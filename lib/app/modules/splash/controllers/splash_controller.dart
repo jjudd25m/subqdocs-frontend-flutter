@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
+
+import '../../../routes/app_pages.dart';
 
 class SplashController extends GetxController {
   //TODO: Implement SplashController
@@ -7,6 +11,7 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    splashTimer();
   }
 
   @override
@@ -17,6 +22,12 @@ class SplashController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void splashTimer() async {
+    Timer(const Duration(seconds: 3), () async {
+      Get.offAllNamed(Routes.LOGIN);
+    });
   }
 
   void increment() => count.value++;

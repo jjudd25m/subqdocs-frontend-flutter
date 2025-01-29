@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+class AddPatientController extends GetxController {
+  //TODO: Implement AddPatientController
 
   final count = 0.obs;
-  RxBool isPast = RxBool(false);
-
   @override
   void onInit() {
     super.onInit();
@@ -22,9 +20,4 @@ class HomeController extends GetxController {
   }
 
   void increment() => count.value++;
-
-  void changeScreen(bool isPast) async {
-    this.isPast.value = isPast;
-    this.isPast.refresh();
-  }
 }

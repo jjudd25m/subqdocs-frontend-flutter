@@ -24,4 +24,7 @@ class AppColors {
 
   static const Color textfieldBorder = Color(0xFFD8DCE4);
   static const Color appbarBorder = Color(0xFFD8DCE4);
+
+  static const Color ScreenBackGround = Color(0xFFF6F6FD);
+  static const Color buttonWithOpacity = Color.fromRGBO(91, 91, 225, 0.3);
 }
