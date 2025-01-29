@@ -31,9 +31,11 @@ class CustomButton extends StatelessWidget {
                 blurRadius: 6,
               ),
             ]),
-            height: 47,
+            height: 40,
             child: ElevatedButton(
               style: ButtonStyle(
+                padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                visualDensity: VisualDensity.compact,
                 foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                 backgroundColor: WidgetStateProperty.all<Color>(backGround),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(

@@ -42,7 +42,7 @@ class CustomTable extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: rowIndex == 0 ? Colors.white : Colors.white,
-        border: Border(bottom: BorderSide(color: AppColors.textDarkGrey, width: 0.5)),
+        border: rowIndex != 0 ? Border(top: BorderSide(color: AppColors.textDarkGrey, width: 0.5)) : null,
       ),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Row(
@@ -50,7 +50,15 @@ class CustomTable extends StatelessWidget {
         children: [
           for (int colIndex = 0; colIndex < columnCount; colIndex++)
             Container(
-              width: 150, // Set a fixed width for columns
+              width: colIndex == 0
+                  ? 200
+                  : colIndex == 1
+                      ? 140
+                      : colIndex == 2
+                          ? 60
+                          : colIndex == 5
+                              ? 140
+                              : 80, // Set a fixed width for columns
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: cellBuilder(
                 context,

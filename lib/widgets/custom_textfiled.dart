@@ -17,6 +17,7 @@ class TextFormFiledWidget extends StatelessWidget {
   final String? hint;
   final String? Function(String?)? checkValidation;
   final Widget? iconButton;
+  void Function(String)? onChanged;
 
   // final Widget? suffix;
 
@@ -27,6 +28,7 @@ class TextFormFiledWidget extends StatelessWidget {
       this.iconButton,
       this.visibility = false,
       this.controller,
+      this.onChanged,
       this.hint = "",
       this.format = const [],
       this.type = TextInputType.text,
@@ -60,6 +62,7 @@ class TextFormFiledWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 child: TextFormField(
+                  onChanged: onChanged,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   inputFormatters: format,
                   keyboardType: type,
@@ -72,7 +75,7 @@ class TextFormFiledWidget extends StatelessWidget {
                       splashColor: Colors.transparent,
                       onTap: onTap,
                       child: Padding(
-                        padding: EdgeInsets.all(7),
+                        padding: EdgeInsets.all(10),
                         child: suffixIcon,
                       ),
                     ),
@@ -81,7 +84,7 @@ class TextFormFiledWidget extends StatelessWidget {
                             splashColor: Colors.transparent,
                             onTap: onTap,
                             child: Padding(
-                              padding: EdgeInsets.all(7),
+                              padding: EdgeInsets.all(13),
                               child: prefixIcon,
                             ),
                           )
@@ -90,7 +93,7 @@ class TextFormFiledWidget extends StatelessWidget {
                     filled: true,
                     hintText: "$hint",
                     hintStyle: AppFonts.regular(14, AppColors.textDarkGrey),
-                    contentPadding: EdgeInsets.only(left: 10, top: 7, bottom: 7, right: 10),
+                    contentPadding: EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
                       borderSide: const BorderSide(

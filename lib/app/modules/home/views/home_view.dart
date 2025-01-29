@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -7,20 +9,31 @@ import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 import 'package:subqdocs/widgets/rounded_image_widget.dart';
 
+import '../../../../widgets/custom_drawer.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/custom_textfiled.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
   bool isPast = true;
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.ScreenBackGround,
+      drawer: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5.0,
+          sigmaY: 5.0,
+        ),
+        child: CustomDrawer(),
+      ),
       body: Column(
         children: [
           Padding(
@@ -36,7 +49,12 @@ class HomeView extends GetView<HomeController> {
                 padding: const EdgeInsets.all(15),
                 child: Row(
                   children: [
-                    SvgPicture.asset("assets/images/logo_drawer.svg"),
+                    GestureDetector(
+                      onTap: () {
+                        _key.currentState!.openDrawer();
+                      },
+                      child: SvgPicture.asset("assets/images/logo_drawer.svg"),
+                    ),
                     SizedBox(
                       width: 15,
                     ),
@@ -100,7 +118,7 @@ class HomeView extends GetView<HomeController> {
                                       controller.changeScreen(false);
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: 10),
+                                      padding: const EdgeInsets.only(left: 30),
                                       child: Text(
                                         "Scheduled Visits",
                                         style: AppFonts.medium(16, AppColors.backgroundBlack),
@@ -192,7 +210,9 @@ class HomeView extends GetView<HomeController> {
                           ),
                           Expanded(
                             child: CustomButton(
-                              navigate: () {},
+                              navigate: () {
+                                Get.offAllNamed(Routes.ADD_PATIENT);
+                              },
                               label: "Schedule Visit",
                             ),
                           )
@@ -239,7 +259,7 @@ class HomeView extends GetView<HomeController> {
                                         ? SvgPicture.asset("assets/images/logo_threedots.svg")
                                         : Text(
                                             cellData,
-                                            textAlign: TextAlign.center,
+                                            textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                             style: TextStyle(
                                               fontWeight: rowIndex == 0 ? FontWeight.bold : FontWeight.normal,
                                             ),
@@ -308,7 +328,7 @@ class HomeView extends GetView<HomeController> {
                                             ? SvgPicture.asset("assets/images/logo_threedots.svg")
                                             : Text(
                                                 cellData,
-                                                textAlign: TextAlign.center,
+                                                textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                 style: TextStyle(
                                                   fontWeight: rowIndex == 0 ? FontWeight.bold : FontWeight.normal,
                                                 ),
