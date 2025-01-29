@@ -1,0 +1,990 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'package:get/get.dart';
+import 'package:subqdocs/app/modules/visit_main/views/delete_image_dialog.dart';
+import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
+import 'package:subqdocs/utils/app_colors.dart';
+import 'package:subqdocs/widget/appbar.dart';
+import 'package:subqdocs/widget/custom_animated_button.dart';
+
+import '../../../../utils/app_diamentions.dart';
+import '../../../../utils/app_fonts.dart';
+import '../../../../utils/imagepath.dart';
+import '../../../../widget/base_image_view.dart';
+import '../../../../widget/custom_textfiled.dart';
+import '../../../routes/app_pages.dart';
+import '../controllers/visit_main_controller.dart';
+
+class VisitMainView extends GetView<VisitMainController> {
+  const VisitMainView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      // appBar: CustomAppBar(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            CustomAppBar(),
+            Expanded(
+              child: Container(
+                color: AppColors.backgroundLightBlue,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Column(
+                        children: <Widget>[
+                          SizedBox(height: 20.0),
+                          ExpansionTile(
+                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            backgroundColor: AppColors.backgroundWhite,
+                            collapsedBackgroundColor: AppColors.backgroundWhite,
+                            title: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    ImagePath.logo_back,
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    "Patient Details",
+                                    style: AppFonts.medium(16, AppColors.textBlack),
+                                  ),
+                                  Spacer(),
+                                  SvgPicture.asset(
+                                    ImagePath.edit,
+                                    height: 25,
+                                    width: 25,
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  SizedBox(
+                                      width: 150,
+                                      height: 40,
+                                      child: CustomAnimatedButton(
+                                        text: " Patient History ",
+                                        isOutline: true,
+                                        enabledTextColor: AppColors.textGrey,
+                                        enabledColor: AppColors.white,
+                                        outLineEnabledColor: AppColors.textGrey,
+                                        outlineColor: AppColors.textGrey,
+                                      ))
+                                ],
+                              ),
+                            ),
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10),
+                                        child: BaseImageView(
+                                          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                          width: 70,
+                                          height: 70,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: -10,
+                                        right: -3,
+                                        child: SvgPicture.asset(
+                                          ImagePath.camera,
+                                          height: 44,
+                                          width: 44,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Don Jones",
+                                            style: AppFonts.medium(15, AppColors.textBlack),
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "12345678",
+                                            style: AppFonts.regular(13, AppColors.textGrey),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Age",
+                                            style: AppFonts.medium(15, AppColors.textBlack),
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "52",
+                                            style: AppFonts.regular(13, AppColors.textGrey),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Gender",
+                                            style: AppFonts.medium(15, AppColors.textBlack),
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Male",
+                                            style: AppFonts.regular(13, AppColors.textGrey),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Visit Date & Time",
+                                            style: AppFonts.medium(15, AppColors.textBlack),
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "10/12/2024  10:30 am",
+                                            style: AppFonts.regular(13, AppColors.textGrey),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )),
+                                  SizedBox(
+                                    width: 30,
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                              // ExpansionTile(
+                              //   title: Text(
+                              //     'Sub title',
+                              //   ),
+                              //   children: <Widget>[
+                              //     // ListTile(
+                              //     //   title: Text('data'),
+                              //     // )
+                              //   ],
+                              // ),
+                              // ListTile(
+                              //   title: Text('data'),
+                              // )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          ExpansionTile(
+                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            backgroundColor: AppColors.backgroundWhite,
+                            collapsedBackgroundColor: AppColors.backgroundWhite,
+                            title: Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Personal Note",
+                                  style: AppFonts.medium(16, AppColors.textBlack),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                child: Container(
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                      color: AppColors.backgroundWhite,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          "He enjoys fishing and gardening. His wife's name is Julie.",
+                                          style: AppFonts.regular(15, AppColors.textBlack),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          "Mon - 20/01/2025",
+                                          style: AppFonts.regular(15, AppColors.textBlack),
+                                        ),
+                                        SizedBox(width: 20),
+                                        SvgPicture.asset(
+                                          ImagePath.edit_outline,
+                                          height: 40,
+                                          width: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                              // ExpansionTile(
+                              //   title: Text(
+                              //     'Sub title',
+                              //   ),
+                              //   children: <Widget>[
+                              //     // ListTile(
+                              //     //   title: Text('data'),
+                              //     // )
+                              //   ],
+                              // ),
+                              // ListTile(
+                              //   title: Text('data'),
+                              // )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          ExpansionTile(
+                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            backgroundColor: AppColors.backgroundWhite,
+                            collapsedBackgroundColor: AppColors.backgroundWhite,
+                            title: Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Visit Snapshot",
+                                  style: AppFonts.medium(16, AppColors.textBlack),
+                                ),
+                                Spacer(),
+                                SvgPicture.asset(
+                                  ImagePath.edit_outline,
+                                  height: 40,
+                                  width: 40,
+                                ),
+                              ],
+                            ),
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                child: Container(
+                                    height: 90,
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                      color: AppColors.backgroundWhite,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        SvgPicture.asset(
+                                          ImagePath.ai,
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          "He enjoys fishing and gardening. His wife's name is Julie.",
+                                          style: AppFonts.regular(15, AppColors.textGrey),
+                                        ),
+                                        Spacer(),
+                                        SizedBox(
+                                            width: 150,
+                                            child: CustomAnimatedButton(
+                                              text: " Generate ",
+                                              isOutline: true,
+                                              enabledTextColor: AppColors.textPurple,
+                                              enabledColor: AppColors.textWhite,
+                                              outLineEnabledColor: AppColors.textPurple,
+                                              outlineColor: AppColors.textPurple,
+                                            )),
+                                        // Text(
+                                        //   textAlign: TextAlign.center,
+                                        //   "Mon - 20/01/2025",
+                                        //   style: AppFonts.regular(15, AppColors.textBlack),
+                                        // ),
+                                        // SizedBox(width: 20),
+                                        // SvgPicture.asset(
+                                        //   ImagePath.edit_outline,
+                                        //   height: 40,
+                                        //   width: 40,
+                                        // ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                child: Text(
+                                  textAlign: TextAlign.left,
+                                  "Don Jones has a history of melanoma in situ on the nasal tip, surgically excised with flap repair. Post-op care included imiquimod treatment, later discontinued due to irritation. Recently started erbium Pearl Fractional laser and Kenalog injections for scar improvement. No signs of melanoma recurrence; benign lesions (seborrheic keratoses, solar lentigines, cherry angiomas) noted—no treatment needed. Scheduled for another laser session today.",
+                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                              // ExpansionTile(
+                              //   title: Text(
+                              //     'Sub title',
+                              //   ),
+                              //   children: <Widget>[
+                              //     // ListTile(
+                              //     //   title: Text('data'),
+                              //     // )
+                              //   ],
+                              // ),
+                              // ListTile(
+                              //   title: Text('data'),
+                              // )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          ExpansionTile(
+                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            backgroundColor: AppColors.backgroundWhite,
+                            collapsedBackgroundColor: AppColors.backgroundWhite,
+                            title: Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Visit Recaps (8 Visits)",
+                                  style: AppFonts.medium(16, AppColors.textBlack),
+                                ),
+                                Spacer(),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                    // color: AppColors.backgroundWhite,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.search,
+                                        height: 25,
+                                        width: 25,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 120,
+                                        child: TextField(
+                                          maxLines: 1, //or null
+                                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                        ),
+                                      ),
+                                      // Text(
+                                      //   "Attachments",
+                                      //   style: AppFonts.medium(16, AppColors.textBlack),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SvgPicture.asset(
+                                  ImagePath.edit_outline,
+                                  height: 40,
+                                  width: 40,
+                                ),
+                              ],
+                            ),
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) => InkWell(
+                                          onTap: () {},
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 10),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      "1/13/2025",
+                                                      style: AppFonts.regular(15, AppColors.textGrey),
+                                                    ),
+                                                    SizedBox(width: 15),
+                                                    Expanded(
+                                                        child: Text(
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.center,
+                                                      "No recurrence. Started erbium laser and Kenalog for nasal scar. Advised routine skin checks..",
+                                                      style: AppFonts.regular(15, AppColors.textGrey),
+                                                    )),
+                                                    Spacer(),
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      "View",
+                                                      style: AppFonts.regular(15, AppColors.textPurple),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 10),
+                                                if (index != 7) ...[
+                                                  Divider(
+                                                    height: 1,
+                                                  )
+                                                ]
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                    itemCount: 8),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          ExpansionTile(
+                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            backgroundColor: AppColors.backgroundWhite,
+                            collapsedBackgroundColor: AppColors.backgroundWhite,
+                            title: Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Attachments",
+                                  style: AppFonts.medium(16, AppColors.textBlack),
+                                ),
+                                Spacer(),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "View All Attachments",
+                                  style: AppFonts.regular(15, AppColors.textPurple),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                PopupMenuButton<String>(
+                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                    offset: const Offset(0, 5),
+                                    color: AppColors.white,
+                                    position: PopupMenuPosition.over,
+                                    style: const ButtonStyle(
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                    itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                              onTap: () {
+                                                controller.isSelectedAttchmentOption.value = 0;
+                                              },
+                                              height: 30,
+                                              padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                              child: Row(
+                                                children: [
+                                                  const SizedBox(width: 5),
+                                                  SvgPicture.asset(
+                                                    ImagePath.document_attchment,
+                                                    width: 30,
+                                                    height: 30,
+                                                    colorFilter:
+                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                  const SizedBox(width: 5),
+                                                  if (controller.isSelectedAttchmentOption.value == 0) ...[
+                                                    SvgPicture.asset(
+                                                      ImagePath.attchment_check,
+                                                      width: 16,
+                                                      height: 16,
+                                                    )
+                                                  ]
+                                                ],
+                                              )),
+                                          PopupMenuItem(
+                                              onTap: () {
+                                                controller.isSelectedAttchmentOption.value = 1;
+                                              },
+                                              height: 30,
+                                              padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                              child: Row(
+                                                children: [
+                                                  const SizedBox(width: 5),
+                                                  SvgPicture.asset(ImagePath.image_attchment,
+                                                      width: 30,
+                                                      height: 30,
+                                                      colorFilter:
+                                                          ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                                  const SizedBox(width: 8),
+                                                  Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                  const SizedBox(width: 5),
+                                                  if (controller.isSelectedAttchmentOption.value == 1) ...[
+                                                    SvgPicture.asset(
+                                                      ImagePath.attchment_check,
+                                                      width: 16,
+                                                      height: 16,
+                                                    )
+                                                  ]
+                                                ],
+                                              )),
+                                          PopupMenuItem(
+                                              onTap: () {
+                                                controller.isSelectedAttchmentOption.value = 2;
+                                              },
+                                              height: 30,
+                                              padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                              child: Row(
+                                                children: [
+                                                  const SizedBox(width: 5),
+                                                  SvgPicture.asset(
+                                                    ImagePath.date_attchment,
+                                                    width: 30,
+                                                    height: 30,
+                                                    colorFilter:
+                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                  const SizedBox(width: 5),
+                                                  if (controller.isSelectedAttchmentOption.value == 2) ...[
+                                                    SvgPicture.asset(
+                                                      ImagePath.attchment_check,
+                                                      width: 16,
+                                                      height: 16,
+                                                    )
+                                                  ]
+                                                ],
+                                              )),
+                                        ],
+                                    child: SvgPicture.asset(
+                                      ImagePath.logo_filter,
+                                      width: 50,
+                                      height: 50,
+                                    )),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                    // color: AppColors.backgroundWhite,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.search,
+                                        height: 25,
+                                        width: 25,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 120,
+                                        child: TextField(
+                                          maxLines: 1, //or null
+                                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SvgPicture.asset(
+                                  ImagePath.edit_outline,
+                                  height: 40,
+                                  width: 40,
+                                ),
+                              ],
+                            ),
+                            children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: SizedBox(
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        padding: EdgeInsets.only(top: 20),
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            height: 200,
+                                            width: 140,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 10),
+                                                Stack(
+                                                  children: [
+                                                    Container(
+                                                      height: 120,
+                                                      width: 120,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
+                                                        // color: AppColors.backgroundWhite,
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                      padding: const EdgeInsets.only(bottom: Dimen.margin2),
+                                                      child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(8), // Add rounded corners here
+                                                          child: Container(
+                                                              color: AppColors.backgroundPdfAttchment,
+                                                              width: 120,
+                                                              height: 120,
+                                                              child: Center(
+                                                                child: (index % 2 == 0)
+                                                                    ? Image.asset(
+                                                                        ImagePath.pdf,
+                                                                        width: 60,
+                                                                        height: 60,
+                                                                        fit: BoxFit.contain,
+                                                                      )
+                                                                    : BaseImageView(
+                                                                        imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+                                                                        width: 120,
+                                                                        height: 120,
+                                                                      ),
+                                                              ))),
+                                                    ),
+                                                    Positioned(
+                                                      top: -15,
+                                                      right: -15,
+                                                      child: Container(
+                                                        width: 50, // Width of the circle
+                                                        height: 50, // Height of the circle
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle, // Ensures the container is circular
+                                                          color: Colors.white, // Circle color (can be changed as needed)
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors.black.withOpacity(0.25), // Shadow color
+                                                              blurRadius: 8, // Shadow blur radius
+                                                              offset: Offset(2, 2), // Shadow offset
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                              builder: (BuildContext context) {
+                                                                return DeleteImageDialog(); // Our custom dialog
+                                                              },
+                                                            );
+                                                          },
+                                                          child: SvgPicture.asset(
+                                                            ImagePath.delete_round,
+                                                            height: 50, // Set the height and width as needed
+                                                            width: 50,
+                                                            fit: BoxFit.cover, // To make sure the image fits the circular shape
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                    // Container(
+                                                    //   decoration: BoxDecoration(
+                                                    //     shape: BoxShape.circle, // Makes the container circular
+                                                    //     boxShadow: [
+                                                    //       BoxShadow(
+                                                    //         color: Colors.black.withValues(alpha: 0.10), // Shadow color
+                                                    //         blurRadius: 0.2,
+                                                    //         blurStyle: BlurStyle.normal,
+                                                    //         spreadRadius: 2, // Shadow blur radius
+                                                    //         offset: Offset(0, 0), // Shadow offset
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    //   child: SvgPicture.asset(
+                                                    //     ImagePath.delete_round,
+                                                    //     height: 60, // Set the height and width as needed
+                                                    //     width: 60,
+                                                    //     fit: BoxFit.cover, // To make sure the image fits the circular shape
+                                                    //   ),
+                                                    // ),
+                                                    // )
+
+                                                    // Positioned(
+                                                    //   top: -15,
+                                                    //   right: -5,
+                                                    //   child: ClipRRect(
+                                                    //     borderRadius: BorderRadius.circular(30),
+                                                    //     child: Container(
+                                                    //       decoration: BoxDecoration(
+                                                    //         border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
+                                                    //         borderRadius: BorderRadius.circular(1),
+                                                    //       ),
+                                                    //       child: SvgPicture.asset(
+                                                    //         ImagePath.delete_round,
+                                                    //         height: 60,
+                                                    //         width: 60,
+                                                    //       ),
+                                                    //     ),
+                                                    //   ),
+                                                    // )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                        itemCount: 8,
+                                      ))),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Obx(() {
+              return Container(
+                color: AppColors.backgroundLightBlue,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Container(
+                  // color: AppColors.backgroundWhite,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Row(
+                    spacing: 15,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                              builder: (BuildContext context) {
+                                return ViewAttchmentImage(); // Our custom dialog
+                              },
+                            );
+                          },
+                          child: Container(
+                            height: 100,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                              color: AppColors.backgroundLightGrey,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImagePath.add_photo,
+                                      height: 30,
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      "Add a Photo",
+                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (controller.isStartRecording.value == false) ...[
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.isStartRecording.value = true;
+                            },
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.backgroundPurple),
+                                color: AppColors.backgroundPurple,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.ai_white,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Start Transcribing",
+                                        style: AppFonts.medium(16, AppColors.textWhite),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (controller.isStartRecording.value) ...[
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.PATIENT_INFO);
+                            },
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.buttonBackgroundGreen),
+                                color: AppColors.buttonBackgroundGreen,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.pause,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Pause",
+                                        style: AppFonts.medium(16, AppColors.textWhite),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.isStartRecording.value = false;
+                            },
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.buttonBackgroundred),
+                                color: AppColors.buttonBackgroundred,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.stop_transcript,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Stop Transcribing",
+                                        style: AppFonts.medium(16, AppColors.textWhite),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
+              );
+            })
+          ],
+        ),
+      ),
+    );
+  }
+}
