@@ -18,6 +18,7 @@ class TextFormFiledWidget extends StatelessWidget {
   final String? Function(String?)? checkValidation;
   final Widget? iconButton;
   void Function(String)? onChanged;
+  bool readOnly;
 
   // final Widget? suffix;
 
@@ -28,6 +29,7 @@ class TextFormFiledWidget extends StatelessWidget {
       this.iconButton,
       this.visibility = false,
       this.controller,
+      this.readOnly = false,
       this.onChanged,
       this.hint = "",
       this.format = const [],
@@ -62,6 +64,7 @@ class TextFormFiledWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 child: TextFormField(
+                  readOnly: readOnly,
                   onChanged: onChanged,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   inputFormatters: format,

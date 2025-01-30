@@ -9,18 +9,22 @@ class CustomButton extends StatelessWidget {
   final Color backGround;
   final Color textColor;
   final bool isTrue;
+  double? hight = 40;
 
-  CustomButton(
-      {super.key,
-      required this.navigate,
-      required this.label,
-      this.backGround = AppColors.backgroundPurple,
-      this.textColor = Colors.white,
-      this.isTrue = true});
+  CustomButton({
+    super.key,
+    required this.navigate,
+    required this.label,
+    this.backGround = AppColors.backgroundPurple,
+    this.textColor = Colors.white,
+    this.hight = 40,
+    this.isTrue = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
           child: Container(
@@ -31,7 +35,7 @@ class CustomButton extends StatelessWidget {
                 blurRadius: 6,
               ),
             ]),
-            height: 40,
+            height: hight,
             child: ElevatedButton(
               style: ButtonStyle(
                 padding: WidgetStatePropertyAll(EdgeInsets.zero),

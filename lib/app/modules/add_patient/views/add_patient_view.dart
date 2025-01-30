@@ -135,6 +135,45 @@ class AddPatientView extends GetView<AddPatientController> {
                         ),
                         Row(
                           children: [
+                            RoundedImageWidget(
+                              size: 60,
+                              imagePath: ImagePath.user,
+                            ),
+                            SizedBox(
+                              width: 14,
+                            ),
+                            SizedBox(
+                              width: 92,
+                              child: Expanded(
+                                child: CustomButton(
+                                  hight: 30.0,
+                                  navigate: () {},
+                                  label: "Choose File",
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            SizedBox(
+                              width: 73,
+                              child: Expanded(
+                                child: CustomButton(
+                                  navigate: () {},
+                                  backGround: Colors.white,
+                                  textColor: AppColors.redText,
+                                  hight: 30.0,
+                                  label: "Remove",
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimen.margin16,
+                        ),
+                        Row(
+                          children: [
                             Expanded(
                               child: TextFormFiledWidget(
                                 label: "Patient ID",
@@ -474,7 +513,7 @@ class AddPatientView extends GetView<AddPatientController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: 180,
+                              width: 160,
                               child: Expanded(
                                 child: CustomButton(
                                   navigate: () {
@@ -496,7 +535,7 @@ class AddPatientView extends GetView<AddPatientController> {
                               width: Dimen.margin6,
                             ),
                             SizedBox(
-                              width: 100,
+                              width: 75,
                               child: Expanded(
                                 child: CustomButton(
                                   navigate: () {},
@@ -511,7 +550,7 @@ class AddPatientView extends GetView<AddPatientController> {
                               width: Dimen.margin6,
                             ),
                             SizedBox(
-                              width: 230,
+                              width: 183,
                               child: Expanded(
                                 child: CustomButton(
                                   navigate: () {},
@@ -522,12 +561,32 @@ class AddPatientView extends GetView<AddPatientController> {
                             SizedBox(
                               width: Dimen.margin6,
                             ),
-                            SizedBox(
-                              width: 85,
-                              child: Expanded(
-                                child: CustomButton(
-                                  navigate: () {},
-                                  label: "Save",
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(10)),
+                              width: 98,
+                              height: 40,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 3, right: 11),
+                                      child: Text(
+                                        "demo",
+                                        style: AppFonts.medium(14, Colors.white),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 40,
+                                      width: 2,
+                                      color: Colors.white,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: SvgPicture.asset(ImagePath.downArrow),
+                                    )
+                                  ],
                                 ),
                               ),
                             )

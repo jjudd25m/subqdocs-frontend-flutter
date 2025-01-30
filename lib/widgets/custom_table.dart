@@ -8,16 +8,26 @@ class CustomTable extends StatelessWidget {
   final int columnCount;
   BuildContext context;
 
-  CustomTable({required this.rows, required this.cellBuilder, required this.columnCount, required this.context});
+  List<double> columnWidths;
+
+  CustomTable(
+      {required this.rows,
+      required this.cellBuilder,
+      required this.columnCount,
+      required this.context,
+      required this.columnWidths});
 
   @override
   Widget build(BuildContext context) {
+    // Get screen width
+    double screenWidth = MediaQuery.of(context).size.width - 100;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal, // Enable horizontal scrolling
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
+          border: Border.all(width: 1, color: AppColors.appbarBorder),
         ),
         child: Padding(
           padding: const EdgeInsets.all(2),
@@ -26,7 +36,7 @@ class CustomTable extends StatelessWidget {
               for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
                 Column(
                   children: [
-                    _buildTableRow(rowIndex),
+                    _buildTableRow(rowIndex, screenWidth),
                     _buildDivider(),
                   ],
                 ),
@@ -37,12 +47,15 @@ class CustomTable extends StatelessWidget {
     );
   }
 
-  Widget _buildTableRow(int rowIndex) {
+  Widget _buildTableRow(int rowIndex, double screenWidth) {
     List<String> rowData = rows[rowIndex];
+
+    // Column width percentages (for example, 20%, 25%, 15%, etc.)
+
     return Container(
       decoration: BoxDecoration(
         color: rowIndex == 0 ? Colors.white : Colors.white,
-        border: rowIndex != 0 ? Border(top: BorderSide(color: AppColors.textDarkGrey, width: 0.5)) : null,
+        border: rowIndex != 0 ? Border(top: BorderSide(color: AppColors.appbarBorder, width: 1)) : null,
       ),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Row(
@@ -50,15 +63,7 @@ class CustomTable extends StatelessWidget {
         children: [
           for (int colIndex = 0; colIndex < columnCount; colIndex++)
             Container(
-              width: colIndex == 0
-                  ? 200
-                  : colIndex == 1
-                      ? 140
-                      : colIndex == 2
-                          ? 60
-                          : colIndex == 5
-                              ? 140
-                              : 80, // Set a fixed width for columns
+              width: screenWidth * columnWidths[colIndex], // Set the width based on percentage
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: cellBuilder(
                 context,

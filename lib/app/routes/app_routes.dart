@@ -7,6 +7,9 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const SPLASH = _Paths.SPLASH;
   static const ADD_PATIENT = _Paths.ADD_PATIENT;
+  static const CUSTOM_DRAWER = _Paths.CUSTOM_DRAWER;
+  static const EDIT_PATENT_DETAILS = _Paths.EDIT_PATENT_DETAILS;
+  static const PATIENT_PROFILE = _Paths.PATIENT_PROFILE;
 }
 
 abstract class _Paths {
@@ -15,4 +18,7 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const SPLASH = '/splash';
   static const ADD_PATIENT = '/add-patient';
+  static const CUSTOM_DRAWER = '/custom-drawer';
+  static const EDIT_PATENT_DETAILS = '/edit-patent-details';
+  static const PATIENT_PROFILE = '/patient-profile';
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:subqdocs/utils/app_colors.dart';
+import 'package:subqdocs/utils/app_fonts.dart';
+import 'package:subqdocs/utils/imagepath.dart';
 
 class DrawerItem extends StatelessWidget {
   final bool isSelected;
@@ -24,19 +27,25 @@ class DrawerItem extends StatelessWidget {
                 SizedBox(
                   width: 18.5,
                 ),
-                // SizedBox(
-                //   height: 18.h,
-                //   width: 18.h,
-                //   child: SvgProvider(
-                //     path: "${AssetPath.stoke}${iconPath}.svg",
-                //     iconColor: isSelected ? Colors.white : Colors.black,
-                //   ),
-                // ),
+                SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: SvgPicture.asset(
+                    iconPath,
+                    colorFilter: isSelected
+                        ? ColorFilter.mode(
+                            Colors.white, // The color you want to apply
+                            BlendMode.srcIn, // This blend mode is commonly used for coloring SVGs
+                          )
+                        : null,
+                  ),
+                ),
                 SizedBox(
                   width: 10.5,
                 ),
                 Text(
                   itemName,
+                  style: isSelected ? AppFonts.medium(16, AppColors.white) : AppFonts.medium(16, AppColors.drawerText),
                 ),
               ],
             ),

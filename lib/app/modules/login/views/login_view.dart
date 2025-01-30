@@ -121,6 +121,12 @@ class LoginView extends GetView<LoginController> {
                                   Routes.HOME,
                                 )
                               }
+                            else
+                              {
+                                Get.offAllNamed(
+                                  Routes.HOME,
+                                )
+                              }
                           },
                       label: "Log in"),
                   SizedBox(
