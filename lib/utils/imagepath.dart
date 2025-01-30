@@ -33,4 +33,9 @@ class ImagePath {
   static const String signature = 'assets/images/signature.svg';
   static const String down_arrow = 'assets/images/down_arrow.svg';
   static const String share = 'assets/images/share.svg';
+
+  static const String reorder = 'assets/images/reorder.svg';
+
+  static const String chat_outline = 'assets/images/chat_outline.svg';
+  static const String delete_outline = 'assets/images/delete_outline.svg';
 }

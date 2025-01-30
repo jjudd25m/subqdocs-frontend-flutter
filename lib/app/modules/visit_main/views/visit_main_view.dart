@@ -516,10 +516,15 @@ class VisitMainView extends GetView<VisitMainController> {
                                   style: AppFonts.medium(16, AppColors.textBlack),
                                 ),
                                 Spacer(),
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "View All Attachments",
-                                  style: AppFonts.regular(15, AppColors.textPurple),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(Routes.ALL_ATTACHMENT);
+                                  },
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    "View All Attachments",
+                                    style: AppFonts.regular(15, AppColors.textPurple),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 10,

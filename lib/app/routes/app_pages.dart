@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/all_attachment/bindings/all_attachment_binding.dart';
+import '../modules/all_attachment/views/all_attachment_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -41,8 +43,13 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PATIENT_INFO,
-      page: () => const PatientInfoView(),
+      page: () => PatientInfoView(),
       binding: PatientInfoBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_ATTACHMENT,
+      page: () => const AllAttachmentView(),
+      binding: AllAttachmentBinding(),
     ),
   ];
 }

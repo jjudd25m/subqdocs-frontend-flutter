@@ -27,6 +27,9 @@ class AppColors {
   static const Color buttonBackgroundred = Color(0xFFE11313);
   static const Color buttonBackgroundGrey = Color(0xFFD8DCE4);
 
+  static const imageBannerGrayBackground = Color(0xFFF6F6F6);
+  static const imageBannerGrayBorder = Color(0xFFD3D3D3);
+
   static const Color textfieldBorder = Color(0xFFD8DCE4);
   static const Color appbarBorder = Color(0xFFD8DCE4);
 }

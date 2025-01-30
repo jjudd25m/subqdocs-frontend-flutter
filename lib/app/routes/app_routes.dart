@@ -8,6 +8,7 @@ abstract class Routes {
   static const SPLASH = _Paths.SPLASH;
   static const VISIT_MAIN = _Paths.VISIT_MAIN;
   static const PATIENT_INFO = _Paths.PATIENT_INFO;
+  static const ALL_ATTACHMENT = _Paths.ALL_ATTACHMENT;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const SPLASH = '/splash';
   static const VISIT_MAIN = '/visit-main';
   static const PATIENT_INFO = '/patient-info';
+  static const ALL_ATTACHMENT = '/all-attachment';
 }
