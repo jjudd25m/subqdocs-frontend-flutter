@@ -38,4 +38,25 @@ class ImagePath {
 
   static const String chat_outline = 'assets/images/chat_outline.svg';
   static const String delete_outline = 'assets/images/delete_outline.svg';
+
+  static const String collpase = 'assets/images/collpase.svg';
+
+  static const String stop_recording = 'assets/images/stop_recording.svg';
+  static const String pause_recording = 'assets/images/pause_recording.svg';
+  static const String wave = 'assets/images/wave.png';
+
+  static const String uploadImage = 'assets/images/upload_image.svg';
+  static const String recording = 'assets/images/recording.svg';
+  static const String pause_white = 'assets/images/pause_white.svg';
+  static const String expand_recording = 'assets/images/expand_recording.svg';
+
+  static const String checkbox_true = 'assets/images/checkbox_true.svg';
+  static const String checkbox_false = 'assets/images/checkbox_false.svg';
+  static const String confirm_check = 'assets/images/confirm_check.svg';
+
+  static const String share_copy_link = 'assets/images/share_copy_link.svg';
+  static const String share_email = 'assets/images/share_email.svg';
+  static const String share_pdf = 'assets/images/share_pdf.svg';
+  static const String share_print = 'assets/images/share_print.svg';
+  static const String share_text = 'assets/images/share_text.svg';
 }

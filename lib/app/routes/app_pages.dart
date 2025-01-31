@@ -8,6 +8,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/patient_info/bindings/patient_info_binding.dart';
 import '../modules/patient_info/views/patient_info_view.dart';
+import '../modules/patient_view_read_only/bindings/patient_view_read_only_binding.dart';
+import '../modules/patient_view_read_only/views/patient_view_read_only_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/visit_main/bindings/visit_main_binding.dart';
@@ -50,6 +52,11 @@ class AppPages {
       name: _Paths.ALL_ATTACHMENT,
       page: () => const AllAttachmentView(),
       binding: AllAttachmentBinding(),
+    ),
+    GetPage(
+      name: _Paths.PATIENT_VIEW_READ_ONLY,
+      page: () => PatientViewReadOnlyView(),
+      binding: PatientViewReadOnlyBinding(),
     ),
   ];
 }

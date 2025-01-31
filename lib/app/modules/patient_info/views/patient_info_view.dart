@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:subqdocs/app/modules/patient_info/views/confirm_finalize_dialog.dart';
 import 'package:subqdocs/app/modules/patient_info/views/doctor_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
@@ -15,6 +16,7 @@ import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/custom_textfiled.dart';
 import '../controllers/patient_info_controller.dart';
 import 'custom_table.dart';
+import 'full_transcript_view.dart';
 
 class PatientInfoView extends GetView<PatientInfoController> {
   PatientInfoView({super.key});
@@ -224,21 +226,110 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         SizedBox(
                                           width: 15,
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Missie Cooper",
-                                              style: AppFonts.regular(13, AppColors.textGrey),
-                                            ),
-                                            SizedBox(width: 5),
-                                            SvgPicture.asset(
-                                              ImagePath.down_arrow,
-                                              width: 20,
-                                              height: 20,
-                                            )
-                                          ],
-                                        ),
+                                        PopupMenuButton<String>(
+                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                                            offset: const Offset(0, 5),
+                                            color: AppColors.white,
+                                            position: PopupMenuPosition.over,
+                                            style: const ButtonStyle(
+                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                            itemBuilder: (context) => [
+                                                  PopupMenuItem(
+                                                      onTap: () {
+                                                        // controller.isSelectedAttchmentOption.value = 0;
+                                                      },
+                                                      // height: 30,
+                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      child: Container(
+                                                        width: 200,
+                                                        child: Column(
+                                                          children: [
+                                                            const SizedBox(width: 5),
+                                                            Container(
+                                                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                                              decoration: BoxDecoration(
+                                                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                                // color: AppColors.backgroundWhite,
+                                                                borderRadius: BorderRadius.circular(8),
+                                                              ),
+                                                              child: Row(
+                                                                children: [
+                                                                  SvgPicture.asset(
+                                                                    ImagePath.search,
+                                                                    height: 25,
+                                                                    width: 25,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 120,
+                                                                    child: TextField(
+                                                                      maxLines: 1, //or null
+                                                                      decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 10),
+                                                            ListView.builder(
+                                                                shrinkWrap: true,
+                                                                physics: NeverScrollableScrollPhysics(),
+                                                                itemBuilder: (context, index) => InkWell(
+                                                                      onTap: () {},
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                        child: Column(
+                                                                          children: [
+                                                                            SizedBox(height: 10),
+                                                                            Row(
+                                                                              children: [
+                                                                                SvgPicture.asset(
+                                                                                  ImagePath.checkbox_true,
+                                                                                  width: 20,
+                                                                                  height: 20,
+                                                                                ),
+                                                                                Spacer(),
+                                                                                Text(
+                                                                                  textAlign: TextAlign.center,
+                                                                                  "Missie Cooper",
+                                                                                  style: AppFonts.regular(15, AppColors.textPurple),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            SizedBox(height: 10),
+                                                                            if (index != 4) ...[
+                                                                              Divider(
+                                                                                height: 1,
+                                                                              )
+                                                                            ]
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                itemCount: 5),
+                                                          ],
+                                                        ),
+                                                      )),
+                                                ],
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "Missie Cooper",
+                                                  style: AppFonts.regular(13, AppColors.textGrey),
+                                                ),
+                                                SizedBox(width: 5),
+                                                SvgPicture.asset(
+                                                  ImagePath.down_arrow,
+                                                  width: 20,
+                                                  height: 20,
+                                                )
+                                              ],
+                                            )),
                                       ],
                                     ),
                                     Column(
@@ -402,11 +493,107 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                           style: AppFonts.medium(20, AppColors.textBlack),
                                         ),
                                         Spacer(),
-                                        SvgPicture.asset(
-                                          ImagePath.share,
-                                          width: 40,
-                                          height: 40,
-                                        )
+                                        PopupMenuButton<String>(
+                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                            offset: const Offset(0, 5),
+                                            color: AppColors.white,
+                                            position: PopupMenuPosition.under,
+                                            style: const ButtonStyle(
+                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                            itemBuilder: (context) => [
+                                                  PopupMenuItem(
+                                                      onTap: () {},
+                                                      height: 30,
+                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          const SizedBox(width: 5),
+                                                          SvgPicture.asset(
+                                                            ImagePath.share_copy_link,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                          const SizedBox(width: 8),
+                                                          Text("Copy Link", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                          const SizedBox(width: 5),
+                                                        ],
+                                                      )),
+                                                  PopupMenuItem(
+                                                      onTap: () {},
+                                                      height: 30,
+                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          const SizedBox(width: 5),
+                                                          SvgPicture.asset(
+                                                            ImagePath.share_email,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                          const SizedBox(width: 8),
+                                                          Text("Email", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                          const SizedBox(width: 5),
+                                                        ],
+                                                      )),
+                                                  PopupMenuItem(
+                                                      onTap: () {},
+                                                      height: 30,
+                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          const SizedBox(width: 5),
+                                                          SvgPicture.asset(
+                                                            ImagePath.share_pdf,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                          const SizedBox(width: 8),
+                                                          Text("Download (PDF)", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                          const SizedBox(width: 5),
+                                                        ],
+                                                      )),
+                                                  PopupMenuItem(
+                                                      onTap: () {},
+                                                      height: 30,
+                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          const SizedBox(width: 5),
+                                                          SvgPicture.asset(
+                                                            ImagePath.share_text,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                          const SizedBox(width: 8),
+                                                          Text("Download (Text)", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                          const SizedBox(width: 5),
+                                                        ],
+                                                      )),
+                                                  PopupMenuItem(
+                                                      onTap: () {},
+                                                      height: 30,
+                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          const SizedBox(width: 5),
+                                                          SvgPicture.asset(
+                                                            ImagePath.share_print,
+                                                            width: 30,
+                                                            height: 30,
+                                                          ),
+                                                          const SizedBox(width: 8),
+                                                          Text("Print", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                          const SizedBox(width: 5),
+                                                        ],
+                                                      )),
+                                                ],
+                                            child: SvgPicture.asset(
+                                              ImagePath.share,
+                                              width: 40,
+                                              height: 40,
+                                            )),
                                       ],
                                     ),
                                   ),
@@ -423,7 +610,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                     height: 20,
                                   ),
                                   if (controller.tabIndex.value == 0) ...[DoctorView()],
-                                  // if (controller.tabIndex.value == 0) ...[DoctorView()],
+                                  if (controller.tabIndex.value == 1) ...[FullTranscriptView()],
                                   if (controller.tabIndex.value == 2) ...[PatientView()],
                                   if (controller.tabIndex.value == 3) ...[FullNoteView()],
 
@@ -519,122 +706,189 @@ class PatientInfoView extends GetView<PatientInfoController> {
                 // color: AppColors.backgroundWhite,
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  spacing: 15,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                            color: AppColors.backgroundLightGrey,
-                            borderRadius: BorderRadius.circular(8),
+                child: Obx(() {
+                  return Row(
+                    spacing: 15,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      if (controller.isSignatureDone.value) ...[
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.isSignatureDone.value = false;
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.backgroundPurple),
+                                    color: AppColors.backgroundPurple,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            ImagePath.signature,
+                                            height: 30,
+                                            width: 30,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Digitally Signed by Dr. Adrian Tinajero ",
+                                            style: AppFonts.medium(16, AppColors.textWhite),
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "12/10/2024 5:02 PM",
+                                            style: AppFonts.medium(16, AppColors.textWhite),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Amend Note",
+                                  style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
+                        ),
+                      ],
+                      if (controller.isSignatureDone.value == false) ...[
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                color: AppColors.backgroundLightGrey,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                    ImagePath.add_photo,
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    textAlign: TextAlign.center,
-                                    "Add Photo or Document",
-                                    style: AppFonts.medium(16, AppColors.textBlack),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.add_photo,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Add Photo or Document",
+                                        style: AppFonts.medium(16, AppColors.textBlack),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                            color: AppColors.backgroundLightGrey,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return ConfirmFinalizeDialog();
+                                },
+                              );
+                            },
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                color: AppColors.backgroundLightGrey,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                    ImagePath.finalize_time,
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    textAlign: TextAlign.center,
-                                    "Finalize Later",
-                                    style: AppFonts.medium(16, AppColors.textBlack),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.finalize_time,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Finalize Later",
+                                        style: AppFonts.medium(16, AppColors.textBlack),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          // controller.isStartRecording.value = true;
-                        },
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.backgroundPurple),
-                            color: AppColors.backgroundPurple,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.isSignatureDone.value = true;
+                            },
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.backgroundPurple),
+                                color: AppColors.backgroundPurple,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                    ImagePath.signature,
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    textAlign: TextAlign.center,
-                                    "Sign and Finalize",
-                                    style: AppFonts.medium(16, AppColors.textWhite),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.signature,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Sign and Finalize",
+                                        style: AppFonts.medium(16, AppColors.textWhite),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                      ],
+                    ],
+                  );
+                }),
               ),
             )
           ],

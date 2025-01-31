@@ -9,6 +9,7 @@ abstract class Routes {
   static const VISIT_MAIN = _Paths.VISIT_MAIN;
   static const PATIENT_INFO = _Paths.PATIENT_INFO;
   static const ALL_ATTACHMENT = _Paths.ALL_ATTACHMENT;
+  static const PATIENT_VIEW_READ_ONLY = _Paths.PATIENT_VIEW_READ_ONLY;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const VISIT_MAIN = '/visit-main';
   static const PATIENT_INFO = '/patient-info';
   static const ALL_ATTACHMENT = '/all-attachment';
+  static const PATIENT_VIEW_READ_ONLY = '/patient-view-read-only';
 }
