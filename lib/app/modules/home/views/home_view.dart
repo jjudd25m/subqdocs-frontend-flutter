@@ -24,8 +24,13 @@ class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
   bool isPast = true;
+
+  bool temp = false;
+
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   DateTime _selectedDate = DateTime.now();
+  GlobalKey<FormState> formKeyFrom = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyTo = GlobalKey<FormState>();
 
   void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
     showCupertinoModalPopup(
@@ -54,7 +59,7 @@ class HomeView extends GetView<HomeController> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text('Cancel'),
+            child: Text('Done'),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -62,6 +67,100 @@ class HomeView extends GetView<HomeController> {
         );
       },
     );
+  }
+
+  void _showPopupMenu(BuildContext context, TextEditingController element, GlobalKey<FormState> formKey) {
+    BuildContext? currentContext = formKey.currentContext;
+
+    final RenderBox? renderBox = currentContext?.findRenderObject() as RenderBox?;
+
+    if (renderBox != null) {
+      final offset = renderBox.localToGlobal(Offset.zero); // Convert to global coordinates
+
+      showMenu<String>(
+        constraints: BoxConstraints(minWidth: 180),
+        color: Colors.white,
+        context: context,
+        position: RelativeRect.fromLTRB(
+          offset.dx,
+          offset.dy + renderBox.size.height, // Position the menu just below the widget
+          offset.dx + renderBox.size.width,
+          offset.dy + renderBox.size.height + 100, // Optional: adjust the bottom part if needed
+        ),
+        items: [
+          PopupMenuItem<String>(
+            padding: EdgeInsets.zero,
+            value: "Today",
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 12, left: 12, right: 15, bottom: 12),
+                  child: Text("Today"),
+                ),
+                Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: AppColors.appbarBorder,
+                )
+              ],
+            ),
+          ),
+          PopupMenuItem<String>(
+            padding: EdgeInsets.zero,
+            value: "Last 7 Days",
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 12, left: 12, right: 15, bottom: 12),
+                  child: Text("Last 7 Days"),
+                ),
+                Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: AppColors.appbarBorder,
+                )
+              ],
+            ),
+          ),
+          PopupMenuItem<String>(
+            padding: EdgeInsets.zero,
+            value: "Last 30 Days",
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 12, left: 12, right: 15, bottom: 12),
+                  child: Text("Last 30 Days"),
+                ),
+                Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: AppColors.appbarBorder,
+                )
+              ],
+            ),
+          ),
+          PopupMenuItem<String>(
+            padding: EdgeInsets.zero,
+            value: "Custom Date",
+            onTap: () async {
+              _showCupertinoDatePicker(context, element); // Custom Date picker
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 12, left: 12, right: 15, bottom: 12),
+                  child: Text("Custom Date"),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   @override
@@ -317,7 +416,9 @@ class HomeView extends GetView<HomeController> {
                                 position: PopupMenuPosition.under,
                                 padding: EdgeInsetsDirectional.zero,
                                 menuPadding: EdgeInsetsDirectional.only(bottom: 0),
-                                onSelected: (value) {},
+                                onSelected: (value) {
+                                  print("selected value is  ${value}");
+                                },
                                 style: const ButtonStyle(
                                   padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
                                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -326,6 +427,9 @@ class HomeView extends GetView<HomeController> {
                                 ),
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
+                                      onTap: () {
+                                        print("its tapped");
+                                      },
                                       padding: EdgeInsets.zero,
                                       value: "",
                                       child: Column(
@@ -422,22 +526,18 @@ class HomeView extends GetView<HomeController> {
                                                   ],
                                               child: Padding(
                                                 padding: const EdgeInsets.only(bottom: 10.0),
-                                                child: TextFormFiledWidget(
-                                                  readOnly: true,
-                                                  onTap: () async {
-                                                    // DateTime? selectedDate = await showDatePicker(
-                                                    //   context: context,
-                                                    //   initialDate: DateTime.now(),
-                                                    //   firstDate: DateTime(2000), // First allowed date
-                                                    //   lastDate: DateTime(2101), // Last allowed date
-                                                    // );
-
-                                                    // if (selectedDate != null) {}
-                                                  },
-                                                  label: "From",
-                                                  controller: controller.fromController,
-                                                  hint: "12/1/1972",
-                                                  suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                                child: Form(
+                                                  key: formKeyFrom,
+                                                  child: TextFormFiledWidget(
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      _showPopupMenu(context, controller.fromController, formKeyFrom);
+                                                    },
+                                                    label: "From",
+                                                    controller: controller.fromController,
+                                                    hint: "12/1/1972",
+                                                    suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                                  ),
                                                 ),
                                               )),
                                         ),
@@ -494,22 +594,18 @@ class HomeView extends GetView<HomeController> {
                                                   ],
                                               child: Padding(
                                                 padding: const EdgeInsets.only(bottom: 10.0),
-                                                child: TextFormFiledWidget(
-                                                  readOnly: true,
-                                                  onTap: () async {
-                                                    // DateTime? selectedDate = await showDatePicker(
-                                                    //   context: context,
-                                                    //   initialDate: DateTime.now(),
-                                                    //   firstDate: DateTime(2000), // First allowed date
-                                                    //   lastDate: DateTime(2101), // Last allowed date
-                                                    // );
-
-                                                    // if (selectedDate != null) {}
-                                                  },
-                                                  label: "To",
-                                                  controller: controller.toController,
-                                                  hint: "MM/DD/YYYY",
-                                                  suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                                child: Form(
+                                                  key: formKeyTo,
+                                                  child: TextFormFiledWidget(
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      _showPopupMenu(context, controller.toController, formKeyTo);
+                                                    },
+                                                    label: "To",
+                                                    controller: controller.toController,
+                                                    hint: "MM/DD/YYYY",
+                                                    suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                                  ),
                                                 ),
                                               )),
                                         ),
