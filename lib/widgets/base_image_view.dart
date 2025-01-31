@@ -6,7 +6,15 @@ import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
 
 class BaseImageView extends StatelessWidget {
-  const BaseImageView({super.key, required this.imageUrl, this.width, this.height, this.errorWidget, this.nameLetters, this.circleColor, this.fontSize = 24.0});
+  const BaseImageView(
+      {super.key,
+      required this.imageUrl,
+      this.width,
+      this.height,
+      this.errorWidget,
+      this.nameLetters,
+      this.circleColor,
+      this.fontSize = 24.0});
 
   final String imageUrl;
   final double? width;
@@ -27,6 +35,10 @@ class BaseImageView extends StatelessWidget {
               if (errorWidget == null) {
                 return (nameLetters?.isNotEmpty ?? false)
                     ? Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.lightpurpule,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         color: circleColor ?? Colors.blue,
                         child: Center(
                           child: Text(
@@ -55,9 +67,12 @@ class BaseImageView extends StatelessWidget {
           )
         : (nameLetters?.isNotEmpty ?? false)
             ? Container(
+                decoration: BoxDecoration(
+                  color: circleColor ?? Colors.blue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 width: width ?? 80,
                 height: height ?? 80,
-                color: circleColor ?? Colors.blue,
                 child: Center(
                   child: Text(
                     nameLetters ?? "",

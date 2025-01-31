@@ -10,6 +10,7 @@ abstract class Routes {
   static const CUSTOM_DRAWER = _Paths.CUSTOM_DRAWER;
   static const EDIT_PATENT_DETAILS = _Paths.EDIT_PATENT_DETAILS;
   static const PATIENT_PROFILE = _Paths.PATIENT_PROFILE;
+  static const PROFILE = _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const CUSTOM_DRAWER = '/custom-drawer';
   static const EDIT_PATENT_DETAILS = '/edit-patent-details';
   static const PATIENT_PROFILE = '/patient-profile';
+  static const PROFILE = '/profile';
 }

@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
@@ -15,7 +17,46 @@ import '../../../../widgets/rounded_image_widget.dart';
 import '../controllers/edit_patent_details_controller.dart';
 
 class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
-  const EditPatentDetailsView({super.key});
+  EditPatentDetailsView({super.key});
+  DateTime _selectedDate = DateTime.now();
+
+  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text(
+            "Pick a Date",
+            style: AppFonts.medium(16, AppColors.black),
+          ),
+          actions: <Widget>[
+            Container(
+              height: 400,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: _selectedDate,
+                onDateTimeChanged: (DateTime newDate) {
+                  _selectedDate = newDate;
+                  // Update the TextField with selected date
+                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  control.text = formattedDate;
+
+                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
+                },
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,6 +217,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                               child: TextFormFiledWidget(
                                 label: "First Name",
                                 // isImportant: true,
+                                isValid: true,
                                 controller: controller.firstNameController,
                                 hint: "Don",
                               ),
@@ -196,6 +238,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             Expanded(
                               child: TextFormFiledWidget(
                                 label: "Last Name",
+                                isValid: true,
                                 // isImportant: true,
                                 controller: controller.lastNameController,
                                 hint: "Jones",
@@ -211,6 +254,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             Expanded(
                               child: TextFormFiledWidget(
                                 label: "Date of birth",
+                                readOnly: true,
+                                onTap: () {
+                                  _showCupertinoDatePicker(context, controller.dobController);
+                                },
                                 controller: controller.dobController,
                                 hint: "12/1/1972",
                                 suffixIcon: SvgPicture.asset(ImagePath.calendar),
@@ -264,6 +311,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             Expanded(
                               child: TextFormFiledWidget(
                                 label: "Visit Date",
+                                readOnly: true,
+                                onTap: () {
+                                  _showCupertinoDatePicker(context, controller.visitDateController);
+                                },
                                 controller: controller.visitDateController,
                                 hint: "10/12/2024",
                                 suffixIcon: SvgPicture.asset(ImagePath.calendar),
@@ -332,9 +383,26 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                         ),
                         Row(
                           children: [
+                            Spacer(),
                             Container(
+                              width: 80,
                               child: Expanded(
-                                child: CustomButton(navigate: () {}, label: "Cancel"),
+                                child: CustomButton(
+                                  navigate: () {},
+                                  isTrue: false,
+                                  textColor: AppColors.backgroundPurple,
+                                  backGround: Colors.white,
+                                  label: "Cancel",
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              width: 70,
+                              child: Expanded(
+                                child: CustomButton(navigate: () {}, label: "Save"),
                               ),
                             ),
                           ],

@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
@@ -23,6 +25,44 @@ class HomeView extends GetView<HomeController> {
 
   bool isPast = true;
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  DateTime _selectedDate = DateTime.now();
+
+  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text(
+            "Pick a Date",
+            style: AppFonts.medium(16, AppColors.black),
+          ),
+          actions: <Widget>[
+            Container(
+              height: 400,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: _selectedDate,
+                onDateTimeChanged: (DateTime newDate) {
+                  _selectedDate = newDate;
+                  // Update the TextField with selected date
+                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
+                  control.text = formattedDate;
+
+                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
+                },
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -372,12 +412,8 @@ class HomeView extends GetView<HomeController> {
                                                     PopupMenuItem(
                                                         value: "",
                                                         onTap: () async {
-                                                          DateTime? selectedDate = await showDatePicker(
-                                                            context: context,
-                                                            initialDate: DateTime.now(),
-                                                            firstDate: DateTime(2000), // First allowed date
-                                                            lastDate: DateTime(2101), // Last allowed date
-                                                          );
+                                                          _showCupertinoDatePicker(context, controller.fromController);
+                                                          // Last allowed date
                                                         },
                                                         child: Text(
                                                           "Custom date",
@@ -399,7 +435,7 @@ class HomeView extends GetView<HomeController> {
                                                     // if (selectedDate != null) {}
                                                   },
                                                   label: "From",
-                                                  controller: TextEditingController(),
+                                                  controller: controller.fromController,
                                                   hint: "12/1/1972",
                                                   suffixIcon: SvgPicture.asset(ImagePath.calendar),
                                                 ),
@@ -449,12 +485,7 @@ class HomeView extends GetView<HomeController> {
                                                     PopupMenuItem(
                                                         value: "",
                                                         onTap: () async {
-                                                          DateTime? selectedDate = await showDatePicker(
-                                                            context: context,
-                                                            initialDate: DateTime.now(),
-                                                            firstDate: DateTime(2000), // First allowed date
-                                                            lastDate: DateTime(2101), // Last allowed date
-                                                          );
+                                                          _showCupertinoDatePicker(context, controller.toController);
                                                         },
                                                         child: Text(
                                                           "Custom date",
@@ -476,7 +507,7 @@ class HomeView extends GetView<HomeController> {
                                                     // if (selectedDate != null) {}
                                                   },
                                                   label: "To",
-                                                  controller: TextEditingController(),
+                                                  controller: controller.toController,
                                                   hint: "MM/DD/YYYY",
                                                   suffixIcon: SvgPicture.asset(ImagePath.calendar),
                                                 ),
@@ -545,7 +576,10 @@ class HomeView extends GetView<HomeController> {
 
                                     borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                   ),
-                                  child: SvgPicture.asset("assets/images/logo_filter.svg"),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: SvgPicture.asset("assets/images/filter_logo.svg"),
+                                  ),
                                 ),
                               ),
                               SizedBox(

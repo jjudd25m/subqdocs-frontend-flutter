@@ -12,6 +12,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/patient_profile/bindings/patient_profile_binding.dart';
 import '../modules/patient_profile/views/patient_profile_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
@@ -20,7 +22,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.SPLASH;
+  static const INITIAL = Routes.HOME;
 
   static final routes = [
     GetPage(
@@ -40,18 +42,23 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ADD_PATIENT,
-      page: () => const AddPatientView(),
+      page: () => AddPatientView(),
       binding: AddPatientBinding(),
     ),
     GetPage(
       name: _Paths.EDIT_PATENT_DETAILS,
-      page: () => const EditPatentDetailsView(),
+      page: () => EditPatentDetailsView(),
       binding: EditPatentDetailsBinding(),
     ),
     GetPage(
       name: _Paths.PATIENT_PROFILE,
       page: () => const PatientProfileView(),
       binding: PatientProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

@@ -78,7 +78,15 @@ class AddPatientController extends GetxController {
           _fileSize = file.lengthSync(); // Size in bytes
 
           String? _filesizeString = _formatFileSize(_fileSize);
-          list.value.add(MediaListingModel(null, _fileName, _formatDate(_pickDate), _filesizeString));
+
+          String? _shortFileName;
+          if (p.basename(_fileName).length > 15) {
+            // Truncate the name to 12 characters and add ellipsis
+            _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+          } else {
+            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          }
+          list.value.add(MediaListingModel(null, _shortFileName, _formatDate(_pickDate), _filesizeString));
         }
 
         list.refresh();

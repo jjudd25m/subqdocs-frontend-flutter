@@ -13,6 +13,7 @@ class TextFormFiledWidget extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final void Function()? onTap;
+  final bool isValid;
 
   final String? hint;
   final String? Function(String?)? checkValidation;
@@ -26,6 +27,7 @@ class TextFormFiledWidget extends StatelessWidget {
       {required this.label,
       this.suffix,
       this.checkValidation,
+      this.isValid = false,
       this.iconButton,
       this.visibility = false,
       this.controller,
@@ -44,9 +46,22 @@ class TextFormFiledWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         label != ""
-            ? Text(
-                "$label",
-                style: AppFonts.regular(14, AppColors.textBlack),
+            ? Row(
+                children: [
+                  Text(
+                    "$label",
+                    style: AppFonts.regular(14, AppColors.textBlack),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  isValid
+                      ? Text(
+                          "*",
+                          style: AppFonts.regular(16, Colors.red),
+                        )
+                      : SizedBox()
+                ],
               )
             : SizedBox(
                 width: 0,

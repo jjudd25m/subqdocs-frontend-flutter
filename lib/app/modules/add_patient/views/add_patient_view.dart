@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
@@ -16,7 +19,7 @@ import '../../../../widgets/rounded_image_widget.dart';
 import '../controllers/add_patient_controller.dart';
 
 class AddPatientView extends GetView<AddPatientController> {
-  const AddPatientView({super.key});
+  AddPatientView({super.key});
 
   void _showCustomDialog(BuildContext context) {
     showDialog(
@@ -24,6 +27,46 @@ class AddPatientView extends GetView<AddPatientController> {
       barrierDismissible: true, // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return CustomDialogAttachment(); // Our custom dialog
+      },
+    );
+  }
+
+  TextEditingController _controller = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+
+  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text(
+            "Pick a Date",
+            style: AppFonts.medium(16, AppColors.black),
+          ),
+          actions: <Widget>[
+            Container(
+              height: 400,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: _selectedDate,
+                onDateTimeChanged: (DateTime newDate) {
+                  _selectedDate = newDate;
+                  // Update the TextField with selected date
+                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  control.text = formattedDate;
+
+                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
+                },
+              ),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        );
       },
     );
   }
@@ -202,6 +245,7 @@ class AddPatientView extends GetView<AddPatientController> {
                               child: TextFormFiledWidget(
                                 label: "First Name",
                                 // isImportant: true,
+                                isValid: true,
                                 controller: controller.firstNameController,
                                 hint: "Don",
                               ),
@@ -222,6 +266,7 @@ class AddPatientView extends GetView<AddPatientController> {
                             Expanded(
                               child: TextFormFiledWidget(
                                 label: "Last Name",
+                                isValid: true,
                                 // isImportant: true,
                                 controller: controller.lastNameController,
                                 hint: "Jones",
@@ -236,7 +281,11 @@ class AddPatientView extends GetView<AddPatientController> {
                           children: [
                             Expanded(
                               child: TextFormFiledWidget(
+                                onTap: () {
+                                  _showCupertinoDatePicker(context, controller.dobController);
+                                },
                                 label: "Date of birth",
+                                readOnly: true,
                                 controller: controller.dobController,
                                 hint: "12/1/1972",
                                 suffixIcon: SvgPicture.asset(ImagePath.calendar),
@@ -290,6 +339,9 @@ class AddPatientView extends GetView<AddPatientController> {
                             Expanded(
                               child: TextFormFiledWidget(
                                 label: "Visit Date",
+                                onTap: () {
+                                  _showCupertinoDatePicker(context, controller.visitDateController);
+                                },
                                 controller: controller.visitDateController,
                                 hint: "10/12/2024",
                                 suffixIcon: SvgPicture.asset(ImagePath.calendar),
@@ -361,7 +413,7 @@ class AddPatientView extends GetView<AddPatientController> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(width: 0.5, color: AppColors.textDarkGrey),
+                              border: Border.all(width: 0.5, color: AppColors.appbarBorder),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(1),
@@ -402,94 +454,40 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   child: Column(
                                                     children: [
                                                       SizedBox(height: 10),
-                                                      Stack(
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisSize: MainAxisSize.min,
                                                         children: [
                                                           Container(
-                                                            height: 120,
-                                                            width: 120,
                                                             decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: AppColors.buttonBackgroundGrey
-                                                                      .withValues(alpha: 0.8)),
-                                                              // color: AppColors.backgroundWhite,
-                                                              borderRadius: BorderRadius.circular(8),
+                                                              color: AppColors.appbarBorder,
+                                                              borderRadius: BorderRadius.circular(10),
                                                             ),
-                                                            padding: const EdgeInsets.only(bottom: Dimen.margin2),
+                                                            width: 120,
+                                                            height: 120,
                                                             child: ClipRRect(
-                                                                borderRadius: BorderRadius.circular(
-                                                                    8), // Add rounded corners here
-                                                                child: Container(
-                                                                    color: AppColors.lightpurpule,
-                                                                    width: 120,
-                                                                    height: 120,
-                                                                    child: Center(
-                                                                      child: (index % 2 == 0)
-                                                                          ? BaseImageView(
-                                                                              imageUrl:
-                                                                                  "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
-                                                                              width: 120,
-                                                                              height: 120,
-                                                                            )
-                                                                          : BaseImageView(
-                                                                              imageUrl:
-                                                                                  "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
-                                                                              width: 120,
-                                                                              height: 120,
-                                                                            ),
-                                                                    ))),
-                                                          ),
-                                                          Positioned(
-                                                            top: -18,
-                                                            right: -18,
-                                                            child: SvgPicture.asset(
-                                                              ImagePath.delete_round_icon,
-                                                              height: 50, // Set the height and width as needed
-                                                              width: 50,
-                                                              fit: BoxFit
-                                                                  .cover, // To make sure the image fits the circular shape
+                                                              borderRadius:
+                                                                  BorderRadius.circular(10), // Set the radius here
+                                                              child: Image.network(
+                                                                "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+                                                                fit: BoxFit.cover,
+                                                              ),
                                                             ),
-                                                          )
-
-                                                          // Container(
-                                                          //   decoration: BoxDecoration(
-                                                          //     shape: BoxShape.circle, // Makes the container circular
-                                                          //     boxShadow: [
-                                                          //       BoxShadow(
-                                                          //         color: Colors.black.withValues(alpha: 0.10), // Shadow color
-                                                          //         blurRadius: 0.2,
-                                                          //         blurStyle: BlurStyle.normal,
-                                                          //         spreadRadius: 2, // Shadow blur radius
-                                                          //         offset: Offset(0, 0), // Shadow offset
-                                                          //       ),
-                                                          //     ],
-                                                          //   ),
-                                                          //   child: SvgPicture.asset(
-                                                          //     ImagePath.delete_round,
-                                                          //     height: 60, // Set the height and width as needed
-                                                          //     width: 60,
-                                                          //     fit: BoxFit.cover, // To make sure the image fits the circular shape
-                                                          //   ),
-                                                          // ),
-                                                          // )
-
-                                                          // Positioned(
-                                                          //   top: -15,
-                                                          //   right: -5,
-                                                          //   child: ClipRRect(
-                                                          //     borderRadius: BorderRadius.circular(30),
-                                                          //     child: Container(
-                                                          //       decoration: BoxDecoration(
-                                                          //         border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
-                                                          //         borderRadius: BorderRadius.circular(1),
-                                                          //       ),
-                                                          //       child: SvgPicture.asset(
-                                                          //         ImagePath.delete_round,
-                                                          //         height: 60,
-                                                          //         width: 60,
-                                                          //       ),
-                                                          //     ),
-                                                          //   ),
-                                                          // )
+                                                          ),
+                                                          SizedBox(
+                                                            height: 6,
+                                                          ),
+                                                          Text(
+                                                            "Recording 1",
+                                                            style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 6,
+                                                          ),
+                                                          Text(
+                                                            "10/19/2024",
+                                                            style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                          ),
                                                         ],
                                                       ),
                                                     ],
@@ -573,7 +571,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 3, right: 11),
                                       child: Text(
-                                        "demo",
+                                        "Save",
                                         style: AppFonts.medium(14, Colors.white),
                                       ),
                                     ),
@@ -582,10 +580,44 @@ class AddPatientView extends GetView<AddPatientController> {
                                       width: 2,
                                       color: Colors.white,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: SvgPicture.asset(ImagePath.downArrow),
-                                    )
+                                    PopupMenuButton<String>(
+                                        offset: const Offset(14, -70),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                        color: AppColors.white,
+                                        position: PopupMenuPosition.over,
+                                        padding: EdgeInsetsDirectional.zero,
+                                        menuPadding: EdgeInsetsDirectional.zero,
+                                        onSelected: (value) {},
+                                        style: const ButtonStyle(
+                                            padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            maximumSize: WidgetStatePropertyAll(Size.zero),
+                                            visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                        itemBuilder: (context) => [
+                                              PopupMenuItem(
+                                                  padding: EdgeInsets.zero,
+                                                  value: "",
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        "Start Visit Now",
+                                                        textAlign: TextAlign.end,
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      )
+                                                    ],
+                                                  )),
+                                            ],
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: SvgPicture.asset(ImagePath.downArrow),
+                                        )),
                                   ],
                                 ),
                               ),
