@@ -9,6 +9,7 @@ import '../utils/imagepath.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar(
       {super.key,
+      required this.drawerkey,
       this.leadingImage,
       this.titleText,
       this.backgroundColor,
@@ -22,6 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.elevation = 0,
       this.centerTitle = false});
 
+  final GlobalKey<ScaffoldState> drawerkey;
   final String? leadingImage;
   final String? titleText;
   final TextAlign? titleAlign;
@@ -46,10 +48,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  ImagePath.drawer,
-                  height: 20,
-                  width: 20,
+                GestureDetector(
+                  onTap: () {
+                    drawerkey.currentState!.openDrawer();
+                  },
+                  child: SvgPicture.asset(
+                    ImagePath.drawer,
+                    height: 20,
+                    width: 20,
+                  ),
                 ),
                 SizedBox(
                   width: 10,

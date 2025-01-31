@@ -18,11 +18,14 @@ import '../../../routes/app_pages.dart';
 import '../controllers/visit_main_controller.dart';
 
 class VisitMainView extends GetView<VisitMainController> {
-  const VisitMainView({super.key});
+  VisitMainView({super.key});
+
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       backgroundColor: AppColors.white,
       // appBar: CustomAppBar(),
       body: SafeArea(
@@ -30,7 +33,7 @@ class VisitMainView extends GetView<VisitMainController> {
           children: [
             Column(
               children: [
-                CustomAppBar(),
+                CustomAppBar(drawerkey: _key),
                 Expanded(
                   child: Container(
                     color: AppColors.backgroundLightBlue,
@@ -626,8 +629,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                             ],
                                         child: SvgPicture.asset(
                                           ImagePath.logo_filter,
-                                          width: 50,
-                                          height: 50,
+                                          width: 40,
+                                          height: 40,
                                         )),
                                     SizedBox(
                                       width: 10,
@@ -673,15 +676,15 @@ class VisitMainView extends GetView<VisitMainController> {
                                   Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                       child: SizedBox(
-                                          height: 200,
+                                          height: 170,
                                           width: double.infinity,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
                                             padding: EdgeInsets.only(top: 20),
                                             itemBuilder: (context, index) {
                                               return Container(
-                                                height: 200,
-                                                width: 140,
+                                                height: 150,
+                                                width: 130,
                                                 child: Column(
                                                   children: [
                                                     SizedBox(height: 10),
@@ -717,42 +720,42 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                           ),
                                                                   ))),
                                                         ),
-                                                        Positioned(
-                                                          top: -15,
-                                                          right: -15,
-                                                          child: Container(
-                                                            width: 50, // Width of the circle
-                                                            height: 50, // Height of the circle
-                                                            decoration: BoxDecoration(
-                                                              shape: BoxShape.circle, // Ensures the container is circular
-                                                              color: Colors.white, // Circle color (can be changed as needed)
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                  color: Colors.black.withOpacity(0.25), // Shadow color
-                                                                  blurRadius: 8, // Shadow blur radius
-                                                                  offset: Offset(2, 2), // Shadow offset
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            child: GestureDetector(
-                                                              onTap: () {
-                                                                showDialog(
-                                                                  context: context,
-                                                                  barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                  builder: (BuildContext context) {
-                                                                    return DeleteImageDialog(); // Our custom dialog
-                                                                  },
-                                                                );
-                                                              },
-                                                              child: SvgPicture.asset(
-                                                                ImagePath.delete_round,
-                                                                height: 50, // Set the height and width as needed
-                                                                width: 50,
-                                                                fit: BoxFit.cover, // To make sure the image fits the circular shape
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        )
+                                                        // Positioned(
+                                                        //   top: -15,
+                                                        //   right: -15,
+                                                        //   child: Container(
+                                                        //     width: 50, // Width of the circle
+                                                        //     height: 50, // Height of the circle
+                                                        //     decoration: BoxDecoration(
+                                                        //       shape: BoxShape.circle, // Ensures the container is circular
+                                                        //       color: Colors.white, // Circle color (can be changed as needed)
+                                                        //       boxShadow: [
+                                                        //         BoxShadow(
+                                                        //           color: Colors.black.withOpacity(0.25), // Shadow color
+                                                        //           blurRadius: 8, // Shadow blur radius
+                                                        //           offset: Offset(2, 2), // Shadow offset
+                                                        //         ),
+                                                        //       ],
+                                                        //     ),
+                                                        //     child: GestureDetector(
+                                                        //       onTap: () {
+                                                        //         showDialog(
+                                                        //           context: context,
+                                                        //           barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                        //           builder: (BuildContext context) {
+                                                        //             return DeleteImageDialog(); // Our custom dialog
+                                                        //           },
+                                                        //         );
+                                                        //       },
+                                                        //       child: SvgPicture.asset(
+                                                        //         ImagePath.delete_round,
+                                                        //         height: 50, // Set the height and width as needed
+                                                        //         width: 50,
+                                                        //         fit: BoxFit.cover, // To make sure the image fits the circular shape
+                                                        //       ),
+                                                        //     ),
+                                                        //   ),
+                                                        // )
 
                                                         // Container(
                                                         //   decoration: BoxDecoration(
@@ -1002,7 +1005,6 @@ class VisitMainView extends GetView<VisitMainController> {
                       if (controller.isExpandRecording.value) ...[
                         Container(
                           width: MediaQuery.of(context).size.width * 0.45,
-                          // height: 300,
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
                               color: AppColors.backgroundLightGrey.withValues(alpha: 0.9),
@@ -1028,7 +1030,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                     Text(
                                       textAlign: TextAlign.center,
                                       "Recording in Progress",
-                                      style: AppFonts.medium(17, AppColors.textWhite),
+                                      style: AppFonts.medium(14, AppColors.textWhite),
                                     ),
                                     Spacer(),
                                     GestureDetector(
@@ -1048,16 +1050,16 @@ class VisitMainView extends GetView<VisitMainController> {
                               Text(
                                 textAlign: TextAlign.center,
                                 "Recording in Progress",
-                                style: AppFonts.regular(20, AppColors.textBlack),
+                                style: AppFonts.regular(17, AppColors.textBlack),
                               ),
                               SizedBox(height: 20),
                               Image.asset(
                                 ImagePath.wave,
-                                height: 110,
-                                width: 110,
+                                height: 90,
+                                width: 90,
                                 fit: BoxFit.fill,
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 20),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -1065,8 +1067,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                     children: [
                                       SvgPicture.asset(
                                         ImagePath.pause_recording,
-                                        height: 70,
-                                        width: 70,
+                                        height: 50,
+                                        width: 50,
                                       ),
                                       SizedBox(height: 10),
                                       Text(
@@ -1081,8 +1083,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                     children: [
                                       SvgPicture.asset(
                                         ImagePath.stop_recording,
-                                        height: 70,
-                                        width: 70,
+                                        height: 50,
+                                        width: 50,
                                       ),
                                       SizedBox(height: 10),
                                       Text(
@@ -1094,22 +1096,22 @@ class VisitMainView extends GetView<VisitMainController> {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 20),
                               Text(
                                 textAlign: TextAlign.center,
                                 "(01:07:12)",
-                                style: AppFonts.regular(17, AppColors.textBlack),
+                                style: AppFonts.regular(14, AppColors.textBlack),
                               ),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
                                   textAlign: TextAlign.center,
                                   "Press the stop button to start generating your summary.",
-                                  style: AppFonts.regular(17, AppColors.textGrey),
+                                  style: AppFonts.regular(14, AppColors.textGrey),
                                 ),
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 15),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 20),
                                 child: Row(
@@ -1120,7 +1122,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                       child: GestureDetector(
                                         onTap: () {},
                                         child: Container(
-                                          height: 60,
+                                          height: 50,
                                           decoration: BoxDecoration(
                                             border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
                                             color: AppColors.white,
@@ -1131,8 +1133,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                             children: [
                                               SvgPicture.asset(
                                                 ImagePath.logo_back,
-                                                height: 25,
-                                                width: 25,
+                                                height: 20,
+                                                width: 20,
                                               ),
                                               SizedBox(
                                                 width: 10,
@@ -1140,7 +1142,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 "Back To Visit",
-                                                style: AppFonts.medium(16, AppColors.textGrey),
+                                                style: AppFonts.medium(14, AppColors.textGrey),
                                               ),
                                             ],
                                           ),
@@ -1151,7 +1153,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                       child: GestureDetector(
                                         onTap: () {},
                                         child: Container(
-                                          height: 60,
+                                          height: 50,
                                           decoration: BoxDecoration(
                                             border: Border.all(color: AppColors.textPurple, width: 2),
                                             color: AppColors.white,
@@ -1162,8 +1164,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                             children: [
                                               SvgPicture.asset(
                                                 ImagePath.uploadImage,
-                                                height: 25,
-                                                width: 25,
+                                                height: 20,
+                                                width: 20,
                                               ),
                                               SizedBox(
                                                 width: 10,
@@ -1171,7 +1173,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 "Upload Photos",
-                                                style: AppFonts.medium(16, AppColors.textPurple),
+                                                style: AppFonts.medium(14, AppColors.textPurple),
                                               ),
                                             ],
                                           ),
@@ -1190,16 +1192,15 @@ class VisitMainView extends GetView<VisitMainController> {
                       ],
                       if (controller.isExpandRecording.value == false) ...[
                         Container(
-                          width: 430,
-                          // height: 300,
+                          width: 340,
                           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.backgroundBlack),
                           child: Row(
                             children: [
                               SvgPicture.asset(
                                 ImagePath.recording,
-                                height: 60,
-                                width: 60,
+                                height: 45,
+                                width: 45,
                               ),
                               SizedBox(width: 10),
                               Column(
@@ -1208,13 +1209,13 @@ class VisitMainView extends GetView<VisitMainController> {
                                   Text(
                                     textAlign: TextAlign.left,
                                     "Don Jones",
-                                    style: AppFonts.regular(15, AppColors.textWhite),
+                                    style: AppFonts.regular(14, AppColors.textWhite),
                                   ),
                                   SizedBox(height: 0),
                                   Text(
                                     textAlign: TextAlign.left,
                                     "00:03:09",
-                                    style: AppFonts.regular(15, AppColors.textGrey),
+                                    style: AppFonts.regular(14, AppColors.textGrey),
                                   ),
                                 ],
                               ),
@@ -1224,14 +1225,14 @@ class VisitMainView extends GetView<VisitMainController> {
                               ),
                               SvgPicture.asset(
                                 ImagePath.pause_white,
-                                height: 60,
-                                width: 60,
+                                height: 45,
+                                width: 45,
                               ),
                               SizedBox(width: 10),
                               SvgPicture.asset(
                                 ImagePath.stop_recording,
-                                height: 60,
-                                width: 60,
+                                height: 45,
+                                width: 45,
                               ),
                               SizedBox(width: 10),
                               GestureDetector(
@@ -1240,8 +1241,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                 },
                                 child: SvgPicture.asset(
                                   ImagePath.expand_recording,
-                                  height: 60,
-                                  width: 60,
+                                  height: 45,
+                                  width: 45,
                                 ),
                               ),
                             ],

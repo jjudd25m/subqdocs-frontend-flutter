@@ -10,10 +10,13 @@ class AppColors {
   // Text color
   static const Color textWhite = Color(0xFFFFFFFF);
   static const Color textBlack = Color(0xFF000000);
+  static const Color textBlackDark = Color(0xFF1E212A);
+
   static const Color textDarkGrey = Color(0xFF6C778B);
   static const Color textGrey = Color(0xFF65676E);
   static const Color textPurple = Color(0xFF5B5BE1);
   static const Color textOrangle = Color(0xFFFF8000);
+  static const Color drawerText = Color(0xFF555A63);
 
   // Background color
   static const Color backgroundWhite = Color(0xFFFFFFFF);
@@ -32,4 +35,14 @@ class AppColors {
 
   static const Color textfieldBorder = Color(0xFFD8DCE4);
   static const Color appbarBorder = Color(0xFFD8DCE4);
+
+  static const Color ScreenBackGround = Color(0xFFF6F6FD);
+  static const Color buttonWithOpacity = Color.fromRGBO(91, 91, 225, 0.40);
+
+  static const Color orange = Color(0xFFFFE6CC);
+  static const Color orangeText = Color(0xFFFF8000);
+  static const Color redText = Color(0xFFEB4335);
+
+  static const Color lightpurpule = Color(0xFFE9E9FB);
+  static const Color lightpurpuleButton = Color(0xFF5B5BE126);
 }

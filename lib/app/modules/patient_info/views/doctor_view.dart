@@ -28,7 +28,7 @@ class DoctorView extends GetView<PatientInfoController> {
               child: Column(
                 children: [
                   Container(
-                    height: 70,
+                    height: 60,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
@@ -38,14 +38,14 @@ class DoctorView extends GetView<PatientInfoController> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Row(
                           children: [
                             Text(
                               textAlign: TextAlign.center,
                               "Diagnosis codes / Procedures",
-                              style: AppFonts.medium(20, AppColors.textPurple),
+                              style: AppFonts.medium(17, AppColors.textPurple),
                             ),
                             Spacer(),
                             SvgPicture.asset(
@@ -153,7 +153,7 @@ class DoctorView extends GetView<PatientInfoController> {
               child: Column(
                 children: [
                   Container(
-                    height: 70,
+                    height: 60,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
@@ -163,14 +163,14 @@ class DoctorView extends GetView<PatientInfoController> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Row(
                           children: [
                             Text(
                               textAlign: TextAlign.center,
                               "Impressions and Plan",
-                              style: AppFonts.medium(20, AppColors.textPurple),
+                              style: AppFonts.medium(17, AppColors.textPurple),
                             ),
                             Spacer(),
                             SvgPicture.asset(

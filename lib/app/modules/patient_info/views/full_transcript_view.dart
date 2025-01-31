@@ -9,7 +9,6 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../controllers/patient_info_controller.dart';
 
-
 class FullTranscriptView extends GetView<PatientInfoController> {
   const FullTranscriptView({super.key});
 
@@ -47,27 +46,27 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                               style: AppFonts.medium(20, AppColors.textBlack),
                             ),
                             Spacer(),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8), color: AppColors.backgroundPurple, border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
-                              child: Row(children: [
-                                SizedBox(width: 15),
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "Select Template",
-                                  style: AppFonts.medium(20, AppColors.textWhite),
-                                ),
-                                SizedBox(width: 10),
-                                SvgPicture.asset(
-                                  ImagePath.down_arrow,
-                                  height: 30,
-                                  width: 30,
-                                  colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
-                                ),
-                                SizedBox(width: 10),
-                              ]),
-                            ),
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(vertical: 12),
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(8), color: AppColors.backgroundPurple, border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                            //   child: Row(children: [
+                            //     SizedBox(width: 15),
+                            //     Text(
+                            //       textAlign: TextAlign.center,
+                            //       "Select Template",
+                            //       style: AppFonts.medium(17, AppColors.textWhite),
+                            //     ),
+                            //     SizedBox(width: 10),
+                            //     SvgPicture.asset(
+                            //       ImagePath.down_arrow,
+                            //       height: 30,
+                            //       width: 30,
+                            //       colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
+                            //     ),
+                            //     SizedBox(width: 10),
+                            //   ]),
+                            // ),
                           ],
                         ),
                         Row(
@@ -116,11 +115,11 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.left,
                                                   "Doctor",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.medium(14, AppColors.textPurple),
                                                 ),
                                                 Text(
                                                   "Yes, doctor. I’ve not been feeling well for the past few days. I’ve been having a stomach ache for a few days and feeling a bit dizzy since yesterday.",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 )
                                               ],
                                             ),

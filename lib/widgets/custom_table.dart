@@ -1,0 +1,86 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:subqdocs/utils/app_colors.dart';
+
+class CustomTable extends StatelessWidget {
+  final List<List<String>> rows;
+  final Widget Function(BuildContext, int, int, String) cellBuilder;
+  final int columnCount;
+  BuildContext context;
+
+  List<double> columnWidths;
+
+  CustomTable(
+      {required this.rows,
+      required this.cellBuilder,
+      required this.columnCount,
+      required this.context,
+      required this.columnWidths});
+
+  @override
+  Widget build(BuildContext context) {
+    // Get screen width
+    double screenWidth = MediaQuery.of(context).size.width - 100;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(width: 1, color: AppColors.appbarBorder),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: Column(
+            children: [
+              for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
+                Column(
+                  children: [
+                    _buildTableRow(rowIndex, screenWidth),
+                    _buildDivider(),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTableRow(int rowIndex, double screenWidth) {
+    List<String> rowData = rows[rowIndex];
+
+    // Column width percentages (for example, 20%, 25%, 15%, etc.)
+
+    return Container(
+      decoration: BoxDecoration(
+        color: rowIndex == 0 ? Colors.white : Colors.white,
+        border: rowIndex != 0 ? Border(top: BorderSide(color: AppColors.appbarBorder, width: 1)) : null,
+      ),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          for (int colIndex = 0; colIndex < columnCount; colIndex++)
+            Container(
+              width: screenWidth * columnWidths[colIndex], // Set the width based on percentage
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: cellBuilder(
+                context,
+                rowIndex,
+                colIndex,
+                rowData.length > colIndex ? rowData[colIndex] : '',
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Divider(
+      height: 0,
+      color: Colors.black,
+    );
+  }
+}

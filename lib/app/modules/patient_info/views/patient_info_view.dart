@@ -20,16 +20,18 @@ import 'full_transcript_view.dart';
 
 class PatientInfoView extends GetView<PatientInfoController> {
   PatientInfoView({super.key});
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundWhite,
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(),
+            CustomAppBar(drawerkey: _key),
             Expanded(
               child: Container(
                 color: AppColors.backgroundLightBlue,
@@ -127,8 +129,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         color: AppColors.textOrangle.withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(25), // Set corner radius
                                       ),
-                                      height: 50,
-                                      width: 130,
+                                      height: 40,
+                                      width: 120,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
@@ -320,7 +322,23 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   "Missie Cooper",
-                                                  style: AppFonts.regular(13, AppColors.textGrey),
+                                                  style: AppFonts.regular(13, AppColors.textPurple),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.textPurple,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(horizontal: 6),
+                                                  child: Text(
+                                                    textAlign: TextAlign.center,
+                                                    "+2",
+                                                    style: AppFonts.bold(13, AppColors.textWhite),
+                                                  ),
                                                 ),
                                                 SizedBox(width: 5),
                                                 SvgPicture.asset(
@@ -381,102 +399,105 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                     return Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 20),
                                       child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 20),
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundPurple.withValues(alpha: 0.2)),
                                           height: 70,
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: 150,
-                                                  height: 40,
-                                                  child: CustomAnimatedButton(
-                                                    onPressed: () {
-                                                      controller.tabIndex.value = 0;
-                                                    },
-                                                    text: " Doctor View ",
-                                                    isOutline: true,
-                                                    fontSize: 17,
-                                                    enabledTextColor: controller.tabIndex.value == 0 ? AppColors.textWhite : AppColors.textGrey,
-                                                    enabledColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    outLineEnabledColor: AppColors.textGrey,
-                                                    outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
-                                                  )),
-                                              SizedBox(
-                                                  width: 150,
-                                                  height: 40,
-                                                  child: CustomAnimatedButton(
-                                                    onPressed: () {
-                                                      controller.tabIndex.value = 1;
-                                                    },
-                                                    text: " Full Transcript ",
-                                                    isOutline: true,
-                                                    fontSize: 17,
-                                                    enabledTextColor: controller.tabIndex.value == 1 ? AppColors.textWhite : AppColors.textGrey,
-                                                    enabledColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    outLineEnabledColor: AppColors.textGrey,
-                                                    outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                  )),
-                                              SizedBox(
-                                                  width: 150,
-                                                  height: 40,
-                                                  child: CustomAnimatedButton(
-                                                    onPressed: () {
-                                                      controller.tabIndex.value = 2;
-                                                    },
-                                                    text: " Patient View ",
-                                                    isOutline: true,
-                                                    fontSize: 17,
-                                                    enabledTextColor: controller.tabIndex.value == 2 ? AppColors.textWhite : AppColors.textGrey,
-                                                    enabledColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    outLineEnabledColor: AppColors.textGrey,
-                                                    outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                  )),
-                                              SizedBox(
-                                                  width: 150,
-                                                  height: 40,
-                                                  child: CustomAnimatedButton(
-                                                    onPressed: () {
-                                                      controller.tabIndex.value = 3;
-                                                    },
-                                                    text: " Full Note ",
-                                                    isOutline: true,
-                                                    fontSize: 17,
-                                                    enabledTextColor: controller.tabIndex.value == 3 ? AppColors.textWhite : AppColors.textGrey,
-                                                    enabledColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    outLineEnabledColor: AppColors.textGrey,
-                                                    outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
-                                                  )),
-                                              SizedBox(
-                                                  width: 150,
-                                                  height: 40,
-                                                  child: CustomAnimatedButton(
-                                                    onPressed: () {
-                                                      controller.tabIndex.value = 4;
-                                                    },
-                                                    text: " Billing Form ",
-                                                    isOutline: true,
-                                                    fontSize: 17,
-                                                    enabledTextColor: controller.tabIndex.value == 4 ? AppColors.textWhite : AppColors.textGrey,
-                                                    enabledColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    outLineEnabledColor: AppColors.textGrey,
-                                                    outlineColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
-                                                  )),
-                                              SizedBox(
-                                                  width: 150,
-                                                  height: 40,
-                                                  child: CustomAnimatedButton(
-                                                    onPressed: () {
-                                                      controller.tabIndex.value = 5;
-                                                    },
-                                                    text: " Requisition ",
-                                                    isOutline: true,
-                                                    fontSize: 17,
-                                                    enabledTextColor: controller.tabIndex.value == 5 ? AppColors.textWhite : AppColors.textGrey,
-                                                    enabledColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    outLineEnabledColor: AppColors.textGrey,
-                                                    outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
-                                                  ))
-                                            ],
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                    width: 130,
+                                                    height: 40,
+                                                    child: CustomAnimatedButton(
+                                                      onPressed: () {
+                                                        controller.tabIndex.value = 0;
+                                                      },
+                                                      text: " Doctor View ",
+                                                      isOutline: true,
+                                                      fontSize: 14,
+                                                      enabledTextColor: controller.tabIndex.value == 0 ? AppColors.textWhite : AppColors.textGrey,
+                                                      enabledColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
+                                                      outLineEnabledColor: AppColors.textGrey,
+                                                      outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
+                                                    )),
+                                                SizedBox(
+                                                    width: 140,
+                                                    height: 40,
+                                                    child: CustomAnimatedButton(
+                                                      onPressed: () {
+                                                        controller.tabIndex.value = 1;
+                                                      },
+                                                      text: " Full Transcript ",
+                                                      isOutline: true,
+                                                      fontSize: 14,
+                                                      enabledTextColor: controller.tabIndex.value == 1 ? AppColors.textWhite : AppColors.textGrey,
+                                                      enabledColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                                      outLineEnabledColor: AppColors.textGrey,
+                                                      outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                                    )),
+                                                SizedBox(
+                                                    width: 120,
+                                                    height: 40,
+                                                    child: CustomAnimatedButton(
+                                                      onPressed: () {
+                                                        controller.tabIndex.value = 2;
+                                                      },
+                                                      text: " Patient View ",
+                                                      isOutline: true,
+                                                      fontSize: 14,
+                                                      enabledTextColor: controller.tabIndex.value == 2 ? AppColors.textWhite : AppColors.textGrey,
+                                                      enabledColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                                      outLineEnabledColor: AppColors.textGrey,
+                                                      outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                                    )),
+                                                SizedBox(
+                                                    width: 120,
+                                                    height: 40,
+                                                    child: CustomAnimatedButton(
+                                                      onPressed: () {
+                                                        controller.tabIndex.value = 3;
+                                                      },
+                                                      text: " Full Note ",
+                                                      isOutline: true,
+                                                      fontSize: 14,
+                                                      enabledTextColor: controller.tabIndex.value == 3 ? AppColors.textWhite : AppColors.textGrey,
+                                                      enabledColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
+                                                      outLineEnabledColor: AppColors.textGrey,
+                                                      outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
+                                                    )),
+                                                SizedBox(
+                                                    width: 130,
+                                                    height: 40,
+                                                    child: CustomAnimatedButton(
+                                                      onPressed: () {
+                                                        controller.tabIndex.value = 4;
+                                                      },
+                                                      text: " Billing Form ",
+                                                      isOutline: true,
+                                                      fontSize: 14,
+                                                      enabledTextColor: controller.tabIndex.value == 4 ? AppColors.textWhite : AppColors.textGrey,
+                                                      enabledColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
+                                                      outLineEnabledColor: AppColors.textGrey,
+                                                      outlineColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
+                                                    )),
+                                                SizedBox(
+                                                    width: 120,
+                                                    height: 40,
+                                                    child: CustomAnimatedButton(
+                                                      onPressed: () {
+                                                        controller.tabIndex.value = 5;
+                                                      },
+                                                      text: " Requisition ",
+                                                      isOutline: true,
+                                                      fontSize: 14,
+                                                      enabledTextColor: controller.tabIndex.value == 5 ? AppColors.textWhite : AppColors.textGrey,
+                                                      enabledColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
+                                                      outLineEnabledColor: AppColors.textGrey,
+                                                      outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
+                                                    ))
+                                              ],
+                                            ),
                                           )),
                                     );
                                   }),

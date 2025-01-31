@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 class LoginController extends GetxController {
   //TODO: Implement LoginController
 
+  RxBool visiblity = RxBool(false);
+
   final count = 0.obs;
   @override
   void onInit() {
@@ -20,4 +22,9 @@ class LoginController extends GetxController {
   }
 
   void increment() => count.value++;
+
+  void changeVisiblity() {
+    visiblity.value = visiblity == true ? false : true;
+    visiblity.refresh();
+  }
 }

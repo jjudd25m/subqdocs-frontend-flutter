@@ -19,16 +19,18 @@ import '../../../routes/app_pages.dart';
 import '../controllers/all_attachment_controller.dart';
 
 class AllAttachmentView extends GetView<AllAttachmentController> {
-  const AllAttachmentView({super.key});
+  AllAttachmentView({super.key});
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(),
+            CustomAppBar(drawerkey: _key),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -50,10 +52,15 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Row(
                             children: [
-                              SvgPicture.asset(
-                                ImagePath.logo_back,
-                                height: 20,
-                                width: 20,
+                              GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: SvgPicture.asset(
+                                  ImagePath.logo_back,
+                                  height: 20,
+                                  width: 20,
+                                ),
                               ),
                               SizedBox(
                                 width: 10,
@@ -156,8 +163,8 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                         ),
                                                       ),
                                                       Positioned(
-                                                        top: -15,
-                                                        right: -15,
+                                                        top: -20,
+                                                        right: -20,
                                                         child: Container(
                                                           width: 50,
                                                           height: 50,

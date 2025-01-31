@@ -42,7 +42,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -53,7 +53,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Cancer History",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -124,7 +124,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -135,7 +135,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Skin History",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -206,7 +206,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -217,7 +217,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Social History",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -288,7 +288,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -299,7 +299,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Medications",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -370,7 +370,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -381,7 +381,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Allergies",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -454,7 +454,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -465,7 +465,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Chief Complaint",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -510,7 +510,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -521,7 +521,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "HPI",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -566,7 +566,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -577,7 +577,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Review of Systems",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -665,7 +665,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -676,7 +676,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Exam",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -759,7 +759,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -770,7 +770,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Impressions and Plan",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -952,7 +952,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -963,7 +963,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Images",
-                                          style: AppFonts.medium(20, AppColors.textPurple),
+                                          style: AppFonts.medium(16, AppColors.textPurple),
                                         ),
                                         Spacer(),
                                         SvgPicture.asset(
@@ -992,9 +992,10 @@ class FullNoteView extends GetView<PatientInfoController> {
                                       Row(
                                         children: [
                                           Text(
-                                            textAlign: TextAlign.center,
+                                            textAlign: TextAlign.left,
+                                            overflow: TextOverflow.ellipsis,
                                             "Right side of the nose before the laser session",
-                                            style: AppFonts.medium(14, AppColors.textBlack),
+                                            style: AppFonts.medium(12, AppColors.textBlack),
                                           ),
                                           SizedBox(width: 10),
                                           SvgPicture.asset(

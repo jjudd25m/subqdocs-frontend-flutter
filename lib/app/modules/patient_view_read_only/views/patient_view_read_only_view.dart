@@ -18,15 +18,18 @@ import '../controllers/patient_view_read_only_controller.dart';
 class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
   PatientViewReadOnlyView({super.key});
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundWhite,
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(),
+            CustomAppBar(drawerkey: _key),
             Expanded(
               child: Container(
                 color: AppColors.backgroundLightBlue,
