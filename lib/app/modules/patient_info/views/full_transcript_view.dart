@@ -9,6 +9,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../controllers/patient_info_controller.dart';
 
+
 class FullTranscriptView extends GetView<PatientInfoController> {
   const FullTranscriptView({super.key});
 
