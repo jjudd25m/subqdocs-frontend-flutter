@@ -62,10 +62,15 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                         ],
                       ),
                       Spacer(),
-                      SvgPicture.asset(
-                        ImagePath.crossWithContainer,
-                        height: 24,
-                        width: 24,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(
+                          ImagePath.crossWithContainer,
+                          height: 24,
+                          width: 24,
+                        ),
                       )
                     ],
                   ),
@@ -89,23 +94,26 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                       SizedBox(
                         height: 16,
                       ),
-                      ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                              onTap: () {
-                                // Handle item selection
-                                // Navigator.pop(context);
-                              },
-                              child: DrawerItem(
-                                isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
-                                itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
-                                iconPath: controller.drawerItemModelList.value[index].drawerIconPath ??
-                                    "", // Add any dummy icon path here
-                              ));
+                      Obx(
+                        () {
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                  onTap: () {
+                                    controller.changeSelected(index);
+                                  },
+                                  child: DrawerItem(
+                                    isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
+                                    itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
+                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ??
+                                        "", // Add any dummy icon path here
+                                  ));
+                            },
+                            itemCount: controller.drawerItemModelList.value.length,
+                          );
                         },
-                        itemCount: controller.drawerItemModelList.value.length,
                       )
                     ],
                   ),

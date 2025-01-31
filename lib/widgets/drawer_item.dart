@@ -37,7 +37,10 @@ class DrawerItem extends StatelessWidget {
                             Colors.white, // The color you want to apply
                             BlendMode.srcIn, // This blend mode is commonly used for coloring SVGs
                           )
-                        : null,
+                        : ColorFilter.mode(
+                            Colors.black, // The color you want to apply
+                            BlendMode.srcIn, // This blend mode is commonly used for coloring SVGs
+                          ),
                   ),
                 ),
                 SizedBox(

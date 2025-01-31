@@ -16,7 +16,7 @@ class CustomDrawerController extends GetxController {
       DrawerItemModel(
         isSelected: true,
         drawerItemTitle: "Add New Visit",
-        drawerIconPath: ImagePath.calenderDrawer,
+        drawerIconPath: ImagePath.calendar,
         routePath: "",
       ),
     );
@@ -63,4 +63,15 @@ class CustomDrawerController extends GetxController {
   }
 
   void increment() => count.value++;
+
+  void changeSelected(int index) {
+    drawerItemModelList.forEach(
+      (element) {
+        element.isSelected = false;
+      },
+    );
+
+    drawerItemModelList[index].isSelected = true;
+    drawerItemModelList.refresh();
+  }
 }

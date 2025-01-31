@@ -743,7 +743,44 @@ class HomeView extends GetView<HomeController> {
                                         ],
                                       )
                                     : colIndex == 5 && rowIndex != 0
-                                        ? SvgPicture.asset("assets/images/logo_threedots.svg")
+                                        ? PopupMenuButton<String>(
+                                            offset: const Offset(0, 8),
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                            color: AppColors.white,
+                                            position: PopupMenuPosition.under,
+                                            padding: EdgeInsetsDirectional.zero,
+                                            menuPadding: EdgeInsetsDirectional.zero,
+                                            onSelected: (value) {},
+                                            style: const ButtonStyle(
+                                                padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                            itemBuilder: (context) => [
+                                                  PopupMenuItem(
+                                                      value: "",
+                                                      child: Text(
+                                                        "View",
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                      )),
+                                                  PopupMenuDivider(),
+                                                  PopupMenuItem(
+                                                      value: "",
+                                                      onTap: () {},
+                                                      child: Text(
+                                                        "Edit",
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                      )),
+                                                  PopupMenuDivider(),
+                                                  PopupMenuItem(
+                                                      value: "",
+                                                      onTap: () {},
+                                                      child: Text(
+                                                        "Delete",
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                      ))
+                                                ],
+                                            child: SvgPicture.asset("assets/images/logo_threedots.svg"))
                                         : rowIndex == 0
                                             ? Text(
                                                 cellData,
@@ -800,7 +837,44 @@ class HomeView extends GetView<HomeController> {
                                             ],
                                           )
                                         : colIndex == 5 && rowIndex != 0
-                                            ? SvgPicture.asset("assets/images/logo_threedots.svg")
+                                            ? PopupMenuButton<String>(
+                                                offset: const Offset(0, 8),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                color: AppColors.white,
+                                                position: PopupMenuPosition.under,
+                                                padding: EdgeInsetsDirectional.zero,
+                                                menuPadding: EdgeInsetsDirectional.zero,
+                                                onSelected: (value) {},
+                                                style: const ButtonStyle(
+                                                    padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                    maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                    visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                                itemBuilder: (context) => [
+                                                      PopupMenuItem(
+                                                          value: "",
+                                                          child: Text(
+                                                            "View",
+                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          )),
+                                                      PopupMenuDivider(),
+                                                      PopupMenuItem(
+                                                          value: "",
+                                                          onTap: () {},
+                                                          child: Text(
+                                                            "Edit",
+                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          )),
+                                                      PopupMenuDivider(),
+                                                      PopupMenuItem(
+                                                          value: "",
+                                                          onTap: () {},
+                                                          child: Text(
+                                                            "Delete",
+                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          ))
+                                                    ],
+                                                child: SvgPicture.asset("assets/images/logo_threedots.svg"))
                                             : rowIndex == 0
                                                 ? Text(
                                                     cellData,
