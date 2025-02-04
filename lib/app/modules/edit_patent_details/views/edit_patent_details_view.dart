@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +11,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
 import '../../../../widgets/custom_button.dart';
@@ -68,54 +70,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
           child: Column(
             children: [
               CustomAppBar(drawerkey: _key),
-              // Padding(
-              //   padding: const EdgeInsets.only(
-              //     top: 25,
-              //   ),
-              //   child: Container(
-              //     height: 68,
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(15),
-              //       child: Row(
-              //         children: [
-              //           SvgPicture.asset("assets/images/logo_drawer.svg"),
-              //           SizedBox(
-              //             width: 15,
-              //           ),
-              //           Image.asset("assets/images/log_subQdocs.png"),
-              //           Spacer(),
-              //           RoundedImageWidget(
-              //             size: 50,
-              //             imagePath: "assets/images/user.png",
-              //           ),
-              //           SizedBox(
-              //             width: 8,
-              //           ),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text(
-              //                 "Adrian Tinajero",
-              //                 style: AppFonts.medium(14, AppColors.backgroundBlack),
-              //               ),
-              //               Text(
-              //                 "DO, FAAD",
-              //                 style: AppFonts.medium(12, AppColors.textDarkGrey),
-              //               ),
-              //             ],
-              //           ),
-              //           SizedBox(
-              //             width: 15,
-              //           ),
-              //           SvgPicture.asset("assets/images/logo_signout.svg")
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
               Expanded(
                   child: Container(
                 color: AppColors.ScreenBackGround,
@@ -157,38 +111,32 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             ),
                             Row(
                               children: [
-                                RoundedImageWidget(
-                                  size: 60,
-                                  imagePath: ImagePath.user,
-                                ),
-                                SizedBox(
-                                  width: 14,
-                                ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Expanded(
-                                    child: CustomButton(
-                                      hight: 35.0,
-                                      navigate: () {},
-                                      label: "Choose File",
-                                    ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "https://s3-alpha-sig.figma.com/img/a4fb/0475/22a6a267e52fb2110d906506ebecb290?Expires=1739145600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Y7ACwUmQuZYw2hburAkZdY7tlHHQwCz~i3Wht~HvYmQcGFD8GDwKHMCbwYgpOBUXGvVtgcZnowY9LR9ViFQbXp5wri4bxQEFttHdu~vevrmZv-WVCoXSV3LXw7Nt4a-xuqABAHtw~WLxLk5e8YDeHwFVbvNg~2LVDF3WmHMr-lvd2SN-mJy0JHA2wTXcWZnQSb~Al-1TzETWp3w0v4fvMTlt63jkC6fvt-jRWIM1-1TGrT3zbhOS8o0qO97EkN3zddNpk1kS5k2u02qhSBlIffrfa6YzCohR8wgyujUJQJwtEihsK~La5qYdDFYb8Heja9-vMcnn4l9ePcueAuCCKw__",
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
                                   ),
+                                ),
+                                SizedBox(
+                                  width: 12.5,
+                                ),
+                                SvgPicture.asset(
+                                  ImagePath.edit,
+                                  width: 26,
+                                  height: 26,
+                                  fit: BoxFit.cover,
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                SizedBox(
-                                  width: 85,
-                                  child: Expanded(
-                                    child: CustomButton(
-                                      navigate: () {},
-                                      backGround: Colors.white,
-                                      textColor: AppColors.redText,
-                                      hight: 35.0,
-                                      label: "Remove",
-                                    ),
-                                  ),
-                                ),
+                                Text(
+                                  "Edit Profile Image",
+                                  style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                )
                               ],
                             ),
                             SizedBox(
@@ -316,49 +264,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: TextFormFiledWidget(
-                                    label: "Visit Date",
-                                    readOnly: true,
-                                    onTap: () {
-                                      _showCupertinoDatePicker(context, controller.visitDateController);
-                                    },
-                                    controller: controller.visitDateController,
-                                    hint: "10/12/2024",
-                                    suffixIcon: SvgPicture.asset(ImagePath.calendar),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Dimen.margin10,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Visit Time",
-                                        style: AppFonts.regular(14, AppColors.textBlack),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Obx(() {
-                                        return BaseDropdown<String>(
-                                          valueAsString: (value) => value ?? "",
-                                          items: controller.visitTime,
-                                          selectedValue: controller.selectedVisitTimeValue.value,
-                                          onChanged: (value) {
-                                            controller.selectedVisitTimeValue.value = value;
-                                          },
-                                          selectText: "11 PM",
-                                        );
-                                      })
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Dimen.margin10,
-                                ),
-                                Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -383,6 +288,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     ],
                                   ),
                                 ),
+                                Expanded(child: SizedBox()),
+                                Expanded(child: SizedBox()),
                               ],
                             ),
                             SizedBox(
@@ -391,26 +298,34 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             Row(
                               children: [
                                 Spacer(),
-                                Container(
-                                  width: 80,
-                                  child: Expanded(
-                                    child: CustomButton(
-                                      navigate: () {},
-                                      isTrue: false,
-                                      textColor: AppColors.backgroundPurple,
-                                      backGround: Colors.white,
-                                      label: "Cancel",
-                                    ),
-                                  ),
+                                ContainerButton(
+                                  onPressed: () {
+                                    // Your onPressed function
+                                  },
+                                  text: 'Cancel',
+
+                                  borderColor: AppColors.backgroundPurple, // Custom border color
+                                  backgroundColor: AppColors.white, // Custom background color
+                                  needBorder: true, // Show border
+                                  textColor: AppColors.backgroundPurple, // Custom text color
+                                  padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                  radius: 6, // Custom border radius
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Container(
-                                  width: 70,
-                                  child: Expanded(
-                                    child: CustomButton(navigate: () {}, label: "Save"),
-                                  ),
+                                ContainerButton(
+                                  onPressed: () {
+                                    // Your onPressed function
+                                  },
+                                  text: 'Save',
+
+                                  borderColor: AppColors.backgroundPurple, // Custom border color
+                                  backgroundColor: AppColors.backgroundPurple, // Custom background color
+                                  needBorder: false, // Show border
+                                  textColor: AppColors.white, // Custom text color
+                                  padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                  radius: 6, // Custom border radius
                                 ),
                               ],
                             ),

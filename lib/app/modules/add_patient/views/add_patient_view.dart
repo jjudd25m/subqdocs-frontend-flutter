@@ -10,7 +10,10 @@ import 'package:subqdocs/widget/appbar.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widget/custom_animated_button.dart';
+import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
 import '../../../../widgets/custom_button.dart';
@@ -83,61 +86,16 @@ class AddPatientView extends GetView<AddPatientController> {
         body: SafeArea(
           child: Column(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.only(
-              //     top: 25,
-              //   ),
-              //   child: Container(
-              //     height: 68,
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(15),
-              //       child: Row(
-              //         children: [
-              //           SvgPicture.asset("assets/images/logo_drawer.svg"),
-              //           SizedBox(
-              //             width: 15,
-              //           ),
-              //           Image.asset("assets/images/log_subQdocs.png"),
-              //           Spacer(),
-              //           RoundedImageWidget(
-              //             size: 50,
-              //             imagePath: "assets/images/user.png",
-              //           ),
-              //           SizedBox(
-              //             width: 8,
-              //           ),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text(
-              //                 "Adrian Tinajero",
-              //                 style: AppFonts.medium(14, AppColors.backgroundBlack),
-              //               ),
-              //               Text(
-              //                 "DO, FAAD",
-              //                 style: AppFonts.medium(12, AppColors.textDarkGrey),
-              //               ),
-              //             ],
-              //           ),
-              //           SizedBox(
-              //             width: 15,
-              //           ),
-              //           SvgPicture.asset("assets/images/logo_signout.svg")
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
               CustomAppBar(drawerkey: _key),
               Expanded(
                   child: Container(
                       color: AppColors.ScreenBackGround,
                       child: Padding(
-                        padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
-                        child: Column(
+                        padding:
+                            const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                        child: ListView(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.zero,
                           children: [
                             Container(
                               width: double.infinity,
@@ -187,38 +145,19 @@ class AddPatientView extends GetView<AddPatientController> {
                                   ),
                                   Row(
                                     children: [
-                                      RoundedImageWidget(
-                                        size: 60,
-                                        imagePath: ImagePath.user,
+                                      BaseImageView(
+                                        imageUrl:
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                        width: 60,
+                                        height: 60,
                                       ),
                                       SizedBox(
-                                        width: 14,
+                                        width: 12,
                                       ),
-                                      SizedBox(
-                                        width: 100,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            hight: 35.0,
-                                            navigate: () {},
-                                            label: "Choose File",
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      SizedBox(
-                                        width: 80,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {},
-                                            backGround: Colors.white,
-                                            textColor: AppColors.redText,
-                                            hight: 35.0,
-                                            label: "Remove",
-                                          ),
-                                        ),
-                                      ),
+                                      Text(
+                                        "   + Add Profile Image",
+                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                      )
                                     ],
                                   ),
                                   SizedBox(
@@ -427,8 +366,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(1),
                                         child: ExpansionTile(
-                                          shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                          shape: OutlineInputBorder(
+                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                           backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                          collapsedShape: OutlineInputBorder(
+                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                           collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                           title: Container(
                                             child: Row(
@@ -474,7 +416,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                       width: 120,
                                                                       height: 120,
                                                                       child: ClipRRect(
-                                                                        borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                        borderRadius: BorderRadius.circular(
+                                                                            10), // Set the radius here
                                                                         child: Image.network(
                                                                           "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
                                                                           fit: BoxFit.cover,
@@ -486,14 +429,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                     ),
                                                                     Text(
                                                                       "Recording 1",
-                                                                      style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                      style:
+                                                                          AppFonts.regular(12, AppColors.textDarkGrey),
                                                                     ),
                                                                     SizedBox(
                                                                       height: 6,
                                                                     ),
                                                                     Text(
                                                                       "10/19/2024",
-                                                                      style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                      style:
+                                                                          AppFonts.regular(12, AppColors.textDarkGrey),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -501,7 +446,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                             ),
                                                           );
                                                         },
-                                                        separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                        separatorBuilder: (context, index) =>
+                                                            const SizedBox(width: Dimen.margin15),
                                                         itemCount: 8,
                                                       ))),
                                             ),
@@ -516,20 +462,28 @@ class AddPatientView extends GetView<AddPatientController> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        width: 160,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {
-                                              _showCustomDialog(context);
-                                            },
-                                            label: "Add Attachments",
-                                            backGround: AppColors.white,
-                                            textColor: AppColors.textPurple,
-                                            isTrue: false,
-                                          ),
-                                        ),
+                                      ContainerButton(
+                                        onPressed: () {
+                                          _showCustomDialog(context);
+                                        },
+                                        text: 'Add Attachments',
+
+                                        borderColor: AppColors.backgroundPurple, // Custom border color
+                                        backgroundColor: Colors.white, // Custom background color
+                                        needBorder: true, // Show border
+                                        textColor: AppColors.backgroundPurple, // Custom text color
+                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                        radius: 6, // Custom border radius
                                       ),
+                                      // CustomButton(
+                                      //   navigate: () {
+                                      //     _showCustomDialog(context);
+                                      //   },
+                                      //   label: "Add Attachments",
+                                      //   backGround: AppColors.white,
+                                      //   textColor: AppColors.textPurple,
+                                      //   isTrue: false,
+                                      // ),
                                       Spacer(),
                                       Text(
                                         "Clear Form",
@@ -538,35 +492,43 @@ class AddPatientView extends GetView<AddPatientController> {
                                       SizedBox(
                                         width: Dimen.margin6,
                                       ),
-                                      SizedBox(
-                                        width: 80,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {},
-                                            label: "Cancel",
-                                            backGround: AppColors.white,
-                                            textColor: AppColors.textPurple,
-                                            isTrue: false,
-                                          ),
-                                        ),
+                                      ContainerButton(
+                                        onPressed: () {
+                                          // Your onPressed function
+                                        },
+                                        text: 'Cancel',
+
+                                        borderColor: AppColors.backgroundPurple, // Custom border color
+                                        backgroundColor: Colors.white, // Custom background color
+                                        needBorder: true, // Show border
+                                        textColor: AppColors.backgroundPurple, // Custom text color
+                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                        radius: 6, // Custom border radius
                                       ),
                                       SizedBox(
                                         width: Dimen.margin6,
                                       ),
-                                      SizedBox(
-                                        width: 190,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {},
-                                            label: "Save and Add Another",
-                                          ),
-                                        ),
+
+                                      ContainerButton(
+                                        onPressed: () {
+                                          // Your onPressed function
+                                        },
+                                        text: 'Save and Add Another',
+
+                                        borderColor: AppColors.backgroundPurple, // Custom border color
+                                        backgroundColor: AppColors.backgroundPurple, // Custom background color
+                                        needBorder: false, // Show border
+                                        textColor: AppColors.white, // Custom text color
+                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                        radius: 6, // Custom border radius
                                       ),
+
                                       SizedBox(
                                         width: Dimen.margin6,
                                       ),
                                       Container(
-                                        decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(10)),
+                                        decoration: BoxDecoration(
+                                            color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
                                         width: 98,
                                         height: 40,
                                         child: Padding(
@@ -624,7 +586,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     child: SvgPicture.asset(
                                                       ImagePath.downArrow,
                                                       width: 20,
-                                                      colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
+                                                      colorFilter:
+                                                          ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
                                                     ),
                                                   )),
                                             ],

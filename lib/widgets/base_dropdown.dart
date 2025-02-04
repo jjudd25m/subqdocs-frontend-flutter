@@ -16,7 +16,16 @@ class BaseDropdown<T> extends StatelessWidget {
   final double? fontSize;
 
   const BaseDropdown(
-      {super.key, this.onChanged, this.selectText, this.decoration, required this.valueAsString, this.selectedValue, this.textLabel, this.isRequired = false, required this.items, this.fontSize = 14});
+      {super.key,
+      this.onChanged,
+      this.selectText,
+      this.decoration,
+      required this.valueAsString,
+      this.selectedValue,
+      this.textLabel,
+      this.isRequired = false,
+      required this.items,
+      this.fontSize = 14});
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +72,7 @@ class BaseDropdown<T> extends StatelessWidget {
         iconStyleData: const IconStyleData(
             icon: Icon(
           Icons.keyboard_arrow_down_rounded,
+          color: AppColors.textDarkGrey,
         )),
         dropdownStyleData: DropdownStyleData(
             maxHeight: Dimen.margin200,

@@ -5,9 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
+import 'package:subqdocs/utils/imagepath.dart';
 import 'package:subqdocs/widget/custom_animated_button.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 
+import '../../../../utils/app_string.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../routes/app_pages.dart';
@@ -20,50 +22,78 @@ class LoginView extends GetView<LoginController> {
   TextEditingController password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool isWidthLessThan428(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    print("mobile widh is ${width}");
+    return width < 428;
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+    bool isSmallScreen = isWidthLessThan428(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
-        child: Column(
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.zero,
           children: [
-            Image.asset("assets/images/image_header1.png"),
-            Padding(
-              padding: const EdgeInsets.only(left: 200, right: 200),
-              child: Column(
+            SizedBox(
+              height: isSmallScreen ? 130 : 300,
+              child: Stack(
                 children: [
-                  SizedBox(
-                    height: 45,
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: isPortrait ? 0 : -80,
+                    child: Image.asset(
+                      ImagePath.loginHeader,
+                    ),
                   ),
-                  Text(
-                    "Login",
-                    style: AppFonts.medium(24, AppColors.backgroundPurple),
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  Text(
-                    "Welcome back",
-                    style: AppFonts.medium(24, AppColors.textBlack),
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  TextFormFiledWidget(
-                      label: "Email Address",
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: isPortrait ? null : 30,
+                ),
+                Text(
+                  AppString.login,
+                  style: AppFonts.medium(24, AppColors.backgroundPurple),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  AppString.welcomeBack,
+                  style: AppFonts.medium(20, AppColors.textBlack),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                SizedBox(
+                  width: isSmallScreen ? Get.width - 30 : 416,
+                  child: TextFormFiledWidget(
+                      label: AppString.emailAddress,
                       controller: email,
-                      hint: "johndoe@medical.com",
+                      hint: AppString.emailPlaceHolder,
                       checkValidation: (value) {
                         return Validation.emailValidate(value);
                       }),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Obx(() {
-                    return TextFormFiledWidget(
-                        label: "Password",
-                        hint: "******",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Obx(() {
+                  return SizedBox(
+                    width: isSmallScreen ? Get.width - 30 : 416,
+                    child: TextFormFiledWidget(
+                        label: AppString.password,
+                        hint: AppString.passwordHint,
                         visibility: controller.visiblity.value,
                         controller: password,
                         suffixIcon: controller.visiblity.value
@@ -72,7 +102,7 @@ class LoginView extends GetView<LoginController> {
                                   controller.changeVisiblity();
                                 },
                                 child: SvgPicture.asset(
-                                  "assets/images/eye_icon_logo.svg",
+                                  ImagePath.eyeLogoOpen,
                                   height: 5,
                                   width: 5,
                                 ),
@@ -81,16 +111,22 @@ class LoginView extends GetView<LoginController> {
                                 onTap: () {
                                   controller.changeVisiblity();
                                 },
-                                child: Icon(CupertinoIcons.eye_slash_fill),
+                                child: Icon(
+                                  CupertinoIcons.eye_slash_fill,
+                                  color: AppColors.textDarkGrey,
+                                ),
                               ),
                         checkValidation: (value) {
                           return Validation.passwordValidate(value);
-                        });
-                  }),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Row(
+                        }),
+                  );
+                }),
+                SizedBox(
+                  height: 12,
+                ),
+                SizedBox(
+                  width: isSmallScreen ? Get.width - 30 : 416,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Checkbox(
@@ -101,20 +137,23 @@ class LoginView extends GetView<LoginController> {
                         onChanged: (value) => {},
                       ),
                       Text(
-                        "Remember me",
+                        AppString.rememberMe,
                         style: AppFonts.medium(14, AppColors.textDarkGrey),
                       ),
                       Spacer(),
                       Text(
-                        "Forgot Password?",
+                        AppString.forgotPassword,
                         style: AppFonts.medium(14, AppColors.backgroundPurple),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  CustomAnimatedButton(
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                  width: isSmallScreen ? Get.width - 30 : 416,
+                  child: CustomAnimatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Get.offAllNamed(
@@ -126,45 +165,32 @@ class LoginView extends GetView<LoginController> {
                         );
                       }
                     },
-                    height: 45,
-                    text: "Log in",
+                    height: 36,
+                    text: AppString.login,
                     enabledTextColor: AppColors.white,
                     enabledColor: AppColors.backgroundPurple,
                   ),
-                  // CustomButton(
-                  //     navigate: () => {
-                  //           if (_formKey.currentState!.validate())
-                  //             {
-                  //               Get.offAllNamed(
-                  //                 Routes.HOME,
-                  //               )
-                  //             }
-                  //           else
-                  //             {
-                  //               Get.offAllNamed(
-                  //                 Routes.HOME,
-                  //               )
-                  //             }
-                  //         },
-                  //     label: "Log in"),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account yet?",
-                        style: AppFonts.medium(14, AppColors.textDarkGrey),
-                      ),
-                      Text(
-                        "Sign up now",
-                        style: AppFonts.medium(14, AppColors.backgroundPurple),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account yet?",
+                      style: AppFonts.medium(12, AppColors.textDarkGrey),
+                    ),
+                    Text(
+                      "Sign up now",
+                      style: AppFonts.medium(12, AppColors.backgroundPurple),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
             )
           ],
         ),

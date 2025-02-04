@@ -9,6 +9,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/rounded_image_widget.dart';
@@ -21,6 +22,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
         key: _key,
         resizeToAvoidBottomInset: false,
@@ -30,54 +32,6 @@ class PatientProfileView extends GetView<PatientProfileController> {
             child: Column(
               children: [
                 CustomAppBar(drawerkey: _key),
-                // Padding(
-                //   padding: const EdgeInsets.only(
-                //     top: 25,
-                //   ),
-                //   child: Container(
-                //     height: 68,
-                //     decoration: BoxDecoration(
-                //       color: Colors.white,
-                //     ),
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(15),
-                //       child: Row(
-                //         children: [
-                //           SvgPicture.asset("assets/images/logo_drawer.svg"),
-                //           SizedBox(
-                //             width: 15,
-                //           ),
-                //           Image.asset("assets/images/log_subQdocs.png"),
-                //           Spacer(),
-                //           RoundedImageWidget(
-                //             size: 50,
-                //             imagePath: "assets/images/user.png",
-                //           ),
-                //           SizedBox(
-                //             width: 8,
-                //           ),
-                //           Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             children: [
-                //               Text(
-                //                 "Adrian Tinajero",
-                //                 style: AppFonts.medium(14, AppColors.backgroundBlack),
-                //               ),
-                //               Text(
-                //                 "DO, FAAD",
-                //                 style: AppFonts.medium(12, AppColors.textDarkGrey),
-                //               ),
-                //             ],
-                //           ),
-                //           SizedBox(
-                //             width: 15,
-                //           ),
-                //           SvgPicture.asset("assets/images/logo_signout.svg")
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Expanded(
                   child: Container(
                     color: AppColors.ScreenBackGround,
@@ -134,7 +88,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               ),
                                             ),
                                             SizedBox(
-                                              width: 10,
+                                              width: 12.5,
                                             ),
                                             SvgPicture.asset(
                                               ImagePath.edit,
@@ -143,7 +97,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               fit: BoxFit.cover,
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              width: 8,
                                             ),
                                             Text(
                                               "Edit Profile Image",
@@ -159,25 +113,33 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                             Spacer(),
                                             SvgPicture.asset(
                                               ImagePath.edit,
-                                              width: 26,
-                                              height: 26,
-                                              fit: BoxFit.cover,
+                                              width: 14,
+                                              height: 14,
                                             ),
                                             SizedBox(
-                                              width: 10,
+                                              width: 18,
                                             ),
-                                            Container(
-                                                width: 125,
-                                                child: Expanded(
-                                                  child: CustomButton(navigate: () {}, label: "Schedule Visit"),
-                                                ))
+                                            ContainerButton(
+                                              onPressed: () {
+                                                // Your onPressed function
+                                              },
+                                              text: 'Schedule Visit',
+
+                                              borderColor: AppColors.backgroundPurple, // Custom border color
+                                              backgroundColor: AppColors.backgroundPurple, // Custom background color
+                                              needBorder: false, // Show border
+                                              textColor: AppColors.white, // Custom text color
+                                              padding:
+                                                  EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                              radius: 6, // Custom border radius
+                                            ),
                                           ],
                                         ),
                                       )
                                     ],
                                   ),
                                   SizedBox(
-                                    height: Dimen.margin16,
+                                    height: Dimen.margin20,
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +247,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                               child: Padding(
                                 padding: const EdgeInsets.all(1),
                                 child: ExpansionTile(
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  shape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  collapsedShape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                   collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                   title: Container(
@@ -311,10 +276,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                         child: CustomTable(
                                           rows: [
                                             ['Visit Date', 'Time', "Action"],
-                                            ["10/12/2024", '11:00 PM', 'View'],
-                                            ["10/12/2024", '11:00 PM', 'View'],
-                                            ["10/12/2024", '11:00 PM', 'View'],
-                                            ["10/12/2024", '11:00 PM', 'View'],
+                                            ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                            ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                            ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                            ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                            ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
                                           ],
                                           cellBuilder: (context, rowIndex, colIndex, cellData) {
                                             return colIndex == 2 && rowIndex != 0
@@ -325,25 +291,48 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                     softWrap: true, // Allows text to wrap
                                                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                   )
-                                                : rowIndex == 0
-                                                    ? Text(
-                                                        cellData,
-                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                        style: AppFonts.regular(12, AppColors.black),
-                                                        softWrap: true, // Allows text to wrap
-                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                : (colIndex == 3 || colIndex == 4) && rowIndex != 0
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            "|  ",
+                                                            style: AppFonts.regular(12, AppColors.appbarBorder),
+                                                          ),
+                                                          Text(
+                                                            cellData,
+                                                            textAlign: TextAlign.center,
+                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                            softWrap: true, // Allows text to wrap
+                                                            overflow: TextOverflow
+                                                                .ellipsis, // Adds ellipsis if text overflows
+                                                          ),
+                                                        ],
                                                       )
-                                                    : Text(
-                                                        cellData,
-                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                        softWrap: true, // Allows text to wrap
-                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                      );
+                                                    : rowIndex == 0
+                                                        ? Text(
+                                                            cellData,
+                                                            textAlign:
+                                                                colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                            style: AppFonts.regular(12, AppColors.black),
+                                                            softWrap: true, // Allows text to wrap
+                                                            overflow: TextOverflow
+                                                                .ellipsis, // Adds ellipsis if text overflows
+                                                          )
+                                                        : Text(
+                                                            cellData,
+                                                            textAlign:
+                                                                colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                            style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                            softWrap: true, // Allows text to wrap
+                                                            overflow: TextOverflow
+                                                                .ellipsis, // Adds ellipsis if text overflows
+                                                          );
                                           },
-                                          columnCount: 3,
+                                          columnCount: 5,
                                           context: context,
-                                          columnWidths: [0.33, 0.33, 0.33],
+                                          columnWidths: isPortrait
+                                              ? [0.30, 0.29, 0.10, 0.16, 0.15]
+                                              : [0.33, 0.32, 0.10, 0.13, 0.12],
                                         ),
                                       ),
                                     ),
@@ -362,8 +351,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                               child: Padding(
                                 padding: const EdgeInsets.all(1),
                                 child: ExpansionTile(
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  shape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                  collapsedShape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                   title: Container(
                                     child: Row(
@@ -383,30 +375,50 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                     Container(
                                       width: double.infinity,
                                       color: Colors.white,
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 53,
-                                          ),
-                                          SvgPicture.asset(ImagePath.noVisitFound),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            "No Visit Found",
-                                            style: AppFonts.medium(16, AppColors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 17,
-                                          ),
-                                          Container(
-                                            width: 125,
-                                            child: CustomButton(navigate: () {}, label: "Schedule Visit"),
-                                          ),
-                                          SizedBox(
-                                            height: 46,
-                                          ),
-                                        ],
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(ImagePath.noVisitFound),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "No Visit Found",
+                                                  style: AppFonts.regular(16, AppColors.black),
+                                                ),
+                                                SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Text(
+                                                  "Your scheduled visits will show here",
+                                                  style: AppFonts.regular(12, AppColors.black),
+                                                ),
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            ContainerButton(
+                                              onPressed: () {
+                                                // Your onPressed function
+                                              },
+                                              text: 'Schedule Visit',
+
+                                              borderColor: AppColors.backgroundPurple, // Custom border color
+                                              backgroundColor: AppColors.backgroundPurple, // Custom background color
+                                              needBorder: false, // Show border
+                                              textColor: AppColors.white, // Custom text color
+                                              padding:
+                                                  EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                              radius: 6, // Custom border radius
+                                            ),
+                                            SizedBox(
+                                              width: 16,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -424,7 +436,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                               child: Padding(
                                 padding: const EdgeInsets.all(1),
                                 child: ExpansionTile(
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  shape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  collapsedShape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                   collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                   title: Container(
