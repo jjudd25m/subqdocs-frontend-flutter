@@ -259,120 +259,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 13,
+                                  height: 5,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: AppColors.imageBannerGrayBackground,
-                                        border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
-                                    padding: EdgeInsets.symmetric(horizontal: 20),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(height: 15),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Right side of the nose before the laser session",
-                                              style: AppFonts.medium(14, AppColors.textBlack),
-                                            ),
-                                            SizedBox(width: 10),
-                                            SvgPicture.asset(
-                                              ImagePath.edit,
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            Spacer(),
-                                            SvgPicture.asset(
-                                              ImagePath.chat_outline,
-                                              height: 40,
-                                              width: 40,
-                                            ),
-                                            SizedBox(width: 10),
-                                            SvgPicture.asset(
-                                              ImagePath.delete_outline,
-                                              height: 40,
-                                              width: 40,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-                                        BaseImageView(
-                                            width: double.infinity,
-                                            height: 300,
-                                            imageUrl:
-                                                "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
-                                        SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "12/24/2024 - 10:13AM",
-                                              style: AppFonts.medium(14, AppColors.textGrey),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Spacer(),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(12),
-                                                color: AppColors.white,
-                                                border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
-                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.circular(22.5),
-                                                        child: BaseImageView(
-                                                            width: 45,
-                                                            height: 45,
-                                                            imageUrl:
-                                                                "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg")),
-                                                    SizedBox(width: 10),
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      "Dr. Tinajero",
-                                                      style: AppFonts.medium(14, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    Spacer(),
-                                                    SvgPicture.asset(
-                                                      ImagePath.edit_outline,
-                                                      height: 40,
-                                                      width: 40,
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    SvgPicture.asset(
-                                                      ImagePath.delete_outline,
-                                                      height: 40,
-                                                      width: 40,
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  textAlign: TextAlign.left,
-                                                  "Pre-treatment photo of the nasal scar prior to the first erbium Pearl Fractional laser session. Documenting baseline appearance for progress tracking.",
-                                                  style: AppFonts.medium(14, AppColors.textGrey),
-                                                ),
-                                              ],
-                                            )),
-                                        SizedBox(height: 20),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 20),
                               ],
                             ),
                           )
@@ -389,7 +277,7 @@ class DoctorView extends GetView<PatientInfoController> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 5,
                   ),
                 ],
               )),

@@ -4,7 +4,7 @@ class PatientInfoController extends GetxController {
   //TODO: Implement PatientInfoController
 
   RxBool isSignatureDone = RxBool(false);
-  List<String> tasks = ["A Task", "B Task", "C Task", "D Task", "E Task", "F Task", "G Task", "H Task"];
+  List<String> tasks = ["A Task"];
   RxInt tabIndex = RxInt(1);
   final count = 0.obs;
   @override

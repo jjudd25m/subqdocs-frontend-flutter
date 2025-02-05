@@ -126,236 +126,235 @@ class VisitMainView extends GetView<VisitMainController> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Expanded(
-                                          child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Age",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "52",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Gender",
-                                                style: AppFonts.medium(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Male",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.start,
-                                                "Visit Date & Time",
-                                                style: AppFonts.medium(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "10/12/2024  10:30 am",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.start,
-                                                "Medical Assistant",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                width: 15,
-                                              ),
-                                              PopupMenuButton<String>(
-                                                  shape: const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                                                  offset: const Offset(0, 5),
-                                                  color: AppColors.white,
-                                                  position: PopupMenuPosition.over,
-                                                  style: const ButtonStyle(
-                                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                      maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                      visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                                  itemBuilder: (context) => [
-                                                        PopupMenuItem(
-                                                            onTap: () {
-                                                              // controller.isSelectedAttchmentOption.value = 0;
-                                                            },
-                                                            // height: 30,
-                                                            padding: const EdgeInsets.only(
-                                                                top: 10, bottom: 8, left: 8, right: 8),
-                                                            child: Container(
-                                                              width: 200,
-                                                              child: Column(
-                                                                children: [
-                                                                  const SizedBox(width: 5),
-                                                                  Container(
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        horizontal: 8, vertical: 7),
-                                                                    decoration: BoxDecoration(
-                                                                      border: Border.all(
-                                                                          color: AppColors.textGrey
-                                                                              .withValues(alpha: 0.5)),
-                                                                      // color: AppColors.backgroundWhite,
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        SvgPicture.asset(
-                                                                          ImagePath.search,
-                                                                          height: 25,
-                                                                          width: 25,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width: 10,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width: 120,
-                                                                          child: TextField(
-                                                                            maxLines: 1, //or null
-                                                                            decoration: InputDecoration.collapsed(
-                                                                                hintText: "Search",
-                                                                                hintStyle: AppFonts.regular(
-                                                                                    14, AppColors.textGrey)),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "Age",
+                                              style: AppFonts.regular(12, AppColors.textBlack),
+                                            ),
+                                            SizedBox(
+                                              height: 6,
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "52",
+                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "Gender",
+                                              style: AppFonts.regular(12, AppColors.textBlack),
+                                            ),
+                                            SizedBox(
+                                              height: 6,
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "Male",
+                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "Visit Date & Time",
+                                              style: AppFonts.regular(12, AppColors.textBlack),
+                                            ),
+                                            SizedBox(
+                                              height: 6,
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "10/12/2024  10:30 am",
+                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.start,
+                                              "Medical Assistant",
+                                              style: AppFonts.regular(12, AppColors.textBlack),
+                                            ),
+                                            SizedBox(
+                                              height: 6,
+                                            ),
+                                            PopupMenuButton<String>(
+                                                shape: const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                                                offset: const Offset(0, 5),
+                                                color: AppColors.white,
+                                                position: PopupMenuPosition.over,
+                                                style: const ButtonStyle(
+                                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                    maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                    visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                                itemBuilder: (context) => [
+                                                      PopupMenuItem(
+                                                          onTap: () {
+                                                            // controller.isSelectedAttchmentOption.value = 0;
+                                                          },
+                                                          // height: 30,
+                                                          padding: const EdgeInsets.only(
+                                                              top: 10, bottom: 8, left: 8, right: 8),
+                                                          child: Container(
+                                                            width: 200,
+                                                            child: Column(
+                                                              children: [
+                                                                const SizedBox(width: 5),
+                                                                Container(
+                                                                  padding:
+                                                                      EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                                                  decoration: BoxDecoration(
+                                                                    border: Border.all(
+                                                                        color:
+                                                                            AppColors.textGrey.withValues(alpha: 0.5)),
+                                                                    // color: AppColors.backgroundWhite,
+                                                                    borderRadius: BorderRadius.circular(8),
                                                                   ),
-                                                                  const SizedBox(height: 10),
-                                                                  ListView.builder(
-                                                                      shrinkWrap: true,
-                                                                      physics: NeverScrollableScrollPhysics(),
-                                                                      itemBuilder: (context, index) => InkWell(
-                                                                            onTap: () {},
-                                                                            child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(
-                                                                                  horizontal: 10),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 10),
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      SvgPicture.asset(
-                                                                                        ImagePath.checkbox_true,
-                                                                                        width: 20,
-                                                                                        height: 20,
-                                                                                      ),
-                                                                                      Spacer(),
-                                                                                      Text(
-                                                                                        textAlign: TextAlign.center,
-                                                                                        "Missie Cooper",
-                                                                                        style: AppFonts.regular(
-                                                                                            15, AppColors.textPurple),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 10),
-                                                                                  if (index != 4) ...[
-                                                                                    Divider(
-                                                                                      height: 1,
-                                                                                    )
-                                                                                  ]
-                                                                                ],
-                                                                              ),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      SvgPicture.asset(
+                                                                        ImagePath.search,
+                                                                        height: 25,
+                                                                        width: 25,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 10,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 120,
+                                                                        child: TextField(
+                                                                          maxLines: 1, //or null
+                                                                          decoration: InputDecoration.collapsed(
+                                                                              hintText: "Search",
+                                                                              hintStyle: AppFonts.regular(
+                                                                                  14, AppColors.textGrey)),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(height: 10),
+                                                                ListView.builder(
+                                                                    shrinkWrap: true,
+                                                                    physics: NeverScrollableScrollPhysics(),
+                                                                    itemBuilder: (context, index) => InkWell(
+                                                                          onTap: () {},
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 10),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 10),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    SvgPicture.asset(
+                                                                                      ImagePath.checkbox_true,
+                                                                                      width: 20,
+                                                                                      height: 20,
+                                                                                    ),
+                                                                                    Spacer(),
+                                                                                    Text(
+                                                                                      textAlign: TextAlign.center,
+                                                                                      "Missie Cooper",
+                                                                                      style: AppFonts.regular(
+                                                                                          15, AppColors.textPurple),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 10),
+                                                                                if (index != 4) ...[
+                                                                                  Divider(
+                                                                                    height: 1,
+                                                                                  )
+                                                                                ]
+                                                                              ],
                                                                             ),
                                                                           ),
-                                                                      itemCount: 5),
-                                                                ],
-                                                              ),
-                                                            )),
-                                                      ],
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        textAlign: TextAlign.center,
-                                                        "Missie Cooper",
-                                                        style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                      ),
-                                                      SizedBox(width: 5),
-                                                      Container(
-                                                        height: 15,
-                                                        decoration: BoxDecoration(),
-                                                      ),
-                                                      Container(
-                                                        height: 15,
-                                                        decoration: BoxDecoration(),
-                                                      ),
-                                                      SvgPicture.asset(
-                                                        ImagePath.down_arrow,
-                                                        width: 20,
-                                                        height: 20,
-                                                      )
+                                                                        ),
+                                                                    itemCount: 5),
+                                                              ],
+                                                            ),
+                                                          )),
                                                     ],
-                                                  )),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Doctor",
-                                                style: AppFonts.medium(15, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                width: 15,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    textAlign: TextAlign.center,
-                                                    "Dr. Adrian Tinajero",
-                                                    style: AppFonts.regular(13, AppColors.textGrey),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    ImagePath.down_arrow,
-                                                    width: 20,
-                                                    height: 20,
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )),
-                                      SizedBox(
-                                        width: 30,
-                                      )
-                                    ],
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      "Missie Cooper",
+                                                      style: AppFonts.regular(14, AppColors.textPurple),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors.textPurple,
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
+                                                      ),
+                                                      padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
+                                                      child: Text(
+                                                        textAlign: TextAlign.center,
+                                                        "+2",
+                                                        style: AppFonts.bold(10, AppColors.textWhite),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    SvgPicture.asset(
+                                                      ImagePath.down_arrow,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )
+                                                  ],
+                                                )),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "Doctor",
+                                              style: AppFonts.regular(12, AppColors.textBlack),
+                                            ),
+                                            SizedBox(
+                                              width: 15,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "Dr. Adrian Tinajero",
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
+                                                ),
+                                                SizedBox(width: 5),
+                                                SvgPicture.asset(
+                                                  ImagePath.down_arrow,
+                                                  width: 20,
+                                                  height: 20,
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20,
@@ -998,13 +997,13 @@ class VisitMainView extends GetView<VisitMainController> {
                 ),
                 Obx(() {
                   return Container(
-                    color: AppColors.backgroundLightBlue,
+                    color: AppColors.ScreenBackGround1,
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Container(
                       // color: AppColors.backgroundWhite,
                       decoration:
                           BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Row(
                         spacing: 15,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1021,7 +1020,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                 );
                               },
                               child: Container(
-                                height: 100,
+                                height: 81,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                   color: AppColors.backgroundLightGrey,
@@ -1060,7 +1059,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                   controller.isStartRecording.value = true;
                                 },
                                 child: Container(
-                                  height: 100,
+                                  height: 81,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColors.backgroundPurple),
                                     color: AppColors.backgroundPurple,
@@ -1100,7 +1099,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                   Get.toNamed(Routes.PATIENT_INFO);
                                 },
                                 child: Container(
-                                  height: 100,
+                                  height: 81,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColors.buttonBackgroundGreen),
                                     color: AppColors.buttonBackgroundGreen,
@@ -1138,7 +1137,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                   controller.isStartRecording.value = false;
                                 },
                                 child: Container(
-                                  height: 100,
+                                  height: 81,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColors.buttonBackgroundred),
                                     color: AppColors.buttonBackgroundred,

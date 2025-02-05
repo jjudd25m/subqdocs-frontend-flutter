@@ -21,47 +21,50 @@ class PatientView extends GetView<PatientInfoController> {
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 0),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                   color: AppColors.white,
                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
               child: Column(
                 children: [
                   Container(
-                    height: 70,
+                    height: 40,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                         border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Row(
                           children: [
                             Text(
                               textAlign: TextAlign.center,
                               "Note",
-                              style: AppFonts.medium(20, AppColors.textPurple),
+                              style: AppFonts.medium(16, AppColors.textPurple),
                             ),
                             Spacer(),
                             SvgPicture.asset(
                               ImagePath.edit_outline,
-                              height: 40,
-                              width: 40,
+                              height: 28,
+                              width: 28,
                             ),
                           ],
                         ),
+                        SizedBox(
+                          height: 5,
+                        )
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: SingleChildScrollView(
                       padding: EdgeInsets.zero,
                       child: Column(
@@ -71,13 +74,14 @@ class PatientView extends GetView<PatientInfoController> {
                               Text(
                                 textAlign: TextAlign.left,
                                 "Your Visit Summary",
-                                style: AppFonts.medium(17, AppColors.textBlack),
+                                style: AppFonts.medium(14, AppColors.textBlack),
                               )
                             ],
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                             child: ListView.builder(
+                                padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) => InkWell(
                                       onTap: () {},
@@ -92,7 +96,7 @@ class PatientView extends GetView<PatientInfoController> {
                                                     child: Text(
                                                   textAlign: TextAlign.left,
                                                   "You were seen today for your full-body skin exam. There are currently no signs of your previous melanoma returning, but continued monitoring is important. We also discussed options to help improve the appearance of the scar on your nose.",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 )),
                                                 // Spacer(),
                                               ],
@@ -104,15 +108,12 @@ class PatientView extends GetView<PatientInfoController> {
                                     ),
                                 itemCount: 1),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
                           Row(
                             children: [
                               Text(
                                 textAlign: TextAlign.left,
                                 "What We Reviewed:",
-                                style: AppFonts.medium(17, AppColors.textBlack),
+                                style: AppFonts.medium(14, AppColors.textBlack),
                               )
                             ],
                           ),
@@ -125,25 +126,27 @@ class PatientView extends GetView<PatientInfoController> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 0),
                                         child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             SizedBox(height: 10),
                                             Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  textAlign: TextAlign.center,
+                                                  textAlign: TextAlign.start,
                                                   '\u2022',
-                                                  style: AppFonts.regular(20, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 ),
                                                 SizedBox(width: 15),
                                                 Expanded(
                                                     child: Text(
                                                   textAlign: TextAlign.left,
                                                   "No issues were reported with your overall health (no night sweats, skin rashes, chest pain, shortness of breath, fever, or chills).",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 )),
                                               ],
                                             ),
-                                            SizedBox(height: 10),
+                                            SizedBox(height: 0),
                                           ],
                                         ),
                                       ),
@@ -151,14 +154,14 @@ class PatientView extends GetView<PatientInfoController> {
                                 itemCount: 2),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           Row(
                             children: [
                               Text(
                                 textAlign: TextAlign.left,
                                 "Today's Findings:",
-                                style: AppFonts.medium(17, AppColors.textBlack),
+                                style: AppFonts.medium(14, AppColors.textBlack),
                               )
                             ],
                           ),
@@ -178,14 +181,14 @@ class PatientView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   '\u2022',
-                                                  style: AppFonts.regular(20, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 ),
                                                 SizedBox(width: 15),
                                                 Expanded(
                                                     child: Text(
                                                   textAlign: TextAlign.left,
                                                   "Brown, scaly spots on your trunk (common and not harmful)",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 )),
                                               ],
                                             ),
@@ -197,20 +200,21 @@ class PatientView extends GetView<PatientInfoController> {
                                 itemCount: 2),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           Row(
                             children: [
                               Text(
                                 textAlign: TextAlign.left,
                                 "Your Care Plan:",
-                                style: AppFonts.medium(17, AppColors.textBlack),
+                                style: AppFonts.medium(14, AppColors.textBlack),
                               )
                             ],
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                             child: ListView.builder(
+                                padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) => InkWell(
                                       onTap: () {},
@@ -224,14 +228,14 @@ class PatientView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   "${index + 1}.",
-                                                  style: AppFonts.regular(17, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 ),
                                                 SizedBox(width: 15),
                                                 Expanded(
                                                     child: Text(
                                                   textAlign: TextAlign.left,
                                                   "Skin Health Monitoring:Continue regular skin checks every 6 months.",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 )),
                                               ],
                                             ),
@@ -243,14 +247,14 @@ class PatientView extends GetView<PatientInfoController> {
                                 itemCount: 2),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           Row(
                             children: [
                               Text(
                                 textAlign: TextAlign.left,
                                 "Next Steps:",
-                                style: AppFonts.medium(17, AppColors.textBlack),
+                                style: AppFonts.medium(14, AppColors.textBlack),
                               )
                             ],
                           ),
@@ -270,14 +274,14 @@ class PatientView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   '\u2022',
-                                                  style: AppFonts.regular(20, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 ),
                                                 SizedBox(width: 15),
                                                 Expanded(
                                                     child: Text(
                                                   textAlign: TextAlign.left,
                                                   "Schedule your next skin check in 6 months.",
-                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 )),
                                               ],
                                             ),
@@ -289,7 +293,7 @@ class PatientView extends GetView<PatientInfoController> {
                                 itemCount: 2),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                         ],
                       ),
@@ -302,7 +306,7 @@ class PatientView extends GetView<PatientInfoController> {
               )),
         ),
         SizedBox(
-          height: 20,
+          height: 5,
         ),
         // Padding(
         //   padding: EdgeInsets.symmetric(horizontal: 20),

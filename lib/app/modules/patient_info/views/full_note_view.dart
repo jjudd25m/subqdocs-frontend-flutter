@@ -30,7 +30,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(6),
+                                  topRight: Radius.circular(6),
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(6)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -38,9 +42,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -112,7 +118,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -120,9 +130,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -194,7 +206,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -202,9 +218,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -276,7 +294,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -284,9 +306,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -358,7 +382,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -366,9 +394,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -442,7 +472,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -450,9 +484,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -498,7 +534,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -506,9 +546,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -554,7 +596,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -562,9 +608,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -653,7 +701,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -661,9 +713,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -747,7 +801,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -755,9 +813,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
@@ -869,7 +929,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(left: 50, top: 20, bottom: 20),
-                                              child: BaseImageView(width: double.infinity, height: 200, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
+                                              child: BaseImageView(
+                                                  width: double.infinity,
+                                                  height: 200,
+                                                  imageUrl:
+                                                      "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
                                             ),
                                           ],
                                         ),
@@ -941,7 +1005,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12)),
                               color: AppColors.white,
                               border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                           child: Column(
@@ -949,9 +1017,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                               Container(
                                 height: 60,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                    borderRadius:
+                                        BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                    border:
+                                        Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
@@ -984,7 +1054,9 @@ class FullNoteView extends GetView<PatientInfoController> {
                                 child: Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12), color: AppColors.imageBannerGrayBackground, border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: AppColors.imageBannerGrayBackground,
+                                      border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
                                   padding: EdgeInsets.symmetric(horizontal: 20),
                                   child: Column(
                                     children: [
@@ -1018,7 +1090,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                                         ],
                                       ),
                                       SizedBox(height: 10),
-                                      BaseImageView(width: double.infinity, height: 200, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
+                                      BaseImageView(
+                                          width: double.infinity,
+                                          height: 200,
+                                          imageUrl:
+                                              "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
                                       SizedBox(height: 10),
                                       Row(
                                         children: [
@@ -1033,8 +1109,10 @@ class FullNoteView extends GetView<PatientInfoController> {
                                       ),
                                       SizedBox(height: 10),
                                       Container(
-                                          decoration:
-                                              BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(12),
+                                              color: AppColors.white,
+                                              border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                           child: Column(
                                             children: [
@@ -1042,7 +1120,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                 children: [
                                                   ClipRRect(
                                                       borderRadius: BorderRadius.circular(22.5),
-                                                      child: BaseImageView(width: 45, height: 45, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg")),
+                                                      child: BaseImageView(
+                                                          width: 45,
+                                                          height: 45,
+                                                          imageUrl:
+                                                              "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg")),
                                                   SizedBox(width: 10),
                                                   Text(
                                                     textAlign: TextAlign.center,
