@@ -17,10 +17,9 @@ class FullTranscriptView extends GetView<PatientInfoController> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 0),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                   color: AppColors.white,
@@ -32,7 +31,7 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.2),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         SizedBox(
@@ -94,8 +93,10 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                               children: [
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                  decoration:
-                                      BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: AppColors.white,
+                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
                                   child: Column(
                                     children: [
                                       SizedBox(height: 10),
@@ -103,7 +104,8 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           BaseImageView(
-                                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                            imageUrl:
+                                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                             width: 40,
                                             height: 40,
                                           ),

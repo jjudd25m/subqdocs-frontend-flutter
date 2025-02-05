@@ -305,7 +305,14 @@ class VisitMainView extends GetView<VisitMainController> {
                                                         style: AppFonts.regular(14, AppColors.backgroundPurple),
                                                       ),
                                                       SizedBox(width: 5),
-                                                      Container(de),
+                                                      Container(
+                                                        height: 15,
+                                                        decoration: BoxDecoration(),
+                                                      ),
+                                                      Container(
+                                                        height: 15,
+                                                        decoration: BoxDecoration(),
+                                                      ),
                                                       SvgPicture.asset(
                                                         ImagePath.down_arrow,
                                                         width: 20,
@@ -649,6 +656,7 @@ class VisitMainView extends GetView<VisitMainController> {
                               ),
                               SizedBox(height: 10),
                               ExpansionTile(
+                                childrenPadding: EdgeInsets.all(0),
                                 collapsedShape: OutlineInputBorder(
                                     borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 shape: OutlineInputBorder(
@@ -657,13 +665,10 @@ class VisitMainView extends GetView<VisitMainController> {
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Row(
                                   children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
                                     Text(
                                       textAlign: TextAlign.center,
                                       "Attachments",
-                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                      style: AppFonts.regular(16, AppColors.textBlack),
                                     ),
                                     Spacer(),
                                     GestureDetector(

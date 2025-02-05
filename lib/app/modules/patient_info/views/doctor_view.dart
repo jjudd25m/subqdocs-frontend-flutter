@@ -17,7 +17,7 @@ class DoctorView extends GetView<PatientInfoController> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 0),
@@ -28,13 +28,13 @@ class DoctorView extends GetView<PatientInfoController> {
               child: Column(
                 children: [
                   Container(
-                    height: 60,
+                    height: 40,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                        border: Border.all(color: AppColors.borderTable, width: 1)),
                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         SizedBox(
@@ -45,15 +45,18 @@ class DoctorView extends GetView<PatientInfoController> {
                             Text(
                               textAlign: TextAlign.center,
                               "Diagnosis codes / Procedures",
-                              style: AppFonts.medium(17, AppColors.textPurple),
+                              style: AppFonts.medium(16, AppColors.textPurple),
                             ),
                             Spacer(),
                             SvgPicture.asset(
                               ImagePath.edit_outline,
-                              height: 40,
-                              width: 40,
+                              height: 28,
+                              width: 28,
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 5,
                         ),
                       ],
                     ),
@@ -62,7 +65,7 @@ class DoctorView extends GetView<PatientInfoController> {
                     height: 20,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SingleChildScrollView(
                       padding: EdgeInsets.zero,
                       child: Column(
@@ -71,7 +74,9 @@ class DoctorView extends GetView<PatientInfoController> {
                             border: TableBorder.all(
                               color: AppColors.buttonBackgroundGrey, // Table border color
                               width: 1, // Border width
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)), // Optional rounded corners
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5)), // Optional rounded corners
                             ),
                             columnWidths: {
                               0: FractionColumnWidth(0.35), // Fixed width for "Procedure" column
@@ -97,7 +102,9 @@ class DoctorView extends GetView<PatientInfoController> {
                                 ),
                                 children: [
                                   _buildTableCell('99213 25 OFFICE O/P EST LOW 20 MIN', false),
-                                  _buildTableCell('Z08 (Encounter for follow-up examination after completed treatment for malignant neoplasm)', false),
+                                  _buildTableCell(
+                                      'Z08 (Encounter for follow-up examination after completed treatment for malignant neoplasm)',
+                                      false),
                                   _buildTableCell('1', false),
                                   _buildTableCell('\$1344.5', false),
                                 ],
@@ -109,7 +116,9 @@ class DoctorView extends GetView<PatientInfoController> {
                             border: TableBorder.all(
                               color: AppColors.buttonBackgroundGrey, // Table border color
                               width: 1, // Border width
-                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)), // Optional rounded corners
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(5),
+                                  bottomRight: Radius.circular(5)), // Optional rounded corners
                             ),
                             columnWidths: {
                               0: FractionColumnWidth(0.85), // Fixed width for "Procedure" column
@@ -138,28 +147,30 @@ class DoctorView extends GetView<PatientInfoController> {
                 ],
               )),
         ),
+
+        //after table
         SizedBox(
-          height: 20,
+          height: 10,
         ),
+
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 0),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                   color: AppColors.white,
                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
               child: Column(
                 children: [
                   Container(
-                    height: 60,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                         border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         SizedBox(
@@ -170,21 +181,24 @@ class DoctorView extends GetView<PatientInfoController> {
                             Text(
                               textAlign: TextAlign.center,
                               "Impressions and Plan",
-                              style: AppFonts.medium(17, AppColors.textPurple),
+                              style: AppFonts.medium(16, AppColors.textPurple),
                             ),
                             Spacer(),
                             SvgPicture.asset(
                               ImagePath.edit_outline,
-                              height: 40,
-                              width: 40,
+                              height: 28,
+                              width: 28,
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 5,
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 12,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -211,8 +225,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                   children: [
                                     SvgPicture.asset(
                                       ImagePath.reorder,
-                                      height: 25,
-                                      width: 25,
+                                      height: 15,
+                                      width: 10,
                                     ),
                                     SizedBox(
                                       width: 20,
@@ -220,34 +234,41 @@ class DoctorView extends GetView<PatientInfoController> {
                                     Text(
                                       textAlign: TextAlign.center,
                                       "1. History of Malignant melanoma on the right side of the nose (Z85.820)",
-                                      style: AppFonts.medium(17, AppColors.textPurple),
+                                      style: AppFonts.medium(14, AppColors.textPurple),
                                     ),
-                                    Spacer()
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                                  child: Text(
-                                    textAlign: TextAlign.left,
-                                    "a. Pear Fractional laser ",
-                                    style: AppFonts.medium(16, AppColors.textBlack),
-                                  ),
+                                SizedBox(
+                                  height: 13,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                                  child: Text(
-                                    textAlign: TextAlign.left,
-                                    "Location: noe \n Hand piece: Ptearl Fraction \nWavelength: 2970 nm \nSpot size: 5 mm",
-                                    style: AppFonts.medium(16, AppColors.textGrey),
-                                  ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImagePath.reorder,
+                                      height: 15,
+                                      width: 10,
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      "2.Scar on right side of the nose (L90.5)",
+                                      style: AppFonts.medium(14, AppColors.textPurple),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(
+                                  height: 13,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Container(
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12), color: AppColors.imageBannerGrayBackground, border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: AppColors.imageBannerGrayBackground,
+                                        border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
                                     padding: EdgeInsets.symmetric(horizontal: 20),
                                     child: Column(
                                       children: [
@@ -280,7 +301,11 @@ class DoctorView extends GetView<PatientInfoController> {
                                           ],
                                         ),
                                         SizedBox(height: 10),
-                                        BaseImageView(width: double.infinity, height: 300, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
+                                        BaseImageView(
+                                            width: double.infinity,
+                                            height: 300,
+                                            imageUrl:
+                                                "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
                                         SizedBox(height: 10),
                                         Row(
                                           children: [
@@ -295,8 +320,10 @@ class DoctorView extends GetView<PatientInfoController> {
                                         ),
                                         SizedBox(height: 10),
                                         Container(
-                                            decoration:
-                                                BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(12),
+                                                color: AppColors.white,
+                                                border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
                                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Column(
                                               children: [
@@ -304,7 +331,11 @@ class DoctorView extends GetView<PatientInfoController> {
                                                   children: [
                                                     ClipRRect(
                                                         borderRadius: BorderRadius.circular(22.5),
-                                                        child: BaseImageView(width: 45, height: 45, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg")),
+                                                        child: BaseImageView(
+                                                            width: 45,
+                                                            height: 45,
+                                                            imageUrl:
+                                                                "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg")),
                                                     SizedBox(width: 10),
                                                     Text(
                                                       textAlign: TextAlign.center,
@@ -369,10 +400,10 @@ class DoctorView extends GetView<PatientInfoController> {
 
   Widget _headerBuildTableCell(String text) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: AppFonts.regular(14, AppColors.black),
       ),
     );
   }
@@ -380,13 +411,8 @@ class DoctorView extends GetView<PatientInfoController> {
   Widget _buildTableCell(String text, bool isTotal) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-          color: isTotal ? Colors.black : Colors.grey[700],
-        ),
-      ),
+      child:
+          Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
     );
   }
 }

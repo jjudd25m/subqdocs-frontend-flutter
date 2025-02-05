@@ -41,8 +41,10 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                         children: <Widget>[
                           SizedBox(height: 20.0),
                           ExpansionTile(
-                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            collapsedShape:
+                                OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape:
+                                OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                             backgroundColor: AppColors.backgroundWhite,
                             collapsedBackgroundColor: AppColors.backgroundWhite,
                             title: Padding(
@@ -70,7 +72,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                         Padding(
                                           padding: const EdgeInsets.only(right: 10),
                                           child: BaseImageView(
-                                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                            imageUrl:
+                                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                             width: 50,
                                             height: 50,
                                           ),
@@ -215,7 +218,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                           width: 15,
                                         ),
                                         PopupMenuButton<String>(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(8))),
                                             offset: const Offset(0, 5),
                                             color: AppColors.white,
                                             position: PopupMenuPosition.over,
@@ -229,7 +233,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                         // controller.isSelectedAttchmentOption.value = 0;
                                                       },
                                                       // height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      padding:
+                                                          const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                       child: Container(
                                                         width: 200,
                                                         child: Column(
@@ -238,7 +243,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                             Container(
                                                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                                                               decoration: BoxDecoration(
-                                                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                                border: Border.all(
+                                                                    color: AppColors.textGrey.withValues(alpha: 0.5)),
                                                                 // color: AppColors.backgroundWhite,
                                                                 borderRadius: BorderRadius.circular(8),
                                                               ),
@@ -256,7 +262,10 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     width: 120,
                                                                     child: TextField(
                                                                       maxLines: 1, //or null
-                                                                      decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                                      decoration: InputDecoration.collapsed(
+                                                                          hintText: "Search",
+                                                                          hintStyle:
+                                                                              AppFonts.regular(14, AppColors.textGrey)),
                                                                     ),
                                                                   ),
                                                                 ],
@@ -269,7 +278,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                 itemBuilder: (context, index) => InkWell(
                                                                       onTap: () {},
                                                                       child: Padding(
-                                                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 10),
                                                                         child: Column(
                                                                           children: [
                                                                             SizedBox(height: 10),
@@ -284,7 +294,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                                 Text(
                                                                                   textAlign: TextAlign.center,
                                                                                   "Missie Cooper",
-                                                                                  style: AppFonts.regular(15, AppColors.textPurple),
+                                                                                  style: AppFonts.regular(
+                                                                                      15, AppColors.textPurple),
                                                                                 ),
                                                                               ],
                                                                             ),
@@ -369,7 +380,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                           SizedBox(height: 10),
                           Container(
                               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Text(
                                 textAlign: TextAlign.left,
                                 "Don was initially diagnosed with melanoma in situ on his nasal tip in January 2024, leading to surgical excision with a bilobed flap repair in February. Post-surgery, he experienced minor wound healing issues, managed with antibiotics and topical treatments. Due to positive margins, he began imiquimod therapy, which was discontinued after a skin reaction. Follow-up exams showed no recurrence, and in January 2025, laser treatment and Kenalog injections were initiated to improve the appearance of his nasal scar.",
@@ -388,7 +400,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                           SizedBox(height: 10),
                           Container(
                               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Text(
                                 textAlign: TextAlign.left,
                                 "Don enjoys hiking and spending time outdoors with his wife and two grandchildren. He’s an avid gardener, which increases his sun exposure, making sun protection especially important. Don values practical advice and appreciates clear explanations about his treatment options.",
@@ -406,8 +419,10 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                           ),
                           SizedBox(height: 10),
                           ExpansionTile(
-                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            collapsedShape:
+                                OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape:
+                                OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                             backgroundColor: AppColors.backgroundWhite,
                             collapsedBackgroundColor: AppColors.backgroundWhite,
                             title: Padding(
@@ -672,8 +687,10 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                               itemBuilder: (context, index) => Column(
                                     children: [
                                       ExpansionTile(
-                                        collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                        collapsedShape: OutlineInputBorder(
+                                            borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                        shape: OutlineInputBorder(
+                                            borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                         backgroundColor: AppColors.backgroundWhite,
                                         collapsedBackgroundColor: AppColors.backgroundWhite,
                                         title: Padding(
@@ -688,7 +705,8 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                       Padding(
                                                         padding: const EdgeInsets.only(right: 10),
                                                         child: BaseImageView(
-                                                          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                          imageUrl:
+                                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                                           width: 50,
                                                           height: 50,
                                                         ),
@@ -758,7 +776,9 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                             height: 5,
                                           ),
                                           Container(
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(8),
+                                                color: AppColors.backgroundWhite),
                                             child: Obx(() {
                                               return Column(
                                                 children: [
@@ -770,7 +790,9 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                       padding: EdgeInsets.symmetric(horizontal: 20),
                                                       child: Container(
                                                           padding: EdgeInsets.symmetric(horizontal: 20),
-                                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundPurple.withValues(alpha: 0.2)),
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(8),
+                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2)),
                                                           height: 70,
                                                           child: Row(
                                                             children: [
@@ -784,10 +806,16 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     text: " Doctor View ",
                                                                     isOutline: true,
                                                                     fontSize: 17,
-                                                                    enabledTextColor: controller.tabIndex.value == 0 ? AppColors.textWhite : AppColors.textGrey,
-                                                                    enabledColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    enabledTextColor: controller.tabIndex.value == 0
+                                                                        ? AppColors.textWhite
+                                                                        : AppColors.textGrey,
+                                                                    enabledColor: controller.tabIndex.value == 0
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                     outLineEnabledColor: AppColors.textGrey,
-                                                                    outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    outlineColor: controller.tabIndex.value == 0
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                   )),
                                                               SizedBox(
                                                                   width: 150,
@@ -799,10 +827,16 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     text: " Full Transcript ",
                                                                     isOutline: true,
                                                                     fontSize: 17,
-                                                                    enabledTextColor: controller.tabIndex.value == 1 ? AppColors.textWhite : AppColors.textGrey,
-                                                                    enabledColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    enabledTextColor: controller.tabIndex.value == 1
+                                                                        ? AppColors.textWhite
+                                                                        : AppColors.textGrey,
+                                                                    enabledColor: controller.tabIndex.value == 1
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                     outLineEnabledColor: AppColors.textGrey,
-                                                                    outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    outlineColor: controller.tabIndex.value == 1
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                   )),
                                                               SizedBox(
                                                                   width: 150,
@@ -814,10 +848,16 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     text: " Patient View ",
                                                                     isOutline: true,
                                                                     fontSize: 17,
-                                                                    enabledTextColor: controller.tabIndex.value == 2 ? AppColors.textWhite : AppColors.textGrey,
-                                                                    enabledColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    enabledTextColor: controller.tabIndex.value == 2
+                                                                        ? AppColors.textWhite
+                                                                        : AppColors.textGrey,
+                                                                    enabledColor: controller.tabIndex.value == 2
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                     outLineEnabledColor: AppColors.textGrey,
-                                                                    outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    outlineColor: controller.tabIndex.value == 2
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                   )),
                                                               SizedBox(
                                                                   width: 150,
@@ -829,10 +869,16 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     text: " Full Note ",
                                                                     isOutline: true,
                                                                     fontSize: 17,
-                                                                    enabledTextColor: controller.tabIndex.value == 3 ? AppColors.textWhite : AppColors.textGrey,
-                                                                    enabledColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    enabledTextColor: controller.tabIndex.value == 3
+                                                                        ? AppColors.textWhite
+                                                                        : AppColors.textGrey,
+                                                                    enabledColor: controller.tabIndex.value == 3
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                     outLineEnabledColor: AppColors.textGrey,
-                                                                    outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    outlineColor: controller.tabIndex.value == 3
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                   )),
                                                               SizedBox(
                                                                   width: 150,
@@ -844,10 +890,16 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     text: " Billing Form ",
                                                                     isOutline: true,
                                                                     fontSize: 17,
-                                                                    enabledTextColor: controller.tabIndex.value == 4 ? AppColors.textWhite : AppColors.textGrey,
-                                                                    enabledColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    enabledTextColor: controller.tabIndex.value == 4
+                                                                        ? AppColors.textWhite
+                                                                        : AppColors.textGrey,
+                                                                    enabledColor: controller.tabIndex.value == 4
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                     outLineEnabledColor: AppColors.textGrey,
-                                                                    outlineColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    outlineColor: controller.tabIndex.value == 4
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                   )),
                                                               SizedBox(
                                                                   width: 150,
@@ -859,10 +911,16 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                     text: " Requisition ",
                                                                     isOutline: true,
                                                                     fontSize: 17,
-                                                                    enabledTextColor: controller.tabIndex.value == 5 ? AppColors.textWhite : AppColors.textGrey,
-                                                                    enabledColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    enabledTextColor: controller.tabIndex.value == 5
+                                                                        ? AppColors.textWhite
+                                                                        : AppColors.textGrey,
+                                                                    enabledColor: controller.tabIndex.value == 5
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                     outLineEnabledColor: AppColors.textGrey,
-                                                                    outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
+                                                                    outlineColor: controller.tabIndex.value == 5
+                                                                        ? AppColors.backgroundPurple
+                                                                        : AppColors.clear,
                                                                   ))
                                                             ],
                                                           )),
@@ -882,19 +940,22 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                         ),
                                                         Spacer(),
                                                         PopupMenuButton<String>(
-                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                                            shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.all(Radius.circular(4))),
                                                             offset: const Offset(0, 5),
                                                             color: AppColors.white,
                                                             position: PopupMenuPosition.under,
                                                             style: const ButtonStyle(
                                                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                                                 maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                                visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                                                visualDensity:
+                                                                    VisualDensity(horizontal: -4, vertical: -4)),
                                                             itemBuilder: (context) => [
                                                                   PopupMenuItem(
                                                                       onTap: () {},
                                                                       height: 30,
-                                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                                      padding: const EdgeInsets.only(
+                                                                          top: 10, bottom: 8, left: 8, right: 8),
                                                                       child: Row(
                                                                         children: [
                                                                           const SizedBox(width: 5),
@@ -904,14 +965,17 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                             height: 30,
                                                                           ),
                                                                           const SizedBox(width: 8),
-                                                                          Text("Copy Link", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                                          Text("Copy Link",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
                                                                           const SizedBox(width: 5),
                                                                         ],
                                                                       )),
                                                                   PopupMenuItem(
                                                                       onTap: () {},
                                                                       height: 30,
-                                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                                      padding: const EdgeInsets.only(
+                                                                          top: 10, bottom: 8, left: 8, right: 8),
                                                                       child: Row(
                                                                         children: [
                                                                           const SizedBox(width: 5),
@@ -921,14 +985,17 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                             height: 30,
                                                                           ),
                                                                           const SizedBox(width: 8),
-                                                                          Text("Email", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                                          Text("Email",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
                                                                           const SizedBox(width: 5),
                                                                         ],
                                                                       )),
                                                                   PopupMenuItem(
                                                                       onTap: () {},
                                                                       height: 30,
-                                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                                      padding: const EdgeInsets.only(
+                                                                          top: 10, bottom: 8, left: 8, right: 8),
                                                                       child: Row(
                                                                         children: [
                                                                           const SizedBox(width: 5),
@@ -938,14 +1005,17 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                             height: 30,
                                                                           ),
                                                                           const SizedBox(width: 8),
-                                                                          Text("Download (PDF)", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                                          Text("Download (PDF)",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
                                                                           const SizedBox(width: 5),
                                                                         ],
                                                                       )),
                                                                   PopupMenuItem(
                                                                       onTap: () {},
                                                                       height: 30,
-                                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                                      padding: const EdgeInsets.only(
+                                                                          top: 10, bottom: 8, left: 8, right: 8),
                                                                       child: Row(
                                                                         children: [
                                                                           const SizedBox(width: 5),
@@ -955,14 +1025,17 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                             height: 30,
                                                                           ),
                                                                           const SizedBox(width: 8),
-                                                                          Text("Download (Text)", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                                          Text("Download (Text)",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
                                                                           const SizedBox(width: 5),
                                                                         ],
                                                                       )),
                                                                   PopupMenuItem(
                                                                       onTap: () {},
                                                                       height: 30,
-                                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                                      padding: const EdgeInsets.only(
+                                                                          top: 10, bottom: 8, left: 8, right: 8),
                                                                       child: Row(
                                                                         children: [
                                                                           const SizedBox(width: 5),
@@ -972,7 +1045,9 @@ class PatientViewReadOnlyView extends GetView<PatientViewReadOnlyController> {
                                                                             height: 30,
                                                                           ),
                                                                           const SizedBox(width: 8),
-                                                                          Text("Print", style: AppFonts.medium(17, AppColors.textBlack)),
+                                                                          Text("Print",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
                                                                           const SizedBox(width: 5),
                                                                         ],
                                                                       )),
