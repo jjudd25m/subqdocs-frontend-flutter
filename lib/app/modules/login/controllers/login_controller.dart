@@ -1,9 +1,25 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
+
+import '../../../../utils/app_string.dart';
+import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/app_preferences.dart';
+import '../../../routes/app_pages.dart';
+import '../model/login_model.dart';
+import '../repository/login_repository.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
 
+  final LoginRepository _loginRepository = LoginRepository();
   RxBool visiblity = RxBool(false);
+  RxBool isLoading = RxBool(false);
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   final count = 0.obs;
   @override
@@ -26,5 +42,24 @@ class LoginController extends GetxController {
   void changeVisiblity() {
     visiblity.value = visiblity == true ? false : true;
     visiblity.refresh();
+  }
+
+  Future<void> authLoginUser() async {
+    isLoading.value = true;
+
+    try {
+      LoginModel loginModel = await _loginRepository.login(email: emailController.text.toLowerCase(), password: passwordController.text);
+      isLoading.value = false;
+      print("response is ${loginModel.toJson()} ");
+
+      await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
+      AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
+      CustomToastification().showToast("Login success", type: ToastificationType.success);
+      Get.offAllNamed(Routes.HOME);
+    } catch (error) {
+      isLoading.value = false;
+      print("login catch error is $error");
+      CustomToastification().showToast("$error", type: ToastificationType.error);
+    }
   }
 }

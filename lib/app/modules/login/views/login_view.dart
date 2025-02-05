@@ -16,8 +16,8 @@ import '../controllers/login_controller.dart';
 class LoginView extends GetView<LoginController> {
   LoginView({super.key});
 
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  // TextEditingController email = TextEditingController();
+  // TextEditingController password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -52,7 +52,7 @@ class LoginView extends GetView<LoginController> {
                   ),
                   TextFormFiledWidget(
                       label: "Email Address",
-                      controller: email,
+                      controller: controller.emailController,
                       hint: "johndoe@medical.com",
                       checkValidation: (value) {
                         return Validation.emailValidate(value);
@@ -65,7 +65,7 @@ class LoginView extends GetView<LoginController> {
                         label: "Password",
                         hint: "******",
                         visibility: controller.visiblity.value,
-                        controller: password,
+                        controller: controller.passwordController,
                         suffixIcon: controller.visiblity.value
                             ? GestureDetector(
                                 onTap: () {
@@ -114,23 +114,27 @@ class LoginView extends GetView<LoginController> {
                   SizedBox(
                     height: 30,
                   ),
-                  CustomAnimatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.offAllNamed(
-                          Routes.HOME,
-                        );
-                      } else {
-                        Get.offAllNamed(
-                          Routes.HOME,
-                        );
-                      }
-                    },
-                    height: 45,
-                    text: "Log in",
-                    enabledTextColor: AppColors.white,
-                    enabledColor: AppColors.backgroundPurple,
-                  ),
+                  Obx(() {
+                    return CustomAnimatedButton(
+                      onPressed: () {
+                        controller.authLoginUser();
+                        // if (_formKey.currentState!.validate()) {
+                        //   Get.offAllNamed(
+                        //     Routes.HOME,
+                        //   );
+                        // } else {
+                        //   Get.offAllNamed(
+                        //     Routes.HOME,
+                        //   );
+                        // }
+                      },
+                      height: 45,
+                      text: "Log in",
+                      isLoading: controller.isLoading.value,
+                      enabledTextColor: AppColors.white,
+                      enabledColor: AppColors.backgroundPurple,
+                    );
+                  }),
                   // CustomButton(
                   //     navigate: () => {
                   //           if (_formKey.currentState!.validate())

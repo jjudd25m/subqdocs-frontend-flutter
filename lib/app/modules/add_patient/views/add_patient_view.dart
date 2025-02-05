@@ -51,11 +51,25 @@ class AddPatientView extends GetView<AddPatientController> {
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
+                maximumDate: control == controller.dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
+                minimumDate: control == controller.visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
                 initialDateTime: _selectedDate,
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
+
                   String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
+
+                  if (control == controller.dobController) {
+                    controller.dob.value = strDate;
+                    print("controller dob is :- ${controller.dob}");
+                  }
+
+                  if (control == controller.visitDateController) {
+                    controller.visitDate.value = strDate;
+                  }
+
                   control.text = formattedDate;
 
                   print('${_selectedDate.toLocal()}'.split(' ')[0]);
@@ -195,13 +209,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                         width: 14,
                                       ),
                                       SizedBox(
-                                        width: 100,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            hight: 35.0,
-                                            navigate: () {},
-                                            label: "Choose File",
-                                          ),
+                                        width: 120,
+                                        child: CustomButton(
+                                          hight: 35.0,
+                                          navigate: () {},
+                                          label: "Choose File",
                                         ),
                                       ),
                                       SizedBox(
@@ -209,14 +221,12 @@ class AddPatientView extends GetView<AddPatientController> {
                                       ),
                                       SizedBox(
                                         width: 80,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {},
-                                            backGround: Colors.white,
-                                            textColor: AppColors.redText,
-                                            hight: 35.0,
-                                            label: "Remove",
-                                          ),
+                                        child: CustomButton(
+                                          navigate: () {},
+                                          backGround: Colors.white,
+                                          textColor: AppColors.redText,
+                                          hight: 35.0,
+                                          label: "Remove",
                                         ),
                                       ),
                                     ],
@@ -224,27 +234,27 @@ class AddPatientView extends GetView<AddPatientController> {
                                   SizedBox(
                                     height: Dimen.margin16,
                                   ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "Patient ID",
-                                          controller: controller.patientIdController,
-                                          hint: "12345678",
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(child: SizedBox()),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: SizedBox(),
-                                      )
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     Expanded(
+                                  //       child: TextFormFiledWidget(
+                                  //         label: "Patient ID",
+                                  //         controller: controller.patientIdController,
+                                  //         hint: "12345678",
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: Dimen.margin10,
+                                  //     ),
+                                  //     Expanded(child: SizedBox()),
+                                  //     SizedBox(
+                                  //       width: Dimen.margin10,
+                                  //     ),
+                                  //     Expanded(
+                                  //       child: SizedBox(),
+                                  //     )
+                                  //   ],
+                                  // ),
                                   SizedBox(
                                     height: Dimen.margin16,
                                   ),
@@ -349,7 +359,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         child: TextFormFiledWidget(
                                           label: "Visit Date",
                                           onTap: () {
-                                            _showCupertinoDatePicker(context, controller.visitDateController);
+                                            controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
                                           },
                                           controller: controller.visitDateController,
                                           hint: "10/12/2024",
@@ -514,20 +524,17 @@ class AddPatientView extends GetView<AddPatientController> {
                                     height: Dimen.margin20,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         width: 160,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {
-                                              _showCustomDialog(context);
-                                            },
-                                            label: "Add Attachments",
-                                            backGround: AppColors.white,
-                                            textColor: AppColors.textPurple,
-                                            isTrue: false,
-                                          ),
+                                        child: CustomButton(
+                                          navigate: () {
+                                            _showCustomDialog(context);
+                                          },
+                                          label: "Add Attachments",
+                                          backGround: AppColors.white,
+                                          textColor: AppColors.textPurple,
+                                          isTrue: false,
                                         ),
                                       ),
                                       Spacer(),
@@ -540,14 +547,12 @@ class AddPatientView extends GetView<AddPatientController> {
                                       ),
                                       SizedBox(
                                         width: 80,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {},
-                                            label: "Cancel",
-                                            backGround: AppColors.white,
-                                            textColor: AppColors.textPurple,
-                                            isTrue: false,
-                                          ),
+                                        child: CustomButton(
+                                          navigate: () {},
+                                          label: "Cancel",
+                                          backGround: AppColors.white,
+                                          textColor: AppColors.textPurple,
+                                          isTrue: false,
                                         ),
                                       ),
                                       SizedBox(
@@ -555,11 +560,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                       ),
                                       SizedBox(
                                         width: 190,
-                                        child: Expanded(
-                                          child: CustomButton(
-                                            navigate: () {},
-                                            label: "Save and Add Another",
-                                          ),
+                                        child: CustomButton(
+                                          navigate: () {
+                                            controller.addPatient();
+                                          },
+                                          label: "Save and Add Another",
                                         ),
                                       ),
                                       SizedBox(
@@ -623,7 +628,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     padding: const EdgeInsets.only(left: 8.0),
                                                     child: SvgPicture.asset(
                                                       ImagePath.downArrow,
-                                                      width: 20,
+                                                      width: 19,
                                                       colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
                                                     ),
                                                   )),
@@ -646,4 +651,31 @@ class AddPatientView extends GetView<AddPatientController> {
           ),
         ));
   }
+
+  // List<String> generateTimeList(DateTime currentTime, {bool isCurrentDay = true}) {
+  //   List<String> timeList = [];
+  //
+  //   if (isCurrentDay) {
+  //     // If it's the current day, generate times from the current time onwards
+  //     int startHour = currentTime.hour;
+  //     int startMinute = (currentTime.minute ~/ 15) * 15; // Round down to nearest 15-minute mark
+  //
+  //     // Start with current time and create time slots until the end of the day
+  //     for (int hour = startHour; hour < 24; hour++) {
+  //       int minute = hour == startHour ? startMinute : 0;
+  //       for (int min = minute; min < 60; min += 15) {
+  //         timeList.add(DateFormat('h:mm a').format(DateTime(currentTime.year, currentTime.month, currentTime.day, hour, min)));
+  //       }
+  //     }
+  //   } else {
+  //     // If it's not the current day, generate times from 12:00 AM to 12:00 PM
+  //     for (int hour = 0; hour < 12; hour++) {
+  //       for (int min = 0; min < 60; min += 15) {
+  //         timeList.add(DateFormat('h:mm a').format(DateTime(currentTime.year, currentTime.month, currentTime.day, hour, min)));
+  //       }
+  //     }
+  //   }
+  //
+  //   return timeList;
+  // }
 }

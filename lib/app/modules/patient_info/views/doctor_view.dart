@@ -217,12 +217,14 @@ class DoctorView extends GetView<PatientInfoController> {
                                     SizedBox(
                                       width: 20,
                                     ),
-                                    Text(
-                                      textAlign: TextAlign.center,
-                                      "1. History of Malignant melanoma on the right side of the nose (Z85.820)",
-                                      style: AppFonts.medium(17, AppColors.textPurple),
+                                    Expanded(
+                                      child: Text(
+                                        textAlign: TextAlign.left,
+                                        "1. History of Malignant melanoma on the right side of the nose (Z85.820)",
+                                        style: AppFonts.medium(17, AppColors.textPurple),
+                                      ),
                                     ),
-                                    Spacer()
+                                    // Spacer()
                                   ],
                                 ),
                                 Padding(
@@ -254,10 +256,12 @@ class DoctorView extends GetView<PatientInfoController> {
                                         SizedBox(height: 15),
                                         Row(
                                           children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Right side of the nose before the laser session",
-                                              style: AppFonts.medium(14, AppColors.textBlack),
+                                            Expanded(
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                "Right side of the nose before the laser session",
+                                                style: AppFonts.medium(14, AppColors.textBlack),
+                                              ),
                                             ),
                                             SizedBox(width: 10),
                                             SvgPicture.asset(

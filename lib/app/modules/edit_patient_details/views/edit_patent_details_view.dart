@@ -19,44 +19,8 @@ import '../controllers/edit_patent_details_controller.dart';
 
 class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
   EditPatentDetailsView({super.key});
-  DateTime _selectedDate = DateTime.now();
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
-  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoActionSheet(
-          title: Text(
-            "Pick a Date",
-            style: AppFonts.medium(16, AppColors.black),
-          ),
-          actions: <Widget>[
-            Container(
-              height: 400,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                initialDateTime: _selectedDate,
-                onDateTimeChanged: (DateTime newDate) {
-                  _selectedDate = newDate;
-                  // Update the TextField with selected date
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
-                  control.text = formattedDate;
 
-                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
-                },
-              ),
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        );
-      },
-    );
-  }
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -166,12 +130,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                 ),
                                 SizedBox(
                                   width: 100,
-                                  child: Expanded(
-                                    child: CustomButton(
-                                      hight: 35.0,
-                                      navigate: () {},
-                                      label: "Choose File",
-                                    ),
+                                  child: CustomButton(
+                                    hight: 35.0,
+                                    navigate: () {},
+                                    label: "Choose File",
                                   ),
                                 ),
                                 SizedBox(
@@ -179,14 +141,12 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                 ),
                                 SizedBox(
                                   width: 85,
-                                  child: Expanded(
-                                    child: CustomButton(
-                                      navigate: () {},
-                                      backGround: Colors.white,
-                                      textColor: AppColors.redText,
-                                      hight: 35.0,
-                                      label: "Remove",
-                                    ),
+                                  child: CustomButton(
+                                    navigate: () {},
+                                    backGround: Colors.white,
+                                    textColor: AppColors.redText,
+                                    hight: 35.0,
+                                    label: "Remove",
                                   ),
                                 ),
                               ],
@@ -194,27 +154,27 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             SizedBox(
                               height: Dimen.margin16,
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormFiledWidget(
-                                    label: "Patient ID",
-                                    controller: controller.patientIdController,
-                                    hint: "12345678",
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Dimen.margin10,
-                                ),
-                                Expanded(child: SizedBox()),
-                                SizedBox(
-                                  width: Dimen.margin10,
-                                ),
-                                Expanded(
-                                  child: SizedBox(),
-                                )
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Expanded(
+                            //       child: TextFormFiledWidget(
+                            //         label: "Patient ID",
+                            //         controller: controller.patientIdController,
+                            //         hint: "12345678",
+                            //       ),
+                            //     ),
+                            //     SizedBox(
+                            //       width: Dimen.margin10,
+                            //     ),
+                            //     Expanded(child: SizedBox()),
+                            //     SizedBox(
+                            //       width: Dimen.margin10,
+                            //     ),
+                            //     Expanded(
+                            //       child: SizedBox(),
+                            //     )
+                            //   ],
+                            // ),
                             SizedBox(
                               height: Dimen.margin16,
                             ),
@@ -263,7 +223,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     label: "Date of birth",
                                     readOnly: true,
                                     onTap: () {
-                                      _showCupertinoDatePicker(context, controller.dobController);
+                                      controller.showDOBCupertinoDatePicker(context, controller.dobController);
                                     },
                                     controller: controller.dobController,
                                     hint: "12/1/1972",
@@ -314,22 +274,23 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                               height: Dimen.margin16,
                             ),
                             Row(
+                              spacing: 10,
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
                                     label: "Visit Date",
                                     readOnly: true,
                                     onTap: () {
-                                      _showCupertinoDatePicker(context, controller.visitDateController);
+                                      controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
                                     },
                                     controller: controller.visitDateController,
                                     hint: "10/12/2024",
                                     suffixIcon: SvgPicture.asset(ImagePath.calendar),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: Dimen.margin10,
-                                ),
+                                // SizedBox(
+                                //   width: Dimen.margin10,
+                                // ),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,17 +308,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           items: controller.visitTime,
                                           selectedValue: controller.selectedVisitTimeValue.value,
                                           onChanged: (value) {
-                                            controller.selectedVisitTimeValue.value = value;
+                                            controller.selectedVisitTimeValue.value = value ?? "";
                                           },
                                           selectText: "11 PM",
                                         );
-                                      })
+                                      }),
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: Dimen.margin10,
-                                ),
+                                // SizedBox(
+                                //   width: Dimen.margin10,
+                                // ),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,14 +354,12 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                 Spacer(),
                                 Container(
                                   width: 80,
-                                  child: Expanded(
-                                    child: CustomButton(
-                                      navigate: () {},
-                                      isTrue: false,
-                                      textColor: AppColors.backgroundPurple,
-                                      backGround: Colors.white,
-                                      label: "Cancel",
-                                    ),
+                                  child: CustomButton(
+                                    navigate: () {},
+                                    isTrue: false,
+                                    textColor: AppColors.backgroundPurple,
+                                    backGround: Colors.white,
+                                    label: "Cancel",
                                   ),
                                 ),
                                 SizedBox(
@@ -408,9 +367,11 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                 ),
                                 Container(
                                   width: 70,
-                                  child: Expanded(
-                                    child: CustomButton(navigate: () {}, label: "Save"),
-                                  ),
+                                  child: CustomButton(
+                                      navigate: () {
+                                        controller.addPatient();
+                                      },
+                                      label: "Save"),
                                 ),
                               ],
                             ),
