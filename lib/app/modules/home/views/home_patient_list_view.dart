@@ -35,7 +35,7 @@ class HomePatientListView extends GetView<HomeController> {
               // Number of columns in the table (for example, 6 here)
               cellBuilder: _buildTableCell,
               context: context,
-              columnWidths: [0.47, 0.05, 0.10, 0.15, 0.15, 0.07], // Set the column widths based on your needs
+              columnWidths: [0.44, 0.05, 0.10, 0.15, 0.15, 0.10], // Set the column widths based on your needs
             ),
             // CustomTable(
             //   rows: [

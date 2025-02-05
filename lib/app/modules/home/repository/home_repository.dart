@@ -6,7 +6,7 @@ import '../model/schedule_visit_list_model.dart';
 
 class HomeRepository {
   Future<PatientListModel> getPatient({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callGet("patient", queryParameters: param);
+    var response = await ApiProvider.instance.callGet("patient/getAllPatients", queryParameters: param);
     print("getPatient API  internal response $response");
     return PatientListModel.fromJson(response);
   }
