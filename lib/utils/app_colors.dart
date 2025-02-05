@@ -22,6 +22,7 @@ class AppColors {
   static const Color backgroundWhite = Color(0xFFFFFFFF);
   static const Color backgroundBlack = Color(0xFF000000);
   static const Color backgroundPurple = Color(0xFF5B5BE1);
+  static const Color borderTable = Color(0xFFE9EFFB);
   static const Color backgroundLightBlue = Color(0xFFF6F6FD);
   static const Color backgroundPdfAttchment = Color(0xFFF9FBFC);
   static const Color backgroundLightGrey = Color(0xFFF5F5F5);
@@ -37,6 +38,8 @@ class AppColors {
   static const Color appbarBorder = Color(0xFFD8DCE4);
 
   static const Color ScreenBackGround = Color(0xFFF6F6FD);
+  static const Color buttonPurpleLight = Color(0xFFEFEFFC);
+  static const Color ScreenBackGround1 = Color(0xFFECF0F4);
   static const Color buttonWithOpacity = Color.fromRGBO(91, 91, 225, 0.40);
 
   static const Color orange = Color(0xFFFFE6CC);

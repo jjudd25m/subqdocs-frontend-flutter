@@ -7,6 +7,8 @@ class VisitMainController extends GetxController {
   final count = 0.obs;
   RxBool isStartRecording = false.obs;
   RxInt isSelectedAttchmentOption = RxInt(0);
+  List<String> patientType = ["New Patient", "Old Patient"];
+  RxnString selectedMedicalAssistant = RxnString();
 
   @override
   void onInit() {

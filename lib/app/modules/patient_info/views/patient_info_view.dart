@@ -14,6 +14,7 @@ import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/custom_textfiled.dart';
+import '../../../../widgets/ContainerButton.dart';
 import '../controllers/patient_info_controller.dart';
 import 'custom_table.dart';
 import 'full_transcript_view.dart';
@@ -34,7 +35,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
             CustomAppBar(drawerkey: _key),
             Expanded(
               child: Container(
-                color: AppColors.backgroundLightBlue,
+                color: AppColors.ScreenBackGround1,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: SingleChildScrollView(
                   child: Column(
@@ -43,124 +44,103 @@ class PatientInfoView extends GetView<PatientInfoController> {
                         children: <Widget>[
                           SizedBox(height: 20.0),
                           ExpansionTile(
-                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            iconColor: AppColors.textDarkGrey,
+                            collapsedIconColor: AppColors.textDarkGrey,
+                            childrenPadding: EdgeInsets.zero,
+                            collapsedShape:
+                                OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape:
+                                OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                             backgroundColor: AppColors.backgroundWhite,
                             collapsedBackgroundColor: AppColors.backgroundWhite,
                             title: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    child: SvgPicture.asset(
-                                      ImagePath.logo_back,
-                                      height: 20,
-                                      width: 20,
-                                    ),
+                                  SvgPicture.asset(
+                                    ImagePath.logo_back,
+                                    height: 15,
+                                    width: 18,
+                                  ),
+                                  SizedBox(
+                                    width: 11,
+                                  ),
+                                  BaseImageView(
+                                    imageUrl:
+                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                    width: 60,
+                                    height: 60,
                                   ),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  SizedBox(
-                                    width: 250,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: 20),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 10),
-                                          child: BaseImageView(
-                                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                            width: 50,
-                                            height: 50,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                            child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  textAlign: TextAlign.center,
-                                                  "Don Jones",
-                                                  style: AppFonts.medium(15, AppColors.textBlack),
-                                                ),
-                                                SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Text(
-                                                  textAlign: TextAlign.center,
-                                                  "12345678",
-                                                  style: AppFonts.regular(13, AppColors.textGrey),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                        SizedBox(
-                                          width: 30,
-                                        )
-                                      ],
-                                    ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "Don Jones",
+                                        style: AppFonts.medium(16, AppColors.textBlack),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        textAlign: TextAlign.center,
+                                        "12345678",
+                                        style: AppFonts.regular(11, AppColors.textGrey),
+                                      ),
+                                    ],
                                   ),
-                                  // Text(
-                                  //   textAlign: TextAlign.center,
-                                  //   "Patient Details",
-                                  //   style: AppFonts.medium(16, AppColors.textBlack),
-                                  // ),
                                   Spacer(),
                                   SvgPicture.asset(
                                     ImagePath.edit,
-                                    height: 25,
-                                    width: 25,
+                                    height: 15,
+                                    width: 15,
                                   ),
                                   SizedBox(
-                                    width: 15,
+                                    width: 18,
                                   ),
                                   Container(
                                       decoration: BoxDecoration(
                                         color: AppColors.textOrangle.withValues(alpha: 0.2),
-                                        borderRadius: BorderRadius.circular(25), // Set corner radius
+                                        borderRadius: BorderRadius.circular(100), // Set corner radius
                                       ),
-                                      height: 40,
-                                      width: 120,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            "Pending",
-                                            style: AppFonts.medium(16, AppColors.textOrangle),
-                                          ),
-                                        ],
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          "Pending",
+                                          style: AppFonts.medium(14, AppColors.textOrangle),
+                                        ),
                                       )),
                                   SizedBox(
-                                    width: 15,
+                                    width: 12,
                                   ),
-                                  SizedBox(
-                                      width: 150,
-                                      height: 40,
-                                      child: CustomAnimatedButton(
-                                        text: " Patient History ",
-                                        isOutline: true,
-                                        enabledTextColor: AppColors.textGrey,
-                                        enabledColor: AppColors.white,
-                                        outLineEnabledColor: AppColors.textGrey,
-                                        outlineColor: AppColors.textGrey,
-                                      ))
+                                  ContainerButton(
+                                    onPressed: () {
+                                      // Your onPressed function
+                                    },
+                                    text: 'Patient History',
+
+                                    borderColor: AppColors.appbarBorder, // Custom border color
+                                    backgroundColor: AppColors.white, // Custom background color
+                                    needBorder: true, // Show border
+                                    textColor: AppColors.textDarkGrey, // Custom text color
+                                    padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                    radius: 6, // Custom border radius
+                                  ),
                                 ],
                               ),
                             ),
                             children: <Widget>[
+                              Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: AppColors.appbarBorder,
+                              ),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -172,15 +152,15 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Age",
-                                          style: AppFonts.medium(15, AppColors.textBlack),
+                                          style: AppFonts.regular(12, AppColors.textBlack),
                                         ),
                                         SizedBox(
-                                          width: 15,
+                                          height: 6,
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
                                           "52",
-                                          style: AppFonts.regular(13, AppColors.textGrey),
+                                          style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
                                     ),
@@ -189,15 +169,15 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Gender",
-                                          style: AppFonts.medium(15, AppColors.textBlack),
+                                          style: AppFonts.regular(12, AppColors.textBlack),
                                         ),
                                         SizedBox(
-                                          width: 15,
+                                          height: 6,
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Male",
-                                          style: AppFonts.regular(13, AppColors.textGrey),
+                                          style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
                                     ),
@@ -206,30 +186,32 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Visit Date & Time",
-                                          style: AppFonts.medium(15, AppColors.textBlack),
+                                          style: AppFonts.regular(12, AppColors.textBlack),
                                         ),
                                         SizedBox(
-                                          width: 15,
+                                          height: 6,
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
                                           "10/12/2024  10:30 am",
-                                          style: AppFonts.regular(13, AppColors.textGrey),
+                                          style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
                                     ),
                                     Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          textAlign: TextAlign.center,
+                                          textAlign: TextAlign.start,
                                           "Medical Assistant",
-                                          style: AppFonts.medium(15, AppColors.textBlack),
+                                          style: AppFonts.regular(12, AppColors.textBlack),
                                         ),
                                         SizedBox(
-                                          width: 15,
+                                          height: 6,
                                         ),
                                         PopupMenuButton<String>(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(8))),
                                             offset: const Offset(0, 5),
                                             color: AppColors.white,
                                             position: PopupMenuPosition.over,
@@ -243,7 +225,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                         // controller.isSelectedAttchmentOption.value = 0;
                                                       },
                                                       // height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      padding:
+                                                          const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                       child: Container(
                                                         width: 200,
                                                         child: Column(
@@ -252,7 +235,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                             Container(
                                                               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                                                               decoration: BoxDecoration(
-                                                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                                border: Border.all(
+                                                                    color: AppColors.textGrey.withValues(alpha: 0.5)),
                                                                 // color: AppColors.backgroundWhite,
                                                                 borderRadius: BorderRadius.circular(8),
                                                               ),
@@ -270,7 +254,10 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                                     width: 120,
                                                                     child: TextField(
                                                                       maxLines: 1, //or null
-                                                                      decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                                      decoration: InputDecoration.collapsed(
+                                                                          hintText: "Search",
+                                                                          hintStyle:
+                                                                              AppFonts.regular(14, AppColors.textGrey)),
                                                                     ),
                                                                   ),
                                                                 ],
@@ -283,7 +270,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                                 itemBuilder: (context, index) => InkWell(
                                                                       onTap: () {},
                                                                       child: Padding(
-                                                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 10),
                                                                         child: Column(
                                                                           children: [
                                                                             SizedBox(height: 10),
@@ -298,7 +286,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                                                 Text(
                                                                                   textAlign: TextAlign.center,
                                                                                   "Missie Cooper",
-                                                                                  style: AppFonts.regular(15, AppColors.textPurple),
+                                                                                  style: AppFonts.regular(
+                                                                                      15, AppColors.textPurple),
                                                                                 ),
                                                                               ],
                                                                             ),
@@ -322,7 +311,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   "Missie Cooper",
-                                                  style: AppFonts.regular(13, AppColors.textPurple),
+                                                  style: AppFonts.regular(14, AppColors.textPurple),
                                                 ),
                                                 SizedBox(
                                                   width: 5,
@@ -333,11 +322,11 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                     borderRadius: BorderRadius.circular(12),
                                                     border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
                                                   ),
-                                                  padding: EdgeInsets.symmetric(horizontal: 6),
+                                                  padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
                                                   child: Text(
                                                     textAlign: TextAlign.center,
                                                     "+2",
-                                                    style: AppFonts.bold(13, AppColors.textWhite),
+                                                    style: AppFonts.bold(10, AppColors.textWhite),
                                                   ),
                                                 ),
                                                 SizedBox(width: 5),
@@ -356,7 +345,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Doctor",
-                                          style: AppFonts.medium(15, AppColors.textBlack),
+                                          style: AppFonts.regular(12, AppColors.textBlack),
                                         ),
                                         SizedBox(
                                           width: 15,
@@ -366,7 +355,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                             Text(
                                               textAlign: TextAlign.center,
                                               "Dr. Adrian Tinajero",
-                                              style: AppFonts.regular(13, AppColors.textGrey),
+                                              style: AppFonts.regular(14, AppColors.textGrey),
                                             ),
                                             SizedBox(width: 5),
                                             SvgPicture.asset(
@@ -386,327 +375,358 @@ class PatientInfoView extends GetView<PatientInfoController> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Container(
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                            width: double.infinity,
+                            decoration:
+                                BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                            child: Obx(
+                              () {
+                                return Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    decoration:
+                                        BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                    height: 45,
+                                    child: SingleChildScrollView(
+                                      physics: BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          IntrinsicWidth(
+                                            child: CustomAnimatedButton(
+                                              onPressed: () {
+                                                controller.tabIndex.value = 0;
+                                              },
+                                              text: " Doctor View ",
+                                              isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                              fontSize: 14,
+                                              enabledTextColor: controller.tabIndex.value == 0
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 0
+                                                  ? AppColors.buttonPurpleLight
+                                                  : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 0
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.clear,
+                                            ),
+                                          ),
+                                          IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                            onPressed: () {
+                                              controller.tabIndex.value = 1;
+                                            },
+                                            text: " Full Transcript ",
+                                            isOutline: true,
+                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            fontSize: 14,
+                                            enabledTextColor: controller.tabIndex.value == 1
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.textGrey,
+                                            enabledColor: controller.tabIndex.value == 1
+                                                ? AppColors.buttonPurpleLight
+                                                : AppColors.clear,
+                                            outLineEnabledColor: AppColors.textGrey,
+                                            outlineColor: controller.tabIndex.value == 1
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.clear,
+                                          )),
+                                          IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                            onPressed: () {
+                                              controller.tabIndex.value = 2;
+                                            },
+                                            text: " Patient View ",
+                                            isOutline: true,
+                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            fontSize: 14,
+                                            enabledTextColor: controller.tabIndex.value == 2
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.textGrey,
+                                            enabledColor: controller.tabIndex.value == 2
+                                                ? AppColors.buttonPurpleLight
+                                                : AppColors.clear,
+                                            outLineEnabledColor: AppColors.textGrey,
+                                            outlineColor: controller.tabIndex.value == 2
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.clear,
+                                          )),
+                                          IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                            onPressed: () {
+                                              controller.tabIndex.value = 3;
+                                            },
+                                            text: " Full Note ",
+                                            isOutline: true,
+                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            fontSize: 14,
+                                            enabledTextColor: controller.tabIndex.value == 3
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.textGrey,
+                                            enabledColor: controller.tabIndex.value == 3
+                                                ? AppColors.buttonPurpleLight
+                                                : AppColors.clear,
+                                            outLineEnabledColor: AppColors.textGrey,
+                                            outlineColor: controller.tabIndex.value == 3
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.clear,
+                                          )),
+                                          IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                            onPressed: () {
+                                              controller.tabIndex.value = 4;
+                                            },
+                                            text: " Billing Form ",
+                                            isOutline: true,
+                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            fontSize: 14,
+                                            enabledTextColor: controller.tabIndex.value == 4
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.textGrey,
+                                            enabledColor: controller.tabIndex.value == 4
+                                                ? AppColors.buttonPurpleLight
+                                                : AppColors.clear,
+                                            outLineEnabledColor: AppColors.textGrey,
+                                            outlineColor: controller.tabIndex.value == 4
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.clear,
+                                          )),
+                                          IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                            onPressed: () {
+                                              controller.tabIndex.value = 5;
+                                            },
+                                            text: " Requisition ",
+                                            isOutline: true,
+                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            fontSize: 14,
+                                            enabledTextColor: controller.tabIndex.value == 5
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.textGrey,
+                                            enabledColor: controller.tabIndex.value == 5
+                                                ? AppColors.buttonPurpleLight
+                                                : AppColors.clear,
+                                            outLineEnabledColor: AppColors.textGrey,
+                                            outlineColor: controller.tabIndex.value == 5
+                                                ? AppColors.backgroundPurple
+                                                : AppColors.clear,
+                                          ))
+                                        ],
+                                      ),
+                                    ));
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            decoration:
+                                BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                             child: Obx(() {
                               return Column(
                                 children: [
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Obx(() {
-                                    return Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20),
-                                      child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 10),
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundPurple.withValues(alpha: 0.2)),
-                                          height: 70,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: [
-                                                SizedBox(
-                                                    width: 130,
-                                                    height: 40,
-                                                    child: CustomAnimatedButton(
-                                                      onPressed: () {
-                                                        controller.tabIndex.value = 0;
-                                                      },
-                                                      text: " Doctor View ",
-                                                      isOutline: true,
-                                                      fontSize: 14,
-                                                      enabledTextColor: controller.tabIndex.value == 0 ? AppColors.textWhite : AppColors.textGrey,
-                                                      enabledColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      outLineEnabledColor: AppColors.textGrey,
-                                                      outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    )),
-                                                SizedBox(
-                                                    width: 140,
-                                                    height: 40,
-                                                    child: CustomAnimatedButton(
-                                                      onPressed: () {
-                                                        controller.tabIndex.value = 1;
-                                                      },
-                                                      text: " Full Transcript ",
-                                                      isOutline: true,
-                                                      fontSize: 14,
-                                                      enabledTextColor: controller.tabIndex.value == 1 ? AppColors.textWhite : AppColors.textGrey,
-                                                      enabledColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      outLineEnabledColor: AppColors.textGrey,
-                                                      outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    )),
-                                                SizedBox(
-                                                    width: 120,
-                                                    height: 40,
-                                                    child: CustomAnimatedButton(
-                                                      onPressed: () {
-                                                        controller.tabIndex.value = 2;
-                                                      },
-                                                      text: " Patient View ",
-                                                      isOutline: true,
-                                                      fontSize: 14,
-                                                      enabledTextColor: controller.tabIndex.value == 2 ? AppColors.textWhite : AppColors.textGrey,
-                                                      enabledColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      outLineEnabledColor: AppColors.textGrey,
-                                                      outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    )),
-                                                SizedBox(
-                                                    width: 120,
-                                                    height: 40,
-                                                    child: CustomAnimatedButton(
-                                                      onPressed: () {
-                                                        controller.tabIndex.value = 3;
-                                                      },
-                                                      text: " Full Note ",
-                                                      isOutline: true,
-                                                      fontSize: 14,
-                                                      enabledTextColor: controller.tabIndex.value == 3 ? AppColors.textWhite : AppColors.textGrey,
-                                                      enabledColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      outLineEnabledColor: AppColors.textGrey,
-                                                      outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    )),
-                                                SizedBox(
-                                                    width: 130,
-                                                    height: 40,
-                                                    child: CustomAnimatedButton(
-                                                      onPressed: () {
-                                                        controller.tabIndex.value = 4;
-                                                      },
-                                                      text: " Billing Form ",
-                                                      isOutline: true,
-                                                      fontSize: 14,
-                                                      enabledTextColor: controller.tabIndex.value == 4 ? AppColors.textWhite : AppColors.textGrey,
-                                                      enabledColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      outLineEnabledColor: AppColors.textGrey,
-                                                      outlineColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    )),
-                                                SizedBox(
-                                                    width: 120,
-                                                    height: 40,
-                                                    child: CustomAnimatedButton(
-                                                      onPressed: () {
-                                                        controller.tabIndex.value = 5;
-                                                      },
-                                                      text: " Requisition ",
-                                                      isOutline: true,
-                                                      fontSize: 14,
-                                                      enabledTextColor: controller.tabIndex.value == 5 ? AppColors.textWhite : AppColors.textGrey,
-                                                      enabledColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      outLineEnabledColor: AppColors.textGrey,
-                                                      outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
-                                                    ))
-                                              ],
+                                  controller.tabIndex.value != 1
+                                      ? Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 19,
                                             ),
-                                          )),
-                                    );
-                                  }),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 20),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          textAlign: TextAlign.center,
-                                          "Patient Medical Record",
-                                          style: AppFonts.medium(20, AppColors.textBlack),
-                                        ),
-                                        Spacer(),
-                                        PopupMenuButton<String>(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                                            offset: const Offset(0, 5),
-                                            color: AppColors.white,
-                                            position: PopupMenuPosition.under,
-                                            style: const ButtonStyle(
-                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                            itemBuilder: (context) => [
-                                                  PopupMenuItem(
-                                                      onTap: () {},
-                                                      height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                      child: Row(
-                                                        children: [
-                                                          const SizedBox(width: 5),
-                                                          SvgPicture.asset(
-                                                            ImagePath.share_copy_link,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text("Copy Link", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                          const SizedBox(width: 5),
-                                                        ],
-                                                      )),
-                                                  PopupMenuItem(
-                                                      onTap: () {},
-                                                      height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                      child: Row(
-                                                        children: [
-                                                          const SizedBox(width: 5),
-                                                          SvgPicture.asset(
-                                                            ImagePath.share_email,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text("Email", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                          const SizedBox(width: 5),
-                                                        ],
-                                                      )),
-                                                  PopupMenuItem(
-                                                      onTap: () {},
-                                                      height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                      child: Row(
-                                                        children: [
-                                                          const SizedBox(width: 5),
-                                                          SvgPicture.asset(
-                                                            ImagePath.share_pdf,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text("Download (PDF)", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                          const SizedBox(width: 5),
-                                                        ],
-                                                      )),
-                                                  PopupMenuItem(
-                                                      onTap: () {},
-                                                      height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                      child: Row(
-                                                        children: [
-                                                          const SizedBox(width: 5),
-                                                          SvgPicture.asset(
-                                                            ImagePath.share_text,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text("Download (Text)", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                          const SizedBox(width: 5),
-                                                        ],
-                                                      )),
-                                                  PopupMenuItem(
-                                                      onTap: () {},
-                                                      height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                      child: Row(
-                                                        children: [
-                                                          const SizedBox(width: 5),
-                                                          SvgPicture.asset(
-                                                            ImagePath.share_print,
-                                                            width: 30,
-                                                            height: 30,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text("Print", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                          const SizedBox(width: 5),
-                                                        ],
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 16),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    "Patient Medical Record",
+                                                    style: AppFonts.medium(20, AppColors.textBlack),
+                                                  ),
+                                                  Spacer(),
+                                                  PopupMenuButton<String>(
+                                                      shape: const RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.all(Radius.circular(4))),
+                                                      offset: const Offset(0, 5),
+                                                      color: AppColors.white,
+                                                      position: PopupMenuPosition.under,
+                                                      style: const ButtonStyle(
+                                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                          maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                          visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                                      itemBuilder: (context) => [
+                                                            PopupMenuItem(
+                                                                onTap: () {},
+                                                                padding: EdgeInsets.zero,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          const SizedBox(width: 5),
+                                                                          SvgPicture.asset(
+                                                                            ImagePath.share_copy_link,
+                                                                            width: 30,
+                                                                            height: 30,
+                                                                          ),
+                                                                          const SizedBox(width: 8),
+                                                                          Text("Copy Link",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
+                                                                          const SizedBox(width: 5),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      height: 1,
+                                                                      color: AppColors.appbarBorder,
+                                                                      width: double.infinity,
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                            PopupMenuItem(
+                                                                onTap: () {},
+                                                                padding: EdgeInsets.zero,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          const SizedBox(width: 5),
+                                                                          SvgPicture.asset(
+                                                                            ImagePath.share_email,
+                                                                            width: 30,
+                                                                            height: 30,
+                                                                          ),
+                                                                          const SizedBox(width: 8),
+                                                                          Text("Email",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
+                                                                          const SizedBox(width: 5),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      height: 1,
+                                                                      color: AppColors.appbarBorder,
+                                                                      width: double.infinity,
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                            PopupMenuItem(
+                                                                onTap: () {},
+                                                                padding: EdgeInsets.zero,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          const SizedBox(width: 5),
+                                                                          SvgPicture.asset(
+                                                                            ImagePath.share_pdf,
+                                                                            width: 30,
+                                                                            height: 30,
+                                                                          ),
+                                                                          const SizedBox(width: 8),
+                                                                          Text("Download (PDF)",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
+                                                                          const SizedBox(width: 5),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      height: 1,
+                                                                      color: AppColors.appbarBorder,
+                                                                      width: double.infinity,
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                            PopupMenuItem(
+                                                                onTap: () {},
+                                                                padding: EdgeInsets.zero,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          const SizedBox(width: 5),
+                                                                          SvgPicture.asset(
+                                                                            ImagePath.share_text,
+                                                                            width: 30,
+                                                                            height: 30,
+                                                                          ),
+                                                                          const SizedBox(width: 8),
+                                                                          Text("Download (Text)",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
+                                                                          const SizedBox(width: 5),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      height: 1,
+                                                                      color: AppColors.appbarBorder,
+                                                                      width: double.infinity,
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                            PopupMenuItem(
+                                                                onTap: () {},
+                                                                padding: EdgeInsets.zero,
+                                                                child: Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          const SizedBox(width: 5),
+                                                                          SvgPicture.asset(
+                                                                            ImagePath.share_print,
+                                                                            width: 30,
+                                                                            height: 30,
+                                                                          ),
+                                                                          const SizedBox(width: 8),
+                                                                          Text("Print",
+                                                                              style: AppFonts.medium(
+                                                                                  17, AppColors.textBlack)),
+                                                                          const SizedBox(width: 5),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )),
+                                                          ],
+                                                      child: SvgPicture.asset(
+                                                        ImagePath.share,
+                                                        width: 36,
+                                                        height: 36,
                                                       )),
                                                 ],
-                                            child: SvgPicture.asset(
-                                              ImagePath.share,
-                                              width: 40,
-                                              height: 40,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    color: AppColors.backgroundLightGrey,
-                                    height: 2,
-                                    width: double.infinity,
-                                    child: SizedBox(),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 19,
+                                            ),
+                                            Container(
+                                              color: AppColors.appbarBorder,
+                                              height: 1,
+                                              width: double.infinity,
+                                            ),
+                                            SizedBox(
+                                              height: 16,
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(
+                                          height: 10,
+                                        ),
                                   if (controller.tabIndex.value == 0) ...[DoctorView()],
                                   if (controller.tabIndex.value == 1) ...[FullTranscriptView()],
                                   if (controller.tabIndex.value == 2) ...[PatientView()],
                                   if (controller.tabIndex.value == 3) ...[FullNoteView()],
-
-                                  // SizedBox(height: 20),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  //   child: SingleChildScrollView(
-                                  //     padding: EdgeInsets.zero,
-                                  //     child: Column(
-                                  //       children: [
-                                  //         Table(
-                                  //           border: TableBorder.all(
-                                  //             color: AppColors.buttonBackgroundGrey, // Table border color
-                                  //             width: 1, // Border width
-                                  //             borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)), // Optional rounded corners
-                                  //           ),
-                                  //           columnWidths: {
-                                  //             0: FractionColumnWidth(0.35), // Fixed width for "Procedure" column
-                                  //             1: FractionColumnWidth(0.35), // Fixed width for "Diagnosis" column
-                                  //             2: FractionColumnWidth(0.15), // Flexible width for "Unit" column (20% of screen)
-                                  //             3: FractionColumnWidth(0.15), // Flexible width for "Unit charges" column (40% of screen)
-                                  //           },
-                                  //           children: [
-                                  //             TableRow(
-                                  //               decoration: BoxDecoration(
-                                  //                 color: AppColors.white, // Header row background color
-                                  //               ),
-                                  //               children: [
-                                  //                 _headerBuildTableCell('Procedure'),
-                                  //                 _headerBuildTableCell('Diagnosis'),
-                                  //                 _headerBuildTableCell('Unit'),
-                                  //                 _headerBuildTableCell('Unit charges'),
-                                  //               ],
-                                  //             ),
-                                  //             TableRow(
-                                  //               decoration: BoxDecoration(
-                                  //                 color: AppColors.white,
-                                  //               ),
-                                  //               children: [
-                                  //                 _buildTableCell('99213 25 OFFICE O/P EST LOW 20 MIN', false),
-                                  //                 _buildTableCell('Z08 (Encounter for follow-up examination after completed treatment for malignant neoplasm)', false),
-                                  //                 _buildTableCell('1', false),
-                                  //                 _buildTableCell('\$1344.5', false),
-                                  //               ],
-                                  //             ),
-                                  //             // Add more rows if needed
-                                  //           ],
-                                  //         ),
-                                  //         Table(
-                                  //           border: TableBorder.all(
-                                  //             color: AppColors.buttonBackgroundGrey, // Table border color
-                                  //             width: 1, // Border width
-                                  //             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)), // Optional rounded corners
-                                  //           ),
-                                  //           columnWidths: {
-                                  //             0: FractionColumnWidth(0.85), // Fixed width for "Procedure" column
-                                  //             1: FractionColumnWidth(0.15), // Fixed width for "Diagnosis" column
-                                  //           },
-                                  //           children: [
-                                  //             TableRow(
-                                  //               decoration: BoxDecoration(
-                                  //                 color: AppColors.white, // Header row background color
-                                  //               ),
-                                  //               children: [
-                                  //                 _headerBuildTableCell('Total'),
-                                  //                 _headerBuildTableCell("\$279.46"),
-                                  //               ],
-                                  //             ),
-                                  //             // Add more rows if needed
-                                  //           ],
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   SizedBox(height: 20),
                                 ],
                               );
@@ -721,12 +741,12 @@ class PatientInfoView extends GetView<PatientInfoController> {
               ),
             ),
             Container(
-              color: AppColors.backgroundLightBlue,
+              color: AppColors.ScreenBackGround1,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Container(
                 // color: AppColors.backgroundWhite,
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Obx(() {
                   return Row(
                     spacing: 15,
@@ -780,7 +800,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                 Text(
                                   textAlign: TextAlign.center,
                                   "Amend Note",
-                                  style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline),
+                                  style: AppFonts.medium(15, AppColors.textGrey)
+                                      .copyWith(decoration: TextDecoration.underline),
                                 ),
                               ],
                             ),
@@ -792,7 +813,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                           child: GestureDetector(
                             onTap: () {},
                             child: Container(
-                              height: 100,
+                              height: 81,
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                 color: AppColors.backgroundLightGrey,
@@ -836,7 +857,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                               );
                             },
                             child: Container(
-                              height: 100,
+                              height: 81,
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                 color: AppColors.backgroundLightGrey,
@@ -874,7 +895,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                               controller.isSignatureDone.value = true;
                             },
                             child: Container(
-                              height: 100,
+                              height: 81,
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppColors.backgroundPurple),
                                 color: AppColors.backgroundPurple,

@@ -17,10 +17,9 @@ class FullTranscriptView extends GetView<PatientInfoController> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 0),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                   color: AppColors.white,
@@ -32,49 +31,27 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.2),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              textAlign: TextAlign.center,
-                              "Transcribing Summary",
-                              style: AppFonts.medium(20, AppColors.textBlack),
-                            ),
-                            Spacer(),
-                            // Container(
-                            //   padding: EdgeInsets.symmetric(vertical: 12),
-                            //   decoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(8), color: AppColors.backgroundPurple, border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
-                            //   child: Row(children: [
-                            //     SizedBox(width: 15),
-                            //     Text(
-                            //       textAlign: TextAlign.center,
-                            //       "Select Template",
-                            //       style: AppFonts.medium(17, AppColors.textWhite),
-                            //     ),
-                            //     SizedBox(width: 10),
-                            //     SvgPicture.asset(
-                            //       ImagePath.down_arrow,
-                            //       height: 30,
-                            //       width: 30,
-                            //       colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
-                            //     ),
-                            //     SizedBox(width: 10),
-                            //   ]),
-                            // ),
-                          ],
+                        Text(
+                          textAlign: TextAlign.center,
+                          "Transcribing Summary",
+                          style: AppFonts.medium(20, AppColors.textBlack),
+                        ),
+                        SizedBox(
+                          height: 4,
                         ),
                         Row(
                           children: [
                             Text(
                               textAlign: TextAlign.left,
                               "(Transcription Time- 03:55)",
-                              style: AppFonts.medium(14, AppColors.textGrey),
+                              style: AppFonts.medium(12, AppColors.textGrey),
                             ),
                             // Spacer()
                           ],
@@ -83,31 +60,35 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 16,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ListView.builder(
+                        padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => Column(
                               children: [
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                  decoration:
-                                      BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: AppColors.white,
+                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
                                   child: Column(
                                     children: [
-                                      SizedBox(height: 10),
+                                      SizedBox(height: 6),
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           BaseImageView(
-                                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                            width: 40,
-                                            height: 40,
+                                            imageUrl:
+                                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                            width: 20,
+                                            height: 20,
                                           ),
-                                          SizedBox(width: 15),
+                                          SizedBox(width: 8),
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,11 +96,12 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                                 Text(
                                                   textAlign: TextAlign.left,
                                                   "Doctor",
-                                                  style: AppFonts.medium(14, AppColors.textPurple),
+                                                  style: AppFonts.regular(14, AppColors.textPurple),
                                                 ),
+                                                SizedBox(height: 4),
                                                 Text(
                                                   "Yes, doctor. I’ve not been feeling well for the past few days. I’ve been having a stomach ache for a few days and feeling a bit dizzy since yesterday.",
-                                                  style: AppFonts.regular(14, AppColors.textGrey),
+                                                  style: AppFonts.regular(12, AppColors.textGrey),
                                                 )
                                               ],
                                             ),
@@ -127,16 +109,16 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                           SizedBox(width: 20),
                                           Text(
                                             "(00:00)",
-                                            style: AppFonts.regular(15, AppColors.textGrey),
+                                            style: AppFonts.regular(12, AppColors.textGrey),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(height: 6),
                                     ],
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 15,
+                                  height: 10,
                                 )
                               ],
                             ),
@@ -214,13 +196,13 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                   //   ),
                   // ),
                   SizedBox(
-                    height: 20,
+                    height: 6,
                   ),
                 ],
               )),
         ),
         SizedBox(
-          height: 20,
+          height: 6,
         ),
         // Padding(
         //   padding: EdgeInsets.symmetric(horizontal: 20),

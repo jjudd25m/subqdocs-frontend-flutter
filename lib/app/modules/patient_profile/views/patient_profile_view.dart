@@ -9,6 +9,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/rounded_image_widget.dart';
@@ -22,6 +23,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
         key: _key,
         resizeToAvoidBottomInset: false,
