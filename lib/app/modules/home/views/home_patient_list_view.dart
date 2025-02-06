@@ -200,6 +200,7 @@ class HomePatientListView extends GetView<HomeController> {
                 itemBuilder: (context) => [
                       PopupMenuItem(
                           onTap: () {
+                            print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                             Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                               "patientData": controller.patientList[rowIndex - 1].patientId.toString(),
                             });
@@ -215,9 +216,13 @@ class HomePatientListView extends GetView<HomeController> {
                           onTap: () {
                             print("row index is :- ${rowIndex}");
                             print("column index is :- ${colIndex}");
+                            print(
+                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.first.id.toString()} ");
+
+                            // print(" our element is $");
 
                             Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].patientId.toString(),
+                              "patientData": controller.patientList[rowIndex - 1].visits,
                             });
                           },
                           child: Text(

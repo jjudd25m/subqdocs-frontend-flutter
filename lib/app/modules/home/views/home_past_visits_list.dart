@@ -125,7 +125,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         },
         columnCount: 7,
         context: context,
-        columnWidths: [0.23, 0.15, 0.08, 0.09, 0.16, 0.19, 0.10],
+        columnWidths: [0.27, 0.13, 0.08, 0.09, 0.14, 0.20, 0.10],
       ),
     );
   }
@@ -144,7 +144,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
         patient.previousVisitCount.toString() ?? "N/A", // Last Visit Date
-        patient.status ?? "0", // Previous Visits
+        patient.visitStatus ?? "0", // Previous Visits
         "Action", // Action (could be a button or some interaction)
       ]);
     }

@@ -18,6 +18,8 @@ class PatientProfileController extends GetxController {
   void onInit() {
     super.onInit();
     patientId = Get.arguments["patientData"];
+
+    print("our patientdata is ${patientId}");
     getPatient(patientId);
   }
 

@@ -60,7 +60,11 @@ class HomeScheduleListView extends GetView<HomeController> {
                         itemBuilder: (context) => [
                               PopupMenuItem(
                                   onTap: () {
-                                    Get.toNamed(Routes.PATIENT_PROFILE);
+                                    print("visite is is ${controller.patientList[rowIndex - 1].visitId.toString()}");
+
+                                    Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                                      "patientData": "4",
+                                    });
                                   },
                                   value: "",
                                   child: Text(

@@ -34,11 +34,11 @@ class AddPatientController extends GetxController {
   RxString dob = RxString("");
   RxString visitDate = RxString("");
 
-  RxnString selectedSexValue = RxnString();
+  RxnString selectedSexValue = RxnString("Male");
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();
-  List<String> visitTime = [];
-  RxString selectedVisitTime = RxString("");
+  List<String> visitTime = ["10 AM ", "11 AM", "12 PM", " 1 PM", "2 PM", "3 PM"];
+  RxString selectedVisitTime = RxString("11 PM");
   List<String> sex = ["Female", "Male"];
   List<String> patientType = ["New Patient", "Old Patient"];
 
@@ -49,7 +49,7 @@ class AddPatientController extends GetxController {
   void onInit() {
     super.onInit();
 
-    visitTime = generateTimeIntervals();
+    // visitTime = generateTimeIntervals();
   }
 
   @override
@@ -149,12 +149,12 @@ class AddPatientController extends GetxController {
   Future<void> addPatient() async {
     isLoading.value = true;
 
-    DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
+    // DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
     // DateTime finalDateTimeFromDateTime = mergeDateAndTimeFromDateTime(selectedDateTime, selectedTime);
 
-    String strVisit_time = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(finalDateTimeFromString);
-
-    print("Merged DateTime from String: $finalDateTimeFromString");
+    // String strVisit_time = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(finalDateTimeFromString);
+    //
+    // print("Merged DateTime from String: $finalDateTimeFromString");
     // print("Merged DateTime from DateTime: $finalDateTimeFromDateTime");
 
     Map<String, dynamic> param = {};
@@ -162,94 +162,104 @@ class AddPatientController extends GetxController {
     param['first_name'] = firstNameController.text;
     param['middle_name'] = middleNameController.text;
     param['last_name'] = lastNameController.text;
-    param['date_of_birth'] = '${dob.value}Z';
+    param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+
     param['gender'] = selectedSexValue.value;
     param['email'] = emailAddressController.text;
     param['visit_date'] = '${visitDate.value}Z';
-    param['visit_time'] = '${strVisit_time}Z';
+    param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+
+    String date = visitDateController.text;
+    String time = selectedVisitTime.value;
+    print(visitDateController.text);
+    print(selectedVisitTime.value);
+
+    DateTime dt = DateFormat("dd/MM/yyyy hh a").parse("$date $time");
+    print(" time is  ${dt.toIso8601String()}");
+    param['visit_time'] = dt.toIso8601String();
 
     print("param is :- $param");
 
-    try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param);
-      isLoading.value = false;
-      print("_addPatientRepository response is ${addPatientModel.toJson()} ");
-      Get.back();
-    } catch (error) {
-      isLoading.value = false;
-      print("_addPatientRepository catch error is $error");
-      CustomToastification().showToast("$error", type: ToastificationType.error);
-    }
+    // try {
+    //   AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param);
+    //   isLoading.value = false;
+    //   print("_addPatientRepository response is ${addPatientModel.toJson()} ");
+    //   Get.back();
+    // } catch (error) {
+    //   isLoading.value = false;
+    //   print("_addPatientRepository catch error is $error");
+    //   CustomToastification().showToast("$error", type: ToastificationType.error);
+    // }
   }
 
-  List<String> generateTimeIntervals() {
-    List<String> times = [];
-    DateTime currentTime = DateTime(2023, 1, 1, 0, 0); // Start at 12:00 AM
+  // List<String> generateTimeIntervals() {
+  //   List<String> times = [];
+  //   DateTime currentTime = DateTime(2023, 1, 1, 0, 0); // Start at 12:00 AM
+  //
+  //   for (int i = 0; i < 48; i++) {
+  //     String formattedTime = formatTime(currentTime);
+  //     times.add(formattedTime);
+  //     currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
+  //   }
+  //
+  //   return times;
+  // }
 
-    for (int i = 0; i < 48; i++) {
-      String formattedTime = formatTime(currentTime);
-      times.add(formattedTime);
-      currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
-    }
-
-    return times;
-  }
-
-  String formatTime(DateTime time) {
-    int hour = time.hour;
-    int minute = time.minute;
-
-    String period = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12;
-    if (hour == 0) hour = 12; // Handle midnight and noon
-
-    String minuteStr = minute.toString().padLeft(2, '0');
-    return '$hour:$minuteStr $period';
-  }
-
-  // Merge time into the date when the date is a String
-  DateTime mergeDateAndTimeFromString(String dateString, String timeString) {
-    DateTime dateTime = DateTime.parse(dateString); // Convert string to DateTime
-
-    // Parse the time to extract hour and minute
-    DateTime time = parseTime(timeString);
-
-    // Return a new DateTime with merged date and time
-    return DateTime(dateTime.year, dateTime.month, dateTime.day, time.hour, time.minute);
-  }
-
-// Merge time into the date when the date is a DateTime
-  DateTime mergeDateAndTimeFromDateTime(DateTime dateTime, String timeString) {
-    // Parse the time to extract hour and minute
-    DateTime time = parseTime(timeString);
-
-    // Return a new DateTime with merged date and time
-    return DateTime(dateTime.year, dateTime.month, dateTime.day, time.hour, time.minute);
-  }
-
-// Helper function to parse time string (e.g., "3:30 PM") into DateTime
-  DateTime parseTime(String timeString) {
-    // Extract the hour and minute, and convert to 24-hour format
-    RegExp timeRegExp = RegExp(r"(\d{1,2}):(\d{2}) (AM|PM)");
-    Match? match = timeRegExp.firstMatch(timeString);
-
-    if (match != null) {
-      int hour = int.parse(match.group(1)!);
-      int minute = int.parse(match.group(2)!);
-      String period = match.group(3)!;
-
-      // Convert hour to 24-hour format
-      if (period == "PM" && hour != 12) {
-        hour += 12;
-      } else if (period == "AM" && hour == 12) {
-        hour = 0;
-      }
-
-      return DateTime(0, 1, 1, hour, minute); // Return DateTime with hour and minute only
-    } else {
-      throw FormatException("Invalid time format.");
-    }
-  }
+//   String formatTime(DateTime time) {
+//     int hour = time.hour;
+//     int minute = time.minute;
+//
+//     String period = hour >= 12 ? 'PM' : 'AM';
+//     hour = hour % 12;
+//     if (hour == 0) hour = 12; // Handle midnight and noon
+//
+//     String minuteStr = minute.toString().padLeft(2, '0');
+//     return '$hour:$minuteStr $period';
+//   }
+//
+//   // Merge time into the date when the date is a String
+//   DateTime mergeDateAndTimeFromString(String dateString, String timeString) {
+//     DateTime dateTime = DateTime.parse(dateString); // Convert string to DateTime
+//
+//     // Parse the time to extract hour and minute
+//     DateTime time = parseTime(timeString);
+//
+//     // Return a new DateTime with merged date and time
+//     return DateTime(dateTime.year, dateTime.month, dateTime.day, time.hour, time.minute);
+//   }
+//
+// // Merge time into the date when the date is a DateTime
+//   DateTime mergeDateAndTimeFromDateTime(DateTime dateTime, String timeString) {
+//     // Parse the time to extract hour and minute
+//     DateTime time = parseTime(timeString);
+//
+//     // Return a new DateTime with merged date and time
+//     return DateTime(dateTime.year, dateTime.month, dateTime.day, time.hour, time.minute);
+//   }
+//
+// // Helper function to parse time string (e.g., "3:30 PM") into DateTime
+//   DateTime parseTime(String timeString) {
+//     // Extract the hour and minute, and convert to 24-hour format
+//     RegExp timeRegExp = RegExp(r"(\d{1,2}):(\d{2}) (AM|PM)");
+//     Match? match = timeRegExp.firstMatch(timeString);
+//
+//     if (match != null) {
+//       int hour = int.parse(match.group(1)!);
+//       int minute = int.parse(match.group(2)!);
+//       String period = match.group(3)!;
+//
+//       // Convert hour to 24-hour format
+//       if (period == "PM" && hour != 12) {
+//         hour += 12;
+//       } else if (period == "AM" && hour == 12) {
+//         hour = 0;
+//       }
+//
+//       return DateTime(0, 1, 1, hour, minute); // Return DateTime with hour and minute only
+//     } else {
+//       throw FormatException("Invalid time format.");
+//     }
+//   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {
     DateTime _selectedDate = DateTime.now();

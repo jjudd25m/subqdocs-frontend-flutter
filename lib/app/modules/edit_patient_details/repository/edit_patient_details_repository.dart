@@ -3,7 +3,7 @@ import '../model/patient_detail_model.dart';
 
 class EditPatientDetailsRepository {
   Future<PatientDetailModel> getPatient({required String id}) async {
-    var response = await ApiProvider.instance.callGet("patient/$id");
+    var response = await ApiProvider.instance.callGet("patient/getPatientById/${id}");
     print("getPatient API  internal response $response");
     return PatientDetailModel.fromJson(response);
   }
