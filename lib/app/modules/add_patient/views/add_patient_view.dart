@@ -54,8 +54,11 @@ class AddPatientView extends GetView<AddPatientController> {
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
-                maximumDate: control == controller.dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
-                minimumDate: control == controller.visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
+                maximumDate:
+                    control == controller.dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
+                minimumDate: control == controller.visitDateController
+                    ? DateTime.now()
+                    : DateTime.now().subtract(Duration(days: 10950)),
                 initialDateTime: _selectedDate,
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
@@ -177,27 +180,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                   SizedBox(
                                     height: Dimen.margin16,
                                   ),
-                                  // Row(
-                                  //   children: [
-                                  //     Expanded(
-                                  //       child: TextFormFiledWidget(
-                                  //         label: "Patient ID",
-                                  //         controller: controller.patientIdController,
-                                  //         hint: "12345678",
-                                  //       ),
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: Dimen.margin10,
-                                  //     ),
-                                  //     Expanded(child: SizedBox()),
-                                  //     SizedBox(
-                                  //       width: Dimen.margin10,
-                                  //     ),
-                                  //     Expanded(
-                                  //       child: SizedBox(),
-                                  //     )
-                                  //   ],
-                                  // ),
                                   SizedBox(
                                     height: Dimen.margin16,
                                   ),
@@ -302,7 +284,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                         child: TextFormFiledWidget(
                                           label: "Visit Date",
                                           onTap: () {
-                                            controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
+                                            controller.showVisitDateCupertinoDatePicker(
+                                                context, controller.visitDateController);
                                           },
                                           controller: controller.visitDateController,
                                           hint: "10/12/2024",

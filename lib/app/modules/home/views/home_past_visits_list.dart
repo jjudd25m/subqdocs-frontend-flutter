@@ -125,7 +125,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         },
         columnCount: 7,
         context: context,
-        columnWidths: [0.26, 0.15, 0.08, 0.09, 0.16, 0.19, 0.07],
+        columnWidths: [0.23, 0.15, 0.08, 0.09, 0.16, 0.19, 0.10],
       ),
     );
   }
@@ -140,10 +140,10 @@ class HomePastVisitsList extends GetView<HomeController> {
     for (var patient in patients) {
       rows.add([
         "${patient.lastName}, ${patient.firstName}", // Patient Name
-        patient.visits?.last.visitDate ?? "N/A", // Last Visit Date
+        patient.visitDate ?? "N/A", // Last Visit Date
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
-        patient.visits?.last.visitDate ?? "N/A", // Last Visit Date
+        patient.previousVisitCount.toString() ?? "N/A", // Last Visit Date
         patient.status ?? "0", // Previous Visits
         "Action", // Action (could be a button or some interaction)
       ]);

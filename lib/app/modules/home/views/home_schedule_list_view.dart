@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -108,7 +109,7 @@ class HomeScheduleListView extends GetView<HomeController> {
           },
           columnCount: 6,
           context: context,
-          columnWidths: [0.43, 0.20, 0.05, 0.1, 0.15, 0.07],
+          columnWidths: [0.40, 0.20, 0.05, 0.1, 0.15, 0.10],
         );
       }),
     );
@@ -124,12 +125,17 @@ class HomeScheduleListView extends GetView<HomeController> {
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
+      // Parse the string to DateTime
+      DateTime parsedDate = DateTime.parse(patient.visitDate ?? "").toLocal(); // Convert to local time if needed
+
+      // Define the desired format
+      String formattedDate = DateFormat('MM/dd hh:mm a').format(parsedDate);
       rows.add([
         "${patient.lastName}, ${patient.firstName}",
-        patient.visits?.last.visitDate ?? "N/A", // Last Visit Date// Patient Name
+        formattedDate ?? "N/A", // Last Visit Date// Patient Name
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
-        patient.pastVisitCount?.toString() ?? "0", // Previous Visits
+        patient.previousVisitCount.toString() ?? "0", // Previous Visits
         "Action", // Action (could be a button or some interaction)
       ]);
     }

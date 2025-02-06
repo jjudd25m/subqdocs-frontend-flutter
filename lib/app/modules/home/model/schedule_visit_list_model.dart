@@ -14,13 +14,13 @@ class ScheduleVisitListModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (responseData != null) {
-      data['responseData'] = responseData!.toJson();
+    final Map<String, dynamic> data = {};
+    if (this.responseData != null) {
+      data['responseData'] = this.responseData!.toJson();
     }
-    data['message'] = message;
-    data['toast'] = toast;
-    data['response_type'] = responseType;
+    data['message'] = this.message;
+    data['toast'] = this.toast;
+    data['response_type'] = this.responseType;
     return data;
   }
 }
@@ -42,11 +42,11 @@ class ResponseData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['totalCount'] = totalCount;
+    data['totalCount'] = this.totalCount;
     return data;
   }
 }
@@ -54,164 +54,84 @@ class ResponseData {
 class ScheduleVisitListData {
   int? id;
   int? patientId;
-  String? firstName;
-  String? lastName;
-  String? middleName;
-  String? dateOfBirth;
-  String? email;
-  String? gender;
-  int? age;
-  dynamic profileImage;
-  dynamic appointmentTime;
+  String? visitStatus;
+  String? visitDate;
+  String? visitTime;
+  Null? visitType;
+  Null? visitNotes;
   String? status;
-  dynamic address;
-  dynamic contactNo;
-  dynamic streetAddress;
-  dynamic city;
-  dynamic state;
-  dynamic zipcode;
-  dynamic homePhone;
-  dynamic cellphone;
-  dynamic visitHistory;
-  int? createdBy;
-  int? updatedBy;
-  dynamic deletedBy;
+  Null? visitDetails;
   String? createdAt;
   String? updatedAt;
-  dynamic deletedAt;
-  int? pastVisitCount;
-  // String? appointmentTime;
-  List<Visits>? visits;
+  Null? deletedAt;
+  String? firstName;
+  String? lastName;
+  String? gender;
+  int? age;
+  String? appointmentTime;
+  int? previousVisitCount;
 
   ScheduleVisitListData(
       {this.id,
       this.patientId,
-      this.firstName,
-      this.lastName,
-      this.middleName,
-      this.dateOfBirth,
-      this.email,
-      this.gender,
-      this.age,
-      this.profileImage,
-      this.appointmentTime,
+      this.visitStatus,
+      this.visitDate,
+      this.visitTime,
+      this.visitType,
+      this.visitNotes,
       this.status,
-      this.address,
-      this.contactNo,
-      this.streetAddress,
-      this.city,
-      this.state,
-      this.zipcode,
-      this.homePhone,
-      this.cellphone,
-      this.visitHistory,
-      this.createdBy,
-      this.updatedBy,
-      this.deletedBy,
+      this.visitDetails,
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
-      this.pastVisitCount,
-      // this.appointmentTime,
-      this.visits});
+      this.firstName,
+      this.lastName,
+      this.gender,
+      this.age,
+      this.appointmentTime,
+      this.previousVisitCount});
 
   ScheduleVisitListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     patientId = json['patient_id'];
-    firstName = json['first_name'];
-    lastName = json['last_name'];
-    middleName = json['middle_name'];
-    dateOfBirth = json['date_of_birth'];
-    email = json['email'];
-    gender = json['gender'];
-    age = json['age'];
-    profileImage = json['profile_image'];
-    appointmentTime = json['appointment_time'];
+    visitStatus = json['visit_status'];
+    visitDate = json['visit_date'];
+    visitTime = json['visit_time'];
+    visitType = json['visit_type'];
+    visitNotes = json['visit_notes'];
     status = json['status'];
-    address = json['address'];
-    contactNo = json['contact_no'];
-    streetAddress = json['street_address'];
-    city = json['city'];
-    state = json['state'];
-    zipcode = json['zipcode'];
-    homePhone = json['home_phone'];
-    cellphone = json['cellphone'];
-    visitHistory = json['visit_history'];
-    createdBy = json['created_by'];
-    updatedBy = json['updated_by'];
-    deletedBy = json['deleted_by'];
+    // visitDetails = json['visit_details'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    pastVisitCount = json['pastVisitCount'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    gender = json['gender'];
+    age = json['age'];
     appointmentTime = json['appointmentTime'];
-    if (json['visits'] != null) {
-      visits = <Visits>[];
-      json['visits'].forEach((v) {
-        visits!.add(Visits.fromJson(v));
-      });
-    }
+    previousVisitCount = json['previousVisitCount'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['patient_id'] = patientId;
-    data['first_name'] = firstName;
-    data['last_name'] = lastName;
-    data['middle_name'] = middleName;
-    data['date_of_birth'] = dateOfBirth;
-    data['email'] = email;
-    data['gender'] = gender;
-    data['age'] = age;
-    data['profile_image'] = profileImage;
-    data['appointment_time'] = appointmentTime;
-    data['status'] = status;
-    data['address'] = address;
-    data['contact_no'] = contactNo;
-    data['street_address'] = streetAddress;
-    data['city'] = city;
-    data['state'] = state;
-    data['zipcode'] = zipcode;
-    data['home_phone'] = homePhone;
-    data['cellphone'] = cellphone;
-    data['visit_history'] = visitHistory;
-    data['created_by'] = createdBy;
-    data['updated_by'] = updatedBy;
-    data['deleted_by'] = deletedBy;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['deleted_at'] = deletedAt;
-    data['pastVisitCount'] = pastVisitCount;
-    data['appointmentTime'] = appointmentTime;
-    if (visits != null) {
-      data['visits'] = visits!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Visits {
-  int? id;
-  String? visitDate;
-  String? visitTime;
-  String? appointmentTime;
-
-  Visits({this.id, this.visitDate, this.visitTime, this.appointmentTime});
-
-  Visits.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    visitDate = json['visitDate'];
-    visitTime = json['visitTime'];
-    appointmentTime = json['appointmentTime'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['visitDate'] = visitDate;
-    data['visitTime'] = visitTime;
-    data['appointmentTime'] = appointmentTime;
+    final Map<String, dynamic> data = {};
+    data['id'] = this.id;
+    data['patient_id'] = this.patientId;
+    data['visit_status'] = this.visitStatus;
+    data['visit_date'] = this.visitDate;
+    data['visit_time'] = this.visitTime;
+    data['visit_type'] = this.visitType;
+    data['visit_notes'] = this.visitNotes;
+    data['status'] = this.status;
+    data['visit_details'] = this.visitDetails;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['deleted_at'] = this.deletedAt;
+    data['first_name'] = this.firstName;
+    data['last_name'] = this.lastName;
+    data['gender'] = this.gender;
+    data['age'] = this.age;
+    data['appointmentTime'] = this.appointmentTime;
+    data['previousVisitCount'] = this.previousVisitCount;
     return data;
   }
 }

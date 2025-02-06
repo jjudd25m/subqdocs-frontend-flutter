@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../model/patient_list_model.dart';
 import '../model/schedule_visit_list_model.dart';
@@ -11,6 +12,7 @@ class HomeController extends GetxController {
   final HomeRepository _homeRepository = HomeRepository();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
@@ -20,6 +22,8 @@ class HomeController extends GetxController {
 
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
+
+  bool sortName = false;
 
   final count = 0.obs;
 
@@ -59,17 +63,82 @@ class HomeController extends GetxController {
     Map<String, dynamic> param = {};
     param['page'] = page;
     param['limit'] = "1000";
+    param['search'] = searchController.text;
+
+    List<Map<String, dynamic>> sorting = [
+      {"id": "first_name", "desc": sortName},
+      {"id": "last_name", "desc": sortName}
+      // Add more sorting parameters as needed
+    ];
+
+    // Dynamically add sorting to the param map
+    for (int i = 0; i < sorting.length; i++) {
+      param['sorting[$i][id]'] = sorting[i]['id'];
+      param['sorting[$i][desc]'] = sorting[i]['desc'];
+    }
+
+    if (toController.text != "" && fromController.text != "") {
+      // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+
+      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      print("start date is the ${startDate}");
+
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      print("start format date is  date is the ${formattedStartDate}");
+
+      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+
+      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    }
 
     patientListModel.value = await _homeRepository.getPatient(param: param);
     patientList.value = patientListModel.value?.responseData?.data ?? [];
-    print("patient List is :- ${patientList}");
+    print("patient list is the :- ${patientList}");
   }
 
   Future<void> getScheduleVisitList() async {
     Map<String, dynamic> param = {};
     param['page'] = page;
     param['limit'] = "1000";
-    param['patientType'] = "Pending";
+    param['isPastPatient'] = 'false';
+    param['search'] = searchController.text;
+
+    List<Map<String, dynamic>> sorting = [
+      {"id": "first_name", "desc": sortName},
+      {"id": "last_name", "desc": sortName}
+      // Add more sorting parameters as needed
+    ];
+
+    // Dynamically add sorting to the param map
+    for (int i = 0; i < sorting.length; i++) {
+      param['sorting[$i][id]'] = sorting[i]['id'];
+      param['sorting[$i][desc]'] = sorting[i]['desc'];
+    }
+
+    if (toController.text != "" && fromController.text != "") {
+      // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+
+      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      print("start date is the ${startDate}");
+
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      print("start format date is  date is the ${formattedStartDate}");
+
+      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+
+      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    }
+
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
     scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
   }
@@ -78,7 +147,39 @@ class HomeController extends GetxController {
     Map<String, dynamic> param = {};
     param['page'] = page;
     param['limit'] = "1000";
-    param['patientType'] = "Finalize";
+    param['isPastPatient'] = 'true';
+    param['search'] = searchController.text;
+
+    List<Map<String, dynamic>> sorting = [
+      {"id": "first_name", "desc": sortName},
+      {"id": "last_name", "desc": sortName}
+      // Add more sorting parameters as needed
+    ];
+
+    // Dynamically add sorting to the param map
+    for (int i = 0; i < sorting.length; i++) {
+      param['sorting[$i][id]'] = sorting[i]['id'];
+      param['sorting[$i][desc]'] = sorting[i]['desc'];
+    }
+
+    if (toController.text != "" && fromController.text != "") {
+      // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+
+      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      print("start date is the ${startDate}");
+
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      print("start format date is  date is the ${formattedStartDate}");
+
+      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+
+      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    }
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
     pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
   }

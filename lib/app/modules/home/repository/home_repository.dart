@@ -12,13 +12,13 @@ class HomeRepository {
   }
 
   Future<ScheduleVisitListModel> getScheduleVisit({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callGet("patient?");
+    var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     print("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
   }
 
   Future<ScheduleVisitListModel> getPastVisit({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callGet("patient?");
+    var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     print("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
   }
