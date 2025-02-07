@@ -213,7 +213,7 @@ class AddPatientController extends GetxController {
       AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param);
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
-      Get.back();
+      Get.back(result: 1);
     } catch (error) {
       isLoading.value = false;
       print("_addPatientRepository catch error is $error");

@@ -232,82 +232,119 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                               SizedBox(
                                 height: Dimen.margin16,
                               ),
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  Expanded(
-                                    child: TextFormFiledWidget(
-                                      label: "Visit Date",
-                                      readOnly: true,
-                                      onTap: () {
-                                        controller.showVisitDateCupertinoDatePicker(
-                                            context, controller.visitDateController);
-                                      },
-                                      controller: controller.visitDateController,
-                                      hint: "10/12/2024",
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      },
-                                      suffixIcon: SvgPicture.asset(ImagePath.calendar),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Dimen.margin10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Visit Time",
-                                          style: AppFonts.regular(14, AppColors.textBlack),
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Obx(() {
-                                          return BaseDropdown<String>(
-                                            valueAsString: (value) => value ?? "",
-                                            items: controller.visitTime,
-                                            selectedValue: controller.selectedVisitTimeValue.value,
-                                            onChanged: (value) {
-                                              controller.selectedVisitTimeValue.value = value ?? "";
-                                            },
-                                            selectText: "12:00 AM",
-                                          );
-                                        }),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Dimen.margin10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Patient Type",
-                                          style: AppFonts.regular(14, AppColors.textBlack),
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Obx(() {
-                                          return BaseDropdown<String>(
-                                            valueAsString: (value) => value ?? "",
-                                            items: controller.patientType,
-                                            selectedValue: controller.selectedPatientValue.value,
-                                            onChanged: (value) {
-                                              controller.selectedPatientValue.value = value;
-                                            },
-                                            selectText: "New Patient",
-                                          );
-                                        })
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                              Obx(
+                                () {
+                                  return controller.isFromSchedule.value
+                                      ? Row(
+                                          spacing: 10,
+                                          children: [
+                                            Expanded(
+                                              child: TextFormFiledWidget(
+                                                label: "Visit Date",
+                                                readOnly: true,
+                                                onTap: () {
+                                                  controller.showVisitDateCupertinoDatePicker(
+                                                      context, controller.visitDateController);
+                                                },
+                                                controller: controller.visitDateController,
+                                                hint: "10/12/2024",
+                                                checkValidation: (value) {
+                                                  return Validation.requiredFiled(value);
+                                                },
+                                                suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: Dimen.margin10,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Visit Time",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Obx(() {
+                                                    return BaseDropdown<String>(
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.visitTime,
+                                                      selectedValue: controller.selectedVisitTimeValue.value,
+                                                      onChanged: (value) {
+                                                        controller.selectedVisitTimeValue.value = value ?? "";
+                                                      },
+                                                      selectText: "12:00 AM",
+                                                    );
+                                                  }),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: Dimen.margin10,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Patient Type",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Obx(() {
+                                                    return BaseDropdown<String>(
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.patientType,
+                                                      selectedValue: controller.selectedPatientValue.value,
+                                                      onChanged: (value) {
+                                                        controller.selectedPatientValue.value = value;
+                                                      },
+                                                      selectText: "New Patient",
+                                                    );
+                                                  })
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          spacing: 10,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Patient Type",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Obx(() {
+                                                    return BaseDropdown<String>(
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.patientType,
+                                                      selectedValue: controller.selectedPatientValue.value,
+                                                      onChanged: (value) {
+                                                        controller.selectedPatientValue.value = value;
+                                                      },
+                                                      selectText: "New Patient",
+                                                    );
+                                                  })
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(child: SizedBox()),
+                                            Expanded(child: SizedBox()),
+                                          ],
+                                        );
+                                },
                               ),
                               SizedBox(
                                 height: 20,

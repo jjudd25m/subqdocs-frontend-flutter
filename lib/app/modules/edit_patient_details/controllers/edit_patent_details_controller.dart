@@ -60,7 +60,10 @@ class EditPatentDetailsController extends GetxController {
   // PatientListData patientListData = PatientListData();
 
   String patientId = "";
-  bool f
+
+  RxBool isFromSchedule = RxBool(true);
+
+  // bool f
 
   RxBool isLoading = RxBool(false);
 
@@ -75,7 +78,10 @@ class EditPatentDetailsController extends GetxController {
     print("edit patient list  ${Get.arguments["patientData"]}");
 
     patientId = Get.arguments["patientData"];
-    patientId = Get.arguments["fromSchedule"];
+    isFromSchedule.value = Get.arguments["fromSchedule"];
+
+    isFromSchedule.refresh();
+
     getPatient(patientId);
   }
 

@@ -122,10 +122,7 @@ class HomeController extends GetxController {
     ];
 
     // Dynamically add sorting to the param map
-    for (int i = 0; i < sorting.length; i++) {
-      param['sorting[$i][id]'] = sorting[i]['id'];
-      param['sorting[$i][desc]'] = sorting[i]['desc'];
-    }
+    param["sorting"] = sorting;
 
     if (toController.text != "" && fromController.text != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -163,11 +160,7 @@ class HomeController extends GetxController {
       // Add more sorting parameters as needed
     ];
 
-    // Dynamically add sorting to the param map
-    for (int i = 0; i < sorting.length; i++) {
-      param['sorting[$i][id]'] = sorting[i]['id'];
-      param['sorting[$i][desc]'] = sorting[i]['desc'];
-    }
+    param["sorting"] = sorting;
 
     if (toController.text != "" && fromController.text != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);

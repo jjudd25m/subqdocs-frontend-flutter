@@ -777,8 +777,14 @@ class HomeView extends GetView<HomeController> {
                                               width: 140,
                                               child: CustomButton(
                                                 hight: 40,
-                                                navigate: () {
-                                                  Get.toNamed(Routes.ADD_PATIENT);
+                                                navigate: () async {
+                                                  final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                                                  if (result == 1) {
+                                                    controller.getPastVisitList();
+                                                    controller.getScheduleVisitList();
+                                                    controller.getPatientList();
+                                                  }
                                                 },
                                                 label: "Schedule Visit",
                                               ),
