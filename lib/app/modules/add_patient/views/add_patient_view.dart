@@ -28,6 +28,8 @@ class AddPatientView extends GetView<AddPatientController> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  DateTime fromDate = DateTime.now().subtract(Duration(days: 371));
+
   void _showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -42,6 +44,47 @@ class AddPatientView extends GetView<AddPatientController> {
   DateTime _selectedDate = DateTime.now();
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  // void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
+  //   showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return CupertinoActionSheet(
+  //         title: Text(
+  //           "Pick a Date",
+  //           style: AppFonts.medium(16, AppColors.black),
+  //         ),
+  //         actions: <Widget>[
+  //           Container(
+  //             height: 400,
+  //             child: CupertinoDatePicker(
+  //               mode: CupertinoDatePickerMode.date,
+  //               maximumDate: DateTime.now().subtract(Duration(days: 370)),
+  //               initialDateTime: DateTime.now().subtract(Duration(days: 371)),
+  //               onDateTimeChanged: (DateTime newDate) {
+  //                 String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+  //                 // String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
+  //                 //
+  //                 //
+  //                 //   controller.dob.value = strDate;
+  //
+  //                 control.text = formattedDate;
+  //
+  //                 print('${_selectedDate.toLocal()}'.split(' ')[0]);
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //         cancelButton: CupertinoActionSheetAction(
+  //           child: Text('Cancel'),
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
     showCupertinoModalPopup(
@@ -60,28 +103,23 @@ class AddPatientView extends GetView<AddPatientController> {
                 maximumDate: DateTime.now().subtract(Duration(days: 370)),
                 initialDateTime: DateTime.now().subtract(Duration(days: 371)),
                 onDateTimeChanged: (DateTime newDate) {
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
-                  String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
+                  fromDate = newDate;
 
-                  if (control == controller.dobController) {
-                    controller.dob.value = strDate;
-                    // print("controller dob is :- ${dob}");
-                  }
-
-                  if (control == controller.visitDateController) {
-                    controller.visitDate.value = strDate;
-                  }
-
-                  control.text = formattedDate;
-
-                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
+                  // Update the TextField with selected date
                 },
               ),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text('Cancel'),
+            child: Text('Done'),
             onPressed: () {
+              String formattedDate = DateFormat('dd/MM/yyyy').format(fromDate);
+
+              // String formattedDate = DateFormat('MM-dd-yyyy').format(DateTime.now());
+              control.text = formattedDate;
+
+              // print('${_selectedDate.toLocal()}'.split(' ')[0]);
+
               Navigator.of(context).pop();
             },
           ),
@@ -291,6 +329,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                       children: [
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                            readOnly: true,
                                             label: "Visit Date",
                                             onTap: () {
                                               controller.showVisitDateCupertinoDatePicker(

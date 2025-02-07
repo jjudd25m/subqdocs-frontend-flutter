@@ -44,7 +44,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                               padding: const EdgeInsets.all(16),
                               child: Container(
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -122,11 +123,28 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Container(
-                                                  width: 125,
-                                                  child: Expanded(
-                                                    child: CustomButton(navigate: () {}, label: "Schedule Visit"),
-                                                  ))
+                                              // Container(
+                                              //     width: 125,
+                                              //     child: Expanded(
+                                              //       child: CustomButton(navigate: () {}, label: "Schedule Visit"),
+                                              //     )),
+                                              // ContainerButton(
+                                              //   onPressed: () {},
+                                              //   text: 'Schedule Visit',
+                                              // ),
+
+                                              ContainerButton(
+                                                onPressed: () {},
+                                                text: 'Schedule Visit',
+
+                                                borderColor: AppColors.backgroundPurple, // Custom border color
+                                                backgroundColor: AppColors.backgroundPurple, // Custom background color
+                                                needBorder: true, // Show border
+                                                textColor: AppColors.white, // Custom text color
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 11, horizontal: 12), // Custom padding
+                                                radius: 6, // Custom border radius
+                                              )
                                             ],
                                           ),
                                         )
@@ -241,7 +259,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(
@@ -279,7 +298,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                       textAlign: TextAlign.center,
                                                       style: AppFonts.regular(14, AppColors.backgroundPurple),
                                                       softWrap: true, // Allows text to wrap
-                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                      overflow:
+                                                          TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                     )
                                                   : rowIndex == 0
                                                       ? Text(
@@ -287,14 +307,16 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                           textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                           style: AppFonts.regular(12, AppColors.black),
                                                           softWrap: true, // Allows text to wrap
-                                                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                          overflow:
+                                                              TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                         )
                                                       : Text(
                                                           cellData,
                                                           textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                           style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                           softWrap: true, // Allows text to wrap
-                                                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                          overflow:
+                                                              TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                         );
                                             },
                                             columnCount: 3,
@@ -318,7 +340,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(
@@ -380,7 +403,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(

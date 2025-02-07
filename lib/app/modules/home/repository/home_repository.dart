@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../data/provider/api_provider.dart';
+import '../model/deletePatientModel.dart';
 import '../model/patient_list_model.dart';
 import '../model/schedule_visit_list_model.dart';
 
@@ -9,6 +10,12 @@ class HomeRepository {
     var response = await ApiProvider.instance.callGet("patient/getAllPatients", queryParameters: param);
     print("getPatient API  internal response $response");
     return PatientListModel.fromJson(response);
+  }
+
+  Future<DeletePatientModel> deletePatientById({required int id}) async {
+    var response = await ApiProvider.instance.callDelete("patient/delete/${id}");
+    print("getPatient API  internal response $response");
+    return DeletePatientModel.fromJson(response);
   }
 
   Future<ScheduleVisitListModel> getScheduleVisit({required Map<String, dynamic> param}) async {

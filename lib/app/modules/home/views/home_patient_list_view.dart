@@ -200,9 +200,9 @@ class HomePatientListView extends GetView<HomeController> {
                 itemBuilder: (context) => [
                       PopupMenuItem(
                           onTap: () {
-                            print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                            // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                             Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].patientId.toString(),
+                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
                             });
                           },
                           // value: "",
@@ -213,7 +213,7 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuDivider(),
                       PopupMenuItem(
                           // value: "",
-                          onTap: () {
+                          onTap: () async {
                             print("row index is :- ${rowIndex}");
                             print("column index is :- ${colIndex}");
                             print(
@@ -221,9 +221,16 @@ class HomePatientListView extends GetView<HomeController> {
 
                             // print(" our element is $");
 
-                            Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].visits,
+                            final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
                             });
+                            print("our result is $result");
+
+                            if (result == 1) {
+                              controller.getScheduleVisitList();
+                              controller.getPastVisitList();
+                              controller.getPatientList();
+                            }
                           },
                           child: Text(
                             "Edit",
@@ -232,7 +239,9 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuDivider(),
                       PopupMenuItem(
                           // value: "",
-                          onTap: () {},
+                          onTap: () {
+                            controller.deletePatientById(controller.patientList[rowIndex - 1].visits!.first.id);
+                          },
                           child: Text(
                             "Delete",
                             style: AppFonts.regular(14, AppColors.textBlack),

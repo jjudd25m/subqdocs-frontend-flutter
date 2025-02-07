@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../model/deletePatientModel.dart';
 import '../model/patient_list_model.dart';
 import '../model/schedule_visit_list_model.dart';
 import '../repository/home_repository.dart';
@@ -99,6 +100,15 @@ class HomeController extends GetxController {
     patientListModel.value = await _homeRepository.getPatient(param: param);
     patientList.value = patientListModel.value?.responseData?.data ?? [];
     print("patient list is the :- ${patientList}");
+  }
+
+  Future<void> deletePatientById(int? id) async {
+    DeletePatientModel deletePatientModel = await _homeRepository.deletePatientById(id: id!);
+    getPatientList();
+    getPastVisitList();
+    getScheduleVisitList();
+
+    print("deleted data is :- ${deletePatientModel}");
   }
 
   Future<void> getScheduleVisitList() async {

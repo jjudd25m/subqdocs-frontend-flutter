@@ -54,6 +54,7 @@ class ResponseData {
 class ScheduleVisitListData {
   int? id;
   int? patientId;
+  int? visitId;
   String? visitStatus;
   String? visitDate;
   String? visitTime;
@@ -74,6 +75,7 @@ class ScheduleVisitListData {
   ScheduleVisitListData(
       {this.id,
       this.patientId,
+      this.visitId,
       this.visitStatus,
       this.visitDate,
       this.visitTime,
@@ -94,6 +96,7 @@ class ScheduleVisitListData {
   ScheduleVisitListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     patientId = json['patient_id'];
+    visitId = json['visit_id'];
     visitStatus = json['visit_status'];
     visitDate = json['visit_date'];
     visitTime = json['visit_time'];
@@ -116,6 +119,7 @@ class ScheduleVisitListData {
     final Map<String, dynamic> data = {};
     data['id'] = this.id;
     data['patient_id'] = this.patientId;
+    data['visit_id'] = this.visitId;
     data['visit_status'] = this.visitStatus;
     data['visit_date'] = this.visitDate;
     data['visit_time'] = this.visitTime;

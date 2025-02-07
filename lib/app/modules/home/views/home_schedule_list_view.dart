@@ -60,10 +60,11 @@ class HomeScheduleListView extends GetView<HomeController> {
                         itemBuilder: (context) => [
                               PopupMenuItem(
                                   onTap: () {
-                                    print("visite is is ${controller.patientList[rowIndex - 1].visitId.toString()}");
+                                    print(
+                                        "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
                                     Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                      "patientData": "4",
+                                      "patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                                     });
                                   },
                                   value: "",
@@ -74,8 +75,16 @@ class HomeScheduleListView extends GetView<HomeController> {
                               PopupMenuDivider(),
                               PopupMenuItem(
                                   value: "",
-                                  onTap: () {
-                                    Get.toNamed(Routes.EDIT_PATENT_DETAILS);
+                                  onTap: () async {
+                                    final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                      "patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                    });
+
+                                    if (result == 1) {
+                                      controller.getScheduleVisitList();
+                                      controller.getPastVisitList();
+                                      controller.getPatientList();
+                                    }
                                   },
                                   child: Text(
                                     "Edit",
@@ -84,7 +93,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                               PopupMenuDivider(),
                               PopupMenuItem(
                                   value: "",
-                                  onTap: () {},
+                                  onTap: () {
+                                    controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
+                                  },
                                   child: Text(
                                     "Delete",
                                     style: AppFonts.regular(14, AppColors.textBlack),
