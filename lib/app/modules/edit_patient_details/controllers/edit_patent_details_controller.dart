@@ -134,7 +134,11 @@ class EditPatentDetailsController extends GetxController {
     // time
 
     // Parse the date string to a DateTime object
+
+    print(" data from api ${patientDetailModel.responseData?.visitTime}");
     DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
+
+    print(" data time $visitTimeS");
 
     // Create a DateFormat to format the date
     DateFormat visitTimeFormat = DateFormat('hh:mm a');
@@ -339,15 +343,27 @@ class EditPatentDetailsController extends GetxController {
 
     DateTime d = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "2025-10-07T16:42:11").toLocal();
 
+    // String date = visitDateController.text;
+    // String? time = selectedVisitTimeValue.value;
+    //
+    // print("time and date is $date $time");
+    //
+    // DateTime dt = DateFormat("MM/dd/yyyy hh:mm a").parse("$date $time").toLocal();
+    // patientDetailModel.responseData?.visitTime = dt.toIso8601String();
+    //
+    // print(" time is ${DateFormat("hh a").format(d)} ");
+
     String date = visitDateController.text;
     String? time = selectedVisitTimeValue.value;
+    print(visitDateController.text);
+    print(selectedVisitTimeValue.value);
 
-    print("time and date is $date $time");
+    DateTime dt = DateFormat("dd/MM/yyyy hh:mm a").parse("$date $time").toLocal();
 
-    DateTime dt = DateFormat("MM/dd/yyyy hh:mm a").parse("$date $time").toLocal();
-    patientDetailModel.responseData?.visitTime = dt.toIso8601String();
+    print("date time is the DateTime  $dt ");
 
-    print(" time is ${DateFormat("hh a").format(d)} ");
+    print(" time is  ${dt.toIso8601String()}");
+    param['visit_time'] = dt.toIso8601String();
 
     // param['first_name'] = firstNameController.text;
     // param['middle_name'] = middleNameController.text;

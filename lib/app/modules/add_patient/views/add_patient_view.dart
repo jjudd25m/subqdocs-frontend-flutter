@@ -363,6 +363,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   items: controller.visitTime,
                                                   selectedValue: controller.selectedVisitTimeValue.value,
                                                   onChanged: (value) {
+                                                    // selectedVisitTime
                                                     controller.selectedVisitTimeValue.value = value;
                                                   },
                                                   selectText: "11 PM",

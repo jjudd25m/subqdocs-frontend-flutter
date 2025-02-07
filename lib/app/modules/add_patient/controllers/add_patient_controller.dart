@@ -67,7 +67,7 @@ class AddPatientController extends GetxController {
     "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
   ];
 
-  RxString selectedVisitTime = RxString("11 PM");
+  // RxString selectedVisitTime = RxString("");
   List<String> sex = ["Female", "Male"];
   List<String> patientType = ["New Patient", "Old Patient"];
 
@@ -199,11 +199,14 @@ class AddPatientController extends GetxController {
     param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
 
     String date = visitDateController.text;
-    String time = selectedVisitTime.value;
+    String? time = selectedVisitTimeValue.value;
     print(visitDateController.text);
-    print(selectedVisitTime.value);
+    print(selectedVisitTimeValue.value);
 
-    DateTime dt = DateFormat("dd/MM/yyyy hh a").parse("$date $time").toLocal();
+    DateTime dt = DateFormat("dd/MM/yyyy hh:mm a").parse("$date $time").toLocal();
+
+    print("date time is the DateTime  $dt ");
+
     print(" time is  ${dt.toIso8601String()}");
     param['visit_time'] = dt.toIso8601String();
 

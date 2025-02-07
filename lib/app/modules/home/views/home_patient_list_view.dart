@@ -293,12 +293,17 @@ class HomePatientListView extends GetView<HomeController> {
                   height: 20,
                 ))
             : rowIndex == 0
-                ? Text(
-                    cellData,
-                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                    style: AppFonts.regular(12, AppColors.black),
-                    softWrap: true, // Allows text to wrap
-                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                ? GestureDetector(
+                    onTap: () {
+                      print("clicked for the ${cellData}");
+                    },
+                    child: Text(
+                      cellData,
+                      textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                      style: AppFonts.regular(12, AppColors.black),
+                      softWrap: true, // Allows text to wrap
+                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                    ),
                   )
                 : Text(
                     cellData,
