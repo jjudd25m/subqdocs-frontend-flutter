@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -33,10 +34,12 @@ class HomeView extends GetView<HomeController> {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   DateTime _selectedDate = DateTime.now();
+  DateTime fromDate = DateTime.now();
+  DateTime toDate = DateTime.now();
   GlobalKey<FormState> formKeyFrom = GlobalKey<FormState>();
   GlobalKey<FormState> formKeyTo = GlobalKey<FormState>();
 
-  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
+  void _showCupertinoDatePicker(BuildContext context, TextEditingController control, bool toController) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -50,14 +53,16 @@ class HomeView extends GetView<HomeController> {
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
-                initialDateTime: _selectedDate,
+                initialDateTime: toController ? fromDate : _selectedDate,
+                minimumDate: toController ? fromDate : null,
                 onDateTimeChanged: (DateTime newDate) {
-                  _selectedDate = newDate;
-                  // Update the TextField with selected date
-                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
-                  control.text = formattedDate;
+                  if (toController) {
+                    toDate = newDate;
+                  } else {
+                    fromDate = newDate;
+                  }
 
-                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
+                  // Update the TextField with selected date
                 },
               ),
             ),
@@ -65,6 +70,13 @@ class HomeView extends GetView<HomeController> {
           cancelButton: CupertinoActionSheetAction(
             child: Text('Done'),
             onPressed: () {
+              String formattedDate = DateFormat('MM-dd-yyyy').format(toController ? toDate : fromDate);
+
+              // String formattedDate = DateFormat('MM-dd-yyyy').format(DateTime.now());
+              control.text = formattedDate;
+
+              // print('${_selectedDate.toLocal()}'.split(' ')[0]);
+              controller.getPatientList();
               Navigator.of(context).pop();
             },
           ),
@@ -73,7 +85,8 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  void _showPopupMenu(BuildContext context, TextEditingController element, GlobalKey<FormState> formKey) {
+  void _showPopupMenu(
+      BuildContext context, TextEditingController element, GlobalKey<FormState> formKey, bool isToController) {
     BuildContext? currentContext = formKey.currentContext;
 
     final RenderBox? renderBox = currentContext?.findRenderObject() as RenderBox?;
@@ -94,6 +107,15 @@ class HomeView extends GetView<HomeController> {
         items: [
           PopupMenuItem<String>(
             padding: EdgeInsets.zero,
+            onTap: () {
+              String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+
+              print(today);
+
+              controller.fromController.text = today;
+              controller.toController.text = today;
+              controller.getPatientList();
+            },
             value: "Today",
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +134,17 @@ class HomeView extends GetView<HomeController> {
           ),
           PopupMenuItem<String>(
             padding: EdgeInsets.zero,
+            onTap: () {
+              String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+              String sevenDaysAgo = DateFormat('MM-dd-yyyy').format(DateTime.now().subtract(Duration(days: 7)));
+
+              print(today);
+              print(sevenDaysAgo);
+              print(" seven days age is the $sevenDaysAgo");
+              controller.fromController.text = sevenDaysAgo;
+              controller.toController.text = today;
+              controller.getPatientList();
+            },
             value: "Last 7 Days",
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +163,17 @@ class HomeView extends GetView<HomeController> {
           ),
           PopupMenuItem<String>(
             padding: EdgeInsets.zero,
-            value: "Last 30 Days",
+            onTap: () {
+              String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+              String thirtyDaysAgo = DateFormat('MM-dd-yyyy').format(DateTime.now().subtract(Duration(days: 30)));
+
+              print(today);
+              print(thirtyDaysAgo);
+
+              controller.fromController.text = thirtyDaysAgo;
+              controller.toController.text = today;
+              controller.getPatientList();
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -150,7 +193,7 @@ class HomeView extends GetView<HomeController> {
             padding: EdgeInsets.zero,
             value: "Custom Date",
             onTap: () async {
-              _showCupertinoDatePicker(context, element); // Custom Date picker
+              _showCupertinoDatePicker(context, element, isToController); // Custom Date picker
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,64 +249,92 @@ class HomeView extends GetView<HomeController> {
                         ),
                         child: Column(
                           children: [
-                            Obx(() {
-                              return Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 20),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
-                                    height: 70,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                            width: 150,
-                                            height: 40,
-                                            child: CustomAnimatedButton(
-                                              onPressed: () {
-                                                controller.tabIndex.value = 0;
-                                              },
-                                              text: "Patient Visits",
-                                              isOutline: true,
-                                              fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple.withValues(alpha: 0.2) : AppColors.clear,
-                                              outLineEnabledColor: AppColors.backgroundPurple,
-                                              outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
-                                            )),
-                                        SizedBox(
-                                            width: 170,
-                                            height: 40,
-                                            child: CustomAnimatedButton(
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                              child: Obx(
+                                () {
+                                  return Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                      decoration:
+                                          BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                      height: 65,
+                                      child: SingleChildScrollView(
+                                        physics: BouncingScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                                onPressed: () {
+                                                  controller.tabIndex.value = 0;
+                                                  controller.getPatientList();
+                                                },
+                                                text: "Patient List",
+                                                isOutline: true,
+                                                paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                fontSize: 14,
+                                                enabledTextColor: controller.tabIndex.value == 0
+                                                    ? AppColors.backgroundPurple
+                                                    : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 0
+                                                    ? AppColors.buttonPurpleLight
+                                                    : AppColors.clear,
+                                                outLineEnabledColor: AppColors.textGrey,
+                                                outlineColor: controller.tabIndex.value == 0
+                                                    ? AppColors.backgroundPurple
+                                                    : AppColors.clear,
+                                              ),
+                                            ),
+                                            IntrinsicWidth(
+                                                child: CustomAnimatedButton(
                                               onPressed: () {
                                                 controller.tabIndex.value = 1;
+                                                controller.getScheduleVisitList();
                                               },
                                               text: "Scheduled Visits",
                                               isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple.withValues(alpha: 0.2) : AppColors.clear,
-                                              outLineEnabledColor: AppColors.backgroundPurple,
-                                              outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 1
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 1
+                                                  ? AppColors.buttonPurpleLight
+                                                  : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 1
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.clear,
                                             )),
-                                        SizedBox(
-                                            width: 150,
-                                            height: 40,
-                                            child: CustomAnimatedButton(
+                                            IntrinsicWidth(
+                                                child: CustomAnimatedButton(
                                               onPressed: () {
                                                 controller.tabIndex.value = 2;
+                                                controller.getPastVisitList();
                                               },
                                               text: "Past Visits",
                                               isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple.withValues(alpha: 0.2) : AppColors.clear,
-                                              outLineEnabledColor: AppColors.backgroundPurple,
-                                              outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 2
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 2
+                                                  ? AppColors.buttonPurpleLight
+                                                  : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 2
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.clear,
                                             )),
-                                      ],
-                                    )),
-                              );
-                            }),
+                                          ],
+                                        ),
+                                      ));
+                                },
+                              ),
+                            ),
                             SizedBox(height: 20),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -301,7 +372,12 @@ class HomeView extends GetView<HomeController> {
                                               itemBuilder: (context) => [
                                                 PopupMenuItem(
                                                     onTap: () {
-                                                      print("its tapped");
+                                                      controller.sortName = controller.sortName ? false : true;
+                                                      controller.tabIndex.value == 0
+                                                          ? controller.getPatientList()
+                                                          : controller.tabIndex.value == 1
+                                                              ? controller.getScheduleVisitList()
+                                                              : controller.getPastVisitList();
                                                     },
                                                     padding: EdgeInsets.zero,
                                                     value: "",
@@ -333,10 +409,12 @@ class HomeView extends GetView<HomeController> {
                                                   padding: EdgeInsets.zero,
                                                   child: PopupMenuButton<String>(
                                                     offset: const Offset(240, 10),
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                    shape:
+                                                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                     color: AppColors.white,
                                                     position: PopupMenuPosition.under,
-                                                    padding: EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 0),
+                                                    padding:
+                                                        EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 0),
                                                     menuPadding: EdgeInsetsDirectional.only(bottom: 0),
                                                     onSelected: (value) {},
                                                     style: const ButtonStyle(
@@ -351,50 +429,94 @@ class HomeView extends GetView<HomeController> {
                                                         child: PopupMenuButton<String>(
                                                             constraints: BoxConstraints(minWidth: 200),
                                                             offset: const Offset(0, 8),
-                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(6)),
                                                             color: AppColors.white,
                                                             position: PopupMenuPosition.under,
-                                                            padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
+                                                            padding: EdgeInsetsDirectional.symmetric(
+                                                                horizontal: 10, vertical: 10),
                                                             menuPadding: EdgeInsetsDirectional.only(bottom: 10),
                                                             onSelected: (value) {},
                                                             style: const ButtonStyle(
-                                                                padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                                padding:
+                                                                    WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
                                                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                                                 maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                                visualDensity: VisualDensity(horizontal: 0, vertical: 4)),
+                                                                visualDensity:
+                                                                    VisualDensity(horizontal: 0, vertical: 4)),
                                                             itemBuilder: (context) => [
                                                                   PopupMenuItem(
                                                                       value: "",
+                                                                      onTap: () {
+                                                                        String today = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now());
+
+                                                                        print(today);
+
+                                                                        controller.fromController.text = today;
+                                                                        controller.toController.text = today;
+                                                                        controller.getPatientList();
+                                                                      },
                                                                       child: Text(
                                                                         "Today",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       )),
                                                                   PopupMenuDivider(),
                                                                   PopupMenuItem(
                                                                       value: "",
-                                                                      onTap: () {},
+                                                                      onTap: () {
+                                                                        String today = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now());
+                                                                        String sevenDaysAgo = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now()
+                                                                                .subtract(Duration(days: 7)));
+
+                                                                        print(today);
+                                                                        print(" seven days age is the $sevenDaysAgo");
+
+                                                                        controller.fromController.text = sevenDaysAgo;
+                                                                        controller.toController.text = today;
+                                                                        controller.getPatientList();
+                                                                      },
                                                                       child: Text(
                                                                         "Last 7 Days",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       )),
                                                                   PopupMenuDivider(),
                                                                   PopupMenuItem(
-                                                                      value: "",
-                                                                      onTap: () {},
+                                                                      value: "last30",
+                                                                      onTap: () {
+                                                                        String today = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now());
+                                                                        String thirtyDaysAgo = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now()
+                                                                                .subtract(Duration(days: 30)));
+
+                                                                        print(today);
+                                                                        print(thirtyDaysAgo);
+                                                                        controller.fromController.text = thirtyDaysAgo;
+                                                                        controller.toController.text = today;
+                                                                        controller.getPatientList();
+                                                                      },
                                                                       child: Text(
                                                                         "Last 30 Days",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       )),
                                                                   PopupMenuDivider(),
                                                                   PopupMenuItem(
                                                                       value: "",
                                                                       onTap: () async {
-                                                                        _showCupertinoDatePicker(context, controller.fromController);
+                                                                        _showCupertinoDatePicker(
+                                                                            context, controller.fromController, false);
                                                                         // Last allowed date
                                                                       },
                                                                       child: Text(
                                                                         "Custom date",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       ))
                                                                 ],
                                                             child: Padding(
@@ -404,7 +526,8 @@ class HomeView extends GetView<HomeController> {
                                                                 child: TextFormFiledWidget(
                                                                   readOnly: true,
                                                                   onTap: () async {
-                                                                    _showPopupMenu(context, controller.fromController, formKeyFrom);
+                                                                    _showPopupMenu(context, controller.fromController,
+                                                                        formKeyFrom, false);
                                                                   },
                                                                   label: "From",
                                                                   controller: controller.fromController,
@@ -420,49 +543,95 @@ class HomeView extends GetView<HomeController> {
                                                         child: PopupMenuButton<String>(
                                                             constraints: BoxConstraints(minWidth: 200),
                                                             offset: const Offset(0, 8),
-                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(6)),
                                                             color: AppColors.white,
                                                             position: PopupMenuPosition.under,
-                                                            padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
+                                                            padding: EdgeInsetsDirectional.symmetric(
+                                                                horizontal: 10, vertical: 10),
                                                             menuPadding: EdgeInsetsDirectional.only(bottom: 10),
                                                             onSelected: (value) {},
                                                             style: const ButtonStyle(
-                                                                padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                                padding:
+                                                                    WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
                                                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                                                 maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                                visualDensity: VisualDensity(horizontal: 0, vertical: 4)),
+                                                                visualDensity:
+                                                                    VisualDensity(horizontal: 0, vertical: 4)),
                                                             itemBuilder: (context) => [
                                                                   PopupMenuItem(
+                                                                      onTap: () {
+                                                                        String today = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now());
+
+                                                                        print(today);
+
+                                                                        controller.fromController.text = today;
+                                                                        controller.toController.text = today;
+                                                                        controller.getPatientList();
+                                                                      },
                                                                       value: "",
                                                                       child: Text(
                                                                         "Today",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       )),
                                                                   PopupMenuDivider(),
                                                                   PopupMenuItem(
                                                                       value: "",
-                                                                      onTap: () {},
+                                                                      onTap: () {
+                                                                        String today = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now());
+                                                                        String sevenDaysAgo = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now()
+                                                                                .subtract(Duration(days: 7)));
+
+                                                                        print(today);
+                                                                        print(sevenDaysAgo);
+                                                                        print(" seven days age is the $sevenDaysAgo");
+
+                                                                        controller.fromController.text = sevenDaysAgo;
+                                                                        controller.toController.text = today;
+                                                                        controller.getPatientList();
+                                                                      },
                                                                       child: Text(
                                                                         "Last 7 Days",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       )),
                                                                   PopupMenuDivider(),
                                                                   PopupMenuItem(
-                                                                      value: "",
-                                                                      onTap: () {},
+                                                                      value: "last30",
+                                                                      onTap: () {
+                                                                        String today = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now());
+                                                                        String thirtyDaysAgo = DateFormat('MM-dd-yyyy')
+                                                                            .format(DateTime.now()
+                                                                                .subtract(Duration(days: 30)));
+
+                                                                        print(today);
+                                                                        print(thirtyDaysAgo);
+
+                                                                        controller.fromController.text = thirtyDaysAgo;
+                                                                        controller.toController.text = today;
+                                                                        controller.getPatientList();
+                                                                      },
                                                                       child: Text(
                                                                         "Last 30 Days",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       )),
                                                                   PopupMenuDivider(),
                                                                   PopupMenuItem(
                                                                       value: "",
                                                                       onTap: () async {
-                                                                        _showCupertinoDatePicker(context, controller.toController);
+                                                                        _showCupertinoDatePicker(
+                                                                            context, controller.toController, true);
                                                                       },
                                                                       child: Text(
                                                                         "Custom date",
-                                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        style:
+                                                                            AppFonts.regular(14, AppColors.textBlack),
                                                                       ))
                                                                 ],
                                                             child: Padding(
@@ -472,7 +641,8 @@ class HomeView extends GetView<HomeController> {
                                                                 child: TextFormFiledWidget(
                                                                   readOnly: true,
                                                                   onTap: () async {
-                                                                    _showPopupMenu(context, controller.toController, formKeyTo);
+                                                                    _showPopupMenu(context, controller.toController,
+                                                                        formKeyTo, true);
                                                                   },
                                                                   label: "To",
                                                                   controller: controller.toController,
@@ -492,7 +662,8 @@ class HomeView extends GetView<HomeController> {
                                                               SvgPicture.asset(ImagePath.calenderDrawer,
                                                                   colorFilter: ColorFilter.mode(
                                                                     Colors.black, // The color you want to apply
-                                                                    BlendMode.srcIn, // This blend mode is commonly used for coloring SVGs
+                                                                    BlendMode
+                                                                        .srcIn, // This blend mode is commonly used for coloring SVGs
                                                                   )),
                                                               SizedBox(width: 6),
                                                               Text(
@@ -542,7 +713,8 @@ class HomeView extends GetView<HomeController> {
                                                     // Border width
                                                   ),
 
-                                                  borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
+                                                  borderRadius: BorderRadius.circular(
+                                                      10), // Optional: to make the corners rounded
                                                 ),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(10),
@@ -577,8 +749,18 @@ class HomeView extends GetView<HomeController> {
                                                   SizedBox(
                                                     width: 120,
                                                     child: TextField(
+                                                      controller: controller.searchController,
+                                                      onChanged: (value) {
+                                                        controller.tabIndex.value == 0
+                                                            ? controller.getPatientList()
+                                                            : controller.tabIndex.value == 1
+                                                                ? controller.getScheduleVisitList()
+                                                                : controller.getPastVisitList();
+                                                      },
                                                       maxLines: 1, //or null
-                                                      decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                      decoration: InputDecoration.collapsed(
+                                                          hintText: "Search",
+                                                          hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                                     ),
                                                   ),
                                                   // Text(
@@ -595,8 +777,14 @@ class HomeView extends GetView<HomeController> {
                                               width: 140,
                                               child: CustomButton(
                                                 hight: 40,
-                                                navigate: () {
-                                                  Get.toNamed(Routes.ADD_PATIENT);
+                                                navigate: () async {
+                                                  final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                                                  if (result == 1) {
+                                                    controller.getPastVisitList();
+                                                    controller.getScheduleVisitList();
+                                                    controller.getPatientList();
+                                                  }
                                                 },
                                                 label: "Schedule Visit",
                                               ),
@@ -612,7 +800,7 @@ class HomeView extends GetView<HomeController> {
                                           ? HomeScheduleListView()
                                           : HomePastVisitsList(),
                                   SizedBox(
-                                    height: 16,
+                                    height: 10,
                                   )
                                 ],
                               ),
@@ -631,326 +819,3 @@ class HomeView extends GetView<HomeController> {
     );
   }
 }
-
-// ? Padding(
-//     padding: const EdgeInsets.all(3.0),
-//     child: CustomTable(
-//       rows: [
-//         ['Patient Name', 'Age', "Gender", 'Last Visit Date', "Previous Visits", "Action"],
-//         ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-//         ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-//         ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-//         ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-//         ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-//       ],
-//       cellBuilder: (context, rowIndex, colIndex, cellData) {
-//         return colIndex == 0 && rowIndex != 0
-//             ? Row(
-//                 children: [
-//                   RoundedImageWidget(
-//                     size: 28,
-//                     imagePath: "assets/images/user.png",
-//                   ),
-//                   SizedBox(
-//                     width: 10,
-//                   ),
-//                   Text(
-//                     cellData,
-//                     textAlign: TextAlign.center,
-//                     style: AppFonts.regular(14, AppColors.textDarkGrey),
-//                     softWrap: true, // Allows text to wrap
-//                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-//                   ),
-//                 ],
-//               )
-//             : colIndex == 5 && rowIndex != 0
-//                 ? PopupMenuButton<String>(
-//                     offset: const Offset(0, 8),
-//                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-//                     color: AppColors.white,
-//                     position: PopupMenuPosition.under,
-//                     padding: EdgeInsetsDirectional.zero,
-//                     menuPadding: EdgeInsetsDirectional.zero,
-//                     onSelected: (value) {},
-//                     style: const ButtonStyle(
-//                         padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-//                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//                         maximumSize: WidgetStatePropertyAll(Size.zero),
-//                         visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-//                     itemBuilder: (context) => [
-//                           PopupMenuItem(
-//                               onTap: () {
-//                                 Get.toNamed(Routes.PATIENT_PROFILE);
-//                               },
-//                               value: "",
-//                               child: Text(
-//                                 "View",
-//                                 style: AppFonts.regular(14, AppColors.textBlack),
-//                               )),
-//                           PopupMenuDivider(),
-//                           PopupMenuItem(
-//                               value: "",
-//                               onTap: () {
-//                                 Get.toNamed(Routes.EDIT_PATENT_DETAILS);
-//                               },
-//                               child: Text(
-//                                 "Edit",
-//                                 style: AppFonts.regular(14, AppColors.textBlack),
-//                               )),
-//                           PopupMenuDivider(),
-//                           PopupMenuItem(
-//                               value: "",
-//                               onTap: () {},
-//                               child: Text(
-//                                 "Delete",
-//                                 style: AppFonts.regular(14, AppColors.textBlack),
-//                               ))
-//                         ],
-//                     child: SvgPicture.asset(
-//                       "assets/images/logo_threedots.svg",
-//                       width: 20,
-//                       height: 20,
-//                     ))
-//                 : rowIndex == 0
-//                     ? Text(
-//                         cellData,
-//                         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-//                         style: AppFonts.regular(12, AppColors.black),
-//                         softWrap: true, // Allows text to wrap
-//                         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-//                       )
-//                     : Text(
-//                         cellData,
-//                         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-//                         style: AppFonts.regular(14, AppColors.textDarkGrey),
-//                         softWrap: true, // Allows text to wrap
-//                         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-//                       );
-//       },
-//       columnCount: 6,
-//       context: context,
-//       columnWidths: [0.37, 0.1, 0.08, 0.15, 0.20, 0.1],
-//     ),
-//   )
-
-// Padding(
-// padding: const EdgeInsets.all(3.0),
-// child: CustomTable(
-// rows: [
-// ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Previous Visits", "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Action"],
-// // Adding longer text to test overflow handling
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Action"],
-// ],
-// cellBuilder: (context, rowIndex, colIndex, cellData) {
-// return colIndex == 0 && rowIndex != 0
-// ? Row(
-// children: [
-// RoundedImageWidget(
-// size: 28,
-// imagePath: "assets/images/user.png",
-// ),
-// SizedBox(
-// width: 10,
-// ),
-// Text(
-// cellData,
-// textAlign: TextAlign.center,
-// style: AppFonts.regular(14, AppColors.textDarkGrey),
-// softWrap: true, // Allows text to wrap
-// overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-// ),
-// ],
-// )
-//     : colIndex == 5 && rowIndex != 0
-// ? PopupMenuButton<String>(
-// offset: const Offset(0, 8),
-// shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-// color: AppColors.white,
-// position: PopupMenuPosition.under,
-// padding: EdgeInsetsDirectional.zero,
-// menuPadding: EdgeInsetsDirectional.zero,
-// onSelected: (value) {},
-// style: const ButtonStyle(
-// padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-// tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-// maximumSize: WidgetStatePropertyAll(Size.zero),
-// visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-// itemBuilder: (context) => [
-// PopupMenuItem(
-// onTap: () {
-// Get.toNamed(Routes.PATIENT_PROFILE);
-// },
-// value: "",
-// child: Text(
-// "View",
-// style: AppFonts.regular(14, AppColors.textBlack),
-// )),
-// PopupMenuDivider(),
-// PopupMenuItem(
-// value: "",
-// onTap: () {
-// Get.toNamed(Routes.EDIT_PATENT_DETAILS);
-// },
-// child: Text(
-// "Edit",
-// style: AppFonts.regular(14, AppColors.textBlack),
-// )),
-// PopupMenuDivider(),
-// PopupMenuItem(
-// value: "",
-// onTap: () {},
-// child: Text(
-// "Delete",
-// style: AppFonts.regular(14, AppColors.textBlack),
-// ))
-// ],
-// child: SvgPicture.asset(
-// "assets/images/logo_threedots.svg",
-// width: 20,
-// height: 20,
-// ))
-//     : rowIndex == 0
-// ? Text(
-// cellData,
-// textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-// style: AppFonts.regular(12, AppColors.black),
-// softWrap: true, // Allows text to wrap
-// overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-// )
-//     : Text(
-// cellData,
-// textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-// style: AppFonts.regular(14, AppColors.textDarkGrey),
-// softWrap: true, // Allows text to wrap
-// overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-// );
-// },
-// columnCount: 6,
-// context: context,
-// columnWidths: [0.32, 0.20, 0.08, 0.1, 0.20, 0.1],
-// ),
-// )
-
-// Padding(
-// padding: const EdgeInsets.all(10.0),
-// child: CustomTable(
-// rows: [
-// ['Patient Name', 'Visit Date', 'Age', "Gender", "Previous Visits", "Status", "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Pending", "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Pending", "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Pending", "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Pending", "Action"],
-// ["Jones, Don", '10/12  10:30 am', '52', 'Male', '2', "Pending", "Action"],
-// ],
-// cellBuilder: (context, rowIndex, colIndex, cellData) {
-// return colIndex == 0 && rowIndex != 0
-// ? Row(
-// children: [
-// RoundedImageWidget(
-// size: 28,
-// imagePath: "assets/images/user.png",
-// ),
-// SizedBox(
-// width: 10,
-// ),
-// Text(
-// cellData,
-// textAlign: TextAlign.center,
-// style: AppFonts.regular(14, AppColors.textDarkGrey),
-// softWrap: true, // Allows text to wrap
-// overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-// ),
-// ],
-// )
-//     : colIndex == 5 && rowIndex != 0
-// ? Padding(
-// padding: const EdgeInsets.only(left: 5),
-// child: Container(
-// decoration: BoxDecoration(
-// color: AppColors.orange,
-// borderRadius: BorderRadius.circular(16),
-// ),
-// child: Padding(
-// padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 6),
-// child: Text(
-// cellData,
-// textAlign: TextAlign.center,
-// style: AppFonts.medium(14, AppColors.orangeText),
-// ),
-// ),
-// ),
-// )
-//     : colIndex == 6 && rowIndex != 0
-// ? PopupMenuButton<String>(
-// offset: const Offset(0, 8),
-// shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-// color: AppColors.white,
-// position: PopupMenuPosition.under,
-// padding: EdgeInsetsDirectional.zero,
-// menuPadding: EdgeInsetsDirectional.zero,
-// onSelected: (value) {},
-// style: const ButtonStyle(
-// padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-// tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-// maximumSize: WidgetStatePropertyAll(Size.zero),
-// visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-// itemBuilder: (context) => [
-// PopupMenuItem(
-// onTap: () {
-// Get.toNamed(Routes.PATIENT_PROFILE);
-// },
-// value: "",
-// child: Text(
-// "View",
-// style: AppFonts.regular(14, AppColors.textBlack),
-// )),
-// PopupMenuDivider(),
-// PopupMenuItem(
-// value: "",
-// onTap: () {
-// Get.toNamed(Routes.EDIT_PATENT_DETAILS);
-// },
-// child: Text(
-// "Edit",
-// style: AppFonts.regular(14, AppColors.textBlack),
-// )),
-// PopupMenuDivider(),
-// PopupMenuItem(
-// value: "",
-// onTap: () {},
-// child: Text(
-// "Delete",
-// style: AppFonts.regular(14, AppColors.textBlack),
-// ))
-// ],
-// child: SvgPicture.asset(
-// "assets/images/logo_threedots.svg",
-// width: 20,
-// height: 20,
-// ))
-//     : rowIndex == 0
-// ? Text(
-// cellData,
-// textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-// style: AppFonts.regular(12, AppColors.black),
-// softWrap: true, // Allows text to wrap
-// overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-// )
-//     : Text(
-// cellData,
-// textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-// style: AppFonts.regular(14, AppColors.textDarkGrey),
-// softWrap: true, // Allows text to wrap
-// overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-// );
-// },
-// columnCount: 7,
-// context: context,
-// columnWidths: [0.19, 0.20, 0.1, 0.09, 0.16, 0.19, 0.09],
-// ),
-// )

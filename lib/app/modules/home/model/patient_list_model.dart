@@ -54,6 +54,8 @@ class ResponseData {
 class PatientListData {
   int? id;
   int? patientId;
+  int? visitId;
+
   String? firstName;
   String? lastName;
   String? middleName;
@@ -86,6 +88,7 @@ class PatientListData {
   PatientListData(
       {this.id,
       this.patientId,
+      this.visitId,
       this.firstName,
       this.lastName,
       this.middleName,
@@ -118,6 +121,7 @@ class PatientListData {
   PatientListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     patientId = json['patient_id'];
+    visitId = json["visit_id"];
     firstName = json['first_name'];
     lastName = json['last_name'];
     middleName = json['middle_name'];
@@ -157,6 +161,7 @@ class PatientListData {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['patient_id'] = patientId;
+    data['visit_id'] = visitId;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['middle_name'] = middleName;

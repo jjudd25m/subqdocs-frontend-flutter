@@ -16,6 +16,8 @@ class CustomAnimatedButton extends StatefulWidget {
   final bool isOutline; // Determines if the button is an outline button
   final VoidCallback? onPressed;
   final bool disableGradient;
+  final EdgeInsetsGeometry? paddingText;
+
   final double height;
   final Color? outLineEnabledColor;
   final double? fontSize;
@@ -30,6 +32,7 @@ class CustomAnimatedButton extends StatefulWidget {
       this.enabledColor = AppColors.textBlack,
       this.disabledColor = AppColors.textGrey,
       this.loadingColor = AppColors.textWhite,
+      this.paddingText = EdgeInsets.zero,
       this.outlineColor,
       this.isOutline = false,
       this.onPressed,
@@ -135,13 +138,17 @@ class _CustomAnimatedButtonState extends State<CustomAnimatedButton> with Single
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
+              padding: widget.paddingText,
               width: double.infinity,
               height: widget.height,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: widget.disableGradient
                       ? [AppColors.textWhite, AppColors.textWhite]
-                      : [widget.isOutline != null ? widget.enabledColor : AppColors.textBlack, widget.isOutline != null ? widget.enabledColor : AppColors.textBlack],
+                      : [
+                          widget.isOutline != null ? widget.enabledColor : AppColors.textBlack,
+                          widget.isOutline != null ? widget.enabledColor : AppColors.textBlack
+                        ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -177,7 +184,8 @@ class _CustomAnimatedButtonState extends State<CustomAnimatedButton> with Single
                     scale: _textScaleAnimation.value,
                     child: Text(
                       widget.isLoading ? "Please wait" : widget.text,
-                      style: AppFonts.medium(widget.fontSize ?? 17, widget.isEnabled ? widget.enabledTextColor : AppColors.textPurple.withValues(alpha: 0.5)),
+                      style: AppFonts.medium(widget.fontSize ?? 17,
+                          widget.isEnabled ? widget.enabledTextColor : AppColors.textPurple.withValues(alpha: 0.5)),
                     ),
                   ),
                 ],

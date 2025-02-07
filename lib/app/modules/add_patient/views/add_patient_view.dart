@@ -12,6 +12,7 @@ import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
@@ -24,6 +25,10 @@ import '../controllers/add_patient_controller.dart';
 
 class AddPatientView extends GetView<AddPatientController> {
   AddPatientView({super.key});
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  DateTime fromDate = DateTime.now().subtract(Duration(days: 371));
 
   void _showCustomDialog(BuildContext context) {
     showDialog(
@@ -40,6 +45,47 @@ class AddPatientView extends GetView<AddPatientController> {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
+  // void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
+  //   showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return CupertinoActionSheet(
+  //         title: Text(
+  //           "Pick a Date",
+  //           style: AppFonts.medium(16, AppColors.black),
+  //         ),
+  //         actions: <Widget>[
+  //           Container(
+  //             height: 400,
+  //             child: CupertinoDatePicker(
+  //               mode: CupertinoDatePickerMode.date,
+  //               maximumDate: DateTime.now().subtract(Duration(days: 370)),
+  //               initialDateTime: DateTime.now().subtract(Duration(days: 371)),
+  //               onDateTimeChanged: (DateTime newDate) {
+  //                 String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+  //                 // String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
+  //                 //
+  //                 //
+  //                 //   controller.dob.value = strDate;
+  //
+  //                 control.text = formattedDate;
+  //
+  //                 print('${_selectedDate.toLocal()}'.split(' ')[0]);
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //         cancelButton: CupertinoActionSheetAction(
+  //           child: Text('Cancel'),
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
     showCupertinoModalPopup(
       context: context,
@@ -54,35 +100,26 @@ class AddPatientView extends GetView<AddPatientController> {
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
-                maximumDate: control == controller.dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
-                minimumDate: control == controller.visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
-                initialDateTime: _selectedDate,
+                maximumDate: DateTime.now().subtract(Duration(days: 370)),
+                initialDateTime: DateTime.now().subtract(Duration(days: 371)),
                 onDateTimeChanged: (DateTime newDate) {
-                  _selectedDate = newDate;
+                  fromDate = newDate;
+
                   // Update the TextField with selected date
-
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
-                  String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
-
-                  if (control == controller.dobController) {
-                    controller.dob.value = strDate;
-                    print("controller dob is :- ${controller.dob}");
-                  }
-
-                  if (control == controller.visitDateController) {
-                    controller.visitDate.value = strDate;
-                  }
-
-                  control.text = formattedDate;
-
-                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
                 },
               ),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text('Cancel'),
+            child: Text('Done'),
             onPressed: () {
+              String formattedDate = DateFormat('dd/MM/yyyy').format(fromDate);
+
+              // String formattedDate = DateFormat('MM-dd-yyyy').format(DateTime.now());
+              control.text = formattedDate;
+
+              // print('${_selectedDate.toLocal()}'.split(' ')[0]);
+
               Navigator.of(context).pop();
             },
           ),
@@ -98,527 +135,531 @@ class AddPatientView extends GetView<AddPatientController> {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.white,
         body: SafeArea(
-          child: Column(
-            children: [
-              CustomAppBar(drawerkey: _key),
-              Expanded(
-                  child: Container(
-                      color: AppColors.ScreenBackGround,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
-                        child: ListView(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.all(Dimen.margin16),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.back();
-                                        },
-                                        child: SvgPicture.asset(
-                                          ImagePath.arrowLeft,
-                                          fit: BoxFit.cover,
-                                          width: Dimen.margin24,
-                                          height: Dimen.margin24,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin8,
-                                      ),
-                                      Text(
-                                        "Add Patient Details",
-                                        style: AppFonts.regular(18, AppColors.textBlack),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin24,
-                                  ),
-                                  TextFormFiledWidget(
-                                    prefixIcon: SvgPicture.asset(
-                                      ImagePath.search,
-                                      fit: BoxFit.cover,
-                                      width: Dimen.margin12,
-                                      height: Dimen.margin12,
-                                    ),
-                                    controller: controller.searchController,
-                                    hint: "Search Patient Name, ID, Date of Birth or Email",
-                                    label: '',
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin16,
-                                  ),
-                                  Row(
-                                    children: [
-                                      BaseImageView(
-                                        imageUrl:
-                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                        width: 60,
-                                        height: 60,
-                                      ),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Text(
-                                        "   + Add Profile Image",
-                                        style: AppFonts.regular(14, AppColors.textGrey),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin16,
-                                  ),
-                                  // Row(
-                                  //   children: [
-                                  //     Expanded(
-                                  //       child: TextFormFiledWidget(
-                                  //         label: "Patient ID",
-                                  //         controller: controller.patientIdController,
-                                  //         hint: "12345678",
-                                  //       ),
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: Dimen.margin10,
-                                  //     ),
-                                  //     Expanded(child: SizedBox()),
-                                  //     SizedBox(
-                                  //       width: Dimen.margin10,
-                                  //     ),
-                                  //     Expanded(
-                                  //       child: SizedBox(),
-                                  //     )
-                                  //   ],
-                                  // ),
-                                  SizedBox(
-                                    height: Dimen.margin16,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "First Name",
-                                          // isImportant: true,
-                                          isValid: true,
-                                          controller: controller.firstNameController,
-                                          hint: "Don",
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "Middle Name",
-                                          controller: controller.middleNameController,
-                                          hint: "Joseph",
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "Last Name",
-                                          isValid: true,
-                                          // isImportant: true,
-                                          controller: controller.lastNameController,
-                                          hint: "Jones",
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin16,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormFiledWidget(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                CustomAppBar(drawerkey: _key),
+                Expanded(
+                    child: Container(
+                        color: AppColors.ScreenBackGround,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                          child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(Dimen.margin16),
+                                decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        GestureDetector(
                                           onTap: () {
-                                            _showCupertinoDatePicker(context, controller.dobController);
+                                            Get.back();
                                           },
-                                          label: "Date of birth",
-                                          readOnly: true,
-                                          controller: controller.dobController,
-                                          hint: "12/1/1972",
-                                          suffixIcon: SvgPicture.asset(ImagePath.calendar),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Sex",
-                                              style: AppFonts.regular(14, AppColors.textBlack),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Obx(() {
-                                              return BaseDropdown<String>(
-                                                valueAsString: (value) => value ?? "",
-                                                items: controller.sex,
-                                                selectedValue: controller.selectedSexValue.value,
-                                                onChanged: (value) {
-                                                  controller.selectedSexValue.value = value;
-                                                },
-                                                selectText: "Male",
-                                              );
-                                            })
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "Email Address",
-                                          controller: controller.emailAddressController,
-                                          hint: "donjones@example.com",
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin16,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "Visit Date",
-                                          onTap: () {
-                                            controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
-                                          },
-                                          controller: controller.visitDateController,
-                                          hint: "10/12/2024",
-                                          suffixIcon: SvgPicture.asset(ImagePath.calendar),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Visit Time",
-                                              style: AppFonts.regular(14, AppColors.textBlack),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Obx(() {
-                                              return BaseDropdown<String>(
-                                                valueAsString: (value) => value ?? "",
-                                                items: controller.visitTime,
-                                                selectedValue: controller.selectedVisitTimeValue.value,
-                                                onChanged: (value) {
-                                                  controller.selectedVisitTimeValue.value = value;
-                                                },
-                                                selectText: "11 PM",
-                                              );
-                                            })
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin10,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Patient Type",
-                                              style: AppFonts.regular(14, AppColors.textBlack),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Obx(() {
-                                              return BaseDropdown<String>(
-                                                valueAsString: (value) => value ?? "",
-                                                items: controller.patientType,
-                                                selectedValue: controller.selectedPatientValue.value,
-                                                onChanged: (value) {
-                                                  controller.selectedPatientValue.value = value;
-                                                },
-                                                selectText: "New Patient",
-                                              );
-                                            })
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin16,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(1),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(width: 0.5, color: AppColors.appbarBorder),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: ExpansionTile(
-                                          shape: OutlineInputBorder(
-                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                          backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                          collapsedShape: OutlineInputBorder(
-                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                          collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                          title: Container(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  textAlign: TextAlign.center,
-                                                  "Attachments",
-                                                  style: AppFonts.medium(16, AppColors.textBlack),
-                                                ),
-                                              ],
-                                            ),
+                                          child: SvgPicture.asset(
+                                            ImagePath.arrowLeft,
+                                            fit: BoxFit.cover,
+                                            width: Dimen.margin24,
+                                            height: Dimen.margin24,
                                           ),
-                                          children: <Widget>[
-                                            Container(
-                                              color: Colors.white,
-                                              child: Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                  child: SizedBox(
-                                                      height: 200,
-                                                      width: double.infinity,
-                                                      child: ListView.separated(
-                                                        scrollDirection: Axis.horizontal,
-                                                        padding: EdgeInsets.only(top: 20),
-                                                        itemBuilder: (context, index) {
-                                                          return Container(
-                                                            height: 200,
-                                                            width: 140,
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(height: 10),
-                                                                Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  mainAxisSize: MainAxisSize.min,
-                                                                  children: [
-                                                                    Container(
-                                                                      decoration: BoxDecoration(
-                                                                        color: AppColors.appbarBorder,
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                      ),
-                                                                      width: 120,
-                                                                      height: 120,
-                                                                      child: ClipRRect(
-                                                                        borderRadius: BorderRadius.circular(
-                                                                            10), // Set the radius here
-                                                                        child: Image.network(
-                                                                          "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
-                                                                          fit: BoxFit.cover,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height: 6,
-                                                                    ),
-                                                                    Text(
-                                                                      "Recording 1",
-                                                                      style:
-                                                                          AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height: 6,
-                                                                    ),
-                                                                    Text(
-                                                                      "10/19/2024",
-                                                                      style:
-                                                                          AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        },
-                                                        separatorBuilder: (context, index) =>
-                                                            const SizedBox(width: Dimen.margin15),
-                                                        itemCount: 8,
-                                                      ))),
-                                            ),
-                                          ],
                                         ),
-                                      ),
+                                        SizedBox(
+                                          width: Dimen.margin8,
+                                        ),
+                                        Text(
+                                          "Add Patient Details",
+                                          style: AppFonts.regular(18, AppColors.textBlack),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: Dimen.margin20,
-                                  ),
-                                  Row(
-                                    children: [
-                                      ContainerButton(
-                                        onPressed: () {
-                                          _showCustomDialog(context);
-                                        },
-                                        text: 'Add Attachments',
-
-                                        borderColor: AppColors.backgroundPurple, // Custom border color
-                                        backgroundColor: Colors.white, // Custom background color
-                                        needBorder: true, // Show border
-                                        textColor: AppColors.backgroundPurple, // Custom text color
-                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
-                                        radius: 6, // Custom border radius
+                                    SizedBox(
+                                      height: Dimen.margin24,
+                                    ),
+                                    TextFormFiledWidget(
+                                      prefixIcon: SvgPicture.asset(
+                                        ImagePath.search,
+                                        fit: BoxFit.cover,
+                                        width: Dimen.margin12,
+                                        height: Dimen.margin12,
                                       ),
-                                      // CustomButton(
-                                      //   navigate: () {
-                                      //     _showCustomDialog(context);
-                                      //   },
-                                      //   label: "Add Attachments",
-                                      //   backGround: AppColors.white,
-                                      //   textColor: AppColors.textPurple,
-                                      //   isTrue: false,
-                                      // ),
-                                      Spacer(),
-                                      Text(
-                                        "Clear Form",
-                                        style: AppFonts.medium(14, AppColors.textDarkGrey),
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin6,
-                                      ),
-                                      ContainerButton(
-                                        onPressed: () {
-                                          // Your onPressed function
-                                        },
-                                        text: 'Cancel',
-
-                                        borderColor: AppColors.backgroundPurple, // Custom border color
-                                        backgroundColor: Colors.white, // Custom background color
-                                        needBorder: true, // Show border
-                                        textColor: AppColors.backgroundPurple, // Custom text color
-                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
-                                        radius: 6, // Custom border radius
-                                      ),
-                                      SizedBox(
-                                        width: Dimen.margin6,
-                                      ),
-
-                                      ContainerButton(
-                                        onPressed: () {
-                                          // Your onPressed function
-                                        },
-                                        text: 'Save and Add Another',
-
-                                        borderColor: AppColors.backgroundPurple, // Custom border color
-                                        backgroundColor: AppColors.backgroundPurple, // Custom background color
-                                        needBorder: false, // Show border
-                                        textColor: AppColors.white, // Custom text color
-                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
-                                        radius: 6, // Custom border radius
-                                      ),
-
-                                      SizedBox(
-                                        width: Dimen.margin6,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
-                                        width: 98,
-                                        height: 40,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                                          child: Row(
+                                      controller: controller.searchController,
+                                      hint: "Search Patient Name, ID, Date of Birth or Email",
+                                      label: '',
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
+                                        BaseImageView(
+                                          imageUrl:
+                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                          width: 60,
+                                          height: 60,
+                                        ),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                          "   + Add Profile Image",
+                                          style: AppFonts.regular(14, AppColors.textGrey),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              label: "First Name",
+                                              // isImportant: true,
+                                              isValid: true,
+                                              controller: controller.firstNameController,
+                                              hint: "Don",
+                                              checkValidation: (value) {
+                                                return Validation.requiredFiled(value);
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              label: "Middle Name",
+                                              controller: controller.middleNameController,
+                                              hint: "Joseph",
+                                              checkValidation: (value) {
+                                                return Validation.requiredFiled(value);
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              label: "Last Name",
+                                              isValid: true,
+                                              // isImportant: true,
+                                              controller: controller.lastNameController,
+                                              hint: "Jones",
+                                              checkValidation: (value) {
+                                                return Validation.requiredFiled(value);
+                                              }),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              onTap: () {
+                                                _showCupertinoDatePicker(context, controller.dobController);
+                                              },
+                                              label: "Date of birth",
+                                              readOnly: true,
+                                              controller: controller.dobController,
+                                              hint: "12/1/1972",
+                                              suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                              checkValidation: (value) {
+                                                return Validation.requiredFiled(value);
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 3, right: 11),
-                                                child: Text(
-                                                  "Save",
-                                                  style: AppFonts.medium(14, Colors.white),
-                                                ),
+                                              Text(
+                                                "Sex",
+                                                style: AppFonts.regular(14, AppColors.textBlack),
                                               ),
-                                              Container(
-                                                height: 40,
-                                                width: 1,
-                                                color: Colors.white,
+                                              SizedBox(
+                                                height: 8,
                                               ),
-                                              PopupMenuButton<String>(
-                                                  offset: const Offset(14, -70),
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                                  color: AppColors.white,
-                                                  position: PopupMenuPosition.over,
-                                                  padding: EdgeInsetsDirectional.zero,
-                                                  menuPadding: EdgeInsetsDirectional.zero,
-                                                  onSelected: (value) {},
-                                                  style: const ButtonStyle(
-                                                      padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                      maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                      visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                                                  itemBuilder: (context) => [
-                                                        PopupMenuItem(
-                                                            padding: EdgeInsets.zero,
-                                                            value: "",
-                                                            child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: 5,
-                                                                ),
-                                                                Text(
-                                                                  "Start Visit Now",
-                                                                  textAlign: TextAlign.end,
-                                                                  style: AppFonts.regular(14, AppColors.textBlack),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 5,
-                                                                )
-                                                              ],
-                                                            )),
-                                                      ],
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0),
-                                                    child: SvgPicture.asset(
-                                                      ImagePath.downArrow,
-                                                      width: 20,
-                                                      colorFilter:
-                                                          ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
-                                                    ),
-                                                  )),
+                                              Obx(() {
+                                                return BaseDropdown<String>(
+                                                  valueAsString: (value) => value ?? "",
+                                                  items: controller.sex,
+                                                  selectedValue: controller.selectedSexValue.value,
+                                                  onChanged: (value) {
+                                                    controller.selectedSexValue.value = value;
+                                                  },
+                                                  selectText: "Male",
+                                                );
+                                              })
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ))),
-            ],
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              label: "Email Address",
+                                              controller: controller.emailAddressController,
+                                              hint: "donjones@example.com",
+                                              checkValidation: (value) {
+                                                return Validation.emailValidate(value);
+                                              }),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                            readOnly: true,
+                                            label: "Visit Date",
+                                            onTap: () {
+                                              controller.showVisitDateCupertinoDatePicker(
+                                                  context, controller.visitDateController);
+                                            },
+                                            controller: controller.visitDateController,
+                                            hint: "10/12/2024",
+                                            checkValidation: (value) {
+                                              return Validation.requiredFiled(value);
+                                            },
+                                            suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Visit Time",
+                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                              ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Obx(() {
+                                                return BaseDropdown<String>(
+                                                  valueAsString: (value) => value ?? "",
+                                                  items: controller.visitTime,
+                                                  selectedValue: controller.selectedVisitTimeValue.value,
+                                                  onChanged: (value) {
+                                                    controller.selectedVisitTimeValue.value = value;
+                                                  },
+                                                  selectText: "11 PM",
+                                                );
+                                              })
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Patient Type",
+                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                              ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Obx(() {
+                                                return BaseDropdown<String>(
+                                                  valueAsString: (value) => value ?? "",
+                                                  items: controller.patientType,
+                                                  selectedValue: controller.selectedPatientValue.value,
+                                                  onChanged: (value) {
+                                                    controller.selectedPatientValue.value = value;
+                                                  },
+                                                  selectText: "New Patient",
+                                                );
+                                              })
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(1),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(width: 0.5, color: AppColors.appbarBorder),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1),
+                                          child: ExpansionTile(
+                                            shape: OutlineInputBorder(
+                                                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                            backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                            collapsedShape: OutlineInputBorder(
+                                                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                            collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                            title: Container(
+                                              child: Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    "Attachments",
+                                                    style: AppFonts.medium(16, AppColors.textBlack),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            children: <Widget>[
+                                              Container(
+                                                color: Colors.white,
+                                                child: Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                    child: SizedBox(
+                                                        height: 200,
+                                                        width: double.infinity,
+                                                        child: ListView.separated(
+                                                          scrollDirection: Axis.horizontal,
+                                                          padding: EdgeInsets.only(top: 20),
+                                                          itemBuilder: (context, index) {
+                                                            return Container(
+                                                              height: 200,
+                                                              width: 140,
+                                                              child: Column(
+                                                                children: [
+                                                                  SizedBox(height: 10),
+                                                                  Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    mainAxisSize: MainAxisSize.min,
+                                                                    children: [
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                          color: AppColors.appbarBorder,
+                                                                          borderRadius: BorderRadius.circular(10),
+                                                                        ),
+                                                                        width: 120,
+                                                                        height: 120,
+                                                                        child: ClipRRect(
+                                                                          borderRadius: BorderRadius.circular(
+                                                                              10), // Set the radius here
+                                                                          child: Image.network(
+                                                                            "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+                                                                            fit: BoxFit.cover,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: 6,
+                                                                      ),
+                                                                      Text(
+                                                                        "Recording 1",
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.textDarkGrey),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: 6,
+                                                                      ),
+                                                                      Text(
+                                                                        "10/19/2024",
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.textDarkGrey),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                          separatorBuilder: (context, index) =>
+                                                              const SizedBox(width: Dimen.margin15),
+                                                          itemCount: 8,
+                                                        ))),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin20,
+                                    ),
+                                    Row(
+                                      children: [
+                                        ContainerButton(
+                                          onPressed: () {
+                                            _showCustomDialog(context);
+                                          },
+                                          text: 'Add Attachments',
+
+                                          borderColor: AppColors.backgroundPurple, // Custom border color
+                                          backgroundColor: Colors.white, // Custom background color
+                                          needBorder: true, // Show border
+                                          textColor: AppColors.backgroundPurple, // Custom text color
+                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                          radius: 6, // Custom border radius
+                                        ),
+                                        // CustomButton(
+                                        //   navigate: () {
+                                        //     _showCustomDialog(context);
+                                        //   },
+                                        //   label: "Add Attachments",
+                                        //   backGround: AppColors.white,
+                                        //   textColor: AppColors.textPurple,
+                                        //   isTrue: false,
+                                        // ),
+                                        Spacer(),
+                                        Text(
+                                          "Clear Form",
+                                          style: AppFonts.medium(14, AppColors.textDarkGrey),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin6,
+                                        ),
+                                        ContainerButton(
+                                          onPressed: () {
+                                            // Your onPressed function
+                                          },
+                                          text: 'Cancel',
+
+                                          borderColor: AppColors.backgroundPurple, // Custom border color
+                                          backgroundColor: Colors.white, // Custom background color
+                                          needBorder: true, // Show border
+                                          textColor: AppColors.backgroundPurple, // Custom text color
+                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                          radius: 6, // Custom border radius
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin6,
+                                        ),
+
+                                        ContainerButton(
+                                          onPressed: () {
+                                            // Your onPressed function
+
+                                            if (_formKey.currentState!.validate()) {
+                                              controller.addPatient();
+                                            }
+                                          },
+                                          text: 'Save and Add Another',
+
+                                          borderColor: AppColors.backgroundPurple, // Custom border color
+                                          backgroundColor: AppColors.backgroundPurple, // Custom background color
+                                          needBorder: false, // Show border
+                                          textColor: AppColors.white, // Custom text color
+                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                          radius: 6, // Custom border radius
+                                        ),
+
+                                        SizedBox(
+                                          width: Dimen.margin6,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: AppColors.backgroundPurple,
+                                              borderRadius: BorderRadius.circular(6)),
+                                          width: 98,
+                                          height: 40,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 3, right: 11),
+                                                  child: Text(
+                                                    "Save",
+                                                    style: AppFonts.medium(14, Colors.white),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: 40,
+                                                  width: 1,
+                                                  color: Colors.white,
+                                                ),
+                                                PopupMenuButton<String>(
+                                                    offset: const Offset(14, -70),
+                                                    shape:
+                                                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                    color: AppColors.white,
+                                                    position: PopupMenuPosition.over,
+                                                    padding: EdgeInsetsDirectional.zero,
+                                                    menuPadding: EdgeInsetsDirectional.zero,
+                                                    onSelected: (value) {},
+                                                    style: const ButtonStyle(
+                                                        padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                        maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                        visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                                    itemBuilder: (context) => [
+                                                          PopupMenuItem(
+                                                              padding: EdgeInsets.zero,
+                                                              value: "",
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: [
+                                                                  SizedBox(
+                                                                    width: 5,
+                                                                  ),
+                                                                  Text(
+                                                                    "Start Visit Now",
+                                                                    textAlign: TextAlign.end,
+                                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 5,
+                                                                  )
+                                                                ],
+                                                              )),
+                                                        ],
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 8.0),
+                                                      child: SvgPicture.asset(
+                                                        ImagePath.downArrow,
+                                                        width: 20,
+                                                        colorFilter: ColorFilter.mode(
+                                                            AppColors.backgroundWhite, BlendMode.srcIn),
+                                                      ),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ))),
+              ],
+            ),
           ),
         ));
   }

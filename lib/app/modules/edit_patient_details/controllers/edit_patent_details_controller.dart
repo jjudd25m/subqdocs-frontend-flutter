@@ -27,12 +27,43 @@ class EditPatentDetailsController extends GetxController {
   RxnString selectedSexValue = RxnString();
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();
-  RxList<String> visitTime = RxList([]);
+  List<String> visitTime = [
+    "12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM",
+    "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM",
+    "02:00 AM", "02:15 AM", "02:30 AM", "02:45 AM",
+    "03:00 AM", "03:15 AM", "03:30 AM", "03:45 AM",
+    "04:00 AM", "04:15 AM", "04:30 AM", "04:45 AM",
+    "05:00 AM", "05:15 AM", "05:30 AM", "05:45 AM",
+    "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM",
+    "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM",
+    "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM",
+    "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM",
+    "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM",
+    "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM",
+
+    // PM times
+    "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM",
+    "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
+    "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM",
+    "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM",
+    "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM",
+    "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM",
+    "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM",
+    "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM",
+    "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM",
+    "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
+    "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
+    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
+  ];
   List<String> sex = ["Female", "Male"];
   List<String> patientType = ["New Patient", "Old Patient"];
   // PatientListData patientListData = PatientListData();
 
   String patientId = "";
+
+  RxBool isFromSchedule = RxBool(true);
+
+  // bool f
 
   RxBool isLoading = RxBool(false);
 
@@ -44,7 +75,13 @@ class EditPatentDetailsController extends GetxController {
   void onInit() {
     super.onInit();
 
+    print("edit patient list  ${Get.arguments["patientData"]}");
+
     patientId = Get.arguments["patientData"];
+    isFromSchedule.value = Get.arguments["fromSchedule"];
+
+    isFromSchedule.refresh();
+
     getPatient(patientId);
   }
 
@@ -112,61 +149,61 @@ class EditPatentDetailsController extends GetxController {
     selectedSexValue.value = patientDetailModel.responseData?.gender ?? "";
     // selectedVisitTimeValue.value = patientListData.visits?.last.visitTime ?? "";
 
-    visitTime.value = generateTimeIntervals(visitdateTime);
+    // visitTime.value = generateTimeIntervals(visitdateTime);
     // selectedVisitTimeValue.value = visitTime.firstOrNull!;
   }
 
-  List<String> generateTimeIntervals(DateTime date) {
-    List<String> times = [];
-    DateTime currentTime;
-
-    // Get the current time rounded to the next 15-minute increment
-    DateTime now = DateTime.now().toLocal();
-    int minutes = now.minute;
-    int nextQuarter = (minutes ~/ 15 + 1) * 15;
-
-    // Round up the current time to the next 15-minute interval
-    if (nextQuarter == 60) {
-      currentTime = DateTime(now.year, now.month, now.day, now.hour + 1, 0); // Next hour
-    } else {
-      currentTime = DateTime(now.year, now.month, now.day, now.hour, nextQuarter);
-    }
-
-    // Scenario 1: If the input date is today
-    if (date.year == now.year && date.month == now.month && date.day == now.day) {
-      DateTime midnight = DateTime(now.year, now.month, now.day + 1); // Midnight of the next day
-
-      while (currentTime.isBefore(midnight)) {
-        String formattedTime = formatTime(currentTime);
-        times.add(formattedTime);
-        currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
-      }
-    } else {
-      // Scenario 2: If the input date is any other date
-      currentTime = DateTime(date.year, date.month, date.day, 0, 0); // Start at 12:00 AM of the passed date
-
-      for (int i = 0; i < 96; i++) {
-        // 24 hours = 96 slots of 15 minutes
-        String formattedTime = formatTime(currentTime);
-        times.add(formattedTime);
-        currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
-      }
-    }
-
-    return times;
-  }
-
-  String formatTime(DateTime time) {
-    int hour = time.hour;
-    int minute = time.minute;
-
-    String period = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12;
-    if (hour == 0) hour = 12; // Handle midnight and noon
-
-    String minuteStr = minute.toString().padLeft(2, '0');
-    return '$hour:$minuteStr $period';
-  }
+  // List<String> generateTimeIntervals(DateTime date) {
+  //   List<String> times = [];
+  //   DateTime currentTime;
+  //
+  //   // Get the current time rounded to the next 15-minute increment
+  //   DateTime now = DateTime.now().toLocal();
+  //   int minutes = now.minute;
+  //   int nextQuarter = (minutes ~/ 15 + 1) * 15;
+  //
+  //   // Round up the current time to the next 15-minute interval
+  //   if (nextQuarter == 60) {
+  //     currentTime = DateTime(now.year, now.month, now.day, now.hour + 1, 0); // Next hour
+  //   } else {
+  //     currentTime = DateTime(now.year, now.month, now.day, now.hour, nextQuarter);
+  //   }
+  //
+  //   // Scenario 1: If the input date is today
+  //   if (date.year == now.year && date.month == now.month && date.day == now.day) {
+  //     DateTime midnight = DateTime(now.year, now.month, now.day + 1); // Midnight of the next day
+  //
+  //     while (currentTime.isBefore(midnight)) {
+  //       String formattedTime = formatTime(currentTime);
+  //       times.add(formattedTime);
+  //       currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
+  //     }
+  //   } else {
+  //     // Scenario 2: If the input date is any other date
+  //     currentTime = DateTime(date.year, date.month, date.day, 0, 0); // Start at 12:00 AM of the passed date
+  //
+  //     for (int i = 0; i < 96; i++) {
+  //       // 24 hours = 96 slots of 15 minutes
+  //       String formattedTime = formatTime(currentTime);
+  //       times.add(formattedTime);
+  //       currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
+  //     }
+  //   }
+  //
+  //   return times;
+  // }
+  //
+  // String formatTime(DateTime time) {
+  //   int hour = time.hour;
+  //   int minute = time.minute;
+  //
+  //   String period = hour >= 12 ? 'PM' : 'AM';
+  //   hour = hour % 12;
+  //   if (hour == 0) hour = 12; // Handle midnight and noon
+  //
+  //   String minuteStr = minute.toString().padLeft(2, '0');
+  //   return '$hour:$minuteStr $period';
+  // }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {
     DateTime _selectedDate = DateTime.now();
@@ -203,8 +240,8 @@ class EditPatentDetailsController extends GetxController {
 
                   control.text = formattedDate;
 
-                  visitTime.value = generateTimeIntervals(newDate);
-                  selectedVisitTimeValue.value = visitTime.firstOrNull!;
+                  // visitTime.value = generateTimeIntervals(newDate);
+                  // selectedVisitTimeValue.value = visitTime.firstOrNull!;
                   print('${_selectedDate.toLocal()}'.split(' ')[0]);
                 },
               ),
@@ -239,7 +276,8 @@ class EditPatentDetailsController extends GetxController {
                 mode: CupertinoDatePickerMode.date,
                 initialDateTime: _selectedDate,
                 maximumDate: control == dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
-                minimumDate: control == visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
+                minimumDate:
+                    control == visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
@@ -276,12 +314,12 @@ class EditPatentDetailsController extends GetxController {
   Future<void> addPatient() async {
     isLoading.value = true;
 
-    DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
+    // DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
     // DateTime finalDateTimeFromDateTime = mergeDateAndTimeFromDateTime(selectedDateTime, selectedTime);
 
-    String strVisit_time = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(finalDateTimeFromString);
-
-    print("Merged DateTime from String: $finalDateTimeFromString");
+    // String strVisit_time = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(finalDateTimeFromString);
+    //
+    // print("Merged DateTime from String: $finalDateTimeFromString");
     // print("Merged DateTime from DateTime: $finalDateTimeFromDateTime");
 
     Map<String, dynamic> param = {};
@@ -289,11 +327,27 @@ class EditPatentDetailsController extends GetxController {
     patientDetailModel.responseData?.firstName = firstNameController.text;
     patientDetailModel.responseData?.middleName = middleNameController.text;
     patientDetailModel.responseData?.lastName = lastNameController.text;
-    patientDetailModel.responseData?.dateOfBirth = '${dob.value}Z';
+
+    patientDetailModel.responseData?.dateOfBirth =
+        DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+
     patientDetailModel.responseData?.gender = selectedSexValue.value;
     patientDetailModel.responseData?.email = emailAddressController.text;
-    patientDetailModel.responseData?.visitTime = '${strVisit_time}Z';
-    patientDetailModel.responseData?.visitDate = '${visitDate.value}Z';
+    // patientDetailModel.responseData?.visitTime = '${strVisit_time}Z';
+    patientDetailModel.responseData?.visitDate =
+        DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+
+    DateTime d = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "2025-10-07T16:42:11").toLocal();
+
+    String date = visitDateController.text;
+    String? time = selectedVisitTimeValue.value;
+
+    print("time and date is $date $time");
+
+    DateTime dt = DateFormat("MM/dd/yyyy hh:mm a").parse("$date $time").toLocal();
+    patientDetailModel.responseData?.visitTime = dt.toIso8601String();
+
+    print(" time is ${DateFormat("hh a").format(d)} ");
 
     // param['first_name'] = firstNameController.text;
     // param['middle_name'] = middleNameController.text;
@@ -307,47 +361,15 @@ class EditPatentDetailsController extends GetxController {
     print("param is :- ${patientDetailModel.responseData?.toJson()}");
 
     try {
-      dynamic response = await _editPatientDetailsRepository.updatePatient(id: patientDetailModel.responseData!.patientId!, param: patientDetailModel.responseData!.toJson());
+      dynamic response = await _editPatientDetailsRepository.updatePatient(
+          id: patientId, param: patientDetailModel.responseData!.toJson());
       isLoading.value = false;
       print("_editPatientDetailsRepository response is ${response} ");
-      Get.back();
+      Get.back(result: 1);
     } catch (error) {
       isLoading.value = false;
       print("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
-    }
-  }
-
-  DateTime mergeDateAndTimeFromString(String dateString, String timeString) {
-    DateTime dateTime = DateTime.parse(dateString); // Convert string to DateTime
-
-    // Parse the time to extract hour and minute
-    DateTime time = parseTime(timeString);
-
-    // Return a new DateTime with merged date and time
-    return DateTime(dateTime.year, dateTime.month, dateTime.day, time.hour, time.minute);
-  }
-
-  DateTime parseTime(String timeString) {
-    // Extract the hour and minute, and convert to 24-hour format
-    RegExp timeRegExp = RegExp(r"(\d{1,2}):(\d{2}) (AM|PM)");
-    Match? match = timeRegExp.firstMatch(timeString);
-
-    if (match != null) {
-      int hour = int.parse(match.group(1)!);
-      int minute = int.parse(match.group(2)!);
-      String period = match.group(3)!;
-
-      // Convert hour to 24-hour format
-      if (period == "PM" && hour != 12) {
-        hour += 12;
-      } else if (period == "AM" && hour == 12) {
-        hour = 0;
-      }
-
-      return DateTime(0, 1, 1, hour, minute); // Return DateTime with hour and minute only
-    } else {
-      throw FormatException("Invalid time format.");
     }
   }
 }
