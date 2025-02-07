@@ -203,7 +203,7 @@ class AddPatientController extends GetxController {
     print(visitDateController.text);
     print(selectedVisitTime.value);
 
-    DateTime dt = DateFormat("dd/MM/yyyy hh a").parse("$date $time");
+    DateTime dt = DateFormat("dd/MM/yyyy hh a").parse("$date $time").toLocal();
     print(" time is  ${dt.toIso8601String()}");
     param['visit_time'] = dt.toIso8601String();
 

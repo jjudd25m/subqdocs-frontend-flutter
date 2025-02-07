@@ -65,6 +65,7 @@ class HomeScheduleListView extends GetView<HomeController> {
 
                                     Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                       "patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                      "fromSchedule": false
                                     });
                                   },
                                   value: "",
@@ -78,6 +79,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                   onTap: () async {
                                     final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
                                       "patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                      "fromSchedule": false
                                     });
 
                                     if (result == 1) {

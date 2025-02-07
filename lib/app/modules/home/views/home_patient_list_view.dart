@@ -199,10 +199,12 @@ class HomePatientListView extends GetView<HomeController> {
                     visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
                 itemBuilder: (context) => [
                       PopupMenuItem(
+                          padding: EdgeInsets.zero,
                           onTap: () {
                             // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                             Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                               "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
+                              "fromSchedule": false
                             });
                           },
                           // value: "",
@@ -210,7 +212,6 @@ class HomePatientListView extends GetView<HomeController> {
                             "View",
                             style: AppFonts.regular(14, AppColors.textBlack),
                           )),
-                      PopupMenuDivider(),
                       PopupMenuItem(
                           // value: "",
                           onTap: () async {
@@ -223,6 +224,7 @@ class HomePatientListView extends GetView<HomeController> {
 
                             final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
                               "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
+                              "fromSchedule": false
                             });
                             print("our result is $result");
 
