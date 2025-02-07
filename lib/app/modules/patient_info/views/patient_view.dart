@@ -99,7 +99,9 @@ class PatientView extends GetView<PatientInfoController> {
                                                   ListView.builder(
                                                     shrinkWrap: true,
                                                     physics: NeverScrollableScrollPhysics(),
-                                                    itemCount: 4, // Number of items
+                                                    itemCount: controller.patientViewListModel.value?.responseData!.visitNoteDetails
+                                                            .dynamicData[controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]?.length ??
+                                                        0, // Number of items
                                                     itemBuilder: (context, subIndex) {
                                                       return Row(
                                                         children: [
@@ -115,24 +117,7 @@ class PatientView extends GetView<PatientInfoController> {
                                                       );
                                                     },
                                                   ),
-                                                  // Row(
-                                                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                                                  //   children: [
-                                                  //     Text(
-                                                  //       textAlign: TextAlign.start,
-                                                  //       '\u2022',
-                                                  //       style: AppFonts.regular(14, AppColors.textGrey),
-                                                  //     ),
-                                                  //     SizedBox(width: 15),
-                                                  //     Expanded(
-                                                  //         child: Text(
-                                                  //       textAlign: TextAlign.left,
-                                                  //       "No issues were reported with your overall health (no night sweats, skin rashes, chest pain, shortness of breath, fever, or chills).",
-                                                  //       style: AppFonts.regular(14, AppColors.textGrey),
-                                                  //     )),
-                                                  //   ],
-                                                  // ),
-                                                  SizedBox(height: 0),
+                                                  SizedBox(height: 20),
                                                 ],
                                               ),
                                             ),
@@ -432,7 +417,13 @@ class PatientView extends GetView<PatientInfoController> {
             ] else ...[
               Center(
                   child: Column(
-                children: [CircularProgressIndicator(), Text(controller.isPatientViewLoadText.value)],
+                children: [
+                  SizedBox(
+                    height: 90,
+                  ),
+                  CircularProgressIndicator(),
+                  Text(controller.isPatientViewLoadText.value)
+                ],
               ))
             ]
           ]

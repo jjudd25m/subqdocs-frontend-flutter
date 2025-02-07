@@ -43,7 +43,7 @@ class HomePatientListView extends GetView<HomeController> {
                     // Number of columns in the table (for example, 6 here)
                     cellBuilder: _buildTableCell,
                     context: context,
-                    columnWidths: [0.44, 0.05, 0.10, 0.15, 0.15, 0.10], // Set the column widths based on your needs
+                    columnWidths: [0.40, 0.09, 0.10, 0.15, 0.15, 0.10], // Set the column widths based on your needs
                   ),
                   // CustomTable(
                   //   rows: [
@@ -210,10 +210,7 @@ class HomePatientListView extends GetView<HomeController> {
                           padding: EdgeInsets.zero,
                           onTap: () {
                             // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
-                              "fromSchedule": false
-                            });
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(), "fromSchedule": false});
                           },
                           // value: "",
                           child: Padding(
@@ -229,15 +226,12 @@ class HomePatientListView extends GetView<HomeController> {
                           onTap: () async {
                             print("row index is :- ${rowIndex}");
                             print("column index is :- ${colIndex}");
-                            print(
-                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.first.id.toString()} ");
+                            print(" patient id is  ${controller.patientList[rowIndex - 1].visits?.first.id.toString()} ");
 
                             // print(" our element is $");
 
-                            final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
-                              "fromSchedule": false
-                            });
+                            final result =
+                                await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(), "fromSchedule": false});
                             print("our result is $result");
 
                             if (result == 1) {

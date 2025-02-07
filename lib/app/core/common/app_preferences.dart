@@ -44,4 +44,8 @@ class AppPreference {
   Future<void> clearPreference() async {
     await _prefs?.clear();
   }
+
+  Future<void> removeKey(String key) async {
+    await _prefs?.remove(key);
+  }
 }

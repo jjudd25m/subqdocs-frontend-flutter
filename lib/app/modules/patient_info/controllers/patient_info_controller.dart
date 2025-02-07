@@ -51,6 +51,13 @@ class PatientInfoController extends GetxController {
       socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
       socketService.socket.on(
+        "VisitDataStatus",
+        (data) {
+          print("visit data status is :- ${data}");
+        },
+      );
+
+      socketService.socket.on(
         "patientViewStatus",
         (data) {
           var res = data as Map<String, dynamic>;
@@ -107,6 +114,9 @@ class PatientInfoController extends GetxController {
               print("pending");
               isFullTranscriptLoading.value = true;
               isFullTranscriptLoadText.value = message;
+
+              isPatientViewLoading.value = true;
+              isPatientViewLoadText.value = "Patient View under process ";
             } else if (status.toLowerCase() == "inprogress") {
               print("inprogress");
               isFullTranscriptLoading.value = true;

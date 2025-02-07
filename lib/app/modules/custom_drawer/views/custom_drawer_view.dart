@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widgets/drawer_item.dart';
 import '../../../../widgets/rounded_image_widget.dart';
+import '../../../core/common/app_preferences.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/custom_drawer_controller.dart';
 
@@ -134,23 +136,30 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
             SizedBox(
               height: 18.5,
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 35,
-                ),
-                Icon(
-                  Icons.logout,
-                  color: AppColors.textDarkGrey,
-                ), // Dummy logout icon
-                SizedBox(
-                  width: 10.5,
-                ),
-                Text(
-                  "Logout", // Dummy string
-                  style: AppFonts.medium(16, AppColors.textDarkGrey),
-                ),
-              ],
+            GestureDetector(
+              onTap: () async {
+                await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                Get.offAllNamed(Routes.LOGIN);
+              },
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 35,
+                  ),
+                  Icon(
+                    Icons.logout,
+                    color: AppColors.textDarkGrey,
+                  ), // Dummy logout icon
+                  SizedBox(
+                    width: 10.5,
+                  ),
+                  Text(
+                    "Logout", // Dummy string
+                    style: AppFonts.medium(16, AppColors.textDarkGrey),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 40,

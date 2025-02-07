@@ -1302,7 +1302,17 @@ class VisitMainView extends GetView<VisitMainController> {
                                     ),
                                     Expanded(
                                       child: GestureDetector(
-                                        onTap: () {},
+                                        onTap: () async {
+                                          FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                            allowMultiple: false,
+                                            type: FileType.custom,
+                                            allowedExtensions: ['mp3', 'aac', 'm4a'],
+                                          );
+
+                                          print("audio is:- ${result?.files.first.xFile.path}");
+
+                                          controller.submitAudio(File(result?.files.first.path ?? ""));
+                                        },
                                         child: Container(
                                           height: 50,
                                           decoration: BoxDecoration(

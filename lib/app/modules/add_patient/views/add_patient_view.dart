@@ -144,8 +144,7 @@ class AddPatientView extends GetView<AddPatientController> {
                     child: Container(
                         color: AppColors.ScreenBackGround,
                         child: Padding(
-                          padding:
-                              const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                          padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                           child: ListView(
                             physics: BouncingScrollPhysics(),
                             padding: EdgeInsets.zero,
@@ -153,8 +152,7 @@ class AddPatientView extends GetView<AddPatientController> {
                               Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration:
-                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -200,8 +198,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                     Row(
                                       children: [
                                         BaseImageView(
-                                          imageUrl:
-                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                           width: 60,
                                           height: 60,
                                         ),
@@ -332,8 +329,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             readOnly: true,
                                             label: "Visit Date",
                                             onTap: () {
-                                              controller.showVisitDateCupertinoDatePicker(
-                                                  context, controller.visitDateController);
+                                              controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
                                             },
                                             controller: controller.visitDateController,
                                             hint: "10/12/2024",
@@ -414,11 +410,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(1),
                                           child: ExpansionTile(
-                                            shape: OutlineInputBorder(
-                                                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                             backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                            collapsedShape: OutlineInputBorder(
-                                                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                             collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                             title: Container(
                                               child: Row(
@@ -464,8 +458,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                         width: 120,
                                                                         height: 120,
                                                                         child: ClipRRect(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              10), // Set the radius here
+                                                                          borderRadius: BorderRadius.circular(10), // Set the radius here
                                                                           child: Image.network(
                                                                             "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
                                                                             fit: BoxFit.cover,
@@ -477,16 +470,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                       ),
                                                                       Text(
                                                                         "Recording 1",
-                                                                        style: AppFonts.regular(
-                                                                            12, AppColors.textDarkGrey),
+                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
                                                                       ),
                                                                       SizedBox(
                                                                         height: 6,
                                                                       ),
                                                                       Text(
                                                                         "10/19/2024",
-                                                                        style: AppFonts.regular(
-                                                                            12, AppColors.textDarkGrey),
+                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -494,8 +485,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                               ),
                                                             );
                                                           },
-                                                          separatorBuilder: (context, index) =>
-                                                              const SizedBox(width: Dimen.margin15),
+                                                          separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
                                                           itemCount: 8,
                                                         ))),
                                               ),
@@ -578,9 +568,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                           width: Dimen.margin6,
                                         ),
                                         Container(
-                                          decoration: BoxDecoration(
-                                              color: AppColors.backgroundPurple,
-                                              borderRadius: BorderRadius.circular(6)),
+                                          decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
                                           width: 98,
                                           height: 40,
                                           child: Padding(
@@ -601,8 +589,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 ),
                                                 PopupMenuButton<String>(
                                                     offset: const Offset(14, -70),
-                                                    shape:
-                                                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                     color: AppColors.white,
                                                     position: PopupMenuPosition.over,
                                                     padding: EdgeInsetsDirectional.zero,
@@ -638,9 +625,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       padding: const EdgeInsets.only(left: 8.0),
                                                       child: SvgPicture.asset(
                                                         ImagePath.downArrow,
-                                                        width: 20,
-                                                        colorFilter: ColorFilter.mode(
-                                                            AppColors.backgroundWhite, BlendMode.srcIn),
+                                                        width: 18,
+                                                        colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
                                                       ),
                                                     )),
                                               ],

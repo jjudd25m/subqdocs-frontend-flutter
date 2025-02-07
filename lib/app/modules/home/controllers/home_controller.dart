@@ -113,7 +113,9 @@ class HomeController extends GetxController {
     param['page'] = page;
     param['limit'] = "1000";
     param['isPastPatient'] = 'false';
-    param['search'] = searchController.text;
+    if (searchController.text.isNotEmpty) {
+      param['search'] = searchController.text;
+    }
 
     List<Map<String, dynamic>> sorting = [
       {"id": "first_name", "desc": sortName},

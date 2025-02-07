@@ -35,9 +35,16 @@ class HomeScheduleListView extends GetView<HomeController> {
                   return colIndex == 0 && rowIndex != 0
                       ? Row(
                           children: [
-                            RoundedImageWidget(
-                              size: 28,
-                              imagePath: "assets/images/user.png",
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                  "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                });
+                              },
+                              child: RoundedImageWidget(
+                                size: 28,
+                                imagePath: "assets/images/user.png",
+                              ),
                             ),
                             SizedBox(
                               width: 10,
@@ -69,14 +76,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         onTap: () {
-                                          print(
-                                              "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                          print("visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
-                                          Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                            "patientData":
-                                                controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                            "fromSchedule": false
-                                          });
+                                          Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
                                         },
                                         value: "",
                                         child: Padding(
@@ -90,11 +92,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         padding: EdgeInsets.zero,
                                         value: "",
                                         onTap: () async {
-                                          final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                                            "patientData":
-                                                controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                            "fromSchedule": true
-                                          });
+                                          final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
+                                              arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": true});
 
                                           if (result == 1) {
                                             controller.getScheduleVisitList();
@@ -123,8 +122,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         padding: EdgeInsets.zero,
                                         value: "",
                                         onTap: () {
-                                          controller
-                                              .deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
+                                          controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
                                         },
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +165,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                 },
                 columnCount: 6,
                 context: context,
-                columnWidths: [0.40, 0.20, 0.05, 0.1, 0.15, 0.10],
+                columnWidths: [0.38, 0.20, 0.07, 0.1, 0.15, 0.10],
               );
       }),
     );

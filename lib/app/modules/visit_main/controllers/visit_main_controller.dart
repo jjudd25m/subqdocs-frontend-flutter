@@ -24,9 +24,14 @@ class VisitMainController extends GetxController {
   List<String> patientType = ["New Patient", "Old Patient"];
   RxnString selectedMedicalAssistant = RxnString();
 
+  RxString visitId = RxString("");
+
   @override
   void onInit() {
     super.onInit();
+
+    visitId.value = Get.arguments["visitId"];
+    print("visit id is :- $visitId");
   }
 
   @override
@@ -44,7 +49,7 @@ class VisitMainController extends GetxController {
   Future<void> submitAudio(File audioFile) async {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: "1");
+    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
     print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
     Get.toNamed(Routes.PATIENT_INFO, arguments: {

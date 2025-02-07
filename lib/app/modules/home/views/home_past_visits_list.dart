@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -64,7 +65,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                     child: Text(
                                       cellData,
                                       textAlign: TextAlign.center,
-                                      style: AppFonts.medium(14, AppColors.orangeText),
+                                      style: AppFonts.medium(13, AppColors.orangeText),
                                     ),
                                   ),
                                 ),
@@ -87,14 +88,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                print(
-                                                    "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                                print("visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
-                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                                  "patientData":
-                                                      controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                                  "fromSchedule": false
-                                                });
+                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
                                               },
                                               value: "",
                                               child: Padding(
@@ -111,11 +107,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
                                                 final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
-                                                    arguments: {
-                                                      "patientData":
-                                                          controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                                      "fromSchedule": false
-                                                    });
+                                                    arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
 
                                                 if (result == 1) {
                                                   controller.getScheduleVisitList();
@@ -144,8 +136,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               value: "",
                                               onTap: () {
-                                                controller.deletePatientById(
-                                                    controller.scheduleVisitList[rowIndex - 1].visitId);
+                                                controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
                                               },
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +171,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                       )
                                     : Text(
                                         cellData,
+                                        maxLines: 2,
                                         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                         style: AppFonts.regular(14, AppColors.textDarkGrey),
                                         softWrap: true, // Allows text to wrap
@@ -188,7 +180,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                   },
                   columnCount: 7,
                   context: context,
-                  columnWidths: [0.27, 0.13, 0.08, 0.09, 0.14, 0.20, 0.10],
+                  columnWidths: [0.25, 0.17, 0.08, 0.08, 0.12, 0.20, 0.09],
                 ),
         );
       },
@@ -199,13 +191,16 @@ class HomePastVisitsList extends GetView<HomeController> {
     List<List<String>> rows = [];
 
     // Add header row first
-    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous Visits", "Status", "Action"]);
+    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"]);
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
+      DateTime parsedDate = DateTime.parse(patient.visitDate ?? "").toLocal(); // Convert to local time if needed
+
+      String formattedDate = DateFormat('MM/dd hh:mm a').format(parsedDate);
       rows.add([
         "${patient.lastName}, ${patient.firstName}", // Patient Name
-        patient.visitDate ?? "N/A", // Last Visit Date
+        formattedDate ?? "N/A", // Last Visit Date
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
         patient.previousVisitCount.toString() ?? "N/A", // Last Visit Date
