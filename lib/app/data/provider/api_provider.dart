@@ -88,17 +88,17 @@ class ApiProvider {
       for (String key in files.keys) {
         formData.files.add(MapEntry(
             key,
-            await MultipartFile.fromFile(
-              files[key]!.path,
-              // filename: files[key]!.path.split(Platform.pathSeparator).last,
-              // contentType: DioMediaType.parse(mimeTye),
-            )));
+            await MultipartFile.fromFile(files[key]!.path, contentType: DioMediaType.parse(mimeTye)
+                // filename: files[key]!.path.split(Platform.pathSeparator).last,
+                // contentType: DioMediaType.parse(mimeTye),
+                )));
       }
 
       if (getApiHeader() != null) {
-        dio.options.headers["Content-Disposition"] = "multipart/form-data";
-        // dio.options.headers["Content-Type"] = "multipart/form-data";
+        // dio.options.headers["Content-Disposition"] = "multipart/form-data";
+        dio.options.headers["Content-Type"] = "multipart/form-data";
         dio.options.headers["Authorization"] = "Bearer $token";
+        print("header is:- ${dio.options.headers}");
         // dio.options.headers = getApiHeader();
         // dio.options.headers['Content-Type'] = mimeTye;
       }

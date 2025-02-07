@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,6 +19,7 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widget/custom_textfiled.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
+import '../../../data/service/recorder_service.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/visit_main_controller.dart';
 
@@ -47,10 +51,8 @@ class VisitMainView extends GetView<VisitMainController> {
                             children: <Widget>[
                               SizedBox(height: 20.0),
                               ExpansionTile(
-                                collapsedShape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                shape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Padding(
@@ -66,8 +68,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                         width: 11,
                                       ),
                                       BaseImageView(
-                                        imageUrl:
-                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                         width: 60,
                                         height: 60,
                                       ),
@@ -194,8 +195,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                               height: 6,
                                             ),
                                             PopupMenuButton<String>(
-                                                shape: const RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                                                 offset: const Offset(0, 5),
                                                 color: AppColors.white,
                                                 position: PopupMenuPosition.over,
@@ -209,20 +209,16 @@ class VisitMainView extends GetView<VisitMainController> {
                                                             // controller.isSelectedAttchmentOption.value = 0;
                                                           },
                                                           // height: 30,
-                                                          padding: const EdgeInsets.only(
-                                                              top: 10, bottom: 8, left: 8, right: 8),
+                                                          padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                           child: Container(
                                                             width: 200,
                                                             child: Column(
                                                               children: [
                                                                 const SizedBox(width: 5),
                                                                 Container(
-                                                                  padding:
-                                                                      EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                                                                   decoration: BoxDecoration(
-                                                                    border: Border.all(
-                                                                        color:
-                                                                            AppColors.textGrey.withValues(alpha: 0.5)),
+                                                                    border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                                                     // color: AppColors.backgroundWhite,
                                                                     borderRadius: BorderRadius.circular(8),
                                                                   ),
@@ -240,10 +236,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                         width: 120,
                                                                         child: TextField(
                                                                           maxLines: 1, //or null
-                                                                          decoration: InputDecoration.collapsed(
-                                                                              hintText: "Search",
-                                                                              hintStyle: AppFonts.regular(
-                                                                                  14, AppColors.textGrey)),
+                                                                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -256,8 +249,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                     itemBuilder: (context, index) => InkWell(
                                                                           onTap: () {},
                                                                           child: Padding(
-                                                                            padding: const EdgeInsets.symmetric(
-                                                                                horizontal: 10),
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
                                                                             child: Column(
                                                                               children: [
                                                                                 SizedBox(height: 10),
@@ -272,8 +264,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                                     Text(
                                                                                       textAlign: TextAlign.center,
                                                                                       "Missie Cooper",
-                                                                                      style: AppFonts.regular(
-                                                                                          15, AppColors.textPurple),
+                                                                                      style: AppFonts.regular(15, AppColors.textPurple),
                                                                                     ),
                                                                                   ],
                                                                                 ),
@@ -377,10 +368,8 @@ class VisitMainView extends GetView<VisitMainController> {
                               SizedBox(height: 10.0),
                               ExpansionTile(
                                 childrenPadding: EdgeInsets.all(0),
-                                collapsedShape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                shape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Row(
@@ -452,10 +441,8 @@ class VisitMainView extends GetView<VisitMainController> {
                               SizedBox(height: 10),
                               ExpansionTile(
                                 childrenPadding: EdgeInsets.all(0),
-                                collapsedShape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                shape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Row(
@@ -514,8 +501,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 backgroundColor: AppColors.white, // Custom background color
                                                 needBorder: true, // Show border
                                                 textColor: AppColors.backgroundPurple, // Custom text color
-                                                padding:
-                                                    EdgeInsets.symmetric(vertical: 0, horizontal: 12), // Custom padding
+                                                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12), // Custom padding
                                                 radius: 6, // Custom border radius
                                               ),
                                             ),
@@ -541,10 +527,8 @@ class VisitMainView extends GetView<VisitMainController> {
                               SizedBox(height: 10),
                               ExpansionTile(
                                 childrenPadding: EdgeInsets.all(0),
-                                collapsedShape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                shape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Row(
@@ -577,8 +561,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                             height: 25,
                                             child: TextField(
                                               maxLines: 1,
-                                              textAlignVertical:
-                                                  TextAlignVertical.center, // Centers the text vertically
+                                              textAlignVertical: TextAlignVertical.center, // Centers the text vertically
                                               decoration: InputDecoration.collapsed(
                                                 hintText: "Search",
                                                 hintStyle: AppFonts.regular(14, AppColors.textGrey),
@@ -656,10 +639,8 @@ class VisitMainView extends GetView<VisitMainController> {
                               SizedBox(height: 10),
                               ExpansionTile(
                                 childrenPadding: EdgeInsets.all(0),
-                                collapsedShape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                shape: OutlineInputBorder(
-                                    borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Row(
@@ -684,8 +665,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                       width: 10,
                                     ),
                                     PopupMenuButton<String>(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
                                         offset: const Offset(0, 5),
                                         color: AppColors.white,
                                         position: PopupMenuPosition.over,
@@ -707,19 +687,11 @@ class VisitMainView extends GetView<VisitMainController> {
                                                         ImagePath.document_attchment,
                                                         width: 30,
                                                         height: 30,
-                                                        colorFilter: ColorFilter.mode(
-                                                            controller.isSelectedAttchmentOption.value == 0
-                                                                ? AppColors.backgroundPurple
-                                                                : AppColors.textDarkGrey,
-                                                            BlendMode.srcIn),
+                                                        colorFilter:
+                                                            ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                       ),
                                                       const SizedBox(width: 8),
-                                                      Text("Document",
-                                                          style: AppFonts.medium(
-                                                              17,
-                                                              controller.isSelectedAttchmentOption.value == 0
-                                                                  ? AppColors.backgroundPurple
-                                                                  : AppColors.textBlack)),
+                                                      Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                                       const SizedBox(width: 5),
                                                       if (controller.isSelectedAttchmentOption.value == 0) ...[
                                                         SvgPicture.asset(
@@ -742,18 +714,10 @@ class VisitMainView extends GetView<VisitMainController> {
                                                       SvgPicture.asset(ImagePath.image_attchment,
                                                           width: 30,
                                                           height: 30,
-                                                          colorFilter: ColorFilter.mode(
-                                                              controller.isSelectedAttchmentOption.value == 1
-                                                                  ? AppColors.backgroundPurple
-                                                                  : AppColors.textDarkGrey,
-                                                              BlendMode.srcIn)),
+                                                          colorFilter:
+                                                              ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
                                                       const SizedBox(width: 8),
-                                                      Text("Image",
-                                                          style: AppFonts.medium(
-                                                              17,
-                                                              controller.isSelectedAttchmentOption.value == 1
-                                                                  ? AppColors.backgroundPurple
-                                                                  : AppColors.textBlack)),
+                                                      Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                                       const SizedBox(width: 5),
                                                       if (controller.isSelectedAttchmentOption.value == 1) ...[
                                                         SvgPicture.asset(
@@ -777,19 +741,11 @@ class VisitMainView extends GetView<VisitMainController> {
                                                         ImagePath.date_attchment,
                                                         width: 30,
                                                         height: 30,
-                                                        colorFilter: ColorFilter.mode(
-                                                            controller.isSelectedAttchmentOption.value == 2
-                                                                ? AppColors.backgroundPurple
-                                                                : AppColors.textDarkGrey,
-                                                            BlendMode.srcIn),
+                                                        colorFilter:
+                                                            ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                       ),
                                                       const SizedBox(width: 8),
-                                                      Text("Date",
-                                                          style: AppFonts.medium(
-                                                              17,
-                                                              controller.isSelectedAttchmentOption.value == 2
-                                                                  ? AppColors.backgroundPurple
-                                                                  : AppColors.textBlack)),
+                                                      Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                                       const SizedBox(width: 5),
                                                       if (controller.isSelectedAttchmentOption.value == 2) ...[
                                                         SvgPicture.asset(
@@ -830,9 +786,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                             width: 120,
                                             child: TextField(
                                               maxLines: 1, //or null
-                                              decoration: InputDecoration.collapsed(
-                                                  hintText: "Search",
-                                                  hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                              decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                             ),
                                           ),
                                         ],
@@ -870,16 +824,13 @@ class VisitMainView extends GetView<VisitMainController> {
                                                           height: 120,
                                                           width: 120,
                                                           decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: AppColors.buttonBackgroundGrey
-                                                                    .withValues(alpha: 0.8)),
+                                                            border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
                                                             // color: AppColors.backgroundWhite,
                                                             borderRadius: BorderRadius.circular(8),
                                                           ),
                                                           padding: const EdgeInsets.only(bottom: Dimen.margin2),
                                                           child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(8), // Add rounded corners here
+                                                              borderRadius: BorderRadius.circular(8), // Add rounded corners here
                                                               child: Container(
                                                                   color: AppColors.backgroundPdfAttchment,
                                                                   width: 120,
@@ -893,8 +844,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                             fit: BoxFit.contain,
                                                                           )
                                                                         : BaseImageView(
-                                                                            imageUrl:
-                                                                                "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+                                                                            imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
                                                                             width: 120,
                                                                             height: 120,
                                                                           ),
@@ -1001,8 +951,7 @@ class VisitMainView extends GetView<VisitMainController> {
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Container(
                       // color: AppColors.backgroundWhite,
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Row(
                         spacing: 15,
@@ -1010,14 +959,24 @@ class VisitMainView extends GetView<VisitMainController> {
                         children: [
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                  builder: (BuildContext context) {
-                                    return ViewAttchmentImage(); // Our custom dialog
-                                  },
+                              onTap: () async {
+                                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                  allowMultiple: false,
+                                  type: FileType.custom,
+                                  allowedExtensions: ['mp3', 'aac', 'm4a'],
                                 );
+
+                                print("audio is:- ${result?.files.first.xFile.path}");
+
+                                controller.submitAudio(File(result?.files.first.path ?? ""));
+
+                                // showDialog(
+                                //   context: context,
+                                //   barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                //   builder: (BuildContext context) {
+                                //     return ViewAttchmentImage(); // Our custom dialog
+                                //   },
+                                // );
                               },
                               child: Container(
                                 height: 81,
@@ -1199,17 +1158,13 @@ class VisitMainView extends GetView<VisitMainController> {
                                 height: 50,
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                                 // color: AppColors.backgroundPurple,
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.backgroundLightGrey.withValues(alpha: 0.9),
-                                        spreadRadius: 6,
-                                        blurRadius: 4.0,
-                                      )
-                                    ],
-                                    borderRadius:
-                                        BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(12)),
-                                    color: AppColors.backgroundPurple),
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.backgroundLightGrey.withValues(alpha: 0.9),
+                                    spreadRadius: 6,
+                                    blurRadius: 4.0,
+                                  )
+                                ], borderRadius: BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(12)), color: AppColors.backgroundPurple),
                                 child: Row(
                                   children: [
                                     Text(
@@ -1248,37 +1203,48 @@ class VisitMainView extends GetView<VisitMainController> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Column(
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImagePath.pause_recording,
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        "Pause",
-                                        style: AppFonts.medium(17, AppColors.textGrey),
-                                      ),
-                                    ],
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await controller.recorderService.startRecording();
+                                    },
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                          ImagePath.pause_recording,
+                                          height: 50,
+                                          width: 50,
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          "Pause",
+                                          style: AppFonts.medium(17, AppColors.textGrey),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(width: 20),
-                                  Column(
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImagePath.stop_recording,
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        "Stop",
-                                        style: AppFonts.medium(17, AppColors.textGrey),
-                                      ),
-                                    ],
-                                  )
+                                  GestureDetector(
+                                      onTap: () async {
+                                        File? audioFile = await controller.recorderService.stopRecording();
+                                        print("audio file url is :- ${audioFile?.absolute}");
+                                        controller.submitAudio(audioFile!);
+                                      },
+                                      child: Column(
+                                        children: [
+                                          SvgPicture.asset(
+                                            ImagePath.stop_recording,
+                                            height: 50,
+                                            width: 50,
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Stop",
+                                            style: AppFonts.medium(17, AppColors.textGrey),
+                                          ),
+                                        ],
+                                      ))
                                 ],
                               ),
                               SizedBox(height: 20),
@@ -1309,8 +1275,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                         child: Container(
                                           height: 50,
                                           decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
+                                            border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
                                             color: AppColors.white,
                                             borderRadius: BorderRadius.circular(8),
                                           ),
@@ -1380,8 +1345,7 @@ class VisitMainView extends GetView<VisitMainController> {
                         Container(
                           width: 340,
                           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                          decoration:
-                              BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.backgroundBlack),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.backgroundBlack),
                           child: Row(
                             children: [
                               SvgPicture.asset(
@@ -1410,16 +1374,28 @@ class VisitMainView extends GetView<VisitMainController> {
                               SizedBox(
                                 height: 20,
                               ),
-                              SvgPicture.asset(
-                                ImagePath.pause_white,
-                                height: 45,
-                                width: 45,
+                              GestureDetector(
+                                onTap: () async {
+                                  await controller.recorderService.startRecording();
+                                },
+                                child: SvgPicture.asset(
+                                  ImagePath.pause_white,
+                                  height: 45,
+                                  width: 45,
+                                ),
                               ),
                               SizedBox(width: 10),
-                              SvgPicture.asset(
-                                ImagePath.stop_recording,
-                                height: 45,
-                                width: 45,
+                              GestureDetector(
+                                onTap: () async {
+                                  File? audioFile = await controller.recorderService.stopRecording();
+                                  print("audio file url is :- ${audioFile?.absolute}");
+                                  controller.submitAudio(audioFile!);
+                                },
+                                child: SvgPicture.asset(
+                                  ImagePath.stop_recording,
+                                  height: 45,
+                                  width: 45,
+                                ),
                               ),
                               SizedBox(width: 10),
                               GestureDetector(
