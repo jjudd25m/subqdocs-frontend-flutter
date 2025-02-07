@@ -336,7 +336,7 @@ class EditPatentDetailsController extends GetxController {
 
     print("time and date is $date $time");
 
-    DateTime dt = DateFormat("MM/dd/yyyy hh:mm a").parse("$date $time");
+    DateTime dt = DateFormat("MM/dd/yyyy hh:mm a").parse("$date $time").toLocal();
     patientDetailModel.responseData?.visitTime = dt.toIso8601String();
 
     print(" time is ${DateFormat("hh a").format(d)} ");
