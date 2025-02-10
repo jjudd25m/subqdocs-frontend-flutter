@@ -8,10 +8,13 @@ class CustomTable extends StatelessWidget {
   final int columnCount;
   BuildContext context;
 
+  final VoidCallback? onLoadMore;
+
   List<double> columnWidths;
 
   CustomTable(
       {required this.rows,
+      this.onLoadMore,
       required this.cellBuilder,
       required this.columnCount,
       required this.context,
@@ -22,29 +25,39 @@ class CustomTable extends StatelessWidget {
     // Get screen width
     double screenWidth = MediaQuery.of(context).size.width - 100;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: AppColors.appbarBorder),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Column(
-            children: [
-              for (int rowIndex = 0; rowIndex < rows.length; rowIndex++)
-                Column(
-                  children: [
-                    _buildTableRow(rowIndex, screenWidth),
-                    _buildDivider(),
-                  ],
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return NotificationListener(
+        onNotification: (notification) {
+          if (notification is ScrollEndNotification) {
+            if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent) {
+              print("Load more: listview end");
+
+              onLoadMore != null ? onLoadMore!() : null;
+            }
+          }
+          return false;
+        },
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 1, color: AppColors.appbarBorder),
+              ),
+              padding: const EdgeInsets.all(2),
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  print(index);
+                  return _buildTableRow(index, screenWidth);
+                },
+                itemCount: rows.length,
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _buildTableRow(int rowIndex, double screenWidth) {
@@ -74,13 +87,6 @@ class CustomTable extends StatelessWidget {
             ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDivider() {
-    return Divider(
-      height: 0,
-      color: Colors.black,
     );
   }
 }

@@ -31,6 +31,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                   ),
                 )
               : CustomTable(
+                  onLoadMore: () => controller.getPastVisitListFetchMore(),
                   rows: _getTableRows(controller.pastVisitList),
                   cellBuilder: (context, rowIndex, colIndex, cellData) {
                     return colIndex == 0 && rowIndex != 0
@@ -88,9 +89,14 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                print("visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                                print(
+                                                    "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
-                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
+                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                                                  "patientData":
+                                                      controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                                  "fromSchedule": false
+                                                });
                                               },
                                               value: "",
                                               child: Padding(
@@ -107,7 +113,11 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
                                                 final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
-                                                    arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
+                                                    arguments: {
+                                                      "patientData":
+                                                          controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                                      "fromSchedule": false
+                                                    });
 
                                                 if (result == 1) {
                                                   controller.getScheduleVisitList();
@@ -136,7 +146,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               value: "",
                                               onTap: () {
-                                                controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
+                                                controller.deletePatientById(
+                                                    controller.scheduleVisitList[rowIndex - 1].visitId);
                                               },
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,

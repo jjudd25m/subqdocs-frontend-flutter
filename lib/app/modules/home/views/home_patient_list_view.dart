@@ -17,135 +17,25 @@ class HomePatientListView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-          controller.patientLoadMore();
-        }
-        return false;
-      },
-      child: Obx(() {
-        return controller.patientList.isEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "No Patients Found",
-                  style: AppFonts.medium(20, AppColors.black),
-                ),
-              )
-            : SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: CustomTable(
-                    rows: _getTableRows(controller.patientList),
-                    columnCount: 6,
-                    // Number of columns in the table (for example, 6 here)
-                    cellBuilder: _buildTableCell,
-                    context: context,
-                    columnWidths: [0.40, 0.09, 0.10, 0.15, 0.15, 0.10], // Set the column widths based on your needs
-                  ),
-                  // CustomTable(
-                  //   rows: [
-                  //     ['Patient Name', 'Age', "Gender", 'Last Visit Date', "Previous Visits", "Action"],
-                  //     ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-                  //     ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-                  //     ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-                  //     ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-                  //     ["Jones, Don", '52', 'Male', '10/12/2024', '2', "Action"],
-                  //   ],
-                  //   cellBuilder: (context, rowIndex, colIndex, cellData) {
-                  //     return colIndex == 0 && rowIndex != 0
-                  //         ? Row(
-                  //             children: [
-                  //               RoundedImageWidget(
-                  //                 size: 28,
-                  //                 imagePath: "assets/images/user.png",
-                  //               ),
-                  //               SizedBox(
-                  //                 width: 10,
-                  //               ),
-                  //               Text(
-                  //                 cellData,
-                  //                 textAlign: TextAlign.center,
-                  //                 style: AppFonts.regular(14, AppColors.textDarkGrey),
-                  //                 softWrap: true, // Allows text to wrap
-                  //                 overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                  //               ),
-                  //             ],
-                  //           )
-                  //         : colIndex == 5 && rowIndex != 0
-                  //             ? PopupMenuButton<String>(
-                  //                 offset: const Offset(0, 8),
-                  //                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                  //                 color: AppColors.white,
-                  //                 position: PopupMenuPosition.under,
-                  //                 padding: EdgeInsetsDirectional.zero,
-                  //                 menuPadding: EdgeInsetsDirectional.zero,
-                  //                 onSelected: (value) {},
-                  //                 style: const ButtonStyle(
-                  //                     padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                  //                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  //                     maximumSize: WidgetStatePropertyAll(Size.zero),
-                  //                     visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                  //                 itemBuilder: (context) => [
-                  //                       PopupMenuItem(
-                  //                           onTap: () {
-                  //                             Get.toNamed(Routes.PATIENT_PROFILE);
-                  //                           },
-                  //                           value: "",
-                  //                           child: Text(
-                  //                             "View",
-                  //                             style: AppFonts.regular(14, AppColors.textBlack),
-                  //                           )),
-                  //                       PopupMenuDivider(),
-                  //                       PopupMenuItem(
-                  //                           value: "",
-                  //                           onTap: () {
-                  //                             Get.toNamed(Routes.EDIT_PATENT_DETAILS);
-                  //                           },
-                  //                           child: Text(
-                  //                             "Edit",
-                  //                             style: AppFonts.regular(14, AppColors.textBlack),
-                  //                           )),
-                  //                       PopupMenuDivider(),
-                  //                       PopupMenuItem(
-                  //                           value: "",
-                  //                           onTap: () {},
-                  //                           child: Text(
-                  //                             "Delete",
-                  //                             style: AppFonts.regular(14, AppColors.textBlack),
-                  //                           ))
-                  //                     ],
-                  //                 child: SvgPicture.asset(
-                  //                   "assets/images/logo_threedots.svg",
-                  //                   width: 20,
-                  //                   height: 20,
-                  //                 ))
-                  //             : rowIndex == 0
-                  //                 ? Text(
-                  //                     cellData,
-                  //                     textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                  //                     style: AppFonts.regular(12, AppColors.black),
-                  //                     softWrap: true, // Allows text to wrap
-                  //                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                  //                   )
-                  //                 : Text(
-                  //                     cellData,
-                  //                     textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                  //                     style: AppFonts.regular(14, AppColors.textDarkGrey),
-                  //                     softWrap: true, // Allows text to wrap
-                  //                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                  //                   );
-                  //   },
-                  //   columnCount: 6,
-                  //   context: context,
-                  //   columnWidths: [0.37, 0.1, 0.08, 0.15, 0.20, 0.1],
-                  // ),
-                ),
-              );
-      }),
-    );
+    return Obx(() {
+      return controller.patientList.isEmpty
+          ? Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                "No Patients Found",
+                style: AppFonts.medium(20, AppColors.black),
+              ),
+            )
+          : CustomTable(
+              rows: _getTableRows(controller.patientList),
+              columnCount: 6,
+              // Number of columns in the table (for example, 6 here)
+              cellBuilder: _buildTableCell,
+              context: context,
+              onLoadMore: () => controller.patientLoadMore(),
+              columnWidths: [0.40, 0.09, 0.10, 0.15, 0.15, 0.10], // Set the column widths based on your needs
+            );
+    });
   }
 
   // This function creates rows from the API model
@@ -210,7 +100,10 @@ class HomePatientListView extends GetView<HomeController> {
                           padding: EdgeInsets.zero,
                           onTap: () {
                             // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(), "fromSchedule": false});
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
+                              "fromSchedule": false
+                            });
                           },
                           // value: "",
                           child: Padding(
@@ -226,12 +119,15 @@ class HomePatientListView extends GetView<HomeController> {
                           onTap: () async {
                             print("row index is :- ${rowIndex}");
                             print("column index is :- ${colIndex}");
-                            print(" patient id is  ${controller.patientList[rowIndex - 1].visits?.first.id.toString()} ");
+                            print(
+                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.first.id.toString()} ");
 
                             // print(" our element is $");
 
-                            final result =
-                                await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(), "fromSchedule": false});
+                            final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
+                              "fromSchedule": false
+                            });
                             print("our result is $result");
 
                             if (result == 1) {
