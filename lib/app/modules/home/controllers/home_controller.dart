@@ -260,7 +260,7 @@ class HomeController extends GetxController {
   Future<void> getPastVisitList() async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
-    param['limit'] = "1";
+    param['limit'] = "20";
     param['isPastPatient'] = 'true';
     param['search'] = searchController.text;
 
@@ -297,7 +297,7 @@ class HomeController extends GetxController {
   Future<void> getPastVisitListFetchMore() async {
     Map<String, dynamic> param = {};
     param['page'] = ++pagePast;
-    param['limit'] = "1";
+    param['limit'] = "20";
     param['isPastPatient'] = 'true';
     param['search'] = searchController.text;
 
