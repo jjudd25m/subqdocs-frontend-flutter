@@ -197,12 +197,16 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               softWrap: true, // Allows text to wrap
                                               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                             ),
-                                            colIndex == controller.colIndex.value && controller.isAsending.value
+                                            colIndex == controller.colIndex.value &&
+                                                    controller.isAsending.value &&
+                                                    colIndex == 6
                                                 ? Icon(
                                                     CupertinoIcons.up_arrow,
                                                     size: 15,
                                                   )
-                                                : colIndex == controller.colIndex.value && !controller.isAsending.value
+                                                : colIndex == controller.colIndex.value &&
+                                                        !controller.isAsending.value &&
+                                                        colIndex == 6
                                                     ? Icon(
                                                         CupertinoIcons.down_arrow,
                                                         size: 15,

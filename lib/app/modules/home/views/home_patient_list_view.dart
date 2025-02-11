@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +9,7 @@ import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
@@ -65,9 +68,12 @@ class HomePatientListView extends GetView<HomeController> {
     return colIndex == 0 && rowIndex != 0
         ? Row(
             children: [
-              RoundedImageWidget(
-                size: 28,
-                imagePath: "assets/images/user.png",
+              BaseImageView(
+                imageUrl: "",
+                height: 28,
+                width: 28,
+                nameLetters: "MT",
+                fontSize: 12,
               ),
               SizedBox(
                 width: 10,

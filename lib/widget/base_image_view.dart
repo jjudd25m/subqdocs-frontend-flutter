@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,7 +8,15 @@ import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
 
 class BaseImageView extends StatelessWidget {
-  const BaseImageView({super.key, required this.imageUrl, this.width, this.height, this.errorWidget, this.nameLetters, this.circleColor, this.fontSize = 24.0});
+  const BaseImageView(
+      {super.key,
+      required this.imageUrl,
+      this.width,
+      this.height,
+      this.errorWidget,
+      this.nameLetters,
+      this.circleColor,
+      this.fontSize = 24.0});
 
   final String imageUrl;
   final double? width;
@@ -57,7 +67,7 @@ class BaseImageView extends StatelessWidget {
             ? Container(
                 width: width ?? 80,
                 height: height ?? 80,
-                color: circleColor ?? Colors.blue,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: circleColor ?? generateDarkRandomColor()),
                 child: Center(
                   child: Text(
                     nameLetters ?? "",
@@ -72,4 +82,16 @@ class BaseImageView extends StatelessWidget {
                 fit: BoxFit.fitWidth,
               );
   }
+}
+
+Color generateDarkRandomColor() {
+  final random = Random();
+
+  // Generate random values for red, green, blue (0 to 127) to ensure a dark color
+  int red = random.nextInt(128); // 0-127 (dark shades)
+  int green = random.nextInt(128); // 0-127 (dark shades)
+  int blue = random.nextInt(128); // 0-127 (dark shades)
+
+  // Return a Color using the generated RGB values
+  return Color.fromRGBO(red, green, blue, 1.0); // Alpha value is 1.0 (fully opaque)
 }
