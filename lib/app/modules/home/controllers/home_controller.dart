@@ -24,6 +24,16 @@ class HomeController extends GetxController {
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
 
+  List<Map<String, dynamic>> sortingPastPatient = [
+    {"id": "first_name", "desc": "false"},
+    {"id": "appointmentTime", "desc": "false"},
+    {"id": "age", "desc": "false"},
+    {"id": "gender", "desc": "false"},
+    {"id": "previousVisitCount", "desc": "false"},
+
+    // Add more sorting parameters as needed
+  ];
+
   bool sortName = false;
 
   final count = 0.obs;
@@ -36,6 +46,9 @@ class HomeController extends GetxController {
 
   var pageSchedule = 1;
   var pagePast = 1;
+
+  RxInt colindex = RxInt(-1);
+  RxBool isAsending = RxBool(false);
 
   @override
   void onInit() {
@@ -58,9 +71,57 @@ class HomeController extends GetxController {
 
   void increment() => count.value++;
 
+  bool? getDescValue(List<Map<String, dynamic>> sorting, String displayName) {
+    // Find the actual key (id) from the name-to-id map
+    String? key = nameToIdMap[displayName];
+
+    if (key == null) {
+      print("Invalid display name: $displayName");
+      return null; // Return null if no matching key is found
+    }
+
+    // Iterate over the sorting list to find the map with the matching 'id'
+    for (var map in sorting) {
+      if (map["id"] == key) {
+        return map["desc"]; // Return the 'desc' value (true/false)
+      }
+    }
+
+    print("No matching 'id' found for $displayName");
+    return null; // Return null if no matching 'id' is found
+  }
+
   void changeScreen(bool isPast) async {
     this.isPast.value = isPast;
     this.isPast.refresh();
+  }
+
+  Map<String, String> nameToIdMap = {
+    "Patient Name": "first_name",
+    "Visit Date": "appointmentTime",
+    "Age": "age",
+    "Gender": "gender",
+    "Previous": "previousVisitCount",
+  };
+
+  List<Map<String, dynamic>> toggleSortDesc(List<Map<String, dynamic>> sorting, String displayName) {
+    // Find the actual key (id) from the name-to-id map
+    String? key = nameToIdMap[displayName];
+
+    if (key == null) {
+      print("Invalid display name: $displayName");
+      return sorting; // Return the original list if no matching key is found
+    }
+
+    // Iterate over the sorting list to find the map with the matching 'id'
+    for (var map in sorting) {
+      if (map["id"] == key) {
+        // Toggle the 'desc' value: if it's true, set it to false, and vice versa
+        map["desc"] = map["desc"] == true ? false : true;
+        break; // Exit loop once we've updated the map
+      }
+    }
+    return sorting;
   }
 
   Future<void> getPatientList({int? page}) async {
@@ -72,7 +133,11 @@ class HomeController extends GetxController {
 
     List<Map<String, dynamic>> sorting = [
       {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
+      {"id": "last_name", "desc": sortName},
+      {"id": "age", "desc": "false"},
+      {"id": "gender", "desc": "false"},
+      {"id": "previousVisitCount", "desc": "false"},
+      {"id": "lastVisitDate", "desc": "false"},
       // Add more sorting parameters as needed
     ];
 
@@ -257,20 +322,14 @@ class HomeController extends GetxController {
     // scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
   }
 
-  Future<void> getPastVisitList() async {
+  Future<void> getPastVisitList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
     param['limit'] = "20";
     param['isPastPatient'] = 'true';
     param['search'] = searchController.text;
 
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
-      // Add more sorting parameters as needed
-    ];
-
-    param["sorting"] = sorting;
+    param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
 
     if (toController.text != "" && fromController.text != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);

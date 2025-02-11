@@ -173,12 +173,43 @@ class HomePastVisitsList extends GetView<HomeController> {
                                       height: 20,
                                     ))
                                 : rowIndex == 0
-                                    ? Text(
-                                        cellData,
-                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                        style: AppFonts.regular(12, AppColors.black),
-                                        softWrap: true, // Allows text to wrap
-                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          print(" data is the $cellData");
+                                          controller.getPastVisitList(sortingName: cellData);
+                                          controller.colindex.value = colIndex;
+
+                                          controller.isAsending.value =
+                                              controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
+                                          controller.colindex.refresh();
+                                          controller.isAsending.refresh();
+                                          print("col index is the $colIndex");
+                                          print(controller.getDescValue(controller.sortingPastPatient, cellData));
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              cellData,
+                                              textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                              style: AppFonts.regular(12, AppColors.black),
+                                              softWrap: true, // Allows text to wrap
+                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                            ),
+                                            colIndex == controller.colindex.value && controller.isAsending.value
+                                                ? Icon(
+                                                    CupertinoIcons.up_arrow,
+                                                    size: 15,
+                                                  )
+                                                : colIndex == controller.colindex.value && !controller.isAsending.value
+                                                    ? Icon(
+                                                        CupertinoIcons.up_arrow,
+                                                        size: 15,
+                                                      )
+                                                    : SizedBox()
+                                          ],
+                                        ),
                                       )
                                     : Text(
                                         cellData,
@@ -191,7 +222,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                   },
                   columnCount: 7,
                   context: context,
-                  columnWidths: [0.25, 0.17, 0.08, 0.08, 0.12, 0.20, 0.09],
+                  columnWidths: [0.22, 0.17, 0.08, 0.11, 0.12, 0.19, 0.10],
                 ),
         );
       },
