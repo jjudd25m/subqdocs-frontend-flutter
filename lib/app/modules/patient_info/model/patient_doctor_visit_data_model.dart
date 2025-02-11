@@ -1,20 +1,20 @@
-class PatientViewListModel {
+class PatientDoctorVisitDataModel {
   ResponseData? responseData;
   String? message;
   bool? toast;
   String? responseType;
 
-  PatientViewListModel({this.responseData, this.message, this.toast, this.responseType});
+  PatientDoctorVisitDataModel({this.responseData, this.message, this.toast, this.responseType});
 
-  PatientViewListModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
+  PatientDoctorVisitDataModel.fromJson(Map<String, dynamic> json) {
+    responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     if (responseData != null) {
       data['responseData'] = responseData!.toJson();
     }
@@ -37,7 +37,7 @@ class VisitNoteDetails {
   // fromJson method
   factory VisitNoteDetails.fromJson(Map<String, dynamic> json) {
     return VisitNoteDetails(
-      yourVisitSummary: json['your_visit_summary'] ?? '',
+      yourVisitSummary: json['visit_details'] ?? '',
       dynamicData: _parseDynamicData(json),
     );
   }
@@ -45,7 +45,7 @@ class VisitNoteDetails {
   // toJson method
   Map<String, dynamic> toJson() {
     return {
-      'your_visit_summary': yourVisitSummary,
+      'visit_details': yourVisitSummary,
       ...dynamicData.map((key, value) => MapEntry(key, value)),
     };
   }
@@ -78,7 +78,7 @@ class ResponseData {
     return ResponseData(
       id: json['id'] ?? 0,
       status: json['status'] ?? '',
-      visitNoteDetails: VisitNoteDetails.fromJson(json['visit_note_details'] ?? {}),
+      visitNoteDetails: VisitNoteDetails.fromJson(json['visit_details'] ?? {}),
     );
   }
 
@@ -87,7 +87,7 @@ class ResponseData {
     return {
       'id': id,
       'status': status,
-      'visit_note_details': visitNoteDetails.toJson(),
+      'visit_details': visitNoteDetails.toJson(),
     };
   }
 }
