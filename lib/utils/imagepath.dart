@@ -47,6 +47,7 @@ class ImagePath {
 
   static const String stop_recording = 'assets/images/stop_recording.svg';
   static const String pause_recording = 'assets/images/pause_recording.svg';
+  static const String start_recording = 'assets/images/resume.svg';
   static const String wave = 'assets/images/wave.png';
 
   static const String uploadImage = 'assets/images/upload_image.svg';

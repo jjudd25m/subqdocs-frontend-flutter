@@ -11,8 +11,8 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
 
-class PatientView extends GetView<PatientInfoController> {
-  const PatientView({super.key});
+class VisitDataView extends GetView<PatientInfoController> {
+  const VisitDataView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class PatientView extends GetView<PatientInfoController> {
                                 children: [
                                   Text(
                                     textAlign: TextAlign.center,
-                                    "Note",
+                                    "Visit Note",
                                     style: AppFonts.medium(16, AppColors.textPurple),
                                   ),
                                   Spacer(),
@@ -90,7 +90,10 @@ class PatientView extends GetView<PatientInfoController> {
                                                     children: [
                                                       Text(
                                                         textAlign: TextAlign.left,
-                                                        controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index).replaceAll("_", " ").capitalizeFirst ??
+                                                        controller.patientDoctorVisitDataModel.value?.responseData?.visitNoteDetails.dynamicData.keys
+                                                                .elementAt(index)
+                                                                .replaceAll("_", " ")
+                                                                .capitalizeFirst ??
                                                             '',
                                                         style: AppFonts.medium(14, AppColors.textBlack),
                                                       )
@@ -100,8 +103,8 @@ class PatientView extends GetView<PatientInfoController> {
                                                   ListView.builder(
                                                     shrinkWrap: true,
                                                     physics: NeverScrollableScrollPhysics(),
-                                                    itemCount: controller.patientViewListModel.value?.responseData!.visitNoteDetails
-                                                            .dynamicData[controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]?.length ??
+                                                    itemCount: controller.patientDoctorVisitDataModel.value?.responseData!.visitNoteDetails
+                                                            .dynamicData[controller.patientDoctorVisitDataModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]?.length ??
                                                         0, // Number of items
                                                     itemBuilder: (context, subIndex) {
                                                       return Row(
@@ -109,8 +112,9 @@ class PatientView extends GetView<PatientInfoController> {
                                                           Expanded(
                                                               child: Text(
                                                             textAlign: TextAlign.left,
-                                                            controller.patientViewListModel.value?.responseData!.visitNoteDetails
-                                                                    .dynamicData[controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]?[subIndex] ??
+                                                            controller.patientDoctorVisitDataModel.value?.responseData!.visitNoteDetails
+                                                                        .dynamicData[controller.patientDoctorVisitDataModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]
+                                                                    ?[subIndex] ??
                                                                 "",
                                                             style: AppFonts.regular(14, AppColors.textGrey),
                                                           )),
@@ -123,7 +127,7 @@ class PatientView extends GetView<PatientInfoController> {
                                               ),
                                             ),
                                           ),
-                                      itemCount: controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.values.length ?? 0),
+                                      itemCount: controller.patientDoctorVisitDataModel.value?.responseData?.visitNoteDetails.dynamicData.values.length ?? 0),
                                   //
                                 ),
                                 SizedBox(
@@ -147,8 +151,8 @@ class PatientView extends GetView<PatientInfoController> {
               ),
             ],
           ),
-          if (controller.isPatientViewLoading.value) ...[
-            if (controller.isPatientViewLoadText.value.toLowerCase() == "failure") ...[
+          if (controller.isVisitDataLoading.value) ...[
+            if (controller.isVisitDataLoadText.value.toLowerCase() == "failure") ...[
               Center(
                   child: Column(
                 children: [
@@ -171,7 +175,7 @@ class PatientView extends GetView<PatientInfoController> {
                     height: 200,
                     fit: BoxFit.fill,
                   ),
-                  Text(controller.isPatientViewLoadText.value)
+                  Text(controller.isVisitDataLoadText.value)
                 ],
               ))
             ]

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -130,7 +131,15 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                         if (controller.isFullTranscriptLoading.value) ...[
                           Center(
                               child: Column(
-                            children: [CircularProgressIndicator(), Text(controller.isFullTranscriptLoadText.value)],
+                            children: [
+                              Lottie.asset(
+                                'assets/lottie/loader.json',
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.fill,
+                              ),
+                              Text(controller.isFullTranscriptLoadText.value)
+                            ],
                           ))
                         ]
                       ],

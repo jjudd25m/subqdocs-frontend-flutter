@@ -6,6 +6,7 @@ import 'package:subqdocs/app/modules/patient_info/views/confirm_finalize_dialog.
 import 'package:subqdocs/app/modules/patient_info/views/doctor_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
+import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -463,6 +464,20 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                             enabledColor: controller.tabIndex.value == 5 ? AppColors.buttonPurpleLight : AppColors.clear,
                                             outLineEnabledColor: AppColors.textGrey,
                                             outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
+                                          )),
+                                          IntrinsicWidth(
+                                              child: CustomAnimatedButton(
+                                            onPressed: () {
+                                              controller.tabIndex.value = 6;
+                                            },
+                                            text: " Visit Data ",
+                                            isOutline: true,
+                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            fontSize: 14,
+                                            enabledTextColor: controller.tabIndex.value == 6 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                            enabledColor: controller.tabIndex.value == 6 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                            outLineEnabledColor: AppColors.textGrey,
+                                            outlineColor: controller.tabIndex.value == 6 ? AppColors.backgroundPurple : AppColors.clear,
                                           ))
                                         ],
                                       ),
@@ -666,6 +681,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                   if (controller.tabIndex.value == 1) ...[FullTranscriptView()],
                                   if (controller.tabIndex.value == 2) ...[PatientView()],
                                   if (controller.tabIndex.value == 3) ...[FullNoteView()],
+                                  if (controller.tabIndex.value == 6) ...[VisitDataView()],
                                   SizedBox(height: 20),
                                 ],
                               );
