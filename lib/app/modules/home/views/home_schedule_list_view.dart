@@ -157,12 +157,38 @@ class HomeScheduleListView extends GetView<HomeController> {
                                 height: 20,
                               ))
                           : rowIndex == 0
-                              ? Text(
-                                  cellData,
-                                  textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                  style: AppFonts.regular(12, AppColors.black),
-                                  softWrap: true, // Allows text to wrap
-                                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                              ? GestureDetector(
+                                  onTap: () {
+                                    print(cellData);
+
+                                    controller.scheduleSorting(cellData: cellData, colIndex: colIndex);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        cellData,
+                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                        style: AppFonts.regular(12, AppColors.black),
+                                        softWrap: true, // Allows text to wrap
+                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                      ),
+                                      colIndex == controller.colindexSchedule.value &&
+                                              controller.isAsendingSchedule.value &&
+                                              colIndex != 5
+                                          ? Icon(
+                                              CupertinoIcons.up_arrow,
+                                              size: 15,
+                                            )
+                                          : colIndex == controller.colindexSchedule.value &&
+                                                  !controller.isAsendingSchedule.value &&
+                                                  colIndex != 5
+                                              ? Icon(
+                                                  CupertinoIcons.down_arrow,
+                                                  size: 15,
+                                                )
+                                              : SizedBox()
+                                    ],
+                                  ),
                                 )
                               : Text(
                                   cellData,
@@ -174,7 +200,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                 },
                 columnCount: 6,
                 context: context,
-                columnWidths: [0.38, 0.20, 0.07, 0.1, 0.15, 0.10],
+                columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
                 onLoadMore: () {
                   controller.getScheduleVisitListFetchMore();
                 },

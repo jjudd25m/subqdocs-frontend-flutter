@@ -33,7 +33,7 @@ class HomePatientListView extends GetView<HomeController> {
               cellBuilder: _buildTableCell,
               context: context,
               onLoadMore: () => controller.patientLoadMore(),
-              columnWidths: [0.40, 0.09, 0.10, 0.15, 0.15, 0.10], // Set the column widths based on your needs
+              columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10], // Set the column widths based on your needs
             );
     });
   }
@@ -183,12 +183,38 @@ class HomePatientListView extends GetView<HomeController> {
                   height: 20,
                 ))
             : rowIndex == 0
-                ? Text(
-                    cellData,
-                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                    style: AppFonts.regular(12, AppColors.black),
-                    softWrap: true, // Allows text to wrap
-                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                ? GestureDetector(
+                    onTap: () {
+                      // controller.sortingSchedulePatient();
+                      controller.patientSorting(colIndex: colIndex, cellData: cellData);
+                      print(cellData);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          cellData,
+                          textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                          style: AppFonts.regular(12, AppColors.black),
+                          softWrap: true, // Allows text to wrap
+                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                        ),
+                        colIndex == controller.colIndexPatient.value &&
+                                controller.isAsendingPatient.value &&
+                                colIndex != 5
+                            ? Icon(
+                                CupertinoIcons.up_arrow,
+                                size: 15,
+                              )
+                            : colIndex == controller.colIndexPatient.value &&
+                                    !controller.isAsendingPatient.value &&
+                                    colIndex != 5
+                                ? Icon(
+                                    CupertinoIcons.down_arrow,
+                                    size: 15,
+                                  )
+                                : SizedBox()
+                      ],
+                    ),
                   )
                 : Text(
                     cellData,

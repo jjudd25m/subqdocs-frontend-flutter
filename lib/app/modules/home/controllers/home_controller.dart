@@ -30,9 +30,41 @@ class HomeController extends GetxController {
     {"id": "age", "desc": "false"},
     {"id": "gender", "desc": "false"},
     {"id": "previousVisitCount", "desc": "false"},
+    {"id": "status", "desc": "false"},
 
     // Add more sorting parameters as needed
   ];
+
+  List<Map<String, dynamic>> sortingSchedulePatient = [
+    {"id": "first_name", "desc": "false"},
+    {"id": "appointmentTime", "desc": "false"},
+    {"id": "age", "desc": "false"},
+    {"id": "gender", "desc": "false"},
+    {"id": "previousVisitCount", "desc": "false"},
+
+    // Add more sorting parameters as needed
+  ];
+
+  List<Map<String, dynamic>> sortingPatientList = [
+    {"id": "first_name", "desc": false},
+    {"id": "lastVisitDate", "desc": false},
+    {"id": "age", "desc": false},
+    {"id": "gender", "desc": false},
+    {"id": "visitCount", "desc": false},
+
+    // Add more sorting parameters as needed
+  ];
+  Map<String, String> nameToIdMap = {
+    "Patient Name": "first_name",
+    "Visit Date": "appointmentTime",
+    "Visit Date & Time": "appointmentTime",
+    "Last Visit Date": "lastVisitDate",
+    "Age": "age",
+    "Gender": "gender",
+    "Previous": "previousVisitCount",
+    "Previous Visits": "previousVisitCount",
+    "Status": "status",
+  };
 
   bool sortName = false;
 
@@ -47,8 +79,14 @@ class HomeController extends GetxController {
   var pageSchedule = 1;
   var pagePast = 1;
 
-  RxInt colindex = RxInt(-1);
+  RxInt colIndex = RxInt(-1);
   RxBool isAsending = RxBool(false);
+
+  RxInt colindexSchedule = RxInt(-1);
+  RxBool isAsendingSchedule = RxBool(false);
+
+  RxInt colIndexPatient = RxInt(-1);
+  RxBool isAsendingPatient = RxBool(false);
 
   @override
   void onInit() {
@@ -83,6 +121,7 @@ class HomeController extends GetxController {
     // Iterate over the sorting list to find the map with the matching 'id'
     for (var map in sorting) {
       if (map["id"] == key) {
+        print("boll is ${map["desc"]}");
         return map["desc"]; // Return the 'desc' value (true/false)
       }
     }
@@ -96,21 +135,17 @@ class HomeController extends GetxController {
     this.isPast.refresh();
   }
 
-  Map<String, String> nameToIdMap = {
-    "Patient Name": "first_name",
-    "Visit Date": "appointmentTime",
-    "Age": "age",
-    "Gender": "gender",
-    "Previous": "previousVisitCount",
-  };
-
   List<Map<String, dynamic>> toggleSortDesc(List<Map<String, dynamic>> sorting, String displayName) {
     // Find the actual key (id) from the name-to-id map
     String? key = nameToIdMap[displayName];
 
     if (key == null) {
       print("Invalid display name: $displayName");
-      return sorting; // Return the original list if no matching key is found
+
+      List<Map<String, dynamic>> empty = [
+        // Add more sorting parameters as needed
+      ];
+      return empty; // Return the original list if no matching key is found
     }
 
     // Iterate over the sorting list to find the map with the matching 'id'
@@ -121,28 +156,19 @@ class HomeController extends GetxController {
         break; // Exit loop once we've updated the map
       }
     }
-    return sorting;
+
+    return sorting.where((map) => map['id'] == key).toList();
   }
 
-  Future<void> getPatientList({int? page}) async {
+  Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
 
     param['page'] = 1;
     param['limit'] = "20";
     param['search'] = searchController.text;
 
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName},
-      {"id": "age", "desc": "false"},
-      {"id": "gender", "desc": "false"},
-      {"id": "previousVisitCount", "desc": "false"},
-      {"id": "lastVisitDate", "desc": "false"},
-      // Add more sorting parameters as needed
-    ];
-
     // Dynamically add sorting to the param map
-    param["sorting"] = sorting;
+    param["sorting"] = toggleSortDesc(sortingPatientList, sortingName ?? "");
 
     if (toController.text != "" && fromController.text != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -224,7 +250,7 @@ class HomeController extends GetxController {
     print("patient list is the :- ${patientList}");
   }
 
-  Future<void> getScheduleVisitList() async {
+  Future<void> getScheduleVisitList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
     param['limit'] = "20";
@@ -233,14 +259,8 @@ class HomeController extends GetxController {
       param['search'] = searchController.text;
     }
 
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
-      // Add more sorting parameters as needed
-    ];
-
     // Dynamically add sorting to the param map
-    param["sorting"] = sorting;
+    param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
 
     if (toController.text != "" && fromController.text != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -436,5 +456,23 @@ class HomeController extends GetxController {
     getScheduleVisitList();
 
     print("deleted data is :- ${deletePatientModel}");
+  }
+
+  void scheduleSorting({String cellData = "", int colIndex = -1}) {
+    getScheduleVisitList(sortingName: cellData);
+    colindexSchedule.value = colIndex;
+
+    isAsendingSchedule.value = getDescValue(sortingSchedulePatient, cellData) ?? false;
+    colindexSchedule.refresh();
+    isAsendingSchedule.refresh();
+  }
+
+  void patientSorting({String cellData = "", int colIndex = -1}) {
+    getPatientList(sortingName: cellData);
+    colIndexPatient.value = colIndex;
+
+    isAsendingPatient.value = getDescValue(sortingPatientList, cellData) ?? false;
+    colIndexPatient.refresh();
+    isAsendingPatient.refresh();
   }
 }

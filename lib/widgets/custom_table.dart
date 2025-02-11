@@ -50,7 +50,6 @@ class CustomTable extends StatelessWidget {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  print(index);
                   return _buildTableRow(index, screenWidth);
                 },
                 itemCount: rows.length,

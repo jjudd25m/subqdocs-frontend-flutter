@@ -177,11 +177,11 @@ class HomePastVisitsList extends GetView<HomeController> {
                                         onTap: () {
                                           print(" data is the $cellData");
                                           controller.getPastVisitList(sortingName: cellData);
-                                          controller.colindex.value = colIndex;
+                                          controller.colIndex.value = colIndex;
 
                                           controller.isAsending.value =
                                               controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
-                                          controller.colindex.refresh();
+                                          controller.colIndex.refresh();
                                           controller.isAsending.refresh();
                                           print("col index is the $colIndex");
                                           print(controller.getDescValue(controller.sortingPastPatient, cellData));
@@ -197,14 +197,14 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               softWrap: true, // Allows text to wrap
                                               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                             ),
-                                            colIndex == controller.colindex.value && controller.isAsending.value
+                                            colIndex == controller.colIndex.value && controller.isAsending.value
                                                 ? Icon(
                                                     CupertinoIcons.up_arrow,
                                                     size: 15,
                                                   )
-                                                : colIndex == controller.colindex.value && !controller.isAsending.value
+                                                : colIndex == controller.colIndex.value && !controller.isAsending.value
                                                     ? Icon(
-                                                        CupertinoIcons.up_arrow,
+                                                        CupertinoIcons.down_arrow,
                                                         size: 15,
                                                       )
                                                     : SizedBox()
