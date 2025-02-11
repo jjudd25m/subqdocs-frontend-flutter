@@ -89,14 +89,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                print(
-                                                    "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                                print("visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
-                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                                  "patientData":
-                                                      controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                                  "fromSchedule": false
-                                                });
+                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
                                               },
                                               value: "",
                                               child: Padding(
@@ -113,11 +108,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
                                                 final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
-                                                    arguments: {
-                                                      "patientData":
-                                                          controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                                      "fromSchedule": false
-                                                    });
+                                                    arguments: {"patientData": controller.scheduleVisitList[rowIndex - 1].visitId.toString(), "fromSchedule": false});
 
                                                 if (result == 1) {
                                                   controller.getScheduleVisitList();
@@ -146,8 +137,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               value: "",
                                               onTap: () {
-                                                controller.deletePatientById(
-                                                    controller.scheduleVisitList[rowIndex - 1].visitId);
+                                                controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
                                               },
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,16 +169,14 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           controller.getPastVisitList(sortingName: cellData);
                                           controller.colIndex.value = colIndex;
 
-                                          controller.isAsending.value =
-                                              controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
+                                          controller.isAsending.value = controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
                                           controller.colIndex.refresh();
                                           controller.isAsending.refresh();
                                           print("col index is the $colIndex");
                                           print(controller.getDescValue(controller.sortingPastPatient, cellData));
                                         },
                                         child: Row(
-                                          mainAxisAlignment:
-                                              colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                          mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               cellData,
@@ -197,16 +185,12 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               softWrap: true, // Allows text to wrap
                                               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                             ),
-                                            colIndex == controller.colIndex.value &&
-                                                    controller.isAsending.value &&
-                                                    colIndex == 6
+                                            colIndex == controller.colIndex.value && controller.isAsending.value && colIndex != 6
                                                 ? Icon(
                                                     CupertinoIcons.up_arrow,
                                                     size: 15,
                                                   )
-                                                : colIndex == controller.colIndex.value &&
-                                                        !controller.isAsending.value &&
-                                                        colIndex == 6
+                                                : colIndex == controller.colIndex.value && !controller.isAsending.value && colIndex != 6
                                                     ? Icon(
                                                         CupertinoIcons.down_arrow,
                                                         size: 15,
