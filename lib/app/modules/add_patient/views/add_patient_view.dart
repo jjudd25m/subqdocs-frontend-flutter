@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
+import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
@@ -45,46 +47,39 @@ class AddPatientView extends GetView<AddPatientController> {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  // void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
-  //   showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return CupertinoActionSheet(
-  //         title: Text(
-  //           "Pick a Date",
-  //           style: AppFonts.medium(16, AppColors.black),
-  //         ),
-  //         actions: <Widget>[
-  //           Container(
-  //             height: 400,
-  //             child: CupertinoDatePicker(
-  //               mode: CupertinoDatePickerMode.date,
-  //               maximumDate: DateTime.now().subtract(Duration(days: 370)),
-  //               initialDateTime: DateTime.now().subtract(Duration(days: 371)),
-  //               onDateTimeChanged: (DateTime newDate) {
-  //                 String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
-  //                 // String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
-  //                 //
-  //                 //
-  //                 //   controller.dob.value = strDate;
-  //
-  //                 control.text = formattedDate;
-  //
-  //                 print('${_selectedDate.toLocal()}'.split(' ')[0]);
-  //               },
-  //             ),
-  //           ),
-  //         ],
-  //         cancelButton: CupertinoActionSheetAction(
-  //           child: Text('Cancel'),
-  //           onPressed: () {
-  //             Navigator.of(context).pop();
-  //           },
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  void showImagePickerDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick an Image'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Pick from Camera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your camera picking logic here
+                  print('Camera selected');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Pick from Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your gallery picking logic here
+                  print('Gallery selected');
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
     showCupertinoModalPopup(
@@ -158,27 +153,30 @@ class AddPatientView extends GetView<AddPatientController> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.back();
-                                          },
-                                          child: SvgPicture.asset(
-                                            ImagePath.arrowLeft,
-                                            fit: BoxFit.cover,
-                                            width: Dimen.margin24,
-                                            height: Dimen.margin24,
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.back();
+                                            },
+                                            child: SvgPicture.asset(
+                                              ImagePath.arrowLeft,
+                                              fit: BoxFit.cover,
+                                              width: Dimen.margin24,
+                                              height: Dimen.margin24,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: Dimen.margin8,
-                                        ),
-                                        Text(
-                                          "Add Patient Details",
-                                          style: AppFonts.regular(18, AppColors.textBlack),
-                                        ),
-                                      ],
+                                          SizedBox(
+                                            width: Dimen.margin8,
+                                          ),
+                                          Text(
+                                            "Add Patient Details",
+                                            style: AppFonts.regular(18, AppColors.textBlack),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(
                                       height: Dimen.margin24,
@@ -197,34 +195,128 @@ class AddPatientView extends GetView<AddPatientController> {
                                     SizedBox(
                                       height: Dimen.margin16,
                                     ),
+                                    Obx(
+                                      () {
+                                        return Row(
+                                          children: [
+                                            controller.profileImage.value?.path != null
+                                                ? RoundedImageFileWidget(
+                                                    imagePath: controller.profileImage.value,
+                                                  )
+                                                : BaseImageView(
+                                                    imageUrl: "",
+                                                    width: 40,
+                                                    height: 40,
+                                                    fontSize: 14,
+                                                    nameLetters: "mihit thakkar",
+                                                  ),
+                                            PopupMenuButton<String>(
+                                              offset: const Offset(0, 8),
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                              color: AppColors.white,
+                                              position: PopupMenuPosition.under,
+                                              padding: EdgeInsetsDirectional.zero,
+                                              menuPadding: EdgeInsetsDirectional.zero,
+                                              onSelected: (value) {},
+                                              style: const ButtonStyle(
+                                                  padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                  maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                  visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem(
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () {
+                                                      controller.pickProfileImage();
+
+                                                      // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                                                    },
+                                                    // value: "",
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          left: 10, right: 20, top: 10, bottom: 10),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.file_copy_sharp,
+                                                            color: AppColors.textDarkGrey,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Text(
+                                                            "Pick From Files",
+                                                            style: AppFonts.regular(16, AppColors.textBlack),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )),
+                                                PopupMenuItem(
+                                                    // value: "",
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () async {
+                                                      controller.captureProfileImage();
+                                                    },
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                          width: double.infinity,
+                                                          height: 1,
+                                                          color: AppColors.appbarBorder,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(
+                                                              left: 10, right: 20, top: 10, bottom: 10),
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(CupertinoIcons.camera),
+                                                              SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              Text(
+                                                                "Take A Photo",
+                                                                style: AppFonts.regular(16, AppColors.textBlack),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )),
+                                              ],
+                                              child: Text(
+                                                "   + Add Profile Image",
+                                                style: AppFonts.regular(14, AppColors.textGrey),
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
                                     Row(
                                       children: [
-                                        BaseImageView(
-                                          imageUrl:
-                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                          width: 60,
-                                          height: 60,
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              label: "Patient Id ",
+                                              // isImportant: true,
+                                              type: TextInputType.number,
+                                              isValid: true,
+                                              format: [FilteringTextInputFormatter.digitsOnly],
+                                              controller: controller.patientId,
+                                              hint: "123",
+                                              checkValidation: (value) {
+                                                return Validation.requiredFiled(value);
+                                              }),
                                         ),
                                         SizedBox(
-                                          width: 12,
+                                          width: Dimen.margin10,
                                         ),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Text(
-                                            "   + Add Profile Image",
-                                            style: AppFonts.regular(14, AppColors.textGrey),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: Dimen.margin16,
-                                    ),
-                                    SizedBox(
-                                      height: Dimen.margin16,
-                                    ),
-                                    Row(
-                                      children: [
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               label: "First Name",
@@ -241,16 +333,18 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
-                                              label: "Middle Name",
-                                              controller: controller.middleNameController,
-                                              hint: "Joseph",
-                                              checkValidation: (value) {
-                                                return Validation.requiredFiled(value);
-                                              }),
+                                            label: "Middle Name",
+                                            controller: controller.middleNameController,
+                                            hint: "Joseph",
+                                          ),
                                         ),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               label: "Last Name",
@@ -261,14 +355,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
                                               }),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: Dimen.margin16,
-                                    ),
-                                    Row(
-                                      children: [
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               onTap: () {
@@ -290,9 +380,17 @@ class AddPatientView extends GetView<AddPatientController> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                "Sex",
-                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "Sex",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                  Text(
+                                                    "*",
+                                                    style: AppFonts.regular(14, AppColors.redText),
+                                                  ),
+                                                ],
                                               ),
                                               SizedBox(
                                                 height: 8,
@@ -311,9 +409,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               label: "Email Address",
@@ -322,14 +424,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                               checkValidation: (value) {
                                                 return Validation.emailValidate(value);
                                               }),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: Dimen.margin16,
-                                    ),
-                                    Row(
-                                      children: [
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
                                         Expanded(
                                           child: TextFormFiledWidget(
                                             readOnly: true,
@@ -341,7 +439,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                             controller: controller.visitDateController,
                                             hint: "10/12/2024",
                                             checkValidation: (value) {
-                                              return Validation.requiredFiled(value);
+                                              return Validation.visitDateAndTimeValidation(
+                                                  value, controller.selectedVisitTimeValue.value);
                                             },
                                             suffixIcon: SvgPicture.asset(ImagePath.calendar),
                                           ),
@@ -369,34 +468,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     controller.selectedVisitTimeValue.value = value;
                                                   },
                                                   selectText: "11 PM",
-                                                );
-                                              })
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Patient Type",
-                                                style: AppFonts.regular(14, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Obx(() {
-                                                return BaseDropdown<String>(
-                                                  valueAsString: (value) => value ?? "",
-                                                  items: controller.patientType,
-                                                  selectedValue: controller.selectedPatientValue.value,
-                                                  onChanged: (value) {
-                                                    controller.selectedPatientValue.value = value;
-                                                  },
-                                                  selectText: "New Patient",
                                                 );
                                               })
                                             ],

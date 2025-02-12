@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:subqdocs/utils/extension.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
@@ -70,7 +71,7 @@ class BaseImageView extends StatelessWidget {
                 decoration: BoxDecoration(shape: BoxShape.circle, color: circleColor ?? generateDarkRandomColor()),
                 child: Center(
                   child: Text(
-                    nameLetters ?? "",
+                    nameLetters?.getFirstTwoWordInitials() ?? "",
                     style: AppFonts.semiBold(fontSize ?? 24.0, AppColors.textWhite),
                   ),
                 ),

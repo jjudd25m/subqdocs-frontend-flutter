@@ -72,7 +72,7 @@ class HomePatientListView extends GetView<HomeController> {
                 imageUrl: "",
                 height: 28,
                 width: 28,
-                nameLetters: "MT",
+                nameLetters: cellData,
                 fontSize: 12,
               ),
               SizedBox(

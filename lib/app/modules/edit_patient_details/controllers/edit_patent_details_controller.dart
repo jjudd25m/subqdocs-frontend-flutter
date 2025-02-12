@@ -15,7 +15,6 @@ class EditPatentDetailsController extends GetxController {
 
   PatientDetailModel patientDetailModel = PatientDetailModel();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
-
   TextEditingController firstNameController = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();

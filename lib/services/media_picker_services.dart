@@ -17,9 +17,9 @@ class MediaPickerServices {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<XFile?> pickImage() async {
+  Future<XFile?> pickImage({bool fromCamera = true}) async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await picker.pickImage(source: fromCamera ? ImageSource.camera : ImageSource.gallery);
     return image;
   }
 

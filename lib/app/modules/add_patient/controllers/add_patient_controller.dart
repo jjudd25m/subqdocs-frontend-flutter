@@ -23,6 +23,7 @@ class AddPatientController extends GetxController {
   RxBool isLoading = RxBool(false);
 
   TextEditingController firstNameController = TextEditingController();
+  TextEditingController patientId = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
@@ -33,6 +34,8 @@ class AddPatientController extends GetxController {
 
   RxString dob = RxString("");
   RxString visitDate = RxString("");
+
+  Rxn<File> profileImage = Rxn();
 
   RxnString selectedSexValue = RxnString("Male");
   RxnString selectedPatientValue = RxnString();
@@ -139,6 +142,23 @@ class AddPatientController extends GetxController {
     );
   }
 
+  Future<void> captureProfileImage() async {
+    XFile? pickedImage = await MediaPickerServices().pickImage();
+    print("picked image is  ${pickedImage}");
+
+    if (pickedImage != null) {
+      profileImage.value = File(pickedImage.path);
+    }
+  }
+
+  Future<void> pickProfileImage() async {
+    XFile? pickedImage = await MediaPickerServices().pickImage(fromCamera: false);
+
+    if (pickedImage != null) {
+      profileImage.value = File(pickedImage.path);
+    }
+  }
+
   Future<void> captureImage() async {
     XFile? image = await MediaPickerServices().pickImage();
 
@@ -189,13 +209,14 @@ class AddPatientController extends GetxController {
     Map<String, dynamic> param = {};
 
     param['first_name'] = firstNameController.text;
+    param['patient_id'] = patientId.text;
     param['middle_name'] = middleNameController.text;
     param['last_name'] = lastNameController.text;
     param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
 
     param['gender'] = selectedSexValue.value;
     param['email'] = emailAddressController.text;
-    param['visit_date'] = '${visitDate.value}Z';
+
     param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
 
     String date = visitDateController.text;
@@ -203,12 +224,16 @@ class AddPatientController extends GetxController {
     print(visitDateController.text);
     print(selectedVisitTimeValue.value);
 
-    DateTime dt = DateFormat("dd/MM/yyyy hh:mm a").parse("$date $time").toLocal();
+    // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
 
-    print("date time is the DateTime  $dt ");
+    DateTime firstTime = DateFormat('hh:mm a').parse(time ?? ""); // 10:30 AM to DateTime
 
-    print(" time is  ${dt.toIso8601String()}");
-    param['visit_time'] = dt.toIso8601String();
+    // Now format it to the hh:mm:ss format
+    String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+
+    print("date time is ${formattedTime}");
+
+    param['visit_time'] = formattedTime;
 
     print("param is :- $param");
 
@@ -328,6 +353,9 @@ class AddPatientController extends GetxController {
                   }
 
                   control.text = formattedDate;
+                  if (selectedVisitTimeValue.value == null) {
+                    selectedVisitTimeValue.value = "11 PM";
+                  }
 
                   print('${_selectedDate.toLocal()}'.split(' ')[0]);
                 },

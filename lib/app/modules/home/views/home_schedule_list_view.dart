@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
@@ -41,9 +42,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                                   "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                                 });
                               },
-                              child: RoundedImageWidget(
-                                size: 28,
-                                imagePath: "assets/images/user.png",
+                              child: BaseImageView(
+                                imageUrl: "",
+                                height: 28,
+                                width: 28,
+                                nameLetters: cellData,
+                                fontSize: 12,
                               ),
                             ),
                             SizedBox(

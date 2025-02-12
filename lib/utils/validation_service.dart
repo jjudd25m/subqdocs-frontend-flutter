@@ -1,7 +1,7 @@
 class Validation {
   static emailValidate(value) {
     if (value == null || value.isEmpty) {
-      return "Plese filed above Filed";
+      return null;
     }
     final bool emailValid =
         RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!);
@@ -48,6 +48,18 @@ class Validation {
     if (value == firstvalue) {
       return "Password not Matched";
     }
+  }
+
+  static visitDateAndTimeValidation(value, anotherValue) {
+    if (value != "") {
+      return null;
+    }
+    if (anotherValue != null) {
+      print("value is the ${value}");
+      return "please filed above filed";
+    }
+
+    return null;
   }
 
   static requiredFiled(value) {
