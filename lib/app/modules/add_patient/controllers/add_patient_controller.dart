@@ -38,9 +38,7 @@ class AddPatientController extends GetxController {
 
   RxString dob = RxString("");
   RxString visitDate = RxString("");
-
   Rxn<File> profileImage = Rxn();
-
   RxnString selectedSexValue = RxnString("Male");
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();

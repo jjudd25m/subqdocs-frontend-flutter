@@ -15,7 +15,9 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../routes/app_pages.dart';
+import '../../add_patient/widgets/custom_dailog.dart';
 import '../controllers/visit_main_controller.dart';
+import 'attachmentDailog.dart';
 
 class VisitMainView extends GetView<VisitMainController> {
   VisitMainView({super.key});
@@ -856,143 +858,72 @@ class VisitMainView extends GetView<VisitMainController> {
                                   ],
                                 ),
                                 children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: SizedBox(
-                                          height: 170,
-                                          width: double.infinity,
-                                          child: ListView.separated(
-                                            scrollDirection: Axis.horizontal,
-                                            padding: EdgeInsets.only(top: 20),
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                height: 150,
-                                                width: 130,
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 10),
-                                                    Stack(
-                                                      children: [
-                                                        Container(
-                                                          height: 120,
-                                                          width: 120,
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: AppColors.buttonBackgroundGrey
-                                                                    .withValues(alpha: 0.8)),
-                                                            // color: AppColors.backgroundWhite,
-                                                            borderRadius: BorderRadius.circular(8),
+                                  Container(
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                        child: SizedBox(
+                                            height: 200,
+                                            width: double.infinity,
+                                            child: Obx(
+                                              () {
+                                                return ListView.separated(
+                                                  scrollDirection: Axis.horizontal,
+                                                  padding: EdgeInsets.only(top: 20),
+                                                  itemBuilder: (context, index) {
+                                                    return Container(
+                                                      height: 200,
+                                                      width: 140,
+                                                      child: Column(
+                                                        children: [
+                                                          SizedBox(height: 10),
+                                                          Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Container(
+                                                                decoration: BoxDecoration(
+                                                                  color: AppColors.appbarBorder,
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                ),
+                                                                width: 120,
+                                                                height: 120,
+                                                                child: ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(10), // Set the radius here
+                                                                  child: Image.file(
+                                                                    controller.selectedList[index].file ?? File(""),
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 6,
+                                                              ),
+                                                              Text(
+                                                                controller.selectedList[index].fileName ?? "",
+                                                                style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 6,
+                                                              ),
+                                                              Text(
+                                                                controller.selectedList[index].date ?? "",
+                                                                style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                              ),
+                                                            ],
                                                           ),
-                                                          padding: const EdgeInsets.only(bottom: Dimen.margin2),
-                                                          child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(8), // Add rounded corners here
-                                                              child: Container(
-                                                                  color: AppColors.backgroundPdfAttchment,
-                                                                  width: 120,
-                                                                  height: 120,
-                                                                  child: Center(
-                                                                    child: (index % 2 == 0)
-                                                                        ? Image.asset(
-                                                                            ImagePath.pdf,
-                                                                            width: 60,
-                                                                            height: 60,
-                                                                            fit: BoxFit.contain,
-                                                                          )
-                                                                        : BaseImageView(
-                                                                            imageUrl:
-                                                                                "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
-                                                                            width: 120,
-                                                                            height: 120,
-                                                                          ),
-                                                                  ))),
-                                                        ),
-                                                        // Positioned(
-                                                        //   top: -15,
-                                                        //   right: -15,
-                                                        //   child: Container(
-                                                        //     width: 50, // Width of the circle
-                                                        //     height: 50, // Height of the circle
-                                                        //     decoration: BoxDecoration(
-                                                        //       shape: BoxShape.circle, // Ensures the container is circular
-                                                        //       color: Colors.white, // Circle color (can be changed as needed)
-                                                        //       boxShadow: [
-                                                        //         BoxShadow(
-                                                        //           color: Colors.black.withOpacity(0.25), // Shadow color
-                                                        //           blurRadius: 8, // Shadow blur radius
-                                                        //           offset: Offset(2, 2), // Shadow offset
-                                                        //         ),
-                                                        //       ],
-                                                        //     ),
-                                                        //     child: GestureDetector(
-                                                        //       onTap: () {
-                                                        //         showDialog(
-                                                        //           context: context,
-                                                        //           barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                        //           builder: (BuildContext context) {
-                                                        //             return DeleteImageDialog(); // Our custom dialog
-                                                        //           },
-                                                        //         );
-                                                        //       },
-                                                        //       child: SvgPicture.asset(
-                                                        //         ImagePath.delete_round,
-                                                        //         height: 50, // Set the height and width as needed
-                                                        //         width: 50,
-                                                        //         fit: BoxFit.cover, // To make sure the image fits the circular shape
-                                                        //       ),
-                                                        //     ),
-                                                        //   ),
-                                                        // )
-
-                                                        // Container(
-                                                        //   decoration: BoxDecoration(
-                                                        //     shape: BoxShape.circle, // Makes the container circular
-                                                        //     boxShadow: [
-                                                        //       BoxShadow(
-                                                        //         color: Colors.black.withValues(alpha: 0.10), // Shadow color
-                                                        //         blurRadius: 0.2,
-                                                        //         blurStyle: BlurStyle.normal,
-                                                        //         spreadRadius: 2, // Shadow blur radius
-                                                        //         offset: Offset(0, 0), // Shadow offset
-                                                        //       ),
-                                                        //     ],
-                                                        //   ),
-                                                        //   child: SvgPicture.asset(
-                                                        //     ImagePath.delete_round,
-                                                        //     height: 60, // Set the height and width as needed
-                                                        //     width: 60,
-                                                        //     fit: BoxFit.cover, // To make sure the image fits the circular shape
-                                                        //   ),
-                                                        // ),
-                                                        // )
-
-                                                        // Positioned(
-                                                        //   top: -15,
-                                                        //   right: -5,
-                                                        //   child: ClipRRect(
-                                                        //     borderRadius: BorderRadius.circular(30),
-                                                        //     child: Container(
-                                                        //       decoration: BoxDecoration(
-                                                        //         border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
-                                                        //         borderRadius: BorderRadius.circular(1),
-                                                        //       ),
-                                                        //       child: SvgPicture.asset(
-                                                        //         ImagePath.delete_round,
-                                                        //         height: 60,
-                                                        //         width: 60,
-                                                        //       ),
-                                                        //     ),
-                                                        //   ),
-                                                        // )
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                            separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                            itemCount: 8,
-                                          ))),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  separatorBuilder: (context, index) =>
+                                                      const SizedBox(width: Dimen.margin15),
+                                                  itemCount: controller.selectedList.length,
+                                                );
+                                              },
+                                            ))),
+                                  ),
                                 ],
                               ),
                             ],
@@ -1016,26 +947,154 @@ class VisitMainView extends GetView<VisitMainController> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                // FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                //   allowMultiple: false,
-                                //   type: FileType.custom,
-                                //   allowedExtensions: ['mp3', 'aac', 'm4a'],
-                                // );
-                                //
-                                // print("audio is:- ${result?.files.first.xFile.path}");
-                                //
-                                // controller.submitAudio(File(result?.files.first.path ?? ""));
+                            child: PopupMenuButton<String>(
+                              offset: const Offset(0, -290),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                              color: AppColors.white,
+                              position: PopupMenuPosition.under,
+                              padding: EdgeInsetsDirectional.zero,
+                              menuPadding: EdgeInsetsDirectional.zero,
+                              onSelected: (value) {},
+                              style: const ButtonStyle(
+                                  padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  maximumSize: WidgetStatePropertyAll(Size.zero),
+                                  visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                    padding: EdgeInsets.zero,
+                                    onTap: () {
+                                      // controller.pickProfileImage();
+                                      controller.captureImage(context);
 
-                                // showDialog(
-                                //   context: context,
-                                //   barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                //   builder: (BuildContext context) {
-                                //     return ViewAttchmentImage(); // Our custom dialog
-                                //   },
-                                // );
-                              },
+                                      // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                                    },
+                                    // value: "",
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.camera,
+                                            color: AppColors.textDarkGrey,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Take Photo or Video",
+                                            style: AppFonts.regular(16, AppColors.textBlack),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                PopupMenuItem(
+                                    // value: "",
+                                    padding: EdgeInsets.zero,
+                                    onTap: () async {
+                                      // controller.captureProfileImage();
+
+                                      controller.captureImage(context, fromCamera: false);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.textDarkGrey,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                CupertinoIcons.photo_fill_on_rectangle_fill,
+                                                color: AppColors.textDarkGrey,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Choose Photo",
+                                                style: AppFonts.regular(16, AppColors.textBlack),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                PopupMenuItem(
+                                    // value: "",
+                                    padding: EdgeInsets.zero,
+                                    onTap: () async {
+                                      // controller.captureProfileImage();
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.document_scanner_sharp,
+                                                color: AppColors.textDarkGrey,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Scan Documents",
+                                                style: AppFonts.regular(16, AppColors.textDarkGrey),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                PopupMenuItem(
+                                    // value: "",
+                                    padding: EdgeInsets.zero,
+                                    onTap: () async {
+                                      // controller.captureProfileImage();
+
+                                      controller.pickFiles(context);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.file_copy_rounded,
+                                                color: AppColors.textDarkGrey,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Attach File",
+                                                style: AppFonts.regular(16, AppColors.textBlack),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ],
                               child: Container(
                                 height: 81,
                                 decoration: BoxDecoration(
@@ -1059,7 +1118,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          "Add a Photo",
+                                          "Add a Photo ",
                                           style: AppFonts.medium(16, AppColors.textBlack),
                                         ),
                                       ],
