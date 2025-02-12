@@ -84,8 +84,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                                               "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
                                           Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                            "patientData":
-                                                controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                            "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                                            "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                                             "fromSchedule": false
                                           });
                                         },
@@ -102,8 +102,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         value: "",
                                         onTap: () async {
                                           final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                                            "patientData":
-                                                controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                            "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                                            "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                                             "fromSchedule": true
                                           });
 

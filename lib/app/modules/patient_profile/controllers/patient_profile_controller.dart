@@ -10,6 +10,7 @@ class PatientProfileController extends GetxController {
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   PatientDetailModel patientDetailModel = PatientDetailModel();
   String patientId = "";
+  String visitId = "";
   final count = 0.obs;
 
   RxString dob = RxString("");
@@ -18,9 +19,10 @@ class PatientProfileController extends GetxController {
   void onInit() {
     super.onInit();
     patientId = Get.arguments["patientData"];
+    visitId = Get.arguments["visitId"];
 
     print("our patientdata is ${patientId}");
-    getPatient(patientId);
+    getPatient(patientId, visitId);
   }
 
   @override
@@ -33,8 +35,14 @@ class PatientProfileController extends GetxController {
     super.onClose();
   }
 
-  Future<void> getPatient(String id) async {
-    patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id);
+  Future<void> getPatient(String id, String visitId) async {
+    Map<String, dynamic> param = {};
+
+    if (visitId != "") {
+      param['visit_id'] = visitId;
+    }
+
+    patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id, param: param);
 
     // firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
     // middleNameController.text = patientDetailModel.responseData?.middleName ?? "";

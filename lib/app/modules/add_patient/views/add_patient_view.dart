@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:subqdocs/widget/appbar.dart';
 
+import '../../../../utils/NoNumbersTextInputFormatter.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
@@ -366,6 +369,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               },
                                               label: "Date of birth",
                                               readOnly: true,
+                                              isValid: true,
                                               controller: controller.dobController,
                                               hint: "12/1/1972",
                                               suffixIcon: SvgPicture.asset(ImagePath.calendar),
@@ -516,61 +520,67 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     child: SizedBox(
                                                         height: 200,
                                                         width: double.infinity,
-                                                        child: ListView.separated(
-                                                          scrollDirection: Axis.horizontal,
-                                                          padding: EdgeInsets.only(top: 20),
-                                                          itemBuilder: (context, index) {
-                                                            return Container(
-                                                              height: 200,
-                                                              width: 140,
-                                                              child: Column(
-                                                                children: [
-                                                                  SizedBox(height: 10),
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    mainAxisSize: MainAxisSize.min,
+                                                        child: Obx(
+                                                          () {
+                                                            return ListView.separated(
+                                                              scrollDirection: Axis.horizontal,
+                                                              padding: EdgeInsets.only(top: 20),
+                                                              itemBuilder: (context, index) {
+                                                                return Container(
+                                                                  height: 200,
+                                                                  width: 140,
+                                                                  child: Column(
                                                                     children: [
-                                                                      Container(
-                                                                        decoration: BoxDecoration(
-                                                                          color: AppColors.appbarBorder,
-                                                                          borderRadius: BorderRadius.circular(10),
-                                                                        ),
-                                                                        width: 120,
-                                                                        height: 120,
-                                                                        child: ClipRRect(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              10), // Set the radius here
-                                                                          child: Image.network(
-                                                                            "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
-                                                                            fit: BoxFit.cover,
+                                                                      SizedBox(height: 10),
+                                                                      Column(
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        mainAxisSize: MainAxisSize.min,
+                                                                        children: [
+                                                                          Container(
+                                                                            decoration: BoxDecoration(
+                                                                              color: AppColors.appbarBorder,
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            width: 120,
+                                                                            height: 120,
+                                                                            child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                  10), // Set the radius here
+                                                                              child: Image.file(
+                                                                                controller.selectedList[index].file ??
+                                                                                    File(""),
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height: 6,
-                                                                      ),
-                                                                      Text(
-                                                                        "Recording 1",
-                                                                        style: AppFonts.regular(
-                                                                            12, AppColors.textDarkGrey),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height: 6,
-                                                                      ),
-                                                                      Text(
-                                                                        "10/19/2024",
-                                                                        style: AppFonts.regular(
-                                                                            12, AppColors.textDarkGrey),
+                                                                          SizedBox(
+                                                                            height: 6,
+                                                                          ),
+                                                                          Text(
+                                                                            controller.selectedList[index].fileName ??
+                                                                                "",
+                                                                            style: AppFonts.regular(
+                                                                                12, AppColors.textDarkGrey),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height: 6,
+                                                                          ),
+                                                                          Text(
+                                                                            controller.selectedList[index].date ?? "",
+                                                                            style: AppFonts.regular(
+                                                                                12, AppColors.textDarkGrey),
+                                                                          ),
+                                                                        ],
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ],
-                                                              ),
+                                                                );
+                                                              },
+                                                              separatorBuilder: (context, index) =>
+                                                                  const SizedBox(width: Dimen.margin15),
+                                                              itemCount: controller.selectedList.length,
                                                             );
                                                           },
-                                                          separatorBuilder: (context, index) =>
-                                                              const SizedBox(width: Dimen.margin15),
-                                                          itemCount: 8,
                                                         ))),
                                               ),
                                             ],

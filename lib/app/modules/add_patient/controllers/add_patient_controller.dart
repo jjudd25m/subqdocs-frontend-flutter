@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -11,8 +12,11 @@ import 'package:toastification/toastification.dart';
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/app_preferences.dart';
 import '../../../models/media_listing_model.dart';
+import '../../login/model/login_model.dart';
 import '../model/add_patient_model.dart';
 import '../repository/add_patient_repository.dart';
 
@@ -75,6 +79,7 @@ class AddPatientController extends GetxController {
   List<String> patientType = ["New Patient", "Old Patient"];
 
   RxList<MediaListingModel> list = RxList();
+  RxList<MediaListingModel> selectedList = RxList();
 
   final count = 0.obs;
   @override
@@ -106,6 +111,11 @@ class AddPatientController extends GetxController {
     return dateFormat.format(date); // Format date to dd/MM/yyyy
   }
 
+  void addImage() {
+    selectedList.addAll(list);
+    list.clear();
+  }
+
   Future<void> pickFiles() async {
     List<XFile>? fileList = await MediaPickerServices().pickMultiMedia();
 
@@ -134,7 +144,12 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(null, _shortFileName, _formatDate(_pickDate), _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -184,7 +199,12 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(null, _shortFileName, _formatDate(_pickDate), _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -207,17 +227,43 @@ class AddPatientController extends GetxController {
     // print("Merged DateTime from DateTime: $finalDateTimeFromDateTime");
 
     Map<String, dynamic> param = {};
+    Map<String, List<File>> profileParams = {};
 
     param['first_name'] = firstNameController.text;
+    if (profileImage.value != null) {
+      print("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['profile_image'] = [profileImage.value!];
+    } else {
+      print("profile is not  available");
+    }
+
+    if (selectedList.isNotEmpty) {
+      print("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
+
+      ;
+    } else {
+      print("profile is not  available");
+    }
+
     param['patient_id'] = patientId.text;
-    param['middle_name'] = middleNameController.text;
+
+    if (middleNameController.text != "") {
+      param['middle_name'] = middleNameController.text;
+    }
     param['last_name'] = lastNameController.text;
     param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
 
     param['gender'] = selectedSexValue.value;
-    param['email'] = emailAddressController.text;
+    if (emailAddressController.text != "") {
+      param['email'] = emailAddressController.text;
+    }
 
-    param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    if (visitDateController.text != "") {
+      param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    }
 
     String date = visitDateController.text;
     String? time = selectedVisitTimeValue.value;
@@ -226,19 +272,24 @@ class AddPatientController extends GetxController {
 
     // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
 
-    DateTime firstTime = DateFormat('hh:mm a').parse(time ?? ""); // 10:30 AM to DateTime
+    if (time != null) {
+      DateTime firstTime = DateFormat('hh:mm a').parse(time); // 10:30 AM to DateTime
 
-    // Now format it to the hh:mm:ss format
-    String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+      // Now format it to the hh:mm:ss format
+      String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
 
-    print("date time is ${formattedTime}");
+      print("date time is ${formattedTime}");
 
-    param['visit_time'] = formattedTime;
+      param['visit_time'] = formattedTime;
+    }
 
     print("param is :- $param");
 
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param);
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
+          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
       Get.back(result: 1);
@@ -354,7 +405,7 @@ class AddPatientController extends GetxController {
 
                   control.text = formattedDate;
                   if (selectedVisitTimeValue.value == null) {
-                    selectedVisitTimeValue.value = "11 PM";
+                    selectedVisitTimeValue.value = "12:00 AM";
                   }
 
                   print('${_selectedDate.toLocal()}'.split(' ')[0]);

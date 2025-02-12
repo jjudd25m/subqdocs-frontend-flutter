@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widgets/custom_toastification.dart';
@@ -16,6 +20,7 @@ class EditPatentDetailsController extends GetxController {
   PatientDetailModel patientDetailModel = PatientDetailModel();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   TextEditingController firstNameController = TextEditingController();
+  // TextEditingController patientIdController = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
@@ -24,8 +29,11 @@ class EditPatentDetailsController extends GetxController {
   TextEditingController patientIdController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   RxnString selectedSexValue = RxnString();
+  RxnString profileImageUrl = RxnString();
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();
+
+  Rxn<File> profileImage = Rxn();
   List<String> visitTime = [
     "12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM",
     "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM",
@@ -59,6 +67,7 @@ class EditPatentDetailsController extends GetxController {
   // PatientListData patientListData = PatientListData();
 
   String patientId = "";
+  String visitId = "";
 
   RxBool isFromSchedule = RxBool(true);
 
@@ -77,11 +86,12 @@ class EditPatentDetailsController extends GetxController {
     print("edit patient list  ${Get.arguments["patientData"]}");
 
     patientId = Get.arguments["patientData"];
+    visitId = Get.arguments["visitId"];
     isFromSchedule.value = Get.arguments["fromSchedule"];
 
     isFromSchedule.refresh();
 
-    getPatient(patientId);
+    getPatient(patientId, visitId);
   }
 
   @override
@@ -94,12 +104,20 @@ class EditPatentDetailsController extends GetxController {
     super.onClose();
   }
 
-  Future<void> getPatient(String id) async {
-    patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id);
+  Future<void> getPatient(String id, String visitId) async {
+    Map<String, dynamic> param = {};
 
+    if (visitId != "") {
+      param['visit_id'] = visitId;
+    }
+
+    patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id, param: param);
     firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
     middleNameController.text = patientDetailModel.responseData?.middleName ?? "";
     lastNameController.text = patientDetailModel.responseData?.lastName ?? "";
+    selectedSexValue.value = patientDetailModel.responseData?.gender;
+    profileImageUrl.value = patientDetailModel.responseData?.profileImage;
+    patientIdController.text = patientDetailModel.responseData?.patientId.toString() ?? "";
 
     print("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
 
@@ -120,15 +138,18 @@ class EditPatentDetailsController extends GetxController {
     print("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
 
     // Parse the date string to a DateTime object
-    DateTime visitdateTime = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
 
-    // Create a DateFormat to format the date
-    DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
+    if (patientDetailModel.responseData?.visitTime != null) {
+      DateTime visitdateTime = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
 
-    // Format the DateTime object to the desired format
-    String visitformattedDate = visitdateFormat.format(visitdateTime);
+      // Create a DateFormat to format the date
+      DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
 
-    visitDateController.text = visitformattedDate;
+      // Format the DateTime object to the desired format
+      String visitformattedDate = visitdateFormat.format(visitdateTime);
+
+      visitDateController.text = visitformattedDate;
+    }
 
     // time
 
@@ -333,20 +354,28 @@ class EditPatentDetailsController extends GetxController {
     patientDetailModel.responseData?.gender = selectedSexValue.value;
     patientDetailModel.responseData?.email = emailAddressController.text;
     // patientDetailModel.responseData?.visitTime = '${strVisit_time}Z';
-    patientDetailModel.responseData?.visitDate =
-        DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    if (isFromSchedule.value) {
+      patientDetailModel.responseData?.visitDate =
+          DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    }
 
-    DateTime d = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "2025-10-07T16:42:11").toLocal();
+    if (isFromSchedule.value) {
+      DateTime d = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "2025-10-07T16:42:11").toLocal();
+    }
 
     String date = visitDateController.text;
     String? time = selectedVisitTimeValue.value;
 
-    print("time and date is $date $time");
+    if (isFromSchedule.value) {
+      if (time != null) {
+        DateTime firstTime = DateFormat('hh:mm a').parse(time);
+        String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+        patientDetailModel.responseData?.visitTime = formattedTime;
+      }
+    }
+    // 10:30 AM to DateTime
 
-    DateTime dt = DateFormat("MM/dd/yyyy hh:mm a").parse("$date $time").toLocal();
-    patientDetailModel.responseData?.visitTime = dt.toIso8601String();
-
-    print(" time is ${DateFormat("hh a").format(d)} ");
+    // Now format it to the hh:mm:ss format
 
     // param['first_name'] = firstNameController.text;
     // param['middle_name'] = middleNameController.text;
@@ -369,6 +398,23 @@ class EditPatentDetailsController extends GetxController {
       isLoading.value = false;
       print("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
+    }
+  }
+
+  Future<void> pickProfileImage() async {
+    XFile? pickedImage = await MediaPickerServices().pickImage(fromCamera: false);
+
+    if (pickedImage != null) {
+      profileImage.value = File(pickedImage.path);
+    }
+  }
+
+  Future<void> captureProfileImage() async {
+    XFile? pickedImage = await MediaPickerServices().pickImage();
+    print("picked image is  ${pickedImage}");
+
+    if (pickedImage != null) {
+      profileImage.value = File(pickedImage.path);
     }
   }
 }

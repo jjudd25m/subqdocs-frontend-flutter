@@ -44,6 +44,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
+                        controller.list.clear();
                       },
                       child: SvgPicture.asset(
                         "assets/images/cross_white.svg",
@@ -180,6 +181,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                           child: CustomButton(
                             navigate: () {
                               Navigator.pop(context);
+                              controller.list.clear();
                             },
                             label: "Cancel",
                             backGround: Colors.white,
@@ -192,7 +194,10 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                         ),
                         Expanded(
                           child: CustomButton(
-                            navigate: () {},
+                            navigate: () {
+                              controller.addImage();
+                              Navigator.pop(context);
+                            },
                             label: "Add",
                           ),
                         ),

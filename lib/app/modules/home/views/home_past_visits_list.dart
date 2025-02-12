@@ -98,6 +98,8 @@ class HomePastVisitsList extends GetView<HomeController> {
 
                                                 Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                   "patientData":
+                                                      controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                                                  "visitId":
                                                       controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                                                   "fromSchedule": false
                                                 });
@@ -116,12 +118,14 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               onTap: () async {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
-                                                final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
-                                                    arguments: {
-                                                      "patientData":
-                                                          controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                                      "fromSchedule": false
-                                                    });
+                                                final result =
+                                                    await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                                  "patientData":
+                                                      controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                                                  "visitId":
+                                                      controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                                  "fromSchedule": false
+                                                });
 
                                                 if (result == 1) {
                                                   controller.getScheduleVisitList();

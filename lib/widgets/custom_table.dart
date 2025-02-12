@@ -26,37 +26,38 @@ class CustomTable extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width - 100;
 
     return NotificationListener(
-        onNotification: (notification) {
-          if (notification is ScrollEndNotification) {
-            if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent) {
-              print("Load more: listview end");
+      onNotification: (notification) {
+        if (notification is ScrollEndNotification) {
+          if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent) {
+            print("Load more: listview end");
 
-              onLoadMore != null ? onLoadMore!() : null;
-            }
+            onLoadMore != null ? onLoadMore!() : null;
           }
-          return false;
-        },
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 1, color: AppColors.appbarBorder),
-              ),
-              padding: const EdgeInsets.all(2),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return _buildTableRow(index, screenWidth);
-                },
-                itemCount: rows.length,
-              ),
+        }
+        return false;
+      },
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(width: 1, color: AppColors.appbarBorder),
             ),
-          ],
-        ));
+            padding: const EdgeInsets.all(2),
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return _buildTableRow(index, screenWidth);
+              },
+              itemCount: rows.length,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildTableRow(int rowIndex, double screenWidth) {

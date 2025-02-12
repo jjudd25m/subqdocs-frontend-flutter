@@ -55,7 +55,7 @@ class HomePatientListView extends GetView<HomeController> {
         "${patient.lastName}, ${patient.firstName}", // Patient Name
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
-        patient.visits?.last.visitDate ?? "N/A", // Last Visit Date
+        patient.visits?.lastOrNull?.visitDate ?? "N/A", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
         "Action", // Action (could be a button or some interaction)
       ]);
@@ -105,9 +105,10 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-                            // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                            print(" patient id is ${controller.patientList[rowIndex - 1].id}");
                             Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
+                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
+                              "visitId": "",
                               "fromSchedule": false
                             });
                           },
@@ -126,12 +127,13 @@ class HomePatientListView extends GetView<HomeController> {
                             print("row index is :- ${rowIndex}");
                             print("column index is :- ${colIndex}");
                             print(
-                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.first.id.toString()} ");
+                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
 
                             // print(" our element is $");
 
                             final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].visits?.first.id.toString(),
+                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
+                              "visitId": "",
                               "fromSchedule": false
                             });
                             print("our result is $result");
