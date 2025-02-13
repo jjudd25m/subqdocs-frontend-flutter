@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
 
@@ -1788,7 +1789,24 @@ class VisitMainView extends GetView<VisitMainController> {
                   ),
                 );
               }),
-            )
+            ),
+            // if (controller.isLoading.value) ...[
+            //   Center(
+            //       child: Column(
+            //     children: [
+            //       Lottie.asset(
+            //         'assets/lottie/progress_loader.json',
+            //         width: 200,
+            //         height: 200,
+            //         fit: BoxFit.fill,
+            //       ),
+            //       SizedBox(
+            //         height: 20,
+            //       ),
+            //       Text(controller.loadingMessage.value)
+            //     ],
+            //   )),
+            // ]
           ],
         ),
       ),

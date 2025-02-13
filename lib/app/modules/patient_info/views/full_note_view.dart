@@ -85,11 +85,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                   SizedBox(height: 2),
                                                   Row(
                                                     children: [
-                                                      // Text(
-                                                      //   textAlign: TextAlign.center,
-                                                      //   '\u2022',
-                                                      //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                      // ),
                                                       SizedBox(width: 15),
                                                       Expanded(
                                                           child: Text(
@@ -168,11 +163,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                   SizedBox(height: 2),
                                                   Row(
                                                     children: [
-                                                      // Text(
-                                                      //   textAlign: TextAlign.center,
-                                                      //   '\u2022',
-                                                      //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                      // ),
                                                       SizedBox(width: 15),
                                                       Expanded(
                                                           child: Text(
@@ -251,11 +241,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                   SizedBox(height: 2),
                                                   Row(
                                                     children: [
-                                                      // Text(
-                                                      //   textAlign: TextAlign.center,
-                                                      //   '\u2022',
-                                                      //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                      // ),
                                                       SizedBox(width: 15),
                                                       Expanded(
                                                           child: Text(
@@ -334,11 +319,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                   SizedBox(height: 2),
                                                   Row(
                                                     children: [
-                                                      // Text(
-                                                      //   textAlign: TextAlign.center,
-                                                      //   '\u2022',
-                                                      //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                      // ),
                                                       SizedBox(width: 15),
                                                       Expanded(
                                                           child: Text(
@@ -492,7 +472,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   padding: const EdgeInsets.symmetric(horizontal: 10),
                                   child: Text(
                                     textAlign: TextAlign.left,
-                                    controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplaint ?? "",
+                                    controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "",
                                     style: AppFonts.medium(14, AppColors.textGrey),
                                   ),
                                 ),
@@ -605,11 +585,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      // Text(
-                                      //   textAlign: TextAlign.left,
-                                      //   "A focused review of systems was completed, including:",
-                                      //   style: AppFonts.regular(15, AppColors.textGrey),
-                                      // ),
                                       SizedBox(height: 10),
                                       ListView.builder(
                                           shrinkWrap: true,
@@ -644,11 +619,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                               ),
                                           itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem?.length ?? 0),
                                       SizedBox(height: 10),
-                                      // Text(
-                                      //   textAlign: TextAlign.left,
-                                      //   "Don reported that he has not experienced night sweats, skin rash, chest pain, shortness of breath, fever or chills.",
-                                      //   style: AppFonts.regular(15, AppColors.textGrey),
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -705,11 +675,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      // Text(
-                                      //   textAlign: TextAlign.left,
-                                      //   controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.ex ?? "",
-                                      //   style: AppFonts.regular(15, AppColors.textGrey),
-                                      // ),
                                       SizedBox(height: 10),
                                       ListView.builder(
                                           shrinkWrap: true,
@@ -723,11 +688,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                       SizedBox(height: 0),
                                                       Row(
                                                         children: [
-                                                          // Text(
-                                                          //   textAlign: TextAlign.center,
-                                                          //   '\u2022',
-                                                          //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                          // ),
                                                           SizedBox(width: 15),
                                                           Expanded(
                                                               child: Text(
@@ -826,13 +786,6 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                   SizedBox(
                                                     width: 20,
                                                   ),
-                                                  // Expanded(
-                                                  //   child: Text(
-                                                  //     textAlign: TextAlign.left,
-                                                  //     "1. History of Malignant melanoma on the right side of the nose (Z85.820)",
-                                                  //     style: AppFonts.medium(14, AppColors.textPurple),
-                                                  //   ),
-                                                  // ),
                                                 ],
                                               ),
                                               Padding(
@@ -848,334 +801,43 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    // Text(
-                                                                    //   textAlign: TextAlign.center,
-                                                                    //   '\u2022',
-                                                                    //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                                    // ),
+                                                                    Text(
+                                                                      textAlign: TextAlign.center,
+                                                                      "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].number}." ?? "",
+                                                                      style: AppFonts.regular(15, AppColors.textPurple),
+                                                                    ),
                                                                     SizedBox(width: 5),
                                                                     Expanded(
                                                                         child: Text(
                                                                       textAlign: TextAlign.left,
-                                                                      controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index] ?? "",
-                                                                      style: AppFonts.regular(15, AppColors.textGrey),
+                                                                      controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].title ?? "",
+                                                                      style: AppFonts.regular(15, AppColors.textPurple),
                                                                     )),
                                                                   ],
                                                                 ),
-                                                                SizedBox(height: 0),
+                                                                Text(
+                                                                  textAlign: TextAlign.left,
+                                                                  controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].description ?? "",
+                                                                  style: AppFonts.regular(15, AppColors.textGrey),
+                                                                ),
+                                                                SizedBox(height: 10),
                                                               ],
                                                             ),
                                                           ),
                                                         ),
                                                     itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?.length ?? 0),
                                               ),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                                              //   child: Text(
-                                              //     textAlign: TextAlign.left,
-                                              //     "I discussed the importance of regular skin checks and self-examinations with Don. I also emphasized consistent sun protection, including wearing protective clothing and using sunscreen with zinc and titanium oxide.",
-                                              //     style: AppFonts.medium(16, AppColors.textGrey),
-                                              //   ),
-                                              // ),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.only(left: 50, top: 20, bottom: 20),
-                                              //   child: ListView.builder(
-                                              //       shrinkWrap: true,
-                                              //       itemBuilder: (context, index) => InkWell(
-                                              //             onTap: () {},
-                                              //             child: Padding(
-                                              //               padding: const EdgeInsets.symmetric(horizontal: 0),
-                                              //               child: Column(
-                                              //                 children: [
-                                              //                   Row(
-                                              //                     children: [
-                                              //                       Text(
-                                              //                         textAlign: TextAlign.center,
-                                              //                         '\u2022',
-                                              //                         style: AppFonts.regular(20, AppColors.textGrey),
-                                              //                       ),
-                                              //                       SizedBox(width: 15),
-                                              //                       Expanded(
-                                              //                           child: Text(
-                                              //                         textAlign: TextAlign.left,
-                                              //                         "Cephalexin 500 mg Capsule",
-                                              //                         style: AppFonts.regular(15, AppColors.textGrey),
-                                              //                       )),
-                                              //                     ],
-                                              //                   ),
-                                              //                   SizedBox(height: 0),
-                                              //                 ],
-                                              //               ),
-                                              //             ),
-                                              //           ),
-                                              //       itemCount: 4),
-                                              // ),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.only(left: 50, top: 20, bottom: 20),
-                                              //   child: BaseImageView(width: double.infinity, height: 200, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
-                                              // ),
                                             ],
                                           ),
                                         )
-                                      // Card(
-                                      //   color: AppColors.white,
-                                      //   key: ValueKey(task),
-                                      //   elevation: 5.0,
-                                      //   child: ListTile(
-                                      //     title: Text(task),
-                                      //     leading: const Icon(Icons.work, color: Colors.black),
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.start,
-                                //     children: [
-                                //       Text(
-                                //         textAlign: TextAlign.left,
-                                //         "A comprehensive skin exam was conducted with the medical assistant present. The scalp, face, trunk, and extremities were thoroughly examined. \n \nDon has skin type II. He appeared well-groomed, well-nourished, and was alert and oriented to person, place, and time. \n \nFindings included: \n",
-                                //         style: AppFonts.regular(15, AppColors.textGrey),
-                                //       ),
-                                //       SizedBox(height: 10),
-                                //       ListView.builder(
-                                //           shrinkWrap: true,
-                                //           itemBuilder: (context, index) => InkWell(
-                                //                 onTap: () {},
-                                //                 child: Padding(
-                                //                   padding: const EdgeInsets.symmetric(horizontal: 0),
-                                //                   child: Column(
-                                //                     children: [
-                                //                       SizedBox(height: 0),
-                                //                       Row(
-                                //                         children: [
-                                //                           Text(
-                                //                             textAlign: TextAlign.center,
-                                //                             '\u2022',
-                                //                             style: AppFonts.regular(20, AppColors.textGrey),
-                                //                           ),
-                                //                           SizedBox(width: 15),
-                                //                           Expanded(
-                                //                               child: Text(
-                                //                             textAlign: TextAlign.left,
-                                //                             "Brown, scaly plaques scattered across the trunk",
-                                //                             style: AppFonts.regular(15, AppColors.textGrey),
-                                //                           )),
-                                //                         ],
-                                //                       ),
-                                //                       SizedBox(height: 0),
-                                //                     ],
-                                //                   ),
-                                //                 ),
-                                //               ),
-                                //           itemCount: 4),
-                                //       SizedBox(height: 10),
-                                //     ],
-                                //   ),
-                                // ),
                                 SizedBox(
                                   height: 10,
                                 ),
                               ],
                             )),
-                        // Container(
-                        //     width: double.infinity,
-                        //     padding: EdgeInsets.symmetric(horizontal: 0),
-                        //     decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
-                        //         color: AppColors.white,
-                        //         border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
-                        //     child: Column(
-                        //       children: [
-                        //         Container(
-                        //           height: 60,
-                        //           decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                        //               color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                        //               border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
-                        //           padding: EdgeInsets.symmetric(horizontal: 10),
-                        //           child: Column(
-                        //             children: [
-                        //               SizedBox(
-                        //                 height: 10,
-                        //               ),
-                        //               Row(
-                        //                 children: [
-                        //                   Text(
-                        //                     textAlign: TextAlign.center,
-                        //                     "Images",
-                        //                     style: AppFonts.medium(16, AppColors.textPurple),
-                        //                   ),
-                        //                   Spacer(),
-                        //                   SvgPicture.asset(
-                        //                     ImagePath.edit_outline,
-                        //                     height: 40,
-                        //                     width: 40,
-                        //                   ),
-                        //                 ],
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //         SizedBox(
-                        //           height: 10,
-                        //         ),
-                        //         Padding(
-                        //           padding: const EdgeInsets.symmetric(horizontal: 20),
-                        //           child: Container(
-                        //             width: double.infinity,
-                        //             decoration: BoxDecoration(
-                        //                 borderRadius: BorderRadius.circular(12), color: AppColors.imageBannerGrayBackground, border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
-                        //             padding: EdgeInsets.symmetric(horizontal: 20),
-                        //             child: Column(
-                        //               children: [
-                        //                 SizedBox(height: 15),
-                        //                 Row(
-                        //                   children: [
-                        //                     Text(
-                        //                       textAlign: TextAlign.left,
-                        //                       overflow: TextOverflow.ellipsis,
-                        //                       "Right side of the nose before the laser session",
-                        //                       style: AppFonts.medium(12, AppColors.textBlack),
-                        //                     ),
-                        //                     SizedBox(width: 10),
-                        //                     SvgPicture.asset(
-                        //                       ImagePath.edit,
-                        //                       height: 25,
-                        //                       width: 25,
-                        //                     ),
-                        //                     Spacer(),
-                        //                     SvgPicture.asset(
-                        //                       ImagePath.chat_outline,
-                        //                       height: 40,
-                        //                       width: 40,
-                        //                     ),
-                        //                     SizedBox(width: 10),
-                        //                     SvgPicture.asset(
-                        //                       ImagePath.delete_outline,
-                        //                       height: 40,
-                        //                       width: 40,
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //                 SizedBox(height: 10),
-                        //                 BaseImageView(width: double.infinity, height: 200, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg"),
-                        //                 SizedBox(height: 10),
-                        //                 Row(
-                        //                   children: [
-                        //                     Text(
-                        //                       textAlign: TextAlign.center,
-                        //                       "12/24/2024 - 10:13AM",
-                        //                       style: AppFonts.medium(14, AppColors.textGrey),
-                        //                     ),
-                        //                     SizedBox(width: 10),
-                        //                     Spacer(),
-                        //                   ],
-                        //                 ),
-                        //                 SizedBox(height: 10),
-                        //                 Container(
-                        //                     decoration:
-                        //                         BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
-                        //                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        //                     child: Column(
-                        //                       children: [
-                        //                         Row(
-                        //                           children: [
-                        //                             ClipRRect(
-                        //                                 borderRadius: BorderRadius.circular(22.5),
-                        //                                 child: BaseImageView(width: 45, height: 45, imageUrl: "https://www.cdfa.ca.gov/v6.5/sample/images/gallery/orangecounty-big.jpg")),
-                        //                             SizedBox(width: 10),
-                        //                             Text(
-                        //                               textAlign: TextAlign.center,
-                        //                               "Dr. Tinajero",
-                        //                               style: AppFonts.medium(14, AppColors.textBlack),
-                        //                             ),
-                        //                             SizedBox(width: 10),
-                        //                             Spacer(),
-                        //                             SvgPicture.asset(
-                        //                               ImagePath.edit_outline,
-                        //                               height: 40,
-                        //                               width: 40,
-                        //                             ),
-                        //                             SizedBox(width: 10),
-                        //                             SvgPicture.asset(
-                        //                               ImagePath.delete_outline,
-                        //                               height: 40,
-                        //                               width: 40,
-                        //                             ),
-                        //                           ],
-                        //                         ),
-                        //                         SizedBox(
-                        //                           height: 10,
-                        //                         ),
-                        //                         Text(
-                        //                           textAlign: TextAlign.left,
-                        //                           "Pre-treatment photo of the nasal scar prior to the first erbium Pearl Fractional laser session. Documenting baseline appearance for progress tracking.",
-                        //                           style: AppFonts.medium(14, AppColors.textGrey),
-                        //                         ),
-                        //                       ],
-                        //                     )),
-                        //                 SizedBox(height: 20),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ),
-                        //         SizedBox(
-                        //           height: 20,
-                        //         ),
-                        //         // Padding(
-                        //         //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                        //         //   child: Column(
-                        //         //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //         //     children: [
-                        //         //       Text(
-                        //         //         textAlign: TextAlign.left,
-                        //         //         "A comprehensive skin exam was conducted with the medical assistant present. The scalp, face, trunk, and extremities were thoroughly examined. \n \nDon has skin type II. He appeared well-groomed, well-nourished, and was alert and oriented to person, place, and time. \n \nFindings included: \n",
-                        //         //         style: AppFonts.regular(15, AppColors.textGrey),
-                        //         //       ),
-                        //         //       SizedBox(height: 10),
-                        //         //       ListView.builder(
-                        //         //           shrinkWrap: true,
-                        //         //           itemBuilder: (context, index) => InkWell(
-                        //         //                 onTap: () {},
-                        //         //                 child: Padding(
-                        //         //                   padding: const EdgeInsets.symmetric(horizontal: 0),
-                        //         //                   child: Column(
-                        //         //                     children: [
-                        //         //                       SizedBox(height: 0),
-                        //         //                       Row(
-                        //         //                         children: [
-                        //         //                           Text(
-                        //         //                             textAlign: TextAlign.center,
-                        //         //                             '\u2022',
-                        //         //                             style: AppFonts.regular(20, AppColors.textGrey),
-                        //         //                           ),
-                        //         //                           SizedBox(width: 15),
-                        //         //                           Expanded(
-                        //         //                               child: Text(
-                        //         //                             textAlign: TextAlign.left,
-                        //         //                             "Brown, scaly plaques scattered across the trunk",
-                        //         //                             style: AppFonts.regular(15, AppColors.textGrey),
-                        //         //                           )),
-                        //         //                         ],
-                        //         //                       ),
-                        //         //                       SizedBox(height: 0),
-                        //         //                     ],
-                        //         //                   ),
-                        //         //                 ),
-                        //         //               ),
-                        //         //           itemCount: 4),
-                        //         //       SizedBox(height: 10),
-                        //         //     ],
-                        //         //   ),
-                        //         // ),
-                        //         // SizedBox(
-                        //         //   height: 10,
-                        //         // ),
-                        //       ],
-                        //     )),
                       ],
                     ))
               ],
@@ -1189,16 +851,3 @@ class FullNoteView extends GetView<PatientInfoController> {
     });
   }
 }
-
-// return Container(child:  if(context.isPhone)...[
-// // ColumnWidget1(),
-// // ColumnWidget2()
-// ]else...[
-// Row(
-// children: [
-// Expanded 3 ColumnWidget1(),
-// SizedBox(widget: 20),
-// Expanded 7 ColumnWidget2()
-// ],
-// )
-// ],);

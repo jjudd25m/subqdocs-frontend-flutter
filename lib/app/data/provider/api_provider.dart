@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mime/mime.dart';
 import '../../../utils/app_string.dart';
 import '../../../utils/validation_string.dart';
 import '../../core/common/app_preferences.dart';
@@ -24,9 +25,7 @@ class ApiProvider {
       print(UrlProvider.baseUrl + url);
     }
     try {
-      var response = await dio
-          .post(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader()))
-          .timeout(const Duration(seconds: 30));
+      var response = await dio.post(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
       var res = response.data is String;
       return res;
       // return getResponse(response.data);
@@ -48,9 +47,7 @@ class ApiProvider {
       print(UrlProvider.baseUrl + url);
     }
     try {
-      var response = await dio
-          .post(UrlProvider.baseUrl + url, data: jsonEncode(params), options: Options(headers: getApiHeader()))
-          .timeout(const Duration(seconds: 30));
+      var response = await dio.post(UrlProvider.baseUrl + url, data: jsonEncode(params), options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
       print("API response is $response");
       return getResponse(response.data);
     } on TimeoutException {
@@ -69,9 +66,7 @@ class ApiProvider {
       print(UrlProvider.baseUrl + url);
     }
     try {
-      var response = await dio
-          .put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader()))
-          .timeout(const Duration(seconds: 30));
+      var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
       return getResponse(response.data);
     } on TimeoutException {
       throw ValidationString.validationRequestTimeout;
@@ -84,8 +79,7 @@ class ApiProvider {
     }
   }
 
-  Future<Map<String, dynamic>> callPostMultiPartDio(
-      String url, Map<String, dynamic> params, Map<String, File> files, String mimeTye, String token) async {
+  Future<Map<String, dynamic>> callPostMultiPartDio(String url, Map<String, dynamic> params, Map<String, File> files, String mimeTye, String token) async {
     if (kDebugMode) {
       print(UrlProvider.baseUrl + url);
     }
@@ -136,9 +130,7 @@ class ApiProvider {
       print("queryParameters: $queryParameters");
       print("url is : $url");
       print("-------------------------------");
-      var response = await dio
-          .get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader()))
-          .timeout(const Duration(seconds: 30));
+      var response = await dio.get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
       print("-------------------------------");
       print("API response $response");
       print("-------------------------------");
@@ -157,18 +149,14 @@ class ApiProvider {
     }
   }
 
-  Future<Map<String, dynamic>> callDelete(String url,
-      {Map<String, dynamic>? queryParameters, Map<String, dynamic>? data}) async {
+  Future<Map<String, dynamic>> callDelete(String url, {Map<String, dynamic>? queryParameters, Map<String, dynamic>? data}) async {
     if (kDebugMode) {
       print(UrlProvider.baseUrl + url);
       // customPrint("call delete parameter $queryParameters");
     }
     try {
       var response = await dio
-          .delete(UrlProvider.baseUrl + url,
-              queryParameters: queryParameters,
-              data: (data != null && data.isNotEmpty) ? jsonEncode(data) : null,
-              options: Options(headers: getApiHeader()))
+          .delete(UrlProvider.baseUrl + url, queryParameters: queryParameters, data: (data != null && data.isNotEmpty) ? jsonEncode(data) : null, options: Options(headers: getApiHeader()))
           .timeout(const Duration(seconds: 30));
 
       // customPrint("call delete response is $response");
@@ -261,5 +249,51 @@ class ApiProvider {
       throw e.response?.data["data"];
     }
     throw e.message ?? ValidationString.validationSomethingWentWrong;
+  }
+
+  Future<Map<String, dynamic>> callPostMultiPartDioListOfFiles({required String url, required Map<String, dynamic> params, required Map<String, List<File>> files, required String token}) async {
+    if (kDebugMode) {
+      print(UrlProvider.baseUrl + url);
+    }
+    try {
+      FormData formData = FormData.fromMap(params);
+
+      for (String key in files.keys) {
+        for (File file in files[key]!) {
+          String mimeType = lookupMimeType(file.path) ?? "";
+
+          formData.files.add(MapEntry(
+            key,
+            await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse(mimeType)
+                // filename: file.path.split(Platform.pathSeparator).last,  // Uncomment if you want to use the file name
+                ),
+          ));
+        }
+      }
+
+      if (getApiHeader() != null) {
+        // dio.options.headers["Content-Disposition"] = "multipart/form-data";
+        dio.options.headers["Content-Type"] = "multipart/form-data";
+        dio.options.headers["Authorization"] = "Bearer $token";
+        print("header is:- ${dio.options.headers}");
+        // dio.options.headers = getApiHeader();
+        // dio.options.headers['Content-Type'] = mimeTye;
+      }
+
+      print("formdata is ${formData.files.first.value}");
+      print("header is ${dio.options.headers}");
+
+      var response = await dio.post(UrlProvider.baseUrl + url, data: formData);
+
+      return getResponse(response.data);
+    } on TimeoutException {
+      throw ValidationString.validationRequestTimeout;
+    } on SocketException {
+      throw ValidationString.validationNoInternetFound;
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    } catch (e) {
+      rethrow;
+    }
   }
 }
