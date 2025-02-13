@@ -1,13 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:subqdocs/widget/base_image_view.dart';
 
+import '../app/core/common/app_preferences.dart';
+import '../app/modules/login/model/login_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
+import '../utils/app_string.dart';
 import '../utils/imagepath.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar(
+  CustomAppBar(
       {super.key,
       required this.drawerkey,
       this.leadingImage,
@@ -36,6 +42,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? leadingWidth;
   final double? elevation;
   final bool? centerTitle;
+
+  var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +90,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       children: [
                         Text(
                           textAlign: TextAlign.center,
-                          "Adrian Tinajero",
+                          "${loginData.responseData?.user?.firstName} ${loginData.responseData?.user?.lastName}",
                           style: AppFonts.medium(15, AppColors.textBlack),
                         ),
                         SizedBox(
@@ -115,7 +123,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     AppBar(
       surfaceTintColor: AppColors.textWhite,
       backgroundColor: backgroundColor ?? AppColors.textWhite,
-      scrolledUnderElevation: elevation, // This will fix the problem
+      scrolledUnderElevation: elevation,
+      // This will fix the problem
       elevation: elevation,
       leadingWidth: leadingWidth,
       leading: Container(

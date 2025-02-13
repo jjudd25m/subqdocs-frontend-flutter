@@ -15,12 +15,12 @@ class ScheduleVisitListModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.toJson();
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -46,7 +46,7 @@ class ResponseData {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['totalCount'] = this.totalCount;
+    data['totalCount'] = totalCount;
     return data;
   }
 }
@@ -117,25 +117,25 @@ class ScheduleVisitListData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id'] = this.id;
-    data['patient_id'] = this.patientId;
-    data['visit_id'] = this.visitId;
-    data['visit_status'] = this.visitStatus;
-    data['visit_date'] = this.visitDate;
-    data['visit_time'] = this.visitTime;
-    data['visit_type'] = this.visitType;
-    data['visit_notes'] = this.visitNotes;
-    data['status'] = this.status;
-    data['visit_details'] = this.visitDetails;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['gender'] = this.gender;
-    data['age'] = this.age;
-    data['appointmentTime'] = this.appointmentTime;
-    data['previousVisitCount'] = this.previousVisitCount;
+    data['id'] = id;
+    data['patient_id'] = patientId;
+    data['visit_id'] = visitId;
+    data['visit_status'] = visitStatus;
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['visit_type'] = visitType;
+    data['visit_notes'] = visitNotes;
+    data['status'] = status;
+    data['visit_details'] = visitDetails;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['gender'] = gender;
+    data['age'] = age;
+    data['appointmentTime'] = appointmentTime;
+    data['previousVisitCount'] = previousVisitCount;
     return data;
   }
 }

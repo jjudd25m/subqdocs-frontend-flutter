@@ -62,6 +62,42 @@ class PatientInfoController extends GetxController {
       socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
       socketService.socket.on(
+        "DoctorsViewStatus",
+        (data) {
+          var res = data as Map<String, dynamic>;
+          print("---------------------------------------------");
+          print("DoctorsViewStatus status is :- ${res}");
+
+          int visit_id = res["visit_id"];
+          int transcription_id = res["transcription_id"];
+          String status = res["status"];
+          String message = res["message"];
+
+          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+            print("DoctorsViewStatus inside condition");
+            if (status.toLowerCase() == "pending") {
+              print("DoctorsViewStatus pending");
+              isFullNoteLoading.value = true;
+              isFullNoteLoadText.value = message;
+            } else if (status.toLowerCase() == "inprogress") {
+              print("DoctorsViewStatus inprogress");
+              isFullNoteLoading.value = true;
+              isFullNoteLoadText.value = message;
+            } else if (status.toLowerCase() == "success") {
+              print("DoctorsViewStatus success");
+              isFullNoteLoading.value = false;
+              isFullNoteLoadText.value = message;
+
+              // getFullNote();
+            } else if (status.toLowerCase() == "failure") {
+              isFullNoteLoading.value = false;
+              isFullNoteLoadText.value = "failure";
+            }
+          }
+        },
+      );
+
+      socketService.socket.on(
         "FullNoteStatus",
         (data) {
           var res = data as Map<String, dynamic>;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
@@ -11,16 +12,22 @@ import 'package:intl/intl.dart';
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
+import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
+import '../model/visit_recap_list_model.dart';
 import '../repository/visit_main_repository.dart';
 import '../views/attachmentDailog.dart';
 
 class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
+
+  RxBool isLoading = RxBool(false);
+  RxString loadingMessage = RxString("");
 
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
   RecorderService recorderService = RecorderService();
@@ -31,7 +38,10 @@ class VisitMainController extends GetxController {
   RxInt isSelectedAttchmentOption = RxInt(0);
   List<String> patientType = ["New Patient", "Old Patient"];
   RxnString selectedMedicalAssistant = RxnString();
-  RxList<MediaListingModel> selectedList = RxList();
+  // RxList<MediaListingModel> selectedList = RxList();
+
+  Rxn<VisitRecapListModel> visitRecapList = Rxn();
+  Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
 
   Future<void> captureProfileImage() async {
     XFile? pickedImage = await MediaPickerServices().pickImage();
@@ -76,12 +86,7 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file,
-          previewImage: null,
-          fileName: _shortFileName,
-          date: _formatDate(_pickDate),
-          Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
     }
 
     list.refresh();
@@ -116,12 +121,7 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(
-              file: file,
-              previewImage: null,
-              fileName: _shortFileName,
-              date: _formatDate(_pickDate),
-              Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
         }
 
         list.refresh();
@@ -132,6 +132,7 @@ class VisitMainController extends GetxController {
   }
 
   RxString visitId = RxString("");
+  RxString patientId = RxString("");
   RxList<MediaListingModel> list = RxList();
 
   void showCustomDialog(BuildContext context) {
@@ -145,11 +146,21 @@ class VisitMainController extends GetxController {
   }
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
 
     visitId.value = Get.arguments["visitId"];
+    patientId.value = Get.arguments["patientId"];
+
     print("visit id is :- $visitId");
+
+    List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+    print("local audio is :- ${pendingFiles}");
+
+    if (patientId.value.isNotEmpty) {
+      getVisitRecap();
+      getPatientAttachment();
+    }
   }
 
   @override
@@ -165,11 +176,15 @@ class VisitMainController extends GetxController {
   void increment() => count.value++;
 
   Future<void> submitAudio(File audioFile) async {
+    isLoading.value = true;
+    loadingMessage.value = "Uploading Audio";
+
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
-        audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
     print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+
+    isLoading.value = false;
 
     Get.toNamed(Routes.PATIENT_INFO, arguments: {
       "trascriptUploadData": patientTranscriptUploadModel,
@@ -180,16 +195,66 @@ class VisitMainController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     Map<String, List<File>> profileParams = {};
-    if (selectedList.isNotEmpty) {
+    if (list.isNotEmpty) {
       print("profile is   available");
       // param['profile_image'] = profileImage.value;
-      profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
-
-      ;
+      profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
     } else {
       print("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(
-        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+    list.clear();
+    getPatientAttachment();
   }
+
+  Future<void> getVisitRecap() async {
+    print("patientID is :- ${patientId.value}");
+    visitRecapList.value = await _visitMainRepository.getVisitRecap(id: patientId.value);
+  }
+
+  Future<void> getPatientAttachment() async {
+    patientAttachmentList.value = await _visitMainRepository.getPatientAttachment(id: visitId.value);
+
+    print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+  }
+
+//   Future<void> submitAudio(File audioFile) async {
+//     isLoading.value = true;
+//     loadingMessage.value = "Uploading Audio";
+//
+//     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+//
+//     bool isConnected = await isInternetAvailable();
+//
+//     if (!isConnected) {
+//       print("No internet connection");
+//       // If no internet, save audio as BLOB in the local database
+//       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
+//
+//       AudioFile audioFileToSave = AudioFile(
+//         audioData: audioBytes,
+//         fileName: audioFile.uri.pathSegments.last,
+//         status: 'pending',
+//       );
+//
+//       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+//
+//       // Show a message or update UI
+//       loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
+//       isLoading.value = false;
+//
+//       return;
+//     } else {
+//       print("internet connected");
+//       // If there is internet, upload the audio
+//       PatientTranscriptUploadModel patientTranscriptUploadModel =
+//           await _visitMainRepository.uploadAudio(
+//         audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+//
+//       print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+//
+//     Get.toNamed(Routes.PATIENT_INFO, arguments: {
+//       "trascriptUploadData": patientTranscriptUploadModel,
+//     });
+//   }
 }

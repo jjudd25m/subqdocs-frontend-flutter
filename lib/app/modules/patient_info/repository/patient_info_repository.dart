@@ -28,4 +28,10 @@ class PatientInfoRepository {
     print("getFullNote API  internal response $response");
     return PatientFullNoteModel.fromJson(response);
   }
+
+  Future<PatientFullNoteModel> getDoctorNote({required String id}) async {
+    var response = await ApiProvider.instance.callGet("full-note/$id");
+    print("getFullNote API  internal response $response");
+    return PatientFullNoteModel.fromJson(response);
+  }
 }

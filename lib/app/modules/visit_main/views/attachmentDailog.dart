@@ -101,8 +101,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                                             children: [
                                               Text(controller.list.value[index].fileName ?? ""),
                                               Text(controller.visitId.value),
-                                              Text(
-                                                  "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                              Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
                                             ],
                                           ),
                                           Spacer(),
@@ -148,6 +147,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                             navigate: () {
                               // controller.addImage(
                               // )
+                              Navigator.pop(context);
                               controller.uploadAttachments();
 
                               //
