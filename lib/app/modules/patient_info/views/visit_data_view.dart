@@ -79,6 +79,7 @@ class VisitDataView extends GetView<PatientInfoController> {
                                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                                   child: ListView.builder(
                                       shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) => InkWell(
                                             onTap: () {},
                                             child: Padding(
@@ -151,7 +152,7 @@ class VisitDataView extends GetView<PatientInfoController> {
               ),
             ],
           ),
-          if (controller.isVisitDataLoading.value) ...[
+          if (controller.isVisitDataLoading.value || controller.patientDoctorVisitDataModel.value?.responseData == null) ...[
             if (controller.isVisitDataLoadText.value.toLowerCase() == "failure") ...[
               Center(
                   child: Column(

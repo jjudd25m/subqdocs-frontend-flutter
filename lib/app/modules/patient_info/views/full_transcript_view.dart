@@ -56,7 +56,7 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                             children: [
                               Text(
                                 textAlign: TextAlign.left,
-                                "(Transcription Time- ${(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData.first.last.end ?? 0.0 / 60.0).toStringAsFixed(2)})",
+                                "(Transcription Time- ${(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.last.transcript?.last.end ?? 0.0 / 60.0).toStringAsFixed(2)})",
                                 style: AppFonts.medium(12, AppColors.textGrey),
                               ),
                               // Spacer()
@@ -76,58 +76,66 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) => Column(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
-                                          child: Column(
-                                            children: [
-                                              SizedBox(height: 6),
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                itemBuilder: (context, index) => ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?.length ?? 0,
+                                      itemBuilder: (context, subIndex) {
+                                        return Column(
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
+                                              child: Column(
                                                 children: [
-                                                  BaseImageView(
-                                                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                  SizedBox(width: 8),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          textAlign: TextAlign.left,
-                                                          controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData.first[index].speaker ?? "",
-                                                          style: AppFonts.regular(14, AppColors.textPurple),
+                                                  SizedBox(height: 6),
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      BaseImageView(
+                                                        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                        width: 20,
+                                                        height: 20,
+                                                      ),
+                                                      SizedBox(width: 8),
+                                                      Expanded(
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              textAlign: TextAlign.left,
+                                                              controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].speaker ?? "",
+                                                              style: AppFonts.regular(14, AppColors.textPurple),
+                                                            ),
+                                                            SizedBox(height: 4),
+                                                            Text(
+                                                              controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].sentence ?? "",
+                                                              style: AppFonts.regular(12, AppColors.textGrey),
+                                                            )
+                                                          ],
                                                         ),
-                                                        SizedBox(height: 4),
-                                                        Text(
-                                                          controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData.first[index].sentence ?? "",
-                                                          style: AppFonts.regular(12, AppColors.textGrey),
-                                                        )
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      SizedBox(width: 20),
+                                                      Text(
+                                                        "(${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].start ?? ""} - ${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end ?? ""})",
+                                                        style: AppFonts.regular(12, AppColors.textGrey),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  SizedBox(width: 20),
-                                                  Text(
-                                                    "(${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData.first[index].start ?? ""} - ${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData.first[index].end ?? ""})",
-                                                    style: AppFonts.regular(12, AppColors.textGrey),
-                                                  ),
+                                                  SizedBox(height: 6),
                                                 ],
                                               ),
-                                              SizedBox(height: 6),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        )
-                                      ],
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            )
+                                          ],
+                                        );
+                                      },
                                     ),
-                                itemCount: controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData.first.length ?? 0)),
+                                itemCount: controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.length ?? 0)),
                         if (controller.isFullTranscriptLoading.value) ...[
                           Center(
                               child: Column(

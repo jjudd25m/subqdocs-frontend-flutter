@@ -79,6 +79,7 @@ class PatientView extends GetView<PatientInfoController> {
                                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                                   child: ListView.builder(
                                       shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) => InkWell(
                                             onTap: () {},
                                             child: Padding(
@@ -147,7 +148,7 @@ class PatientView extends GetView<PatientInfoController> {
               ),
             ],
           ),
-          if (controller.isPatientViewLoading.value) ...[
+          if (controller.isPatientViewLoading.value || controller.patientViewListModel.value?.responseData == null) ...[
             if (controller.isPatientViewLoadText.value.toLowerCase() == "failure") ...[
               Center(
                   child: Column(
