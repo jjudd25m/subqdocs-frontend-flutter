@@ -6,6 +6,7 @@ import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../data/service/socket_service.dart';
 import '../../login/model/login_model.dart';
+import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../model/patient_doctor_visit_data_model.dart';
 import '../model/patient_fullnote_model.dart';
@@ -27,6 +28,7 @@ class PatientInfoController extends GetxController {
   Rxn<PatientViewListModel> patientViewListModel = Rxn();
   Rxn<PatientDoctorVisitDataModel> patientDoctorVisitDataModel = Rxn();
   Rxn<PatientFullNoteModel> patientFullNoteModel = Rxn();
+  Rxn<DoctorViewModel> doctorViewList = Rxn();
 
   PatientTranscriptUploadModel patientTranscriptUploadModel = PatientTranscriptUploadModel();
 
@@ -88,7 +90,7 @@ class PatientInfoController extends GetxController {
               isFullNoteLoading.value = false;
               isFullNoteLoadText.value = message;
 
-              // getFullNote();
+              getDoctorNote();
             } else if (status.toLowerCase() == "failure") {
               isFullNoteLoading.value = false;
               isFullNoteLoadText.value = "failure";
@@ -266,5 +268,10 @@ class PatientInfoController extends GetxController {
   Future<void> getFullNote() async {
     patientFullNoteModel.value = await _patientInfoRepository.getFullNote(id: patientTranscriptUploadModel.responseData!.visitId.toString());
     print("getFullNote is :- ${patientFullNoteModel.value}");
+  }
+
+  Future<void> getDoctorNote() async {
+    doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: patientTranscriptUploadModel.responseData!.visitId.toString());
+    print("getDoctorNote is :- ${doctorViewList.value}");
   }
 }

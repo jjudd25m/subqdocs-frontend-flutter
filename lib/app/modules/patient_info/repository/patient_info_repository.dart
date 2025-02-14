@@ -1,4 +1,5 @@
 import '../../../data/provider/api_provider.dart';
+import '../../visit_main/model/doctor_view_model.dart';
 import '../model/patient_doctor_visit_data_model.dart';
 import '../model/patient_fullnote_model.dart';
 import '../model/patient_view_list_model.dart';
@@ -29,9 +30,9 @@ class PatientInfoRepository {
     return PatientFullNoteModel.fromJson(response);
   }
 
-  Future<PatientFullNoteModel> getDoctorNote({required String id}) async {
+  Future<DoctorViewModel> getDoctorNote({required String id}) async {
     var response = await ApiProvider.instance.callGet("full-note/$id");
     print("getFullNote API  internal response $response");
-    return PatientFullNoteModel.fromJson(response);
+    return DoctorViewModel.fromJson(response);
   }
 }
