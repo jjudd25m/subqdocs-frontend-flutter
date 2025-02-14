@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/widgets/empty_patient_screen.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -25,10 +26,18 @@ class HomeScheduleListView extends GetView<HomeController> {
         return controller.scheduleVisitList.isEmpty
             ? Padding(
                 padding: const EdgeInsets.all(10),
-                child: Text(
-                  "No Patients Found",
-                  style: AppFonts.medium(20, AppColors.black),
-                ),
+                child: EmptyPatientScreen(
+                    onBtnPress: () async {
+                      final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                      if (result == 1) {
+                        controller.getPastVisitList();
+                        controller.getScheduleVisitList();
+                        controller.getPatientList();
+                      }
+                    },
+                    title: "Your Schedule Visits List is Empty",
+                    description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
               )
             : CustomTable(
                 rows: _getTableRows(controller.scheduleVisitList),
@@ -43,12 +52,15 @@ class HomeScheduleListView extends GetView<HomeController> {
                                   "patientId": controller.scheduleVisitList[rowIndex - 1].patientId.toString(),
                                 });
                               },
-                              child: BaseImageView(
-                                imageUrl: profileImage,
-                                height: 28,
-                                width: 28,
-                                nameLetters: cellData,
-                                fontSize: 12,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(14),
+                                child: BaseImageView(
+                                  imageUrl: profileImage,
+                                  height: 28,
+                                  width: 28,
+                                  nameLetters: cellData,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -84,8 +96,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         onTap: () {
-                                          print(
-                                              "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                          print("visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
                                           Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                             "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
@@ -138,8 +149,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         padding: EdgeInsets.zero,
                                         value: "",
                                         onTap: () {
-                                          controller
-                                              .deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
+                                          controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
                                         },
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,6 +182,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     controller.scheduleSorting(cellData: cellData, colIndex: colIndex);
                                   },
                                   child: Row(
+                                    mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         cellData,
@@ -180,16 +191,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         softWrap: true, // Allows text to wrap
                                         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                       ),
-                                      colIndex == controller.colindexSchedule.value &&
-                                              controller.isAsendingSchedule.value &&
-                                              colIndex != 5
+                                      colIndex == controller.colindexSchedule.value && controller.isAsendingSchedule.value && colIndex != 5
                                           ? Icon(
                                               CupertinoIcons.up_arrow,
                                               size: 15,
                                             )
-                                          : colIndex == controller.colindexSchedule.value &&
-                                                  !controller.isAsendingSchedule.value &&
-                                                  colIndex != 5
+                                          : colIndex == controller.colindexSchedule.value && !controller.isAsendingSchedule.value && colIndex != 5
                                               ? Icon(
                                                   CupertinoIcons.down_arrow,
                                                   size: 15,

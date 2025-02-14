@@ -93,8 +93,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                   Spacer(),
                                   SvgPicture.asset(
                                     ImagePath.edit,
-                                    height: 15,
-                                    width: 15,
+                                    height: 20,
+                                    width: 20,
                                   ),
                                   SizedBox(
                                     width: 18,
@@ -105,7 +105,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                         borderRadius: BorderRadius.circular(100), // Set corner radius
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                                         child: Text(
                                           textAlign: TextAlign.start,
                                           "Pending",

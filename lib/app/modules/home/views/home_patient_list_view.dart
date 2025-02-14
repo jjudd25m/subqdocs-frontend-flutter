@@ -11,6 +11,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/custom_table.dart';
+import '../../../../widgets/empty_patient_screen.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
 import '../model/patient_list_model.dart';
@@ -24,10 +25,18 @@ class HomePatientListView extends GetView<HomeController> {
       return controller.patientList.isEmpty
           ? Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(
-                "No Patients Found",
-                style: AppFonts.medium(20, AppColors.black),
-              ),
+              child: EmptyPatientScreen(
+                  onBtnPress: () async {
+                    final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                    if (result == 1) {
+                      controller.getPastVisitList();
+                      controller.getScheduleVisitList();
+                      controller.getPatientList();
+                    }
+                  },
+                  title: "Your Patient List is Empty",
+                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
             )
           : CustomTable(
               rows: _getTableRows(controller.patientList),
@@ -69,13 +78,15 @@ class HomePatientListView extends GetView<HomeController> {
     return colIndex == 0 && rowIndex != 0
         ? Row(
             children: [
-              BaseImageView(
-                imageUrl: profileImage,
-                height: 28,
-                width: 28,
-                nameLetters: cellData,
-                fontSize: 12,
-              ),
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: BaseImageView(
+                    imageUrl: profileImage,
+                    height: 28,
+                    width: 28,
+                    nameLetters: cellData,
+                    fontSize: 12,
+                  )),
               SizedBox(
                 width: 10,
               ),
@@ -110,11 +121,7 @@ class HomePatientListView extends GetView<HomeController> {
                           padding: EdgeInsets.zero,
                           onTap: () {
                             print(" patient id is ${controller.patientList[rowIndex - 1].id}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
-                              "visitId": "",
-                              "fromSchedule": false
-                            });
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
                           },
                           // value: "",
                           child: Padding(
@@ -130,16 +137,12 @@ class HomePatientListView extends GetView<HomeController> {
                           onTap: () async {
                             print("row index is :- ${rowIndex}");
                             print("column index is :- ${colIndex}");
-                            print(
-                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
+                            print(" patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
 
                             // print(" our element is $");
 
-                            final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
-                              "visitId": "",
-                              "fromSchedule": false
-                            });
+                            final result =
+                                await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
                             print("our result is $result");
 
                             if (result == 1) {
@@ -202,6 +205,7 @@ class HomePatientListView extends GetView<HomeController> {
                       print(cellData);
                     },
                     child: Row(
+                      mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                       children: [
                         Text(
                           cellData,
@@ -210,16 +214,12 @@ class HomePatientListView extends GetView<HomeController> {
                           softWrap: true, // Allows text to wrap
                           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                         ),
-                        colIndex == controller.colIndexPatient.value &&
-                                controller.isAsendingPatient.value &&
-                                colIndex != 5
+                        colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
                             ? Icon(
                                 CupertinoIcons.up_arrow,
                                 size: 15,
                               )
-                            : colIndex == controller.colIndexPatient.value &&
-                                    !controller.isAsendingPatient.value &&
-                                    colIndex != 5
+                            : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
                                 ? Icon(
                                     CupertinoIcons.down_arrow,
                                     size: 15,

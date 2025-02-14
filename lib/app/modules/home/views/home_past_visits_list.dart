@@ -9,6 +9,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/custom_table.dart';
+import '../../../../widgets/empty_patient_screen.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
@@ -26,10 +27,18 @@ class HomePastVisitsList extends GetView<HomeController> {
           child: controller.pastVisitList.isEmpty
               ? Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "No Patients Found",
-                    style: AppFonts.medium(20, AppColors.black),
-                  ),
+                  child: EmptyPatientScreen(
+                      onBtnPress: () async {
+                        final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                        if (result == 1) {
+                          controller.getPastVisitList();
+                          controller.getScheduleVisitList();
+                          controller.getPatientList();
+                        }
+                      },
+                      title: "Your Past Visit List is Empty",
+                      description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
                 )
               : CustomTable(
                   onLoadMore: () => controller.getPastVisitListFetchMore(),
@@ -38,13 +47,15 @@ class HomePastVisitsList extends GetView<HomeController> {
                     return colIndex == 0 && rowIndex != 0
                         ? Row(
                             children: [
-                              BaseImageView(
-                                imageUrl: profileImage,
-                                height: 28,
-                                width: 28,
-                                nameLetters: cellData,
-                                fontSize: 12,
-                              ),
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: BaseImageView(
+                                    imageUrl: profileImage,
+                                    height: 28,
+                                    width: 28,
+                                    nameLetters: cellData,
+                                    fontSize: 12,
+                                  )),
                               SizedBox(
                                 width: 10,
                               ),
@@ -96,8 +107,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                print(
-                                                    "visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
+                                                print("visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
 
                                                 Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                   "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
@@ -119,8 +129,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               onTap: () async {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
-                                                final result =
-                                                    await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                                final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
                                                   "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
                                                   "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
                                                   "fromSchedule": false
@@ -186,16 +195,14 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           controller.getPastVisitList(sortingName: cellData);
                                           controller.colIndex.value = colIndex;
 
-                                          controller.isAsending.value =
-                                              controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
+                                          controller.isAsending.value = controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
                                           controller.colIndex.refresh();
                                           controller.isAsending.refresh();
                                           print("col index is the $colIndex");
                                           print(controller.getDescValue(controller.sortingPastPatient, cellData));
                                         },
                                         child: Row(
-                                          mainAxisAlignment:
-                                              colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                          mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               cellData,
@@ -205,16 +212,12 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               softWrap: true, // Allows text to wrap
                                               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                             ),
-                                            colIndex == controller.colIndex.value &&
-                                                    controller.isAsending.value &&
-                                                    colIndex != 6
+                                            colIndex == controller.colIndex.value && controller.isAsending.value && colIndex != 6
                                                 ? Icon(
                                                     CupertinoIcons.up_arrow,
                                                     size: 15,
                                                   )
-                                                : colIndex == controller.colIndex.value &&
-                                                        !controller.isAsending.value &&
-                                                        colIndex != 6
+                                                : colIndex == controller.colIndex.value && !controller.isAsending.value && colIndex != 6
                                                     ? Icon(
                                                         CupertinoIcons.down_arrow,
                                                         size: 15,

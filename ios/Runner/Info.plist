@@ -49,5 +49,11 @@
   <string>Recording Permission</string>
   <key>NSSpeechRecognitionUsageDescription</key>
   <string>recognize speech</string>
+  <key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+  <true/>
+  <key>NSCameraUsageDescription</key>
+  <string>$(PRODUCT_NAME) camera description.</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>$(PRODUCT_NAME)photos description.</string>
 </dict>
 </plist>

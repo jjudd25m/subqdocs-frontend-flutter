@@ -85,4 +85,6 @@ class ImagePath {
   static const String downArrow = 'assets/images/down_arrow.svg';
   static const String nameFilter = 'assets/images/name_filter.svg';
   // static const String edit = 'assets/images/edit_icon_light.svg';
+
+  static const String patient_no_data = 'assets/images/patient_no_data.svg';
 }
