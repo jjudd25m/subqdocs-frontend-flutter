@@ -4,7 +4,7 @@ import 'package:subqdocs/utils/app_colors.dart';
 
 class CustomTable extends StatelessWidget {
   final List<List<String>> rows;
-  final Widget Function(BuildContext, int, int, String) cellBuilder;
+  final Widget Function(BuildContext, int, int, String, String) cellBuilder;
   final int columnCount;
   BuildContext context;
 
@@ -79,11 +79,7 @@ class CustomTable extends StatelessWidget {
               width: screenWidth * columnWidths[colIndex], // Set the width based on percentage
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: cellBuilder(
-                context,
-                rowIndex,
-                colIndex,
-                rowData.length > colIndex ? rowData[colIndex] : '',
-              ),
+                  context, rowIndex, colIndex, rowData.length > colIndex ? rowData[colIndex] : '', rowData.last),
             ),
         ],
       ),

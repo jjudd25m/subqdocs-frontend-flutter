@@ -29,6 +29,7 @@ class BaseImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(" image url is ${imageUrl}");
     return imageUrl.isNotEmpty
         ? CachedNetworkImage(
             imageUrl: imageUrl,
@@ -38,10 +39,13 @@ class BaseImageView extends StatelessWidget {
               if (errorWidget == null) {
                 return (nameLetters?.isNotEmpty ?? false)
                     ? Container(
-                        color: circleColor ?? Colors.blue,
+                        width: width ?? 80,
+                        height: height ?? 80,
+                        decoration:
+                            BoxDecoration(shape: BoxShape.circle, color: circleColor ?? generateDarkRandomColor()),
                         child: Center(
                           child: Text(
-                            nameLetters ?? "",
+                            nameLetters?.getFirstTwoWordInitials() ?? "",
                             style: AppFonts.semiBold(fontSize ?? 24.0, AppColors.textWhite),
                           ),
                         ),

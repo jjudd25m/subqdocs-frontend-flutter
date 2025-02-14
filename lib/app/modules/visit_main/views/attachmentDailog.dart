@@ -45,6 +45,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
+
                         // controller.list.clear();
                       },
                       child: SvgPicture.asset(
@@ -101,7 +102,8 @@ class attachmentDailog extends GetView<VisitMainController> {
                                             children: [
                                               Text(controller.list.value[index].fileName ?? ""),
                                               Text(controller.visitId.value),
-                                              Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                              Text(
+                                                  "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
                                             ],
                                           ),
                                           Spacer(),
@@ -131,7 +133,6 @@ class attachmentDailog extends GetView<VisitMainController> {
                           child: CustomButton(
                             navigate: () {
                               Navigator.pop(context);
-                              // controller.list.clear();
                             },
                             label: "Cancel",
                             backGround: Colors.white,

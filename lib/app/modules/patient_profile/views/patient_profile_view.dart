@@ -295,7 +295,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
                                               ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
                                             ],
-                                            cellBuilder: (context, rowIndex, colIndex, cellData) {
+                                            cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                                               return colIndex == 2 && rowIndex != 0
                                                   ? Text(
                                                       cellData,

@@ -55,6 +55,8 @@ class ScheduleVisitListData {
   int? id;
   int? patientId;
   int? visitId;
+
+  dynamic profileImage;
   String? visitStatus;
   String? visitDate;
   String? visitTime;
@@ -76,6 +78,7 @@ class ScheduleVisitListData {
       {this.id,
       this.patientId,
       this.visitId,
+      this.profileImage,
       this.visitStatus,
       this.visitDate,
       this.visitTime,
@@ -98,6 +101,7 @@ class ScheduleVisitListData {
     patientId = json['patient_id'];
     visitId = json['visit_id'];
     visitStatus = json['visit_status'];
+    profileImage = json['profile_image'];
     visitDate = json['visit_date'];
     visitTime = json['visit_time'];
     visitType = json['visit_type'];
@@ -121,6 +125,7 @@ class ScheduleVisitListData {
     data['patient_id'] = patientId;
     data['visit_id'] = visitId;
     data['visit_status'] = visitStatus;
+    data['profile_image'] = profileImage;
     data['visit_date'] = visitDate;
     data['visit_time'] = visitTime;
     data['visit_type'] = visitType;

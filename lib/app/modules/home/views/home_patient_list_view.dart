@@ -57,19 +57,20 @@ class HomePatientListView extends GetView<HomeController> {
         patient.gender ?? "N/A", // Gender
         patient.visits?.lastOrNull?.visitDate ?? "N/A", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
-        "Action", // Action (could be a button or some interaction)
+        "Action",
+        patient.profileImage ?? "" // Action (could be a button or some interaction)
       ]);
     }
     return rows;
   }
 
   // This is the cell builder function where you can customize how each cell is built.
-  Widget _buildTableCell(BuildContext context, int rowIndex, int colIndex, String cellData) {
+  Widget _buildTableCell(BuildContext context, int rowIndex, int colIndex, String cellData, String profileImage) {
     return colIndex == 0 && rowIndex != 0
         ? Row(
             children: [
               BaseImageView(
-                imageUrl: "",
+                imageUrl: profileImage,
                 height: 28,
                 width: 28,
                 nameLetters: cellData,
@@ -78,12 +79,15 @@ class HomePatientListView extends GetView<HomeController> {
               SizedBox(
                 width: 10,
               ),
-              Text(
-                cellData,
-                textAlign: TextAlign.center,
-                style: AppFonts.regular(14, AppColors.textDarkGrey),
-                softWrap: true, // Allows text to wrap
-                overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+              Flexible(
+                child: Text(
+                  cellData,
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  style: AppFonts.regular(14, AppColors.textDarkGrey),
+                  softWrap: true, // Allows text to wrap
+                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                ),
               ),
             ],
           )
