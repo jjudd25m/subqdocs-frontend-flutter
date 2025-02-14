@@ -32,17 +32,20 @@ class PatientInfoController extends GetxController {
 
   PatientTranscriptUploadModel patientTranscriptUploadModel = PatientTranscriptUploadModel();
 
+  RxBool isDoctorViewLoading = RxBool(false);
+  RxString isDoctorViewLoadText = RxString("Waiting for response!");
+
   RxBool isFullNoteLoading = RxBool(false);
-  RxString isFullNoteLoadText = RxString("");
+  RxString isFullNoteLoadText = RxString("Waiting for response!");
 
   RxBool isVisitDataLoading = RxBool(false);
-  RxString isVisitDataLoadText = RxString("");
+  RxString isVisitDataLoadText = RxString("Waiting for response!");
 
   RxBool isPatientViewLoading = RxBool(false);
-  RxString isPatientViewLoadText = RxString("");
+  RxString isPatientViewLoadText = RxString("Waiting for response!");
 
   RxBool isFullTranscriptLoading = RxBool(false);
-  RxString isFullTranscriptLoadText = RxString("");
+  RxString isFullTranscriptLoadText = RxString("Waiting for response!");
 
   @override
   void onInit() {
@@ -79,21 +82,21 @@ class PatientInfoController extends GetxController {
             print("DoctorsViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               print("DoctorsViewStatus pending");
-              isFullNoteLoading.value = true;
-              isFullNoteLoadText.value = message;
+              isDoctorViewLoading.value = true;
+              isDoctorViewLoadText.value = message;
             } else if (status.toLowerCase() == "inprogress") {
               print("DoctorsViewStatus inprogress");
-              isFullNoteLoading.value = true;
-              isFullNoteLoadText.value = message;
+              isDoctorViewLoading.value = true;
+              isDoctorViewLoadText.value = message;
             } else if (status.toLowerCase() == "success") {
               print("DoctorsViewStatus success");
-              isFullNoteLoading.value = false;
-              isFullNoteLoadText.value = message;
+              isDoctorViewLoading.value = false;
+              isDoctorViewLoadText.value = message;
 
               getDoctorNote();
             } else if (status.toLowerCase() == "failure") {
-              isFullNoteLoading.value = false;
-              isFullNoteLoadText.value = "failure";
+              isDoctorViewLoading.value = false;
+              isDoctorViewLoadText.value = "failure";
             }
           }
         },
@@ -272,6 +275,7 @@ class PatientInfoController extends GetxController {
 
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: patientTranscriptUploadModel.responseData!.visitId.toString());
-    print("getDoctorNote is :- ${doctorViewList.value}");
+    print("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
+    print("diagnos is :- ${doctorViewList.value?.responseData?.diagnosisCodesProcedures?.toJson()}");
   }
 }
