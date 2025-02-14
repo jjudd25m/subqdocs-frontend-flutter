@@ -130,6 +130,15 @@ class HomeController extends GetxController {
     return null; // Return null if no matching 'id' is found
   }
 
+  void clearFilter() {
+    searchController.text = "";
+    fromController.clear();
+    toController.clear();
+    getPatientList();
+    getScheduleVisitList();
+    getPastVisitList();
+  }
+
   void changeScreen(bool isPast) async {
     this.isPast.value = isPast;
     this.isPast.refresh();

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,8 +10,11 @@ import 'package:toastification/toastification.dart';
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/app_preferences.dart';
 import '../../home/model/patient_list_model.dart';
+import '../../login/model/login_model.dart';
 import '../model/patient_detail_model.dart';
 import '../repository/edit_patient_details_repository.dart';
 
@@ -139,7 +143,8 @@ class EditPatentDetailsController extends GetxController {
 
     // Parse the date string to a DateTime object
 
-    if (patientDetailModel.responseData?.visitTime != null) {
+    if (isFromSchedule.value) {
+      print(" at the time of the get the time  ${patientDetailModel.responseData?.visitTime} ");
       DateTime visitdateTime = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
 
       // Create a DateFormat to format the date
@@ -152,19 +157,32 @@ class EditPatentDetailsController extends GetxController {
     }
 
     // time
+    //
+    // // Parse the date string to a DateTime object
+    // DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
+    //
+    // // Create a DateFormat to format the date
+    // DateFormat visitTimeFormat = DateFormat('hh:mm a');
 
-    // Parse the date string to a DateTime object
-    DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
+    // // Format the DateTime object to the desired format
+    // String visitformattedTime = visitTimeFormat.format(visitTimeS);
+    //
+    //
+    // print("visitformattedTime is:- $visitformattedTime");
 
-    // Create a DateFormat to format the date
-    DateFormat visitTimeFormat = DateFormat('hh:mm a');
+    if (isFromSchedule.value) {
+      DateTime visitTimeS =
+          DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
 
-    // Format the DateTime object to the desired format
-    String visitformattedTime = visitTimeFormat.format(visitTimeS);
+      // Formatting to "hh:mm a" format
+      String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
 
-    print("visitformattedTime is:- $visitformattedTime");
+      print("visitformattedTime is:- $formattedTime");
 
-    selectedVisitTimeValue.value = visitformattedTime;
+      selectedVisitTimeValue.value = formattedTime;
+    }
+
+    // selectedVisitTimeValue.value = visitformattedTime;
 
     selectedSexValue.value = patientDetailModel.responseData?.gender ?? "";
     // selectedVisitTimeValue.value = patientListData.visits?.last.visitTime ?? "";
@@ -332,65 +350,75 @@ class EditPatentDetailsController extends GetxController {
   }
 
   Future<void> addPatient() async {
+    if (!isFromSchedule.value) {
+      visitDateController.clear();
+    }
     isLoading.value = true;
 
-    // DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
-    // DateTime finalDateTimeFromDateTime = mergeDateAndTimeFromDateTime(selectedDateTime, selectedTime);
-
-    // String strVisit_time = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(finalDateTimeFromString);
-    //
-    // print("Merged DateTime from String: $finalDateTimeFromString");
-    // print("Merged DateTime from DateTime: $finalDateTimeFromDateTime");
-
     Map<String, dynamic> param = {};
+    Map<String, List<File>> profileParams = {};
 
-    patientDetailModel.responseData?.firstName = firstNameController.text;
-    patientDetailModel.responseData?.middleName = middleNameController.text;
-    patientDetailModel.responseData?.lastName = lastNameController.text;
-
-    patientDetailModel.responseData?.dateOfBirth =
-        DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
-
-    patientDetailModel.responseData?.gender = selectedSexValue.value;
-    patientDetailModel.responseData?.email = emailAddressController.text;
-    // patientDetailModel.responseData?.visitTime = '${strVisit_time}Z';
-    if (isFromSchedule.value) {
-      patientDetailModel.responseData?.visitDate =
-          DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    param['first_name'] = firstNameController.text;
+    if (profileImage.value != null) {
+      print("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['profile_image'] = [profileImage.value!];
+    } else {
+      print("profile is not  available");
     }
 
-    if (isFromSchedule.value) {
-      DateTime d = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "2025-10-07T16:42:11").toLocal();
+    // if (selectedList.isNotEmpty) {
+    //   print("profile is   available");
+    //   // param['profile_image'] = profileImage.value;
+    //   // profileParams['attachments'] = .map((model) => model.file).toList().whereType<File>().toList();
+    //
+    //   ;
+    // } else {
+    //   print("profile is not  available");
+    // }
+
+    param['patient_id'] = patientIdController.text;
+
+    if (middleNameController.text != "") {
+      param['middle_name'] = middleNameController.text;
+    }
+    param['last_name'] = lastNameController.text;
+    param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+
+    param['gender'] = selectedSexValue.value;
+    if (emailAddressController.text != "") {
+      param['email'] = emailAddressController.text;
+    }
+
+    if (visitDateController.text != "") {
+      param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
     }
 
     String date = visitDateController.text;
     String? time = selectedVisitTimeValue.value;
+    print(visitDateController.text);
+    print(selectedVisitTimeValue.value);
 
-    if (isFromSchedule.value) {
-      if (time != null) {
-        DateTime firstTime = DateFormat('hh:mm a').parse(time);
-        String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
-        patientDetailModel.responseData?.visitTime = formattedTime;
-      }
+    // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
+
+    if (time != null) {
+      DateTime firstTime = DateFormat('hh:mm a').parse(time); // 10:30 AM to DateTime
+
+      // Now format it to the hh:mm:ss format
+      String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+
+      print("date time is ${formattedTime}");
+
+      param['visit_time'] = formattedTime;
     }
-    // 10:30 AM to DateTime
 
-    // Now format it to the hh:mm:ss format
-
-    // param['first_name'] = firstNameController.text;
-    // param['middle_name'] = middleNameController.text;
-    // param['last_name'] = lastNameController.text;
-    // param['date_of_birth'] = '${dob.value}Z';
-    // param['gender'] = selectedSexValue.value;
-    // param['email'] = emailAddressController.text;
-    // param['visit_date'] = '${visitDate.value}Z';
-    // param['visit_time'] = '${strVisit_time}Z';
-
-    print("param is :- ${patientDetailModel.responseData?.toJson()}");
+    print("param is :- $param");
 
     try {
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
       dynamic response = await _editPatientDetailsRepository.updatePatient(
-          id: patientId, param: patientDetailModel.responseData!.toJson());
+          files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
+
       isLoading.value = false;
       print("_editPatientDetailsRepository response is ${response} ");
       Get.back(result: 1);
@@ -406,6 +434,7 @@ class EditPatentDetailsController extends GetxController {
 
     if (pickedImage != null) {
       profileImage.value = File(pickedImage.path);
+      profileImage.refresh();
     }
   }
 
@@ -415,6 +444,7 @@ class EditPatentDetailsController extends GetxController {
 
     if (pickedImage != null) {
       profileImage.value = File(pickedImage.path);
+      profileImage.refresh();
     }
   }
 }

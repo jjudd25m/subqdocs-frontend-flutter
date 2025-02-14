@@ -97,13 +97,11 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               onTap: () {
                                                 print(
-                                                    "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                                    "visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
 
                                                 Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                                  "patientData":
-                                                      controller.scheduleVisitList[rowIndex - 1].id.toString(),
-                                                  "visitId":
-                                                      controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                                  "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
+                                                  "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
                                                   "fromSchedule": false
                                                 });
                                               },
@@ -123,10 +121,8 @@ class HomePastVisitsList extends GetView<HomeController> {
 
                                                 final result =
                                                     await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                                                  "patientData":
-                                                      controller.scheduleVisitList[rowIndex - 1].id.toString(),
-                                                  "visitId":
-                                                      controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                                  "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
+                                                  "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
                                                   "fromSchedule": false
                                                 });
 
@@ -264,7 +260,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         patient.previousVisitCount.toString() ?? "N/A", // Last Visit Date
         patient.visitStatus ?? "0", // Previous Visits
         "Action",
-        patient.profileImage ?? ""
+
         // Action (could be a button or some interaction)
       ]);
     }

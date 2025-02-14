@@ -90,124 +90,129 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                               SizedBox(
                                 height: Dimen.margin24,
                               ),
-                              Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: controller.profileImageUrl.value != null
-                                        ? CachedNetworkImage(
-                                            imageUrl: controller.profileImageUrl.value ?? "",
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : controller.profileImage.value?.path != null
-                                            ? RoundedImageFileWidget(
-                                                imagePath: controller.profileImage.value,
-                                              )
-                                            : BaseImageView(
-                                                imageUrl: "",
+                              Obx(
+                                () {
+                                  return Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(100),
+                                        child: controller.profileImageUrl.value != null
+                                            ? CachedNetworkImage(
+                                                imageUrl: controller.profileImageUrl.value ?? "",
                                                 width: 60,
                                                 height: 60,
-                                                fontSize: 14,
-                                                nameLetters: "mihir",
-                                              ),
-                                  ),
-                                  PopupMenuButton<String>(
-                                      offset: const Offset(0, 8),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                      color: AppColors.white,
-                                      position: PopupMenuPosition.under,
-                                      padding: EdgeInsetsDirectional.zero,
-                                      menuPadding: EdgeInsetsDirectional.zero,
-                                      onSelected: (value) {},
-                                      style: const ButtonStyle(
-                                          padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          maximumSize: WidgetStatePropertyAll(Size.zero),
-                                          visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                                      itemBuilder: (context) => [
-                                            PopupMenuItem(
-                                                padding: EdgeInsets.zero,
-                                                onTap: () {
-                                                  controller.pickProfileImage();
-
-                                                  // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
-                                                },
-                                                // value: "",
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.file_copy_sharp,
-                                                        color: AppColors.textDarkGrey,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        "Pick From Files",
-                                                        style: AppFonts.regular(16, AppColors.textBlack),
-                                                      ),
-                                                    ],
+                                                fit: BoxFit.cover,
+                                              )
+                                            : controller.profileImage.value?.path != null
+                                                ? RoundedImageFileWidget(
+                                                    size: 60,
+                                                    imagePath: controller.profileImage.value,
+                                                  )
+                                                : BaseImageView(
+                                                    imageUrl: "",
+                                                    width: 60,
+                                                    height: 60,
+                                                    fontSize: 14,
+                                                    nameLetters: "mihir",
                                                   ),
-                                                )),
-                                            PopupMenuItem(
-                                                // value: "",
-                                                padding: EdgeInsets.zero,
-                                                onTap: () async {
-                                                  controller.captureProfileImage();
-                                                },
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      width: double.infinity,
-                                                      height: 1,
-                                                      color: AppColors.appbarBorder,
-                                                    ),
-                                                    Padding(
+                                      ),
+                                      PopupMenuButton<String>(
+                                          offset: const Offset(0, 8),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                          color: AppColors.white,
+                                          position: PopupMenuPosition.under,
+                                          padding: EdgeInsetsDirectional.zero,
+                                          menuPadding: EdgeInsetsDirectional.zero,
+                                          onSelected: (value) {},
+                                          style: const ButtonStyle(
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                          itemBuilder: (context) => [
+                                                PopupMenuItem(
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () {
+                                                      controller.pickProfileImage();
+
+                                                      // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                                                    },
+                                                    // value: "",
+                                                    child: Padding(
                                                       padding: const EdgeInsets.only(
                                                           left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
-                                                          Icon(CupertinoIcons.camera),
+                                                          Icon(
+                                                            Icons.file_copy_sharp,
+                                                            color: AppColors.textDarkGrey,
+                                                          ),
                                                           SizedBox(
                                                             width: 10,
                                                           ),
                                                           Text(
-                                                            "Take A Photo",
+                                                            "Pick From Files",
                                                             style: AppFonts.regular(16, AppColors.textBlack),
                                                           ),
                                                         ],
                                                       ),
-                                                    ),
-                                                  ],
-                                                )),
-                                          ],
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 12.5,
-                                          ),
-                                          SvgPicture.asset(
-                                            ImagePath.edit,
-                                            width: 26,
-                                            height: 26,
-                                            fit: BoxFit.cover,
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            "Edit Profile Image",
-                                            style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                          ),
-                                        ],
-                                      ))
-                                ],
+                                                    )),
+                                                PopupMenuItem(
+                                                    // value: "",
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () async {
+                                                      controller.captureProfileImage();
+                                                    },
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                          width: double.infinity,
+                                                          height: 1,
+                                                          color: AppColors.appbarBorder,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(
+                                                              left: 10, right: 20, top: 10, bottom: 10),
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(CupertinoIcons.camera),
+                                                              SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              Text(
+                                                                "Take A Photo",
+                                                                style: AppFonts.regular(16, AppColors.textBlack),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )),
+                                              ],
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 12.5,
+                                              ),
+                                              SvgPicture.asset(
+                                                ImagePath.edit,
+                                                width: 26,
+                                                height: 26,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                "Edit Profile Image",
+                                                style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                              ),
+                                            ],
+                                          ))
+                                    ],
+                                  );
+                                },
                               ),
                               SizedBox(
                                 height: Dimen.margin16,
@@ -249,12 +254,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   ),
                                   Expanded(
                                     child: TextFormFiledWidget(
-                                        label: "Middle Name",
-                                        controller: controller.middleNameController,
-                                        hint: "Joseph",
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
+                                      label: "Middle Name",
+                                      controller: controller.middleNameController,
+                                      hint: "Joseph",
+                                    ),
                                   ),
                                 ],
                               ),

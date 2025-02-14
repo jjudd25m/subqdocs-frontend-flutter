@@ -133,7 +133,7 @@ class ResponseData {
     data['email'] = email;
     data['gender'] = gender;
     data['age'] = age;
-    data['profile_image'] = profileImage;
+
     data['appointment_time'] = appointmentTime;
     data['status'] = status;
     data['address'] = address;
@@ -151,8 +151,14 @@ class ResponseData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
-    data['visit_date'] = visitDate;
-    data['visit_time'] = visitTime;
+    if (visitDate != null) {
+      data['visit_date'] = visitDate;
+    }
+
+    if (visitDate != null) {
+      data['visit_time'] = visitTime;
+    }
+
     data['visit_id'] = visitId;
     return data;
   }
