@@ -124,8 +124,8 @@ class ForgotPasswordController extends GetxController {
 
     Map<String, dynamic> param = {};
 
-    param['email'] = emailController.text;
-    param['password'] = confirmPasswordController.text;
+    param['email'] = emailController.text.trim();
+    param['password'] = confirmPasswordController.text.trim();
 
     try {
       VerifyOtpModel verifyOtpModel = await _forgotPasswordRepository.resetPassword(param: param);

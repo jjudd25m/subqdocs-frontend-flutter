@@ -57,7 +57,7 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
             fieldHeight: 40,
             fieldWidth: 40,
             fillColor: AppColors.blackLight,
-            contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+            contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             margin: EdgeInsets.only(right: 10),
             borderColor: AppColors.appbarBorder,
             borderWidth: 1,
