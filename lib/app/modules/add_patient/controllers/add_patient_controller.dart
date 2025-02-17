@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -115,7 +116,7 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> pickFiles() async {
-    List<XFile>? fileList = await MediaPickerServices().pickMultiMedia();
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
     print("media  file is  ${fileList}");
 

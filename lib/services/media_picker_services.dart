@@ -38,6 +38,24 @@ class MediaPickerServices {
     return null;
   }
 
+  Future<List<PlatformFile>?> pickAllFiles() async {
+    // Pick multiple files, setting type as FileType.any to allow all types of files
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true, // Allows multiple files to be selected
+      type: FileType.any, // Accepts any type of file
+    );
+
+    // Check if the user picked any files
+    if (result != null) {
+      List<PlatformFile> files = result.files; // List of selected files
+      print("Files selected: $files");
+      return files;
+    } else {
+      print("No files selected");
+      return null;
+    }
+  }
+
   Future<XFile?> pickVideo({required bool fromCamera}) async {
     final XFile? image = await _picker.pickVideo(source: fromCamera ? ImageSource.camera : ImageSource.gallery);
     return image;
