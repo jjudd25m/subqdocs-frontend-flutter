@@ -15,6 +15,7 @@ abstract class Routes {
   static const EDIT_PATENT_DETAILS = _Paths.EDIT_PATENT_DETAILS;
   static const PATIENT_PROFILE = _Paths.PATIENT_PROFILE;
   static const PROFILE = _Paths.PROFILE;
+  static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const EDIT_PATENT_DETAILS = '/edit-patent-details';
   static const PATIENT_PROFILE = '/patient-profile';
   static const PROFILE = '/profile';
+  static const FORGOT_PASSWORD = '/forgot-password';
 }
