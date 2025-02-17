@@ -81,8 +81,7 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  void _showPopupMenu(
-      BuildContext context, TextEditingController element, GlobalKey<FormState> formKey, bool isToController) {
+  void _showPopupMenu(BuildContext context, TextEditingController element, GlobalKey<FormState> formKey, bool isToController) {
     BuildContext? currentContext = formKey.currentContext;
 
     final RenderBox? renderBox = currentContext?.findRenderObject() as RenderBox?;
@@ -217,7 +216,29 @@ class HomeView extends GetView<HomeController> {
           sigmaX: 5.0,
           sigmaY: 5.0,
         ),
-        child: CustomDrawerView(),
+        child: CustomDrawerView(
+          onItemSelected: (index) async {
+            if (index == 0) {
+              final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+              if (result == 1) {
+                controller.getPastVisitList();
+                controller.getScheduleVisitList();
+                controller.getPatientList();
+              }
+              _key.currentState!.closeDrawer();
+            } else if (index == 1) {
+              controller.tabIndex.value = 1;
+              _key.currentState!.closeDrawer();
+            } else if (index == 2) {
+              controller.tabIndex.value = 2;
+              _key.currentState!.closeDrawer();
+            } else if (index == 3) {
+              controller.tabIndex.value = 0;
+              _key.currentState!.closeDrawer();
+            }
+          },
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -248,14 +269,12 @@ class HomeView extends GetView<HomeController> {
                             children: [
                               Container(
                                 width: double.infinity,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                                 child: Obx(
                                   () {
                                     return Container(
                                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                         height: 65,
                                         child: SingleChildScrollView(
                                           physics: BouncingScrollPhysics(),
@@ -273,16 +292,10 @@ class HomeView extends GetView<HomeController> {
                                                   isOutline: true,
                                                   paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                   fontSize: 14,
-                                                  enabledTextColor: controller.tabIndex.value == 0
-                                                      ? AppColors.backgroundPurple
-                                                      : AppColors.textGrey,
-                                                  enabledColor: controller.tabIndex.value == 0
-                                                      ? AppColors.buttonPurpleLight
-                                                      : AppColors.clear,
+                                                  enabledTextColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                  enabledColor: controller.tabIndex.value == 0 ? AppColors.buttonPurpleLight : AppColors.clear,
                                                   outLineEnabledColor: AppColors.textGrey,
-                                                  outlineColor: controller.tabIndex.value == 0
-                                                      ? AppColors.backgroundPurple
-                                                      : AppColors.clear,
+                                                  outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
                                                 ),
                                               ),
                                               IntrinsicWidth(
@@ -296,16 +309,10 @@ class HomeView extends GetView<HomeController> {
                                                 isOutline: true,
                                                 paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
-                                                enabledTextColor: controller.tabIndex.value == 1
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.textGrey,
-                                                enabledColor: controller.tabIndex.value == 1
-                                                    ? AppColors.buttonPurpleLight
-                                                    : AppColors.clear,
+                                                enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
                                                 outLineEnabledColor: AppColors.textGrey,
-                                                outlineColor: controller.tabIndex.value == 1
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.clear,
+                                                outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
                                               )),
                                               IntrinsicWidth(
                                                   child: CustomAnimatedButton(
@@ -318,16 +325,10 @@ class HomeView extends GetView<HomeController> {
                                                 isOutline: true,
                                                 paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
-                                                enabledTextColor: controller.tabIndex.value == 2
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.textGrey,
-                                                enabledColor: controller.tabIndex.value == 2
-                                                    ? AppColors.buttonPurpleLight
-                                                    : AppColors.clear,
+                                                enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
                                                 outLineEnabledColor: AppColors.textGrey,
-                                                outlineColor: controller.tabIndex.value == 2
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.clear,
+                                                outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
                                               )),
                                             ],
                                           ),
@@ -339,8 +340,7 @@ class HomeView extends GetView<HomeController> {
                               Expanded(
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  decoration:
-                                      BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                   child: Column(
                                     children: [
                                       Obx(
@@ -425,12 +425,10 @@ class HomeView extends GetView<HomeController> {
                                                       padding: EdgeInsets.zero,
                                                       child: PopupMenuButton<String>(
                                                         offset: const Offset(240, 10),
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(6)),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                         color: AppColors.white,
                                                         position: PopupMenuPosition.under,
-                                                        padding:
-                                                            EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 0),
+                                                        padding: EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 0),
                                                         menuPadding: EdgeInsetsDirectional.only(bottom: 0),
                                                         onSelected: (value) {},
                                                         style: const ButtonStyle(
@@ -445,27 +443,22 @@ class HomeView extends GetView<HomeController> {
                                                             child: PopupMenuButton<String>(
                                                                 constraints: BoxConstraints(minWidth: 200),
                                                                 offset: const Offset(0, 8),
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.circular(6)),
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                                 color: AppColors.white,
                                                                 position: PopupMenuPosition.under,
-                                                                padding: EdgeInsetsDirectional.symmetric(
-                                                                    horizontal: 10, vertical: 10),
+                                                                padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
                                                                 menuPadding: EdgeInsetsDirectional.only(bottom: 10),
                                                                 onSelected: (value) {},
                                                                 style: const ButtonStyle(
-                                                                    padding: WidgetStatePropertyAll(
-                                                                        EdgeInsetsDirectional.zero),
+                                                                    padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
                                                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                                                     maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                                    visualDensity:
-                                                                        VisualDensity(horizontal: 0, vertical: 4)),
+                                                                    visualDensity: VisualDensity(horizontal: 0, vertical: 4)),
                                                                 itemBuilder: (context) => [
                                                                       PopupMenuItem(
                                                                           value: "",
                                                                           onTap: () {
-                                                                            String today = DateFormat('MM-dd-yyyy')
-                                                                                .format(DateTime.now());
+                                                                            String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
 
                                                                             print(today);
 
@@ -475,69 +468,53 @@ class HomeView extends GetView<HomeController> {
                                                                           },
                                                                           child: Text(
                                                                             "Today",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           )),
                                                                       PopupMenuDivider(),
                                                                       PopupMenuItem(
                                                                           value: "",
                                                                           onTap: () {
-                                                                            String today = DateFormat('MM-dd-yyyy')
-                                                                                .format(DateTime.now());
-                                                                            String sevenDaysAgo =
-                                                                                DateFormat('MM-dd-yyyy').format(
-                                                                                    DateTime.now()
-                                                                                        .subtract(Duration(days: 7)));
+                                                                            String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+                                                                            String sevenDaysAgo = DateFormat('MM-dd-yyyy').format(DateTime.now().subtract(Duration(days: 7)));
 
                                                                             print(today);
-                                                                            print(
-                                                                                " seven days age is the $sevenDaysAgo");
+                                                                            print(" seven days age is the $sevenDaysAgo");
 
-                                                                            controller.fromController.text =
-                                                                                sevenDaysAgo;
+                                                                            controller.fromController.text = sevenDaysAgo;
                                                                             controller.toController.text = today;
                                                                             controller.getPatientList();
                                                                           },
                                                                           child: Text(
                                                                             "Last 7 Days",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           )),
                                                                       PopupMenuDivider(),
                                                                       PopupMenuItem(
                                                                           value: "last30",
                                                                           onTap: () {
-                                                                            String today = DateFormat('MM-dd-yyyy')
-                                                                                .format(DateTime.now());
-                                                                            String thirtyDaysAgo =
-                                                                                DateFormat('MM-dd-yyyy').format(
-                                                                                    DateTime.now()
-                                                                                        .subtract(Duration(days: 30)));
+                                                                            String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+                                                                            String thirtyDaysAgo = DateFormat('MM-dd-yyyy').format(DateTime.now().subtract(Duration(days: 30)));
 
                                                                             print(today);
                                                                             print(thirtyDaysAgo);
-                                                                            controller.fromController.text =
-                                                                                thirtyDaysAgo;
+                                                                            controller.fromController.text = thirtyDaysAgo;
                                                                             controller.toController.text = today;
                                                                             controller.getPatientList();
                                                                           },
                                                                           child: Text(
                                                                             "Last 30 Days",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           )),
                                                                       PopupMenuDivider(),
                                                                       PopupMenuItem(
                                                                           value: "",
                                                                           onTap: () async {
-                                                                            _showCupertinoDatePicker(context,
-                                                                                controller.fromController, false);
+                                                                            _showCupertinoDatePicker(context, controller.fromController, false);
                                                                             // Last allowed date
                                                                           },
                                                                           child: Text(
                                                                             "Custom date",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           ))
                                                                     ],
                                                                 child: Padding(
@@ -547,11 +524,7 @@ class HomeView extends GetView<HomeController> {
                                                                     child: TextFormFiledWidget(
                                                                       readOnly: true,
                                                                       onTap: () async {
-                                                                        _showPopupMenu(
-                                                                            context,
-                                                                            controller.fromController,
-                                                                            formKeyFrom,
-                                                                            false);
+                                                                        _showPopupMenu(context, controller.fromController, formKeyFrom, false);
                                                                       },
                                                                       label: "From",
                                                                       controller: controller.fromController,
@@ -567,26 +540,21 @@ class HomeView extends GetView<HomeController> {
                                                             child: PopupMenuButton<String>(
                                                                 constraints: BoxConstraints(minWidth: 200),
                                                                 offset: const Offset(0, 8),
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.circular(6)),
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                                 color: AppColors.white,
                                                                 position: PopupMenuPosition.under,
-                                                                padding: EdgeInsetsDirectional.symmetric(
-                                                                    horizontal: 10, vertical: 10),
+                                                                padding: EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
                                                                 menuPadding: EdgeInsetsDirectional.only(bottom: 10),
                                                                 onSelected: (value) {},
                                                                 style: const ButtonStyle(
-                                                                    padding: WidgetStatePropertyAll(
-                                                                        EdgeInsetsDirectional.zero),
+                                                                    padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
                                                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                                                     maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                                    visualDensity:
-                                                                        VisualDensity(horizontal: 0, vertical: 4)),
+                                                                    visualDensity: VisualDensity(horizontal: 0, vertical: 4)),
                                                                 itemBuilder: (context) => [
                                                                       PopupMenuItem(
                                                                           onTap: () {
-                                                                            String today = DateFormat('MM-dd-yyyy')
-                                                                                .format(DateTime.now());
+                                                                            String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
 
                                                                             print(today);
 
@@ -597,70 +565,54 @@ class HomeView extends GetView<HomeController> {
                                                                           value: "",
                                                                           child: Text(
                                                                             "Today",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           )),
                                                                       PopupMenuDivider(),
                                                                       PopupMenuItem(
                                                                           value: "",
                                                                           onTap: () {
-                                                                            String today = DateFormat('MM-dd-yyyy')
-                                                                                .format(DateTime.now());
-                                                                            String sevenDaysAgo =
-                                                                                DateFormat('MM-dd-yyyy').format(
-                                                                                    DateTime.now()
-                                                                                        .subtract(Duration(days: 7)));
+                                                                            String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+                                                                            String sevenDaysAgo = DateFormat('MM-dd-yyyy').format(DateTime.now().subtract(Duration(days: 7)));
 
                                                                             print(today);
                                                                             print(sevenDaysAgo);
-                                                                            print(
-                                                                                " seven days age is the $sevenDaysAgo");
+                                                                            print(" seven days age is the $sevenDaysAgo");
 
-                                                                            controller.fromController.text =
-                                                                                sevenDaysAgo;
+                                                                            controller.fromController.text = sevenDaysAgo;
                                                                             controller.toController.text = today;
                                                                             controller.getPatientList();
                                                                           },
                                                                           child: Text(
                                                                             "Last 7 Days",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           )),
                                                                       PopupMenuDivider(),
                                                                       PopupMenuItem(
                                                                           value: "last30",
                                                                           onTap: () {
-                                                                            String today = DateFormat('MM-dd-yyyy')
-                                                                                .format(DateTime.now());
-                                                                            String thirtyDaysAgo =
-                                                                                DateFormat('MM-dd-yyyy').format(
-                                                                                    DateTime.now()
-                                                                                        .subtract(Duration(days: 30)));
+                                                                            String today = DateFormat('MM-dd-yyyy').format(DateTime.now());
+                                                                            String thirtyDaysAgo = DateFormat('MM-dd-yyyy').format(DateTime.now().subtract(Duration(days: 30)));
 
                                                                             print(today);
                                                                             print(thirtyDaysAgo);
 
-                                                                            controller.fromController.text =
-                                                                                thirtyDaysAgo;
+                                                                            controller.fromController.text = thirtyDaysAgo;
                                                                             controller.toController.text = today;
                                                                             controller.getPatientList();
                                                                           },
                                                                           child: Text(
                                                                             "Last 30 Days",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           )),
                                                                       PopupMenuDivider(),
                                                                       PopupMenuItem(
                                                                           value: "",
                                                                           onTap: () async {
-                                                                            _showCupertinoDatePicker(
-                                                                                context, controller.toController, true);
+                                                                            _showCupertinoDatePicker(context, controller.toController, true);
                                                                           },
                                                                           child: Text(
                                                                             "Custom date",
-                                                                            style: AppFonts.regular(
-                                                                                14, AppColors.textBlack),
+                                                                            style: AppFonts.regular(14, AppColors.textBlack),
                                                                           ))
                                                                     ],
                                                                 child: Padding(
@@ -670,8 +622,7 @@ class HomeView extends GetView<HomeController> {
                                                                     child: TextFormFiledWidget(
                                                                       readOnly: true,
                                                                       onTap: () async {
-                                                                        _showPopupMenu(context, controller.toController,
-                                                                            formKeyTo, true);
+                                                                        _showPopupMenu(context, controller.toController, formKeyTo, true);
                                                                       },
                                                                       label: "To",
                                                                       controller: controller.toController,
@@ -691,8 +642,7 @@ class HomeView extends GetView<HomeController> {
                                                                   SvgPicture.asset(ImagePath.calenderDrawer,
                                                                       colorFilter: ColorFilter.mode(
                                                                         Colors.black, // The color you want to apply
-                                                                        BlendMode
-                                                                            .srcIn, // This blend mode is commonly used for coloring SVGs
+                                                                        BlendMode.srcIn, // This blend mode is commonly used for coloring SVGs
                                                                       )),
                                                                   SizedBox(width: 6),
                                                                   Text(
@@ -742,8 +692,7 @@ class HomeView extends GetView<HomeController> {
                                                         // Border width
                                                       ),
 
-                                                      borderRadius: BorderRadius.circular(
-                                                          10), // Optional: to make the corners rounded
+                                                      borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                                     ),
                                                     child: Padding(
                                                       padding: const EdgeInsets.all(10),
@@ -761,8 +710,7 @@ class HomeView extends GetView<HomeController> {
                                                 Container(
                                                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                                                   decoration: BoxDecoration(
-                                                    border:
-                                                        Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                    border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                                     // color: AppColors.backgroundWhite,
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
@@ -788,9 +736,7 @@ class HomeView extends GetView<HomeController> {
                                                                     : controller.getPastVisitList();
                                                           },
                                                           maxLines: 1, //or null
-                                                          decoration: InputDecoration.collapsed(
-                                                              hintText: "Search",
-                                                              hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                                         ),
                                                       ),
                                                       // Text(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,6 +18,8 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/custom_textfiled.dart';
 import '../../../../widgets/ContainerButton.dart';
+import '../../../routes/app_pages.dart';
+import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/patient_info_controller.dart';
 import 'custom_table.dart';
 import 'full_transcript_view.dart';
@@ -30,6 +34,37 @@ class PatientInfoView extends GetView<PatientInfoController> {
       key: _key,
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundWhite,
+      drawer: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5.0,
+          sigmaY: 5.0,
+        ),
+        child: CustomDrawerView(
+          onItemSelected: (index) async {
+            if (index == 0) {
+              final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+              _key.currentState!.closeDrawer();
+            } else if (index == 1) {
+              Get.toNamed(Routes.HOME, arguments: {
+                "tabIndex": 1,
+              });
+
+              _key.currentState!.closeDrawer();
+            } else if (index == 2) {
+              Get.toNamed(Routes.HOME, arguments: {
+                "tabIndex": 2,
+              });
+              _key.currentState!.closeDrawer();
+            } else if (index == 3) {
+              Get.toNamed(Routes.HOME, arguments: {
+                "tabIndex": 0,
+              });
+              _key.currentState!.closeDrawer();
+            }
+          },
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [

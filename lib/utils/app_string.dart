@@ -2,6 +2,9 @@ class AppString {
   /*App Preference Key*/
   static const String prefKeyToken = 'token';
   static const String prefKeyUserLoginData = 'userLoginData';
+  static const String prefKeyRememberMe = "prefKeyRememberMe";
+  static const String prefKeyRememberEmail = "prefKeyRememberEmail";
+  static const String prefKeyRememberPassword = "prefKeyRememberPassword";
 
   //login screen
   static const String login = 'Log in';

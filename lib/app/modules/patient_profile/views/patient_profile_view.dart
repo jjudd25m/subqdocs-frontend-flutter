@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +16,8 @@ import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/rounded_image_widget.dart';
+import '../../../routes/app_pages.dart';
+import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/patient_profile_controller.dart';
 import '../widgets/common_patient_data.dart';
 
@@ -29,6 +33,37 @@ class PatientProfileView extends GetView<PatientProfileController> {
         key: _key,
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.white,
+        drawer: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 5.0,
+            sigmaY: 5.0,
+          ),
+          child: CustomDrawerView(
+            onItemSelected: (index) async {
+              if (index == 0) {
+                final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                _key.currentState!.closeDrawer();
+              } else if (index == 1) {
+                Get.toNamed(Routes.HOME, arguments: {
+                  "tabIndex": 1,
+                });
+
+                _key.currentState!.closeDrawer();
+              } else if (index == 2) {
+                Get.toNamed(Routes.HOME, arguments: {
+                  "tabIndex": 2,
+                });
+                _key.currentState!.closeDrawer();
+              } else if (index == 3) {
+                Get.toNamed(Routes.HOME, arguments: {
+                  "tabIndex": 0,
+                });
+                _key.currentState!.closeDrawer();
+              }
+            },
+          ),
+        ),
         body: SafeArea(
           child: Container(
             child: Column(
@@ -45,8 +80,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                               padding: const EdgeInsets.all(16),
                               child: Container(
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration:
-                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -87,10 +121,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                     height: 50,
                                                     width: 50,
                                                     fontSize: 16,
-                                                    imageUrl:
-                                                        controller.patientDetailModel.responseData?.profileImage ?? "",
-                                                    nameLetters:
-                                                        "${controller.patientDetailModel.responseData?.firstName}  ${controller.patientDetailModel.responseData?.lastName} ",
+                                                    imageUrl: controller.patientDetailModel.responseData?.profileImage ?? "",
+                                                    nameLetters: "${controller.patientDetailModel.responseData?.firstName}  ${controller.patientDetailModel.responseData?.lastName} ",
                                                   )),
                                               SizedBox(
                                                 width: 10,
@@ -143,8 +175,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                 backgroundColor: AppColors.backgroundPurple, // Custom background color
                                                 needBorder: true, // Show border
                                                 textColor: AppColors.white, // Custom text color
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 11, horizontal: 12), // Custom padding
+                                                padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
                                                 radius: 6, // Custom border radius
                                               )
                                             ],
@@ -185,9 +216,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                             SizedBox(
                                               height: 30,
                                             ),
-                                            CommonPatientData(
-                                                label: "Sex",
-                                                data: controller.patientDetailModel.responseData?.gender ?? ""),
+                                            CommonPatientData(label: "Sex", data: controller.patientDetailModel.responseData?.gender ?? ""),
                                           ],
                                         ),
                                         Column(
@@ -260,10 +289,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    collapsedShape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(
@@ -302,8 +329,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                       textAlign: TextAlign.center,
                                                       style: AppFonts.regular(14, AppColors.backgroundPurple),
                                                       softWrap: true, // Allows text to wrap
-                                                      overflow:
-                                                          TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                     )
                                                   : (colIndex == 3 || colIndex == 4) && rowIndex != 0
                                                       ? Row(
@@ -317,36 +343,29 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                               textAlign: TextAlign.center,
                                                               style: AppFonts.regular(14, AppColors.backgroundPurple),
                                                               softWrap: true, // Allows text to wrap
-                                                              overflow: TextOverflow
-                                                                  .ellipsis, // Adds ellipsis if text overflows
+                                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                             ),
                                                           ],
                                                         )
                                                       : rowIndex == 0
                                                           ? Text(
                                                               cellData ?? "",
-                                                              textAlign:
-                                                                  colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                              textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                               style: AppFonts.regular(12, AppColors.black),
                                                               softWrap: true, // Allows text to wrap
-                                                              overflow: TextOverflow
-                                                                  .ellipsis, // Adds ellipsis if text overflows
+                                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                             )
                                                           : Text(
                                                               cellData ?? "",
-                                                              textAlign:
-                                                                  colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                              textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                               style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                               softWrap: true, // Allows text to wrap
-                                                              overflow: TextOverflow
-                                                                  .ellipsis, // Adds ellipsis if text overflows
+                                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                             );
                                             },
                                             columnCount: 5,
                                             context: context,
-                                            columnWidths: isPortrait
-                                                ? [0.25, 0.29, 0.11, 0.17, 0.18]
-                                                : [0.33, 0.32, 0.10, 0.13, 0.12],
+                                            columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.33, 0.32, 0.10, 0.13, 0.12],
                                           ),
                                         ),
                                       ),
@@ -365,11 +384,9 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    collapsedShape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(
                                       child: Row(
@@ -424,8 +441,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                 backgroundColor: AppColors.backgroundPurple, // Custom background color
                                                 needBorder: false, // Show border
                                                 textColor: AppColors.white, // Custom text color
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 11, horizontal: 12), // Custom padding
+                                                padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
                                                 radius: 6, // Custom border radius
                                               ),
                                               SizedBox(
@@ -450,10 +466,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    collapsedShape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(

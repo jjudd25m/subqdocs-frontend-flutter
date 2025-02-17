@@ -87,4 +87,7 @@ class ImagePath {
   // static const String edit = 'assets/images/edit_icon_light.svg';
 
   static const String patient_no_data = 'assets/images/patient_no_data.svg';
+
+  static const String dark_pause = 'assets/images/dark_pause.svg';
+  static const String dark_play = 'assets/images/dark_play.svg';
 }

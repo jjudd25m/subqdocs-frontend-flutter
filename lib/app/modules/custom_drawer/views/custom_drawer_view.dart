@@ -14,7 +14,10 @@ import '../../../routes/app_pages.dart';
 import '../controllers/custom_drawer_controller.dart';
 
 class CustomDrawerView extends GetView<CustomDrawerController> {
-  CustomDrawerView({super.key});
+  final Function(int index)? onItemSelected;
+
+  CustomDrawerView({Key? key, this.onItemSelected}) : super(key: key);
+  // CustomDrawerView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +107,25 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  onTap: () {
-                                    if (index == 3) {
-                                      Get.toNamed(Routes.VISIT_MAIN);
-                                    }
+                                  onTap: () async {
+                                    await onItemSelected!(index);
+                                    // if (index == 0) {
+                                    //   Get.toNamed(Routes.HOME, arguments: {
+                                    //     "tabIndex": 0,
+                                    //   });
+                                    // } else if (index == 1) {
+                                    //   Get.toNamed(Routes.HOME, arguments: {
+                                    //     "tabIndex": 1,
+                                    //   });
+                                    // } else if (index == 2) {
+                                    //   Get.toNamed(Routes.HOME, arguments: {
+                                    //     "tabIndex": 2,
+                                    //   });
+                                    // } else if (index == 3) {
+                                    // } else if (index == 4) {
+                                    //   // Get.toNamed(Routes.VISIT_MAIN);
+                                    // }
+
                                     controller.changeSelected(index);
                                   },
                                   child: DrawerItem(

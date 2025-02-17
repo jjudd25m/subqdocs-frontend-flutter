@@ -18,6 +18,8 @@ class LoginController extends GetxController {
   RxBool visiblity = RxBool(false);
   RxBool isLoading = RxBool(false);
 
+  RxBool isRememberMe = RxBool(false);
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -26,10 +28,20 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // emailController.text = "lisaaaaaaa@yopmail.com";
-    // passwordController.text = "User@123";
-    emailController.text = "ks@yopmail.com";
-    passwordController.text = "abc@A123";
+    bool isRemember = AppPreference.instance.getBool(AppString.prefKeyRememberMe);
+
+    if (isRemember) {
+      String preferenceEmail = AppPreference.instance.getString(AppString.prefKeyRememberEmail);
+      String preferencePassword = AppPreference.instance.getString(AppString.prefKeyRememberPassword);
+      emailController.text = preferenceEmail;
+      passwordController.text = preferencePassword;
+      isRememberMe.value = true;
+    }
+
+    // // emailController.text = "lisaaaaaaa@yopmail.com";
+    // // passwordController.text = "User@123";
+    // emailController.text = "ks@yopmail.com";
+    // passwordController.text = "abc@A123";
   }
 
   @override
@@ -50,6 +62,16 @@ class LoginController extends GetxController {
   }
 
   Future<void> authLoginUser() async {
+    if (isRememberMe.value) {
+      AppPreference.instance.setBool(AppString.prefKeyRememberMe, true);
+      AppPreference.instance.setString(AppString.prefKeyRememberEmail, emailController.text);
+      AppPreference.instance.setString(AppString.prefKeyRememberPassword, passwordController.text);
+    } else {
+      AppPreference.instance.setBool(AppString.prefKeyRememberMe, false);
+      AppPreference.instance.setString(AppString.prefKeyRememberEmail, "");
+      AppPreference.instance.setString(AppString.prefKeyRememberPassword, "");
+    }
+
     isLoading.value = true;
 
     try {

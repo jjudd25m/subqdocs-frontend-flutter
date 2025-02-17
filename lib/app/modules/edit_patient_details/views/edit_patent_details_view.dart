@@ -22,6 +22,7 @@ import '../../../../widgets/base_image_view.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../../widgets/rounded_image_widget.dart';
+import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/edit_patent_details_controller.dart';
 
@@ -42,7 +43,31 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
             sigmaX: 5.0,
             sigmaY: 5.0,
           ),
-          child: CustomDrawerView(),
+          child: CustomDrawerView(
+            onItemSelected: (index) async {
+              if (index == 0) {
+                final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                _key.currentState!.closeDrawer();
+              } else if (index == 1) {
+                Get.toNamed(Routes.HOME, arguments: {
+                  "tabIndex": 1,
+                });
+
+                _key.currentState!.closeDrawer();
+              } else if (index == 2) {
+                Get.toNamed(Routes.HOME, arguments: {
+                  "tabIndex": 2,
+                });
+                _key.currentState!.closeDrawer();
+              } else if (index == 3) {
+                Get.toNamed(Routes.HOME, arguments: {
+                  "tabIndex": 0,
+                });
+                _key.currentState!.closeDrawer();
+              }
+            },
+          ),
         ),
         backgroundColor: AppColors.white,
         body: SafeArea(
@@ -139,8 +164,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     },
                                                     // value: "",
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          left: 10, right: 20, top: 10, bottom: 10),
+                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
                                                           Icon(
@@ -172,8 +196,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                           color: AppColors.appbarBorder,
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(
-                                                              left: 10, right: 20, top: 10, bottom: 10),
+                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(CupertinoIcons.camera),
@@ -352,8 +375,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                 label: "Visit Date",
                                                 readOnly: true,
                                                 onTap: () {
-                                                  controller.showVisitDateCupertinoDatePicker(
-                                                      context, controller.visitDateController);
+                                                  controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
                                                 },
                                                 controller: controller.visitDateController,
                                                 hint: "10/12/2024",

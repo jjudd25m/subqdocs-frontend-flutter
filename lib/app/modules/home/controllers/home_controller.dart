@@ -74,8 +74,8 @@ class HomeController extends GetxController {
 
   RxBool isPast = RxBool(false);
   RxBool isPagination = RxBool(false);
-  var pagePatient = 1;
 
+  var pagePatient = 1;
   var pageSchedule = 1;
   var pagePast = 1;
 
@@ -91,6 +91,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    if (Get.arguments != null) {
+      tabIndex.value = Get.arguments["tabIndex"] ?? 0;
+
+      print("tabe index is:- ${Get.arguments["tabIndex"]}");
+    }
 
     getPatientList();
     getScheduleVisitList();

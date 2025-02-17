@@ -130,13 +130,15 @@ class LoginView extends GetView<LoginController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Checkbox(
-                        visualDensity: VisualDensity.compact,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        activeColor: AppColors.backgroundPurple,
-                        value: true,
-                        onChanged: (value) => {},
-                      ),
+                      Obx(() {
+                        return Checkbox(
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          activeColor: AppColors.backgroundPurple,
+                          value: controller.isRememberMe.value,
+                          onChanged: (value) => {controller.isRememberMe.value = value!},
+                        );
+                      }),
                       Text(
                         AppString.rememberMe,
                         style: AppFonts.medium(14, AppColors.textDarkGrey),

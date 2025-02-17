@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,6 +20,7 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../routes/app_pages.dart';
 import '../../add_patient/widgets/custom_dailog.dart';
+import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/visit_main_controller.dart';
 import 'attachmentDailog.dart';
 
@@ -33,6 +35,37 @@ class VisitMainView extends GetView<VisitMainController> {
       key: _key,
       backgroundColor: AppColors.white,
       // appBar: CustomAppBar(),
+      drawer: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5.0,
+          sigmaY: 5.0,
+        ),
+        child: CustomDrawerView(
+          onItemSelected: (index) async {
+            if (index == 0) {
+              final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+              _key.currentState!.closeDrawer();
+            } else if (index == 1) {
+              Get.toNamed(Routes.HOME, arguments: {
+                "tabIndex": 1,
+              });
+
+              _key.currentState!.closeDrawer();
+            } else if (index == 2) {
+              Get.toNamed(Routes.HOME, arguments: {
+                "tabIndex": 2,
+              });
+              _key.currentState!.closeDrawer();
+            } else if (index == 3) {
+              Get.toNamed(Routes.HOME, arguments: {
+                "tabIndex": 0,
+              });
+              _key.currentState!.closeDrawer();
+            }
+          },
+        ),
+      ),
       body: SafeArea(
         child: Obx(() {
           return Stack(
@@ -1826,13 +1859,41 @@ class VisitMainView extends GetView<VisitMainController> {
                               Spacer(),
                               GestureDetector(
                                 onTap: () async {
-                                  await controller.recorderService.startRecording();
+                                  if (controller.recorderService.recordingStatus.value == 0) {
+                                    // If not recording, start the recording
+                                    await controller.recorderService.startRecording();
+                                  } else if (controller.recorderService.recordingStatus.value == 1) {
+                                    // If recording, pause it
+                                    await controller.recorderService.pauseRecording();
+                                  } else if (controller.recorderService.recordingStatus.value == 2) {
+                                    // If paused, resume the recording
+                                    await controller.recorderService.resumeRecording();
+                                  }
                                 },
-                                child: SvgPicture.asset(
-                                  ImagePath.pause_white,
-                                  height: 45,
-                                  width: 45,
-                                ),
+                                child: Obx(() {
+                                  if (controller.recorderService.recordingStatus.value == 0) {
+                                    // If recording is stopped, show start button
+                                    return SvgPicture.asset(
+                                      ImagePath.dark_play,
+                                      height: 45,
+                                      width: 45,
+                                    );
+                                  } else if (controller.recorderService.recordingStatus.value == 1) {
+                                    // If recording, show pause button
+                                    return SvgPicture.asset(
+                                      ImagePath.dark_pause, // Replace with the actual pause icon
+                                      height: 45,
+                                      width: 45,
+                                    );
+                                  } else {
+                                    // If paused, show resume button
+                                    return SvgPicture.asset(
+                                      ImagePath.dark_play, // Replace with the actual resume icon
+                                      height: 45,
+                                      width: 45,
+                                    );
+                                  }
+                                }),
                               ),
                               SizedBox(width: 10),
                               GestureDetector(
