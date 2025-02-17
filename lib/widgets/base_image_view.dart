@@ -76,7 +76,7 @@ class BaseImageView extends StatelessWidget {
                   ),
                 ),
               )
-            : SvgPicture.asset(ImagePath.avatar, width: width ?? 80, height: height ?? 80, fit: BoxFit.fitWidth, q);
+            : SvgPicture.asset(ImagePath.avatar, width: width ?? 80, height: height ?? 80, fit: BoxFit.fitWidth);
   }
 }
 

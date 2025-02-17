@@ -59,8 +59,10 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
+      print("API response is $e");
       throw handleDioException(e);
     } catch (e) {
+      print("API response is $e");
       rethrow;
     }
   }
