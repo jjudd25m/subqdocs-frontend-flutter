@@ -77,7 +77,6 @@ class TextFormFiledWidget extends StatelessWidget {
                   ],
                 ),
                 child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   inputFormatters: format,
                   keyboardType: type,
                   cursorColor: AppColors.backgroundPurple,

@@ -36,6 +36,7 @@ class AppColors {
 
   static const Color textfieldBorder = Color(0xFFD8DCE4);
   static const Color appbarBorder = Color(0xFFD8DCE4);
+  static const Color blackLight = Color.fromRGBO(0, 0, 0, 0.03);
 
   static const Color ScreenBackGround = Color(0xFFF6F6FD);
   static const Color buttonPurpleLight = Color(0xFFEFEFFC);

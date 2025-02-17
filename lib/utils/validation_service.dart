@@ -45,7 +45,9 @@ class Validation {
       return "please filed above filed";
     }
 
-    if (value == firstvalue) {
+    print(value);
+    print(firstvalue);
+    if (value != firstvalue) {
       return "Password not Matched";
     }
   }

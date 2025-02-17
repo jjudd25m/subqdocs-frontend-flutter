@@ -4,6 +4,7 @@ class ImagePath {
   static const String loginHeader = 'assets/images/image_header1.png';
 
   static const String eyeLogoOpen = 'assets/images/eye_icon_logo.svg';
+  static const String rightCheck = 'assets/images/right_ok.svg';
   static const String drawer = 'assets/images/logo_drawer.svg';
   static const String subqdocs_text_logo = 'assets/images/subqdocs_text_logo.png';
   static const String logo_signout = 'assets/images/logo_signout.svg';

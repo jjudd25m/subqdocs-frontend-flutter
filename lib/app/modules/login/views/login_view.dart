@@ -144,9 +144,14 @@ class LoginView extends GetView<LoginController> {
                         style: AppFonts.medium(14, AppColors.textDarkGrey),
                       ),
                       Spacer(),
-                      Text(
-                        AppString.forgotPassword,
-                        style: AppFonts.medium(14, AppColors.backgroundPurple),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.FORGOT_PASSWORD);
+                        },
+                        child: Text(
+                          AppString.forgotPassword,
+                          style: AppFonts.medium(14, AppColors.backgroundPurple),
+                        ),
                       ),
                     ],
                   ),

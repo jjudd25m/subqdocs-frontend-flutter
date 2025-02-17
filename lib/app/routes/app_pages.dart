@@ -1,21 +1,23 @@
 import 'package:get/get.dart';
 
-import '../modules/all_attachment/bindings/all_attachment_binding.dart';
-import '../modules/all_attachment/views/all_attachment_view.dart';
 import '../modules/add_patient/bindings/add_patient_binding.dart';
 import '../modules/add_patient/views/add_patient_view.dart';
+import '../modules/all_attachment/bindings/all_attachment_binding.dart';
+import '../modules/all_attachment/views/all_attachment_view.dart';
 import '../modules/edit_patient_details/bindings/edit_patent_details_binding.dart';
 import '../modules/edit_patient_details/views/edit_patent_details_view.dart';
+import '../modules/forgot_password/bindings/forgot_password_binding.dart';
+import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/patient_info/bindings/patient_info_binding.dart';
 import '../modules/patient_info/views/patient_info_view.dart';
-import '../modules/patient_view_read_only/bindings/patient_view_read_only_binding.dart';
-import '../modules/patient_view_read_only/views/patient_view_read_only_view.dart';
 import '../modules/patient_profile/bindings/patient_profile_binding.dart';
 import '../modules/patient_profile/views/patient_profile_view.dart';
+import '../modules/patient_view_read_only/bindings/patient_view_read_only_binding.dart';
+import '../modules/patient_view_read_only/views/patient_view_read_only_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGOT_PASSWORD,
+      page: () => ForgotPasswordView(),
+      binding: ForgotPasswordBinding(),
     ),
   ];
 }
