@@ -38,7 +38,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                         }
                       },
                       title: "Your Past Visit List is Empty",
-                      description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                      description:
+                          "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
                 )
               : CustomTable(
                   onLoadMore: () => controller.getPastVisitListFetchMore(),
@@ -107,7 +108,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                print("visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
+                                                print(
+                                                    "visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
 
                                                 Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                   "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
@@ -129,7 +131,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               onTap: () async {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
-                                                final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                                final result =
+                                                    await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
                                                   "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
                                                   "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
                                                   "fromSchedule": false
@@ -195,14 +198,16 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           controller.getPastVisitList(sortingName: cellData);
                                           controller.colIndex.value = colIndex;
 
-                                          controller.isAsending.value = controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
+                                          controller.isAsending.value =
+                                              controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
                                           controller.colIndex.refresh();
                                           controller.isAsending.refresh();
                                           print("col index is the $colIndex");
                                           print(controller.getDescValue(controller.sortingPastPatient, cellData));
                                         },
                                         child: Row(
-                                          mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               cellData,
@@ -212,12 +217,16 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               softWrap: true, // Allows text to wrap
                                               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                             ),
-                                            colIndex == controller.colIndex.value && controller.isAsending.value && colIndex != 6
+                                            colIndex == controller.colIndex.value &&
+                                                    controller.isAsending.value &&
+                                                    colIndex != 6
                                                 ? Icon(
                                                     CupertinoIcons.up_arrow,
                                                     size: 15,
                                                   )
-                                                : colIndex == controller.colIndex.value && !controller.isAsending.value && colIndex != 6
+                                                : colIndex == controller.colIndex.value &&
+                                                        !controller.isAsending.value &&
+                                                        colIndex != 6
                                                     ? Icon(
                                                         CupertinoIcons.down_arrow,
                                                         size: 15,
@@ -252,12 +261,28 @@ class HomePastVisitsList extends GetView<HomeController> {
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
-      DateTime parsedDate = DateTime.parse(patient.visitDate ?? "").toLocal(); // Convert to local time if needed
+      String formatedTime;
+      String formatedDateTime = "N/A";
 
-      String formattedDate = DateFormat('MM/dd hh:mm a').format(parsedDate);
+      String formattedDate = "N/A";
+
+      if (patient.visitDate != null) {
+        DateTime dateTime = DateTime.parse(patient.visitDate ?? "");
+
+        // Format the DateTime to "MM/dd"
+        formattedDate = DateFormat('MM/dd').format(dateTime);
+      }
+
+      if (patient.visitTime != null) {
+        DateTime dateTime = DateTime.parse(patient.visitTime ?? "");
+
+        // Format the DateTime to "hh:mm a" (e.g., "05:30 AM")
+        formattedDate += " " + DateFormat('hh:mm a').format(dateTime.toLocal());
+        formatedDateTime = formattedDate;
+      }
       rows.add([
         "${patient.lastName}, ${patient.firstName}", // Patient Name
-        formattedDate ?? "N/A", // Last Visit Date
+        formatedDateTime, // Last Visit Date
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
         patient.previousVisitCount.toString() ?? "N/A", // Last Visit Date
