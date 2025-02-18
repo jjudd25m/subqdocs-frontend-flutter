@@ -205,7 +205,9 @@ class HomeController extends GetxController {
     }
 
     patientListModel.value = await _homeRepository.getPatient(param: param);
+
     patientList.value = patientListModel.value?.responseData?.data ?? [];
+
     print("patient list is the :- ${patientList}");
   }
 
@@ -297,6 +299,7 @@ class HomeController extends GetxController {
     }
 
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
+
     scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
   }
 

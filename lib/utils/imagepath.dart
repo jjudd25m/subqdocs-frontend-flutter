@@ -22,6 +22,7 @@ class ImagePath {
   static const String pause = 'assets/images/pause.svg';
   static const String stop_transcript = 'assets/images/stop_transcript.svg';
   static const String logo_filter = 'assets/images/logo_filter.svg';
+  static const String file_placeHolder = 'assets/images/file_placeholder.png';
 
   static const String document_attchment = 'assets/images/document_attchment.svg';
   static const String image_attchment = 'assets/images/image_attchment.svg';

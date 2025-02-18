@@ -116,7 +116,7 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> pickFiles() async {
-    List<XFile>? fileList = await MediaPickerServices().pickMultiMedia();
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
     print("media  file is  ${fileList}");
 
@@ -131,7 +131,7 @@ class AddPatientController extends GetxController {
           _pickDate = DateTime.now(); // Get the date when the file is picked
 
           // Get the size of the file
-          File file = File(element.path);
+          File file = File(element.xFile.path);
           _fileSize = file.lengthSync(); // Size in bytes
 
           String? _filesizeString = _formatFileSize(_fileSize);
@@ -143,7 +143,12 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -193,7 +198,12 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -277,7 +287,8 @@ class AddPatientController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
+          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
       Get.back(result: 1);
@@ -379,7 +390,7 @@ class AddPatientController extends GetxController {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
 
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
                   String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
 
                   if (control == dobController) {

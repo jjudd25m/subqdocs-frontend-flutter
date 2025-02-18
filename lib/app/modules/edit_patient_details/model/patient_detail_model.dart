@@ -7,20 +7,20 @@ class PatientDetailModel {
   PatientDetailModel({this.responseData, this.message, this.toast, this.responseType});
 
   PatientDetailModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
+    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (responseData != null) {
-      data['responseData'] = responseData!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.responseData != null) {
+      data['responseData'] = this.responseData!.toJson();
     }
-    data['message'] = message;
-    data['toast'] = toast;
-    data['response_type'] = responseType;
+    data['message'] = this.message;
+    data['toast'] = this.toast;
+    data['response_type'] = this.responseType;
     return data;
   }
 }
@@ -32,30 +32,14 @@ class ResponseData {
   String? lastName;
   String? middleName;
   String? dateOfBirth;
+  int? age;
   String? email;
   String? gender;
-  int? age;
-  dynamic profileImage;
-  dynamic appointmentTime;
-  String? status;
-  dynamic address;
-  dynamic contactNo;
-  dynamic streetAddress;
-  dynamic city;
-  dynamic state;
-  dynamic zipcode;
-  dynamic homePhone;
-  dynamic cellphone;
-  dynamic visitHistory;
-  int? createdBy;
-  int? updatedBy;
-  dynamic deletedBy;
-  String? createdAt;
-  String? updatedAt;
-  dynamic deletedAt;
+  Null? profileImage;
+  List<ScheduledVisits>? scheduledVisits;
+  List<PastVisits>? pastVisits;
   String? visitDate;
   String? visitTime;
-  int? visitId;
 
   ResponseData(
       {this.id,
@@ -64,30 +48,14 @@ class ResponseData {
       this.lastName,
       this.middleName,
       this.dateOfBirth,
-      this.email,
-      this.gender,
       this.age,
-      this.profileImage,
-      this.appointmentTime,
-      this.status,
-      this.address,
-      this.contactNo,
-      this.streetAddress,
-      this.city,
-      this.state,
-      this.zipcode,
-      this.homePhone,
-      this.cellphone,
-      this.visitHistory,
-      this.createdBy,
-      this.updatedBy,
-      this.deletedBy,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
+      this.email,
       this.visitDate,
       this.visitTime,
-      this.visitId});
+      this.gender,
+      this.profileImage,
+      this.scheduledVisits,
+      this.pastVisits});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -96,61 +64,38 @@ class ResponseData {
     lastName = json['last_name'];
     middleName = json['middle_name'];
     dateOfBirth = json['date_of_birth'];
+    age = json['age'];
     email = json['email'];
     gender = json['gender'];
-    age = json['age'];
-    profileImage = json['profile_image'];
-    appointmentTime = json['appointment_time'];
-    status = json['status'];
-    address = json['address'];
-    contactNo = json['contact_no'];
-    streetAddress = json['street_address'];
-    city = json['city'];
-    state = json['state'];
-    zipcode = json['zipcode'];
-    homePhone = json['home_phone'];
-    cellphone = json['cellphone'];
-    visitHistory = json['visit_history'];
-    createdBy = json['created_by'];
-    updatedBy = json['updated_by'];
-    deletedBy = json['deleted_by'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
     visitDate = json['visit_date'];
     visitTime = json['visit_time'];
-    visitId = json['visit_id'];
+    profileImage = json['profile_image'];
+    if (json['scheduledVisits'] != null) {
+      scheduledVisits = <ScheduledVisits>[];
+      json['scheduledVisits'].forEach((v) {
+        scheduledVisits!.add(new ScheduledVisits.fromJson(v));
+      });
+    }
+    if (json['pastVisits'] != null) {
+      pastVisits = <PastVisits>[];
+      json['pastVisits'].forEach((v) {
+        pastVisits!.add(new PastVisits.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['patient_id'] = patientId;
-    data['first_name'] = firstName;
-    data['last_name'] = lastName;
-    data['middle_name'] = middleName;
-    data['date_of_birth'] = dateOfBirth;
-    data['email'] = email;
-    data['gender'] = gender;
-    data['age'] = age;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['patient_id'] = this.patientId;
+    data['first_name'] = this.firstName;
+    data['last_name'] = this.lastName;
+    data['middle_name'] = this.middleName;
+    data['date_of_birth'] = this.dateOfBirth;
+    data['age'] = this.age;
+    data['email'] = this.email;
+    data['gender'] = this.gender;
 
-    data['appointment_time'] = appointmentTime;
-    data['status'] = status;
-    data['address'] = address;
-    data['contact_no'] = contactNo;
-    data['street_address'] = streetAddress;
-    data['city'] = city;
-    data['state'] = state;
-    data['zipcode'] = zipcode;
-    data['home_phone'] = homePhone;
-    data['cellphone'] = cellphone;
-    data['visit_history'] = visitHistory;
-    data['created_by'] = createdBy;
-    data['updated_by'] = updatedBy;
-    data['deleted_by'] = deletedBy;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['deleted_at'] = deletedAt;
     if (visitDate != null) {
       data['visit_date'] = visitDate;
     }
@@ -158,8 +103,66 @@ class ResponseData {
     if (visitDate != null) {
       data['visit_time'] = visitTime;
     }
+    data['profile_image'] = this.profileImage;
+    if (this.scheduledVisits != null) {
+      data['scheduledVisits'] = this.scheduledVisits!.map((v) => v.toJson()).toList();
+    }
+    if (this.pastVisits != null) {
+      data['pastVisits'] = this.pastVisits!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
-    data['visit_id'] = visitId;
+class ScheduledVisits {
+  String? visitDate;
+  String? visitTime;
+  String? visitStatus;
+  int? id;
+
+  ScheduledVisits({this.visitDate, this.visitTime, this.visitStatus, this.id});
+
+  ScheduledVisits.fromJson(Map<String, dynamic> json) {
+    visitDate = json['visit_date'];
+    visitTime = json['visit_time'];
+    visitStatus = json['visit_status'];
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['visit_date'] = this.visitDate;
+    data['visit_time'] = this.visitTime;
+    data['visit_status'] = this.visitStatus;
+    data['id'] = this.id;
+    return data;
+  }
+}
+
+class PastVisits {
+  String? visitDate;
+  String? visitTime;
+  String? visitStatus;
+  int? id;
+  String? summary;
+
+  PastVisits({this.visitDate, this.visitTime, this.visitStatus, this.id, this.summary});
+
+  PastVisits.fromJson(Map<String, dynamic> json) {
+    visitDate = json['visit_date'];
+    visitTime = json['visit_time'];
+    visitStatus = json['visit_status'];
+    id = json['id'];
+    summary = json['summary'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['visit_date'] = this.visitDate;
+    data['visit_time'] = this.visitTime;
+    data['visit_status'] = this.visitStatus;
+    data['id'] = this.id;
+    data['summary'] = this.summary;
     return data;
   }
 }

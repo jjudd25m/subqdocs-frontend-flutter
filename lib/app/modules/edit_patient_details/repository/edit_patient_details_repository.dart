@@ -10,6 +10,12 @@ class EditPatientDetailsRepository {
     return PatientDetailModel.fromJson(response);
   }
 
+  Future<PatientDetailModel> getPatientDetails({required String id}) async {
+    var response = await ApiProvider.instance.callGet("patient/${id}/profileDetails", queryParameters: {});
+    print("response is for getPatient ID  $response");
+    return PatientDetailModel.fromJson(response);
+  }
+
   Future<dynamic> updatePatient(
       {required String id,
       required Map<String, dynamic> param,

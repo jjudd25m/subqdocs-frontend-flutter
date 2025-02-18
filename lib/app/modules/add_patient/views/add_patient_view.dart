@@ -48,6 +48,12 @@ class AddPatientView extends GetView<AddPatientController> {
     );
   }
 
+  bool isImage(File file) {
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+    final fileExtension = file.uri.pathSegments.last.split('.').last.toLowerCase();
+    return imageExtensions.contains(fileExtension);
+  }
+
   TextEditingController _controller = TextEditingController();
   DateTime _selectedDate = DateTime.now();
 
@@ -114,7 +120,7 @@ class AddPatientView extends GetView<AddPatientController> {
           cancelButton: CupertinoActionSheetAction(
             child: Text('Done'),
             onPressed: () {
-              String formattedDate = DateFormat('dd/MM/yyyy').format(fromDate);
+              String formattedDate = DateFormat('MM/dd/yyyy').format(fromDate);
 
               // String formattedDate = DateFormat('MM-dd-yyyy').format(DateTime.now());
               control.text = formattedDate;
@@ -181,7 +187,8 @@ class AddPatientView extends GetView<AddPatientController> {
                     child: Container(
                         color: AppColors.ScreenBackGround,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                          padding:
+                              const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                           child: ListView(
                             physics: BouncingScrollPhysics(),
                             padding: EdgeInsets.zero,
@@ -189,7 +196,8 @@ class AddPatientView extends GetView<AddPatientController> {
                               Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -273,7 +281,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     },
                                                     // value: "",
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                      padding: const EdgeInsets.only(
+                                                          left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
                                                           Icon(
@@ -305,7 +314,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                           color: AppColors.appbarBorder,
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          padding: const EdgeInsets.only(
+                                                              left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(CupertinoIcons.camera),
@@ -472,12 +482,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                             readOnly: true,
                                             label: "Visit Date",
                                             onTap: () {
-                                              controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
+                                              controller.showVisitDateCupertinoDatePicker(
+                                                  context, controller.visitDateController);
                                             },
                                             controller: controller.visitDateController,
                                             hint: "10/12/2024",
                                             checkValidation: (value) {
-                                              return Validation.visitDateAndTimeValidation(value, controller.selectedVisitTimeValue.value);
+                                              return Validation.visitDateAndTimeValidation(
+                                                  value, controller.selectedVisitTimeValue.value);
                                             },
                                             suffixIcon: SvgPicture.asset(ImagePath.calendar),
                                           ),
@@ -525,9 +537,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(1),
                                           child: ExpansionTile(
-                                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                            shape: OutlineInputBorder(
+                                                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                             backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                            collapsedShape: OutlineInputBorder(
+                                                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                             collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                             title: Container(
                                               child: Row(
@@ -575,26 +589,39 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                             width: 120,
                                                                             height: 120,
                                                                             child: ClipRRect(
-                                                                              borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                              child: Image.file(
-                                                                                controller.selectedList[index].file ?? File(""),
-                                                                                fit: BoxFit.cover,
-                                                                              ),
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                  10), // Set the radius here
+                                                                              child: controller.selectedList[index]
+                                                                                              .file !=
+                                                                                          null &&
+                                                                                      isImage(controller
+                                                                                          .selectedList[index].file!)
+                                                                                  ? Image.file(
+                                                                                      controller
+                                                                                          .selectedList[index].file!,
+                                                                                      fit: BoxFit.cover,
+                                                                                    )
+                                                                                  : Image.asset(
+                                                                                      ImagePath.file_placeHolder,
+                                                                                    ), // Display a placeholder if the file is not an image
                                                                             ),
                                                                           ),
                                                                           SizedBox(
                                                                             height: 6,
                                                                           ),
                                                                           Text(
-                                                                            controller.selectedList[index].fileName ?? "",
-                                                                            style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                            controller.selectedList[index].fileName ??
+                                                                                "",
+                                                                            style: AppFonts.regular(
+                                                                                12, AppColors.textDarkGrey),
                                                                           ),
                                                                           SizedBox(
                                                                             height: 6,
                                                                           ),
                                                                           Text(
                                                                             controller.selectedList[index].date ?? "",
-                                                                            style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                            style: AppFonts.regular(
+                                                                                12, AppColors.textDarkGrey),
                                                                           ),
                                                                         ],
                                                                       ),
@@ -602,7 +629,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                   ),
                                                                 );
                                                               },
-                                                              separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                              separatorBuilder: (context, index) =>
+                                                                  const SizedBox(width: Dimen.margin15),
                                                               itemCount: controller.selectedList.length,
                                                             );
                                                           },
@@ -687,7 +715,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                           width: Dimen.margin6,
                                         ),
                                         Container(
-                                          decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
+                                          decoration: BoxDecoration(
+                                              color: AppColors.backgroundPurple,
+                                              borderRadius: BorderRadius.circular(6)),
                                           width: 98,
                                           height: 40,
                                           child: Padding(
@@ -708,7 +738,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 ),
                                                 PopupMenuButton<String>(
                                                     offset: const Offset(14, -70),
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                    shape:
+                                                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                     color: AppColors.white,
                                                     position: PopupMenuPosition.over,
                                                     padding: EdgeInsetsDirectional.zero,
@@ -745,7 +776,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       child: SvgPicture.asset(
                                                         ImagePath.downArrow,
                                                         width: 18,
-                                                        colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
+                                                        colorFilter: ColorFilter.mode(
+                                                            AppColors.backgroundWhite, BlendMode.srcIn),
                                                       ),
                                                     )),
                                               ],
