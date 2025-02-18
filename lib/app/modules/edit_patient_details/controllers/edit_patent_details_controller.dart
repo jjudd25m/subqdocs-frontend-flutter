@@ -264,7 +264,7 @@ class EditPatentDetailsController extends GetxController {
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
                   String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
 
                   if (control == dobController) {
@@ -319,7 +319,7 @@ class EditPatentDetailsController extends GetxController {
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
                   String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
 
                   if (control == dobController) {
@@ -379,6 +379,10 @@ class EditPatentDetailsController extends GetxController {
 
     param['patient_id'] = patientIdController.text;
 
+    if (visitId != "") {
+      param['visit_id'] = visitId;
+    }
+
     if (middleNameController.text != "") {
       param['middle_name'] = middleNameController.text;
     }
@@ -402,7 +406,7 @@ class EditPatentDetailsController extends GetxController {
     // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
 
     if (time != null) {
-      DateTime firstTime = DateFormat('hh:mm a').parse(time); // 10:30 AM to DateTime
+      DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
       String formattedTime = DateFormat('hh:mm:ss').format(firstTime);

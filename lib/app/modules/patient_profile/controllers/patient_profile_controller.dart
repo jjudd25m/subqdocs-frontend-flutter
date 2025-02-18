@@ -42,7 +42,7 @@ class PatientProfileController extends GetxController {
       param['visit_id'] = visitId;
     }
 
-    patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id, param: param);
+    patientDetailModel = await _editPatientDetailsRepository.getPatientDetails(id: id);
 
     // firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
     // middleNameController.text = patientDetailModel.responseData?.middleName ?? "";

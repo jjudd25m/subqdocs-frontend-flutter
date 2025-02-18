@@ -143,7 +143,12 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -193,7 +198,12 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -262,7 +272,7 @@ class AddPatientController extends GetxController {
     // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
 
     if (time != null) {
-      DateTime firstTime = DateFormat('hh:mm a').parse(time); // 10:30 AM to DateTime
+      DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
       String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
@@ -277,7 +287,8 @@ class AddPatientController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
+          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
       Get.back(result: 1);
@@ -379,7 +390,7 @@ class AddPatientController extends GetxController {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
 
-                  String formattedDate = DateFormat('dd/MM/yyyy').format(_selectedDate);
+                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
                   String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
 
                   if (control == dobController) {
