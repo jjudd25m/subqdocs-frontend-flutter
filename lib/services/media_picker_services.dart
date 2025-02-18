@@ -43,6 +43,24 @@ class MediaPickerServices {
     return image;
   }
 
+  Future<List<PlatformFile>?> pickAllFiles() async {
+    // Pick multiple files, setting type as FileType.any to allow all types of files
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true, // Allows multiple files to be selected
+      type: FileType.any, // Accepts any type of file
+    );
+
+    // Check if the user picked any files
+    if (result != null) {
+      List<PlatformFile> files = result.files; // List of selected files
+      print("Files selected: $files");
+      return files;
+    } else {
+      print("No files selected");
+      return null;
+    }
+  }
+
   Future<List<XFile>?> pickMultiMedia() async {
     List<XFile>? image = await _picker.pickMultipleMedia(limit: mediaLimit);
     print("file is  ${image}");
@@ -124,8 +142,7 @@ enum MediaType {
 extension MediaTypeExtension on MediaType {
   static MediaType fromString(String value) {
     try {
-      return MediaType.values
-          .firstWhere((quiz) => quiz.value.toLowerCase() == value.toLowerCase(), orElse: () => MediaType.Image);
+      return MediaType.values.firstWhere((quiz) => quiz.value.toLowerCase() == value.toLowerCase(), orElse: () => MediaType.Image);
     } catch (e) {
       return MediaType.Image; // Return null if no match is found
     }

@@ -10,6 +10,7 @@ import '../../../../utils/app_string.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/custom_textfiled.dart';
+import '../../../../widgets/custom_textfiled.dart';
 
 class EnterMailView extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {
@@ -87,7 +88,7 @@ class EnterMailView extends GetView<ForgotPasswordController> {
           },
           child: Text(
             "Back to Login",
-            style: AppFonts.medium(12, AppColors.backgroundPurple),
+            style: AppFonts.medium(14, AppColors.backgroundPurple),
           ),
         ),
       ],

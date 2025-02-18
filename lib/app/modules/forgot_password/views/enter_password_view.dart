@@ -12,6 +12,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/custom_textfiled.dart';
+import '../../../../widgets/custom_textfiled.dart';
 
 class EnterPasswordView extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {

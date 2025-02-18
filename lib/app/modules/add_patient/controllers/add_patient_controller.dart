@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -142,12 +143,7 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(
-              file: file,
-              previewImage: null,
-              fileName: _shortFileName,
-              date: _formatDate(_pickDate),
-              Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
         }
 
         list.refresh();
@@ -197,12 +193,7 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file,
-          previewImage: null,
-          fileName: _shortFileName,
-          date: _formatDate(_pickDate),
-          Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
     }
 
     list.refresh();
@@ -286,8 +277,7 @@ class AddPatientController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
-          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
       Get.back(result: 1);
