@@ -48,6 +48,12 @@ class AddPatientView extends GetView<AddPatientController> {
     );
   }
 
+  bool isImage(File file) {
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+    final fileExtension = file.uri.pathSegments.last.split('.').last.toLowerCase();
+    return imageExtensions.contains(fileExtension);
+  }
+
   TextEditingController _controller = TextEditingController();
   DateTime _selectedDate = DateTime.now();
 
@@ -555,137 +561,80 @@ class AddPatientView extends GetView<AddPatientController> {
                                               Container(
                                                 color: Colors.white,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(1),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      border: Border.all(width: 0.5, color: AppColors.appbarBorder),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(1),
-                                                      child: ExpansionTile(
-                                                        shape: OutlineInputBorder(
-                                                            borderSide: BorderSide.none,
-                                                            borderRadius: BorderRadius.circular(8)),
-                                                        backgroundColor:
-                                                            AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                        collapsedShape: OutlineInputBorder(
-                                                            borderSide: BorderSide.none,
-                                                            borderRadius: BorderRadius.circular(8)),
-                                                        collapsedBackgroundColor:
-                                                            AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                        title: Container(
-                                                          child: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                              Text(
-                                                                textAlign: TextAlign.center,
-                                                                "Attachments",
-                                                                style: AppFonts.medium(16, AppColors.textBlack),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        children: <Widget>[
-                                                          Container(
-                                                            color: Colors.white,
-                                                            child: Padding(
-                                                                padding:
-                                                                    EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                                child: SizedBox(
-                                                                    height: 200,
-                                                                    width: double.infinity,
-                                                                    child: Obx(
-                                                                      () {
-                                                                        return ListView.separated(
-                                                                          scrollDirection: Axis.horizontal,
-                                                                          padding: EdgeInsets.only(top: 20),
-                                                                          itemBuilder: (context, index) {
-                                                                            return Container(
-                                                                              height: 200,
-                                                                              width: 140,
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 10),
-                                                                                  Column(
-                                                                                    crossAxisAlignment:
-                                                                                        CrossAxisAlignment.start,
-                                                                                    mainAxisSize: MainAxisSize.min,
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: AppColors.appbarBorder,
-                                                                                          borderRadius:
-                                                                                              BorderRadius.circular(10),
-                                                                                        ),
-                                                                                        width: 120,
-                                                                                        height: 120,
-                                                                                        child: ClipRRect(
-                                                                                          borderRadius:
-                                                                                              BorderRadius.circular(
-                                                                                                  10), // Set the radius here
-                                                                                          child: controller
-                                                                                                          .selectedList[
-                                                                                                              index]
-                                                                                                          .file !=
-                                                                                                      null &&
-                                                                                                  isImage(controller
-                                                                                                      .selectedList[
-                                                                                                          index]
-                                                                                                      .file!)
-                                                                                              ? Image.file(
-                                                                                                  controller
-                                                                                                      .selectedList[
-                                                                                                          index]
-                                                                                                      .file!,
-                                                                                                  fit: BoxFit.cover,
-                                                                                                )
-                                                                                              : Image.asset(
-                                                                                                  ImagePath
-                                                                                                      .file_placeHolder,
-                                                                                                ), // Display a placeholder if the file is not an image
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        height: 6,
-                                                                                      ),
-                                                                                      Text(
-                                                                                        controller.selectedList[index]
-                                                                                                .fileName ??
-                                                                                            "",
-                                                                                        style: AppFonts.regular(
-                                                                                            12, AppColors.textDarkGrey),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        height: 6,
-                                                                                      ),
-                                                                                      Text(
-                                                                                        controller.selectedList[index]
-                                                                                                .date ??
-                                                                                            "",
-                                                                                        style: AppFonts.regular(
-                                                                                            12, AppColors.textDarkGrey),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                          separatorBuilder: (context, index) =>
-                                                                              const SizedBox(width: Dimen.margin15),
-                                                                          itemCount: controller.selectedList.length,
-                                                                        );
-                                                                      },
-                                                                    ))),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
+                                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                    child: SizedBox(
+                                                        height: 200,
+                                                        width: double.infinity,
+                                                        child: Obx(
+                                                          () {
+                                                            return ListView.separated(
+                                                              scrollDirection: Axis.horizontal,
+                                                              padding: EdgeInsets.only(top: 20),
+                                                              itemBuilder: (context, index) {
+                                                                return Container(
+                                                                  height: 200,
+                                                                  width: 140,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      SizedBox(height: 10),
+                                                                      Column(
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        mainAxisSize: MainAxisSize.min,
+                                                                        children: [
+                                                                          Container(
+                                                                            decoration: BoxDecoration(
+                                                                              color: AppColors.appbarBorder,
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            width: 120,
+                                                                            height: 120,
+                                                                            child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                  10), // Set the radius here
+                                                                              child: controller.selectedList[index]
+                                                                                              .file !=
+                                                                                          null &&
+                                                                                      isImage(controller
+                                                                                          .selectedList[index].file!)
+                                                                                  ? Image.file(
+                                                                                      controller
+                                                                                          .selectedList[index].file!,
+                                                                                      fit: BoxFit.cover,
+                                                                                    )
+                                                                                  : Image.asset(
+                                                                                      ImagePath.file_placeHolder,
+                                                                                    ), // Display a placeholder if the file is not an image
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height: 6,
+                                                                          ),
+                                                                          Text(
+                                                                            controller.selectedList[index].fileName ??
+                                                                                "",
+                                                                            style: AppFonts.regular(
+                                                                                12, AppColors.textDarkGrey),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height: 6,
+                                                                          ),
+                                                                          Text(
+                                                                            controller.selectedList[index].date ?? "",
+                                                                            style: AppFonts.regular(
+                                                                                12, AppColors.textDarkGrey),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
+                                                              separatorBuilder: (context, index) =>
+                                                                  const SizedBox(width: Dimen.margin15),
+                                                              itemCount: controller.selectedList.length,
+                                                            );
+                                                          },
+                                                        ))),
                                               ),
                                             ],
                                           ),
