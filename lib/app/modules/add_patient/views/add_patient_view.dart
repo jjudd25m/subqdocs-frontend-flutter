@@ -50,6 +50,12 @@ class AddPatientView extends GetView<AddPatientController> {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
+  bool isImage(File file) {
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+    final fileExtension = file.uri.pathSegments.last.split('.').last.toLowerCase();
+    return imageExtensions.contains(fileExtension);
+  }
+
   void showImagePickerDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -546,11 +552,19 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                             child: ClipRRect(
                                                                               borderRadius: BorderRadius.circular(
                                                                                   10), // Set the radius here
-                                                                              child: Image.file(
-                                                                                controller.selectedList[index].file ??
-                                                                                    File(""),
-                                                                                fit: BoxFit.cover,
-                                                                              ),
+                                                                              child: controller.selectedList[index]
+                                                                                              .file !=
+                                                                                          null &&
+                                                                                      isImage(controller
+                                                                                          .selectedList[index].file!)
+                                                                                  ? Image.file(
+                                                                                      controller
+                                                                                          .selectedList[index].file!,
+                                                                                      fit: BoxFit.cover,
+                                                                                    )
+                                                                                  : Image.asset(
+                                                                                      ImagePath.file_placeHolder,
+                                                                                    ), // Display a placeholder if the file is not an image
                                                                             ),
                                                                           ),
                                                                           SizedBox(

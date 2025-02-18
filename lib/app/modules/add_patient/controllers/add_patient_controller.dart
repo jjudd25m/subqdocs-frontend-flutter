@@ -131,7 +131,7 @@ class AddPatientController extends GetxController {
           _pickDate = DateTime.now(); // Get the date when the file is picked
 
           // Get the size of the file
-          File file = File(element.path);
+          File file = File(element.xFile.path);
           _fileSize = file.lengthSync(); // Size in bytes
 
           String? _filesizeString = _formatFileSize(_fileSize);

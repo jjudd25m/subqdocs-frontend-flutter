@@ -24,6 +24,7 @@ class ImagePath {
 
   static const String document_attchment = 'assets/images/document_attchment.svg';
   static const String image_attchment = 'assets/images/image_attchment.svg';
+  static const String file_placeHolder = 'assets/images/file_placeholder.png';
   static const String date_attchment = 'assets/images/date_attchment.svg';
   static const String attchment_check = 'assets/images/attchment_check.svg';
   static const String logo_cross = 'assets/images/logo_cross.svg';
