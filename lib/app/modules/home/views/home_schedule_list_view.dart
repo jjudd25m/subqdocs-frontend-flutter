@@ -45,22 +45,14 @@ class HomeScheduleListView extends GetView<HomeController> {
                   return colIndex == 0 && rowIndex != 0
                       ? Row(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                  "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                  "patientId": controller.scheduleVisitList[rowIndex - 1].patientId.toString(),
-                                });
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(14),
-                                child: BaseImageView(
-                                  imageUrl: profileImage,
-                                  height: 28,
-                                  width: 28,
-                                  nameLetters: cellData,
-                                  fontSize: 12,
-                                ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(14),
+                              child: BaseImageView(
+                                imageUrl: profileImage,
+                                height: 28,
+                                width: 28,
+                                nameLetters: cellData,
+                                fontSize: 12,
                               ),
                             ),
                             SizedBox(
@@ -216,6 +208,13 @@ class HomeScheduleListView extends GetView<HomeController> {
                 columnCount: 6,
                 context: context,
                 columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
+                onRowSelected: (rowIndex, rowData) {
+                  print("row index is :- $rowIndex");
+                  Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                    "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                    "patientId": controller.scheduleVisitList[rowIndex - 1].patientId.toString(),
+                  });
+                },
                 onLoadMore: () {
                   controller.getScheduleVisitListFetchMore();
                 },
@@ -235,13 +234,29 @@ class HomeScheduleListView extends GetView<HomeController> {
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
       // Parse the string to DateTime
-      DateTime parsedDate = DateTime.parse(patient.visitDate ?? "").toLocal(); // Convert to local time if needed
+      String formatedTime;
+      String formatedDateTime = "N/A";
 
-      // Define the desired format
-      String formattedDate = DateFormat('MM/dd hh:mm a').format(parsedDate);
+      String formattedDate = "N/A";
+
+      if (patient.visitDate != null) {
+        DateTime dateTime = DateTime.parse(patient.visitDate ?? "");
+
+        // Format the DateTime to "MM/dd"
+        formattedDate = DateFormat('MM/dd').format(dateTime);
+      }
+
+      if (patient.visitTime != null) {
+        DateTime dateTime = DateTime.parse(patient.visitTime ?? "");
+
+        // Format the DateTime to "hh:mm a" (e.g., "05:30 AM")
+        formattedDate += " " + DateFormat('hh:mm a').format(dateTime.toLocal());
+        formatedDateTime = formattedDate;
+      }
+
       rows.add([
         "${patient.lastName}, ${patient.firstName}",
-        formattedDate ?? "N/A", // Last Visit Date// Patient Name
+        formatedDateTime, // Last Visit Date// Patient Name
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
         patient.previousVisitCount.toString() ?? "0", // Previous Visits

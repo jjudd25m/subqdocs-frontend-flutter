@@ -171,8 +171,7 @@ class EditPatentDetailsController extends GetxController {
     // print("visitformattedTime is:- $visitformattedTime");
 
     if (isFromSchedule.value) {
-      DateTime visitTimeS =
-          DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
+      DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
 
       // Formatting to "hh:mm a" format
       String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
@@ -314,8 +313,7 @@ class EditPatentDetailsController extends GetxController {
                 mode: CupertinoDatePickerMode.date,
                 initialDateTime: _selectedDate,
                 maximumDate: control == dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
-                minimumDate:
-                    control == visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
+                minimumDate: control == visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
@@ -402,7 +400,7 @@ class EditPatentDetailsController extends GetxController {
     // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
 
     if (time != null) {
-      DateTime firstTime = DateFormat('hh:mm a').parse(time); // 10:30 AM to DateTime
+      DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
       String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
@@ -412,12 +410,15 @@ class EditPatentDetailsController extends GetxController {
       param['visit_time'] = formattedTime;
     }
 
+    if (isFromSchedule.value) {
+      param['visit_id'] = visitId;
+    }
+
     print("param is :- $param");
 
     try {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-      dynamic response = await _editPatientDetailsRepository.updatePatient(
-          files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
+      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
 
       isLoading.value = false;
       print("_editPatientDetailsRepository response is ${response} ");

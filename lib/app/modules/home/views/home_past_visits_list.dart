@@ -43,6 +43,13 @@ class HomePastVisitsList extends GetView<HomeController> {
               : CustomTable(
                   onLoadMore: () => controller.getPastVisitListFetchMore(),
                   rows: _getTableRows(controller.pastVisitList),
+                  onRowSelected: (rowIndex, rowData) {
+                    print("row index is :- $rowIndex");
+
+                    Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                      "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
+                    });
+                  },
                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                     return colIndex == 0 && rowIndex != 0
                         ? Row(
@@ -252,12 +259,28 @@ class HomePastVisitsList extends GetView<HomeController> {
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
-      DateTime parsedDate = DateTime.parse(patient.visitDate ?? "").toLocal(); // Convert to local time if needed
+      String formatedTime;
+      String formatedDateTime = "N/A";
 
-      String formattedDate = DateFormat('MM/dd hh:mm a').format(parsedDate);
+      String formattedDate = "N/A";
+
+      if (patient.visitDate != null) {
+        DateTime dateTime = DateTime.parse(patient.visitDate ?? "");
+
+        // Format the DateTime to "MM/dd"
+        formattedDate = DateFormat('MM/dd').format(dateTime);
+      }
+
+      if (patient.visitTime != null) {
+        DateTime dateTime = DateTime.parse(patient.visitTime ?? "");
+
+        // Format the DateTime to "hh:mm a" (e.g., "05:30 AM")
+        formattedDate += " " + DateFormat('hh:mm a').format(dateTime.toLocal());
+        formatedDateTime = formattedDate;
+      }
       rows.add([
         "${patient.lastName}, ${patient.firstName}", // Patient Name
-        formattedDate ?? "N/A", // Last Visit Date
+        formatedDateTime, // Last Visit Date
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
         patient.previousVisitCount.toString() ?? "N/A", // Last Visit Date

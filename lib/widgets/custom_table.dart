@@ -12,13 +12,9 @@ class CustomTable extends StatelessWidget {
 
   List<double> columnWidths;
 
-  CustomTable(
-      {required this.rows,
-      this.onLoadMore,
-      required this.cellBuilder,
-      required this.columnCount,
-      required this.context,
-      required this.columnWidths});
+  final void Function(int rowIndex, List<String> rowData)? onRowSelected;
+
+  CustomTable({required this.rows, this.onLoadMore, required this.cellBuilder, required this.columnCount, required this.context, required this.columnWidths, this.onRowSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -65,23 +61,27 @@ class CustomTable extends StatelessWidget {
 
     // Column width percentages (for example, 20%, 25%, 15%, etc.)
 
-    return Container(
-      decoration: BoxDecoration(
-        color: rowIndex == 0 ? Colors.white : Colors.white,
-        border: rowIndex != 0 ? Border(top: BorderSide(color: AppColors.appbarBorder, width: 1)) : null,
-      ),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          for (int colIndex = 0; colIndex < columnCount; colIndex++)
-            Container(
-              width: screenWidth * columnWidths[colIndex], // Set the width based on percentage
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: cellBuilder(
-                  context, rowIndex, colIndex, rowData.length > colIndex ? rowData[colIndex] : '', rowData.last),
-            ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        onRowSelected?.call(rowIndex, rowData);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: rowIndex == 0 ? Colors.white : Colors.white,
+          border: rowIndex != 0 ? Border(top: BorderSide(color: AppColors.appbarBorder, width: 1)) : null,
+        ),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            for (int colIndex = 0; colIndex < columnCount; colIndex++)
+              Container(
+                width: screenWidth * columnWidths[colIndex], // Set the width based on percentage
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: cellBuilder(context, rowIndex, colIndex, rowData.length > colIndex ? rowData[colIndex] : '', rowData.last),
+              ),
+          ],
+        ),
       ),
     );
   }

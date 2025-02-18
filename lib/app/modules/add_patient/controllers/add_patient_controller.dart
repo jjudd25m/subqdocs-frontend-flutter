@@ -262,7 +262,7 @@ class AddPatientController extends GetxController {
     // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
 
     if (time != null) {
-      DateTime firstTime = DateFormat('hh:mm a').parse(time); // 10:30 AM to DateTime
+      DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
       String formattedTime = DateFormat('hh:mm:ss').format(firstTime);

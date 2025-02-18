@@ -91,10 +91,15 @@ class PatientInfoView extends GetView<PatientInfoController> {
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    ImagePath.logo_back,
-                                    height: 15,
-                                    width: 18,
+                                  InkWell(
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    child: SvgPicture.asset(
+                                      ImagePath.logo_back,
+                                      height: 15,
+                                      width: 18,
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 11,
