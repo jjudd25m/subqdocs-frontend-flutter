@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as p;
@@ -105,7 +106,7 @@ class VisitMainController extends GetxController {
   Future<void> pickFiles(BuildContext context) async {
     list.clear();
 
-    List<XFile>? fileList = await MediaPickerServices().pickMultiMedia();
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
     print("media  file is  ${fileList}");
 
@@ -120,7 +121,7 @@ class VisitMainController extends GetxController {
           _pickDate = DateTime.now(); // Get the date when the file is picked
 
           // Get the size of the file
-          File file = File(element.path);
+          File file = File(element.xFile.path);
           _fileSize = file.lengthSync(); // Size in bytes
 
           String? _filesizeString = _formatFileSize(_fileSize);
