@@ -13,6 +13,17 @@ class Validation {
     return null;
   }
 
+  static emailValidateRequired(value) {
+    final bool emailValid =
+        RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!);
+
+    if (emailValid == false) {
+      return "Enter Valid Mail Address";
+    }
+
+    return null;
+  }
+
   static phoneValidate(value) {
     if (value == null || value.isEmpty) {
       return "please filed above filed";

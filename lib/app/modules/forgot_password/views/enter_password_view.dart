@@ -48,75 +48,81 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
         SizedBox(
           height: 24,
         ),
-        SizedBox(
-          width: isSmallScreen ? Get.width - 30 : 416,
-          child: TextFormFiledWidget(
-              label: "New Password",
-              controller: controller.passwordController,
-              hint: AppString.passwordHint,
-              suffixIcon: controller.visiblity.value
-                  ? GestureDetector(
-                      onTap: () {
-                        controller.changeVisiblity();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: SvgPicture.asset(
-                          ImagePath.eyeLogoOpen,
-                          height: 5,
-                          width: 5,
+        Obx(
+          () {
+            return SizedBox(
+              width: isSmallScreen ? Get.width - 30 : 416,
+              child: TextFormFiledWidget(
+                  label: "New Password",
+                  controller: controller.passwordController,
+                  hint: AppString.passwordHint,
+                  suffixIcon: controller.passwordVisible.value
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.changePasswordVisible();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: SvgPicture.asset(
+                              ImagePath.eyeLogoOpen,
+                              height: 7,
+                              width: 7,
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            controller.changePasswordVisible();
+                          },
+                          child: Icon(
+                            CupertinoIcons.eye_slash_fill,
+                          ),
                         ),
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        controller.changeVisiblity();
-                      },
-                      child: Icon(
-                        CupertinoIcons.eye_slash_fill,
-                        color: AppColors.textDarkGrey,
-                        size: 10,
-                      ),
-                    ),
-              checkValidation: (value) {
-                return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
-              }),
+                  checkValidation: (value) {
+                    return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
+                  }),
+            );
+          },
         ),
         SizedBox(
           height: 20,
         ),
-        SizedBox(
-          width: isSmallScreen ? Get.width - 30 : 416,
-          child: TextFormFiledWidget(
-              label: "Confirm Password",
-              controller: controller.confirmPasswordController,
-              hint: AppString.passwordHint,
-              suffixIcon: controller.visiblityConfirmPassword.value
-                  ? GestureDetector(
-                      onTap: () {
-                        controller.changeVisiblity();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: SvgPicture.asset(
-                          ImagePath.eyeLogoOpen,
-                          height: 5,
-                          width: 5,
+        Obx(
+          () {
+            return SizedBox(
+              width: isSmallScreen ? Get.width - 30 : 416,
+              child: TextFormFiledWidget(
+                  label: "Confirm Password",
+                  controller: controller.confirmPasswordController,
+                  hint: AppString.passwordHint,
+                  suffixIcon: controller.confirmPasswordVisible.value
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.changeConfirmPasswordVisible();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: SvgPicture.asset(
+                              ImagePath.eyeLogoOpen,
+                              height: 7,
+                              width: 7,
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            controller.changeConfirmPasswordVisible();
+                          },
+                          child: Icon(
+                            CupertinoIcons.eye_slash_fill,
+                            color: AppColors.textDarkGrey,
+                          ),
                         ),
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        controller.changeVisiblity();
-                      },
-                      child: Icon(
-                        CupertinoIcons.eye_slash_fill,
-                        color: AppColors.textDarkGrey,
-                      ),
-                    ),
-              checkValidation: (value) {
-                return Validation.conforimpasswordValidate(value, controller.passwordController.text);
-              }),
+                  checkValidation: (value) {
+                    return Validation.conforimpasswordValidate(value, controller.passwordController.text);
+                  }),
+            );
+          },
         ),
         SizedBox(
           height: 30,

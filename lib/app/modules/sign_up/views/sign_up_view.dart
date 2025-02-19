@@ -1,26 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:subqdocs/utils/app_colors.dart';
-import 'package:subqdocs/utils/app_fonts.dart';
-import 'package:subqdocs/utils/imagepath.dart';
-import 'package:subqdocs/widget/custom_animated_button.dart';
-import 'package:subqdocs/widgets/custom_button.dart';
 
+import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
+import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
+import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../routes/app_pages.dart';
-import '../controllers/login_controller.dart';
+import '../controllers/sign_up_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-  LoginView({super.key});
-
-  // TextEditingController email = TextEditingController();
-  // TextEditingController password = TextEditingController();
+class SignUpView extends GetView<SignUpController> {
+  SignUpView({super.key});
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isWidthLessThan428(BuildContext context) {
@@ -63,14 +58,14 @@ class LoginView extends GetView<LoginController> {
                   height: isPortrait ? null : 30,
                 ),
                 Text(
-                  AppString.login,
+                  "Sign Up",
                   style: AppFonts.medium(24, AppColors.backgroundPurple),
                 ),
                 SizedBox(
                   height: 24,
                 ),
                 Text(
-                  AppString.welcomeBack,
+                  "Welcome",
                   style: AppFonts.medium(20, AppColors.textBlack),
                 ),
                 SizedBox(
@@ -79,11 +74,37 @@ class LoginView extends GetView<LoginController> {
                 SizedBox(
                   width: isSmallScreen ? Get.width - 30 : 416,
                   child: TextFormFiledWidget(
+                      label: "First Name",
+                      controller: controller.firstNameController,
+                      hint: "Enter First Name",
+                      checkValidation: (value) {
+                        return Validation.requiredFiled(value);
+                      }),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: isSmallScreen ? Get.width - 30 : 416,
+                  child: TextFormFiledWidget(
+                      label: "Last Name",
+                      controller: controller.lastNameController,
+                      hint: "Enter Last Name",
+                      checkValidation: (value) {
+                        return Validation.requiredFiled(value);
+                      }),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: isSmallScreen ? Get.width - 30 : 416,
+                  child: TextFormFiledWidget(
                       label: AppString.emailAddress,
                       controller: controller.emailController,
-                      hint: AppString.emailPlaceHolder,
+                      hint: "Enter Email",
                       checkValidation: (value) {
-                        return Validation.emailValidate(value);
+                        return Validation.emailValidateRequired(value);
                       }),
                 ),
                 SizedBox(
@@ -94,13 +115,13 @@ class LoginView extends GetView<LoginController> {
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
                         label: AppString.password,
-                        hint: AppString.passwordHint,
-                        visibility: controller.visiblity.value,
+                        hint: "Enter Password",
+                        visibility: controller.passwordVisible.value,
                         controller: controller.passwordController,
-                        suffixIcon: controller.visiblity.value
+                        suffixIcon: controller.passwordVisible.value
                             ? GestureDetector(
                                 onTap: () {
-                                  controller.changeVisiblity();
+                                  controller.changePasswordVisible();
                                 },
                                 child: SvgPicture.asset(
                                   ImagePath.eyeLogoOpen,
@@ -110,7 +131,9 @@ class LoginView extends GetView<LoginController> {
                               )
                             : GestureDetector(
                                 onTap: () {
-                                  controller.changeVisiblity();
+                                  // controller.changeVisiblity();
+
+                                  controller.changePasswordVisible();
                                 },
                                 child: Icon(
                                   CupertinoIcons.eye_slash_fill,
@@ -118,56 +141,60 @@ class LoginView extends GetView<LoginController> {
                                 ),
                               ),
                         checkValidation: (value) {
-                          return Validation.passwordValidate(value);
+                          return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
                         }),
                   );
                 }),
                 SizedBox(
-                  height: 12,
+                  height: 20,
                 ),
+                Obx(() {
+                  return SizedBox(
+                    width: isSmallScreen ? Get.width - 30 : 416,
+                    child: TextFormFiledWidget(
+                        label: "Confirm Password",
+                        hint: "Enter confirm Password",
+                        visibility: controller.confirmPasswordVisible.value,
+                        controller: controller.confirmPasswordController,
+                        suffixIcon: controller.confirmPasswordVisible.value
+                            ? GestureDetector(
+                                onTap: () {
+                                  controller.changeConfirmPasswordVisible();
+                                },
+                                child: SvgPicture.asset(
+                                  ImagePath.eyeLogoOpen,
+                                  height: 5,
+                                  width: 5,
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  controller.changeConfirmPasswordVisible();
+                                },
+                                child: Icon(
+                                  CupertinoIcons.eye_slash_fill,
+                                  color: AppColors.textDarkGrey,
+                                ),
+                              ),
+                        checkValidation: (value) {
+                          return Validation.conforimpasswordValidate(value, controller.passwordController.text);
+                        }),
+                  );
+                }),
                 SizedBox(
-                  width: isSmallScreen ? Get.width - 30 : 416,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(() {
-                        return Checkbox(
-                          visualDensity: VisualDensity.compact,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          activeColor: AppColors.backgroundPurple,
-                          value: controller.isRememberMe.value,
-                          onChanged: (value) => {controller.isRememberMe.value = value!},
-                        );
-                      }),
-                      Text(
-                        AppString.rememberMe,
-                        style: AppFonts.medium(14, AppColors.textDarkGrey),
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.FORGOT_PASSWORD);
-                        },
-                        child: Text(
-                          AppString.forgotPassword,
-                          style: AppFonts.medium(14, AppColors.backgroundPurple),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
+                  height: 42,
                 ),
                 Obx(() {
                   return SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: CustomAnimatedButton(
                       onPressed: () {
-                        controller.authLoginUser();
+                        if (_formKey.currentState!.validate()) {
+                          controller.registerUser();
+                        }
                       },
                       height: 45,
-                      text: "Log in",
+                      text: "Sign up",
                       isLoading: controller.isLoading.value,
                       enabledTextColor: AppColors.white,
                       enabledColor: AppColors.backgroundPurple,
@@ -175,25 +202,16 @@ class LoginView extends GetView<LoginController> {
                   );
                 }),
                 SizedBox(
-                  height: 24,
+                  height: 30,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account yet?",
-                      style: AppFonts.medium(14, AppColors.textDarkGrey),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.SIGN_UP);
-                      },
-                      child: Text(
-                        "Sign up now",
-                        style: AppFonts.medium(14, AppColors.backgroundPurple),
-                      ),
-                    ),
-                  ],
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    "Back to Login",
+                    style: AppFonts.medium(14, AppColors.backgroundPurple),
+                  ),
                 ),
               ],
             )
