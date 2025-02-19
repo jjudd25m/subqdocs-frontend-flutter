@@ -12,6 +12,11 @@ import 'package:zoom_widget/zoom_widget.dart';
 import '../../../../widget/custom_animated_button.dart';
 
 class DeleteImageDialog extends StatelessWidget {
+  final VoidCallback? onDelete;
+  String? extension;
+
+  DeleteImageDialog({required this.onDelete, this.extension});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -70,17 +75,21 @@ class DeleteImageDialog extends StatelessWidget {
                 ),
                 SvgPicture.asset(
                   ImagePath.delete_popup,
-                  width: 100,
-                  height: 100,
+                  width: 70,
+                  height: 70,
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  width: 280,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    "Are you sure you want to Delete this ${extension}?",
+                    style: AppFonts.medium(17, AppColors.textBlack),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Are you sure you want to Delete this image?",
-                  style: AppFonts.medium(17, AppColors.textBlack),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Right Cheek - 01/23/2025",
+                  "",
                   style: AppFonts.medium(15, AppColors.textGrey),
                 ),
                 SizedBox(height: 40),
@@ -89,10 +98,13 @@ class DeleteImageDialog extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(
-                          width: 150,
+                          width: 90,
                           height: 40,
                           child: CustomAnimatedButton(
-                            text: " Retake Image ",
+                            onPressed: () {
+                              navigator?.pop();
+                            },
+                            text: "Cancel",
                             isOutline: true,
                             enabledTextColor: AppColors.backgroundPurple,
                             enabledColor: AppColors.white,
@@ -104,18 +116,7 @@ class DeleteImageDialog extends StatelessWidget {
                           width: 90,
                           height: 40,
                           child: CustomAnimatedButton(
-                            text: "Cancel",
-                            isOutline: true,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          )),
-                      SizedBox(width: 10),
-                      SizedBox(
-                          width: 90,
-                          height: 40,
-                          child: CustomAnimatedButton(
+                            onPressed: onDelete,
                             text: " Delete ",
                             isOutline: true,
                             enabledTextColor: AppColors.textWhite,

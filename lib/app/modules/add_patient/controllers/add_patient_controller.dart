@@ -118,6 +118,11 @@ class AddPatientController extends GetxController {
     list.clear();
   }
 
+  void deleteAttachments(int index) {
+    selectedList.removeAt(index);
+    Get.back();
+  }
+
   Future<void> pickFiles() async {
     List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 

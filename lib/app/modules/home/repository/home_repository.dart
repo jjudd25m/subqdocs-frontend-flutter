@@ -13,7 +13,7 @@ class HomeRepository {
   }
 
   Future<DeletePatientModel> deletePatientById({required int id}) async {
-    var response = await ApiProvider.instance.callDelete("patient/delete/${id}");
+    var response = await ApiProvider.instance.callDelete(url: "patient/delete/${id}");
     print("getPatient API  internal response $response");
     return DeletePatientModel.fromJson(response);
   }

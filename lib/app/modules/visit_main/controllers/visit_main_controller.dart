@@ -9,14 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_string.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../forgot_password/models/common_respons.dart';
+import '../../forgot_password/models/send_otp_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
@@ -198,6 +202,21 @@ class VisitMainController extends GetxController {
     Get.toNamed(Routes.PATIENT_INFO, arguments: {
       "trascriptUploadData": patientTranscriptUploadModel,
     });
+  }
+
+  Future<void> deleteAttachments(int id) async {
+    Map<String, List<int>> params = {};
+    params["attachments"] = [id];
+
+    print("attch :- ${params}");
+    CommonResponse commonResponse = await _visitMainRepository.deleteAttachments(params: params);
+    if (commonResponse.responseType == "success") {
+      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
+    } else {
+      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.error);
+    }
+    Get.back();
+    getPatientAttachment();
   }
 
   Future<void> uploadAttachments() async {

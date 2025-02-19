@@ -270,8 +270,8 @@ class ApiProvider {
     }
   }
 
-  Future<Map<String, dynamic>> callDelete(String url,
-      {Map<String, dynamic>? queryParameters, Map<String, dynamic>? data}) async {
+  Future<Map<String, dynamic>> callDelete(
+      {required String url, Map<String, dynamic>? queryParameters, Map<String, dynamic>? data}) async {
     if (kDebugMode) {
       print(UrlProvider.baseUrl + url);
       // customPrint("call delete parameter $queryParameters");

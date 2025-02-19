@@ -17,6 +17,7 @@ class ImagePath {
   static const String search = 'assets/images/search.svg';
   static const String pdf = 'assets/images/pdf.png';
   static const String delete_round = 'assets/images/delete_round.svg';
+  static const String delete_black = 'assets/images/delete_black.svg';
   static const String add_photo = 'assets/images/add_photo.svg';
   static const String ai_white = 'assets/images/ai_white.svg';
   static const String pause = 'assets/images/pause.svg';
