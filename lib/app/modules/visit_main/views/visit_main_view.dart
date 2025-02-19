@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -21,11 +21,27 @@ import '../../../routes/app_pages.dart';
 import '../../add_patient/widgets/custom_dailog.dart';
 import '../controllers/visit_main_controller.dart';
 import 'attachmentDailog.dart';
+import 'delete_image_dialog.dart';
 
 class VisitMainView extends GetView<VisitMainController> {
   VisitMainView({super.key});
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  String getFileExtension(String filePath) {
+    // Define image extensions
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+
+    // Get the file extension
+    String extension = p.extension(filePath);
+
+    // Check if the extension is an image type
+    if (imageExtensions.contains(extension.toLowerCase())) {
+      return 'image'; // Return "image" if it's an image extension
+    } else {
+      return extension.replaceFirst('.', ''); // Return extension without dot
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -894,33 +910,93 @@ class VisitMainView extends GetView<VisitMainController> {
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               mainAxisSize: MainAxisSize.min,
                                                               children: [
-                                                                Container(
-                                                                  decoration: BoxDecoration(
-                                                                    color: AppColors.appbarBorder,
-                                                                    borderRadius: BorderRadius.circular(10),
-                                                                  ),
-                                                                  width: 120,
-                                                                  height: 120,
-                                                                  child: ClipRRect(
-                                                                    borderRadius: BorderRadius.circular(
-                                                                        10), // Set the radius here
-                                                                    child: CachedNetworkImage(
-                                                                      imageUrl: controller.patientAttachmentList.value
-                                                                              ?.responseData?[index].filePath ??
-                                                                          "",
+                                                                Stack(
+                                                                  clipBehavior: Clip.none,
+                                                                  alignment: Alignment.topRight,
+                                                                  children: [
+                                                                    Container(
+                                                                      decoration: BoxDecoration(
+                                                                        color: AppColors.appbarBorder,
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                      ),
                                                                       width: 120,
                                                                       height: 120,
-                                                                      errorWidget: (context, url, error) {
-                                                                        return Image.asset(ImagePath.file_placeHolder);
-                                                                      },
-                                                                      fit: BoxFit.cover,
-                                                                    )
-                                                                    // Image.file(
-                                                                    //   controller.list[index].file ?? File(""),
-                                                                    //   fit: BoxFit.cover,
-                                                                    // )
-                                                                    ,
-                                                                  ),
+                                                                      child: ClipRRect(
+                                                                        borderRadius: BorderRadius.circular(
+                                                                            10), // Set the radius here
+                                                                        child: CachedNetworkImage(
+                                                                          imageUrl: controller
+                                                                                  .patientAttachmentList
+                                                                                  .value
+                                                                                  ?.responseData?[index]
+                                                                                  .filePath ??
+                                                                              "",
+                                                                          width: 120,
+                                                                          height: 120,
+                                                                          errorWidget: (context, url, error) {
+                                                                            return Image.asset(
+                                                                                ImagePath.file_placeHolder);
+                                                                          },
+                                                                          fit: BoxFit.cover,
+                                                                        )
+                                                                        // Image.file(
+                                                                        //   controller.list[index].file ?? File(""),
+                                                                        //   fit: BoxFit.cover,
+                                                                        // )
+                                                                        ,
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: -10,
+                                                                      // Align at the top of the first container
+                                                                      right: -10,
+                                                                      child: Container(
+                                                                        width: 40,
+                                                                        height: 40,
+                                                                        decoration: BoxDecoration(
+                                                                          shape: BoxShape.circle,
+                                                                          color: Colors.white,
+                                                                          boxShadow: [
+                                                                            BoxShadow(
+                                                                              color: Colors.black.withOpacity(0.2),
+                                                                              blurRadius: 2.2,
+                                                                              offset: Offset(0.2, 0),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        child: GestureDetector(
+                                                                          onTap: () {
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              barrierDismissible: true,
+                                                                              builder: (BuildContext context) {
+                                                                                // return SizedBox();
+                                                                                return DeleteImageDialog(
+                                                                                  onDelete: () {
+                                                                                    controller.deleteAttachments(
+                                                                                        controller
+                                                                                                .patientAttachmentList
+                                                                                                .value
+                                                                                                ?.responseData![index]
+                                                                                                .id ??
+                                                                                            0);
+                                                                                  },
+                                                                                  extension: controller
+                                                                                      .patientAttachmentList
+                                                                                      .value
+                                                                                      ?.responseData?[index]
+                                                                                      .fileType,
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                          child: SvgPicture.asset(
+                                                                            ImagePath.delete_black,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                                 SizedBox(
                                                                   height: 6,

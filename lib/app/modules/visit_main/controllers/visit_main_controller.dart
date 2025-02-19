@@ -9,14 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_string.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../forgot_password/models/common_respons.dart';
+import '../../forgot_password/models/send_otp_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
@@ -89,7 +93,12 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -128,7 +137,12 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -190,7 +204,8 @@ class VisitMainController extends GetxController {
 
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+        audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
     print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
     isLoading.value = false;
@@ -198,6 +213,20 @@ class VisitMainController extends GetxController {
     Get.toNamed(Routes.PATIENT_INFO, arguments: {
       "trascriptUploadData": patientTranscriptUploadModel,
     });
+  }
+
+  Future<void> deleteAttachments(int id) async {
+    Map<String, List<int>> params = {};
+    params["attachments"] = [id];
+
+    CommonResponse commonResponse = await _visitMainRepository.deleteAttachments(params: params);
+    if (commonResponse.responseType == "success") {
+      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
+    } else {
+      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.error);
+    }
+    Get.back();
+    getPatientAttachment();
   }
 
   Future<void> uploadAttachments() async {
@@ -211,7 +240,8 @@ class VisitMainController extends GetxController {
     } else {
       print("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+    await _visitMainRepository.uploadAttachments(
+        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
     list.clear();
     getPatientAttachment();
   }
