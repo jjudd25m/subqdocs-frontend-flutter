@@ -13,8 +13,8 @@ import '../views/forgot_password_view.dart';
 import '../views/password_changed_screen.dart';
 
 class ForgotPasswordController extends GetxController {
-  RxBool visiblity = RxBool(true);
-  RxBool visiblityConfirmPassword = RxBool(true);
+  RxBool passwordVisible = RxBool(true);
+  RxBool confirmPasswordVisible = RxBool(true);
   RxBool isLoading = RxBool(false);
 
   TextEditingController emailController = TextEditingController();
@@ -42,6 +42,16 @@ class ForgotPasswordController extends GetxController {
     return screenMap[currentScreen.value] ?? EnterMailView(); // Default screen if no match
   }
 
+  void changePasswordVisible() {
+    passwordVisible.value = passwordVisible.value == true ? false : true;
+    passwordVisible.refresh();
+  }
+
+  void changeConfirmPasswordVisible() {
+    confirmPasswordVisible.value = confirmPasswordVisible.value == true ? false : true;
+    confirmPasswordVisible.refresh();
+  }
+
   void changeCurrentScreen(String screenName) {
     currentScreen.value = screenName;
     currentScreen.refresh();
@@ -64,11 +74,6 @@ class ForgotPasswordController extends GetxController {
   }
 
   void increment() => count.value++;
-
-  void changeVisiblity() {
-    visiblity.value = visiblity == true ? false : true;
-    visiblity.refresh();
-  }
 
   Future<void> sendOtp() async {
     isLoading.value = true;

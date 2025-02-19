@@ -20,6 +20,8 @@ import '../modules/patient_view_read_only/bindings/patient_view_read_only_bindin
 import '../modules/patient_view_read_only/views/patient_view_read_only_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/sign_up/bindings/sign_up_binding.dart';
+import '../modules/sign_up/views/sign_up_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/visit_main/bindings/visit_main_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.FORGOT_PASSWORD,
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGN_UP,
+      page: () => SignUpView(),
+      binding: SignUpBinding(),
     ),
   ];
 }
