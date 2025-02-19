@@ -53,7 +53,7 @@ class ResponseData {
 
 class ScheduleVisitListData {
   int? id;
-  int? patientId;
+  String? patientId;
   int? visitId;
 
   dynamic profileImage;

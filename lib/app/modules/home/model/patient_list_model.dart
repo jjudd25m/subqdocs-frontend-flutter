@@ -53,7 +53,7 @@ class ResponseData {
 
 class PatientListData {
   int? id;
-  int? patientId;
+  String? patientId;
   int? visitId;
 
   String? firstName;

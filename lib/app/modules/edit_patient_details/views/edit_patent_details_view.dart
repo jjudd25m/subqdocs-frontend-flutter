@@ -21,6 +21,7 @@ import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
+import '../../../../widgets/date_field.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
@@ -305,20 +306,65 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     width: Dimen.margin10,
                                   ),
                                   Expanded(
-                                    child: TextFormFiledWidget(
-                                      label: "Date of birth",
-                                      readOnly: true,
-                                      onTap: () {
-                                        controller.showDOBCupertinoDatePicker(context, controller.dobController);
-                                      },
-                                      controller: controller.dobController,
-                                      hint: "12/1/1972",
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      },
-                                      suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "DOB",
+                                              style: AppFonts.regular(14, AppColors.textBlack),
+                                            ),
+                                            Text(
+                                              "*",
+                                              style: AppFonts.regular(14, AppColors.redText),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Container(
+                                          height: 48,
+                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          child: DateFormatField(
+                                              decoration: InputDecoration(
+                                                hintText: "02/23/2024",
+                                                border: InputBorder.none,
+                                                // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
+                                              ),
+                                              addCalendar: false,
+                                              controller: controller.dobController,
+                                              type: DateFormatType.type2,
+                                              lastDate: DateTime.now(),
+                                              onComplete: (date) {
+                                                print("date is :- ${controller.dobController.text}");
+                                                print("DateFormatField date is:-  ${date}");
+                                              }),
+                                        )
+                                      ],
                                     ),
                                   ),
+                                  // Expanded(
+                                  //   child: TextFormFiledWidget(
+                                  //     label: "Date of birth",
+                                  //     readOnly: true,
+                                  //     onTap: () {
+                                  //       controller.showDOBCupertinoDatePicker(context, controller.dobController);
+                                  //     },
+                                  //     controller: controller.dobController,
+                                  //     hint: "12/1/1972",
+                                  //     checkValidation: (value) {
+                                  //       return Validation.requiredFiled(value);
+                                  //     },
+                                  //     suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     width: Dimen.margin10,
                                   ),
@@ -371,20 +417,65 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               width: Dimen.margin10,
                                             ),
                                             Expanded(
-                                              child: TextFormFiledWidget(
-                                                label: "Visit Date",
-                                                readOnly: true,
-                                                onTap: () {
-                                                  controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
-                                                },
-                                                controller: controller.visitDateController,
-                                                hint: "10/12/2024",
-                                                checkValidation: (value) {
-                                                  return Validation.requiredFiled(value);
-                                                },
-                                                suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "Visit Date",
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                      ),
+                                                      Text(
+                                                        "*",
+                                                        style: AppFonts.regular(14, AppColors.redText),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Container(
+                                                    height: 48,
+                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(6),
+                                                    ),
+                                                    child: DateFormatField(
+                                                        decoration: InputDecoration(
+                                                          hintText: "02/23/2024",
+                                                          border: InputBorder.none,
+                                                          // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
+                                                        ),
+                                                        addCalendar: false,
+                                                        controller: controller.visitDateController,
+                                                        type: DateFormatType.type2,
+                                                        lastDate: DateTime.now(),
+                                                        onComplete: (date) {
+                                                          print("date is :- ${controller.dobController.text}");
+                                                          print("DateFormatField date is:-  ${date}");
+                                                        }),
+                                                  )
+                                                ],
                                               ),
                                             ),
+                                            // Expanded(
+                                            //   child: TextFormFiledWidget(
+                                            //     label: "Visit Date",
+                                            //     readOnly: true,
+                                            //     onTap: () {
+                                            //       controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
+                                            //     },
+                                            //     controller: controller.visitDateController,
+                                            //     hint: "10/12/2024",
+                                            //     checkValidation: (value) {
+                                            //       return Validation.requiredFiled(value);
+                                            //     },
+                                            //     suffixIcon: SvgPicture.asset(ImagePath.calendar),
+                                            //   ),
+                                            // ),
                                             SizedBox(
                                               width: Dimen.margin10,
                                             ),

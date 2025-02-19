@@ -27,7 +27,7 @@ class AddPatientModel {
 
 class ResponseData {
   int? id;
-  int? patientId;
+  String? patientId;
   String? firstName;
   String? lastName;
   String? middleName;
