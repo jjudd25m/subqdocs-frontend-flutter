@@ -75,11 +75,15 @@ class LoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      LoginModel loginModel = await _loginRepository.login(email: emailController.text.toLowerCase(), password: passwordController.text);
+      LoginModel loginModel =
+          await _loginRepository.login(email: emailController.text.toLowerCase(), password: passwordController.text);
       isLoading.value = false;
       print("response is ${loginModel.toJson()} ");
 
       await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
+      await AppPreference.instance.removeKey(AppString.patientList);
+      await AppPreference.instance.removeKey(AppString.pastPatientList);
+      await AppPreference.instance.removeKey(AppString.schedulePatientList);
       AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
       CustomToastification().showToast("Login success", type: ToastificationType.success);
       Get.offAllNamed(Routes.HOME);
