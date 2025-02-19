@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../utils/app_string.dart';
+import '../../../core/common/app_preferences.dart';
 import '../model/deletePatientModel.dart';
 import '../model/patient_list_model.dart';
 import '../model/schedule_visit_list_model.dart';
@@ -67,6 +72,7 @@ class HomeController extends GetxController {
   };
 
   bool sortName = false;
+  RxBool isInternetConnected = RxBool(true);
 
   final count = 0.obs;
 
@@ -91,7 +97,11 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // bool result = await InternetConnection().hasInternetAccess;
+    //
+    // print("connection is the  $result");
 
+    handelInternetConnection();
     if (Get.arguments != null) {
       tabIndex.value = Get.arguments["tabIndex"] ?? 0;
 
@@ -208,6 +218,8 @@ class HomeController extends GetxController {
 
     patientList.value = patientListModel.value?.responseData?.data ?? [];
 
+    await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModel.toJson()));
+
     print("patient list is the :- ${patientList}");
   }
 
@@ -301,6 +313,7 @@ class HomeController extends GetxController {
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
 
     scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
+    await AppPreference.instance.setString(AppString.schedulePatientList, json.encode(scheduleVisitListModel.toJson()));
   }
 
   Future<void> getScheduleVisitListFetchMore() async {
@@ -389,6 +402,8 @@ class HomeController extends GetxController {
     }
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
     pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
+
+    await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModel.toJson()));
   }
 
   Future<void> getPastVisitListFetchMore() async {
@@ -492,5 +507,35 @@ class HomeController extends GetxController {
     isAsendingPatient.value = getDescValue(sortingPatientList, cellData) ?? false;
     colIndexPatient.refresh();
     isAsendingPatient.refresh();
+  }
+
+  void handelInternetConnection() {
+    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          print("now its  connected ");
+          getPastVisitList();
+          getScheduleVisitList();
+          getPatientList();
+
+          break;
+        case InternetStatus.disconnected:
+          var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
+          var schedulePatient = ScheduleVisitListModel.fromJson(
+              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+          var pastPatient =
+              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
+
+          patientList.value = patient.responseData?.data ?? [];
+          scheduleVisitList.value = schedulePatient.responseData?.data ?? [];
+          pastVisitList.value = pastPatient.responseData?.data ?? [];
+          patientList.refresh();
+          scheduleVisitList.refresh();
+          pastVisitList.refresh();
+
+          print("now its not connected ");
+          break;
+      }
+    });
   }
 }
