@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../data/provider/api_provider.dart';
 import '../model/deletePatientModel.dart';
@@ -28,5 +29,11 @@ class HomeRepository {
     var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     print("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
+  }
+
+  Future<StatusResponseModel> getStatus() async {
+    var response = await ApiProvider.instance.callGet("patient/visit/status");
+    print("getScheduleVisit API  internal response $response");
+    return StatusResponseModel.fromJson(response);
   }
 }

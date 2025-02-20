@@ -101,7 +101,7 @@ class TextFormFiledWidget extends StatelessWidget {
                             splashColor: Colors.transparent,
                             onTap: onTap,
                             child: Padding(
-                              padding: EdgeInsets.all(13),
+                              padding: EdgeInsets.only(top: 10, left: 10, right: 0, bottom: 10),
                               child: prefixIcon,
                             ),
                           )
