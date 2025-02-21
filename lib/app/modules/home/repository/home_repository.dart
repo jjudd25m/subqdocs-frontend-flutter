@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../data/provider/api_provider.dart';
 import '../model/deletePatientModel.dart';
@@ -14,7 +15,7 @@ class HomeRepository {
   }
 
   Future<DeletePatientModel> deletePatientById({required int id}) async {
-    var response = await ApiProvider.instance.callDelete(url: "patient/delete/${id}");
+    var response = await ApiProvider.instance.callDelete(url: "patient/delete/${id}", data: {});
     print("getPatient API  internal response $response");
     return DeletePatientModel.fromJson(response);
   }
@@ -29,6 +30,12 @@ class HomeRepository {
     var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     print("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
+  }
+
+  Future<StatusResponseModel> getStatus() async {
+    var response = await ApiProvider.instance.callGet("patient/visit/status");
+    print("getScheduleVisit API  internal response $response");
+    return StatusResponseModel.fromJson(response);
   }
 
   Future<PatientScheduleModel> patientVisitCreate({required Map<String, dynamic> param}) async {

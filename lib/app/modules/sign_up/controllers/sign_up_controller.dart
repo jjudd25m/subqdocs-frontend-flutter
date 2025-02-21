@@ -59,6 +59,8 @@ class SignUpController extends GetxController {
     try {
       SignUpModel signUpModel = await _signupRepository.registerUser(param: param);
 
+      print("respionse is :- ${signUpModel.toJson()}");
+
       isLoading.value = false;
 
       if (signUpModel.responseType == "success") {

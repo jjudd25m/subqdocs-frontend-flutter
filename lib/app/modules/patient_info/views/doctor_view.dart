@@ -219,7 +219,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          "${task.number} ${task.description}",
+                                          "${task.number} ${task.title}",
                                           style: AppFonts.medium(14, AppColors.textPurple),
                                         ),
                                       ],
@@ -238,7 +238,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                     ),
                                                     Text(
                                                       textAlign: TextAlign.center,
-                                                      "${treatments.type} ${treatments.title} \n",
+                                                      "${treatments.type} ${treatments.name} \n",
                                                       style: AppFonts.regular(14, AppColors.black),
                                                     ),
                                                   ],

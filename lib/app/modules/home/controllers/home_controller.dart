@@ -9,6 +9,8 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:intl/intl.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
+import 'package:subqdocs/app/modules/home/model/Status.dart';
+import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
@@ -40,6 +42,15 @@ class HomeController extends GetxController {
 
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
+
+  RxList<StatusModel> statusModel = RxList();
+
+  RxInt selectedIndex = RxInt(-1);
+
+  RxString startDate = RxString("MM/DD/YYYY");
+  RxString endDate = RxString("");
+
+  List<DateTime> selectedValue = [];
 
   List<Map<String, dynamic>> sortingPastPatient = [
     {"id": "first_name", "desc": "false"},
@@ -121,6 +132,8 @@ class HomeController extends GetxController {
     }
 
     getPatientList();
+    getStatus();
+
     getScheduleVisitList();
     getPastVisitList();
   }
@@ -158,13 +171,55 @@ class HomeController extends GetxController {
     return null; // Return null if no matching 'id' is found
   }
 
-  void clearFilter() {
+  void setDateRange() {
+    print("function  is called ");
+
+    if (selectedValue.isNotEmpty) {
+      for (int i = 0; i < selectedValue.length; i++) {
+        var dateTime = selectedValue[i];
+        // Format the date to 'MM-dd-yyyy'
+        print("goint to this ");
+        if (selectedValue.length == 1) {
+          startDate.value =
+              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value =
+              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+        } else {
+          if (i == 0) {
+            startDate.value =
+                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          } else {
+            endDate.value =
+                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          }
+        }
+      }
+    } else {
+      DateTime dateTime = DateTime.now();
+      startDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+    }
+    Get.back();
+  }
+
+  void clearFilter({bool canPop = false}) {
     searchController.text = "";
+
+    startDate.value = "MM/DD/YYYY";
+    endDate.value = "";
+    selectedIndex.value = -1;
     fromController.clear();
     toController.clear();
     getPatientList();
     getScheduleVisitList();
     getPastVisitList();
+
+    // if(canPop)
+    //   {
+    //     Get.ca
+    //   }
   }
 
   void changeScreen(bool isPast) async {
@@ -207,21 +262,21 @@ class HomeController extends GetxController {
     // Dynamically add sorting to the param map
     param["sorting"] = toggleSortDesc(sortingPatientList, sortingName ?? "");
 
-    if (toController.text != "" && fromController.text != "") {
+    if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDate}");
+      print("start date is the ${startDateTime}");
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       print("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
@@ -251,21 +306,21 @@ class HomeController extends GetxController {
     // Dynamically add sorting to the param map
     param["sorting"] = sorting;
 
-    if (toController.text != "" && fromController.text != "") {
+    if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDate}");
+      print("start date is the ${startDateTime}");
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       print("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
@@ -303,21 +358,21 @@ class HomeController extends GetxController {
     // Dynamically add sorting to the param map
     param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
 
-    if (toController.text != "" && fromController.text != "") {
+    if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDate}");
+      print("start date is the ${startDateTime}");
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       print("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
@@ -346,21 +401,21 @@ class HomeController extends GetxController {
     // Dynamically add sorting to the param map
     param["sorting"] = sorting;
 
-    if (toController.text != "" && fromController.text != "") {
+    if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDate}");
+      print("start date is the ${startDateTime}");
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       print("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
@@ -394,24 +449,29 @@ class HomeController extends GetxController {
 
     param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
 
-    if (toController.text != "" && fromController.text != "") {
+    if (selectedIndex.value != -1) {
+      param['status'] = statusModel[selectedIndex.value].status;
+    }
+
+    if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDate}");
+      print("start date is the ${startDateTime}");
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       print("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
+
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
     pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
 
@@ -430,27 +490,31 @@ class HomeController extends GetxController {
       {"id": "last_name", "desc": sortName}
       // Add more sorting parameters as needed
     ];
+    if (selectedIndex.value != -1) {
+      param['status'] = statusModel[selectedIndex.value].status;
+    }
 
     param["sorting"] = sorting;
 
-    if (toController.text != "" && fromController.text != "") {
+    if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDate = DateFormat('MM-dd-yyyy').parse(fromController.text);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDate}");
+      print("start date is the ${startDateTime}");
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       print("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDate = DateFormat('MM-dd-yyyy').parse(toController.text);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
+
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
 
     if (pastVisitListModel.value?.responseData?.data != null) {
@@ -468,6 +532,18 @@ class HomeController extends GetxController {
       print("no data fetch and add");
       pagePast--;
     }
+
+    // pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
+  }
+
+  Future<void> getStatus() async {
+    StatusResponseModel statusResponseModel = await _homeRepository.getStatus();
+
+    statusResponseModel.responseData?.forEach(
+      (element) {
+        statusModel.add(StatusModel(status: element));
+      },
+    );
 
     // pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
   }

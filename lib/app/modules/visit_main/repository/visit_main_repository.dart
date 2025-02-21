@@ -11,6 +11,7 @@ import '../../patient_info/model/patient_view_list_model.dart';
 import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
 import '../model/visit_recap_list_model.dart';
+import '../model/visitmainModel.dart';
 
 class VisitMainRepository {
   Future<PatientTranscriptUploadModel> uploadAudio(
@@ -42,9 +43,16 @@ class VisitMainRepository {
     return VisitRecapListModel.fromJson(response);
   }
 
-  Future<PatientAttachmentListModel> getPatientAttachment({required String id}) async {
-    var response = await ApiProvider.instance.callGet("patient/attachments/$id");
+  Future<PatientAttachmentListModel> getPatientAttachment(
+      {required String id, required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callGet("patient/attachments/$id", queryParameters: param);
     print("getPatientAttachment API internal response $response");
     return PatientAttachmentListModel.fromJson(response);
+  }
+
+  Future<VisitMainPatientDetails> getPatientDetails({required String id}) async {
+    var response = await ApiProvider.instance.callGet("patient/visitMainPatientData/$id", queryParameters: {});
+    print("getPatientAttachment API internal response $response");
+    return VisitMainPatientDetails.fromJson(response);
   }
 }

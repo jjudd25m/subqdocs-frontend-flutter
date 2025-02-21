@@ -423,50 +423,80 @@ class AddPatientView extends GetView<AddPatientController> {
                                           width: Dimen.margin10,
                                         ),
                                         Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "DOB",
-                                                    style: AppFonts.regular(14, AppColors.textBlack),
-                                                  ),
-                                                  Text(
-                                                    "*",
-                                                    style: AppFonts.regular(14, AppColors.redText),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Container(
-                                                height: 48,
-                                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                                                  color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                child: DateFormatField(
-                                                    decoration: InputDecoration(
-                                                      hintText: "02/23/2024",
-                                                      border: InputBorder.none,
-                                                      // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
-                                                    ),
-                                                    addCalendar: false,
-                                                    controller: controller.dobController,
-                                                    type: DateFormatType.type2,
-                                                    lastDate: DateTime.now(),
-                                                    onComplete: (date) {
-                                                      print("date is :- ${controller.dobController.text}");
-                                                      print("DateFormatField date is:-  ${date}");
-                                                    }),
-                                              )
-                                            ],
-                                          ),
+                                          child: TextFormFiledWidget(
+                                              suffixIcon: Icon(Icons.calendar_month),
+                                              label: "Date of birth",
+                                              isValid: true,
+                                              readOnly: true,
+                                              // isImportant: true,
+                                              controller: controller.dobController,
+                                              onTap: () async {
+                                                final picked = await showDatePicker(
+                                                  context: context,
+                                                  initialDate: DateTime.now().subtract(Duration(days: 400)),
+                                                  firstDate: DateTime.now().subtract(Duration(days: 36700)),
+                                                  lastDate: DateTime.now().subtract(Duration(days: 400)),
+                                                );
+                                                if (picked != null) {
+                                                  String inputText;
+                                                  String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                  inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                  controller.dobController.text = inputText;
+                                                }
+                                              },
+                                              hint: "mm/dd/yyyy",
+                                              checkValidation: (value) {
+                                                return Validation.requiredFiled(value);
+                                              }),
                                         ),
+                                        // Expanded(
+                                        //   child: Column(
+                                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                                        //     children: [
+                                        //       Row(
+                                        //         children: [
+                                        //           Text(
+                                        //             "Date of Birth",
+                                        //             style: AppFonts.regular(14, AppColors.textBlack),
+                                        //           ),
+                                        //           Text(
+                                        //             "*",
+                                        //             style: AppFonts.regular(14, AppColors.redText),
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //       SizedBox(
+                                        //         height: 8,
+                                        //       ),
+                                        //       Container(
+                                        //         height: 48,
+                                        //         padding: EdgeInsets.only(left: 10),
+                                        //         decoration: BoxDecoration(
+                                        //           border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
+                                        //           color: Colors.white,
+                                        //           borderRadius: BorderRadius.circular(6),
+                                        //         ),
+                                        //         child: DateFormatField(
+                                        //             // checkValidation: (value) {
+                                        //             //   return Validation.requiredFiled(value);
+                                        //             // },
+                                        //             decoration: InputDecoration(
+                                        //               hintText: "02/23/2024",
+                                        //               border: InputBorder.none,
+                                        //               // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
+                                        //             ),
+                                        //             addCalendar: true,
+                                        //             controller: controller.dobController,
+                                        //             type: DateFormatType.type2,
+                                        //             lastDate: DateTime.now(),
+                                        //             onComplete: (date) {
+                                        //               print("date is :- ${controller.dobController.text}");
+                                        //               print("DateFormatField date is:-  ${date}");
+                                        //             }),
+                                        //       )
+                                        //     ],
+                                        //   ),
+                                        // ),
                                         // Expanded(
                                         //   child: ),
                                         // TextFormFiledWidget(
@@ -537,49 +567,73 @@ class AddPatientView extends GetView<AddPatientController> {
                                         SizedBox(
                                           width: Dimen.margin10,
                                         ),
+                                        // Expanded(
+                                        //   child: Column(
+                                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                                        //     children: [
+                                        //       Row(
+                                        //         children: [
+                                        //           Text(
+                                        //             "Visit Date",
+                                        //             style: AppFonts.regular(14, AppColors.textBlack),
+                                        //           ),
+                                        //           Text(
+                                        //             "*",
+                                        //             style: AppFonts.regular(14, AppColors.redText),
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //       SizedBox(
+                                        //         height: 8,
+                                        //       ),
+                                        //       Container(
+                                        //         height: 48,
+                                        //         padding: EdgeInsets.only(left: 10),
+                                        //         decoration: BoxDecoration(
+                                        //           border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
+                                        //           color: Colors.white,
+                                        //           borderRadius: BorderRadius.circular(6),
+                                        //         ),
+                                        //         child: DateFormatField(
+                                        //             decoration: InputDecoration(
+                                        //               hintText: "02/23/2024",
+                                        //               border: InputBorder.none,
+                                        //               // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
+                                        //             ),
+                                        //             addCalendar: true,
+                                        //             controller: controller.visitDateController,
+                                        //             type: DateFormatType.type2,
+                                        //             lastDate: DateTime.now(),
+                                        //             onComplete: (date) {
+                                        //               print("date is :- ${controller.dobController.text}");
+                                        //               print("DateFormatField date is:-  ${date}");
+                                        //             }),
+                                        //       )
+                                        //     ],
+                                        //   ),
+                                        // ),
                                         Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "Visit Date",
-                                                    style: AppFonts.regular(14, AppColors.textBlack),
-                                                  ),
-                                                  Text(
-                                                    "*",
-                                                    style: AppFonts.regular(14, AppColors.redText),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Container(
-                                                height: 48,
-                                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                                                  color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                child: DateFormatField(
-                                                    decoration: InputDecoration(
-                                                      hintText: "02/23/2024",
-                                                      border: InputBorder.none,
-                                                      // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
-                                                    ),
-                                                    addCalendar: false,
-                                                    controller: controller.visitDateController,
-                                                    type: DateFormatType.type2,
-                                                    lastDate: DateTime.now(),
-                                                    onComplete: (date) {
-                                                      print("date is :- ${controller.dobController.text}");
-                                                      print("DateFormatField date is:-  ${date}");
-                                                    }),
-                                              )
-                                            ],
+                                          child: TextFormFiledWidget(
+                                            suffixIcon: Icon(Icons.calendar_month),
+                                            label: "Visit Date",
+                                            readOnly: true,
+                                            // isImportant: true,
+                                            controller: controller.visitDateController,
+                                            onTap: () async {
+                                              final picked = await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.now().add(Duration(days: 1000)),
+                                              );
+                                              if (picked != null) {
+                                                String inputText;
+                                                String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                controller.visitDateController.text = inputText;
+                                              }
+                                            },
+                                            hint: "mm/dd/yyyy",
                                           ),
                                         ),
                                         SizedBox(
@@ -674,23 +728,15 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                               Container(
                                                                                 decoration: BoxDecoration(
                                                                                   color: AppColors.appbarBorder,
-                                                                                  borderRadius:
-                                                                                      BorderRadius.circular(10),
+                                                                                  borderRadius: BorderRadius.circular(10),
                                                                                 ),
                                                                                 width: 120,
                                                                                 height: 120,
                                                                                 child: ClipRRect(
-                                                                                  borderRadius: BorderRadius.circular(
-                                                                                      10), // Set the radius here
-                                                                                  child: controller.selectedList[index]
-                                                                                                  .file !=
-                                                                                              null &&
-                                                                                          isImage(controller
-                                                                                              .selectedList[index]
-                                                                                              .file!)
+                                                                                  borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                                  child: controller.selectedList[index].file != null && isImage(controller.selectedList[index].file!)
                                                                                       ? Image.file(
-                                                                                          controller.selectedList[index]
-                                                                                              .file!,
+                                                                                          controller.selectedList[index].file!,
                                                                                           fit: BoxFit.cover,
                                                                                         )
                                                                                       : Image.asset(
@@ -710,8 +756,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                     color: Colors.white,
                                                                                     boxShadow: [
                                                                                       BoxShadow(
-                                                                                        color: Colors.black
-                                                                                            .withOpacity(0.2),
+                                                                                        color: Colors.black.withOpacity(0.2),
                                                                                         blurRadius: 2.2,
                                                                                         offset: Offset(0.2, 0),
                                                                                       ),
@@ -722,22 +767,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                       showDialog(
                                                                                         context: context,
                                                                                         barrierDismissible: true,
-                                                                                        builder:
-                                                                                            (BuildContext context) {
+                                                                                        builder: (BuildContext context) {
                                                                                           // return SizedBox();
                                                                                           return DeleteImageDialog(
                                                                                             onDelete: () {
-                                                                                              controller
-                                                                                                  .deleteAttachments(
-                                                                                                      index);
+                                                                                              controller.deleteAttachments(index);
                                                                                             },
-                                                                                            extension: getFileExtension(
-                                                                                                controller
-                                                                                                        .selectedList[
-                                                                                                            index]
-                                                                                                        .file
-                                                                                                        ?.path ??
-                                                                                                    ""),
+                                                                                            extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
                                                                                           );
                                                                                         },
                                                                                       );

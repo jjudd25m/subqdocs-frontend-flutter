@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:subqdocs/utils/app_colors.dart';
+import 'package:subqdocs/widgets/custom_textfiled.dart';
 
 import 'formater.dart';
 
@@ -18,6 +19,7 @@ enum DateFormatType {
 class DateFormatField extends StatefulWidget {
   const DateFormatField({
     super.key,
+    this.checkValidation,
     required this.onComplete,
     required this.type,
     this.addCalendar = true,
@@ -28,6 +30,8 @@ class DateFormatField extends StatefulWidget {
     this.lastDate,
     this.focusNode,
   });
+
+  final String? Function(String?)? checkValidation;
 
   /// [InputDecoration] a styling class for form field
   ///
@@ -123,7 +127,7 @@ class _DateFormatFieldState extends State<DateFormatField> {
       String inputText;
       switch (widget.type) {
         case DateFormatType.type2:
-          inputText = '${padDayMonth(picked.day)}/${padDayMonth(picked.month)}/${picked.year}';
+          inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
           break;
       }
       setState(() {
@@ -135,7 +139,29 @@ class _DateFormatFieldState extends State<DateFormatField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    // return TextFormFiledWidget(
+    //   label: "",
+    //   readOnly: true,
+    //   controller: _dobFormater,
+    //   onTap: () {
+    //     _dobFormater.selection = TextSelection.fromPosition(
+    //       TextPosition(offset: _dobFormater.text.length),
+    //     );
+    //   },
+    //   suffixIcon: IconButton(
+    //     onPressed: pickDate,
+    //     icon: const Icon(Icons.calendar_month),
+    //   ),
+    //   checkValidation: widget.checkValidation,
+    //   // focusNode: widget.focusNode,
+    //   // decoration: decoration(),
+    //   // va: widget.checkValidation,
+    //   // keyboardType: TextInputType.datetime,
+    //   onChanged: formatInput,
+    // );
+
+    return TextFormField(
+      readOnly: true,
       controller: _dobFormater,
       onTap: () {
         _dobFormater.selection = TextSelection.fromPosition(
@@ -144,6 +170,7 @@ class _DateFormatFieldState extends State<DateFormatField> {
       },
       focusNode: widget.focusNode,
       decoration: decoration(),
+      validator: widget.checkValidation,
       keyboardType: TextInputType.datetime,
       onChanged: formatInput,
     );

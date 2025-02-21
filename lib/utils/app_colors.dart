@@ -43,6 +43,9 @@ class AppColors {
   static const Color ScreenBackGround1 = Color(0xFFECF0F4);
   static const Color buttonWithOpacity = Color.fromRGBO(91, 91, 225, 0.40);
 
+  static const Color lightgreenPastVisit = Color(0xFFC0FBED);
+  static const Color greenPastVisit = Color(0xFF09A17A);
+
   static const Color orange = Color(0xFFFFE6CC);
   static const Color orangeText = Color(0xFFFF8000);
   static const Color redText = Color(0xFFEB4335);

@@ -39,6 +39,8 @@ class ImagePath {
   static const String finalize_time = 'assets/images/finalize_time.svg';
   static const String signature = 'assets/images/signature.svg';
   static const String down_arrow = 'assets/images/down_arrow.svg';
+  static const String unCheckedBox = 'assets/images/un_checked.svg';
+  static const String checkedBox = 'assets/images/checked_box.svg';
   static const String share = 'assets/images/share.svg';
 
   static const String reorder = 'assets/images/reorder.svg';

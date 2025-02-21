@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 
+import '../../../widgets/customPermission.dart';
 import '../../core/utils/app_keys.dart';
 
 // class RecorderService {
@@ -87,7 +89,7 @@ class RecorderService {
   Timer? _timer;
 
   /// Start Recording
-  Future<bool> startRecording() async {
+  Future<bool> startRecording(BuildContext context) async {
     log("log: start recording");
     if (await audioRecorder.hasPermission()) {
       Directory dir = await getApplicationCacheDirectory();
@@ -102,8 +104,19 @@ class RecorderService {
       _startTimer();
 
       return true;
-    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && AppKeys.instance.navigatorKey?.currentState?.context != null) {
+    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+      print(" rrrrr");
       // Handle permission denial here
+
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => PermissionAlert(
+                permissionDescription:
+                    "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.",
+                permissionTitle: " Microphone  permission request",
+                isMicPermission: true,
+              ));
     }
     return false;
   }

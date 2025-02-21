@@ -79,10 +79,9 @@ class ForgotPasswordController extends GetxController {
     isLoading.value = true;
 
     try {
-      SendOtpModel sendOtpModel =
-          await _forgotPasswordRepository.sendOtp(email: emailController.text.toLowerCase().trim());
+      SendOtpModel sendOtpModel = await _forgotPasswordRepository.sendOtp(email: emailController.text.toLowerCase().trim());
 
-      if (sendOtpModel.responseType == "success") {
+      if (sendOtpModel.responseData != false) {
         isLoading.value = false;
         print("response is ${sendOtpModel.toJson()} ");
         currentScreen.value = optScreen;
@@ -108,7 +107,7 @@ class ForgotPasswordController extends GetxController {
 
     try {
       VerifyOtpModel verifyOtpModel = await _forgotPasswordRepository.verifyOpt(param: param);
-      if (verifyOtpModel.responseType == "success") {
+      if (verifyOtpModel.responseData != false) {
         isLoading.value = false;
         print(verifyOtpModel.toJson());
         currentScreen.value = enterPassword;
@@ -134,11 +133,10 @@ class ForgotPasswordController extends GetxController {
 
     try {
       VerifyOtpModel verifyOtpModel = await _forgotPasswordRepository.resetPassword(param: param);
-      if (verifyOtpModel.responseType == "success") {
+      if (verifyOtpModel.responseData != false) {
         isLoading.value = false;
         print(verifyOtpModel.toJson());
-        CustomToastification()
-            .showToast(verifyOtpModel.message ?? "Password Update Sucessfully", type: ToastificationType.success);
+        CustomToastification().showToast(verifyOtpModel.message ?? "Password Update Sucessfully", type: ToastificationType.success);
         currentScreen.value = passwordChangedScreen;
 
         currentScreen.refresh();

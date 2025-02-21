@@ -25,6 +25,7 @@ import '../../login/model/login_model.dart';
 import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
 import '../model/visit_recap_list_model.dart';
+import '../model/visitmainModel.dart';
 import '../repository/visit_main_repository.dart';
 import '../views/attachmentDailog.dart';
 
@@ -34,19 +35,25 @@ class VisitMainController extends GetxController {
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
 
+  RxBool isImage = RxBool(false);
+  RxBool isDocument = RxBool(false);
+
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
   RecorderService recorderService = RecorderService();
+
+  TextEditingController searchController = TextEditingController();
 
   RxBool isExpandRecording = true.obs;
   final count = 0.obs;
   RxBool isStartRecording = false.obs;
-  RxInt isSelectedAttchmentOption = RxInt(0);
+  RxInt isSelectedAttchmentOption = RxInt(-1);
   List<String> patientType = ["New Patient", "Old Patient"];
   RxnString selectedMedicalAssistant = RxnString();
   // RxList<MediaListingModel> selectedList = RxList();
 
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
   Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
+  Rxn<VisitMainPatientDetails> patientData = Rxn();
 
   Future<void> captureProfileImage() async {
     XFile? pickedImage = await MediaPickerServices().pickImage();
@@ -93,7 +100,12 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -132,7 +144,12 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -173,6 +190,10 @@ class VisitMainController extends GetxController {
     if (patientId.value.isNotEmpty) {
       getVisitRecap();
       getPatientAttachment();
+    }
+
+    if (visitId.value.isNotEmpty) {
+      getPatientDetails();
     }
   }
 
@@ -220,7 +241,8 @@ class VisitMainController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+          await _visitMainRepository.uploadAudio(
+        audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -257,7 +279,8 @@ class VisitMainController extends GetxController {
     } else {
       print("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+    await _visitMainRepository.uploadAttachments(
+        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     getPatientAttachment();
   }
@@ -268,7 +291,27 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> getPatientAttachment() async {
-    patientAttachmentList.value = await _visitMainRepository.getPatientAttachment(id: visitId.value);
+    Map<String, dynamic> param = {};
+
+    if (searchController.text != "") {
+      param['search'] = searchController.text;
+    }
+
+    if (isImage.value) {
+      param['image'] = true;
+    }
+
+    if (isDocument.value) {
+      param['document'] = true;
+    }
+
+    patientAttachmentList.value = await _visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+
+    print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+  }
+
+  Future<void> getPatientDetails() async {
+    patientData.value = await _visitMainRepository.getPatientDetails(id: visitId.value);
 
     print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }

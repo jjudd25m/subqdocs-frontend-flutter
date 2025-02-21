@@ -44,6 +44,40 @@ class VisitMainView extends GetView<VisitMainController> {
     }
   }
 
+  String formatDateTime({required String firstDate, required String secondDate}) {
+    if (firstDate != "" && secondDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+      DateTime secondDateTime = DateTime.parse(secondDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Format the second time (for hours and minutes with am/pm)
+      String formattedTime = DateFormat('h:mm a').format(secondDateTime);
+
+      // Return the formatted string in the desired format
+      return '$formattedDate $formattedTime';
+    } else {
+      return "";
+    }
+  }
+
+  String visitRecapformatDate({required String firstDate}) {
+    if (firstDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Return the formatted string in the desired format
+      return formattedDate;
+    } else {
+      return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,10 +110,15 @@ class VisitMainView extends GetView<VisitMainController> {
                                     padding: const EdgeInsets.symmetric(vertical: 5),
                                     child: Row(
                                       children: [
-                                        SvgPicture.asset(
-                                          ImagePath.logo_back,
-                                          height: 15,
-                                          width: 18,
+                                        InkWell(
+                                          onTap: () {
+                                            Get.back();
+                                          },
+                                          child: SvgPicture.asset(
+                                            ImagePath.logo_back,
+                                            height: 15,
+                                            width: 18,
+                                          ),
                                         ),
                                         SizedBox(
                                           width: 11,
@@ -97,7 +136,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                           children: [
                                             Text(
                                               textAlign: TextAlign.center,
-                                              "Don Jones",
+                                              "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""} ",
                                               style: AppFonts.medium(16, AppColors.textBlack),
                                             ),
                                             SizedBox(
@@ -105,7 +144,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
-                                              "12345678",
+                                              controller.patientData.value?.responseData?.patientId ?? "",
                                               style: AppFonts.regular(11, AppColors.textGrey),
                                             ),
                                           ],
@@ -166,7 +205,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                "52",
+                                                controller.patientData.value?.responseData?.age.toString() ?? "",
                                                 style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
@@ -183,7 +222,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                "Male",
+                                                controller.patientData.value?.responseData?.gender ?? "",
                                                 style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
@@ -200,7 +239,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                "10/12/2024  10:30 am",
+                                                formatDateTime(
+                                                    firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                                 style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
@@ -258,6 +298,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                           width: 120,
                                                                           child: TextField(
                                                                             maxLines: 1, //or null
+
                                                                             decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                                                           ),
                                                                         ),
@@ -353,7 +394,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "Dr. Adrian Tinajero",
+                                                    "Dr ${controller.patientData.value?.responseData?.doctorFirstName}  ${controller.patientData.value?.responseData?.doctorLastName}",
                                                     style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                   SizedBox(width: 5),
@@ -629,7 +670,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                         children: [
                                                           Text(
                                                             textAlign: TextAlign.center,
-                                                            controller.visitRecapList.value?.responseData?[index].visitDate ?? "",
+                                                            visitRecapformatDate(firstDate: controller.visitRecapList.value?.responseData?[index].visitDate ?? ""),
                                                             style: AppFonts.medium(14, AppColors.textGrey),
                                                           ),
                                                           SizedBox(width: 15),
@@ -706,6 +747,9 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 PopupMenuItem(
                                                     onTap: () {
                                                       controller.isSelectedAttchmentOption.value = 0;
+                                                      controller.isDocument.value = true;
+                                                      controller.isImage.value = false;
+                                                      controller.getPatientAttachment();
                                                     },
                                                     height: 30,
                                                     padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
@@ -735,6 +779,9 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 PopupMenuItem(
                                                     onTap: () {
                                                       controller.isSelectedAttchmentOption.value = 1;
+                                                      controller.isDocument.value = false;
+                                                      controller.isImage.value = true;
+                                                      controller.getPatientAttachment();
                                                     },
                                                     height: 30,
                                                     padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
@@ -815,6 +862,10 @@ class VisitMainView extends GetView<VisitMainController> {
                                             SizedBox(
                                               width: 120,
                                               child: TextField(
+                                                controller: controller.searchController,
+                                                onChanged: (value) {
+                                                  controller.getPatientAttachment();
+                                                },
                                                 maxLines: 1, //or null
                                                 decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                               ),
@@ -1657,7 +1708,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                 onTap: () async {
                                   if (controller.recorderService.recordingStatus.value == 0) {
                                     // If not recording, start the recording
-                                    await controller.recorderService.startRecording();
+                                    await controller.recorderService.startRecording(context);
                                   } else if (controller.recorderService.recordingStatus.value == 1) {
                                     // If recording, pause it
                                     await controller.recorderService.pauseRecording();
@@ -1892,7 +1943,7 @@ class VisitMainView extends GetView<VisitMainController> {
                               Spacer(),
                               GestureDetector(
                                 onTap: () async {
-                                  await controller.recorderService.startRecording();
+                                  await controller.recorderService.startRecording(context);
                                 },
                                 child: SvgPicture.asset(
                                   ImagePath.pause_white,
