@@ -43,6 +43,25 @@ class VisitMainView extends GetView<VisitMainController> {
     }
   }
 
+  String formatDateTime({required String firstDate, required String secondDate}) {
+    if (firstDate != "" && secondDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+      DateTime secondDateTime = DateTime.parse(secondDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Format the second time (for hours and minutes with am/pm)
+      String formattedTime = DateFormat('h:mm a').format(secondDateTime);
+
+      // Return the formatted string in the desired format
+      return '$formattedDate $formattedTime';
+    } else {
+      return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,7 +221,11 @@ class VisitMainView extends GetView<VisitMainController> {
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                "10/12/2024  10:30 am",
+                                                formatDateTime(
+                                                    firstDate:
+                                                        controller.patientData.value?.responseData?.visitDate ?? "",
+                                                    secondDate:
+                                                        controller.patientData.value?.responseData?.visitTime ?? ""),
                                                 style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
@@ -366,7 +389,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "Dr. Adrian Tinajero",
+                                                    "Dr ${controller.patientData.value?.responseData?.doctorFirstName}  ${controller.patientData.value?.responseData?.doctorLastName}",
                                                     style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                   SizedBox(width: 5),
