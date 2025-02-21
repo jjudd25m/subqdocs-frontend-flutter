@@ -220,7 +220,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                   print("row index is :- $rowIndex");
                   Get.toNamed(Routes.VISIT_MAIN, arguments: {
                     "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                    "patientId": controller.scheduleVisitList[rowIndex - 1].patientId.toString(),
+                    "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
                   });
                 },
                 onLoadMore: () {

@@ -197,7 +197,7 @@ class HomeController extends GetxController {
 
     startDate.value = "MM/DD/YYYY";
     endDate.value = "";
-
+    selectedIndex.value = -1;
     fromController.clear();
     toController.clear();
     getPatientList();
@@ -437,6 +437,10 @@ class HomeController extends GetxController {
 
     param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
 
+    if (selectedIndex.value != -1) {
+      param['status'] = statusModel[selectedIndex.value].status;
+    }
+
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
@@ -474,6 +478,9 @@ class HomeController extends GetxController {
       {"id": "last_name", "desc": sortName}
       // Add more sorting parameters as needed
     ];
+    if (selectedIndex.value != -1) {
+      param['status'] = statusModel[selectedIndex.value].status;
+    }
 
     param["sorting"] = sorting;
 

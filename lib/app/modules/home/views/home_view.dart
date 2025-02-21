@@ -342,13 +342,15 @@ class HomeView extends GetView<HomeController> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 16, bottom: 6),
-                                                              child: Text(
-                                                                "Status",
-                                                                style: AppFonts.medium(14, AppColors.textBlack),
-                                                              ),
-                                                            )
+                                                            controller.tabIndex.value == 2
+                                                                ? Padding(
+                                                                    padding: const EdgeInsets.only(left: 16, bottom: 0),
+                                                                    child: Text(
+                                                                      "Status",
+                                                                      style: AppFonts.medium(14, AppColors.textBlack),
+                                                                    ),
+                                                                  )
+                                                                : SizedBox()
                                                           ],
                                                         )),
                                                     controller.tabIndex.value == 2
@@ -439,184 +441,375 @@ class HomeView extends GetView<HomeController> {
                                                             onTap: () {},
                                                             padding: EdgeInsets.zero,
                                                             value: "",
-                                                            child: Text(""),
-                                                          ),
-                                                    PopupMenuItem(
-                                                      enabled: false,
-                                                      onTap: () {},
-                                                      padding: EdgeInsets.zero,
-                                                      value: "",
-                                                      child: Obx(() {
-                                                        return Padding(
-                                                          padding: const EdgeInsets.only(
-                                                              right: 16, left: 16, bottom: 16, top: 10),
-                                                          child: TextFormFiledWidget(
-                                                              readOnly: true,
-                                                              label: "Visit Date",
-                                                              controller: controller.fromController,
-                                                              onTap: () async {
-                                                                print("print");
-                                                                showDialog(
-                                                                  context: context,
-                                                                  useSafeArea: true,
-                                                                  builder: (context) {
-                                                                    return AlertDialog(
-                                                                      backgroundColor: AppColors.backgroundWhite,
-                                                                      titlePadding: EdgeInsets.zero,
-                                                                      shape: RoundedRectangleBorder(
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                      ),
-                                                                      title: Column(
-                                                                        children: [
-                                                                          SizedBox(height: 10),
-                                                                          // Padding(
-                                                                          //   padding: EdgeInsets.symmetric(horizontal: DimensionConstant.d15),
-                                                                          //   child: WidgetConstant().textLight14(changeEventDateStr),
-                                                                          // ),
-                                                                          SizedBox(
-                                                                            width: 305,
-                                                                            height: 290,
-                                                                            child: GetBuilder<HomeController>(
-                                                                              builder: (controller) {
-                                                                                return CalendarDatePicker2(
-                                                                                  config: CalendarDatePicker2Config(
-                                                                                    // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
-                                                                                    weekdayLabelTextStyle:
-                                                                                        AppFonts.regular(
-                                                                                            14, AppColors.textGrey),
-                                                                                    weekdayLabels: [
-                                                                                      "Mo",
-                                                                                      "Tu",
-                                                                                      "We",
-                                                                                      "Th",
-                                                                                      "Fr",
-                                                                                      "Sa",
-                                                                                      "su"
-                                                                                    ],
-                                                                                    daySplashColor: AppColors.clear,
-                                                                                    calendarViewMode:
-                                                                                        CalendarDatePicker2Mode.day,
-                                                                                    selectedDayHighlightColor:
-                                                                                        AppColors.backgroundPurple,
-                                                                                    dayMaxWidth: 60,
-                                                                                    allowSameValueSelection: true,
-                                                                                    firstDayOfWeek: 6,
-                                                                                    disableMonthPicker: true,
-
-                                                                                    scrollViewTopHeaderTextStyle:
-                                                                                        const TextStyle(
-                                                                                      color: Colors.black87,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                    ),
-
-                                                                                    controlsTextStyle: const TextStyle(
-                                                                                      color: Colors.black,
-                                                                                      fontSize: 15,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                    ),
-                                                                                    centerAlignModePicker: true,
-                                                                                    customModePickerIcon:
-                                                                                        const SizedBox(),
-                                                                                    calendarViewScrollPhysics:
-                                                                                        const NeverScrollableScrollPhysics(),
-
-                                                                                    calendarType:
-                                                                                        CalendarDatePicker2Type.range,
-                                                                                  ),
-                                                                                  onValueChanged: (value) {
-                                                                                    controller.selectedValue = value;
-
-                                                                                    print("onchanged  ${value}");
-                                                                                  },
-                                                                                  value: [DateTime.now()],
-                                                                                );
-                                                                              },
+                                                            child: Obx(() {
+                                                              return Padding(
+                                                                padding: const EdgeInsets.only(
+                                                                    right: 16, left: 16, bottom: 16, top: 10),
+                                                                child: TextFormFiledWidget(
+                                                                    readOnly: true,
+                                                                    label: "Visit Date",
+                                                                    controller: controller.fromController,
+                                                                    onTap: () async {
+                                                                      print("print");
+                                                                      showDialog(
+                                                                        context: context,
+                                                                        useSafeArea: true,
+                                                                        builder: (context) {
+                                                                          return AlertDialog(
+                                                                            backgroundColor: AppColors.backgroundWhite,
+                                                                            titlePadding: EdgeInsets.zero,
+                                                                            shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(10),
                                                                             ),
-                                                                          ),
+                                                                            title: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 10),
+                                                                                // Padding(
+                                                                                //   padding: EdgeInsets.symmetric(horizontal: DimensionConstant.d15),
+                                                                                //   child: WidgetConstant().textLight14(changeEventDateStr),
+                                                                                // ),
+                                                                                SizedBox(
+                                                                                  width: 305,
+                                                                                  height: 290,
+                                                                                  child: GetBuilder<HomeController>(
+                                                                                    builder: (controller) {
+                                                                                      return CalendarDatePicker2(
+                                                                                        config:
+                                                                                            CalendarDatePicker2Config(
+                                                                                          // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
+                                                                                          weekdayLabelTextStyle:
+                                                                                              AppFonts.regular(14,
+                                                                                                  AppColors.textGrey),
+                                                                                          weekdayLabels: [
+                                                                                            "Mo",
+                                                                                            "Tu",
+                                                                                            "We",
+                                                                                            "Th",
+                                                                                            "Fr",
+                                                                                            "Sa",
+                                                                                            "su"
+                                                                                          ],
+                                                                                          daySplashColor:
+                                                                                              AppColors.clear,
+                                                                                          calendarViewMode:
+                                                                                              CalendarDatePicker2Mode
+                                                                                                  .day,
+                                                                                          selectedDayHighlightColor:
+                                                                                              AppColors
+                                                                                                  .backgroundPurple,
+                                                                                          dayMaxWidth: 60,
+                                                                                          allowSameValueSelection: true,
+                                                                                          firstDayOfWeek: 6,
+                                                                                          disableMonthPicker: true,
 
-                                                                          Row(
-                                                                            children: [
-                                                                              SizedBox(
-                                                                                width: 5,
-                                                                              ),
-                                                                              Expanded(
-                                                                                child: ContainerButton(
-                                                                                  padding: EdgeInsets.only(
-                                                                                      top: 10, bottom: 10),
-                                                                                  onPressed: () {
-                                                                                    Navigator.pop(context);
-                                                                                  },
-                                                                                  backgroundColor: Colors.white,
-                                                                                  needBorder: true,
-                                                                                  borderColor:
-                                                                                      AppColors.backgroundPurple,
-                                                                                  textColor: AppColors.backgroundPurple,
-                                                                                  text: "Cancel",
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(
-                                                                                width: 5,
-                                                                              ),
-                                                                              Expanded(
-                                                                                child: ContainerButton(
-                                                                                  padding: EdgeInsets.only(
-                                                                                      top: 10, bottom: 10),
-                                                                                  onPressed: () {
-                                                                                    controller.setDateRange();
-                                                                                  },
-                                                                                  text: "Choose Date",
-                                                                                  backgroundColor:
-                                                                                      AppColors.backgroundPurple,
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(
-                                                                                width: 5,
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                          SizedBox(height: 10),
-                                                                        ],
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                );
+                                                                                          scrollViewTopHeaderTextStyle:
+                                                                                              const TextStyle(
+                                                                                            color: Colors.black87,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
 
-                                                                // final date = await showDatePickerDialog(
-                                                                //   context: context,
-                                                                //   initialDate: DateTime(2022, 10, 10),
-                                                                //   minDate: DateTime(2020, 10, 10),
-                                                                //   maxDate: DateTime(2024, 10, 30),
-                                                                //   width: 300,
-                                                                //   height: 300,
-                                                                //   currentDate: DateTime(2022, 10, 15),
-                                                                //   selectedDate: DateTime(2022, 10, 16),
-                                                                //   currentDateDecoration: const BoxDecoration(),
-                                                                //   currentDateTextStyle: const TextStyle(),
-                                                                //   daysOfTheWeekTextStyle: const TextStyle(),
-                                                                //   disabledCellsDecoration: const BoxDecoration(),
-                                                                //   disabledCellsTextStyle: const TextStyle(),
-                                                                //   enabledCellsDecoration: const BoxDecoration(),
-                                                                //   enabledCellsTextStyle: const TextStyle(),
-                                                                //   initialPickerType: PickerType.days,
-                                                                //   selectedCellDecoration: const BoxDecoration(),
-                                                                //   selectedCellTextStyle: const TextStyle(),
-                                                                //   leadingDateTextStyle: const TextStyle(),
-                                                                //   slidersColor: Colors.lightBlue,
-                                                                //   highlightColor: Colors.redAccent,
-                                                                //   slidersSize: 20,
-                                                                //   splashColor: Colors.lightBlueAccent,
-                                                                //   splashRadius: 40,
-                                                                //   centerLeadingDate: true,
-                                                                // );
-                                                              },
-                                                              suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
-                                                              hint: "${controller.startDate}-${controller.endDate}",
-                                                              checkValidation: (value) {
-                                                                return Validation.emailValidate(value);
-                                                              }),
-                                                        );
-                                                      }),
-                                                    ),
+                                                                                          controlsTextStyle:
+                                                                                              const TextStyle(
+                                                                                            color: Colors.black,
+                                                                                            fontSize: 15,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
+                                                                                          centerAlignModePicker: true,
+                                                                                          customModePickerIcon:
+                                                                                              const SizedBox(),
+                                                                                          calendarViewScrollPhysics:
+                                                                                              const NeverScrollableScrollPhysics(),
+
+                                                                                          calendarType:
+                                                                                              CalendarDatePicker2Type
+                                                                                                  .range,
+                                                                                        ),
+                                                                                        onValueChanged: (value) {
+                                                                                          controller.selectedValue =
+                                                                                              value;
+
+                                                                                          print("onchanged  ${value}");
+                                                                                        },
+                                                                                        value: [DateTime.now()],
+                                                                                      );
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+
+                                                                                Row(
+                                                                                  children: [
+                                                                                    SizedBox(
+                                                                                      width: 5,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: ContainerButton(
+                                                                                        padding: EdgeInsets.only(
+                                                                                            top: 10, bottom: 10),
+                                                                                        onPressed: () {
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        backgroundColor: Colors.white,
+                                                                                        needBorder: true,
+                                                                                        borderColor:
+                                                                                            AppColors.backgroundPurple,
+                                                                                        textColor:
+                                                                                            AppColors.backgroundPurple,
+                                                                                        text: "Cancel",
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 5,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: ContainerButton(
+                                                                                        padding: EdgeInsets.only(
+                                                                                            top: 10, bottom: 10),
+                                                                                        onPressed: () {
+                                                                                          controller.setDateRange();
+                                                                                        },
+                                                                                        text: "Choose Date",
+                                                                                        backgroundColor:
+                                                                                            AppColors.backgroundPurple,
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 5,
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 10),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      );
+
+                                                                      // final date = await showDatePickerDialog(
+                                                                      //   context: context,
+                                                                      //   initialDate: DateTime(2022, 10, 10),
+                                                                      //   minDate: DateTime(2020, 10, 10),
+                                                                      //   maxDate: DateTime(2024, 10, 30),
+                                                                      //   width: 300,
+                                                                      //   height: 300,
+                                                                      //   currentDate: DateTime(2022, 10, 15),
+                                                                      //   selectedDate: DateTime(2022, 10, 16),
+                                                                      //   currentDateDecoration: const BoxDecoration(),
+                                                                      //   currentDateTextStyle: const TextStyle(),
+                                                                      //   daysOfTheWeekTextStyle: const TextStyle(),
+                                                                      //   disabledCellsDecoration: const BoxDecoration(),
+                                                                      //   disabledCellsTextStyle: const TextStyle(),
+                                                                      //   enabledCellsDecoration: const BoxDecoration(),
+                                                                      //   enabledCellsTextStyle: const TextStyle(),
+                                                                      //   initialPickerType: PickerType.days,
+                                                                      //   selectedCellDecoration: const BoxDecoration(),
+                                                                      //   selectedCellTextStyle: const TextStyle(),
+                                                                      //   leadingDateTextStyle: const TextStyle(),
+                                                                      //   slidersColor: Colors.lightBlue,
+                                                                      //   highlightColor: Colors.redAccent,
+                                                                      //   slidersSize: 20,
+                                                                      //   splashColor: Colors.lightBlueAccent,
+                                                                      //   splashRadius: 40,
+                                                                      //   centerLeadingDate: true,
+                                                                      // );
+                                                                    },
+                                                                    suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
+                                                                    hint:
+                                                                        "${controller.startDate}-${controller.endDate}",
+                                                                    checkValidation: (value) {
+                                                                      return Validation.emailValidate(value);
+                                                                    }),
+                                                              );
+                                                            }),
+                                                          ),
+                                                    controller.tabIndex.value == 2
+                                                        ? PopupMenuItem(
+                                                            enabled: false,
+                                                            onTap: () {},
+                                                            padding: EdgeInsets.zero,
+                                                            value: "",
+                                                            child: Obx(() {
+                                                              return Padding(
+                                                                padding: const EdgeInsets.only(
+                                                                    right: 16, left: 16, bottom: 16, top: 10),
+                                                                child: TextFormFiledWidget(
+                                                                    readOnly: true,
+                                                                    label: "Visit Date",
+                                                                    controller: controller.fromController,
+                                                                    onTap: () async {
+                                                                      print("print");
+                                                                      showDialog(
+                                                                        context: context,
+                                                                        useSafeArea: true,
+                                                                        builder: (context) {
+                                                                          return AlertDialog(
+                                                                            backgroundColor: AppColors.backgroundWhite,
+                                                                            titlePadding: EdgeInsets.zero,
+                                                                            shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            title: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 10),
+                                                                                // Padding(
+                                                                                //   padding: EdgeInsets.symmetric(horizontal: DimensionConstant.d15),
+                                                                                //   child: WidgetConstant().textLight14(changeEventDateStr),
+                                                                                // ),
+                                                                                SizedBox(
+                                                                                  width: 305,
+                                                                                  height: 290,
+                                                                                  child: GetBuilder<HomeController>(
+                                                                                    builder: (controller) {
+                                                                                      return CalendarDatePicker2(
+                                                                                        config:
+                                                                                            CalendarDatePicker2Config(
+                                                                                          // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
+                                                                                          weekdayLabelTextStyle:
+                                                                                              AppFonts.regular(14,
+                                                                                                  AppColors.textGrey),
+                                                                                          weekdayLabels: [
+                                                                                            "Mo",
+                                                                                            "Tu",
+                                                                                            "We",
+                                                                                            "Th",
+                                                                                            "Fr",
+                                                                                            "Sa",
+                                                                                            "su"
+                                                                                          ],
+                                                                                          daySplashColor:
+                                                                                              AppColors.clear,
+                                                                                          calendarViewMode:
+                                                                                              CalendarDatePicker2Mode
+                                                                                                  .day,
+                                                                                          selectedDayHighlightColor:
+                                                                                              AppColors
+                                                                                                  .backgroundPurple,
+                                                                                          dayMaxWidth: 60,
+                                                                                          allowSameValueSelection: true,
+                                                                                          firstDayOfWeek: 6,
+                                                                                          disableMonthPicker: true,
+
+                                                                                          scrollViewTopHeaderTextStyle:
+                                                                                              const TextStyle(
+                                                                                            color: Colors.black87,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
+
+                                                                                          controlsTextStyle:
+                                                                                              const TextStyle(
+                                                                                            color: Colors.black,
+                                                                                            fontSize: 15,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
+                                                                                          centerAlignModePicker: true,
+                                                                                          customModePickerIcon:
+                                                                                              const SizedBox(),
+                                                                                          calendarViewScrollPhysics:
+                                                                                              const NeverScrollableScrollPhysics(),
+
+                                                                                          calendarType:
+                                                                                              CalendarDatePicker2Type
+                                                                                                  .range,
+                                                                                        ),
+                                                                                        onValueChanged: (value) {
+                                                                                          controller.selectedValue =
+                                                                                              value;
+
+                                                                                          print("onchanged  ${value}");
+                                                                                        },
+                                                                                        value: [DateTime.now()],
+                                                                                      );
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+
+                                                                                Row(
+                                                                                  children: [
+                                                                                    SizedBox(
+                                                                                      width: 5,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: ContainerButton(
+                                                                                        padding: EdgeInsets.only(
+                                                                                            top: 10, bottom: 10),
+                                                                                        onPressed: () {
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        backgroundColor: Colors.white,
+                                                                                        needBorder: true,
+                                                                                        borderColor:
+                                                                                            AppColors.backgroundPurple,
+                                                                                        textColor:
+                                                                                            AppColors.backgroundPurple,
+                                                                                        text: "Cancel",
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 5,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: ContainerButton(
+                                                                                        padding: EdgeInsets.only(
+                                                                                            top: 10, bottom: 10),
+                                                                                        onPressed: () {
+                                                                                          controller.setDateRange();
+                                                                                        },
+                                                                                        text: "Choose Date",
+                                                                                        backgroundColor:
+                                                                                            AppColors.backgroundPurple,
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 5,
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 10),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      );
+
+                                                                      // final date = await showDatePickerDialog(
+                                                                      //   context: context,
+                                                                      //   initialDate: DateTime(2022, 10, 10),
+                                                                      //   minDate: DateTime(2020, 10, 10),
+                                                                      //   maxDate: DateTime(2024, 10, 30),
+                                                                      //   width: 300,
+                                                                      //   height: 300,
+                                                                      //   currentDate: DateTime(2022, 10, 15),
+                                                                      //   selectedDate: DateTime(2022, 10, 16),
+                                                                      //   currentDateDecoration: const BoxDecoration(),
+                                                                      //   currentDateTextStyle: const TextStyle(),
+                                                                      //   daysOfTheWeekTextStyle: const TextStyle(),
+                                                                      //   disabledCellsDecoration: const BoxDecoration(),
+                                                                      //   disabledCellsTextStyle: const TextStyle(),
+                                                                      //   enabledCellsDecoration: const BoxDecoration(),
+                                                                      //   enabledCellsTextStyle: const TextStyle(),
+                                                                      //   initialPickerType: PickerType.days,
+                                                                      //   selectedCellDecoration: const BoxDecoration(),
+                                                                      //   selectedCellTextStyle: const TextStyle(),
+                                                                      //   leadingDateTextStyle: const TextStyle(),
+                                                                      //   slidersColor: Colors.lightBlue,
+                                                                      //   highlightColor: Colors.redAccent,
+                                                                      //   slidersSize: 20,
+                                                                      //   splashColor: Colors.lightBlueAccent,
+                                                                      //   splashRadius: 40,
+                                                                      //   centerLeadingDate: true,
+                                                                      // );
+                                                                    },
+                                                                    suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
+                                                                    hint:
+                                                                        "${controller.startDate}-${controller.endDate}",
+                                                                    checkValidation: (value) {
+                                                                      return Validation.emailValidate(value);
+                                                                    }),
+                                                              );
+                                                            }),
+                                                          )
+                                                        : PopupMenuDivider(
+                                                            height: 0,
+                                                          ),
                                                   ],
                                                   child: Container(
                                                     height: 40,
