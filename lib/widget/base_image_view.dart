@@ -21,7 +21,7 @@ class BaseImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(" image url is ${imageUrl}");
+    // print(" image url is ${imageUrl}");
     return imageUrl.isNotEmpty
         ? CachedNetworkImage(
             imageUrl: imageUrl,

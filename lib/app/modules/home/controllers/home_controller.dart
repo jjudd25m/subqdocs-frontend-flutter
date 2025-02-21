@@ -1,19 +1,31 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../data/service/database_helper.dart';
+import '../../login/model/login_model.dart';
+import '../../visit_main/model/patient_transcript_upload_model.dart';
+import '../../visit_main/repository/visit_main_repository.dart';
 import '../model/deletePatientModel.dart';
 import '../model/patient_list_model.dart';
+import '../model/patient_schedule_model.dart';
 import '../model/schedule_visit_list_model.dart';
 import '../repository/home_repository.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
+
+  final VisitMainRepository _visitMainRepository = VisitMainRepository();
 
   final HomeRepository _homeRepository = HomeRepository();
   TextEditingController fromController = TextEditingController();
@@ -510,7 +522,7 @@ class HomeController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) {
+    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           print("now its  connected ");
@@ -518,13 +530,24 @@ class HomeController extends GetxController {
           getScheduleVisitList();
           getPatientList();
 
+          print('---------------------------------hahahahaha');
+          List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+
+          print("audio file count is :- ${audio.length}");
+          if (audio.isNotEmpty) {
+            CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
+
+            uploadAllAudioFiles(() {
+              CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+              print('All audio files have been uploaded!');
+            });
+          }
+
           break;
         case InternetStatus.disconnected:
           var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
-          var schedulePatient = ScheduleVisitListModel.fromJson(
-              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
-          var pastPatient =
-              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
+          var schedulePatient = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+          var pastPatient = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
 
           patientList.value = patient.responseData?.data ?? [];
           scheduleVisitList.value = schedulePatient.responseData?.data ?? [];
@@ -533,9 +556,71 @@ class HomeController extends GetxController {
           scheduleVisitList.refresh();
           pastVisitList.refresh();
 
+          // List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+          //
+          // List<Future<bool>> uploadFutures = [];
+          //
+          // for (var file in audio) {
+          //   await uploadLocalAudio(file);
+          //   DatabaseHelper.instance.deleteAudioFile(file.id ?? 0);
+          // }
+
           print("now its not connected ");
           break;
       }
     });
+  }
+
+  Future<void> uploadAllAudioFiles(Function onAllUploaded) async {
+    List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+
+    List<Future<bool>> uploadFutures = [];
+
+    for (var file in audio) {
+      uploadFutures.add(uploadLocalAudio(file).then((success) {
+        if (success) {
+          DatabaseHelper.instance.deleteAudioFile(file.id ?? 0);
+        }
+        return success;
+      }));
+    }
+
+    await Future.wait(uploadFutures);
+
+    // Notify when all files are uploaded
+    onAllUploaded(); // This will trigger the callback function
+  }
+
+  Future<bool> uploadLocalAudio(AudioFile file) async {
+    try {
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+      print("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
+
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      print("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
+      // Your upload logic here (e.g., send the audio data to a server)
+      // If upload is successful, return true
+      return true; // You might want to change this logic to match your actual upload process
+    } catch (error) {
+      // If an error occurs during upload, return false
+      print('Failed to upload audio: $error');
+      return false;
+    }
+  }
+
+  // Future<PatientTranscriptUploadModel> uploadLocalAudio(AudioFile data) async {
+  //   var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  //
+  //   PatientTranscriptUploadModel patientTranscriptUploadModel =
+  //       await _visitMainRepository.uploadAudio(audioFile: File.fromRawPath(data.audioData), token: loginData.responseData?.token ?? "", patientVisitId: data.visitId ?? "");
+  //   return patientTranscriptUploadModel;
+  // }
+
+  Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {
+    PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
+    print("patientVisitCreate API  internal response $response");
+    CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
   }
 }

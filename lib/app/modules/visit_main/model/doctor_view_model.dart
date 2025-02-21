@@ -542,19 +542,19 @@ class ImpressionsAndPlan {
 
 class Treatments {
   String? type;
-  String? name;
+  String? title;
   List<Specifications>? specifications;
   // List<String>? notes;
 
   Treatments({
     this.type,
-    this.name,
+    this.title,
     this.specifications,
   });
 
   Treatments.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    name = json['name'];
+    title = json['title'];
     if (json['specifications'] != null) {
       specifications = <Specifications>[];
       json['specifications'].forEach((v) {
@@ -567,7 +567,7 @@ class Treatments {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
-    data['name'] = name;
+    data['title'] = title;
     if (specifications != null) {
       data['specifications'] = specifications!.map((v) => v.toJson()).toList();
     }

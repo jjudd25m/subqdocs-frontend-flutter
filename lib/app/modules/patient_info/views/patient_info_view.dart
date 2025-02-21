@@ -477,34 +477,34 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                             outLineEnabledColor: AppColors.textGrey,
                                             outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
                                           )),
-                                          IntrinsicWidth(
-                                              child: CustomAnimatedButton(
-                                            onPressed: () {
-                                              controller.tabIndex.value = 4;
-                                            },
-                                            text: " Billing Form ",
-                                            isOutline: true,
-                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                            fontSize: 14,
-                                            enabledTextColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                            enabledColor: controller.tabIndex.value == 4 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                            outLineEnabledColor: AppColors.textGrey,
-                                            outlineColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
-                                          )),
-                                          IntrinsicWidth(
-                                              child: CustomAnimatedButton(
-                                            onPressed: () {
-                                              controller.tabIndex.value = 5;
-                                            },
-                                            text: " Requisition ",
-                                            isOutline: true,
-                                            paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                            fontSize: 14,
-                                            enabledTextColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                            enabledColor: controller.tabIndex.value == 5 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                            outLineEnabledColor: AppColors.textGrey,
-                                            outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
-                                          )),
+                                          // IntrinsicWidth(
+                                          //     child: CustomAnimatedButton(
+                                          //   onPressed: () {
+                                          //     controller.tabIndex.value = 4;
+                                          //   },
+                                          //   text: " Billing Form ",
+                                          //   isOutline: true,
+                                          //   paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                          //   fontSize: 14,
+                                          //   enabledTextColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                          //   enabledColor: controller.tabIndex.value == 4 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                          //   outLineEnabledColor: AppColors.textGrey,
+                                          //   outlineColor: controller.tabIndex.value == 4 ? AppColors.backgroundPurple : AppColors.clear,
+                                          // )),
+                                          // IntrinsicWidth(
+                                          //     child: CustomAnimatedButton(
+                                          //   onPressed: () {
+                                          //     controller.tabIndex.value = 5;
+                                          //   },
+                                          //   text: " Requisition ",
+                                          //   isOutline: true,
+                                          //   paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                          //   fontSize: 14,
+                                          //   enabledTextColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                          //   enabledColor: controller.tabIndex.value == 5 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                          //   outLineEnabledColor: AppColors.textGrey,
+                                          //   outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
+                                          // )),
                                           IntrinsicWidth(
                                               child: CustomAnimatedButton(
                                             onPressed: () {

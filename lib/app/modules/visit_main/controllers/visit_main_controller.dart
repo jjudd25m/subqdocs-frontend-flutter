@@ -189,19 +189,46 @@ class VisitMainController extends GetxController {
   void increment() => count.value++;
 
   Future<void> submitAudio(File audioFile) async {
-    isLoading.value = true;
-    loadingMessage.value = "Uploading Audio";
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
 
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      print("internet not available ");
+      isLoading.value = true;
+      loadingMessage.value = "Uploading Audio";
+      Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-    PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
-    print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
 
-    isLoading.value = false;
+      await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
-    Get.toNamed(Routes.PATIENT_INFO, arguments: {
-      "trascriptUploadData": patientTranscriptUploadModel,
-    });
+      // Show a message or update UI
+      loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
+      isLoading.value = false;
+
+      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+
+      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+
+      for (var file in audio) {
+        print("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
+      }
+    } else {
+      print("internet available");
+      isLoading.value = true;
+      loadingMessage.value = "Uploading Audio";
+
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+
+      isLoading.value = false;
+
+      Get.toNamed(Routes.PATIENT_INFO, arguments: {
+        "trascriptUploadData": patientTranscriptUploadModel,
+      });
+    }
   }
 
   Future<void> deleteAttachments(int id) async {

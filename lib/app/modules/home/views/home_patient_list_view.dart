@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
+import 'package:subqdocs/app/modules/home/views/schedule_patient_dialog.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -163,6 +164,42 @@ class HomePatientListView extends GetView<HomeController> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   "Edit",
+                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                ),
+                              ),
+                            ],
+                          )),
+                      PopupMenuItem(
+                          padding: EdgeInsets.zero,
+                          // value: "",
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                              builder: (BuildContext context) {
+                                return SchedulePatientDialog(
+                                  receiveParam: (p0, p1) {
+                                    print("p0 is $p0 p1 is $p1");
+                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
+                                  },
+                                ); // Our custom dialog
+                              },
+                            );
+
+                            // controller.deletePatientById(controller.patientList[rowIndex - 1].visits!.first.id);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: AppColors.appbarBorder,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Schedule",
                                   style: AppFonts.regular(14, AppColors.textBlack),
                                 ),
                               ),
