@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 import 'package:path/path.dart' as p;
 import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_colors.dart';
@@ -24,6 +25,8 @@ import '../repository/add_patient_repository.dart';
 
 class AddPatientController extends GetxController {
   //TODO: Implement AddPatientController
+
+  RxBool isSaveAddAnother = RxBool(false);
 
   final AddPatientRepository _addPatientRepository = AddPatientRepository();
   RxBool isLoading = RxBool(false);
@@ -286,12 +289,28 @@ class AddPatientController extends GetxController {
       AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
-      Get.back(result: 1);
+      CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
+
+      if (isSaveAddAnother.value == false) {
+        Get.back(result: 1);
+      } else {
+        clearForm();
+      }
     } catch (error) {
       isLoading.value = false;
       print("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
     }
+  }
+
+  Future<void> clearForm() async {
+    patientId.clear();
+    firstNameController.clear();
+    middleNameController.clear();
+    lastNameController.clear();
+    dobController.clear();
+    emailAddressController.clear();
+    visitDateController.clear();
   }
 
   // List<String> generateTimeIntervals() {
@@ -416,5 +435,13 @@ class AddPatientController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> launchInAppWithBrowserOptions(Uri url) async {
+    print("launch url is :- ${url}");
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

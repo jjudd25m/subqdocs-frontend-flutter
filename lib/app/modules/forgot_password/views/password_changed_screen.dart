@@ -16,7 +16,7 @@ import '../../../../widget/custom_textfiled.dart';
 class PasswordChangedScreen extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    print("mobile widh is ${width}");
+    // print("mobile widh is ${width}");
     return width < 428;
   }
 

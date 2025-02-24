@@ -43,4 +43,11 @@ class HomeRepository {
     return PatientScheduleModel.fromJson(response);
     print("patientVisitCreate API  internal response $response");
   }
+
+  Future<dynamic> patientReScheduleVisit({required Map<String, dynamic> param, required String visitId}) async {
+    var response = await ApiProvider.instance.callPut("patient-visit/update/$visitId", param);
+    print("patientReScheduleVisit ${response}");
+    return response;
+    print("patientVisitCreate API  internal response $response");
+  }
 }

@@ -65,7 +65,8 @@ class HomePatientListView extends GetView<HomeController> {
         "${patient.lastName}, ${patient.firstName}", // Patient Name
         patient.age.toString(), // Age
         patient.gender ?? "N/A", // Gender
-        patient.visits?.lastOrNull?.visitDate ?? "N/A", // Last Visit Date
+        patient.lastVisitDate ?? "N/A", // Last Visit Date
+        // patient.visits?.lastOrNull?.visitDate ?? "N/A", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
         "Action",
         patient.profileImage ?? "" // Action (could be a button or some interaction)

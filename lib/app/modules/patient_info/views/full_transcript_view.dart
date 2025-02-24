@@ -56,7 +56,7 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                             children: [
                               Text(
                                 textAlign: TextAlign.left,
-                                "(Transcription Time- ${(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.last.transcript?.last.end ?? 0.0 / 60.0).toStringAsFixed(2)})",
+                                "(Transcription Time-  ${(convertSecondsToMinutes(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.last.transcript?.last.end.round() ?? 0))})",
                                 style: AppFonts.medium(12, AppColors.textGrey),
                               ),
                               // Spacer()
@@ -119,7 +119,9 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                                       ),
                                                       SizedBox(width: 20),
                                                       Text(
-                                                        "(${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].start ?? ""} - ${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end ?? ""})",
+                                                        convertSecondsToMinutes(
+                                                            controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end.round()),
+                                                        // "(${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].start ?? ""} - ${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end ?? ""})",
                                                         style: AppFonts.regular(12, AppColors.textGrey),
                                                       ),
                                                     ],
@@ -187,5 +189,11 @@ class FullTranscriptView extends GetView<PatientInfoController> {
         ),
       ),
     );
+  }
+
+  String convertSecondsToMinutes(int seconds) {
+    int minutes = seconds ~/ 60; // Integer division for minutes
+    int remainingSeconds = seconds % 60; // Remainder for seconds
+    return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}'; // Format as MM:SS
   }
 }

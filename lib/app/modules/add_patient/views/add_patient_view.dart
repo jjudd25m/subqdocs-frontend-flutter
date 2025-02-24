@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -54,6 +56,8 @@ class AddPatientView extends GetView<AddPatientController> {
 
   bool isImage(File file) {
     final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+
+    print("file extension is :- ${getFileExtension(file.path)}");
     final fileExtension = file.uri.pathSegments.last.split('.').last.toLowerCase();
     return imageExtensions.contains(fileExtension);
   }
@@ -567,51 +571,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                         SizedBox(
                                           width: Dimen.margin10,
                                         ),
-                                        // Expanded(
-                                        //   child: Column(
-                                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                                        //     children: [
-                                        //       Row(
-                                        //         children: [
-                                        //           Text(
-                                        //             "Visit Date",
-                                        //             style: AppFonts.regular(14, AppColors.textBlack),
-                                        //           ),
-                                        //           Text(
-                                        //             "*",
-                                        //             style: AppFonts.regular(14, AppColors.redText),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //       SizedBox(
-                                        //         height: 8,
-                                        //       ),
-                                        //       Container(
-                                        //         height: 48,
-                                        //         padding: EdgeInsets.only(left: 10),
-                                        //         decoration: BoxDecoration(
-                                        //           border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                                        //           color: Colors.white,
-                                        //           borderRadius: BorderRadius.circular(6),
-                                        //         ),
-                                        //         child: DateFormatField(
-                                        //             decoration: InputDecoration(
-                                        //               hintText: "02/23/2024",
-                                        //               border: InputBorder.none,
-                                        //               // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
-                                        //             ),
-                                        //             addCalendar: true,
-                                        //             controller: controller.visitDateController,
-                                        //             type: DateFormatType.type2,
-                                        //             lastDate: DateTime.now(),
-                                        //             onComplete: (date) {
-                                        //               print("date is :- ${controller.dobController.text}");
-                                        //               print("DateFormatField date is:-  ${date}");
-                                        //             }),
-                                        //       )
-                                        //     ],
-                                        //   ),
-                                        // ),
                                         Expanded(
                                           child: TextFormFiledWidget(
                                             suffixIcon: Icon(Icons.calendar_month),
@@ -732,16 +691,38 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                 ),
                                                                                 width: 120,
                                                                                 height: 120,
-                                                                                child: ClipRRect(
-                                                                                  borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                                  child: controller.selectedList[index].file != null && isImage(controller.selectedList[index].file!)
-                                                                                      ? Image.file(
-                                                                                          controller.selectedList[index].file!,
-                                                                                          fit: BoxFit.cover,
-                                                                                        )
-                                                                                      : Image.asset(
-                                                                                          ImagePath.file_placeHolder,
-                                                                                        ), // Display a placeholder if the file is not an image
+                                                                                child: GestureDetector(
+                                                                                  onTap: () {
+                                                                                    // FullscreenImageViewer.open(
+                                                                                    //   context: context,
+                                                                                    //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
+                                                                                    // );
+                                                                                  },
+                                                                                  child: GestureDetector(
+                                                                                    onTap: () {
+                                                                                      if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
+                                                                                        print("1");
+                                                                                        FullscreenImageViewer.open(
+                                                                                          context: context,
+                                                                                          child: Image.file(controller.selectedList[index].file ?? File("")),
+                                                                                        );
+                                                                                      } else {
+                                                                                        print("2");
+                                                                                        controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
+                                                                                      }
+                                                                                    },
+                                                                                    child: ClipRRect(
+                                                                                      borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                                      child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
+                                                                                          ? Image.file(
+                                                                                              controller.selectedList[index].file!,
+                                                                                              fit: BoxFit.cover,
+                                                                                            )
+                                                                                          : Image.asset(
+                                                                                              ImagePath.file_placeHolder,
+                                                                                            ), // Display a placeholder if the file is not an image
+                                                                                    ),
+                                                                                  ),
                                                                                 ),
                                                                               ),
                                                                               Positioned(
@@ -868,11 +849,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                           },
                                           text: 'Add Attachments',
 
-                                          borderColor: AppColors.backgroundPurple, // Custom border color
-                                          backgroundColor: Colors.white, // Custom background color
-                                          needBorder: true, // Show border
-                                          textColor: AppColors.backgroundPurple, // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                          borderColor: AppColors.backgroundPurple,
+                                          // Custom border color
+                                          backgroundColor: Colors.white,
+                                          // Custom background color
+                                          needBorder: true,
+                                          // Show border
+                                          textColor: AppColors.backgroundPurple,
+                                          // Custom text color
+                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                          // Custom padding
                                           radius: 6, // Custom border radius
                                         ),
                                         // CustomButton(
@@ -885,9 +871,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                         //   isTrue: false,
                                         // ),
                                         Spacer(),
-                                        Text(
-                                          "Clear Form",
-                                          style: AppFonts.medium(14, AppColors.textDarkGrey),
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller.clearForm();
+                                          },
+                                          child: Text(
+                                            "Clear Form",
+                                            style: AppFonts.medium(14, AppColors.textDarkGrey),
+                                          ),
                                         ),
                                         SizedBox(
                                           width: Dimen.margin6,
@@ -898,11 +889,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                           },
                                           text: 'Cancel',
 
-                                          borderColor: AppColors.backgroundPurple, // Custom border color
-                                          backgroundColor: Colors.white, // Custom background color
-                                          needBorder: true, // Show border
-                                          textColor: AppColors.backgroundPurple, // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                          borderColor: AppColors.backgroundPurple,
+                                          // Custom border color
+                                          backgroundColor: Colors.white,
+                                          // Custom background color
+                                          needBorder: true,
+                                          // Show border
+                                          textColor: AppColors.backgroundPurple,
+                                          // Custom text color
+                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                          // Custom padding
                                           radius: 6, // Custom border radius
                                         ),
                                         SizedBox(
@@ -913,86 +909,102 @@ class AddPatientView extends GetView<AddPatientController> {
                                           onPressed: () {
                                             // Your onPressed function
 
+                                            controller.isSaveAddAnother.value = true;
+
                                             if (_formKey.currentState!.validate()) {
                                               controller.addPatient();
                                             }
                                           },
                                           text: 'Save and Add Another',
 
-                                          borderColor: AppColors.backgroundPurple, // Custom border color
-                                          backgroundColor: AppColors.backgroundPurple, // Custom background color
-                                          needBorder: false, // Show border
-                                          textColor: AppColors.white, // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                          borderColor: AppColors.backgroundPurple,
+                                          // Custom border color
+                                          backgroundColor: AppColors.backgroundPurple,
+                                          // Custom background color
+                                          needBorder: false,
+                                          // Show border
+                                          textColor: AppColors.white,
+                                          // Custom text color
+                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                          // Custom padding
                                           radius: 6, // Custom border radius
                                         ),
 
                                         SizedBox(
                                           width: Dimen.margin6,
                                         ),
-                                        Container(
-                                          decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
-                                          width: 98,
-                                          height: 40,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 3, right: 11),
-                                                  child: Text(
-                                                    "Save",
-                                                    style: AppFonts.medium(14, Colors.white),
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller.isSaveAddAnother.value = false;
+
+                                            if (_formKey.currentState!.validate()) {
+                                              controller.addPatient();
+                                            }
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
+                                            width: 70,
+                                            height: 40,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 3, right: 11),
+                                                    child: Text(
+                                                      "Save",
+                                                      style: AppFonts.medium(14, Colors.white),
+                                                    ),
                                                   ),
-                                                ),
-                                                Container(
-                                                  height: 40,
-                                                  width: 1,
-                                                  color: Colors.white,
-                                                ),
-                                                PopupMenuButton<String>(
-                                                    offset: const Offset(14, -70),
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                                    color: AppColors.white,
-                                                    position: PopupMenuPosition.over,
-                                                    padding: EdgeInsetsDirectional.zero,
-                                                    menuPadding: EdgeInsetsDirectional.zero,
-                                                    onSelected: (value) {},
-                                                    style: const ButtonStyle(
-                                                        padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                        maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                        visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                                                    itemBuilder: (context) => [
-                                                          PopupMenuItem(
-                                                              padding: EdgeInsets.zero,
-                                                              value: "",
-                                                              child: Row(
-                                                                mainAxisSize: MainAxisSize.min,
-                                                                children: [
-                                                                  SizedBox(
-                                                                    width: 5,
-                                                                  ),
-                                                                  Text(
-                                                                    "Start Visit Now",
-                                                                    textAlign: TextAlign.end,
-                                                                    style: AppFonts.regular(14, AppColors.textBlack),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 5,
-                                                                  )
-                                                                ],
-                                                              )),
-                                                        ],
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(left: 8.0),
-                                                      child: SvgPicture.asset(
-                                                        ImagePath.downArrow,
-                                                        width: 18,
-                                                        colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
-                                                      ),
-                                                    )),
-                                              ],
+                                                  // Container(
+                                                  //   height: 40,
+                                                  //   width: 1,
+                                                  //   color: Colors.white,
+                                                  // ),
+                                                  // PopupMenuButton<String>(
+                                                  //     offset: const Offset(14, -70),
+                                                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                  //     color: AppColors.white,
+                                                  //     position: PopupMenuPosition.over,
+                                                  //     padding: EdgeInsetsDirectional.zero,
+                                                  //     menuPadding: EdgeInsetsDirectional.zero,
+                                                  //     onSelected: (value) {},
+                                                  //     style: const ButtonStyle(
+                                                  //         padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                  //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                  //         maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                  //         visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                                  //     itemBuilder: (context) => [
+                                                  //           PopupMenuItem(
+                                                  //               padding: EdgeInsets.zero,
+                                                  //               value: "",
+                                                  //               child: Row(
+                                                  //                 mainAxisSize: MainAxisSize.min,
+                                                  //                 children: [
+                                                  //                   SizedBox(
+                                                  //                     width: 5,
+                                                  //                   ),
+                                                  //                   Text(
+                                                  //                     "Start Visit Now",
+                                                  //                     textAlign: TextAlign.end,
+                                                  //                     style: AppFonts.regular(14, AppColors.textBlack),
+                                                  //                   ),
+                                                  //                   SizedBox(
+                                                  //                     width: 5,
+                                                  //                   )
+                                                  //                 ],
+                                                  //               )),
+                                                  //         ],
+                                                  //     child: Padding(
+                                                  //       padding: const EdgeInsets.only(left: 8.0),
+                                                  //       child: SvgPicture.asset(
+                                                  //         ImagePath.downArrow,
+                                                  //         width: 18,
+                                                  //         colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
+                                                  //       ),
+                                                  //     )),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         )
@@ -1012,104 +1024,4 @@ class AddPatientView extends GetView<AddPatientController> {
           ),
         ));
   }
-
-  // List<String> generateTimeList(DateTime currentTime, {bool isCurrentDay = true}) {
-  //   List<String> timeList = [];
-  //
-  //   if (isCurrentDay) {
-  //     // If it's the current day, generate times from the current time onwards
-  //     int startHour = currentTime.hour;
-  //     int startMinute = (currentTime.minute ~/ 15) * 15; // Round down to nearest 15-minute mark
-  //
-  //     // Start with current time and create time slots until the end of the day
-  //     for (int hour = startHour; hour < 24; hour++) {
-  //       int minute = hour == startHour ? startMinute : 0;
-  //       for (int min = minute; min < 60; min += 15) {
-  //         timeList.add(DateFormat('h:mm a').format(DateTime(currentTime.year, currentTime.month, currentTime.day, hour, min)));
-  //       }
-  //     }
-  //   } else {
-  //     // If it's not the current day, generate times from 12:00 AM to 12:00 PM
-  //     for (int hour = 0; hour < 12; hour++) {
-  //       for (int min = 0; min < 60; min += 15) {
-  //         timeList.add(DateFormat('h:mm a').format(DateTime(currentTime.year, currentTime.month, currentTime.day, hour, min)));
-  //       }
-  //     }
-  //   }
-  //
-  //   return timeList;
-  // }
 }
-
-// class DateTextField extends StatefulWidget {
-//   final TextEditingController controller;
-//   final String label;
-//
-//   DateTextField({required this.controller, required this.label});
-//
-//   @override
-//   _DateTextFieldState createState() => _DateTextFieldState();
-// }
-//
-// class _DateTextFieldState extends State<DateTextField> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextField(
-//       controller: widget.controller,
-//       decoration: InputDecoration(
-//         labelText: widget.label,
-//         hintText: 'MM/DD/YYYY',
-//         border: InputBorder.none,
-//       ),
-//       keyboardType: TextInputType.number,
-//       inputFormatters: [
-//         // Custom InputFormatter to manage slashes automatically
-//         FilteringTextInputFormatter.digitsOnly,
-//         DateTextFormatter(),
-//       ],
-//     );
-//   }
-// }
-//
-// // Custom InputFormatter to enforce mm/dd/yyyy format and validate the date
-// class DateTextFormatter extends TextInputFormatter {
-//   static const _maxChars = 5;
-//
-//   @override
-//   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-//     if (!isValidDate(newValue.text)) {
-//       return oldValue;
-//     }
-//     var text = _format(newValue.text, '/');
-//     return newValue.copyWith(text: text, selection: updateCursorPosition(text));
-//   }
-//
-//   String _format(String value, String separator) {
-//     value = value.replaceAll(separator, '');
-//     var newString = '';
-//
-//     for (int i = 0; i < math.min(value.length, _maxChars); i++) {
-//       newString += value[i];
-//       if ((i == 1 || i == 3) && i != value.length - 1) {
-//         newString += separator;
-//       }
-//     }
-//
-//     return newString;
-//   }
-//
-//   TextSelection updateCursorPosition(String text) {
-//     return TextSelection.fromPosition(TextPosition(offset: text.length));
-//   }
-//
-//   bool isValidDate(String value) {
-//     if (value.length == 1) {
-//       return ['0', '1'].contains(value);
-//     } else if (value.length == 2) {
-//       var number = int.parse(value);
-//       return number >= 1 && number <= 12;
-//     } else {
-//       return true;
-//     }
-//   }
-// }

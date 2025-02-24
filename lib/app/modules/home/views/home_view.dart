@@ -343,18 +343,31 @@ class HomeView extends GetView<HomeController> {
                                                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                                     child: Row(
                                                                       children: [
-                                                                        controller.selectedIndex.value == index
+                                                                        controller.selectedStatusIndex.contains(index)
                                                                             ? GestureDetector(
                                                                                 onTap: () {
                                                                                   print("true false");
-                                                                                  controller.selectedIndex.value = index;
+
+                                                                                  if (controller.selectedStatusIndex.contains(index)) {
+                                                                                    // int sindex = controller.selectedStatusIndex.indexOf(index);
+                                                                                    controller.selectedStatusIndex.remove(index);
+                                                                                  } else {
+                                                                                    controller.selectedStatusIndex.add(index);
+                                                                                  }
+                                                                                  // controller.selectedIndex.value = index;
                                                                                 },
                                                                                 child: SvgPicture.asset(ImagePath.checkedBox),
                                                                               )
                                                                             : GestureDetector(
                                                                                 onTap: () {
                                                                                   print("");
-                                                                                  controller.selectedIndex.value = index;
+                                                                                  if (controller.selectedStatusIndex.contains(index)) {
+                                                                                    // int sindex = controller.selectedStatusIndex.indexOf(index);
+                                                                                    controller.selectedStatusIndex.remove(index);
+                                                                                  } else {
+                                                                                    controller.selectedStatusIndex.add(index);
+                                                                                  }
+                                                                                  // controller.selectedIndex.value = index;
                                                                                 },
                                                                                 child: SvgPicture.asset(ImagePath.unCheckedBox),
                                                                               ),

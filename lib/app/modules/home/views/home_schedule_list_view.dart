@@ -37,8 +37,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                       }
                     },
                     title: "Your Schedule Visits List is Empty",
-                    description:
-                        "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                    description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
               )
             : CustomTable(
                 rows: _getTableRows(controller.scheduleVisitList),
@@ -89,8 +88,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         onTap: () {
-                                          print(
-                                              "visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
+                                          print("visite is is ${controller.scheduleVisitList[rowIndex - 1].visitId.toString()}");
 
                                           Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                             "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
@@ -143,8 +141,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         padding: EdgeInsets.zero,
                                         value: "",
                                         onTap: () {
-                                          controller
-                                              .deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
+                                          controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
                                         },
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,8 +174,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     controller.scheduleSorting(cellData: cellData, colIndex: colIndex);
                                   },
                                   child: Row(
-                                    mainAxisAlignment:
-                                        colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                    mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         cellData,
@@ -187,16 +183,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         softWrap: true, // Allows text to wrap
                                         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                       ),
-                                      colIndex == controller.colindexSchedule.value &&
-                                              controller.isAsendingSchedule.value &&
-                                              colIndex != 5
+                                      colIndex == controller.colindexSchedule.value && controller.isAsendingSchedule.value && colIndex != 5
                                           ? Icon(
                                               CupertinoIcons.up_arrow,
                                               size: 15,
                                             )
-                                          : colIndex == controller.colindexSchedule.value &&
-                                                  !controller.isAsendingSchedule.value &&
-                                                  colIndex != 5
+                                          : colIndex == controller.colindexSchedule.value && !controller.isAsendingSchedule.value && colIndex != 5
                                               ? Icon(
                                                   CupertinoIcons.down_arrow,
                                                   size: 15,
@@ -218,10 +210,10 @@ class HomeScheduleListView extends GetView<HomeController> {
                 columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
                 onRowSelected: (rowIndex, rowData) {
                   print("row index is :- $rowIndex");
-                  Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                    "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                    "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
-                  });
+                  // Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                  //   "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                  //   "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                  // });
                 },
                 onLoadMore: () {
                   controller.getScheduleVisitListFetchMore();

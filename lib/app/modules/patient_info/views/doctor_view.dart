@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -238,7 +239,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                     ),
                                                     Text(
                                                       textAlign: TextAlign.center,
-                                                      "${treatments.type} ${treatments.name} \n",
+                                                      " ${treatments.type} ${treatments.name} \n",
                                                       style: AppFonts.regular(14, AppColors.black),
                                                     ),
                                                   ],
@@ -257,6 +258,35 @@ class DoctorView extends GetView<PatientInfoController> {
                                                             style: AppFonts.regular(14, AppColors.black),
                                                           ),
                                                         ],
+                                                      ),
+                                                    SizedBox(height: 10),
+                                                    for (String note in treatments.notes ?? [])
+                                                      Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  textAlign: TextAlign.left,
+                                                                  "•",
+                                                                  style: AppFonts.regular(14, AppColors.black),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Text(
+                                                                  textAlign: TextAlign.center,
+                                                                  " $note",
+                                                                  style: AppFonts.regular(14, AppColors.black),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                   ],
                                                 ),
@@ -294,7 +324,7 @@ class DoctorView extends GetView<PatientInfoController> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       child: Text(
         text,
-        style: AppFonts.regular(14, AppColors.black),
+        style: AppFonts.medium(14, AppColors.black),
       ),
     );
   }
@@ -342,7 +372,104 @@ class DoctorView extends GetView<PatientInfoController> {
           ),
           children: [
             _buildTableCell("${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}", false),
-            _buildTableCell(diagnos, false),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => InkWell(
+                        onTap: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: double.maxFinite,
+                                      child: Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: "${diagnosis.diagnosis?[index].code} ",
+                                              recognizer: TapGestureRecognizer()..onTap = () {},
+                                              style: AppFonts.semiBold(14, AppColors.black),
+                                            ),
+                                            TextSpan(
+                                              text: "${diagnosis.diagnosis?[index].description} ",
+                                              recognizer: TapGestureRecognizer()..onTap = () {},
+                                              style: AppFonts.regular(14, AppColors.black),
+                                            ),
+                                            WidgetSpan(
+                                              alignment: PlaceholderAlignment.middle,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.lightgreenPastVisit, // Background color
+                                                  borderRadius: BorderRadius.circular(8), // Corner radius
+                                                ),
+                                                child: Text(
+                                                  diagnosis.diagnosis?[index].confidenceScore ?? "",
+                                                  style: AppFonts.regular(14, AppColors.greenPastVisit), // Text color
+                                                ),
+                                              ),
+                                            ),
+                                            // TextSpan(
+                                            //   text: diagnosis.diagnosis?[index].confidenceScore ?? "",
+                                            //   recognizer: TapGestureRecognizer()..onTap = () {},
+                                            //   style: AppFonts.regular(14, AppColors.greenPastVisit),
+                                            // ),
+                                          ],
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  itemCount: diagnosis.diagnosis?.length ?? 0),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Expanded(
+            //     child: Container(
+            //       width: double.maxFinite,
+            //       child: Text.rich(
+            //         TextSpan(
+            //           children: [
+            //             TextSpan(
+            //               text: ${diagnosis.procedure?.code ?? 'No code'},
+            //               style: const TextStyle(
+            //                 color: AppColors.black,
+            //                 fontFamily: "Mulish",
+            //                 fontSize: 15,
+            //                 decoration: TextDecoration.none,
+            //               ),
+            //             ),
+            //             TextSpan(
+            //               text: "Submit Your Workstation for Verification",
+            //               recognizer: TapGestureRecognizer()..onTap = () {},
+            //               style: const TextStyle(
+            //                 color: AppColors.black,
+            //                 fontFamily: "Mulish",
+            //                 fontSize: 15,
+            //                 fontWeight: FontWeight.w800,
+            //                 decoration: TextDecoration.underline,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         textAlign: TextAlign.left,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // _buildTableCell(diagnos, false),
             _buildTableCell(diagnosis.units?.toString() ?? '0', false), // Default to '0' if null
             _buildTableCell("\$${diagnosis.unitCharge?.toString()}", false), // Default to '0' if null
           ],

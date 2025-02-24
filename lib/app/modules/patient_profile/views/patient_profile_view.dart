@@ -20,6 +20,7 @@ import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
+import '../../home/views/schedule_patient_dialog.dart';
 import '../controllers/patient_profile_controller.dart';
 import '../widgets/common_patient_data.dart';
 
@@ -82,8 +83,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                               padding: const EdgeInsets.all(16),
                               child: Container(
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration:
-                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -124,10 +124,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                     height: 50,
                                                     width: 50,
                                                     fontSize: 16,
-                                                    imageUrl:
-                                                        controller.patientDetailModel.responseData?.profileImage ?? "",
-                                                    nameLetters:
-                                                        "${controller.patientDetailModel.responseData?.firstName}  ${controller.patientDetailModel.responseData?.lastName} ",
+                                                    imageUrl: controller.patientDetailModel.value?.responseData?.profileImage ?? "",
+                                                    nameLetters: "${controller.patientDetailModel.value?.responseData?.firstName}  ${controller.patientDetailModel.value?.responseData?.lastName} ",
                                                   )),
                                               SizedBox(
                                                 width: 10,
@@ -205,7 +203,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           children: [
                                             CommonPatientData(
                                               label: "Patient ID",
-                                              data: controller.patientDetailModel.responseData?.patientId.toString(),
+                                              data: controller.patientDetailModel.value?.responseData?.patientId.toString(),
                                             ),
                                             SizedBox(
                                               height: 30,
@@ -221,14 +219,12 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           children: [
                                             CommonPatientData(
                                               label: "First Name",
-                                              data: controller.patientDetailModel.responseData?.firstName ?? "",
+                                              data: controller.patientDetailModel.value?.responseData?.firstName ?? "",
                                             ),
                                             SizedBox(
                                               height: 30,
                                             ),
-                                            CommonPatientData(
-                                                label: "Sex",
-                                                data: controller.patientDetailModel.responseData?.gender ?? ""),
+                                            CommonPatientData(label: "Sex", data: controller.patientDetailModel.value?.responseData?.gender ?? ""),
                                           ],
                                         ),
                                         Column(
@@ -238,14 +234,14 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               children: [
                                                 CommonPatientData(
                                                   label: "Middle Name",
-                                                  data: controller.patientDetailModel.responseData?.middleName,
+                                                  data: controller.patientDetailModel.value?.responseData?.middleName,
                                                 ),
                                                 SizedBox(
                                                   width: 120,
                                                 ),
                                                 CommonPatientData(
                                                   label: "Last Name",
-                                                  data: controller.patientDetailModel.responseData?.lastName,
+                                                  data: controller.patientDetailModel.value?.responseData?.lastName,
                                                 ),
                                               ],
                                             ),
@@ -254,7 +250,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                             ),
                                             CommonPatientData(
                                               label: "Email Address",
-                                              data: controller.patientDetailModel.responseData?.email,
+                                              data: controller.patientDetailModel.value?.responseData?.email,
                                             ),
                                           ],
                                         ),
@@ -301,10 +297,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    collapsedShape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(
@@ -322,16 +316,14 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                       ),
                                     ),
                                     children: <Widget>[
-                                      controller.patientDetailModel.responseData?.scheduledVisits?.length != 0
+                                      controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
                                           ? Container(
                                               width: double.infinity,
                                               color: Colors.white,
                                               child: Padding(
                                                 padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
                                                 child: CustomTable(
-                                                  rows: _getTableRows(
-                                                      controller.patientDetailModel.responseData?.scheduledVisits ??
-                                                          []),
+                                                  rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
                                                   // rows: [
                                                   //   ['Visit Date', 'Time', "Action"],
                                                   //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
@@ -342,13 +334,22 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                   // ],
                                                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                                                     return colIndex == 2 && rowIndex != 0
-                                                        ? Text(
-                                                            cellData,
-                                                            textAlign: TextAlign.center,
-                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                            softWrap: true, // Allows text to wrap
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Adds ellipsis if text overflows
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                                                "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                "patientId": controller.patientId,
+                                                              });
+
+                                                              print("row index is :- $rowIndex");
+                                                            },
+                                                            child: Text(
+                                                              cellData,
+                                                              textAlign: TextAlign.center,
+                                                              style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                              softWrap: true, // Allows text to wrap
+                                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                            ),
                                                           )
                                                         : (colIndex == 3 || colIndex == 4) && rowIndex != 0
                                                             ? Row(
@@ -357,44 +358,60 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                     "|  ",
                                                                     style: AppFonts.regular(12, AppColors.appbarBorder),
                                                                   ),
-                                                                  Text(
-                                                                    cellData ?? "",
-                                                                    textAlign: TextAlign.center,
-                                                                    style: AppFonts.regular(
-                                                                        14, AppColors.backgroundPurple),
-                                                                    softWrap: true, // Allows text to wrap
-                                                                    overflow: TextOverflow
-                                                                        .ellipsis, // Adds ellipsis if text overflows
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      if (colIndex == 3) {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                          builder: (BuildContext context) {
+                                                                            return SchedulePatientDialog(
+                                                                              receiveParam: (p0, p1) {
+                                                                                print("p0 is $p0 p1 is $p1");
+                                                                                print("row index is :- ${rowIndex}");
+                                                                                print("visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                                controller.patientReScheduleCreate(
+                                                                                    param: {"visit_date": p1, "visit_time": p0},
+                                                                                    visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
+                                                                              },
+                                                                            ); // Our custom dialog
+                                                                          },
+                                                                        );
+                                                                      } else if (colIndex == 4) {
+                                                                        controller.deletePatientVisit(
+                                                                            id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                      }
+                                                                      print("col index is :- $colIndex");
+                                                                    },
+                                                                    child: Text(
+                                                                      cellData ?? "",
+                                                                      textAlign: TextAlign.center,
+                                                                      style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                      softWrap: true, // Allows text to wrap
+                                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                    ),
                                                                   ),
                                                                 ],
                                                               )
                                                             : rowIndex == 0
                                                                 ? Text(
                                                                     cellData ?? "",
-                                                                    textAlign: colIndex == 0
-                                                                        ? TextAlign.start
-                                                                        : TextAlign.center,
+                                                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                                     style: AppFonts.regular(12, AppColors.black),
                                                                     softWrap: true, // Allows text to wrap
-                                                                    overflow: TextOverflow
-                                                                        .ellipsis, // Adds ellipsis if text overflows
+                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                                   )
                                                                 : Text(
                                                                     cellData ?? "",
-                                                                    textAlign: colIndex == 0
-                                                                        ? TextAlign.start
-                                                                        : TextAlign.center,
+                                                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                                                     style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                     softWrap: true, // Allows text to wrap
-                                                                    overflow: TextOverflow
-                                                                        .ellipsis, // Adds ellipsis if text overflows
+                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                                   );
                                                   },
                                                   columnCount: 5,
                                                   context: context,
-                                                  columnWidths: isPortrait
-                                                      ? [0.25, 0.29, 0.11, 0.17, 0.18]
-                                                      : [0.30, 0.10, 0.10, 0.13, 0.12],
+                                                  columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.30, 0.10, 0.15, 0.13, 0.12],
                                                 ),
                                               ),
                                             )
@@ -466,10 +483,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: ExpansionTile(
-                                    shape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    collapsedShape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     title: Container(
@@ -492,7 +507,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                         color: Colors.white,
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                          child: controller.patientDetailModel.responseData?.pastVisits?.length != 0
+                                          child: controller.patientDetailModel.value?.responseData?.pastVisits?.length != 0
                                               ? ListView.builder(
                                                   padding: EdgeInsets.zero,
                                                   shrinkWrap: true,
@@ -507,8 +522,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                 children: [
                                                                   Text(
                                                                     textAlign: TextAlign.start,
-                                                                    _getDate(controller.patientDetailModel.responseData
-                                                                        ?.pastVisits?[index].visitDate),
+                                                                    _getDate(controller.patientDetailModel.value?.responseData?.pastVisits?[index].visitDate),
                                                                     style: AppFonts.regular(15, AppColors.textGrey),
                                                                   ),
                                                                   SizedBox(width: 20),
@@ -516,9 +530,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                       child: Text(
                                                                     maxLines: 2,
                                                                     textAlign: TextAlign.start,
-                                                                    controller.patientDetailModel.responseData
-                                                                            ?.pastVisits?[index].summary ??
-                                                                        "",
+                                                                    controller.patientDetailModel.value?.responseData?.pastVisits?[index].summary ?? "",
                                                                     style: AppFonts.regular(15, AppColors.textGrey),
                                                                   )),
                                                                   SizedBox(
@@ -542,8 +554,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                           ),
                                                         ),
                                                       ),
-                                                  itemCount:
-                                                      controller.patientDetailModel.responseData?.pastVisits?.length)
+                                                  itemCount: controller.patientDetailModel.value?.responseData?.pastVisits?.length)
                                               : Container(
                                                   width: double.infinity,
                                                   color: Colors.white,
@@ -677,7 +688,7 @@ List<List<String>> _getTableRows(List<ScheduledVisits> patients) {
     rows.add([
       visitDate,
       visitTime,
-      'View ',
+      'Start visit now ',
       "Reschedule",
       "Cancel visit"
 

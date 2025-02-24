@@ -110,10 +110,8 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                             itemBuilder: (context, index) => InkWell(
                                   onTap: () {},
                                   child: ExpansionTile(
-                                    collapsedShape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    shape: OutlineInputBorder(
-                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundWhite,
                                     collapsedBackgroundColor: AppColors.backgroundWhite,
                                     title: Padding(
@@ -144,8 +142,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                           shrinkWrap: true,
                                           physics: NeverScrollableScrollPhysics(),
                                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: (MediaQuery.of(context).size.width.toInt() / 140)
-                                                .toInt(), // Number of columns
+                                            crossAxisCount: (MediaQuery.of(context).size.width.toInt() / 140).toInt(), // Number of columns
                                             crossAxisSpacing: Dimen.margin15, // Horizontal space between items
                                             mainAxisSpacing: Dimen.margin15, // Vertical space between items
                                             childAspectRatio: 0.9, // Adjust the height-to-width ratio of the grid items
@@ -166,9 +163,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                         height: 120,
                                                         width: 120,
                                                         decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: AppColors.buttonBackgroundGrey
-                                                                  .withValues(alpha: 0.8)),
+                                                          border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
                                                           borderRadius: BorderRadius.circular(8),
                                                         ),
                                                         padding: const EdgeInsets.only(bottom: Dimen.margin2),
@@ -189,10 +184,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                   //       )
                                                                   //     :
                                                                   BaseImageView(
-                                                                imageUrl: controller.attachmentDic.values
-                                                                        .elementAt(index)[subindex]
-                                                                        .filePath ??
-                                                                    "",
+                                                                imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
                                                                 width: 120,
                                                                 height: 120,
                                                               ),
@@ -227,17 +219,9 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                   // return SizedBox();
                                                                   return DeleteImageDialog(
                                                                     onDelete: () {
-                                                                      controller.deleteAttachments(
-                                                                          index,
-                                                                          subindex,
-                                                                          controller.attachmentDic.values
-                                                                                  .elementAt(index)[subindex]
-                                                                                  .id ??
-                                                                              -1);
+                                                                      controller.deleteAttachments(index, subindex, controller.attachmentDic.values.elementAt(index)[subindex].id ?? -1);
                                                                     },
-                                                                    extension: controller.attachmentDic.values
-                                                                        .elementAt(index)[subindex]
-                                                                        .fileType,
+                                                                    extension: controller.attachmentDic.values.elementAt(index)[subindex].fileType,
                                                                   );
                                                                 },
                                                               );
@@ -410,7 +394,10 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                             context: context,
                             barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                             builder: (BuildContext context) {
-                              return ViewAttchmentImage(); // Our custom dialog
+                              return ViewAttchmentImage(
+                                imageUrl: '',
+                                attchmentUrl: '',
+                              ); // Our custom dialog
                             },
                           );
                         },

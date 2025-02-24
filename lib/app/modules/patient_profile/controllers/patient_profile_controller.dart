@@ -1,14 +1,20 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:toastification/toastification.dart';
 
+import '../../../../widgets/custom_toastification.dart';
+import '../../../data/provider/api_provider.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
+import '../../home/model/patient_schedule_model.dart';
+import '../../home/repository/home_repository.dart';
 
 class PatientProfileController extends GetxController {
   //TODO: Implement PatientProfileController
 
+  final HomeRepository _homeRepository = HomeRepository();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
-  PatientDetailModel patientDetailModel = PatientDetailModel();
+  Rxn<PatientDetailModel> patientDetailModel = Rxn();
   String patientId = "";
   String visitId = "";
   final count = 0.obs;
@@ -21,7 +27,7 @@ class PatientProfileController extends GetxController {
     patientId = Get.arguments["patientData"];
     visitId = Get.arguments["visitId"];
 
-    print("our patientdata is ${patientId}");
+    print("our patientdata is ${patientId} visitId is ${visitId}");
     getPatient(patientId, visitId);
   }
 
@@ -42,7 +48,7 @@ class PatientProfileController extends GetxController {
       param['visit_id'] = visitId;
     }
 
-    patientDetailModel = await _editPatientDetailsRepository.getPatientDetails(id: id);
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: id);
 
     // firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
     // middleNameController.text = patientDetailModel.responseData?.middleName ?? "";
@@ -51,7 +57,7 @@ class PatientProfileController extends GetxController {
     // print("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
     //
     // Parse the date string to a DateTime object
-    DateTime dateTime = DateTime.parse(patientDetailModel.responseData?.dateOfBirth ?? "").toLocal();
+    DateTime dateTime = DateTime.parse(patientDetailModel.value?.responseData?.dateOfBirth ?? "").toLocal();
 
     // Create a DateFormat to format the date
     DateFormat dateFormat = DateFormat('MM/dd/yyyy');
@@ -96,5 +102,26 @@ class PatientProfileController extends GetxController {
     //
     // visitTime.value = generateTimeIntervals(visitdateTime);
     // selectedVisitTimeValue.value = visitTime.firstOrNull!;
+  }
+
+  Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {
+    PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
+    print("patientVisitCreate API  internal response $response");
+    CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+  }
+
+  Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
+    print("visit id :- ${visitId}");
+    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+    print("patientReScheduleCreate API  internal response $response");
+    getPatient(patientId, visitId);
+    // CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+  }
+
+  Future<void> deletePatientVisit({required String id}) async {
+    var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
+    print(response);
+    getPatient(patientId, visitId);
+    // return response;
   }
 }

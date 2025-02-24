@@ -1,3 +1,4 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,9 +13,12 @@ import 'package:toastification/toastification.dart';
 
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/base_dropdown.dart';
+import '../../../../widgets/custom_textfiled.dart';
 import '../../../../widgets/date_field.dart';
 
 class SchedulePatientDialog extends GetView<HomeController> {
+  RxBool isCalendarOpen = RxBool(false);
+
   RxBool isLoading = RxBool(false);
   RxnString selectedVisitTimeValue = RxnString();
   DateTime? visitDate = DateTime.now();
@@ -48,6 +52,10 @@ class SchedulePatientDialog extends GetView<HomeController> {
     "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
   ];
 
+  List<DateTime?> _singleDatePickerValueWithDefaultValue = [
+    DateTime.now().add(const Duration(days: 1)),
+  ];
+
   final void Function(String, String) receiveParam;
 
   SchedulePatientDialog({required this.receiveParam});
@@ -60,177 +68,230 @@ class SchedulePatientDialog extends GetView<HomeController> {
         borderRadius: BorderRadius.circular(12),
       ),
       elevation: 16,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 360,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Visit Date",
-                          style: AppFonts.regular(14, AppColors.textBlack),
-                        ),
-                        Text(
-                          "*",
-                          style: AppFonts.regular(14, AppColors.redText),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Container(
-                      height: 48,
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: DateFormatField(
-                          decoration: InputDecoration(
-                              hintText: "02/23/2024",
-                              border: InputBorder.none,
-                              suffixIconConstraints: BoxConstraints(maxHeight: 60),
-                              suffixIcon: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.calendar_month),
-                              )
-                              // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
-                              ),
-                          addCalendar: true,
-                          controller: visitDateController,
-                          type: DateFormatType.type2,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(Duration(days: 365)),
-                          onComplete: (date) {
-                            print("date is :- ${visitDateController.text}");
-                            print("DateFormatField date is:-  ${date}");
-                            visitDate = date;
-                          }),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Visit Time",
-                      style: AppFonts.regular(14, AppColors.textBlack),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Obx(() {
-                      return BaseDropdown<String>(
-                        valueAsString: (value) => value ?? "",
-                        items: visitTime,
-                        selectedValue: selectedVisitTimeValue.value,
-                        onChanged: (value) {
-                          selectedVisitTimeValue.value = value;
-                        },
-                        selectText: "11 PM",
-                      );
-                    }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: [
-                        Expanded(
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              Get.back();
-                              // controller.authLoginUser();
-                            },
-                            height: 45,
-                            text: "Cancel",
-                            isOutline: true,
-                            isLoading: isLoading.value,
-                            outlineColor: AppColors.backgroundPurple,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
+      child: Obx(() {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 360,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Visit Date",
+                            style: AppFonts.regular(14, AppColors.textBlack),
                           ),
+                          Text(
+                            "*",
+                            style: AppFonts.regular(14, AppColors.redText),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      // TextFormFiledWidget(
+                      //   suffixIcon: Icon(Icons.calendar_month),
+                      //   label: "Visit Date",
+                      //   readOnly: true,
+                      //   // isImportant: true,
+                      //   controller: visitDateController,
+                      //   onTap: () async {
+                      //     final picked = await showDatePicker(
+                      //       context: context,
+                      //       initialDate: DateTime.now(),
+                      //       firstDate: DateTime.now(),
+                      //       lastDate: DateTime.now().add(Duration(days: 1000)),
+                      //     );
+                      //     if (picked != null) {
+                      //       String inputText;
+                      //       String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                      //       inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                      //       visitDateController.text = inputText;
+                      //     }
+                      //   },
+                      //   hint: "mm/dd/yyyy",
+                      // ),
+                      Container(
+                        height: 48,
+                        padding: EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        Expanded(
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              bool isSameDate = visitDate != null && visitDate?.year == DateTime.now().year && visitDate?.month == DateTime.now().month && visitDate?.day == DateTime.now().day;
+                        child: DateFormatField(
+                            decoration: InputDecoration(
+                                hintText: "02/23/2024",
+                                border: InputBorder.none,
+                                suffixIconConstraints: BoxConstraints(maxHeight: 60),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    print("hello world");
+                                    isCalendarOpen.value = !isCalendarOpen.value;
+                                  },
+                                  icon: const Icon(Icons.calendar_month),
+                                )
+                                // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
+                                ),
+                            addCalendar: false,
+                            controller: visitDateController,
+                            type: DateFormatType.type2,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(Duration(days: 365)),
+                            onComplete: (date) {
+                              print("date is :- ${visitDateController.text}");
+                              print("DateFormatField date is:-  ${date}");
+                              visitDate = date;
+                            }),
+                      ),
+                      if (isCalendarOpen.value) ...[buildSingleDatePickerWithValue()],
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Visit Time",
+                        style: AppFonts.regular(14, AppColors.textBlack),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Obx(() {
+                        return BaseDropdown<String>(
+                          valueAsString: (value) => value ?? "",
+                          items: visitTime,
+                          selectedValue: selectedVisitTimeValue.value,
+                          onChanged: (value) {
+                            selectedVisitTimeValue.value = value;
+                          },
+                          selectText: "11 PM",
+                        );
+                      }),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: [
+                          Expanded(
+                            child: CustomAnimatedButton(
+                              onPressed: () {
+                                Get.back();
+                                // controller.authLoginUser();
+                              },
+                              height: 45,
+                              text: "Cancel",
+                              isOutline: true,
+                              isLoading: isLoading.value,
+                              outlineColor: AppColors.backgroundPurple,
+                              enabledTextColor: AppColors.backgroundPurple,
+                              enabledColor: AppColors.white,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomAnimatedButton(
+                              onPressed: () {
+                                bool isSameDate = visitDate != null && visitDate?.year == DateTime.now().year && visitDate?.month == DateTime.now().month && visitDate?.day == DateTime.now().day;
 
-                              if (isSameDate) {
-                                DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                if (isSameDate) {
+                                  DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
 
-                                // Now format it to the hh:mm:ss format
-                                String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+                                  // Now format it to the hh:mm:ss format
+                                  String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
 
-                                DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
-                                DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
+                                  DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
+                                  DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
 
-                                // Combine current date with the given time
-                                DateTime givenDateTime = DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  givenTime.hour,
-                                  givenTime.minute,
-                                );
+                                  // Combine current date with the given time
+                                  DateTime givenDateTime = DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                    givenTime.hour,
+                                    givenTime.minute,
+                                  );
 
-                                print("given time is :- ${givenDateTime}");
-                                print("current time is :- ${DateTime.now()}");
+                                  print("given time is :- ${givenDateTime}");
+                                  print("current time is :- ${DateTime.now()}");
 
-                                // Compare the times
-                                bool isAhead = givenDateTime.isAfter(DateTime.now());
+                                  // Compare the times
+                                  bool isAhead = givenDateTime.isAfter(DateTime.now());
 
-                                if (isAhead) {
-                                  print('Given time is ahead of the current time.');
+                                  if (isAhead) {
+                                    print('Given time is ahead of the current time.');
+                                    print("visit time is $formattedTime");
+                                    print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
+                                    receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
+                                    // controller.patientScheduleCreate(param: {});
+                                    Get.back();
+                                  } else {
+                                    print('Given time is not ahead of the current time.');
+                                    CustomToastification().showToast("Visit time must be in the future", type: ToastificationType.error);
+                                  }
+                                } else {
+                                  DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+
+                                  // Now format it to the hh:mm:ss format
+                                  String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
                                   print("visit time is $formattedTime");
                                   print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
                                   receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
                                   // controller.patientScheduleCreate(param: {});
                                   Get.back();
-                                } else {
-                                  print('Given time is not ahead of the current time.');
-                                  CustomToastification().showToast("Visit time must be in the future", type: ToastificationType.error);
                                 }
-                              } else {
-                                DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
-
-                                // Now format it to the hh:mm:ss format
-                                String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
-                                print("visit time is $formattedTime");
-                                print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
-                                receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
-                                // controller.patientScheduleCreate(param: {});
-                                Get.back();
-                              }
-                            },
-                            height: 45,
-                            text: "Schedule Patient",
-                            isOutline: true,
-                            isLoading: isLoading.value,
-                            outlineColor: AppColors.backgroundPurple,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
+                              },
+                              height: 45,
+                              text: "Schedule Patient",
+                              isOutline: true,
+                              isLoading: isLoading.value,
+                              outlineColor: AppColors.backgroundPurple,
+                              enabledTextColor: AppColors.backgroundPurple,
+                              enabledColor: AppColors.white,
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
+              )
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget buildSingleDatePickerWithValue() {
+    return SizedBox(
+      width: 400,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 10),
+          // const Text('Single Date Picker'),
+          CalendarDatePicker2(
+            displayedMonthDate: _singleDatePickerValueWithDefaultValue.first,
+            // config: config,
+            value: _singleDatePickerValueWithDefaultValue,
+            onValueChanged: (value) {
+              print("value is :- ${value.first}");
+              visitDate = value.first;
+              String padDayMonth(int value) => value.toString().padLeft(2, '0');
+              visitDateController.text = '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
+            },
+            config: CalendarDatePicker2Config(firstDate: DateTime.now()),
+          ),
+        ],
       ),
     );
   }

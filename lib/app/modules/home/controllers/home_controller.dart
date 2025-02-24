@@ -45,7 +45,8 @@ class HomeController extends GetxController {
 
   RxList<StatusModel> statusModel = RxList();
 
-  RxInt selectedIndex = RxInt(-1);
+  // RxInt selectedIndex = RxInt(-1);
+  RxList<int> selectedStatusIndex = RxList();
 
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
@@ -180,26 +181,20 @@ class HomeController extends GetxController {
         // Format the date to 'MM-dd-yyyy'
         print("goint to this ");
         if (selectedValue.length == 1) {
-          startDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
         } else {
           if (i == 0) {
-            startDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           } else {
-            endDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           }
         }
       }
     } else {
       DateTime dateTime = DateTime.now();
-      startDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
     }
     Get.back();
   }
@@ -209,7 +204,8 @@ class HomeController extends GetxController {
 
     startDate.value = "MM/DD/YYYY";
     endDate.value = "";
-    selectedIndex.value = -1;
+    selectedStatusIndex.clear();
+    // selectedIndex.value = -1;
     fromController.clear();
     toController.clear();
     getPatientList();
@@ -287,7 +283,9 @@ class HomeController extends GetxController {
 
     await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModel.toJson()));
 
-    print("patient list is the :- ${patientList}");
+    print("*******************************************************");
+    print("patient list is the :- ${patientList.first.toJson()}");
+    print("*******************************************************");
   }
 
   Future<void> getPatientListFetchMore({int? page}) async {
@@ -449,8 +447,12 @@ class HomeController extends GetxController {
 
     param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
 
-    if (selectedIndex.value != -1) {
-      param['status'] = statusModel[selectedIndex.value].status;
+    // if (selectedIndex.value != -1) {
+    //   param['status'] = statusModel[selectedIndex.value].status;
+    // }
+
+    if (selectedStatusIndex.isNotEmpty) {
+      param['status'] = selectedStatusIndex.map((e) => statusModel[e].status).toList();
     }
 
     if (startDate.value != "" && endDate.value != "") {
@@ -490,8 +492,12 @@ class HomeController extends GetxController {
       {"id": "last_name", "desc": sortName}
       // Add more sorting parameters as needed
     ];
-    if (selectedIndex.value != -1) {
-      param['status'] = statusModel[selectedIndex.value].status;
+
+    // if (selectedIndex.value != -1) {
+    //   param['status'] = statusModel[selectedIndex.value].status;
+    // }
+    if (selectedStatusIndex.isNotEmpty) {
+      param['status'] = selectedStatusIndex.map((e) => statusModel[e].status).toList();
     }
 
     param["sorting"] = sorting;

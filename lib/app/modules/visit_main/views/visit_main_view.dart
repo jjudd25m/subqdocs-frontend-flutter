@@ -6,10 +6,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
 
@@ -918,22 +920,56 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                       ),
                                                                       width: 120,
                                                                       height: 120,
-                                                                      child: ClipRRect(
-                                                                        borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                        child: CachedNetworkImage(
-                                                                          imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                          width: 120,
-                                                                          height: 120,
-                                                                          errorWidget: (context, url, error) {
-                                                                            return Image.asset(ImagePath.file_placeHolder);
-                                                                          },
-                                                                          fit: BoxFit.cover,
-                                                                        )
-                                                                        // Image.file(
-                                                                        //   controller.list[index].file ?? File(""),
-                                                                        //   fit: BoxFit.cover,
-                                                                        // )
-                                                                        ,
+                                                                      child: GestureDetector(
+                                                                        onTap: () {
+                                                                          print(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+
+                                                                          if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                              builder: (BuildContext context) {
+                                                                                return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                                    ? ViewAttchmentImage(
+                                                                                        imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                        attchmentUrl: '',
+                                                                                      )
+                                                                                    : ViewAttchmentImage(
+                                                                                        imageUrl: "",
+                                                                                        attchmentUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                              },
+                                                                            );
+                                                                          } else {
+                                                                            Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
+                                                                            print("attchmentUri is :- ${attchmentUri}");
+                                                                            controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                          }
+
+                                                                          // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
+                                                                          // } else {
+                                                                          //   FullscreenImageViewer.open(
+                                                                          //     context: context,
+                                                                          //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
+                                                                          //   );
+                                                                          // }
+                                                                        },
+                                                                        child: ClipRRect(
+                                                                          borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                          child: CachedNetworkImage(
+                                                                            imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                            width: 120,
+                                                                            height: 120,
+                                                                            errorWidget: (context, url, error) {
+                                                                              return Image.asset(ImagePath.file_placeHolder);
+                                                                            },
+                                                                            fit: BoxFit.cover,
+                                                                          )
+                                                                          // Image.file(
+                                                                          //   controller.list[index].file ?? File(""),
+                                                                          //   fit: BoxFit.cover,
+                                                                          // )
+                                                                          ,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                     Positioned(

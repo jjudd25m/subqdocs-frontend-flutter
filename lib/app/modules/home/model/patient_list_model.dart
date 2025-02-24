@@ -82,6 +82,7 @@ class PatientListData {
   String? updatedAt;
   dynamic deletedAt;
   int? pastVisitCount;
+  String? lastVisitDate;
   // String? appointmentTime;
   List<Visits>? visits;
 
@@ -115,6 +116,7 @@ class PatientListData {
       this.updatedAt,
       this.deletedAt,
       this.pastVisitCount,
+      this.lastVisitDate,
       // this.appointmentTime,
       this.visits});
 
@@ -149,6 +151,7 @@ class PatientListData {
     deletedAt = json['deleted_at'];
     pastVisitCount = json['pastVisitCount'];
     appointmentTime = json['appointmentTime'];
+    lastVisitDate = json['lastVisitDate'];
     if (json['visits'] != null) {
       visits = <Visits>[];
       json['visits'].forEach((v) {
@@ -189,6 +192,7 @@ class PatientListData {
     data['deleted_at'] = deletedAt;
     data['pastVisitCount'] = pastVisitCount;
     data['appointmentTime'] = appointmentTime;
+    data['lastVisitDate'] = lastVisitDate;
     if (visits != null) {
       data['visits'] = visits!.map((v) => v.toJson()).toList();
     }

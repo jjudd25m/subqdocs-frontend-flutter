@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_string.dart';
@@ -100,12 +101,7 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file,
-          previewImage: null,
-          fileName: _shortFileName,
-          date: _formatDate(_pickDate),
-          Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
     }
 
     list.refresh();
@@ -144,12 +140,7 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(
-              file: file,
-              previewImage: null,
-              fileName: _shortFileName,
-              date: _formatDate(_pickDate),
-              Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
         }
 
         list.refresh();
@@ -241,8 +232,7 @@ class VisitMainController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(
-        audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -279,8 +269,7 @@ class VisitMainController extends GetxController {
     } else {
       print("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(
-        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     getPatientAttachment();
   }
@@ -355,4 +344,14 @@ class VisitMainController extends GetxController {
 //       "trascriptUploadData": patientTranscriptUploadModel,
 //     });
 //   }
+
+  Future<void> launchInAppWithBrowserOptions(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppBrowserView,
+      browserConfiguration: const BrowserConfiguration(showTitle: true),
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 }

@@ -20,7 +20,7 @@ class SignUpView extends GetView<SignUpController> {
 
   bool isWidthLessThan428(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    print("mobile widh is ${width}");
+    // print("mobile widh is ${width}");
     return width < 428;
   }
 
