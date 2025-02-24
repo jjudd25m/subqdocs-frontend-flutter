@@ -101,13 +101,26 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
     if (list.isNotEmpty) {
       showCustomDialog(context);
     }
+  }
+
+  void clearFilter() {
+    isSelectedAttchmentOption.value = -1;
+    isDocument.value = false;
+    isImage.value = false;
+    getPatientAttachment();
+    Get.back();
   }
 
   Future<void> pickFiles(BuildContext context) async {
@@ -140,7 +153,12 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -209,7 +227,8 @@ class VisitMainController extends GetxController {
       loadingMessage.value = "Uploading Audio";
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave =
+          AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
 
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
@@ -217,7 +236,8 @@ class VisitMainController extends GetxController {
       loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
       isLoading.value = false;
 
-      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      CustomToastification()
+          .showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
       List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
@@ -231,8 +251,8 @@ class VisitMainController extends GetxController {
 
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+          audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -269,7 +289,8 @@ class VisitMainController extends GetxController {
     } else {
       print("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await _visitMainRepository.uploadAttachments(
+        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     getPatientAttachment();
   }
