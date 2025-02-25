@@ -412,7 +412,7 @@ class EditPatentDetailsController extends GetxController {
       DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
-      String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+      String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
 
       print("date time is ${formattedTime}");
 

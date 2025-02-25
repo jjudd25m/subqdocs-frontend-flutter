@@ -311,24 +311,12 @@ class HomePastVisitsList extends GetView<HomeController> {
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
-      String formatedTime;
       String formatedDateTime = "N/A";
 
-      String formattedDate = "N/A";
+      if (patient.appointmentTime != null) {
+        DateTime dateTime = DateTime.parse(patient.appointmentTime ?? "");
 
-      if (patient.visitDate != null) {
-        DateTime dateTime = DateTime.parse(patient.visitDate ?? "");
-
-        // Format the DateTime to "MM/dd"
-        formattedDate = DateFormat('MM/dd').format(dateTime);
-      }
-
-      if (patient.visitTime != null) {
-        DateTime dateTime = DateTime.parse(patient.visitTime ?? "");
-
-        // Format the DateTime to "hh:mm a" (e.g., "05:30 AM")
-        formattedDate += " " + DateFormat('hh:mm a').format(dateTime.toLocal());
-        formatedDateTime = formattedDate;
+        formatedDateTime = " " + DateFormat('MM/dd hh:mm a').format(dateTime.toLocal());
       }
 
       String getFirstLetter(String input) {

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../utils/Formetors.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
@@ -117,6 +118,7 @@ class SignUpView extends GetView<SignUpController> {
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
                         label: AppString.password,
+                        format: [NoSpaceTextFormatter()],
                         hint: "Enter Password",
                         visibility: controller.passwordVisible.value,
                         controller: controller.passwordController,
@@ -155,6 +157,7 @@ class SignUpView extends GetView<SignUpController> {
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
                         label: "Confirm Password",
+                        format: [NoSpaceTextFormatter()],
                         hint: "Enter confirm Password",
                         visibility: controller.confirmPasswordVisible.value,
                         controller: controller.confirmPasswordController,
