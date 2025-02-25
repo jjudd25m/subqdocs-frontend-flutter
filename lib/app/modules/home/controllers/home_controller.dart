@@ -447,12 +447,15 @@ class HomeController extends GetxController {
 
     param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
 
-    // if (selectedIndex.value != -1) {
-    //   param['status'] = statusModel[selectedIndex.value].status;
-    // }
-
     if (selectedStatusIndex.isNotEmpty) {
-      param['status'] = selectedStatusIndex.map((e) => statusModel[e].status).toList();
+      List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status!).toList();
+
+      print("status array is- $statusList");
+      if (statusList.length == 1) {
+        param['status[0]'] = statusList;
+      } else {
+        param['status'] = statusList;
+      }
     }
 
     if (startDate.value != "" && endDate.value != "") {
@@ -493,11 +496,15 @@ class HomeController extends GetxController {
       // Add more sorting parameters as needed
     ];
 
-    // if (selectedIndex.value != -1) {
-    //   param['status'] = statusModel[selectedIndex.value].status;
-    // }
     if (selectedStatusIndex.isNotEmpty) {
-      param['status'] = selectedStatusIndex.map((e) => statusModel[e].status).toList();
+      List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status!).toList();
+
+      print("status array is- $statusList");
+      if (statusList.length == 1) {
+        param['status[0]'] = statusList;
+      } else {
+        param['status'] = statusList;
+      }
     }
 
     param["sorting"] = sorting;

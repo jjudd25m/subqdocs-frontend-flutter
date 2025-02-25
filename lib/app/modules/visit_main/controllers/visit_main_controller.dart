@@ -16,12 +16,16 @@ import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../edit_patient_details/model/patient_detail_model.dart';
+import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../forgot_password/models/common_respons.dart';
 import '../../forgot_password/models/send_otp_model.dart';
+import '../../home/repository/home_repository.dart';
 import '../../login/model/login_model.dart';
 import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
@@ -32,6 +36,11 @@ import '../views/attachmentDailog.dart';
 
 class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
+
+  Rxn<PatientDetailModel> patientDetailModel = Rxn();
+  final HomeRepository _homeRepository = HomeRepository();
+
+  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
@@ -186,6 +195,7 @@ class VisitMainController extends GetxController {
     if (visitId.value.isNotEmpty) {
       getPatientDetails();
     }
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
   }
 
   @override
@@ -353,5 +363,20 @@ class VisitMainController extends GetxController {
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
+    print("visit id :- ${visitId}");
+    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+    print("patientReScheduleCreate API  internal response $response");
+    // getPatient(patientId, visitId);
+    // CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+  }
+
+  Future<void> deletePatientVisit({required String id}) async {
+    var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
+    print(response);
+    // getPatient(patientId, visitId);
+    // return response;
   }
 }

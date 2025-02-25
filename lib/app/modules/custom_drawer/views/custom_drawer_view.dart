@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -11,13 +13,15 @@ import '../../../../widgets/drawer_item.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../routes/app_pages.dart';
+import '../../login/model/login_model.dart';
 import '../controllers/custom_drawer_controller.dart';
 
 class CustomDrawerView extends GetView<CustomDrawerController> {
   final Function(int index)? onItemSelected;
 
+  var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
   CustomDrawerView({Key? key, this.onItemSelected}) : super(key: key);
-  // CustomDrawerView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Adrian Tinajero", // Dummy user data
+                            "${loginData.responseData?.user?.firstName} ${loginData.responseData?.user?.lastName}",
                             style: AppFonts.medium(14, AppColors.textBlackDark),
                           ),
                           SizedBox(

@@ -1,11 +1,10 @@
 import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/app/modules/visit_main/views/delete_schedule_visit.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widget/base_image_view.dart';
 
@@ -14,9 +13,7 @@ import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widgets/ContainerButton.dart';
-import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
-import '../../../../widgets/rounded_image_widget.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
@@ -378,8 +375,19 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                           },
                                                                         );
                                                                       } else if (colIndex == 4) {
-                                                                        controller.deletePatientVisit(
-                                                                            id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          barrierDismissible: true,
+                                                                          builder: (BuildContext context) {
+                                                                            // return SizedBox();
+                                                                            return DeleteScheduleVisit(
+                                                                              onDelete: () {
+                                                                                controller.deletePatientVisit(
+                                                                                    id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                        );
                                                                       }
                                                                       print("col index is :- $colIndex");
                                                                     },

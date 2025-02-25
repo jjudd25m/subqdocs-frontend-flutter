@@ -247,8 +247,10 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
+      print("DioException $e");
       throw handleDioException(e);
     } catch (e) {
+      print("catch $e");
       rethrow;
     }
   }
@@ -303,7 +305,8 @@ class ApiProvider {
     // Initialize the headers map
     Map<String, String> headers = {
       // "Content-Type": "application/json",
-      "accept": "application/json",
+      "accept": "*/*",
+      "Content-Type": "application/json"
     };
 
     // Add x-session header if token exists

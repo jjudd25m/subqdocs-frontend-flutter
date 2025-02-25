@@ -20,11 +20,15 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/ContainerButton.dart';
+import '../../../../widgets/custom_table.dart';
 import '../../../routes/app_pages.dart';
 import '../../add_patient/widgets/custom_dailog.dart';
+import '../../edit_patient_details/model/patient_detail_model.dart';
+import '../../home/views/schedule_patient_dialog.dart';
 import '../controllers/visit_main_controller.dart';
 import 'attachmentDailog.dart';
 import 'delete_image_dialog.dart';
+import 'delete_schedule_visit.dart';
 
 class VisitMainView extends GetView<VisitMainController> {
   VisitMainView({super.key});
@@ -82,6 +86,7 @@ class VisitMainView extends GetView<VisitMainController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
       key: _key,
       backgroundColor: AppColors.white,
@@ -502,6 +507,202 @@ class VisitMainView extends GetView<VisitMainController> {
                                     //   title: Text('data'),
                                     // )
                                   ],
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(width: 0.5, color: AppColors.white),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(1),
+                                    child: ExpansionTile(
+                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      backgroundColor: AppColors.white,
+                                      collapsedBackgroundColor: AppColors.white,
+                                      title: Container(
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              "Scheduled Visit",
+                                              style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      children: <Widget>[
+                                        controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                            ? Container(
+                                                width: double.infinity,
+                                                color: Colors.white,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
+                                                  child: CustomTable(
+                                                    rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
+                                                    // rows: [
+                                                    //   ['Visit Date', 'Time', "Action"],
+                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                    // ],
+                                                    cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
+                                                      return colIndex == 2 && rowIndex != 0
+                                                          ? GestureDetector(
+                                                              onTap: () {
+                                                                Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                                                  "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                  "patientId": controller.patientId,
+                                                                });
+
+                                                                print("row index is :- $rowIndex");
+                                                              },
+                                                              child: Text(
+                                                                cellData,
+                                                                textAlign: TextAlign.center,
+                                                                style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                softWrap: true, // Allows text to wrap
+                                                                overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                              ),
+                                                            )
+                                                          : (colIndex == 3 || colIndex == 4) && rowIndex != 0
+                                                              ? Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      "|  ",
+                                                                      style: AppFonts.regular(12, AppColors.appbarBorder),
+                                                                    ),
+                                                                    GestureDetector(
+                                                                      onTap: () {
+                                                                        if (colIndex == 3) {
+                                                                          showDialog(
+                                                                            context: context,
+                                                                            barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                            builder: (BuildContext context) {
+                                                                              return SchedulePatientDialog(
+                                                                                receiveParam: (p0, p1) {
+                                                                                  print("p0 is $p0 p1 is $p1");
+                                                                                  print("row index is :- ${rowIndex}");
+                                                                                  print(
+                                                                                      "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                                  controller.patientReScheduleCreate(
+                                                                                      param: {"visit_date": p1, "visit_time": p0},
+                                                                                      visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
+                                                                                },
+                                                                              ); // Our custom dialog
+                                                                            },
+                                                                          );
+                                                                        } else if (colIndex == 4) {
+                                                                          showDialog(
+                                                                            context: context,
+                                                                            barrierDismissible: true,
+                                                                            builder: (BuildContext context) {
+                                                                              // return SizedBox();
+                                                                              return DeleteScheduleVisit(
+                                                                                onDelete: () {
+                                                                                  controller.deletePatientVisit(
+                                                                                      id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                          );
+                                                                        }
+                                                                        print("col index is :- $colIndex");
+                                                                      },
+                                                                      child: Text(
+                                                                        cellData ?? "",
+                                                                        textAlign: TextAlign.center,
+                                                                        style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                        softWrap: true, // Allows text to wrap
+                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              : rowIndex == 0
+                                                                  ? Text(
+                                                                      cellData ?? "",
+                                                                      textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                      style: AppFonts.regular(12, AppColors.black),
+                                                                      softWrap: true, // Allows text to wrap
+                                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                    )
+                                                                  : Text(
+                                                                      cellData ?? "",
+                                                                      textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                      style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                                      softWrap: true, // Allows text to wrap
+                                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                    );
+                                                    },
+                                                    columnCount: 5,
+                                                    context: context,
+                                                    columnWidths: isPortrait ? [0.25, 0.25, 0.11, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                width: double.infinity,
+                                                color: Colors.white,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+                                                  child: Row(
+                                                    children: [
+                                                      SvgPicture.asset(ImagePath.noVisitFound),
+                                                      SizedBox(
+                                                        width: 16,
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "No Visit Found",
+                                                            style: AppFonts.regular(16, AppColors.black),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 4,
+                                                          ),
+                                                          Text(
+                                                            "Your scheduled visits will show here",
+                                                            style: AppFonts.regular(12, AppColors.black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Spacer(),
+                                                      ContainerButton(
+                                                        onPressed: () {
+                                                          // Your onPressed function
+                                                        },
+                                                        text: 'Schedule Visit',
+
+                                                        borderColor: AppColors.backgroundPurple,
+                                                        // Custom border color
+                                                        backgroundColor: AppColors.backgroundPurple,
+                                                        // Custom background color
+                                                        needBorder: false,
+                                                        // Show border
+                                                        textColor: AppColors.white,
+                                                        // Custom text color
+                                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                                        // Custom padding
+                                                        radius: 6, // Custom border radius
+                                                      ),
+                                                      SizedBox(
+                                                        width: 16,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(height: 10),
                                 ExpansionTile(
@@ -2038,5 +2239,55 @@ class VisitMainView extends GetView<VisitMainController> {
         }),
       ),
     );
+  }
+
+  List<List<String>> _getTableRows(List<ScheduledVisits> patients) {
+    List<List<String>> rows = [];
+
+    // Add header row first
+    rows.add(
+      ['Visit Date', 'Time', "Action"],
+    );
+
+    // Iterate over each patient and extract data for each row
+    for (var patient in patients) {
+      String visitDate = "N/A";
+      String visitTime = "N/A";
+
+      if (patient.visitDate != null) {
+        DateTime visitdateTime = DateTime.parse(patient.visitDate ?? "").toLocal();
+
+        // Create a DateFormat to format the date
+        DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
+
+        // Format the DateTime object to the desired format
+        String visitformattedDate = visitdateFormat.format(visitdateTime);
+
+        visitDate = visitformattedDate;
+      }
+
+      if (patient.visitTime != null) {
+        DateTime visitdateTime = DateTime.parse(patient.visitTime ?? "").toLocal();
+
+        // Create a DateFormat to format the date
+        DateFormat visitdateFormat = DateFormat('hh:mm: a');
+
+        // Format the DateTime object to the desired format
+        String visitformattedDate = visitdateFormat.format(visitdateTime);
+
+        visitTime = visitformattedDate;
+      }
+
+      rows.add([
+        visitDate,
+        visitTime,
+        'Start visit now ',
+        "Reschedule",
+        "Cancel visit"
+
+        // Action (could be a button or some interaction)
+      ]);
+    }
+    return rows;
   }
 }
