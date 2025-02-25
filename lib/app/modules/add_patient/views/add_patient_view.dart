@@ -955,6 +955,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ContainerButton(
                                           onPressed: () {
                                             // Your onPressed function
+
+                                            Get.back();
                                           },
                                           text: 'Cancel',
 

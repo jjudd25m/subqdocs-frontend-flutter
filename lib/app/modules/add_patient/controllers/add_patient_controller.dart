@@ -13,6 +13,7 @@ import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../services/media_picker_services.dart';
+import '../../../../utils/Loader.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
@@ -228,6 +229,7 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> addPatient() async {
+    Loader().showLoadingDialogForSimpleLoader();
     isLoading.value = true;
 
     // DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
@@ -305,11 +307,14 @@ class AddPatientController extends GetxController {
       CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
 
       if (isSaveAddAnother.value == false) {
+        Get.back();
         Get.back(result: 1);
       } else {
+        Get.back();
         clearForm();
       }
     } catch (error) {
+      Get.back();
       isLoading.value = false;
       print("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
