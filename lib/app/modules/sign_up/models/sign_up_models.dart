@@ -7,20 +7,20 @@ class SignUpModel {
   SignUpModel({this.responseData, this.message, this.toast, this.responseType});
 
   SignUpModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
+    responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -33,25 +33,13 @@ class ResponseData {
   String? password;
   String? updatedAt;
   String? createdAt;
-  Null? secret2fa;
-  Null? profileImage;
-  Null? otp;
-  Null? otpGeneratedAt;
-  Null? deletedAt;
+  dynamic secret2fa;
+  dynamic profileImage;
+  dynamic otp;
+  dynamic otpGeneratedAt;
+  dynamic deletedAt;
 
-  ResponseData(
-      {this.id,
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.password,
-      this.updatedAt,
-      this.createdAt,
-      this.secret2fa,
-      this.profileImage,
-      this.otp,
-      this.otpGeneratedAt,
-      this.deletedAt});
+  ResponseData({this.id, this.firstName, this.lastName, this.email, this.password, this.updatedAt, this.createdAt, this.secret2fa, this.profileImage, this.otp, this.otpGeneratedAt, this.deletedAt});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -69,19 +57,19 @@ class ResponseData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['email'] = this.email;
-    data['password'] = this.password;
-    data['updated_at'] = this.updatedAt;
-    data['created_at'] = this.createdAt;
-    data['secret_2fa'] = this.secret2fa;
-    data['profile_image'] = this.profileImage;
-    data['otp'] = this.otp;
-    data['otp_generated_at'] = this.otpGeneratedAt;
-    data['deleted_at'] = this.deletedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['email'] = email;
+    data['password'] = password;
+    data['updated_at'] = updatedAt;
+    data['created_at'] = createdAt;
+    data['secret_2fa'] = secret2fa;
+    data['profile_image'] = profileImage;
+    data['otp'] = otp;
+    data['otp_generated_at'] = otpGeneratedAt;
+    data['deleted_at'] = deletedAt;
     return data;
   }
 }

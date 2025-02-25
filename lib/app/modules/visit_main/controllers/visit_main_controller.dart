@@ -132,7 +132,7 @@ class VisitMainController extends GetxController {
 
     List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
-    print("media  file is  ${fileList}");
+    print("media  file is  $fileList");
 
     fileList?.forEach(
       (element) {
@@ -265,7 +265,7 @@ class VisitMainController extends GetxController {
     Map<String, List<int>> params = {};
     params["attachments"] = [id];
 
-    print("attch :- ${params}");
+    print("attch :- $params");
     CommonResponse commonResponse = await _visitMainRepository.deleteAttachments(params: params);
     if (commonResponse.responseType == "success") {
       CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);

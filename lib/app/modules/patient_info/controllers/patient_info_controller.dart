@@ -83,11 +83,32 @@ class PatientInfoController extends GetxController {
         socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
         socketService.socket.on(
+          "AllTabStatus",
+          (data) {
+            var res = data as Map<String, dynamic>;
+            print("---------------------------------------------");
+            print("AllTabStatus status is :- ${res}");
+
+            int visit_id = res["visit_id"];
+            int transcription_id = res["transcription_id"];
+            String status = res["status"];
+            String message = res["message"];
+
+            if (status.toLowerCase() == "failure") {
+              print("PatientViewStatus failure");
+
+              // isPatientViewLoading.value = true;
+              // isPatientViewLoadText.value = "failure";
+            }
+          },
+        );
+
+        socketService.socket.on(
           "DoctorsViewStatus",
           (data) {
             var res = data as Map<String, dynamic>;
             print("---------------------------------------------");
-            print("DoctorsViewStatus status is :- ${res}");
+            print("DoctorsViewStatus status is :- $res");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];

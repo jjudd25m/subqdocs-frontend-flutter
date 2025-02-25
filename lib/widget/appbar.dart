@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:subqdocs/widget/base_image_view.dart';
 
 import '../app/core/common/app_preferences.dart';
 import '../app/modules/login/model/login_model.dart';
+import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../utils/app_string.dart';
@@ -106,10 +109,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ],
                 ),
                 SizedBox(width: 20),
-                SvgPicture.asset(
-                  ImagePath.logo_signout,
-                  height: 30,
-                  width: 30,
+                GestureDetector(
+                  onTap: () async {
+                    await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                    await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                    Get.offAllNamed(Routes.LOGIN);
+                  },
+                  child: SvgPicture.asset(
+                    ImagePath.logo_signout,
+                    height: 30,
+                    width: 30,
+                  ),
                 ),
               ],
             ),

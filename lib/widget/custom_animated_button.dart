@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:subqdocs/utils/imagepath.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -6,6 +8,7 @@ import '../utils/app_fonts.dart';
 class CustomAnimatedButton extends StatefulWidget {
   final bool isEnabled;
   final bool isLoading;
+  final bool isDoctorView;
   final String text;
   final Color enabledColor; // Color for enabled button
   final Color disabledColor; // Color for disabled button
@@ -26,6 +29,7 @@ class CustomAnimatedButton extends StatefulWidget {
       {super.key,
       this.isEnabled = true,
       this.isLoading = false,
+      this.isDoctorView = false,
       required this.text,
       this.enabledTextColor = AppColors.textWhite,
       this.disabledTextColor = AppColors.textGrey,
@@ -145,10 +149,7 @@ class _CustomAnimatedButtonState extends State<CustomAnimatedButton> with Single
                 gradient: LinearGradient(
                   colors: widget.disableGradient
                       ? [AppColors.textWhite, AppColors.textWhite]
-                      : [
-                          widget.isOutline != null ? widget.enabledColor : AppColors.textBlack,
-                          widget.isOutline != null ? widget.enabledColor : AppColors.textBlack
-                        ],
+                      : [widget.isOutline != null ? widget.enabledColor : AppColors.textBlack, widget.isOutline != null ? widget.enabledColor : AppColors.textBlack],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -177,6 +178,12 @@ class _CustomAnimatedButtonState extends State<CustomAnimatedButton> with Single
                         ),
                       ),
                     ),
+                  if (widget.isDoctorView)
+                    Image.asset(
+                      ImagePath.subqdocs_icon,
+                      height: 24,
+                      width: 24,
+                    ),
                   if (widget.isLoading) const SizedBox(width: 8),
                   // Space between spinner and text
                   // Button Text with ScaleTransition
@@ -184,8 +191,7 @@ class _CustomAnimatedButtonState extends State<CustomAnimatedButton> with Single
                     scale: _textScaleAnimation.value,
                     child: Text(
                       widget.isLoading ? "Please wait" : widget.text,
-                      style: AppFonts.medium(widget.fontSize ?? 17,
-                          widget.isEnabled ? widget.enabledTextColor : AppColors.textPurple.withValues(alpha: 0.5)),
+                      style: AppFonts.medium(widget.fontSize ?? 17, widget.isEnabled ? widget.enabledTextColor : AppColors.textPurple.withValues(alpha: 0.5)),
                     ),
                   ),
                 ],
