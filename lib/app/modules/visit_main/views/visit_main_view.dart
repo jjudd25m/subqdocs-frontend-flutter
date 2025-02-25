@@ -60,7 +60,7 @@ class VisitMainView extends GetView<VisitMainController> {
       String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
 
       // Format the second time (for hours and minutes with am/pm)
-      String formattedTime = DateFormat('h:mm a').format(secondDateTime);
+      String formattedTime = DateFormat('h:mm a').format(secondDateTime.toLocal());
 
       // Return the formatted string in the desired format
       return '$formattedDate $formattedTime';
@@ -105,10 +105,14 @@ class VisitMainView extends GetView<VisitMainController> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Column(
-                              children: <Widget>[
-                                SizedBox(height: 20.0),
-                                ExpansionTile(
+                            Column(children: <Widget>[
+                              SizedBox(height: 20.0),
+                              Theme(
+                                data: ThemeData(
+                                  splashColor: Colors.transparent, // Remove splash color
+                                  highlightColor: Colors.transparent, // Remove highlight color
+                                ),
+                                child: ExpansionTile(
                                   collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   backgroundColor: AppColors.backgroundWhite,
@@ -435,8 +439,14 @@ class VisitMainView extends GetView<VisitMainController> {
                                     // )
                                   ],
                                 ),
-                                SizedBox(height: 10.0),
-                                ExpansionTile(
+                              ),
+                              SizedBox(height: 10.0),
+                              Theme(
+                                data: ThemeData(
+                                  splashColor: Colors.transparent, // Remove splash color
+                                  highlightColor: Colors.transparent, // Remove highlight color
+                                ),
+                                child: ExpansionTile(
                                   childrenPadding: EdgeInsets.all(0),
                                   collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -508,744 +518,812 @@ class VisitMainView extends GetView<VisitMainController> {
                                     // )
                                   ],
                                 ),
-                                SizedBox(height: 10),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(width: 0.5, color: AppColors.white),
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(width: 0.5, color: AppColors.white),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(1),
+                                  child: ExpansionTile(
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    backgroundColor: AppColors.white,
+                                    collapsedBackgroundColor: AppColors.white,
+                                    title: Container(
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Scheduled Visit",
+                                            style: AppFonts.medium(16, AppColors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    children: <Widget>[
+                                      controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                          ? Container(
+                                              width: double.infinity,
+                                              color: Colors.white,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
+                                                child: CustomTable(
+                                                  rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
+                                                  // rows: [
+                                                  //   ['Visit Date', 'Time', "Action"],
+                                                  //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                  //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                  //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                  //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                  //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
+                                                  // ],
+                                                  cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
+                                                    return colIndex == 2 && rowIndex != 0
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                                                "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                "patientId": controller.patientId,
+                                                              });
+
+                                                              print("row index is :- $rowIndex");
+                                                            },
+                                                            child: Text(
+                                                              cellData,
+                                                              textAlign: TextAlign.center,
+                                                              style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                              softWrap: true, // Allows text to wrap
+                                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                            ),
+                                                          )
+                                                        : (colIndex == 3 || colIndex == 4) && rowIndex != 0
+                                                            ? Row(
+                                                                children: [
+                                                                  Text(
+                                                                    "|  ",
+                                                                    style: AppFonts.regular(12, AppColors.appbarBorder),
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      if (colIndex == 3) {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                          builder: (BuildContext context) {
+                                                                            return SchedulePatientDialog(
+                                                                              receiveParam: (p0, p1) {
+                                                                                print("p0 is $p0 p1 is $p1");
+                                                                                print("row index is :- ${rowIndex}");
+                                                                                print("visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                                controller.patientReScheduleCreate(
+                                                                                    param: {"visit_date": p1, "visit_time": p0},
+                                                                                    visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
+                                                                              },
+                                                                            ); // Our custom dialog
+                                                                          },
+                                                                        );
+                                                                      } else if (colIndex == 4) {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          barrierDismissible: true,
+                                                                          builder: (BuildContext context) {
+                                                                            // return SizedBox();
+                                                                            return DeleteScheduleVisit(
+                                                                              onDelete: () {
+                                                                                controller.deletePatientVisit(
+                                                                                    id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      }
+                                                                      print("col index is :- $colIndex");
+                                                                    },
+                                                                    child: Text(
+                                                                      cellData ?? "",
+                                                                      textAlign: TextAlign.center,
+                                                                      style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                      softWrap: true, // Allows text to wrap
+                                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            : rowIndex == 0
+                                                                ? Text(
+                                                                    cellData ?? "",
+                                                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                    style: AppFonts.regular(12, AppColors.black),
+                                                                    softWrap: true, // Allows text to wrap
+                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                  )
+                                                                : Text(
+                                                                    cellData ?? "",
+                                                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                    style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                                    softWrap: true, // Allows text to wrap
+                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                  );
+                                                  },
+                                                  columnCount: 5,
+                                                  context: context,
+                                                  columnWidths: isPortrait ? [0.25, 0.25, 0.11, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              width: double.infinity,
+                                              color: Colors.white,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+                                                child: Row(
+                                                  children: [
+                                                    SvgPicture.asset(ImagePath.noVisitFound),
+                                                    SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          "No Visit Found",
+                                                          style: AppFonts.regular(16, AppColors.black),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                        Text(
+                                                          "Your scheduled visits will show here",
+                                                          style: AppFonts.regular(12, AppColors.black),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Spacer(),
+                                                    ContainerButton(
+                                                      onPressed: () {
+                                                        // Your onPressed function
+                                                      },
+                                                      text: 'Schedule Visit',
+
+                                                      borderColor: AppColors.backgroundPurple,
+                                                      // Custom border color
+                                                      backgroundColor: AppColors.backgroundPurple,
+                                                      // Custom background color
+                                                      needBorder: false,
+                                                      // Show border
+                                                      textColor: AppColors.white,
+                                                      // Custom text color
+                                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                                      // Custom padding
+                                                      radius: 6, // Custom border radius
+                                                    ),
+                                                    SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                    ],
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(1),
-                                    child: ExpansionTile(
-                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      backgroundColor: AppColors.white,
-                                      collapsedBackgroundColor: AppColors.white,
-                                      title: Container(
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              ExpansionTile(
+                                childrenPadding: EdgeInsets.all(0),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                backgroundColor: AppColors.backgroundWhite,
+                                collapsedBackgroundColor: AppColors.backgroundWhite,
+                                title: Row(
+                                  children: [
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      "Visit Snapshot",
+                                      style: AppFonts.regular(16, AppColors.textBlack),
+                                    ),
+                                    Spacer(),
+                                    SvgPicture.asset(
+                                      ImagePath.edit_outline,
+                                      height: 28,
+                                      width: 28,
+                                    ),
+                                  ],
+                                ),
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                                    child: Container(
+                                        height: 56,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                          color: AppColors.backgroundWhite,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
                                         child: Row(
                                           children: [
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            SvgPicture.asset(
+                                              ImagePath.ai,
+                                              height: 16,
+                                              width: 16,
+                                            ),
                                             SizedBox(
                                               width: 10,
                                             ),
                                             Text(
-                                              textAlign: TextAlign.center,
-                                              "Scheduled Visit",
-                                              style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                              textAlign: TextAlign.start,
+                                              "He enjoys fishing and gardening. His wife's name is Julie.",
+                                              style: AppFonts.regular(14, AppColors.textGrey),
                                             ),
+                                            Spacer(),
+                                            SizedBox(
+                                              height: 36,
+                                              child: ContainerButton(
+                                                onPressed: () {
+                                                  // Your onPressed function
+                                                },
+                                                text: 'Generate',
+
+                                                borderColor: AppColors.backgroundPurple,
+                                                // Custom border color
+                                                backgroundColor: AppColors.white,
+                                                // Custom background color
+                                                needBorder: true,
+                                                // Show border
+                                                textColor: AppColors.backgroundPurple,
+                                                // Custom text color
+                                                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                                                // Custom padding
+                                                radius: 6, // Custom border radius
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            )
                                           ],
-                                        ),
-                                      ),
-                                      children: <Widget>[
-                                        controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
-                                            ? Container(
-                                                width: double.infinity,
-                                                color: Colors.white,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
-                                                  child: CustomTable(
-                                                    rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
-                                                    // rows: [
-                                                    //   ['Visit Date', 'Time', "Action"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    // ],
-                                                    cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
-                                                      return colIndex == 2 && rowIndex != 0
-                                                          ? GestureDetector(
-                                                              onTap: () {
-                                                                Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                                  "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
-                                                                  "patientId": controller.patientId,
-                                                                });
-
-                                                                print("row index is :- $rowIndex");
-                                                              },
-                                                              child: Text(
-                                                                cellData,
-                                                                textAlign: TextAlign.center,
-                                                                style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                                softWrap: true, // Allows text to wrap
-                                                                overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                              ),
-                                                            )
-                                                          : (colIndex == 3 || colIndex == 4) && rowIndex != 0
-                                                              ? Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      "|  ",
-                                                                      style: AppFonts.regular(12, AppColors.appbarBorder),
-                                                                    ),
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        if (colIndex == 3) {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                            builder: (BuildContext context) {
-                                                                              return SchedulePatientDialog(
-                                                                                receiveParam: (p0, p1) {
-                                                                                  print("p0 is $p0 p1 is $p1");
-                                                                                  print("row index is :- ${rowIndex}");
-                                                                                  print(
-                                                                                      "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
-                                                                                  controller.patientReScheduleCreate(
-                                                                                      param: {"visit_date": p1, "visit_time": p0},
-                                                                                      visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
-                                                                                },
-                                                                              ); // Our custom dialog
-                                                                            },
-                                                                          );
-                                                                        } else if (colIndex == 4) {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            barrierDismissible: true,
-                                                                            builder: (BuildContext context) {
-                                                                              // return SizedBox();
-                                                                              return DeleteScheduleVisit(
-                                                                                onDelete: () {
-                                                                                  controller.deletePatientVisit(
-                                                                                      id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
-                                                                                },
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        }
-                                                                        print("col index is :- $colIndex");
-                                                                      },
-                                                                      child: Text(
-                                                                        cellData ?? "",
-                                                                        textAlign: TextAlign.center,
-                                                                        style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                                        softWrap: true, // Allows text to wrap
-                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              : rowIndex == 0
-                                                                  ? Text(
-                                                                      cellData ?? "",
-                                                                      textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                      style: AppFonts.regular(12, AppColors.black),
-                                                                      softWrap: true, // Allows text to wrap
-                                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                    )
-                                                                  : Text(
-                                                                      cellData ?? "",
-                                                                      textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                      style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                                      softWrap: true, // Allows text to wrap
-                                                                      overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                    );
-                                                    },
-                                                    columnCount: 5,
-                                                    context: context,
-                                                    columnWidths: isPortrait ? [0.25, 0.25, 0.11, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
-                                                  ),
-                                                ),
-                                              )
-                                            : Container(
-                                                width: double.infinity,
-                                                color: Colors.white,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
-                                                  child: Row(
-                                                    children: [
-                                                      SvgPicture.asset(ImagePath.noVisitFound),
-                                                      SizedBox(
-                                                        width: 16,
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            "No Visit Found",
-                                                            style: AppFonts.regular(16, AppColors.black),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 4,
-                                                          ),
-                                                          Text(
-                                                            "Your scheduled visits will show here",
-                                                            style: AppFonts.regular(12, AppColors.black),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Spacer(),
-                                                      ContainerButton(
-                                                        onPressed: () {
-                                                          // Your onPressed function
-                                                        },
-                                                        text: 'Schedule Visit',
-
-                                                        borderColor: AppColors.backgroundPurple,
-                                                        // Custom border color
-                                                        backgroundColor: AppColors.backgroundPurple,
-                                                        // Custom background color
-                                                        needBorder: false,
-                                                        // Show border
-                                                        textColor: AppColors.white,
-                                                        // Custom text color
-                                                        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
-                                                        // Custom padding
-                                                        radius: 6, // Custom border radius
-                                                      ),
-                                                      SizedBox(
-                                                        width: 16,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                      ],
+                                        )),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    child: Text(
+                                      textAlign: TextAlign.start,
+                                      "Don Jones has a history of melanoma in situ on the nasal tip, surgically excised with flap repair. Post-op care included imiquimod treatment, later discontinued due to irritation. Recently started erbium Pearl Fractional laser and Kenalog injections for scar improvement. No signs of melanoma recurrence; benign lesions (seborrheic keratoses, solar lentigines, cherry angiomas) noted—no treatment needed. Scheduled for another laser session today.",
+                                      style: AppFonts.regular(14, AppColors.textGrey),
                                     ),
                                   ),
-                                ),
-                                SizedBox(height: 10),
-                                ExpansionTile(
-                                  childrenPadding: EdgeInsets.all(0),
-                                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  backgroundColor: AppColors.backgroundWhite,
-                                  collapsedBackgroundColor: AppColors.backgroundWhite,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        "Visit Snapshot",
-                                        style: AppFonts.regular(16, AppColors.textBlack),
+                                  SizedBox(
+                                    height: 20,
+                                  )
+                                ],
+                              ),
+                            ]),
+                            SizedBox(height: 10),
+                            Theme(
+                              data: ThemeData(
+                                splashColor: Colors.transparent, // Remove splash color
+                                highlightColor: Colors.transparent, // Remove highlight color
+                              ),
+                              child: ExpansionTile(
+                                childrenPadding: EdgeInsets.all(0),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                backgroundColor: AppColors.backgroundWhite,
+                                collapsedBackgroundColor: AppColors.backgroundWhite,
+                                title: Row(
+                                  children: [
+                                    Text(
+                                      textAlign: TextAlign.start,
+                                      "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)",
+                                      style: AppFonts.regular(16, AppColors.textBlack),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                        // color: AppColors.backgroundWhite,
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                      Spacer(),
-                                      SvgPicture.asset(
-                                        ImagePath.edit_outline,
-                                        height: 28,
-                                        width: 28,
-                                      ),
-                                    ],
-                                  ),
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                                      child: Container(
-                                          height: 56,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                            color: AppColors.backgroundWhite,
-                                            borderRadius: BorderRadius.circular(8),
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            ImagePath.search,
+                                            height: 14,
+                                            width: 14,
                                           ),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 10,
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 194,
+                                            height: 25,
+                                            child: TextField(
+                                              maxLines: 1,
+                                              textAlignVertical: TextAlignVertical.center, // Centers the text vertically
+                                              decoration: InputDecoration.collapsed(
+                                                hintText: "Search",
+                                                hintStyle: AppFonts.regular(14, AppColors.textGrey),
                                               ),
-                                              SvgPicture.asset(
-                                                ImagePath.ai,
-                                                height: 16,
-                                                width: 16,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.start,
-                                                "He enjoys fishing and gardening. His wife's name is Julie.",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                              Spacer(),
-                                              SizedBox(
-                                                height: 36,
-                                                child: ContainerButton(
-                                                  onPressed: () {
-                                                    // Your onPressed function
-                                                  },
-                                                  text: 'Generate',
+                                            ),
+                                          )
 
-                                                  borderColor: AppColors.backgroundPurple,
-                                                  // Custom border color
-                                                  backgroundColor: AppColors.white,
-                                                  // Custom background color
-                                                  needBorder: true,
-                                                  // Show border
-                                                  textColor: AppColors.backgroundPurple,
-                                                  // Custom text color
-                                                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-                                                  // Custom padding
-                                                  radius: 6, // Custom border radius
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              )
-                                            ],
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Text(
-                                        textAlign: TextAlign.start,
-                                        "Don Jones has a history of melanoma in situ on the nasal tip, surgically excised with flap repair. Post-op care included imiquimod treatment, later discontinued due to irritation. Recently started erbium Pearl Fractional laser and Kenalog injections for scar improvement. No signs of melanoma recurrence; benign lesions (seborrheic keratoses, solar lentigines, cherry angiomas) noted—no treatment needed. Scheduled for another laser session today.",
-                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                          // Text(
+                                          //   "Attachments",
+                                          //   style: AppFonts.medium(16, AppColors.textBlack),
+                                          // ),
+                                        ],
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 20,
-                                    )
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                      ImagePath.edit_outline,
+                                      height: 40,
+                                      width: 40,
+                                    ),
                                   ],
                                 ),
-                                SizedBox(height: 10),
-                                ExpansionTile(
-                                  childrenPadding: EdgeInsets.all(0),
-                                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  backgroundColor: AppColors.backgroundWhite,
-                                  collapsedBackgroundColor: AppColors.backgroundWhite,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        textAlign: TextAlign.start,
-                                        "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)",
-                                        style: AppFonts.regular(16, AppColors.textBlack),
-                                      ),
-                                      Spacer(),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                          // color: AppColors.backgroundWhite,
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              ImagePath.search,
-                                              height: 14,
-                                              width: 14,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 194,
-                                              height: 25,
-                                              child: TextField(
-                                                maxLines: 1,
-                                                textAlignVertical: TextAlignVertical.center, // Centers the text vertically
-                                                decoration: InputDecoration.collapsed(
-                                                  hintText: "Search",
-                                                  hintStyle: AppFonts.regular(14, AppColors.textGrey),
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) => InkWell(
+                                              onTap: () {},
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(height: 10),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          textAlign: TextAlign.center,
+                                                          visitRecapformatDate(firstDate: controller.visitRecapList.value?.responseData?[index].visitDate ?? ""),
+                                                          style: AppFonts.medium(14, AppColors.textGrey),
+                                                        ),
+                                                        SizedBox(width: 15),
+                                                        Expanded(
+                                                            child: Text(
+                                                          maxLines: 1,
+                                                          textAlign: TextAlign.center,
+                                                          controller.visitRecapList.value?.responseData?[index].summary ?? "",
+                                                          style: AppFonts.regular(14, AppColors.textGrey),
+                                                        )),
+                                                        Spacer(),
+                                                        Text(
+                                                          textAlign: TextAlign.center,
+                                                          "View",
+                                                          style: AppFonts.medium(12, AppColors.textPurple),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    if (index != 7) ...[
+                                                      Divider(
+                                                        height: 1,
+                                                        color: AppColors.appbarBorder,
+                                                      )
+                                                    ]
+                                                  ],
                                                 ),
                                               ),
-                                            )
-
-                                            // Text(
-                                            //   "Attachments",
-                                            //   style: AppFonts.medium(16, AppColors.textBlack),
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      SvgPicture.asset(
-                                        ImagePath.edit_outline,
-                                        height: 40,
-                                        width: 40,
-                                      ),
-                                    ],
+                                            ),
+                                        itemCount: controller.visitRecapList.value?.responseData?.length ?? 0),
                                   ),
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) => InkWell(
-                                                onTap: () {},
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                  child: Column(
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Theme(
+                              data: ThemeData(
+                                splashColor: Colors.transparent, // Remove splash color
+                                highlightColor: Colors.transparent, // Remove highlight color
+                              ),
+                              child: ExpansionTile(
+                                childrenPadding: EdgeInsets.all(0),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                backgroundColor: AppColors.backgroundWhite,
+                                collapsedBackgroundColor: AppColors.backgroundWhite,
+                                title: Row(
+                                  children: [
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      "Attachments",
+                                      style: AppFonts.regular(16, AppColors.textBlack),
+                                    ),
+                                    Spacer(),
+                                    GestureDetector(
+                                      onTap: () {
+                                        var result = Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
+                                          "attachmentList": controller.patientAttachmentList,
+                                        });
+
+                                        if (result != null) {
+                                          controller.getPatientAttachment();
+                                        }
+                                      },
+                                      child: Text(
+                                        textAlign: TextAlign.center,
+                                        "View All Attachments",
+                                        style: AppFonts.regular(15, AppColors.textPurple),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    PopupMenuButton<String>(
+                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                        offset: const Offset(0, 5),
+                                        color: AppColors.white,
+                                        position: PopupMenuPosition.over,
+                                        style: const ButtonStyle(
+                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            maximumSize: WidgetStatePropertyAll(Size.zero),
+                                            visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                        itemBuilder: (context) => [
+                                              PopupMenuItem(
+                                                  enabled: false,
+                                                  onTap: () {},
+                                                  padding: EdgeInsets.zero,
+                                                  value: "1",
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 16, right: 5, bottom: 5, top: 10),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          "Filters",
+                                                          style: AppFonts.medium(16, AppColors.textBlack),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 80,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            print("clicked");
+
+                                                            controller.clearFilter();
+                                                          },
+                                                          child: Text(
+                                                            "Clear",
+                                                            style: AppFonts.medium(14, AppColors.backgroundPurple),
+                                                          ),
+                                                        ),
+                                                        // SizedBox(
+                                                        //   width: 20,
+                                                        // ),
+                                                        // GestureDetector(
+                                                        //   onTap: () {
+                                                        //     print("clicked");
+                                                        //
+                                                        //     controller.clearFilter();
+                                                        //   },
+                                                        //   child: Text(
+                                                        //     "Apply",
+                                                        //     style: AppFonts.medium(
+                                                        //         14, AppColors.backgroundPurple),
+                                                        //   ),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                  )),
+                                              PopupMenuItem(
+                                                  onTap: () {
+                                                    controller.isSelectedAttchmentOption.value = 0;
+                                                    controller.isDocument.value = true;
+                                                    controller.isImage.value = false;
+                                                    controller.getPatientAttachment();
+                                                  },
+                                                  height: 30,
+                                                  padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                  child: Row(
                                                     children: [
-                                                      SizedBox(height: 10),
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                            textAlign: TextAlign.center,
-                                                            visitRecapformatDate(firstDate: controller.visitRecapList.value?.responseData?[index].visitDate ?? ""),
-                                                            style: AppFonts.medium(14, AppColors.textGrey),
-                                                          ),
-                                                          SizedBox(width: 15),
-                                                          Expanded(
-                                                              child: Text(
-                                                            maxLines: 1,
-                                                            textAlign: TextAlign.center,
-                                                            controller.visitRecapList.value?.responseData?[index].summary ?? "",
-                                                            style: AppFonts.regular(14, AppColors.textGrey),
-                                                          )),
-                                                          Spacer(),
-                                                          Text(
-                                                            textAlign: TextAlign.center,
-                                                            "View",
-                                                            style: AppFonts.medium(12, AppColors.textPurple),
-                                                          ),
-                                                        ],
+                                                      const SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        ImagePath.document_attchment,
+                                                        width: 30,
+                                                        height: 30,
+                                                        colorFilter:
+                                                            ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                       ),
-                                                      SizedBox(height: 10),
-                                                      if (index != 7) ...[
-                                                        Divider(
-                                                          height: 1,
-                                                          color: AppColors.appbarBorder,
+                                                      const SizedBox(width: 8),
+                                                      Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                      const SizedBox(width: 5),
+                                                      if (controller.isSelectedAttchmentOption.value == 0) ...[
+                                                        SvgPicture.asset(
+                                                          ImagePath.attchment_check,
+                                                          width: 16,
+                                                          height: 16,
                                                         )
                                                       ]
                                                     ],
-                                                  ),
-                                                ),
-                                              ),
-                                          itemCount: controller.visitRecapList.value?.responseData?.length ?? 0),
+                                                  )),
+                                              PopupMenuItem(
+                                                  onTap: () {
+                                                    controller.isSelectedAttchmentOption.value = 1;
+                                                    controller.isDocument.value = false;
+                                                    controller.isImage.value = true;
+                                                    controller.getPatientAttachment();
+                                                  },
+                                                  height: 30,
+                                                  padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      const SizedBox(width: 5),
+                                                      SvgPicture.asset(ImagePath.image_attchment,
+                                                          width: 30,
+                                                          height: 30,
+                                                          colorFilter:
+                                                              ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                                      const SizedBox(width: 8),
+                                                      Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                      const SizedBox(width: 5),
+                                                      if (controller.isSelectedAttchmentOption.value == 1) ...[
+                                                        SvgPicture.asset(
+                                                          ImagePath.attchment_check,
+                                                          width: 16,
+                                                          height: 16,
+                                                        )
+                                                      ]
+                                                    ],
+                                                  )),
+                                              PopupMenuItem(
+                                                  onTap: () {
+                                                    controller.isSelectedAttchmentOption.value = 2;
+                                                  },
+                                                  height: 30,
+                                                  padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      const SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        ImagePath.date_attchment,
+                                                        width: 30,
+                                                        height: 30,
+                                                        colorFilter:
+                                                            ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                      const SizedBox(width: 5),
+                                                      if (controller.isSelectedAttchmentOption.value == 2) ...[
+                                                        SvgPicture.asset(
+                                                          ImagePath.attchment_check,
+                                                          width: 16,
+                                                          height: 16,
+                                                        )
+                                                      ]
+                                                    ],
+                                                  )),
+                                            ],
+                                        child: SvgPicture.asset(
+                                          ImagePath.logo_filter,
+                                          width: 40,
+                                          height: 40,
+                                        )),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                        // color: AppColors.backgroundWhite,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            ImagePath.search,
+                                            height: 25,
+                                            width: 25,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 120,
+                                            child: TextField(
+                                              controller: controller.searchController,
+                                              onChanged: (value) {
+                                                controller.getPatientAttachment();
+                                              },
+                                              maxLines: 1, //or null
+                                              decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                      ImagePath.edit_outline,
+                                      height: 40,
+                                      width: 40,
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 10),
-                                ExpansionTile(
-                                  childrenPadding: EdgeInsets.all(0),
-                                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  backgroundColor: AppColors.backgroundWhite,
-                                  collapsedBackgroundColor: AppColors.backgroundWhite,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        "Attachments",
-                                        style: AppFonts.regular(16, AppColors.textBlack),
-                                      ),
-                                      Spacer(),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
-                                            "attachmentList": controller.patientAttachmentList,
-                                          });
-                                        },
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          "View All Attachments",
-                                          style: AppFonts.regular(15, AppColors.textPurple),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      PopupMenuButton<String>(
-                                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                                          offset: const Offset(0, 5),
-                                          color: AppColors.white,
-                                          position: PopupMenuPosition.over,
-                                          style: const ButtonStyle(
-                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              maximumSize: WidgetStatePropertyAll(Size.zero),
-                                              visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                          itemBuilder: (context) => [
-                                                PopupMenuItem(
-                                                    onTap: () {
-                                                      controller.isSelectedAttchmentOption.value = 0;
-                                                      controller.isDocument.value = true;
-                                                      controller.isImage.value = false;
-                                                      controller.getPatientAttachment();
-                                                    },
-                                                    height: 30,
-                                                    padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                    child: Row(
-                                                      children: [
-                                                        const SizedBox(width: 5),
-                                                        SvgPicture.asset(
-                                                          ImagePath.document_attchment,
-                                                          width: 30,
-                                                          height: 30,
-                                                          colorFilter:
-                                                              ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
-                                                        ),
-                                                        const SizedBox(width: 8),
-                                                        Text("Document",
-                                                            style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                        const SizedBox(width: 5),
-                                                        if (controller.isSelectedAttchmentOption.value == 0) ...[
-                                                          SvgPicture.asset(
-                                                            ImagePath.attchment_check,
-                                                            width: 16,
-                                                            height: 16,
-                                                          )
-                                                        ]
-                                                      ],
-                                                    )),
-                                                PopupMenuItem(
-                                                    onTap: () {
-                                                      controller.isSelectedAttchmentOption.value = 1;
-                                                      controller.isDocument.value = false;
-                                                      controller.isImage.value = true;
-                                                      controller.getPatientAttachment();
-                                                    },
-                                                    height: 30,
-                                                    padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                    child: Row(
-                                                      children: [
-                                                        const SizedBox(width: 5),
-                                                        SvgPicture.asset(ImagePath.image_attchment,
-                                                            width: 30,
-                                                            height: 30,
-                                                            colorFilter: ColorFilter.mode(
-                                                                controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
-                                                        const SizedBox(width: 8),
-                                                        Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                        const SizedBox(width: 5),
-                                                        if (controller.isSelectedAttchmentOption.value == 1) ...[
-                                                          SvgPicture.asset(
-                                                            ImagePath.attchment_check,
-                                                            width: 16,
-                                                            height: 16,
-                                                          )
-                                                        ]
-                                                      ],
-                                                    )),
-                                                PopupMenuItem(
-                                                    onTap: () {
-                                                      controller.isSelectedAttchmentOption.value = 2;
-                                                    },
-                                                    height: 30,
-                                                    padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                                    child: Row(
-                                                      children: [
-                                                        const SizedBox(width: 5),
-                                                        SvgPicture.asset(
-                                                          ImagePath.date_attchment,
-                                                          width: 30,
-                                                          height: 30,
-                                                          colorFilter:
-                                                              ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
-                                                        ),
-                                                        const SizedBox(width: 8),
-                                                        Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                        const SizedBox(width: 5),
-                                                        if (controller.isSelectedAttchmentOption.value == 2) ...[
-                                                          SvgPicture.asset(
-                                                            ImagePath.attchment_check,
-                                                            width: 16,
-                                                            height: 16,
-                                                          )
-                                                        ]
-                                                      ],
-                                                    )),
-                                              ],
-                                          child: SvgPicture.asset(
-                                            ImagePath.logo_filter,
-                                            width: 40,
-                                            height: 40,
-                                          )),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                          // color: AppColors.backgroundWhite,
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              ImagePath.search,
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 120,
-                                              child: TextField(
-                                                controller: controller.searchController,
-                                                onChanged: (value) {
-                                                  controller.getPatientAttachment();
-                                                },
-                                                maxLines: 1, //or null
-                                                decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      SvgPicture.asset(
-                                        ImagePath.edit_outline,
-                                        height: 40,
-                                        width: 40,
-                                      ),
-                                    ],
-                                  ),
-                                  children: <Widget>[
-                                    Container(
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                          child: SizedBox(
-                                              height: 200,
-                                              width: double.infinity,
-                                              child: Obx(
-                                                () {
-                                                  return ListView.separated(
-                                                    scrollDirection: Axis.horizontal,
-                                                    padding: EdgeInsets.only(top: 20),
-                                                    itemBuilder: (context, index) {
-                                                      return Container(
-                                                        height: 200,
-                                                        width: 140,
-                                                        child: Column(
-                                                          children: [
-                                                            SizedBox(height: 10),
-                                                            Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                Stack(
-                                                                  clipBehavior: Clip.none,
-                                                                  alignment: Alignment.topRight,
-                                                                  children: [
-                                                                    Container(
-                                                                      decoration: BoxDecoration(
-                                                                        color: AppColors.appbarBorder,
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                      ),
-                                                                      width: 120,
-                                                                      height: 120,
-                                                                      child: GestureDetector(
-                                                                        onTap: () {
-                                                                          print(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
-
-                                                                          if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
-                                                                            showDialog(
-                                                                              context: context,
-                                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                              builder: (BuildContext context) {
-                                                                                return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
-                                                                                    ? ViewAttchmentImage(
-                                                                                        imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                                        attchmentUrl: '',
-                                                                                      )
-                                                                                    : ViewAttchmentImage(
-                                                                                        imageUrl: "",
-                                                                                        attchmentUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
-                                                                              },
-                                                                            );
-                                                                          } else {
-                                                                            Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
-                                                                            print("attchmentUri is :- ${attchmentUri}");
-                                                                            controller.launchInAppWithBrowserOptions(attchmentUri);
-                                                                          }
-
-                                                                          // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
-                                                                          // } else {
-                                                                          //   FullscreenImageViewer.open(
-                                                                          //     context: context,
-                                                                          //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
-                                                                          //   );
-                                                                          // }
-                                                                        },
-                                                                        child: ClipRRect(
-                                                                          borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                          child: CachedNetworkImage(
-                                                                            imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                            width: 120,
-                                                                            height: 120,
-                                                                            errorWidget: (context, url, error) {
-                                                                              return Image.asset(ImagePath.file_placeHolder);
-                                                                            },
-                                                                            fit: BoxFit.cover,
-                                                                          )
-                                                                          // Image.file(
-                                                                          //   controller.list[index].file ?? File(""),
-                                                                          //   fit: BoxFit.cover,
-                                                                          // )
-                                                                          ,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Positioned(
-                                                                      top: -10,
-                                                                      // Align at the top of the first container
-                                                                      right: -10,
-                                                                      child: Container(
-                                                                        width: 40,
-                                                                        height: 40,
+                                children: <Widget>[
+                                  Container(
+                                    color: Colors.white,
+                                    child: controller.patientAttachmentList.value?.responseData?.length != 0
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: SizedBox(
+                                                height: 200,
+                                                width: double.infinity,
+                                                child: Obx(
+                                                  () {
+                                                    return ListView.separated(
+                                                      scrollDirection: Axis.horizontal,
+                                                      padding: EdgeInsets.only(top: 20),
+                                                      itemBuilder: (context, index) {
+                                                        return Container(
+                                                          height: 200,
+                                                          width: 140,
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(height: 10),
+                                                              Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: [
+                                                                  Stack(
+                                                                    clipBehavior: Clip.none,
+                                                                    alignment: Alignment.topRight,
+                                                                    children: [
+                                                                      Container(
                                                                         decoration: BoxDecoration(
-                                                                          shape: BoxShape.circle,
-                                                                          color: Colors.white,
-                                                                          boxShadow: [
-                                                                            BoxShadow(
-                                                                              color: Colors.black.withOpacity(0.2),
-                                                                              blurRadius: 2.2,
-                                                                              offset: Offset(0.2, 0),
-                                                                            ),
-                                                                          ],
+                                                                          color: AppColors.appbarBorder,
+                                                                          borderRadius: BorderRadius.circular(10),
                                                                         ),
+                                                                        width: 120,
+                                                                        height: 120,
                                                                         child: GestureDetector(
                                                                           onTap: () {
-                                                                            showDialog(
-                                                                              context: context,
-                                                                              barrierDismissible: true,
-                                                                              builder: (BuildContext context) {
-                                                                                // return SizedBox();
-                                                                                return DeleteImageDialog(
-                                                                                  onDelete: () {
-                                                                                    controller.deleteAttachments(controller.patientAttachmentList.value?.responseData![index].id ?? 0);
-                                                                                  },
-                                                                                  extension: controller.patientAttachmentList.value?.responseData?[index].fileType,
+                                                                            print(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+
+                                                                            if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                              showDialog(
+                                                                                context: context,
+                                                                                barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                                builder: (BuildContext context) {
+                                                                                  return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                                      ? ViewAttchmentImage(
+                                                                                          imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                          attchmentUrl: '',
+                                                                                        )
+                                                                                      : ViewAttchmentImage(
+                                                                                          imageUrl: "",
+                                                                                          attchmentUrl:
+                                                                                              controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                                },
+                                                                              );
+                                                                            } else {
+                                                                              Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
+                                                                              print("attchmentUri is :- ${attchmentUri}");
+                                                                              controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                            }
+
+                                                                            // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
+                                                                            // } else {
+                                                                            //   FullscreenImageViewer.open(
+                                                                            //     context: context,
+                                                                            //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
+                                                                            //   );
+                                                                            // }
+                                                                          },
+                                                                          child: ClipRRect(
+                                                                            borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                            child: CachedNetworkImage(
+                                                                              imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                              width: 120,
+                                                                              height: 120,
+                                                                              errorWidget: (context, url, error) {
+                                                                                return Image.asset(
+                                                                                  ImagePath.file_placeHolder,
                                                                                 );
                                                                               },
-                                                                            );
-                                                                          },
-                                                                          child: SvgPicture.asset(
-                                                                            ImagePath.delete_black,
+                                                                              fit: BoxFit.cover,
+                                                                            )
+                                                                            // Image.file(
+                                                                            //   controller.list[index].file ?? File(""),
+                                                                            //   fit: BoxFit.cover,
+                                                                            // )
+                                                                            ,
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 6,
-                                                                ),
-                                                                Text(
-                                                                  maxLines: 1,
-                                                                  controller.patientAttachmentList.value?.responseData?[index].fileName ?? "",
-                                                                  style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 6,
-                                                                ),
-                                                                Text(
-                                                                  DateFormat('MM/dd/yyyy')
-                                                                      .format(DateTime.parse(controller.patientAttachmentList.value?.responseData?[index].createdAt ?? "").toLocal()),
-                                                                  style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                    separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                                    itemCount: controller.patientAttachmentList.value?.responseData?.length ?? 0,
-                                                  );
-                                                },
-                                              ))),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                                                      Positioned(
+                                                                        top: -10,
+                                                                        // Align at the top of the first container
+                                                                        right: -10,
+                                                                        child: Container(
+                                                                          width: 40,
+                                                                          height: 40,
+                                                                          decoration: BoxDecoration(
+                                                                            shape: BoxShape.circle,
+                                                                            color: Colors.white,
+                                                                            boxShadow: [
+                                                                              BoxShadow(
+                                                                                color: Colors.black.withOpacity(0.2),
+                                                                                blurRadius: 2.2,
+                                                                                offset: Offset(0.2, 0),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          child: GestureDetector(
+                                                                            onTap: () {
+                                                                              showDialog(
+                                                                                context: context,
+                                                                                barrierDismissible: true,
+                                                                                builder: (BuildContext context) {
+                                                                                  // return SizedBox();
+                                                                                  return DeleteImageDialog(
+                                                                                    onDelete: () {
+                                                                                      controller.deleteAttachments(controller.patientAttachmentList.value?.responseData![index].id ?? 0);
+                                                                                    },
+                                                                                    extension: controller.patientAttachmentList.value?.responseData?[index].fileType,
+                                                                                  );
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                            child: SvgPicture.asset(
+                                                                              ImagePath.delete_black,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 6,
+                                                                  ),
+                                                                  Text(
+                                                                    maxLines: 1,
+                                                                    controller.patientAttachmentList.value?.responseData?[index].fileName ?? "",
+                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 6,
+                                                                  ),
+                                                                  Text(
+                                                                    DateFormat('MM/dd/yyyy')
+                                                                        .format(DateTime.parse(controller.patientAttachmentList.value?.responseData?[index].createdAt ?? "").toLocal()),
+                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                      separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                      itemCount: controller.patientAttachmentList.value?.responseData?.length ?? 0,
+                                                    );
+                                                  },
+                                                )))
+                                        : Container(
+                                            width: double.infinity,
+                                            height: 200,
+                                            child: Center(child: Text("Attachments Not available")),
+                                          ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

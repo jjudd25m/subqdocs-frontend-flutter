@@ -50,6 +50,8 @@ class AddPatientController extends GetxController {
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   List<String> visitTime = [
     "12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM",
     "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM",
@@ -154,7 +156,12 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -204,7 +211,12 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -286,7 +298,8 @@ class AddPatientController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
+          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       print("_addPatientRepository response is ${addPatientModel.toJson()} ");
       CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
@@ -311,6 +324,7 @@ class AddPatientController extends GetxController {
     dobController.clear();
     emailAddressController.clear();
     visitDateController.clear();
+    formKey.currentState!.reset();
   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {

@@ -5,7 +5,7 @@ import '../models/sign_up_models.dart';
 
 class SignupRepository {
   Future<SignUpModel> registerUser({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callPost("auth/register", params: param);
+    var response = await ApiProvider.instance.callPostWithoutHeader("auth/register", params: param);
 
     print("getPatient API  internal response $response");
 

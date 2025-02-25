@@ -79,7 +79,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.back();
+                                Get.back(result: 1);
                               },
                               child: SvgPicture.asset(
                                 ImagePath.logo_back,
@@ -109,262 +109,288 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                             shrinkWrap: true,
                             itemBuilder: (context, index) => InkWell(
                                   onTap: () {},
-                                  child: ExpansionTile(
-                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    backgroundColor: AppColors.backgroundWhite,
-                                    collapsedBackgroundColor: AppColors.backgroundWhite,
-                                    title: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            getFormattedDate(controller.attachmentDic.keys.elementAt(index)),
-                                            style: AppFonts.medium(16, AppColors.textPurple),
-                                          ),
-                                          SizedBox(width: 10),
-                                          Expanded(
-                                            child: Divider(
-                                              color: AppColors.buttonBackgroundGrey,
-                                              height: 1,
-                                              thickness: 1,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                  child: Theme(
+                                    data: ThemeData(
+                                      splashColor: Colors.transparent, // Remove splash color
+                                      highlightColor: Colors.transparent, // Remove highlight color
                                     ),
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 20),
-                                        // height: 300,
-                                        child: GridView.builder(
-                                          shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: (MediaQuery.of(context).size.width.toInt() / 140).toInt(), // Number of columns
-                                            crossAxisSpacing: Dimen.margin15, // Horizontal space between items
-                                            mainAxisSpacing: Dimen.margin15, // Vertical space between items
-                                            childAspectRatio: 0.9, // Adjust the height-to-width ratio of the grid items
-                                          ),
-                                          padding: EdgeInsets.only(top: 20),
-                                          itemBuilder: (context, subindex) {
-                                            return Container(
-                                              height: 200,
-                                              width: 140,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 10),
-                                                  Stack(
-                                                    clipBehavior: Clip.none,
-                                                    alignment: Alignment.topRight,
-                                                    children: [
-                                                      Container(
-                                                        height: 120,
-                                                        width: 120,
-                                                        decoration: BoxDecoration(
-                                                          border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
-                                                          borderRadius: BorderRadius.circular(8),
-                                                        ),
-                                                        padding: const EdgeInsets.only(bottom: Dimen.margin2),
-                                                        child: ClipRRect(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          child: Container(
-                                                            color: AppColors.backgroundPdfAttchment,
-                                                            width: 120,
-                                                            height: 120,
-                                                            child: Center(
-                                                              child:
-                                                                  // (index % 2 == 0)
-                                                                  //     ? Image.asset(
-                                                                  //         ImagePath.pdf,
-                                                                  //         width: 60,
-                                                                  //         height: 60,
-                                                                  //         fit: BoxFit.contain,
-                                                                  //       )
-                                                                  //     :
-                                                                  BaseImageView(
-                                                                imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
-                                                                width: 120,
-                                                                height: 120,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        top: -10,
-                                                        // Align at the top of the first container
-                                                        right: -10,
-                                                        child: Container(
-                                                          width: 40,
-                                                          height: 40,
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            color: Colors.white,
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: Colors.black.withOpacity(0.2),
-                                                                blurRadius: 2.2,
-                                                                offset: Offset(0.2, 0),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          child: GestureDetector(
-                                                            onTap: () {
-                                                              showDialog(
-                                                                context: context,
-                                                                barrierDismissible: true,
-                                                                builder: (BuildContext context) {
-                                                                  // return SizedBox();
-                                                                  return DeleteImageDialog(
-                                                                    onDelete: () {
-                                                                      controller.deleteAttachments(index, subindex, controller.attachmentDic.values.elementAt(index)[subindex].id ?? -1);
-                                                                    },
-                                                                    extension: controller.attachmentDic.values.elementAt(index)[subindex].fileType,
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            child: SvgPicture.asset(
-                                                              ImagePath.delete_black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                    child: ExpansionTile(
+                                      collapsedShape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      backgroundColor: AppColors.backgroundWhite,
+                                      collapsedBackgroundColor: AppColors.backgroundWhite,
+                                      title: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              getFormattedDate(controller.attachmentDic.keys.elementAt(index)),
+                                              style: AppFonts.medium(16, AppColors.textPurple),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Divider(
+                                                color: AppColors.buttonBackgroundGrey,
+                                                height: 1,
+                                                thickness: 1,
                                               ),
-                                            );
-                                          },
-                                          itemCount: controller.attachmentDic.values.elementAt(index).length,
+                                            )
+                                          ],
                                         ),
                                       ),
-                                      // Row(
-                                      //   children: [
-                                      //     SizedBox(width: 20),
-                                      //     Stack(
-                                      //       children: [
-                                      //         Padding(
-                                      //           padding: const EdgeInsets.only(right: 10),
-                                      //           child: BaseImageView(
-                                      //             imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                      //             width: 70,
-                                      //             height: 70,
-                                      //           ),
-                                      //         ),
-                                      //         Positioned(
-                                      //           bottom: -10,
-                                      //           right: -3,
-                                      //           child: SvgPicture.asset(
-                                      //             ImagePath.camera,
-                                      //             height: 44,
-                                      //             width: 44,
-                                      //           ),
-                                      //         )
-                                      //       ],
-                                      //     ),
-                                      //     SizedBox(
-                                      //       width: 20,
-                                      //     ),
-                                      //     Expanded(
-                                      //         child: Row(
-                                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      //       children: [
-                                      //         Column(
-                                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                                      //           children: [
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "Don Jones",
-                                      //               style: AppFonts.medium(15, AppColors.textBlack),
-                                      //             ),
-                                      //             SizedBox(
-                                      //               width: 15,
-                                      //             ),
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "12345678",
-                                      //               style: AppFonts.regular(13, AppColors.textGrey),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //         Column(
-                                      //           children: [
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "Age",
-                                      //               style: AppFonts.medium(15, AppColors.textBlack),
-                                      //             ),
-                                      //             SizedBox(
-                                      //               width: 15,
-                                      //             ),
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "52",
-                                      //               style: AppFonts.regular(13, AppColors.textGrey),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //         Column(
-                                      //           children: [
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "Gender",
-                                      //               style: AppFonts.medium(15, AppColors.textBlack),
-                                      //             ),
-                                      //             SizedBox(
-                                      //               width: 15,
-                                      //             ),
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "Male",
-                                      //               style: AppFonts.regular(13, AppColors.textGrey),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //         Column(
-                                      //           children: [
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "Visit Date & Time",
-                                      //               style: AppFonts.medium(15, AppColors.textBlack),
-                                      //             ),
-                                      //             SizedBox(
-                                      //               width: 15,
-                                      //             ),
-                                      //             Text(
-                                      //               textAlign: TextAlign.center,
-                                      //               "10/12/2024  10:30 am",
-                                      //               style: AppFonts.regular(13, AppColors.textGrey),
-                                      //             ),
-                                      //           ],
-                                      //         )
-                                      //       ],
-                                      //     )),
-                                      //     SizedBox(
-                                      //       width: 30,
-                                      //     )
-                                      //   ],
-                                      // ),
-                                      SizedBox(
-                                        height: 20,
-                                      )
-                                      // ExpansionTile(
-                                      //   title: Text(
-                                      //     'Sub title',
-                                      //   ),
-                                      //   children: <Widget>[
-                                      //     // ListTile(
-                                      //     //   title: Text('data'),
-                                      //     // )
-                                      //   ],
-                                      // ),
-                                      // ListTile(
-                                      //   title: Text('data'),
-                                      // )
-                                    ],
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 20),
+                                          // height: 300,
+                                          child: GridView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: (MediaQuery.of(context).size.width.toInt() / 140)
+                                                  .toInt(), // Number of columns
+                                              crossAxisSpacing: Dimen.margin15, // Horizontal space between items
+                                              mainAxisSpacing: Dimen.margin15, // Vertical space between items
+                                              childAspectRatio:
+                                                  0.9, // Adjust the height-to-width ratio of the grid items
+                                            ),
+                                            padding: EdgeInsets.only(top: 20),
+                                            itemBuilder: (context, subindex) {
+                                              return Container(
+                                                height: 200,
+                                                width: 140,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(height: 10),
+                                                    Stack(
+                                                      clipBehavior: Clip.none,
+                                                      alignment: Alignment.topRight,
+                                                      children: [
+                                                        Container(
+                                                          height: 120,
+                                                          width: 120,
+                                                          decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color: AppColors.buttonBackgroundGrey
+                                                                    .withValues(alpha: 0.8)),
+                                                            borderRadius: BorderRadius.circular(8),
+                                                          ),
+                                                          padding: const EdgeInsets.only(bottom: Dimen.margin2),
+                                                          child: ClipRRect(
+                                                            borderRadius: BorderRadius.circular(8),
+                                                            child: Container(
+                                                              color: AppColors.backgroundPdfAttchment,
+                                                              width: 120,
+                                                              height: 120,
+                                                              child: Center(
+                                                                child:
+                                                                    // (index % 2 == 0)
+                                                                    //     ? Image.asset(
+                                                                    //         ImagePath.pdf,
+                                                                    //         width: 60,
+                                                                    //         height: 60,
+                                                                    //         fit: BoxFit.contain,
+                                                                    //       )
+                                                                    //     :
+                                                                    BaseImageView(
+                                                                  imageUrl: controller.attachmentDic.values
+                                                                          .elementAt(index)[subindex]
+                                                                          .filePath ??
+                                                                      "",
+                                                                  width: 120,
+                                                                  height: 120,
+                                                                  errorWidget: Image.asset(
+                                                                    ImagePath.file_placeHolder,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          top: -10,
+                                                          // Align at the top of the first container
+                                                          right: -10,
+                                                          child: Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration: BoxDecoration(
+                                                              shape: BoxShape.circle,
+                                                              color: Colors.white,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors.black.withOpacity(0.2),
+                                                                  blurRadius: 2.2,
+                                                                  offset: Offset(0.2, 0),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            child: GestureDetector(
+                                                              onTap: () {
+                                                                showDialog(
+                                                                  context: context,
+                                                                  barrierDismissible: true,
+                                                                  builder: (BuildContext context) {
+                                                                    // return SizedBox();
+                                                                    return DeleteImageDialog(
+                                                                      onDelete: () {
+                                                                        controller.deleteAttachments(
+                                                                            index,
+                                                                            subindex,
+                                                                            controller.attachmentDic.values
+                                                                                    .elementAt(index)[subindex]
+                                                                                    .id ??
+                                                                                -1);
+                                                                      },
+                                                                      extension: controller.attachmentDic.values
+                                                                          .elementAt(index)[subindex]
+                                                                          .fileType,
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                              child: SvgPicture.asset(
+                                                                ImagePath.delete_black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            itemCount: controller.attachmentDic.values.elementAt(index).length,
+                                          ),
+                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     SizedBox(width: 20),
+                                        //     Stack(
+                                        //       children: [
+                                        //         Padding(
+                                        //           padding: const EdgeInsets.only(right: 10),
+                                        //           child: BaseImageView(
+                                        //             imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                        //             width: 70,
+                                        //             height: 70,
+                                        //           ),
+                                        //         ),
+                                        //         Positioned(
+                                        //           bottom: -10,
+                                        //           right: -3,
+                                        //           child: SvgPicture.asset(
+                                        //             ImagePath.camera,
+                                        //             height: 44,
+                                        //             width: 44,
+                                        //           ),
+                                        //         )
+                                        //       ],
+                                        //     ),
+                                        //     SizedBox(
+                                        //       width: 20,
+                                        //     ),
+                                        //     Expanded(
+                                        //         child: Row(
+                                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        //       children: [
+                                        //         Column(
+                                        //           crossAxisAlignment: CrossAxisAlignment.start,
+                                        //           children: [
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "Don Jones",
+                                        //               style: AppFonts.medium(15, AppColors.textBlack),
+                                        //             ),
+                                        //             SizedBox(
+                                        //               width: 15,
+                                        //             ),
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "12345678",
+                                        //               style: AppFonts.regular(13, AppColors.textGrey),
+                                        //             ),
+                                        //           ],
+                                        //         ),
+                                        //         Column(
+                                        //           children: [
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "Age",
+                                        //               style: AppFonts.medium(15, AppColors.textBlack),
+                                        //             ),
+                                        //             SizedBox(
+                                        //               width: 15,
+                                        //             ),
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "52",
+                                        //               style: AppFonts.regular(13, AppColors.textGrey),
+                                        //             ),
+                                        //           ],
+                                        //         ),
+                                        //         Column(
+                                        //           children: [
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "Gender",
+                                        //               style: AppFonts.medium(15, AppColors.textBlack),
+                                        //             ),
+                                        //             SizedBox(
+                                        //               width: 15,
+                                        //             ),
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "Male",
+                                        //               style: AppFonts.regular(13, AppColors.textGrey),
+                                        //             ),
+                                        //           ],
+                                        //         ),
+                                        //         Column(
+                                        //           children: [
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "Visit Date & Time",
+                                        //               style: AppFonts.medium(15, AppColors.textBlack),
+                                        //             ),
+                                        //             SizedBox(
+                                        //               width: 15,
+                                        //             ),
+                                        //             Text(
+                                        //               textAlign: TextAlign.center,
+                                        //               "10/12/2024  10:30 am",
+                                        //               style: AppFonts.regular(13, AppColors.textGrey),
+                                        //             ),
+                                        //           ],
+                                        //         )
+                                        //       ],
+                                        //     )),
+                                        //     SizedBox(
+                                        //       width: 30,
+                                        //     )
+                                        //   ],
+                                        // ),
+                                        SizedBox(
+                                          height: 20,
+                                        )
+                                        // ExpansionTile(
+                                        //   title: Text(
+                                        //     'Sub title',
+                                        //   ),
+                                        //   children: <Widget>[
+                                        //     // ListTile(
+                                        //     //   title: Text('data'),
+                                        //     // )
+                                        //   ],
+                                        // ),
+                                        // ListTile(
+                                        //   title: Text('data'),
+                                        // )
+                                      ],
+                                    ),
                                   ),
                                 ),
                             itemCount: controller.attachmentDic.keys.length);

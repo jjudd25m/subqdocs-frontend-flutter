@@ -149,7 +149,7 @@ class PatientListData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    pastVisitCount = json['pastVisitCount'];
+    pastVisitCount = json['visitCount'];
     appointmentTime = json['appointmentTime'];
     lastVisitDate = json['lastVisitDate'];
     if (json['visits'] != null) {
@@ -190,7 +190,7 @@ class PatientListData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
-    data['pastVisitCount'] = pastVisitCount;
+    data['visitCount'] = pastVisitCount;
     data['appointmentTime'] = appointmentTime;
     data['lastVisitDate'] = lastVisitDate;
     if (visits != null) {

@@ -27,7 +27,7 @@ class PatientProfileController extends GetxController {
     patientId = Get.arguments["patientData"];
     visitId = Get.arguments["visitId"];
 
-    print("our patientdata is ${patientId} visitId is ${visitId}");
+    print("our patient data is $patientId visitId is $visitId");
     getPatient(patientId, visitId);
   }
 
@@ -111,17 +111,15 @@ class PatientProfileController extends GetxController {
   }
 
   Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
-    print("visit id :- ${visitId}");
+    print("visit id :- $visitId");
     dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
     print("patientReScheduleCreate API  internal response $response");
     getPatient(patientId, visitId);
-    // CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
   }
 
   Future<void> deletePatientVisit({required String id}) async {
     var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
     print(response);
     getPatient(patientId, visitId);
-    // return response;
   }
 }

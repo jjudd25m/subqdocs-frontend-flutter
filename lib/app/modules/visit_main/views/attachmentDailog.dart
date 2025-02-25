@@ -22,12 +22,14 @@ class attachmentDailog extends GetView<VisitMainController> {
       ),
       elevation: 16,
       child: Container(
+        constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .50),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
           children: [
             Container(
               width: 360,
@@ -44,9 +46,8 @@ class attachmentDailog extends GetView<VisitMainController> {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
-
-                        // controller.list.clear();
+                        controller.list.clear();
+                        Get.back();
                       },
                       child: SvgPicture.asset(
                         "assets/images/cross_white.svg",
@@ -61,107 +62,107 @@ class attachmentDailog extends GetView<VisitMainController> {
               width: 360,
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Files",
-                      style: AppFonts.medium(16, AppColors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: AppColors.textDarkGrey, // Border color
-                                  width: 0.5,
-                                  // Border width
+                child: Obx(() {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Files",
+                        style: AppFonts.medium(16, AppColors.black),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: AppColors.textDarkGrey, // Border color
+                                    width: 0.5,
+                                    // Border width
+                                  ),
+
+                                  borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                 ),
-
-                                borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset("assets/images/placeholde_image.svg"),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(controller.list.value[index].fileName ?? ""),
+                                            Text(controller.visitId.value),
+                                            Text(
+                                                "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller.list.removeAt(index);
+                                            controller.list.refresh();
+                                          },
+                                          child: SvgPicture.asset(
+                                            "assets/images/logo_cross.svg",
+                                            width: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
                               ),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Obx(
-                                    () {
-                                      return Row(
-                                        children: [
-                                          SvgPicture.asset("assets/images/placeholde_image.svg"),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(controller.list.value[index].fileName ?? ""),
-                                              Text(controller.visitId.value),
-                                              Text(
-                                                  "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // controller.removeItem(index);
-                                            },
-                                            child: SvgPicture.asset(
-                                              "assets/images/logo_cross.svg",
-                                              width: 18,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  )),
+                            );
+                          },
+                          itemCount: controller.list.length),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomButton(
+                              navigate: () {
+                                Navigator.pop(context);
+                              },
+                              label: "Cancel",
+                              backGround: Colors.white,
+                              isTrue: false,
+                              textColor: AppColors.backgroundPurple,
                             ),
-                          );
-                        },
-                        itemCount: controller.list.length),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomButton(
-                            navigate: () {
-                              Navigator.pop(context);
-                            },
-                            label: "Cancel",
-                            backGround: Colors.white,
-                            isTrue: false,
-                            textColor: AppColors.backgroundPurple,
                           ),
-                        ),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                          child: CustomButton(
-                            navigate: () {
-                              // controller.addImage(
-                              // )
-                              Navigator.pop(context);
-                              controller.uploadAttachments();
-
-                              //
-
-                              // Navigator.pop(context);
-                            },
-                            label: "Add",
+                          SizedBox(
+                            width: 12,
                           ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                          Expanded(
+                            child: CustomButton(
+                              navigate: () {
+                                // controller.addImage(
+                                // )
+                                Navigator.pop(context);
+                                controller.uploadAttachments();
+
+                                //
+
+                                // Navigator.pop(context);
+                              },
+                              label: "Add",
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                }),
               ),
             )
           ],

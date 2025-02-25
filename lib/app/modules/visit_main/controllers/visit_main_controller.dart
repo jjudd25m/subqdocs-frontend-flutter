@@ -119,6 +119,14 @@ class VisitMainController extends GetxController {
     }
   }
 
+  void clearFilter() {
+    isSelectedAttchmentOption.value = -1;
+    isDocument.value = false;
+    isImage.value = false;
+    getPatientAttachment();
+    Get.back();
+  }
+
   Future<void> pickFiles(BuildContext context) async {
     list.clear();
 
@@ -185,7 +193,7 @@ class VisitMainController extends GetxController {
     print("visit id is :- $visitId");
 
     List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
-    print("local audio is :- ${pendingFiles}");
+    print("local audio is :- $pendingFiles");
 
     if (patientId.value.isNotEmpty) {
       getVisitRecap();
@@ -366,7 +374,7 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
-    print("visit id :- ${visitId}");
+    print("visit id :- $visitId");
     dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
     print("patientReScheduleCreate API  internal response $response");
     // getPatient(patientId, visitId);

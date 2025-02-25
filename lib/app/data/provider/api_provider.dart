@@ -63,6 +63,29 @@ class ApiProvider {
     }
   }
 
+  Future<Map<String, dynamic>> callPostWithoutHeader(String url, {Map<String, dynamic>? params}) async {
+    print("API parameter is $params");
+
+    if (kDebugMode) {
+      print(UrlProvider.baseUrl + url);
+    }
+    try {
+      var response = await dio.post(UrlProvider.baseUrl + url, data: jsonEncode(params), options: Options(headers: getApiHeaderWithoutToken())).timeout(const Duration(seconds: 30));
+      print("API response is $response");
+      return getResponse(response.data);
+    } on TimeoutException {
+      throw ValidationString.validationRequestTimeout;
+    } on SocketException {
+      throw ValidationString.validationNoInternetFound;
+    } on DioException catch (e) {
+      print("API response is $e");
+      throw handleDioException(e);
+    } catch (e) {
+      print("API response is $e");
+      rethrow;
+    }
+  }
+
   Future<Map<String, dynamic>> callPut(String url, Map<String, dynamic> params) async {
     if (kDebugMode) {
       print(UrlProvider.baseUrl + url);
@@ -314,6 +337,18 @@ class ApiProvider {
       headers["Authorization"] = "Bearer $token";
       // headers[""] = token;
     }
+
+    print("header is $headers");
+    return headers.isEmpty ? null : headers;
+  }
+
+  Map<String, String>? getApiHeaderWithoutToken() {
+    print("getApiHeader");
+
+    // String token = AppPreference.instance.getString(AppString.prefKeyToken);
+
+    // Initialize the headers map
+    Map<String, String> headers = {"accept": "*/*", "Content-Type": "application/json"};
 
     print("header is $headers");
     return headers.isEmpty ? null : headers;

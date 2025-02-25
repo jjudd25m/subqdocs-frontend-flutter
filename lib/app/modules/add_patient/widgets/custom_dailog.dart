@@ -21,12 +21,14 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
       ),
       elevation: 16,
       child: Container(
+        constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .50),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
           children: [
             Container(
               width: 360,
@@ -122,6 +124,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                     ),
                     Obx(() {
                       return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return Padding(

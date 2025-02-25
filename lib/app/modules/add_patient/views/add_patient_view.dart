@@ -40,8 +40,6 @@ import '../controllers/add_patient_controller.dart';
 class AddPatientView extends GetView<AddPatientController> {
   AddPatientView({super.key});
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   DateTime fromDate = DateTime.now().subtract(Duration(days: 371));
 
   void _showCustomDialog(BuildContext context) {
@@ -202,7 +200,7 @@ class AddPatientView extends GetView<AddPatientController> {
         ),
         body: SafeArea(
           child: Form(
-            key: _formKey,
+            key: controller.formKey,
             child: Column(
               children: [
                 CustomAppBar(drawerkey: _key),
@@ -210,7 +208,8 @@ class AddPatientView extends GetView<AddPatientController> {
                     child: Container(
                         color: AppColors.ScreenBackGround,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                          padding:
+                              const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                           child: ListView(
                             physics: BouncingScrollPhysics(),
                             padding: EdgeInsets.zero,
@@ -218,7 +217,8 @@ class AddPatientView extends GetView<AddPatientController> {
                               Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -302,7 +302,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     },
                                                     // value: "",
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                      padding: const EdgeInsets.only(
+                                                          left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
                                                           Icon(
@@ -334,7 +335,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                           color: AppColors.appbarBorder,
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          padding: const EdgeInsets.only(
+                                                              left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(CupertinoIcons.camera),
@@ -444,7 +446,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 if (picked != null) {
                                                   String inputText;
                                                   String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                  inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                  inputText =
+                                                      '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                   controller.dobController.text = inputText;
                                                 }
                                               },
@@ -588,7 +591,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                               if (picked != null) {
                                                 String inputText;
                                                 String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                inputText =
+                                                    '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                 controller.visitDateController.text = inputText;
                                               }
                                             },
@@ -637,203 +641,268 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(1),
-                                          child: ExpansionTile(
-                                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                            backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                            collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                            title: Container(
-                                              child: Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    textAlign: TextAlign.center,
-                                                    "Attachments",
-                                                    style: AppFonts.medium(16, AppColors.textBlack),
-                                                  ),
-                                                ],
-                                              ),
+                                          child: Theme(
+                                            data: ThemeData(
+                                              splashColor: Colors.transparent, // Remove splash color
+                                              highlightColor: Colors.transparent, // Remove highlight color
                                             ),
-                                            children: <Widget>[
-                                              Container(
-                                                color: Colors.white,
-                                                child: Padding(
-                                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                    child: SizedBox(
-                                                        height: 200,
-                                                        width: double.infinity,
-                                                        child: Obx(
-                                                          () {
-                                                            return ListView.separated(
-                                                              scrollDirection: Axis.horizontal,
-                                                              padding: EdgeInsets.only(top: 20),
-                                                              itemBuilder: (context, index) {
-                                                                return Container(
-                                                                  height: 200,
-                                                                  width: 140,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      SizedBox(height: 10),
-                                                                      Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                        mainAxisSize: MainAxisSize.min,
-                                                                        children: [
-                                                                          Stack(
-                                                                            clipBehavior: Clip.none,
-                                                                            alignment: Alignment.topRight,
+                                            child: ExpansionTile(
+                                              shape: OutlineInputBorder(
+                                                  borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                              backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                              collapsedShape: OutlineInputBorder(
+                                                  borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                              collapsedBackgroundColor:
+                                                  AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                              title: Container(
+                                                child: Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      "Attachments",
+                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              children: <Widget>[
+                                                Container(
+                                                    color: Colors.white,
+                                                    child: controller.selectedList.length != 0
+                                                        ? Padding(
+                                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                            child: SizedBox(
+                                                                height: 200,
+                                                                width: double.infinity,
+                                                                child: Obx(
+                                                                  () {
+                                                                    return ListView.separated(
+                                                                      scrollDirection: Axis.horizontal,
+                                                                      padding: EdgeInsets.only(top: 20),
+                                                                      itemBuilder: (context, index) {
+                                                                        return Container(
+                                                                          height: 200,
+                                                                          width: 140,
+                                                                          child: Column(
                                                                             children: [
-                                                                              Container(
-                                                                                decoration: BoxDecoration(
-                                                                                  color: AppColors.appbarBorder,
-                                                                                  borderRadius: BorderRadius.circular(10),
-                                                                                ),
-                                                                                width: 120,
-                                                                                height: 120,
-                                                                                child: GestureDetector(
-                                                                                  onTap: () {
-                                                                                    // FullscreenImageViewer.open(
-                                                                                    //   context: context,
-                                                                                    //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
-                                                                                    // );
-                                                                                  },
-                                                                                  child: GestureDetector(
-                                                                                    onTap: () {
-                                                                                      if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
-                                                                                        print("1");
-                                                                                        FullscreenImageViewer.open(
-                                                                                          context: context,
-                                                                                          child: Image.file(controller.selectedList[index].file ?? File("")),
-                                                                                        );
-                                                                                      } else {
-                                                                                        print("2");
-                                                                                        controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
-                                                                                      }
-                                                                                    },
-                                                                                    child: ClipRRect(
-                                                                                      borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                                      child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
-                                                                                          ? Image.file(
-                                                                                              controller.selectedList[index].file!,
-                                                                                              fit: BoxFit.cover,
-                                                                                            )
-                                                                                          : Image.asset(
-                                                                                              ImagePath.file_placeHolder,
-                                                                                            ), // Display a placeholder if the file is not an image
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Positioned(
-                                                                                top: -10,
-                                                                                // Align at the top of the first container
-                                                                                right: -10,
-                                                                                child: Container(
-                                                                                  width: 40,
-                                                                                  height: 40,
-                                                                                  decoration: BoxDecoration(
-                                                                                    shape: BoxShape.circle,
-                                                                                    color: Colors.white,
-                                                                                    boxShadow: [
-                                                                                      BoxShadow(
-                                                                                        color: Colors.black.withOpacity(0.2),
-                                                                                        blurRadius: 2.2,
-                                                                                        offset: Offset(0.2, 0),
+                                                                              SizedBox(height: 10),
+                                                                              Column(
+                                                                                crossAxisAlignment:
+                                                                                    CrossAxisAlignment.start,
+                                                                                mainAxisSize: MainAxisSize.min,
+                                                                                children: [
+                                                                                  Stack(
+                                                                                    clipBehavior: Clip.none,
+                                                                                    alignment: Alignment.topRight,
+                                                                                    children: [
+                                                                                      Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: AppColors.appbarBorder,
+                                                                                          borderRadius:
+                                                                                              BorderRadius.circular(10),
+                                                                                        ),
+                                                                                        width: 120,
+                                                                                        height: 120,
+                                                                                        child: GestureDetector(
+                                                                                          onTap: () {
+                                                                                            // FullscreenImageViewer.open(
+                                                                                            //   context: context,
+                                                                                            //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
+                                                                                            // );
+                                                                                          },
+                                                                                          child: GestureDetector(
+                                                                                            onTap: () {
+                                                                                              if (getFileExtension(
+                                                                                                      controller
+                                                                                                              .selectedList[
+                                                                                                                  index]
+                                                                                                              .file
+                                                                                                              ?.path ??
+                                                                                                          "") ==
+                                                                                                  "image") {
+                                                                                                print("1");
+                                                                                                FullscreenImageViewer
+                                                                                                    .open(
+                                                                                                  context: context,
+                                                                                                  child: Image.file(
+                                                                                                      controller
+                                                                                                              .selectedList[
+                                                                                                                  index]
+                                                                                                              .file ??
+                                                                                                          File("")),
+                                                                                                );
+                                                                                              } else {
+                                                                                                print("2");
+                                                                                                controller.launchInAppWithBrowserOptions(
+                                                                                                    Uri.file(controller
+                                                                                                            .selectedList[
+                                                                                                                index]
+                                                                                                            .file
+                                                                                                            ?.path ??
+                                                                                                        ""));
+                                                                                              }
+                                                                                            },
+                                                                                            child: ClipRRect(
+                                                                                              borderRadius:
+                                                                                                  BorderRadius.circular(
+                                                                                                      10), // Set the radius here
+                                                                                              child: getFileExtension(controller
+                                                                                                              .selectedList[
+                                                                                                                  index]
+                                                                                                              .file
+                                                                                                              ?.path ??
+                                                                                                          "") ==
+                                                                                                      "image"
+                                                                                                  ? Image.file(
+                                                                                                      controller
+                                                                                                          .selectedList[
+                                                                                                              index]
+                                                                                                          .file!,
+                                                                                                      fit: BoxFit.cover,
+                                                                                                    )
+                                                                                                  : Image.asset(
+                                                                                                      ImagePath
+                                                                                                          .file_placeHolder,
+                                                                                                    ), // Display a placeholder if the file is not an image
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Positioned(
+                                                                                        top: -10,
+                                                                                        // Align at the top of the first container
+                                                                                        right: -10,
+                                                                                        child: Container(
+                                                                                          width: 40,
+                                                                                          height: 40,
+                                                                                          decoration: BoxDecoration(
+                                                                                            shape: BoxShape.circle,
+                                                                                            color: Colors.white,
+                                                                                            boxShadow: [
+                                                                                              BoxShadow(
+                                                                                                color: Colors.black
+                                                                                                    .withOpacity(0.2),
+                                                                                                blurRadius: 2.2,
+                                                                                                offset: Offset(0.2, 0),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                          child: GestureDetector(
+                                                                                            onTap: () {
+                                                                                              showDialog(
+                                                                                                context: context,
+                                                                                                barrierDismissible:
+                                                                                                    true,
+                                                                                                builder: (BuildContext
+                                                                                                    context) {
+                                                                                                  // return SizedBox();
+                                                                                                  return DeleteImageDialog(
+                                                                                                    onDelete: () {
+                                                                                                      controller
+                                                                                                          .deleteAttachments(
+                                                                                                              index);
+                                                                                                    },
+                                                                                                    extension: getFileExtension(
+                                                                                                        controller
+                                                                                                                .selectedList[
+                                                                                                                    index]
+                                                                                                                .file
+                                                                                                                ?.path ??
+                                                                                                            ""),
+                                                                                                  );
+                                                                                                },
+                                                                                              );
+                                                                                            },
+                                                                                            child: SvgPicture.asset(
+                                                                                              ImagePath.delete_black,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
                                                                                       ),
                                                                                     ],
                                                                                   ),
-                                                                                  child: GestureDetector(
-                                                                                    onTap: () {
-                                                                                      showDialog(
-                                                                                        context: context,
-                                                                                        barrierDismissible: true,
-                                                                                        builder: (BuildContext context) {
-                                                                                          // return SizedBox();
-                                                                                          return DeleteImageDialog(
-                                                                                            onDelete: () {
-                                                                                              controller.deleteAttachments(index);
-                                                                                            },
-                                                                                            extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
-                                                                                          );
-                                                                                        },
-                                                                                      );
-                                                                                    },
-                                                                                    child: SvgPicture.asset(
-                                                                                      ImagePath.delete_black,
-                                                                                    ),
+                                                                                  // Stack(
+                                                                                  //   alignment: Alignment.bottomRight,
+                                                                                  //   children: <Widget>[
+                                                                                  //     Container(
+                                                                                  //       height: 200,
+                                                                                  //       width: 200,
+                                                                                  //       child: InkWell(
+                                                                                  //         onTap: () => {},
+                                                                                  //         child: ClipRRect(
+                                                                                  //           borderRadius:
+                                                                                  //               BorderRadius.circular(100),
+                                                                                  //           child: Container(
+                                                                                  //             height: 200,
+                                                                                  //             width: 200,
+                                                                                  //             color: Colors.grey[200],
+                                                                                  //             child: Icon(Icons.person),
+                                                                                  //           ),
+                                                                                  //         ),
+                                                                                  //       ),
+                                                                                  //     ),
+                                                                                  //     Container(
+                                                                                  //       height: 60,
+                                                                                  //       width: 60,
+                                                                                  //       decoration: BoxDecoration(
+                                                                                  //         shape: BoxShape.circle,
+                                                                                  //         color: Colors.white,
+                                                                                  //       ),
+                                                                                  //       padding: EdgeInsets.all(5),
+                                                                                  //       child: Container(
+                                                                                  //         decoration: BoxDecoration(
+                                                                                  //             shape: BoxShape.circle,
+                                                                                  //             color: Colors.grey[200]),
+                                                                                  //         child: IconButton(
+                                                                                  //           icon: Icon(Icons.edit),
+                                                                                  //           onPressed: () {},
+                                                                                  //         ),
+                                                                                  //       ),
+                                                                                  //     ),
+                                                                                  //   ],
+                                                                                  // ),
+                                                                                  SizedBox(
+                                                                                    height: 6,
                                                                                   ),
-                                                                                ),
+                                                                                  Text(
+                                                                                    controller.selectedList[index]
+                                                                                            .fileName ??
+                                                                                        "",
+                                                                                    style: AppFonts.regular(
+                                                                                        12, AppColors.textDarkGrey),
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    height: 6,
+                                                                                  ),
+                                                                                  Text(
+                                                                                    controller
+                                                                                            .selectedList[index].date ??
+                                                                                        "",
+                                                                                    style: AppFonts.regular(
+                                                                                        12, AppColors.textDarkGrey),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             ],
                                                                           ),
-                                                                          // Stack(
-                                                                          //   alignment: Alignment.bottomRight,
-                                                                          //   children: <Widget>[
-                                                                          //     Container(
-                                                                          //       height: 200,
-                                                                          //       width: 200,
-                                                                          //       child: InkWell(
-                                                                          //         onTap: () => {},
-                                                                          //         child: ClipRRect(
-                                                                          //           borderRadius:
-                                                                          //               BorderRadius.circular(100),
-                                                                          //           child: Container(
-                                                                          //             height: 200,
-                                                                          //             width: 200,
-                                                                          //             color: Colors.grey[200],
-                                                                          //             child: Icon(Icons.person),
-                                                                          //           ),
-                                                                          //         ),
-                                                                          //       ),
-                                                                          //     ),
-                                                                          //     Container(
-                                                                          //       height: 60,
-                                                                          //       width: 60,
-                                                                          //       decoration: BoxDecoration(
-                                                                          //         shape: BoxShape.circle,
-                                                                          //         color: Colors.white,
-                                                                          //       ),
-                                                                          //       padding: EdgeInsets.all(5),
-                                                                          //       child: Container(
-                                                                          //         decoration: BoxDecoration(
-                                                                          //             shape: BoxShape.circle,
-                                                                          //             color: Colors.grey[200]),
-                                                                          //         child: IconButton(
-                                                                          //           icon: Icon(Icons.edit),
-                                                                          //           onPressed: () {},
-                                                                          //         ),
-                                                                          //       ),
-                                                                          //     ),
-                                                                          //   ],
-                                                                          // ),
-                                                                          SizedBox(
-                                                                            height: 6,
-                                                                          ),
-                                                                          Text(
-                                                                            controller.selectedList[index].fileName ?? "",
-                                                                            style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                          ),
-                                                                          SizedBox(
-                                                                            height: 6,
-                                                                          ),
-                                                                          Text(
-                                                                            controller.selectedList[index].date ?? "",
-                                                                            style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                );
-                                                              },
-                                                              separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                                              itemCount: controller.selectedList.length,
-                                                            );
-                                                          },
-                                                        ))),
-                                              ),
-                                            ],
+                                                                        );
+                                                                      },
+                                                                      separatorBuilder: (context, index) =>
+                                                                          const SizedBox(width: Dimen.margin15),
+                                                                      itemCount: controller.selectedList.length,
+                                                                    );
+                                                                  },
+                                                                )))
+                                                        : Container(
+                                                            width: double.infinity,
+                                                            height: 200,
+                                                            child: Center(child: Text("Attachments Not available")),
+                                                          )),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -911,7 +980,7 @@ class AddPatientView extends GetView<AddPatientController> {
 
                                             controller.isSaveAddAnother.value = true;
 
-                                            if (_formKey.currentState!.validate()) {
+                                            if (controller.formKey.currentState!.validate()) {
                                               controller.addPatient();
                                             }
                                           },
@@ -937,12 +1006,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                           onTap: () {
                                             controller.isSaveAddAnother.value = false;
 
-                                            if (_formKey.currentState!.validate()) {
+                                            if (controller.formKey.currentState!.validate()) {
                                               controller.addPatient();
                                             }
                                           },
                                           child: Container(
-                                            decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
+                                            decoration: BoxDecoration(
+                                                color: AppColors.backgroundPurple,
+                                                borderRadius: BorderRadius.circular(6)),
                                             width: 70,
                                             height: 40,
                                             child: Padding(

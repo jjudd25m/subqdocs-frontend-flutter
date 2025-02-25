@@ -27,6 +27,8 @@ class HomeRepository {
   }
 
   Future<ScheduleVisitListModel> getPastVisit({required Map<String, dynamic> param}) async {
+    print(param);
+
     var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     print("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
