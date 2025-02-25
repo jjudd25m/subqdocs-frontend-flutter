@@ -75,8 +75,8 @@ class LoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      LoginModel loginModel =
-          await _loginRepository.login(email: emailController.text.toLowerCase(), password: passwordController.text);
+      LoginModel loginModel = await _loginRepository.login(
+          email: emailController.text.toLowerCase().trim(), password: passwordController.text.trim());
       isLoading.value = false;
       print("response is ${loginModel.toJson()} ");
 

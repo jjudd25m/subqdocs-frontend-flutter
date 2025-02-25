@@ -1027,214 +1027,237 @@ class VisitMainView extends GetView<VisitMainController> {
                                     children: <Widget>[
                                       Container(
                                         color: Colors.white,
-                                        child: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: SizedBox(
-                                                height: 200,
-                                                width: double.infinity,
-                                                child: Obx(
-                                                  () {
-                                                    return ListView.separated(
-                                                      scrollDirection: Axis.horizontal,
-                                                      padding: EdgeInsets.only(top: 20),
-                                                      itemBuilder: (context, index) {
-                                                        return Container(
-                                                          height: 200,
-                                                          width: 140,
-                                                          child: Column(
-                                                            children: [
-                                                              SizedBox(height: 10),
-                                                              Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                mainAxisSize: MainAxisSize.min,
+                                        child: controller.patientAttachmentList.value?.responseData?.length != 0
+                                            ? Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                child: SizedBox(
+                                                    height: 200,
+                                                    width: double.infinity,
+                                                    child: Obx(
+                                                      () {
+                                                        return ListView.separated(
+                                                          scrollDirection: Axis.horizontal,
+                                                          padding: EdgeInsets.only(top: 20),
+                                                          itemBuilder: (context, index) {
+                                                            return Container(
+                                                              height: 200,
+                                                              width: 140,
+                                                              child: Column(
                                                                 children: [
-                                                                  Stack(
-                                                                    clipBehavior: Clip.none,
-                                                                    alignment: Alignment.topRight,
+                                                                  SizedBox(height: 10),
+                                                                  Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    mainAxisSize: MainAxisSize.min,
                                                                     children: [
-                                                                      Container(
-                                                                        decoration: BoxDecoration(
-                                                                          color: AppColors.appbarBorder,
-                                                                          borderRadius: BorderRadius.circular(10),
-                                                                        ),
-                                                                        width: 120,
-                                                                        height: 120,
-                                                                        child: GestureDetector(
-                                                                          onTap: () {
-                                                                            print(controller.patientAttachmentList.value
-                                                                                ?.responseData?[index].fileType
-                                                                                ?.contains("image"));
+                                                                      Stack(
+                                                                        clipBehavior: Clip.none,
+                                                                        alignment: Alignment.topRight,
+                                                                        children: [
+                                                                          Container(
+                                                                            decoration: BoxDecoration(
+                                                                              color: AppColors.appbarBorder,
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            width: 120,
+                                                                            height: 120,
+                                                                            child: GestureDetector(
+                                                                              onTap: () {
+                                                                                print(controller
+                                                                                    .patientAttachmentList
+                                                                                    .value
+                                                                                    ?.responseData?[index]
+                                                                                    .fileType
+                                                                                    ?.contains("image"));
 
-                                                                            if (controller.patientAttachmentList.value
-                                                                                    ?.responseData?[index].fileType
-                                                                                    ?.contains("image") ??
-                                                                                false) {
-                                                                              showDialog(
-                                                                                context: context,
-                                                                                barrierDismissible:
-                                                                                    true, // Allows dismissing the dialog by tapping outside
-                                                                                builder: (BuildContext context) {
-                                                                                  return controller
-                                                                                              .patientAttachmentList
-                                                                                              .value
-                                                                                              ?.responseData?[index]
-                                                                                              .fileType
-                                                                                              ?.contains("image") ??
-                                                                                          false
-                                                                                      ? ViewAttchmentImage(
-                                                                                          imageUrl: controller
-                                                                                                  .patientAttachmentList
-                                                                                                  .value
-                                                                                                  ?.responseData?[index]
-                                                                                                  .filePath ??
-                                                                                              "",
-                                                                                          attchmentUrl: '',
-                                                                                        )
-                                                                                      : ViewAttchmentImage(
-                                                                                          imageUrl: "",
-                                                                                          attchmentUrl: controller
-                                                                                                  .patientAttachmentList
-                                                                                                  .value
-                                                                                                  ?.responseData?[index]
-                                                                                                  .filePath ??
-                                                                                              ""); // Our custom dialog
-                                                                                },
-                                                                              );
-                                                                            } else {
-                                                                              Uri attchmentUri = Uri.parse(controller
-                                                                                      .patientAttachmentList
-                                                                                      .value
-                                                                                      ?.responseData?[index]
-                                                                                      .filePath ??
-                                                                                  "");
-                                                                              print(
-                                                                                  "attchmentUri is :- ${attchmentUri}");
-                                                                              controller.launchInAppWithBrowserOptions(
-                                                                                  attchmentUri);
-                                                                            }
-
-                                                                            // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
-                                                                            // } else {
-                                                                            //   FullscreenImageViewer.open(
-                                                                            //     context: context,
-                                                                            //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
-                                                                            //   );
-                                                                            // }
-                                                                          },
-                                                                          child: ClipRRect(
-                                                                            borderRadius: BorderRadius.circular(
-                                                                                10), // Set the radius here
-                                                                            child: CachedNetworkImage(
-                                                                              imageUrl: controller
-                                                                                      .patientAttachmentList
-                                                                                      .value
-                                                                                      ?.responseData?[index]
-                                                                                      .filePath ??
-                                                                                  "",
-                                                                              width: 120,
-                                                                              height: 120,
-                                                                              errorWidget: (context, url, error) {
-                                                                                return Image.asset(
-                                                                                  ImagePath.file_placeHolder,
-                                                                                );
-                                                                              },
-                                                                              fit: BoxFit.cover,
-                                                                            )
-                                                                            // Image.file(
-                                                                            //   controller.list[index].file ?? File(""),
-                                                                            //   fit: BoxFit.cover,
-                                                                            // )
-                                                                            ,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Positioned(
-                                                                        top: -10,
-                                                                        // Align at the top of the first container
-                                                                        right: -10,
-                                                                        child: Container(
-                                                                          width: 40,
-                                                                          height: 40,
-                                                                          decoration: BoxDecoration(
-                                                                            shape: BoxShape.circle,
-                                                                            color: Colors.white,
-                                                                            boxShadow: [
-                                                                              BoxShadow(
-                                                                                color: Colors.black.withOpacity(0.2),
-                                                                                blurRadius: 2.2,
-                                                                                offset: Offset(0.2, 0),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                          child: GestureDetector(
-                                                                            onTap: () {
-                                                                              showDialog(
-                                                                                context: context,
-                                                                                barrierDismissible: true,
-                                                                                builder: (BuildContext context) {
-                                                                                  // return SizedBox();
-                                                                                  return DeleteImageDialog(
-                                                                                    onDelete: () {
-                                                                                      controller.deleteAttachments(
-                                                                                          controller
-                                                                                                  .patientAttachmentList
-                                                                                                  .value
-                                                                                                  ?.responseData![index]
-                                                                                                  .id ??
-                                                                                              0);
-                                                                                    },
-                                                                                    extension: controller
+                                                                                if (controller
                                                                                         .patientAttachmentList
                                                                                         .value
                                                                                         ?.responseData?[index]
-                                                                                        .fileType,
+                                                                                        .fileType
+                                                                                        ?.contains("image") ??
+                                                                                    false) {
+                                                                                  showDialog(
+                                                                                    context: context,
+                                                                                    barrierDismissible:
+                                                                                        true, // Allows dismissing the dialog by tapping outside
+                                                                                    builder: (BuildContext context) {
+                                                                                      return controller
+                                                                                                  .patientAttachmentList
+                                                                                                  .value
+                                                                                                  ?.responseData?[index]
+                                                                                                  .fileType
+                                                                                                  ?.contains("image") ??
+                                                                                              false
+                                                                                          ? ViewAttchmentImage(
+                                                                                              imageUrl: controller
+                                                                                                      .patientAttachmentList
+                                                                                                      .value
+                                                                                                      ?.responseData?[
+                                                                                                          index]
+                                                                                                      .filePath ??
+                                                                                                  "",
+                                                                                              attchmentUrl: '',
+                                                                                            )
+                                                                                          : ViewAttchmentImage(
+                                                                                              imageUrl: "",
+                                                                                              attchmentUrl: controller
+                                                                                                      .patientAttachmentList
+                                                                                                      .value
+                                                                                                      ?.responseData?[
+                                                                                                          index]
+                                                                                                      .filePath ??
+                                                                                                  ""); // Our custom dialog
+                                                                                    },
                                                                                   );
-                                                                                },
-                                                                              );
-                                                                            },
-                                                                            child: SvgPicture.asset(
-                                                                              ImagePath.delete_black,
+                                                                                } else {
+                                                                                  Uri attchmentUri = Uri.parse(
+                                                                                      controller
+                                                                                              .patientAttachmentList
+                                                                                              .value
+                                                                                              ?.responseData?[index]
+                                                                                              .filePath ??
+                                                                                          "");
+                                                                                  print(
+                                                                                      "attchmentUri is :- ${attchmentUri}");
+                                                                                  controller
+                                                                                      .launchInAppWithBrowserOptions(
+                                                                                          attchmentUri);
+                                                                                }
+
+                                                                                // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
+                                                                                // } else {
+                                                                                //   FullscreenImageViewer.open(
+                                                                                //     context: context,
+                                                                                //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
+                                                                                //   );
+                                                                                // }
+                                                                              },
+                                                                              child: ClipRRect(
+                                                                                borderRadius: BorderRadius.circular(
+                                                                                    10), // Set the radius here
+                                                                                child: CachedNetworkImage(
+                                                                                  imageUrl: controller
+                                                                                          .patientAttachmentList
+                                                                                          .value
+                                                                                          ?.responseData?[index]
+                                                                                          .filePath ??
+                                                                                      "",
+                                                                                  width: 120,
+                                                                                  height: 120,
+                                                                                  errorWidget: (context, url, error) {
+                                                                                    return Image.asset(
+                                                                                      ImagePath.file_placeHolder,
+                                                                                    );
+                                                                                  },
+                                                                                  fit: BoxFit.cover,
+                                                                                )
+                                                                                // Image.file(
+                                                                                //   controller.list[index].file ?? File(""),
+                                                                                //   fit: BoxFit.cover,
+                                                                                // )
+                                                                                ,
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
+                                                                          Positioned(
+                                                                            top: -10,
+                                                                            // Align at the top of the first container
+                                                                            right: -10,
+                                                                            child: Container(
+                                                                              width: 40,
+                                                                              height: 40,
+                                                                              decoration: BoxDecoration(
+                                                                                shape: BoxShape.circle,
+                                                                                color: Colors.white,
+                                                                                boxShadow: [
+                                                                                  BoxShadow(
+                                                                                    color:
+                                                                                        Colors.black.withOpacity(0.2),
+                                                                                    blurRadius: 2.2,
+                                                                                    offset: Offset(0.2, 0),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              child: GestureDetector(
+                                                                                onTap: () {
+                                                                                  showDialog(
+                                                                                    context: context,
+                                                                                    barrierDismissible: true,
+                                                                                    builder: (BuildContext context) {
+                                                                                      // return SizedBox();
+                                                                                      return DeleteImageDialog(
+                                                                                        onDelete: () {
+                                                                                          controller.deleteAttachments(
+                                                                                              controller
+                                                                                                      .patientAttachmentList
+                                                                                                      .value
+                                                                                                      ?.responseData![
+                                                                                                          index]
+                                                                                                      .id ??
+                                                                                                  0);
+                                                                                        },
+                                                                                        extension: controller
+                                                                                            .patientAttachmentList
+                                                                                            .value
+                                                                                            ?.responseData?[index]
+                                                                                            .fileType,
+                                                                                      );
+                                                                                    },
+                                                                                  );
+                                                                                },
+                                                                                child: SvgPicture.asset(
+                                                                                  ImagePath.delete_black,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: 6,
+                                                                      ),
+                                                                      Text(
+                                                                        maxLines: 1,
+                                                                        controller.patientAttachmentList.value
+                                                                                ?.responseData?[index].fileName ??
+                                                                            "",
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.textDarkGrey),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height: 6,
+                                                                      ),
+                                                                      Text(
+                                                                        DateFormat('MM/dd/yyyy').format(DateTime.parse(
+                                                                                controller
+                                                                                        .patientAttachmentList
+                                                                                        .value
+                                                                                        ?.responseData?[index]
+                                                                                        .createdAt ??
+                                                                                    "")
+                                                                            .toLocal()),
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.textDarkGrey),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  SizedBox(
-                                                                    height: 6,
-                                                                  ),
-                                                                  Text(
-                                                                    maxLines: 1,
-                                                                    controller.patientAttachmentList.value
-                                                                            ?.responseData?[index].fileName ??
-                                                                        "",
-                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 6,
-                                                                  ),
-                                                                  Text(
-                                                                    DateFormat('MM/dd/yyyy').format(DateTime.parse(
-                                                                            controller.patientAttachmentList.value
-                                                                                    ?.responseData?[index].createdAt ??
-                                                                                "")
-                                                                        .toLocal()),
-                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                  ),
                                                                 ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            );
+                                                          },
+                                                          separatorBuilder: (context, index) =>
+                                                              const SizedBox(width: Dimen.margin15),
+                                                          itemCount: controller
+                                                                  .patientAttachmentList.value?.responseData?.length ??
+                                                              0,
                                                         );
                                                       },
-                                                      separatorBuilder: (context, index) =>
-                                                          const SizedBox(width: Dimen.margin15),
-                                                      itemCount: controller
-                                                              .patientAttachmentList.value?.responseData?.length ??
-                                                          0,
-                                                    );
-                                                  },
-                                                ))),
+                                                    )))
+                                            : Container(
+                                                width: double.infinity,
+                                                height: 200,
+                                                child: Center(child: Text("Attachments Not available")),
+                                              ),
                                       ),
                                     ],
                                   ),
