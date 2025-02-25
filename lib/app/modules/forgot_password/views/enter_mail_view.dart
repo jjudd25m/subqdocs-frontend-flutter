@@ -7,6 +7,7 @@ import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 
 import '../../../../utils/app_string.dart';
+import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/custom_textfiled.dart';
@@ -51,6 +52,7 @@ class EnterMailView extends GetView<ForgotPasswordController> {
           width: isSmallScreen ? Get.width - 30 : 416,
           child: TextFormFiledWidget(
               label: AppString.emailAddress,
+              format: [NoSpaceLowercaseTextFormatter()],
               controller: controller.emailController,
               hint: AppString.emailPlaceHolder,
               checkValidation: (value) {

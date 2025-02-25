@@ -10,10 +10,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/widget/appbar.dart';
 
+import '../../../../utils/Formetors.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
@@ -165,7 +167,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     },
                                                     // value: "",
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                      padding: const EdgeInsets.only(
+                                                          left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
                                                           Icon(
@@ -197,7 +200,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                           color: AppColors.appbarBorder,
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          padding: const EdgeInsets.only(
+                                                              left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(CupertinoIcons.camera),
@@ -249,10 +253,11 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                         label: "Patient Id ",
+
                                         // isImportant: true,
                                         type: TextInputType.number,
                                         isValid: true,
-                                        format: [FilteringTextInputFormatter.digitsOnly],
+                                        format: [NoSpaceTextFormatter()],
                                         controller: controller.patientIdController,
                                         hint: "123",
                                         checkValidation: (value) {
@@ -265,6 +270,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                         label: "First Name",
+                                        format: [NoSpaceTextFormatter()],
                                         // isImportant: true,
                                         isValid: true,
                                         controller: controller.firstNameController,
@@ -279,6 +285,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                       label: "Middle Name",
+                                      format: [NoSpaceTextFormatter()],
                                       controller: controller.middleNameController,
                                       hint: "Joseph",
                                     ),
@@ -293,6 +300,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                       label: "Last Name",
+                                      format: [NoSpaceTextFormatter()],
                                       isValid: true,
                                       // isImportant: true,
                                       controller: controller.lastNameController,
@@ -309,6 +317,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     child: TextFormFiledWidget(
                                         suffixIcon: Icon(Icons.calendar_month),
                                         label: "Date of birth",
+                                        format: [NoSpaceTextFormatter()],
                                         isValid: true,
                                         readOnly: true,
                                         // isImportant: true,
@@ -323,7 +332,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           if (picked != null) {
                                             String inputText;
                                             String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                            inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                            inputText =
+                                                '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                             controller.dobController.text = inputText;
                                           }
                                         },
@@ -432,6 +442,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           children: [
                                             Expanded(
                                               child: TextFormFiledWidget(
+                                                format: [NoSpaceLowercaseTextFormatter()],
                                                 label: "Email Address",
                                                 controller: controller.emailAddressController,
                                                 hint: "donjones@example.com",
@@ -447,6 +458,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               child: TextFormFiledWidget(
                                                 suffixIcon: Icon(Icons.calendar_month),
                                                 label: "Visit Date",
+                                                format: [NoSpaceTextFormatter()],
                                                 readOnly: true,
                                                 // isImportant: true,
                                                 controller: controller.visitDateController,
@@ -460,7 +472,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                   if (picked != null) {
                                                     String inputText;
                                                     String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                    inputText =
+                                                        '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                     controller.visitDateController.text = inputText;
                                                   }
                                                 },
@@ -562,6 +575,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                             Expanded(
                                               child: TextFormFiledWidget(
                                                 label: "Email Address",
+                                                format: [NoSpaceLowercaseTextFormatter()],
                                                 controller: controller.emailAddressController,
                                                 hint: "donjones@example.com",
                                                 checkValidation: (value) {
