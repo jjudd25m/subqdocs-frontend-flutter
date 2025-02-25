@@ -102,6 +102,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(controller.list.value[index].fileName ?? ""),
+                                            //
                                             Text(controller.visitId.value),
                                             Text(
                                                 "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
