@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../services/media_picker_services.dart';
+import '../../../../utils/Loader.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
@@ -171,7 +172,8 @@ class EditPatentDetailsController extends GetxController {
     // print("visitformattedTime is:- $visitformattedTime");
 
     if (isFromSchedule.value) {
-      DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
+      DateTime visitTimeS =
+          DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
 
       // Formatting to "hh:mm a" format
       String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
@@ -313,7 +315,8 @@ class EditPatentDetailsController extends GetxController {
                 mode: CupertinoDatePickerMode.date,
                 initialDateTime: _selectedDate,
                 maximumDate: control == dobController ? DateTime.now() : DateTime.now().add(Duration(days: 365)),
-                minimumDate: control == visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
+                minimumDate:
+                    control == visitDateController ? DateTime.now() : DateTime.now().subtract(Duration(days: 10950)),
                 onDateTimeChanged: (DateTime newDate) {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
@@ -348,6 +351,8 @@ class EditPatentDetailsController extends GetxController {
   }
 
   Future<void> addPatient() async {
+    Loader().showLoadingDialogForSimpleLoader();
+
     if (!isFromSchedule.value) {
       visitDateController.clear();
     }
@@ -407,7 +412,7 @@ class EditPatentDetailsController extends GetxController {
       DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
-      String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+      String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
 
       print("date time is ${formattedTime}");
 
@@ -422,12 +427,16 @@ class EditPatentDetailsController extends GetxController {
 
     try {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
+
+      dynamic response = await _editPatientDetailsRepository.updatePatient(
+          files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
 
       isLoading.value = false;
       print("_editPatientDetailsRepository response is ${response} ");
+      Get.back();
       Get.back(result: 1);
     } catch (error) {
+      Get.back();
       isLoading.value = false;
       print("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);

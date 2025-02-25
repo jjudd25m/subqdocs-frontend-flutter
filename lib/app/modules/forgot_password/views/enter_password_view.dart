@@ -7,6 +7,7 @@ import 'package:subqdocs/app/modules/forgot_password/controllers/forgot_password
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 
+import '../../../../utils/Formetors.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
@@ -54,8 +55,10 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
               width: isSmallScreen ? Get.width - 30 : 416,
               child: TextFormFiledWidget(
                   label: "New Password",
+                  format: [NoSpaceTextFormatter()],
                   controller: controller.passwordController,
                   hint: AppString.passwordHint,
+                  visibility: controller.passwordVisible.value,
                   suffixIcon: controller.passwordVisible.value
                       ? GestureDetector(
                           onTap: () {
@@ -93,8 +96,10 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
               width: isSmallScreen ? Get.width - 30 : 416,
               child: TextFormFiledWidget(
                   label: "Confirm Password",
+                  format: [NoSpaceTextFormatter()],
                   controller: controller.confirmPasswordController,
                   hint: AppString.passwordHint,
+                  visibility: controller.confirmPasswordVisible.value,
                   suffixIcon: controller.confirmPasswordVisible.value
                       ? GestureDetector(
                           onTap: () {

@@ -102,6 +102,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(controller.list.value[index].fileName ?? ""),
+                                            //
                                             Text(controller.visitId.value),
                                             Text(
                                                 "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
@@ -112,6 +113,9 @@ class attachmentDailog extends GetView<VisitMainController> {
                                           onTap: () {
                                             controller.list.removeAt(index);
                                             controller.list.refresh();
+                                            if (controller.list.isEmpty) {
+                                              Get.back();
+                                            }
                                           },
                                           child: SvgPicture.asset(
                                             "assets/images/logo_cross.svg",
@@ -132,7 +136,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                           Expanded(
                             child: CustomButton(
                               navigate: () {
-                                Navigator.pop(context);
+                                Get.back();
                               },
                               label: "Cancel",
                               backGround: Colors.white,
@@ -148,7 +152,7 @@ class attachmentDailog extends GetView<VisitMainController> {
                               navigate: () {
                                 // controller.addImage(
                                 // )
-                                Navigator.pop(context);
+                                Get.back();
                                 controller.uploadAttachments();
 
                                 //

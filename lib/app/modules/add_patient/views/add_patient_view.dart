@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:subqdocs/widget/appbar.dart';
 
+import '../../../../utils/Formetors.dart';
 import '../../../../utils/NoNumbersTextInputFormatter.dart';
 import 'package:path/path.dart' as p;
 import '../../../../utils/app_colors.dart';
@@ -21,6 +22,7 @@ import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widget/fileImage.dart';
@@ -391,6 +393,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               label: "First Name",
                                               // isImportant: true,
                                               isValid: true,
+                                              format: [NoSpaceTextFormatter()],
                                               controller: controller.firstNameController,
                                               hint: "Don",
                                               checkValidation: (value) {
@@ -402,6 +405,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                            format: [NoSpaceTextFormatter()],
                                             label: "Middle Name",
                                             controller: controller.middleNameController,
                                             hint: "Joseph",
@@ -416,6 +420,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                       children: [
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                              format: [NoSpaceTextFormatter()],
                                               label: "Last Name",
                                               isValid: true,
                                               // isImportant: true,
@@ -431,6 +436,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               suffixIcon: Icon(Icons.calendar_month),
+                                              format: [NoSpaceTextFormatter()],
                                               label: "Date of birth",
                                               isValid: true,
                                               readOnly: true,
@@ -564,6 +570,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                       children: [
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                              format: [NoSpaceLowercaseTextFormatter()],
                                               label: "Email Address",
                                               controller: controller.emailAddressController,
                                               hint: "donjones@example.com",
@@ -576,6 +583,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                            format: [NoSpaceTextFormatter()],
                                             suffixIcon: Icon(Icons.calendar_month),
                                             label: "Visit Date",
                                             readOnly: true,
@@ -955,6 +963,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ContainerButton(
                                           onPressed: () {
                                             // Your onPressed function
+
+                                            Get.back();
                                           },
                                           text: 'Cancel',
 

@@ -13,6 +13,7 @@ import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../services/media_picker_services.dart';
+import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
@@ -110,7 +111,12 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -157,7 +163,12 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -227,7 +238,8 @@ class VisitMainController extends GetxController {
       loadingMessage.value = "Uploading Audio";
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave =
+          AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
 
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
@@ -235,7 +247,8 @@ class VisitMainController extends GetxController {
       loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
       isLoading.value = false;
 
-      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      CustomToastification()
+          .showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
       List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
@@ -249,8 +262,8 @@ class VisitMainController extends GetxController {
 
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+          audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -262,6 +275,7 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> deleteAttachments(int id) async {
+    Loader().showLoadingDialogForSimpleLoader();
     Map<String, List<int>> params = {};
     params["attachments"] = [id];
 
@@ -273,10 +287,12 @@ class VisitMainController extends GetxController {
       CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.error);
     }
     Get.back();
+    Get.back();
     getPatientAttachment();
   }
 
   Future<void> uploadAttachments() async {
+    Loader().showLoadingDialogForSimpleLoader();
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     Map<String, List<File>> profileParams = {};
@@ -287,8 +303,10 @@ class VisitMainController extends GetxController {
     } else {
       print("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await _visitMainRepository.uploadAttachments(
+        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
+    Get.back();
     getPatientAttachment();
   }
 
@@ -312,56 +330,22 @@ class VisitMainController extends GetxController {
       param['document'] = true;
     }
 
-    patientAttachmentList.value = await _visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+    try {
+      patientAttachmentList.value = await _visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+      // Get.back();
+    } catch (error) {
+      // Get.back();
+    }
 
     print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
   Future<void> getPatientDetails() async {
+    Loader().showLoadingDialogForSimpleLoader();
     patientData.value = await _visitMainRepository.getPatientDetails(id: visitId.value);
-
+    Get.back();
     print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
-
-//   Future<void> submitAudio(File audioFile) async {
-//     isLoading.value = true;
-//     loadingMessage.value = "Uploading Audio";
-//
-//     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-//
-//     bool isConnected = await isInternetAvailable();
-//
-//     if (!isConnected) {
-//       print("No internet connection");
-//       // If no internet, save audio as BLOB in the local database
-//       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
-//
-//       AudioFile audioFileToSave = AudioFile(
-//         audioData: audioBytes,
-//         fileName: audioFile.uri.pathSegments.last,
-//         status: 'pending',
-//       );
-//
-//       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-//
-//       // Show a message or update UI
-//       loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
-//       isLoading.value = false;
-//
-//       return;
-//     } else {
-//       print("internet connected");
-//       // If there is internet, upload the audio
-//       PatientTranscriptUploadModel patientTranscriptUploadModel =
-//           await _visitMainRepository.uploadAudio(
-//         audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
-//
-//       print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
-//
-//     Get.toNamed(Routes.PATIENT_INFO, arguments: {
-//       "trascriptUploadData": patientTranscriptUploadModel,
-//     });
-//   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
     if (!await launchUrl(

@@ -11,6 +11,7 @@ import 'package:subqdocs/widget/custom_animated_button.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 
 import '../../../../utils/app_string.dart';
+import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../routes/app_pages.dart';
@@ -81,6 +82,7 @@ class LoginView extends GetView<LoginController> {
                   child: TextFormFiledWidget(
                       label: AppString.emailAddress,
                       controller: controller.emailController,
+                      format: [NoSpaceLowercaseTextFormatter()],
                       hint: AppString.emailPlaceHolder,
                       checkValidation: (value) {
                         return Validation.emailValidate(value);
