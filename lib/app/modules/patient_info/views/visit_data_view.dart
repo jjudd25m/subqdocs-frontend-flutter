@@ -110,6 +110,13 @@ class VisitDataView extends GetView<PatientInfoController> {
                                                     itemBuilder: (context, subIndex) {
                                                       return Row(
                                                         children: [
+                                                          if (controller.patientDoctorVisitDataModel.value?.responseData?.visitNoteDetails.dynamicData.keys.toList()[index] == "personal_note") ...[
+                                                            Text(
+                                                              textAlign: TextAlign.left,
+                                                              "• ",
+                                                              style: AppFonts.semiBold(16, AppColors.textGrey),
+                                                            )
+                                                          ],
                                                           Expanded(
                                                               child: Text(
                                                             textAlign: TextAlign.left,

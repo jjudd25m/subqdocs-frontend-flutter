@@ -490,13 +490,16 @@ class VisitMainView extends GetView<VisitMainController> {
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                "He enjoys fishing and gardening. His wife's name is Julie.",
+                                                controller.patientData.value?.responseData?.personalNote?.personalNote?.join(" \n") ?? "",
+                                                // "He enjoys fishing and gardening. His wife's name is Julie.",
                                                 style: AppFonts.regular(14, AppColors.textDarkGrey),
                                               ),
                                               Spacer(),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                "Mon - 20/01/2025",
+                                                controller.patientData.value?.responseData?.personalNote?.visitDate != null
+                                                    ? DateFormat('E MM/dd hh:mm a').format(DateTime.parse(controller.patientData.value?.responseData?.personalNote?.visitDate ?? "").toUtc())
+                                                    : "",
                                                 style: AppFonts.regular(10, AppColors.textDarkGrey),
                                               ),
                                               SizedBox(width: 7),

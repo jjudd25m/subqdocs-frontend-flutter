@@ -14,13 +14,13 @@ class VisitMainPatientDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -41,6 +41,7 @@ class ResponseData {
   int? age;
   String? gender;
   List<Null>? attachments;
+  PersonalNote? personalNote;
 
   ResponseData(
       {this.doctorFirstName,
@@ -57,7 +58,8 @@ class ResponseData {
       this.profileImage,
       this.age,
       this.gender,
-      this.attachments});
+      this.attachments,
+      this.personalNote});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     doctorFirstName = json['doctor_first_name'];
@@ -78,25 +80,50 @@ class ResponseData {
       attachments = <Null>[];
       json['attachments'].forEach((v) {});
     }
+    personalNote = json['personal_note'] != null ? new PersonalNote.fromJson(json['personal_note']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['doctor_first_name'] = this.doctorFirstName;
-    data['doctor_last_name'] = this.doctorLastName;
-    data['visit_id'] = this.visitId;
-    data['visit_date'] = this.visitDate;
-    data['visit_time'] = this.visitTime;
-    data['visit_status'] = this.visitStatus;
-    data['id'] = this.id;
-    data['patient_id'] = this.patientId;
-    data['patient_first_name'] = this.patientFirstName;
-    data['patient_middle_name'] = this.patientMiddleName;
-    data['patient_last_name'] = this.patientLastName;
-    data['profile_image'] = this.profileImage;
-    data['age'] = this.age;
-    data['gender'] = this.gender;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['doctor_first_name'] = doctorFirstName;
+    data['doctor_last_name'] = doctorLastName;
+    data['visit_id'] = visitId;
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['visit_status'] = visitStatus;
+    data['id'] = id;
+    data['patient_id'] = patientId;
+    data['patient_first_name'] = patientFirstName;
+    data['patient_middle_name'] = patientMiddleName;
+    data['patient_last_name'] = patientLastName;
+    data['profile_image'] = profileImage;
+    data['age'] = age;
+    data['gender'] = gender;
+    if (personalNote != null) {
+      data['personal_note'] = personalNote!.toJson();
+    }
+    return data;
+  }
+}
 
+class PersonalNote {
+  int? id;
+  String? visitDate;
+  List<String>? personalNote;
+
+  PersonalNote({this.id, this.visitDate, this.personalNote});
+
+  PersonalNote.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    visitDate = json['visit_date'];
+    personalNote = json['personal_note'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['visit_date'] = visitDate;
+    data['personal_note'] = personalNote;
     return data;
   }
 }

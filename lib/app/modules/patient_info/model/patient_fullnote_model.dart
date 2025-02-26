@@ -196,47 +196,55 @@ class FullNoteDetails {
 class ImpressionsAndPlan {
   String? number;
   String? title;
-  List<String>? plan;
-  List<Medications>? medications;
-  List<Procedures>? procedures;
-  List<String>? monitoringAndAdjustments;
-  List<String>? followUp;
+  String? code;
+  String? description;
+  // List<String>? plan;
+  // List<Medications>? medications;
+  // List<Procedures>? procedures;
+  // List<String>? monitoringAndAdjustments;
+  // List<String>? followUp;
 
-  ImpressionsAndPlan({this.number, this.title, this.plan, this.medications, this.procedures, this.monitoringAndAdjustments, this.followUp});
+  ImpressionsAndPlan({this.number, this.title, this.code, this.description
+      // this.plan, this.medications, this.procedures, this.monitoringAndAdjustments, this.followUp
+      });
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     title = json['title'];
-    plan = json['plan'].cast<String>();
-    if (json['medications'] != null) {
-      medications = <Medications>[];
-      json['medications'].forEach((v) {
-        medications!.add(Medications.fromJson(v));
-      });
-    }
-    if (json['procedures'] != null) {
-      procedures = <Procedures>[];
-      json['procedures'].forEach((v) {
-        procedures!.add(Procedures.fromJson(v));
-      });
-    }
-    monitoringAndAdjustments = json['monitoring_and_adjustments'].cast<String>();
-    followUp = json['follow_up'].cast<String>();
+    code = json['code'];
+    description = json['description'];
+    // plan = json['plan'];
+    // if (json['medications'] != null) {
+    //   medications = <Medications>[];
+    //   json['medications'].forEach((v) {
+    //     medications!.add(Medications.fromJson(v));
+    //   });
+    // }
+    // if (json['procedures'] != null) {
+    //   procedures = <Procedures>[];
+    //   json['procedures'].forEach((v) {
+    //     procedures!.add(Procedures.fromJson(v));
+    //   });
+    // }
+    // monitoringAndAdjustments = json['monitoring_and_adjustments'].cast<String>();
+    // followUp = json['follow_up'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['number'] = number;
     data['title'] = title;
-    data['plan'] = plan;
-    if (medications != null) {
-      data['medications'] = medications!.map((v) => v.toJson()).toList();
-    }
-    if (procedures != null) {
-      data['procedures'] = procedures!.map((v) => v.toJson()).toList();
-    }
-    data['monitoring_and_adjustments'] = monitoringAndAdjustments;
-    data['follow_up'] = followUp;
+    data['code'] = code;
+    data['description'] = description;
+    // data['plan'] = plan;
+    // if (medications != null) {
+    //   data['medications'] = medications!.map((v) => v.toJson()).toList();
+    // }
+    // if (procedures != null) {
+    //   data['procedures'] = procedures!.map((v) => v.toJson()).toList();
+    // }
+    // data['monitoring_and_adjustments'] = monitoringAndAdjustments;
+    // data['follow_up'] = followUp;
     return data;
   }
 }
