@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/app_string.dart';
@@ -13,6 +14,7 @@ import '../model/patient_fullnote_model.dart';
 import '../model/patient_view_list_model.dart';
 import '../model/transcript_list_model.dart';
 import '../repository/patient_info_repository.dart';
+import '../views/confirm_finalize_dialog.dart';
 
 class PatientInfoController extends GetxController {
   //TODO: Implement PatientInfoController
@@ -20,6 +22,7 @@ class PatientInfoController extends GetxController {
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();
   SocketService socketService = SocketService();
 
+  RxBool isPromptFailure = RxBool(false);
   RxBool isSignatureDone = RxBool(false);
   List<String> tasks = ["A Task"];
   RxInt tabIndex = RxInt(1);
@@ -96,6 +99,8 @@ class PatientInfoController extends GetxController {
 
             if (status.toLowerCase() == "failure") {
               print("PatientViewStatus failure");
+
+              showPrompError(Get.context!, message);
 
               // isPatientViewLoading.value = true;
               // isPatientViewLoadText.value = "failure";
@@ -289,6 +294,16 @@ class PatientInfoController extends GetxController {
         print("socket is not connected");
       }
     }
+  }
+
+  Future<void> showPrompError(BuildContext context, String message) async {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return PrompErrorDialog(message);
+      },
+    );
   }
 
   Future<void> getAllPatientInfo() async {

@@ -10,6 +10,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
+import '../model/patient_fullnote_model.dart';
 
 class FullNoteView extends GetView<PatientInfoController> {
   const FullNoteView({super.key});
@@ -830,10 +831,109 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                       )),
                                                                     ],
                                                                   ),
-                                                                  Text(
-                                                                    textAlign: TextAlign.left,
-                                                                    controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].description ?? "",
-                                                                    style: AppFonts.regular(15, AppColors.textGrey),
+                                                                  SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        textAlign: TextAlign.start,
+                                                                        'Plan',
+                                                                        style: AppFonts.semiBold(15, AppColors.textGrey),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        textAlign: TextAlign.start,
+                                                                        controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].plan?.join("\n") ?? '',
+                                                                        style: AppFonts.regular(15, AppColors.textGrey),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        textAlign: TextAlign.start,
+                                                                        'Procedures',
+                                                                        style: AppFonts.semiBold(15, AppColors.textGrey),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      for (Procedures procedures
+                                                                          in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedures ?? [])
+                                                                        Text(
+                                                                          textAlign: TextAlign.start,
+                                                                          '${procedures.name} - ${procedures.cptCode}',
+                                                                          style: AppFonts.regular(15, AppColors.textGrey),
+                                                                        )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        textAlign: TextAlign.start,
+                                                                        'Monitoring and Adjustments:',
+                                                                        style: AppFonts.semiBold(15, AppColors.textGrey),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child: Text(
+                                                                          textAlign: TextAlign.start,
+                                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].monitoringAndAdjustments
+                                                                                  ?.join("\n") ??
+                                                                              '',
+                                                                          style: AppFonts.regular(15, AppColors.textGrey),
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        textAlign: TextAlign.start,
+                                                                        'Follow Up:',
+                                                                        style: AppFonts.semiBold(15, AppColors.textGrey),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child: Text(
+                                                                          textAlign: TextAlign.start,
+                                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].followUp?.join("\n") ?? '',
+                                                                          style: AppFonts.regular(15, AppColors.textGrey),
+                                                                        ),
+                                                                      )
+                                                                    ],
                                                                   ),
                                                                   SizedBox(height: 10),
                                                                 ],

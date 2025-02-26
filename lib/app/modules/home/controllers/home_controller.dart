@@ -181,26 +181,20 @@ class HomeController extends GetxController {
         // Format the date to 'MM-dd-yyyy'
         print("goint to this ");
         if (selectedValue.length == 1) {
-          startDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
         } else {
           if (i == 0) {
-            startDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           } else {
-            endDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           }
         }
       }
     } else {
       DateTime dateTime = DateTime.now();
-      startDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
     }
     Get.back();
   }
@@ -633,8 +627,7 @@ class HomeController extends GetxController {
             CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
 
             uploadAllAudioFiles(() {
-              CustomToastification()
-                  .showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+              CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
               print('All audio files have been uploaded!');
             });
           }
@@ -642,14 +635,13 @@ class HomeController extends GetxController {
           break;
         case InternetStatus.disconnected:
           var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
-          var schedulePatient = ScheduleVisitListModel.fromJson(
-              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
-          var pastPatient =
-              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
 
+          var schedule = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+
+          var past = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
           patientList.value = patient.responseData?.data ?? [];
-          scheduleVisitList.value = schedulePatient.responseData?.data ?? [];
-          pastVisitList.value = pastPatient.responseData?.data ?? [];
+          scheduleVisitList.value = schedule.responseData?.data ?? [];
+          pastVisitList.value = past.responseData?.data ?? [];
           patientList.refresh();
           scheduleVisitList.refresh();
           pastVisitList.refresh();
@@ -695,10 +687,8 @@ class HomeController extends GetxController {
 
       print("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
-          audioFile: File.fromUri(Uri.file(file.fileName ?? "")),
-          token: loginData.responseData?.token ?? "",
-          patientVisitId: file.visitId ?? "");
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
       print("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       // Your upload logic here (e.g., send the audio data to a server)
       // If upload is successful, return true

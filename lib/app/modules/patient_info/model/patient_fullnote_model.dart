@@ -196,21 +196,107 @@ class FullNoteDetails {
 class ImpressionsAndPlan {
   String? number;
   String? title;
-  String? description;
+  List<String>? plan;
+  List<Medications>? medications;
+  List<Procedures>? procedures;
+  List<String>? monitoringAndAdjustments;
+  List<String>? followUp;
 
-  ImpressionsAndPlan({this.number, this.title, this.description});
+  ImpressionsAndPlan({this.number, this.title, this.plan, this.medications, this.procedures, this.monitoringAndAdjustments, this.followUp});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     title = json['title'];
-    description = json['description'];
+    plan = json['plan'].cast<String>();
+    if (json['medications'] != null) {
+      medications = <Medications>[];
+      json['medications'].forEach((v) {
+        medications!.add(Medications.fromJson(v));
+      });
+    }
+    if (json['procedures'] != null) {
+      procedures = <Procedures>[];
+      json['procedures'].forEach((v) {
+        procedures!.add(Procedures.fromJson(v));
+      });
+    }
+    monitoringAndAdjustments = json['monitoring_and_adjustments'].cast<String>();
+    followUp = json['follow_up'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['number'] = number;
     data['title'] = title;
-    data['description'] = description;
+    data['plan'] = plan;
+    if (medications != null) {
+      data['medications'] = medications!.map((v) => v.toJson()).toList();
+    }
+    if (procedures != null) {
+      data['procedures'] = procedures!.map((v) => v.toJson()).toList();
+    }
+    data['monitoring_and_adjustments'] = monitoringAndAdjustments;
+    data['follow_up'] = followUp;
     return data;
   }
 }
+
+class Medications {
+  String? name;
+  String? dosage;
+
+  Medications({this.name, this.dosage});
+
+  Medications.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    dosage = json['dosage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['dosage'] = dosage;
+    return data;
+  }
+}
+
+class Procedures {
+  String? name;
+  String? cptCode;
+
+  Procedures({this.name, this.cptCode});
+
+  Procedures.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    cptCode = json['cpt_code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['cpt_code'] = cptCode;
+    return data;
+  }
+}
+
+// class ImpressionsAndPlan {
+//   String? number;
+//   String? title;
+//   String? description;
+//
+//   ImpressionsAndPlan({this.number, this.title, this.description});
+//
+//   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
+//     number = json['number'];
+//     title = json['title'];
+//     description = json['description'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['number'] = number;
+//     data['title'] = title;
+//     data['description'] = description;
+//     return data;
+//   }
+// }

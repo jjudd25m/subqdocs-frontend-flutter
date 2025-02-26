@@ -3,8 +3,8 @@ class AppString {
   static const String prefKeyToken = 'token';
   static const String prefKeyUserLoginData = 'userLoginData';
   static const String patientList = 'patientList';
-  static const String schedulePatientList = 'patientList';
-  static const String pastPatientList = 'patientList';
+  static const String schedulePatientList = 'schedulePatient';
+  static const String pastPatientList = 'pastPatient';
   static const String prefKeyRememberMe = "prefKeyRememberMe";
   static const String prefKeyRememberEmail = "prefKeyRememberEmail";
   static const String prefKeyRememberPassword = "prefKeyRememberPassword";

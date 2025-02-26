@@ -35,7 +35,7 @@ class ResponseData {
   int? age;
   String? email;
   String? gender;
-  Null? profileImage;
+  dynamic profileImage;
   List<ScheduledVisits>? scheduledVisits;
   List<PastVisits>? pastVisits;
   String? visitDate;
