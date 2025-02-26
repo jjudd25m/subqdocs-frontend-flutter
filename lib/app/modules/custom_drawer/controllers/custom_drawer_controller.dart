@@ -14,7 +14,6 @@ class CustomDrawerController extends GetxController {
   void onInit() {
     drawerItemModelList.add(
       DrawerItemModel(
-        isSelected: true,
         drawerItemTitle: "Add New Visit",
         drawerIconPath: ImagePath.calendar,
         routePath: "",
@@ -36,6 +35,7 @@ class CustomDrawerController extends GetxController {
     );
     drawerItemModelList.add(
       DrawerItemModel(
+        isSelected: true,
         drawerItemTitle: "Patient Visits",
         drawerIconPath: ImagePath.patiton_visit_drawer,
         routePath: "",
@@ -65,6 +65,8 @@ class CustomDrawerController extends GetxController {
   void increment() => count.value++;
 
   void changeSelected(int index) {
+    print(" selected index is the  $index");
+
     drawerItemModelList.forEach(
       (element) {
         element.isSelected = false;
