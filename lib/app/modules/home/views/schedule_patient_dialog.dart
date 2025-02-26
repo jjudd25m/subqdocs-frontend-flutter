@@ -23,6 +23,7 @@ class SchedulePatientDialog extends GetView<HomeController> {
   RxnString selectedVisitTimeValue = RxnString();
   DateTime? visitDate = DateTime.now();
   TextEditingController visitDateController = TextEditingController();
+
   List<String> visitTime = [
     "12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM",
     "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM",
@@ -62,6 +63,7 @@ class SchedulePatientDialog extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -200,13 +202,18 @@ class SchedulePatientDialog extends GetView<HomeController> {
                           Expanded(
                             child: CustomAnimatedButton(
                               onPressed: () {
-                                bool isSameDate = visitDate != null && visitDate?.year == DateTime.now().year && visitDate?.month == DateTime.now().month && visitDate?.day == DateTime.now().day;
+                                bool isSameDate = visitDate != null &&
+                                    visitDate?.year == DateTime.now().year &&
+                                    visitDate?.month == DateTime.now().month &&
+                                    visitDate?.day == DateTime.now().day;
 
                                 if (isSameDate) {
-                                  DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                  DateTime firstTime = DateFormat('hh:mm a')
+                                      .parse(selectedVisitTimeValue.value ?? "")
+                                      .toUtc(); // 10:30 AM to DateTime
 
                                   // Now format it to the hh:mm:ss format
-                                  String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+                                  String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
 
                                   DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
                                   DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
@@ -227,24 +234,39 @@ class SchedulePatientDialog extends GetView<HomeController> {
                                   bool isAhead = givenDateTime.isAfter(DateTime.now());
 
                                   if (isAhead) {
-                                    print('Given time is ahead of the current time.');
-                                    print("visit time is $formattedTime");
-                                    print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
-                                    receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
+                                    // print('Given time is ahead of the current time.');
+                                    // print("visit time is $formattedTime");
+                                    // print(
+                                    //     "visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
+                                    // receiveParam(
+                                    //     formattedTime,
+                                    //     DateFormat('yyyy-MM-dd')
+                                    //         .format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
+                                    receiveParam(
+                                        formattedTime,
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(DateFormat('MM/dd/yyyy').parse(visitDateController.text.trim())));
                                     // controller.patientScheduleCreate(param: {});
                                     Get.back();
                                   } else {
                                     print('Given time is not ahead of the current time.');
-                                    CustomToastification().showToast("Visit time must be in the future", type: ToastificationType.error);
+                                    CustomToastification()
+                                        .showToast("Visit time must be in the future", type: ToastificationType.error);
                                   }
                                 } else {
-                                  DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                  DateTime firstTime = DateFormat('hh:mm a')
+                                      .parse(selectedVisitTimeValue.value ?? "")
+                                      .toUtc(); // 10:30 AM to DateTime
 
                                   // Now format it to the hh:mm:ss format
-                                  String formattedTime = DateFormat('hh:mm:ss').format(firstTime);
+                                  String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
                                   print("visit time is $formattedTime");
-                                  print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
-                                  receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
+                                  print(
+                                      "visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
+                                  receiveParam(
+                                      formattedTime,
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
                                   // controller.patientScheduleCreate(param: {});
                                   Get.back();
                                 }
@@ -287,7 +309,8 @@ class SchedulePatientDialog extends GetView<HomeController> {
               print("value is :- ${value.first}");
               visitDate = value.first;
               String padDayMonth(int value) => value.toString().padLeft(2, '0');
-              visitDateController.text = '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
+              visitDateController.text =
+                  '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
             },
             config: CalendarDatePicker2Config(firstDate: DateTime.now()),
           ),

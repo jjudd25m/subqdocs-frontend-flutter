@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
 import 'package:subqdocs/app/modules/home/model/Status.dart';
@@ -181,20 +182,26 @@ class HomeController extends GetxController {
         // Format the date to 'MM-dd-yyyy'
         print("goint to this ");
         if (selectedValue.length == 1) {
-          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          startDate.value =
+              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value =
+              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
         } else {
           if (i == 0) {
-            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            startDate.value =
+                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           } else {
-            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            endDate.value =
+                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           }
         }
       }
     } else {
       DateTime dateTime = DateTime.now();
-      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      startDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
     }
     Get.back();
   }
@@ -627,7 +634,8 @@ class HomeController extends GetxController {
             CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
 
             uploadAllAudioFiles(() {
-              CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+              CustomToastification()
+                  .showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
               print('All audio files have been uploaded!');
             });
           }
@@ -636,9 +644,11 @@ class HomeController extends GetxController {
         case InternetStatus.disconnected:
           var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
 
-          var schedule = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+          var schedule = ScheduleVisitListModel.fromJson(
+              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
 
-          var past = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
+          var past =
+              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
           patientList.value = patient.responseData?.data ?? [];
           scheduleVisitList.value = schedule.responseData?.data ?? [];
           pastVisitList.value = past.responseData?.data ?? [];
@@ -687,8 +697,10 @@ class HomeController extends GetxController {
 
       print("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+          audioFile: File.fromUri(Uri.file(file.fileName ?? "")),
+          token: loginData.responseData?.token ?? "",
+          patientVisitId: file.visitId ?? "");
       print("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       // Your upload logic here (e.g., send the audio data to a server)
       // If upload is successful, return true
@@ -709,8 +721,15 @@ class HomeController extends GetxController {
   // }
 
   Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {
-    PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
-    print("patientVisitCreate API  internal response $response");
-    CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+    Loader().showLoadingDialogForSimpleLoader();
+
+    try {
+      PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
+      print("patientVisitCreate API  internal response $response");
+      CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+      Get.back();
+    } catch (e) {
+      Get.back();
+    }
   }
 }

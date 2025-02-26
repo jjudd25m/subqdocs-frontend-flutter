@@ -257,7 +257,9 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         // isImportant: true,
                                         type: TextInputType.number,
                                         isValid: true,
-                                        format: [NoSpaceTextFormatter()],
+                                        format: [
+                                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                                        ],
                                         controller: controller.patientIdController,
                                         hint: "123",
                                         checkValidation: (value) {
@@ -270,7 +272,9 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                         label: "First Name",
-                                        format: [NoSpaceTextFormatter()],
+                                        format: [
+                                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                        ],
                                         // isImportant: true,
                                         isValid: true,
                                         controller: controller.firstNameController,
@@ -285,7 +289,9 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                       label: "Middle Name",
-                                      format: [NoSpaceTextFormatter()],
+                                      format: [
+                                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                      ],
                                       controller: controller.middleNameController,
                                       hint: "Joseph",
                                     ),
@@ -300,7 +306,9 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                       label: "Last Name",
-                                      format: [NoSpaceTextFormatter()],
+                                      format: [
+                                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                      ],
                                       isValid: true,
                                       // isImportant: true,
                                       controller: controller.lastNameController,

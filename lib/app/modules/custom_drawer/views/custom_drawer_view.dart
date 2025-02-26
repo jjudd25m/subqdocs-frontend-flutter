@@ -112,6 +112,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                             itemBuilder: (context, index) {
                               return InkWell(
                                   onTap: () async {
+                                    controller.changeSelected(index);
                                     await onItemSelected!(index);
                                     // if (index == 0) {
                                     //   Get.toNamed(Routes.HOME, arguments: {
@@ -129,13 +130,12 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                     // } else if (index == 4) {
                                     //   // Get.toNamed(Routes.VISIT_MAIN);
                                     // }
-
-                                    controller.changeSelected(index);
                                   },
                                   child: DrawerItem(
                                     isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
                                     itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
-                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ?? "", // Add any dummy icon path here
+                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ??
+                                        "", // Add any dummy icon path here
                                   ));
                             },
                             itemCount: controller.drawerItemModelList.value.length,
