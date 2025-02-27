@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 import 'package:subqdocs/widget/custom_animated_button.dart';
-import 'package:subqdocs/widgets/custom_button.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../../utils/no_space_lowercase.dart';
@@ -20,13 +18,10 @@ import '../controllers/login_controller.dart';
 class LoginView extends GetView<LoginController> {
   LoginView({super.key});
 
-  // TextEditingController email = TextEditingController();
-  // TextEditingController password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isWidthLessThan428(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // print("mobile widh is ${width}");
     return width < 428;
   }
 

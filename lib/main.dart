@@ -15,8 +15,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreference.instance.init();
 
-  // IO.Socket socket = IO.io('https://dev-api.subqdocs.com', IO.OptionBuilder().setTransports(['websocket']).build());
-
   socketService.socket.onConnect((_) {
     print('connect');
     // socket.emit('msg', 'test');
@@ -58,17 +56,4 @@ Future<void> main() async {
       ),
     ),
   );
-
-  // runApp(
-  //   SentryWidget(
-  //     child: ToastificationWrapper(
-  //       child: GetMaterialApp(
-  //         title: "Application",
-  //         debugShowCheckedModeBanner: false,
-  //         initialRoute: AppPages.INITIAL,
-  //         getPages: AppPages.routes,
-  //       ),
-  //     ),
-  //   ),
-  // );
 }

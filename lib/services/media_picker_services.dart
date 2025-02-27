@@ -4,6 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 
+import '../app/core/common/logger.dart';
+
 const int mediaLimit = 4;
 
 class MediaPickerServices {
@@ -53,17 +55,17 @@ class MediaPickerServices {
     // Check if the user picked any files
     if (result != null) {
       List<PlatformFile> files = result.files; // List of selected files
-      print("Files selected: $files");
+      customPrint("Files selected: $files");
       return files;
     } else {
-      print("No files selected");
+      customPrint("No files selected");
       return null;
     }
   }
 
   Future<List<XFile>?> pickMultiMedia() async {
     List<XFile>? image = await _picker.pickMultipleMedia(limit: mediaLimit);
-    print("file is  ${image}");
+    customPrint("file is  ${image}");
     return image;
   }
 

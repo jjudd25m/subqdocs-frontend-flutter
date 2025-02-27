@@ -16,7 +16,6 @@ import '../../../../widget/custom_textfiled.dart';
 class PasswordChangedScreen extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // print("mobile widh is ${width}");
     return width < 428;
   }
 
@@ -40,7 +39,7 @@ class PasswordChangedScreen extends GetView<ForgotPasswordController> {
         SizedBox(
           height: 16,
         ),
-        Container(
+        SizedBox(
           width: isSmallScreen ? 300 : 400,
           child: Text(
             "Please enter your registered email address below, and we’ll send you a link to reset your password",
@@ -56,8 +55,6 @@ class PasswordChangedScreen extends GetView<ForgotPasswordController> {
             width: isSmallScreen ? Get.width - 30 : 416,
             child: CustomAnimatedButton(
               onPressed: () {
-                // controller.authLoginUser();
-
                 Get.back();
               },
               height: 45,

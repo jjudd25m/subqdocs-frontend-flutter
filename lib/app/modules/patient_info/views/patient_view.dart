@@ -38,7 +38,6 @@ class PatientView extends GetView<PatientInfoController> {
                               borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                               color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                               border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
-                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             children: [

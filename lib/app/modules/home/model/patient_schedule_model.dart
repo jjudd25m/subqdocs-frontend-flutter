@@ -7,20 +7,20 @@ class PatientScheduleModel {
   PatientScheduleModel({this.responseData, this.message, this.toast, this.responseType});
 
   PatientScheduleModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
+    responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -58,19 +58,19 @@ class ResponseData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['patient_id'] = this.patientId;
-    data['visit_date'] = this.visitDate;
-    data['visit_time'] = this.visitTime;
-    data['visit_status'] = this.visitStatus;
-    data['status'] = this.status;
-    data['updated_at'] = this.updatedAt;
-    data['created_at'] = this.createdAt;
-    data['visit_type'] = this.visitType;
-    data['visit_notes'] = this.visitNotes;
-    data['visit_details'] = this.visitDetails;
-    data['deleted_at'] = this.deletedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['patient_id'] = patientId;
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['visit_status'] = visitStatus;
+    data['status'] = status;
+    data['updated_at'] = updatedAt;
+    data['created_at'] = createdAt;
+    data['visit_type'] = visitType;
+    data['visit_notes'] = visitNotes;
+    data['visit_details'] = visitDetails;
+    data['deleted_at'] = deletedAt;
     return data;
   }
 }

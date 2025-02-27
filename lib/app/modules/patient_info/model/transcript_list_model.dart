@@ -1,101 +1,3 @@
-// class TranscriptListModel {
-//   ResponseData responseData;
-//   String message;
-//   bool toast;
-//   String responseType;
-//
-//   TranscriptListModel({
-//     required this.responseData,
-//     required this.message,
-//     required this.toast,
-//     required this.responseType,
-//   });
-//
-//   factory TranscriptListModel.fromJson(Map<String, dynamic> json) => TranscriptListModel(
-//         responseData: ResponseData.fromJson(json["responseData"]),
-//         message: json["message"],
-//         toast: json["toast"],
-//         responseType: json["response_type"],
-//       );
-//
-//   Map<String, dynamic> toJson() => {
-//         "responseData": responseData.toJson(),
-//         "message": message,
-//         "toast": toast,
-//         "response_type": responseType,
-//       };
-// }
-//
-// class ResponseData {
-//   int id;
-//   String status;
-//   CleanedTranscript cleanedTranscript;
-//
-//   ResponseData({
-//     required this.id,
-//     required this.status,
-//     required this.cleanedTranscript,
-//   });
-//
-//   factory ResponseData.fromJson(Map<String, dynamic> json) => ResponseData(
-//         id: json["id"],
-//         status: json["status"],
-//         cleanedTranscript: CleanedTranscript.fromJson(json["cleaned_transcript"]),
-//       );
-//
-//   Map<String, dynamic> toJson() => {
-//         "id": id,
-//         "status": status,
-//         "cleaned_transcript": cleanedTranscript.toJson(),
-//       };
-// }
-//
-// class CleanedTranscript {
-//   List<List<CleanedTranscriptResponseDatum>> cleanedTranscriptResponseData;
-//
-//   CleanedTranscript({
-//     required this.cleanedTranscriptResponseData,
-//   });
-//
-//   factory CleanedTranscript.fromJson(Map<String, dynamic> json) => CleanedTranscript(
-//         cleanedTranscriptResponseData: List<List<CleanedTranscriptResponseDatum>>.from(
-//             json["cleaned_transcript_response_data"].map((x) => List<CleanedTranscriptResponseDatum>.from(x.map((x) => CleanedTranscriptResponseDatum.fromJson(x))))),
-//       );
-//
-//   Map<String, dynamic> toJson() => {
-//         "cleaned_transcript_response_data": List<dynamic>.from(cleanedTranscriptResponseData.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
-//       };
-// }
-//
-// class CleanedTranscriptResponseDatum {
-//   double end;
-//   double start;
-//   String speaker;
-//   String sentence;
-//
-//   CleanedTranscriptResponseDatum({
-//     required this.end,
-//     required this.start,
-//     required this.speaker,
-//     required this.sentence,
-//   });
-//
-//   factory CleanedTranscriptResponseDatum.fromJson(Map<String, dynamic> json) => CleanedTranscriptResponseDatum(
-//         end: json["end"]?.toDouble(),
-//         start: json["start"]?.toDouble(),
-//         speaker: json["speaker"],
-//         sentence: json["sentence"],
-//       );
-//
-//   Map<String, dynamic> toJson() => {
-//         "end": end,
-//         "start": start,
-//         "speaker": speaker,
-//         "sentence": sentence,
-//       };
-// }
-//-------------------------------------------------------
-
 class TranscriptListModel {
   TranscriptListResponseData? responseData;
   String? message;
@@ -105,20 +7,20 @@ class TranscriptListModel {
   TranscriptListModel({this.responseData, this.message, this.toast, this.responseType});
 
   TranscriptListModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? new TranscriptListResponseData.fromJson(json['responseData']) : null;
+    responseData = json['responseData'] != null ? TranscriptListResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -133,15 +35,15 @@ class TranscriptListResponseData {
   TranscriptListResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
-    cleanedTranscript = json['cleaned_transcript'] != null ? new CleanedTranscript.fromJson(json['cleaned_transcript']) : null;
+    cleanedTranscript = json['cleaned_transcript'] != null ? CleanedTranscript.fromJson(json['cleaned_transcript']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['status'] = this.status;
-    if (this.cleanedTranscript != null) {
-      data['cleaned_transcript'] = this.cleanedTranscript!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['status'] = status;
+    if (cleanedTranscript != null) {
+      data['cleaned_transcript'] = cleanedTranscript!.toJson();
     }
     return data;
   }
@@ -156,15 +58,15 @@ class CleanedTranscript {
     if (json['response_data'] != null) {
       responseData = <ResponseData>[];
       json['response_data'].forEach((v) {
-        responseData!.add(new ResponseData.fromJson(v));
+        responseData!.add(ResponseData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['response_data'] = this.responseData!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['response_data'] = responseData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -183,17 +85,17 @@ class ResponseData {
     if (json['transcript'] != null) {
       transcript = <Transcript>[];
       json['transcript'].forEach((v) {
-        transcript!.add(new Transcript.fromJson(v));
+        transcript!.add(Transcript.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['chunk_id'] = this.chunkId;
-    data['file_name'] = this.fileName;
-    if (this.transcript != null) {
-      data['transcript'] = this.transcript!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['chunk_id'] = chunkId;
+    data['file_name'] = fileName;
+    if (transcript != null) {
+      data['transcript'] = transcript!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -215,12 +117,11 @@ class Transcript {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['end'] = this.end;
-    data['start'] = this.start;
-    data['speaker'] = this.speaker;
-    data['sentence'] = this.sentence;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['end'] = end;
+    data['start'] = start;
+    data['speaker'] = speaker;
+    data['sentence'] = sentence;
     return data;
   }
 }
-//-----------------------------------------------------

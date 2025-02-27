@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/logger.dart';
 import '../../../data/service/socket_service.dart';
 import '../../login/model/login_model.dart';
 import '../../visit_main/model/doctor_view_model.dart';
@@ -56,11 +57,11 @@ class PatientInfoController extends GetxController {
   void onInit() {
     super.onInit();
 
-    print("argument is :- ${Get.arguments}");
+    customPrint("argument is :- ${Get.arguments}");
 
     if (Get.arguments["visitId"] != null) {
       visitId = Get.arguments["visitId"];
-      print("visit id :- $visitId");
+      customPrint("visit id :- $visitId");
 
       getAllPatientInfo();
     }
@@ -68,7 +69,7 @@ class PatientInfoController extends GetxController {
     if (Get.arguments["trascriptUploadData"] != null) {
       patientTranscriptUploadModel = Get.arguments["trascriptUploadData"];
       visitId = patientTranscriptUploadModel.responseData!.visitId.toString();
-      print("patientTranscriptUploadModel data is:- \n \n ${patientTranscriptUploadModel.toJson()}");
+      customPrint("patientTranscriptUploadModel data is:- \n \n ${patientTranscriptUploadModel.toJson()}");
     }
   }
 
@@ -79,9 +80,9 @@ class PatientInfoController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     if (patientTranscriptUploadModel.responseData != null) {
-      print("socket status:- ${socketService.socket.connected}");
+      customPrint("socket status:- ${socketService.socket.connected}");
       if (socketService.socket.connected) {
-        print("socket is connected");
+        customPrint("socket is connected");
 
         socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
@@ -89,8 +90,8 @@ class PatientInfoController extends GetxController {
           "AllTabStatus",
           (data) {
             var res = data as Map<String, dynamic>;
-            print("---------------------------------------------");
-            print("AllTabStatus status is :- ${res}");
+            customPrint("---------------------------------------------");
+            customPrint("AllTabStatus status is :- ${res}");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];
@@ -98,12 +99,9 @@ class PatientInfoController extends GetxController {
             String message = res["message"];
 
             if (status.toLowerCase() == "failure") {
-              print("PatientViewStatus failure");
+              customPrint("PatientViewStatus failure");
 
               showPrompError(Get.context!, message);
-
-              // isPatientViewLoading.value = true;
-              // isPatientViewLoadText.value = "failure";
             }
           },
         );
@@ -112,8 +110,8 @@ class PatientInfoController extends GetxController {
           "DoctorsViewStatus",
           (data) {
             var res = data as Map<String, dynamic>;
-            print("---------------------------------------------");
-            print("DoctorsViewStatus status is :- $res");
+            customPrint("---------------------------------------------");
+            customPrint("DoctorsViewStatus status is :- $res");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];
@@ -121,17 +119,17 @@ class PatientInfoController extends GetxController {
             String message = res["message"];
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
-              print("DoctorsViewStatus inside condition");
+              customPrint("DoctorsViewStatus inside condition");
               if (status.toLowerCase() == "pending") {
-                print("DoctorsViewStatus pending");
+                customPrint("DoctorsViewStatus pending");
                 isDoctorViewLoading.value = true;
                 isDoctorViewLoadText.value = message;
               } else if (status.toLowerCase() == "inprogress") {
-                print("DoctorsViewStatus inprogress");
+                customPrint("DoctorsViewStatus inprogress");
                 isDoctorViewLoading.value = true;
                 isDoctorViewLoadText.value = message;
               } else if (status.toLowerCase() == "success") {
-                print("DoctorsViewStatus success");
+                customPrint("DoctorsViewStatus success");
                 isDoctorViewLoading.value = false;
                 isDoctorViewLoadText.value = message;
 
@@ -148,8 +146,8 @@ class PatientInfoController extends GetxController {
           "FullNoteStatus",
           (data) {
             var res = data as Map<String, dynamic>;
-            print("---------------------------------------------");
-            print("FullNoteStatus status is :- ${res}");
+            customPrint("---------------------------------------------");
+            customPrint("FullNoteStatus status is :- ${res}");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];
@@ -157,17 +155,17 @@ class PatientInfoController extends GetxController {
             String message = res["message"];
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
-              print("FullNoteStatus inside condition");
+              customPrint("FullNoteStatus inside condition");
               if (status.toLowerCase() == "pending") {
-                print("FullNoteStatus pending");
+                customPrint("FullNoteStatus pending");
                 isFullNoteLoading.value = true;
                 isFullNoteLoadText.value = message;
               } else if (status.toLowerCase() == "inprogress") {
-                print("FullNoteStatus inprogress");
+                customPrint("FullNoteStatus inprogress");
                 isFullNoteLoading.value = true;
                 isFullNoteLoadText.value = message;
               } else if (status.toLowerCase() == "success") {
-                print("FullNoteStatus success");
+                customPrint("FullNoteStatus success");
                 isFullNoteLoading.value = false;
                 isFullNoteLoadText.value = message;
 
@@ -184,8 +182,8 @@ class PatientInfoController extends GetxController {
           "VisitDataStatus",
           (data) {
             var res = data as Map<String, dynamic>;
-            print("---------------------------------------------");
-            print("visit data status is :- ${res}");
+            customPrint("---------------------------------------------");
+            customPrint("visit data status is :- ${res}");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];
@@ -193,17 +191,17 @@ class PatientInfoController extends GetxController {
             String message = res["message"];
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
-              print("VisitDataStatus inside condition");
+              customPrint("VisitDataStatus inside condition");
               if (status.toLowerCase() == "pending") {
-                print("VisitDataStatus pending");
+                customPrint("VisitDataStatus pending");
                 isVisitDataLoading.value = true;
                 isVisitDataLoadText.value = message;
               } else if (status.toLowerCase() == "inprogress") {
-                print("VisitDataStatus inprogress");
+                customPrint("VisitDataStatus inprogress");
                 isVisitDataLoading.value = true;
                 isVisitDataLoadText.value = message;
               } else if (status.toLowerCase() == "success") {
-                print("VisitDataStatus success");
+                customPrint("VisitDataStatus success");
                 isVisitDataLoading.value = false;
                 isVisitDataLoadText.value = message;
 
@@ -220,33 +218,33 @@ class PatientInfoController extends GetxController {
           "PatientViewStatus",
           (data) {
             var res = data as Map<String, dynamic>;
-            print("---------------------------------------------");
-            print("PatientViewStatus data:- $res");
+            customPrint("---------------------------------------------");
+            customPrint("PatientViewStatus data:- $res");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];
             String status = res["status"];
             String message = res["message"];
 
-            print("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
-              print("PatientViewStatus inside condition");
+              customPrint("PatientViewStatus inside condition");
               if (status.toLowerCase() == "pending") {
                 isPatientViewLoading.value = true;
                 isPatientViewLoadText.value = message;
-                print("PatientViewStatus pending");
+                customPrint("PatientViewStatus pending");
               } else if (status.toLowerCase() == "inprogress") {
-                print("PatientViewStatus inprogress");
+                customPrint("PatientViewStatus inprogress");
                 isPatientViewLoading.value = true;
                 isPatientViewLoadText.value = message;
               } else if (status.toLowerCase() == "success") {
-                print("PatientViewStatus success");
+                customPrint("PatientViewStatus success");
                 isPatientViewLoading.value = false;
                 isPatientViewLoadText.value = message;
                 getPatientView();
               } else if (status.toLowerCase() == "failure") {
-                print("PatientViewStatus failure");
+                customPrint("PatientViewStatus failure");
                 isPatientViewLoading.value = true;
                 isPatientViewLoadText.value = "failure";
               }
@@ -257,32 +255,32 @@ class PatientInfoController extends GetxController {
         socketService.socket.on(
           "transcriptStatus",
           (data) {
-            print("---------------------------------------------");
+            customPrint("---------------------------------------------");
             var res = data as Map<String, dynamic>;
-            print("transcriptStatus data:- $res");
+            customPrint("transcriptStatus data:- $res");
 
             int visit_id = res["visit_id"];
             int transcription_id = res["transcription_id"];
             String status = res["status"];
             String message = res["message"];
 
-            print("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
-              print("transcriptStatus inside condition");
+              customPrint("transcriptStatus inside condition");
               if (status.toLowerCase() == "pending") {
-                print("transcriptStatus pending");
+                customPrint("transcriptStatus pending");
                 isFullTranscriptLoading.value = true;
                 isFullTranscriptLoadText.value = message;
 
                 isPatientViewLoading.value = true;
                 isPatientViewLoadText.value = "Patient View under process ";
               } else if (status.toLowerCase() == "inprogress") {
-                print("transcriptStatus inprogress");
+                customPrint("transcriptStatus inprogress");
                 isFullTranscriptLoading.value = true;
                 isFullTranscriptLoadText.value = message;
               } else if (status.toLowerCase() == "success") {
-                print("transcriptStatus success");
+                customPrint("transcriptStatus success");
                 isFullTranscriptLoading.value = false;
                 isFullTranscriptLoadText.value = message;
                 getTranscript();
@@ -291,7 +289,7 @@ class PatientInfoController extends GetxController {
           },
         );
       } else {
-        print("socket is not connected");
+        customPrint("socket is not connected");
       }
     }
   }
@@ -316,27 +314,27 @@ class PatientInfoController extends GetxController {
 
   Future<void> getTranscript() async {
     transcriptListModel.value = await _patientInfoRepository.getTranscript(id: visitId);
-    print("transcriptListModel is :- ${transcriptListModel.value?.toJson()}");
+    customPrint("transcriptListModel is :- ${transcriptListModel.value?.toJson()}");
   }
 
   Future<void> getPatientView() async {
     patientViewListModel.value = await _patientInfoRepository.getPatientView(id: visitId);
-    print("getPatientView is :- ${patientViewListModel.value?.toJson()}");
+    customPrint("getPatientView is :- ${patientViewListModel.value?.toJson()}");
   }
 
   Future<void> getPatientDoctorVisitData() async {
     patientDoctorVisitDataModel.value = await _patientInfoRepository.getDoctorVisitData(id: visitId);
-    print("getPatientView is :- ${patientDoctorVisitDataModel.value?.toJson()}");
+    customPrint("getPatientView is :- ${patientDoctorVisitDataModel.value?.toJson()}");
   }
 
   Future<void> getFullNote() async {
     patientFullNoteModel.value = await _patientInfoRepository.getFullNote(id: visitId);
-    print("getFullNote is :- ${patientFullNoteModel.value}");
+    customPrint("getFullNote is :- ${patientFullNoteModel.value}");
   }
 
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
-    print("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
-    print("diagnos is :- ${doctorViewList.value?.responseData?.diagnosisCodesProcedures?.toJson()}");
+    customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
+    customPrint("diagnos is :- ${doctorViewList.value?.responseData?.diagnosisCodesProcedures?.toJson()}");
   }
 }

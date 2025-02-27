@@ -15,7 +15,7 @@ import '../controllers/patient_info_controller.dart';
 import '../model/transcript_list_model.dart';
 
 class FullTranscriptView extends GetView<PatientInfoController> {
-  FullTranscriptView({super.key});
+  const FullTranscriptView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,6 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                                 "(Transcription Time-  ${(convertSecondsToMinutes(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.last.transcript?.last.end.round() ?? 0))})",
                                 style: AppFonts.medium(12, AppColors.textGrey),
                               ),
-                              // Spacer()
                             ],
                           )
                         ],

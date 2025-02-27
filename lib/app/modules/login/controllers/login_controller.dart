@@ -7,6 +7,7 @@ import 'package:toastification/toastification.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../model/login_model.dart';
 import '../repository/login_repository.dart';
@@ -37,24 +38,7 @@ class LoginController extends GetxController {
       passwordController.text = preferencePassword;
       isRememberMe.value = true;
     }
-
-    // // emailController.text = "lisaaaaaaa@yopmail.com";
-    // // passwordController.text = "User@123";
-    // emailController.text = "ks@yopmail.com";
-    // passwordController.text = "abc@A123";
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 
   void changeVisiblity() {
     visiblity.value = visiblity == true ? false : true;
@@ -75,10 +59,9 @@ class LoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      LoginModel loginModel = await _loginRepository.login(
-          email: emailController.text.toLowerCase().trim(), password: passwordController.text.trim());
+      LoginModel loginModel = await _loginRepository.login(email: emailController.text.toLowerCase().trim(), password: passwordController.text.trim());
       isLoading.value = false;
-      print("response is ${loginModel.toJson()} ");
+      customPrint("response is ${loginModel.toJson()} ");
 
       await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
       await AppPreference.instance.removeKey(AppString.patientList);
@@ -89,7 +72,7 @@ class LoginController extends GetxController {
       Get.offAllNamed(Routes.HOME);
     } catch (error) {
       isLoading.value = false;
-      print("login catch error is $error");
+      customPrint("login catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
     }
   }

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -15,6 +13,7 @@ import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/logger.dart';
 import '../../../data/service/database_helper.dart';
 import '../../login/model/login_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -58,32 +57,32 @@ class HomeController extends GetxController {
   List<DateTime> selectedValue = [];
 
   List<Map<String, dynamic>> sortingPastPatient = [
-    {"id": "first_name", "desc": "false"},
-    {"id": "appointmentTime", "desc": "false"},
-    {"id": "age", "desc": "false"},
-    {"id": "gender", "desc": "false"},
-    {"id": "previousVisitCount", "desc": "false"},
-    {"id": "status", "desc": "false"},
+    {"id": "first_name", "desc": "true"},
+    {"id": "appointmentTime", "desc": "true"},
+    {"id": "age", "desc": "true"},
+    {"id": "gender", "desc": "true"},
+    {"id": "previousVisitCount", "desc": "true"},
+    {"id": "status", "desc": "true"},
 
     // Add more sorting parameters as needed
   ];
 
   List<Map<String, dynamic>> sortingSchedulePatient = [
-    {"id": "first_name", "desc": "false"},
-    {"id": "appointmentTime", "desc": "false"},
-    {"id": "age", "desc": "false"},
-    {"id": "gender", "desc": "false"},
-    {"id": "previousVisitCount", "desc": "false"},
+    {"id": "first_name", "desc": "true"},
+    {"id": "appointmentTime", "desc": "true"},
+    {"id": "age", "desc": "true"},
+    {"id": "gender", "desc": "true"},
+    {"id": "previousVisitCount", "desc": "true"},
 
     // Add more sorting parameters as needed
   ];
 
   List<Map<String, dynamic>> sortingPatientList = [
-    {"id": "first_name", "desc": false},
-    {"id": "lastVisitDate", "desc": false},
-    {"id": "age", "desc": false},
-    {"id": "gender", "desc": false},
-    {"id": "visitCount", "desc": false},
+    {"id": "first_name", "desc": true},
+    {"id": "lastVisitDate", "desc": true},
+    {"id": "age", "desc": true},
+    {"id": "gender", "desc": true},
+    {"id": "visitCount", "desc": true},
 
     // Add more sorting parameters as needed
   ];
@@ -125,31 +124,18 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // bool result = await InternetConnection().hasInternetAccess;
-    //
-    // print("connection is the  $result");
 
     handelInternetConnection();
     if (Get.arguments != null) {
       tabIndex.value = Get.arguments["tabIndex"] ?? 0;
 
-      print("tabe index is:- ${Get.arguments["tabIndex"]}");
+      customPrint("tabe index is:- ${Get.arguments["tabIndex"]}");
     }
 
     getPatientList();
     getStatus();
     getScheduleVisitList();
     getPastVisitList();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void increment() => count.value++;
@@ -159,51 +145,45 @@ class HomeController extends GetxController {
     String? key = nameToIdMap[displayName];
 
     if (key == null) {
-      print("Invalid display name: $displayName");
+      customPrint("Invalid display name: $displayName");
       return null; // Return null if no matching key is found
     }
 
     // Iterate over the sorting list to find the map with the matching 'id'
     for (var map in sorting) {
       if (map["id"] == key) {
-        print("boll is ${map["desc"]}");
+        customPrint("boll is ${map["desc"]}");
         return map["desc"]; // Return the 'desc' value (true/false)
       }
     }
 
-    print("No matching 'id' found for $displayName");
+    customPrint("No matching 'id' found for $displayName");
     return null; // Return null if no matching 'id' is found
   }
 
   void setDateRange() {
-    print("function  is called ");
+    customPrint("function  is called ");
 
     if (selectedValue.isNotEmpty) {
       for (int i = 0; i < selectedValue.length; i++) {
         var dateTime = selectedValue[i];
         // Format the date to 'MM-dd-yyyy'
-        print("goint to this ");
+        customPrint("goint to this ");
         if (selectedValue.length == 1) {
-          startDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
         } else {
           if (i == 0) {
-            startDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           } else {
-            endDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           }
         }
       }
     } else {
       DateTime dateTime = DateTime.now();
-      startDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
     }
     Get.back();
   }
@@ -214,17 +194,11 @@ class HomeController extends GetxController {
     startDate.value = "MM/DD/YYYY";
     endDate.value = "";
     selectedStatusIndex.clear();
-    // selectedIndex.value = -1;
     fromController.clear();
     toController.clear();
     getPatientList();
     getScheduleVisitList();
     getPastVisitList();
-
-    // if(canPop)
-    //   {
-    //     Get.ca
-    //   }
   }
 
   void changeScreen(bool isPast) async {
@@ -237,7 +211,7 @@ class HomeController extends GetxController {
     String? key = nameToIdMap[displayName];
 
     if (key == null) {
-      print("Invalid display name: $displayName");
+      customPrint("Invalid display name: $displayName");
 
       List<Map<String, dynamic>> empty = [
         // Add more sorting parameters as needed
@@ -289,11 +263,10 @@ class HomeController extends GetxController {
       pastVisitListModelOfLine.value = await _homeRepository.getPastVisit(param: pastParam);
 
       await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModelOOffLine.toJson()));
-      await AppPreference.instance
-          .setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
+      await AppPreference.instance.setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
       await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModelOfLine.toJson()));
     } catch (e) {
-      print(e);
+      customPrint(e);
     }
   }
 
@@ -305,7 +278,10 @@ class HomeController extends GetxController {
     param['search'] = searchController.text;
 
     // Dynamically add sorting to the param map
-    param["sorting"] = toggleSortDesc(sortingPatientList, sortingName ?? "");
+
+    if (sortingName!.isNotEmpty) {
+      param["sorting"] = toggleSortDesc(sortingPatientList, sortingName ?? "");
+    }
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -313,10 +289,10 @@ class HomeController extends GetxController {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDateTime}");
+      customPrint("start date is the ${startDateTime}");
 
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
+      customPrint("start format date is  date is the ${formattedStartDate}");
 
       DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
@@ -343,7 +319,9 @@ class HomeController extends GetxController {
     }
 
     // Dynamically add sorting to the param map
-    param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
+    if (sortingName!.isNotEmpty) {
+      param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
+    }
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -351,10 +329,10 @@ class HomeController extends GetxController {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDateTime}");
+      customPrint("start date is the ${startDateTime}");
 
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
+      customPrint("start format date is  date is the ${formattedStartDate}");
 
       DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
@@ -377,12 +355,14 @@ class HomeController extends GetxController {
     param['isPastPatient'] = 'true';
     param['search'] = searchController.text;
 
-    param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
+    if (sortingName!.isNotEmpty) {
+      param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
+    }
 
     if (selectedStatusIndex.isNotEmpty) {
       List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status.toString()!).toList();
 
-      print("status array is- $statusList");
+      customPrint("status array is- $statusList");
       if (statusList.length == 1) {
         param['status[0]'] = statusList;
       } else {
@@ -396,10 +376,10 @@ class HomeController extends GetxController {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDateTime}");
+      customPrint("start date is the ${startDateTime}");
 
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
+      customPrint("start format date is  date is the ${formattedStartDate}");
 
       DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
@@ -439,10 +419,10 @@ class HomeController extends GetxController {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDateTime}");
+      customPrint("start date is the ${startDateTime}");
 
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
+      customPrint("start format date is  date is the ${formattedStartDate}");
 
       DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
@@ -459,17 +439,16 @@ class HomeController extends GetxController {
       int? dataCount = scheduleVisitList.length;
 
       if (scheduleVisitList.length >= totalCount!) {
-        print("no data fetch and add");
+        customPrint("no data fetch and add");
         pageSchedule--;
       } else {
-        print(" data fetch and add");
+        customPrint(" data fetch and add");
         scheduleVisitList.addAll(scheduleVisitListModel.value?.responseData?.data as Iterable<ScheduleVisitListData>);
       }
     } else {
-      print("no data fetch and add");
+      customPrint("no data fetch and add");
       pageSchedule--;
     }
-    // scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
   }
 
   Future<void> getPatientListFetchMore({int? page}) async {
@@ -494,10 +473,10 @@ class HomeController extends GetxController {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDateTime}");
+      customPrint("start date is the ${startDateTime}");
 
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
+      customPrint("start format date is  date is the ${formattedStartDate}");
 
       DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
@@ -514,18 +493,18 @@ class HomeController extends GetxController {
       int? dataCount = patientList.length;
 
       if (patientList.length >= totalCount!) {
-        print("no data fetch and add");
+        customPrint("no data fetch and add");
         pagePatient--;
       } else {
-        print(" data fetch and add");
+        customPrint(" data fetch and add");
         patientList.addAll(patientListModel.value?.responseData?.data as Iterable<PatientListData>);
       }
     } else {
-      print("no data fetch and add");
+      customPrint("no data fetch and add");
       pagePatient--;
     }
 
-    print("patient list is the :- ${patientList}");
+    customPrint("patient list is the :- ${patientList}");
   }
 
   Future<void> getPastVisitListFetchMore() async {
@@ -544,7 +523,7 @@ class HomeController extends GetxController {
     if (selectedStatusIndex.isNotEmpty) {
       List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status!).toList();
 
-      print("status array is- $statusList");
+      customPrint("status array is- $statusList");
       if (statusList.length == 1) {
         param['status[0]'] = statusList;
       } else {
@@ -560,10 +539,10 @@ class HomeController extends GetxController {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
 
-      print("start date is the ${startDateTime}");
+      customPrint("start date is the ${startDateTime}");
 
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
+      customPrint("start format date is  date is the ${formattedStartDate}");
 
       DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
       // Format the DateTime to the required format (yyyy mm dd)
@@ -580,37 +559,33 @@ class HomeController extends GetxController {
       int? dataCount = pastVisitList.length;
 
       if (pastVisitList.length >= totalCount!) {
-        print("no data fetch and add");
+        customPrint("no data fetch and add");
         pagePast--;
       } else {
-        print(" data fetch and add");
+        customPrint(" data fetch and add");
         pastVisitList.addAll(pastVisitListModel.value?.responseData?.data as Iterable<ScheduleVisitListData>);
       }
     } else {
-      print("no data fetch and add");
+      customPrint("no data fetch and add");
       pagePast--;
     }
-
-    // pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
   }
 
   Future<void> getStatus() async {
     StatusResponseModel statusResponseModel = await _homeRepository.getStatus();
+
+    statusModel.clear();
 
     statusResponseModel.responseData?.forEach(
       (element) {
         statusModel.add(StatusModel(status: element));
       },
     );
-
-    // pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
   }
 
   void patientLoadMore() async {
-    print("fetch more data beacuse needed");
+    customPrint("fetch more data beacuse needed");
     getPatientListFetchMore();
-
-    // patientFetchMoreData();
   }
 
   Future<void> deletePatientById(int? id) async {
@@ -619,7 +594,7 @@ class HomeController extends GetxController {
     getPastVisitList();
     getScheduleVisitList();
 
-    print("deleted data is :- ${deletePatientModel}");
+    customPrint("deleted data is :- ${deletePatientModel}");
   }
 
   void scheduleSorting({String cellData = "", int colIndex = -1}) {
@@ -644,23 +619,22 @@ class HomeController extends GetxController {
     final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
-          print("now its  connected ");
+          customPrint("now its  connected ");
           getPastVisitList();
           getScheduleVisitList();
           getPatientList();
           getStatus();
 
-          print('---------------------------------hahahahaha');
+          customPrint('---------------------------------hahahahaha');
           List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
-          print("audio file count is :- ${audio.length}");
+          customPrint("audio file count is :- ${audio.length}");
           if (audio.isNotEmpty) {
             CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
 
             uploadAllAudioFiles(() {
-              CustomToastification()
-                  .showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
-              print('All audio files have been uploaded!');
+              CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+              customPrint('All audio files have been uploaded!');
             });
           }
 
@@ -668,11 +642,9 @@ class HomeController extends GetxController {
         case InternetStatus.disconnected:
           var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
 
-          var schedule = ScheduleVisitListModel.fromJson(
-              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+          var schedule = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
 
-          var past =
-              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
+          var past = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
           patientList.value = patient.responseData?.data ?? [];
           scheduleVisitList.value = schedule.responseData?.data ?? [];
           pastVisitList.value = past.responseData?.data ?? [];
@@ -680,16 +652,7 @@ class HomeController extends GetxController {
           scheduleVisitList.refresh();
           pastVisitList.refresh();
 
-          // List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
-          //
-          // List<Future<bool>> uploadFutures = [];
-          //
-          // for (var file in audio) {
-          //   await uploadLocalAudio(file);
-          //   DatabaseHelper.instance.deleteAudioFile(file.id ?? 0);
-          // }
-
-          print("now its not connected ");
+          customPrint("now its not connected ");
           break;
       }
     });
@@ -711,7 +674,6 @@ class HomeController extends GetxController {
 
     await Future.wait(uploadFutures);
 
-    // Notify when all files are uploaded
     onAllUploaded(); // This will trigger the callback function
   }
 
@@ -719,19 +681,15 @@ class HomeController extends GetxController {
     try {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      print("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
+      customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
-          audioFile: File.fromUri(Uri.file(file.fileName ?? "")),
-          token: loginData.responseData?.token ?? "",
-          patientVisitId: file.visitId ?? "");
-      print("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
-      // Your upload logic here (e.g., send the audio data to a server)
-      // If upload is successful, return true
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {
       // If an error occurs during upload, return false
-      print('Failed to upload audio: $error');
+      customPrint('Failed to upload audio: $error');
       return false;
     }
   }
@@ -741,8 +699,9 @@ class HomeController extends GetxController {
 
     try {
       PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
-      print("patientVisitCreate API  internal response $response");
+      customPrint("patientVisitCreate API  internal response $response");
       CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+      tabIndex.value = 1;
       Get.back();
     } catch (e) {
       Get.back();

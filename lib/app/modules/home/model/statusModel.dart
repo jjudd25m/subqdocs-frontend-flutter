@@ -14,11 +14,11 @@ class StatusResponseModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['responseData'] = this.responseData;
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['responseData'] = responseData;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }

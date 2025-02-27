@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:mime/mime.dart';
 
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../forgot_password/models/common_respons.dart';
 import '../../forgot_password/models/send_otp_model.dart';
@@ -14,45 +15,40 @@ import '../model/visit_recap_list_model.dart';
 import '../model/visitmainModel.dart';
 
 class VisitMainRepository {
-  Future<PatientTranscriptUploadModel> uploadAudio(
-      {required File audioFile, required String token, required String patientVisitId}) async {
+  Future<PatientTranscriptUploadModel> uploadAudio({required File audioFile, required String token, required String patientVisitId}) async {
     String? mimeType = lookupMimeType(audioFile.path);
-    var response = await ApiProvider.instance.callPostMultiPartDio(
-        "patient/transcript/upload/$patientVisitId", {}, {"audio": audioFile}, mimeType ?? "", token);
+    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {}, {"audio": audioFile}, mimeType ?? "", token);
     return PatientTranscriptUploadModel.fromJson(response);
   }
 
-  Future<void> uploadAttachments(
-      {required Map<String, List<File>> files, required String token, required String patientVisitId}) async {
-    var response = await ApiProvider.instance.callPostMultiPartDioListOfFiles(
-        url: "patient/attachments/${patientVisitId}", params: {}, files: files, token: token);
+  Future<void> uploadAttachments({required Map<String, List<File>> files, required String token, required String patientVisitId}) async {
+    var response = await ApiProvider.instance.callPostMultiPartDioListOfFiles(url: "patient/attachments/${patientVisitId}", params: {}, files: files, token: token);
 
-    print(response);
+    customPrint(response);
   }
 
   Future<CommonResponse> deleteAttachments({required Map<String, List<int>> params}) async {
     var response = await ApiProvider.instance.callDelete(url: "patient/attachments", data: params);
 
-    print(response);
+    customPrint(response);
     return CommonResponse.fromJson(response);
   }
 
   Future<VisitRecapListModel> getVisitRecap({required String id}) async {
     var response = await ApiProvider.instance.callGet("patient-visit/getAllVisitRecap/$id");
-    print("getVisitRecap API  internal response $response");
+    customPrint("getVisitRecap API  internal response $response");
     return VisitRecapListModel.fromJson(response);
   }
 
-  Future<PatientAttachmentListModel> getPatientAttachment(
-      {required String id, required Map<String, dynamic> param}) async {
+  Future<PatientAttachmentListModel> getPatientAttachment({required String id, required Map<String, dynamic> param}) async {
     var response = await ApiProvider.instance.callGet("patient/attachments/$id", queryParameters: param);
-    print("getPatientAttachment API internal response $response");
+    customPrint("getPatientAttachment API internal response $response");
     return PatientAttachmentListModel.fromJson(response);
   }
 
   Future<VisitMainPatientDetails> getPatientDetails({required String id}) async {
     var response = await ApiProvider.instance.callGet("patient/visitMainPatientData/$id", queryParameters: {});
-    print("getPatientAttachment API internal response $response");
+    customPrint("getPatientAttachment API internal response $response");
     return VisitMainPatientDetails.fromJson(response);
   }
 }

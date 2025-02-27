@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 
+import '../app/core/common/logger.dart';
+
 class CustomTable extends StatelessWidget {
   final List<List<String>> rows;
   final Widget Function(BuildContext, int, int, String, String) cellBuilder;
@@ -25,7 +27,7 @@ class CustomTable extends StatelessWidget {
       onNotification: (notification) {
         if (notification is ScrollEndNotification) {
           if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent) {
-            print("Load more: listview end");
+            customPrint("Load more: listview end");
 
             onLoadMore != null ? onLoadMore!() : null;
           }

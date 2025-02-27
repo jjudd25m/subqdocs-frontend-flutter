@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +7,6 @@ import 'package:subqdocs/app/routes/app_pages.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
-import 'package:zoom_widget/zoom_widget.dart';
 
 import '../../../../widget/custom_animated_button.dart';
 
@@ -162,12 +160,6 @@ class PrompErrorDialog extends StatelessWidget {
                       style: AppFonts.medium(15, Colors.white),
                     ),
                     Spacer(),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Get.back();
-                    //   },
-                    //   child: Icon(Icons.info_outline, color: AppColors.redText, size: 20),
-                    // ),
                     SizedBox(width: 10)
                   ],
                 ),
@@ -184,11 +176,6 @@ class PrompErrorDialog extends StatelessWidget {
                   color: AppColors.redText,
                   size: 100,
                 ),
-                // SvgPicture.asset(
-                //   ImagePath.confirm_check,
-                //   width: 100,
-                //   height: 100,
-                // ),
                 SizedBox(height: 20),
                 Text(
                   errorMessage,
@@ -200,21 +187,10 @@ class PrompErrorDialog extends StatelessWidget {
                   child: Row(
                     spacing: 20,
                     children: [
-                      // xpanded(
-                      //   child: CustomAnimatedButton(
-                      //     text: " Cancel ",
-                      //     isOutline: true,
-                      //     enabledTextColor: AppColors.backgroundPurple,
-                      //     enabledColor: AppColors.white,
-                      //     outLineEnabledColor: AppColors.textGrey,
-                      //     outlineColor: AppColors.backgroundPurple,
-                      //   ),
-                      // ),
                       Expanded(
                         child: CustomAnimatedButton(
                           onPressed: () {
                             Get.offAllNamed(Routes.HOME);
-                            // Get.toNamed(Routes.PATIENT_VIEW_READ_ONLY);
                           },
                           text: " Okay ",
                           isOutline: true,

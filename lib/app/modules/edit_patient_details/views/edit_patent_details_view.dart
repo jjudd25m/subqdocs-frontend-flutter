@@ -162,13 +162,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     padding: EdgeInsets.zero,
                                                     onTap: () {
                                                       controller.pickProfileImage();
-
-                                                      // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                                                     },
                                                     // value: "",
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          left: 10, right: 20, top: 10, bottom: 10),
+                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
                                                           Icon(
@@ -200,8 +197,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                           color: AppColors.appbarBorder,
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(
-                                                              left: 10, right: 20, top: 10, bottom: 10),
+                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(CupertinoIcons.camera),
@@ -340,8 +336,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           if (picked != null) {
                                             String inputText;
                                             String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                            inputText =
-                                                '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                            inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                             controller.dobController.text = inputText;
                                           }
                                         },
@@ -350,66 +345,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           return Validation.requiredFiled(value);
                                         }),
                                   ),
-                                  // Expanded(
-                                  //   child: Column(
-                                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                                  //     children: [
-                                  //       Row(
-                                  //         children: [
-                                  //           Text(
-                                  //             "Date of Birth",
-                                  //             style: AppFonts.regular(14, AppColors.textBlack),
-                                  //           ),
-                                  //           Text(
-                                  //             "*",
-                                  //             style: AppFonts.regular(14, AppColors.redText),
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //       SizedBox(
-                                  //         height: 8,
-                                  //       ),
-                                  //       Container(
-                                  //         height: 48,
-                                  //         padding: EdgeInsets.only(left: 10),
-                                  //         decoration: BoxDecoration(
-                                  //           border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                                  //           color: Colors.white,
-                                  //           borderRadius: BorderRadius.circular(6),
-                                  //         ),
-                                  //         child: DateFormatField(
-                                  //             decoration: InputDecoration(
-                                  //               hintText: "02/23/2024",
-                                  //               border: InputBorder.none,
-                                  //               // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
-                                  //             ),
-                                  //             addCalendar: true,
-                                  //             controller: controller.dobController,
-                                  //             type: DateFormatType.type2,
-                                  //             lastDate: DateTime.now(),
-                                  //             onComplete: (date) {
-                                  //               print("date is :- ${controller.dobController.text}");
-                                  //               print("DateFormatField date is:-  ${date}");
-                                  //             }),
-                                  //       )
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // Expanded(
-                                  //   child: TextFormFiledWidget(
-                                  //     label: "Date of birth",
-                                  //     readOnly: true,
-                                  //     onTap: () {
-                                  //       controller.showDOBCupertinoDatePicker(context, controller.dobController);
-                                  //     },
-                                  //     controller: controller.dobController,
-                                  //     hint: "12/1/1972",
-                                  //     checkValidation: (value) {
-                                  //       return Validation.requiredFiled(value);
-                                  //     },
-                                  //     suffixIcon: SvgPicture.asset(ImagePath.calendar),
-                                  //   ),
-                                  // ),
                                   SizedBox(
                                     width: Dimen.margin10,
                                   ),
@@ -480,74 +415,13 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                   if (picked != null) {
                                                     String inputText;
                                                     String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                    inputText =
-                                                        '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                     controller.visitDateController.text = inputText;
                                                   }
                                                 },
                                                 hint: "mm/dd/yyyy",
                                               ),
                                             ),
-                                            // Expanded(
-                                            //   child: Column(
-                                            //     crossAxisAlignment: CrossAxisAlignment.start,
-                                            //     children: [
-                                            //       Row(
-                                            //         children: [
-                                            //           Text(
-                                            //             "Visit Date",
-                                            //             style: AppFonts.regular(14, AppColors.textBlack),
-                                            //           ),
-                                            //           Text(
-                                            //             "*",
-                                            //             style: AppFonts.regular(14, AppColors.redText),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //       SizedBox(
-                                            //         height: 8,
-                                            //       ),
-                                            //       Container(
-                                            //         height: 48,
-                                            //         padding: EdgeInsets.only(left: 10),
-                                            //         decoration: BoxDecoration(
-                                            //           border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                                            //           color: Colors.white,
-                                            //           borderRadius: BorderRadius.circular(6),
-                                            //         ),
-                                            //         child: DateFormatField(
-                                            //             decoration: InputDecoration(
-                                            //               hintText: "02/23/2024",
-                                            //               border: InputBorder.none,
-                                            //               // errorText: controller.rxnDob.value?.isAfter(DateTime.now()) ? "Date should be less than today's date " : ""
-                                            //             ),
-                                            //             addCalendar: true,
-                                            //             controller: controller.visitDateController,
-                                            //             type: DateFormatType.type2,
-                                            //             lastDate: DateTime.now(),
-                                            //             onComplete: (date) {
-                                            //               print("date is :- ${controller.dobController.text}");
-                                            //               print("DateFormatField date is:-  ${date}");
-                                            //             }),
-                                            //       )
-                                            //     ],
-                                            //   ),
-                                            // ),
-                                            // Expanded(
-                                            //   child: TextFormFiledWidget(
-                                            //     label: "Visit Date",
-                                            //     readOnly: true,
-                                            //     onTap: () {
-                                            //       controller.showVisitDateCupertinoDatePicker(context, controller.visitDateController);
-                                            //     },
-                                            //     controller: controller.visitDateController,
-                                            //     hint: "10/12/2024",
-                                            //     checkValidation: (value) {
-                                            //       return Validation.requiredFiled(value);
-                                            //     },
-                                            //     suffixIcon: SvgPicture.asset(ImagePath.calendar),
-                                            //   ),
-                                            // ),
                                             SizedBox(
                                               width: Dimen.margin10,
                                             ),
@@ -608,8 +482,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   Spacer(),
                                   ContainerButton(
                                     onPressed: () {
-                                      // Your onPressed function
-
                                       Get.back();
                                     },
                                     text: 'Cancel',
@@ -626,8 +498,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   ),
                                   ContainerButton(
                                     onPressed: () {
-                                      // Your onPressed function
-
                                       if (_formKey.currentState!.validate()) {
                                         controller.addPatient();
                                       }

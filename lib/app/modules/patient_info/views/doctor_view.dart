@@ -1,15 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
-import '../../../../widget/base_image_view.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 
@@ -353,17 +350,6 @@ class DoctorView extends GetView<PatientInfoController> {
 
     // Iterate over each diagnosis procedure data
     for (SubDiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures?.subDiagnosisCodesProcedures ?? []) {
-      // Convert diagnosis codes and descriptions into a formatted string (for the diagnosis column)
-      String diagnos = diagnosis.diagnosis
-              ?.map(
-                (e) {
-                  return '${e.code} (${e.description})'; // Assuming e is a Procedure or similar object
-                },
-              )
-              .toList()
-              .join(' \n') ??
-          'No diagnosis available'; // Default text if no diagnosis
-
       // Ensure each row has exactly 4 children
       rows.add(
         TableRow(
@@ -415,11 +401,6 @@ class DoctorView extends GetView<PatientInfoController> {
                                                 ),
                                               ),
                                             ),
-                                            // TextSpan(
-                                            //   text: diagnosis.diagnosis?[index].confidenceScore ?? "",
-                                            //   recognizer: TapGestureRecognizer()..onTap = () {},
-                                            //   style: AppFonts.regular(14, AppColors.greenPastVisit),
-                                            // ),
                                           ],
                                         ),
                                         textAlign: TextAlign.left,
@@ -434,42 +415,6 @@ class DoctorView extends GetView<PatientInfoController> {
                       ),
                   itemCount: diagnosis.diagnosis?.length ?? 0),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Expanded(
-            //     child: Container(
-            //       width: double.maxFinite,
-            //       child: Text.rich(
-            //         TextSpan(
-            //           children: [
-            //             TextSpan(
-            //               text: ${diagnosis.procedure?.code ?? 'No code'},
-            //               style: const TextStyle(
-            //                 color: AppColors.black,
-            //                 fontFamily: "Mulish",
-            //                 fontSize: 15,
-            //                 decoration: TextDecoration.none,
-            //               ),
-            //             ),
-            //             TextSpan(
-            //               text: "Submit Your Workstation for Verification",
-            //               recognizer: TapGestureRecognizer()..onTap = () {},
-            //               style: const TextStyle(
-            //                 color: AppColors.black,
-            //                 fontFamily: "Mulish",
-            //                 fontSize: 15,
-            //                 fontWeight: FontWeight.w800,
-            //                 decoration: TextDecoration.underline,
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //         textAlign: TextAlign.left,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // _buildTableCell(diagnos, false),
             _buildTableCell(diagnosis.units?.toString() ?? '0', false), // Default to '0' if null
             _buildTableCell("\$${diagnosis.unitCharge?.toString()}", false), // Default to '0' if null
           ],

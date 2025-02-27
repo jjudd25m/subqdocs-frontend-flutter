@@ -5,7 +5,7 @@ class RoundedImageWidget extends StatelessWidget {
   final double? size;
   final String? imagePath;
 
-  RoundedImageWidget({super.key, this.size = 44, this.imagePath});
+  const RoundedImageWidget({super.key, this.size = 44, this.imagePath});
 
   @override
   Widget build(BuildContext context) {

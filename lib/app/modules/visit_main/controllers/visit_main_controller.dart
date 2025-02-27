@@ -17,6 +17,7 @@ import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
@@ -60,7 +61,6 @@ class VisitMainController extends GetxController {
   RxInt isSelectedAttchmentOption = RxInt(-1);
   List<String> patientType = ["New Patient", "Old Patient"];
   RxnString selectedMedicalAssistant = RxnString();
-  // RxList<MediaListingModel> selectedList = RxList();
 
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
   Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
@@ -68,7 +68,7 @@ class VisitMainController extends GetxController {
 
   Future<void> captureProfileImage() async {
     XFile? pickedImage = await MediaPickerServices().pickImage();
-    print("picked image is  ${pickedImage}");
+    customPrint("picked image is  $pickedImage");
 
     if (pickedImage != null) {}
   }
@@ -89,7 +89,7 @@ class VisitMainController extends GetxController {
 
     XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
 
-    print("media  file is  $image");
+    customPrint("media  file is  $image");
 
     XFile? _pickedFile;
     String? _fileName;
@@ -133,7 +133,7 @@ class VisitMainController extends GetxController {
 
     List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
-    print("media  file is  $fileList");
+    customPrint("media  file is  $fileList");
 
     fileList?.forEach(
       (element) {
@@ -191,10 +191,10 @@ class VisitMainController extends GetxController {
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
 
-    print("visit id is :- $visitId");
+    customPrint("visit id is :- $visitId");
 
     List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
-    print("local audio is :- $pendingFiles");
+    customPrint("local audio is :- $pendingFiles");
 
     if (patientId.value.isNotEmpty) {
       getVisitRecap();
@@ -227,7 +227,7 @@ class VisitMainController extends GetxController {
     final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      print("internet not available ");
+      customPrint("internet not available ");
       isLoading.value = true;
       loadingMessage.value = "Uploading Audio";
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
@@ -245,10 +245,10 @@ class VisitMainController extends GetxController {
       List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
       for (var file in audio) {
-        print("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
+        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
       }
     } else {
-      print("internet available");
+      customPrint("internet available");
       isLoading.value = true;
       loadingMessage.value = "Uploading Audio";
 
@@ -256,7 +256,7 @@ class VisitMainController extends GetxController {
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
           await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
-      print("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
 
@@ -271,7 +271,7 @@ class VisitMainController extends GetxController {
     Map<String, List<int>> params = {};
     params["attachments"] = [id];
 
-    print("attch :- $params");
+    customPrint("attch :- $params");
     CommonResponse commonResponse = await _visitMainRepository.deleteAttachments(params: params);
     if (commonResponse.responseType == "success") {
       CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
@@ -289,11 +289,11 @@ class VisitMainController extends GetxController {
 
     Map<String, List<File>> profileParams = {};
     if (list.isNotEmpty) {
-      print("profile is   available");
+      customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
       profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
     } else {
-      print("profile is not  available");
+      customPrint("profile is not  available");
     }
     await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
@@ -302,7 +302,7 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> getVisitRecap() async {
-    print("patientID is :- ${patientId.value}");
+    customPrint("patientID is :- ${patientId.value}");
     visitRecapList.value = await _visitMainRepository.getVisitRecap(id: patientId.value);
   }
 
@@ -328,14 +328,14 @@ class VisitMainController extends GetxController {
       // Get.back();
     }
 
-    print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
   Future<void> getPatientDetails() async {
     Loader().showLoadingDialogForSimpleLoader();
     patientData.value = await _visitMainRepository.getPatientDetails(id: visitId.value);
     Get.back();
-    print("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
@@ -349,17 +349,13 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
-    print("visit id :- $visitId");
+    customPrint("visit id :- $visitId");
     dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
-    print("patientReScheduleCreate API  internal response $response");
-    // getPatient(patientId, visitId);
-    // CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+    customPrint("patientReScheduleCreate API  internal response $response");
   }
 
   Future<void> deletePatientVisit({required String id}) async {
     var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
-    print(response);
-    // getPatient(patientId, visitId);
-    // return response;
+    customPrint(response);
   }
 }

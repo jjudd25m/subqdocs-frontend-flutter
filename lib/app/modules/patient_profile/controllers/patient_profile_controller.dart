@@ -50,12 +50,6 @@ class PatientProfileController extends GetxController {
 
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: id);
 
-    // firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
-    // middleNameController.text = patientDetailModel.responseData?.middleName ?? "";
-    // lastNameController.text = patientDetailModel.responseData?.lastName ?? "";
-    //
-    // print("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
-    //
     // Parse the date string to a DateTime object
     DateTime dateTime = DateTime.parse(patientDetailModel.value?.responseData?.dateOfBirth ?? "").toLocal();
 
@@ -65,43 +59,6 @@ class PatientProfileController extends GetxController {
     // Format the DateTime object to the desired format
     String formattedDate = dateFormat.format(dateTime);
     dob.value = formattedDate;
-    // print("dob is :- $formattedDate");
-    //
-    // emailAddressController.text = patientDetailModel.responseData?.email ?? "";
-    //
-    // print("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
-    //
-    // // Parse the date string to a DateTime object
-    // DateTime visitdateTime = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
-    //
-    // // Create a DateFormat to format the date
-    // DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
-    //
-    // // Format the DateTime object to the desired format
-    // String visitformattedDate = visitdateFormat.format(visitdateTime);
-    //
-    // visitDateController.text = visitformattedDate;
-    //
-    // // time
-    //
-    // // Parse the date string to a DateTime object
-    // DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "").toLocal();
-    //
-    // // Create a DateFormat to format the date
-    // DateFormat visitTimeFormat = DateFormat('hh:mm a');
-    //
-    // // Format the DateTime object to the desired format
-    // String visitformattedTime = visitTimeFormat.format(visitTimeS);
-    //
-    // print("visitformattedTime is:- $visitformattedTime");
-    //
-    // selectedVisitTimeValue.value = visitformattedTime;
-    //
-    // selectedSexValue.value = patientDetailModel.responseData?.gender ?? "";
-    // // selectedVisitTimeValue.value = patientListData.visits?.last.visitTime ?? "";
-    //
-    // visitTime.value = generateTimeIntervals(visitdateTime);
-    // selectedVisitTimeValue.value = visitTime.firstOrNull!;
   }
 
   Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {

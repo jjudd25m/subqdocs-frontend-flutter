@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -19,6 +18,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/logger.dart';
 import '../../../models/media_listing_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/add_patient_model.dart';
@@ -90,21 +90,10 @@ class AddPatientController extends GetxController {
   RxList<MediaListingModel> selectedList = RxList();
 
   final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
-
-    // visitTime = generateTimeIntervals();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void increment() => count.value++;
@@ -132,7 +121,7 @@ class AddPatientController extends GetxController {
   Future<void> pickFiles() async {
     List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
-    print("media  file is  ${fileList}");
+    customPrint("media  file is  ${fileList}");
 
     fileList?.forEach(
       (element) {
@@ -157,12 +146,7 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(
-              file: file,
-              previewImage: null,
-              fileName: _shortFileName,
-              date: _formatDate(_pickDate),
-              Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
         }
 
         list.refresh();
@@ -172,7 +156,7 @@ class AddPatientController extends GetxController {
 
   Future<void> captureProfileImage() async {
     XFile? pickedImage = await MediaPickerServices().pickImage();
-    print("picked image is  ${pickedImage}");
+    customPrint("picked image is  $pickedImage");
 
     if (pickedImage != null) {
       profileImage.value = File(pickedImage.path);
@@ -190,7 +174,7 @@ class AddPatientController extends GetxController {
   Future<void> captureImage() async {
     XFile? image = await MediaPickerServices().pickImage();
 
-    print("media  file is  ${image}");
+    customPrint("media  file is  $image");
 
     XFile? _pickedFile;
     String? _fileName;
@@ -212,12 +196,7 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file,
-          previewImage: null,
-          fileName: _shortFileName,
-          date: _formatDate(_pickDate),
-          Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
     }
 
     list.refresh();
@@ -232,32 +211,24 @@ class AddPatientController extends GetxController {
     Loader().showLoadingDialogForSimpleLoader();
     isLoading.value = true;
 
-    // DateTime finalDateTimeFromString = mergeDateAndTimeFromString(visitDate.value, selectedVisitTimeValue.value ?? "");
-    // DateTime finalDateTimeFromDateTime = mergeDateAndTimeFromDateTime(selectedDateTime, selectedTime);
-
-    // String strVisit_time = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(finalDateTimeFromString);
-    //
-    // print("Merged DateTime from String: $finalDateTimeFromString");
-    // print("Merged DateTime from DateTime: $finalDateTimeFromDateTime");
-
     Map<String, dynamic> param = {};
     Map<String, List<File>> profileParams = {};
 
     param['first_name'] = firstNameController.text;
     if (profileImage.value != null) {
-      print("profile is   available");
+      customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
       profileParams['profile_image'] = [profileImage.value!];
     } else {
-      print("profile is not  available");
+      customPrint("profile is not  available");
     }
 
     if (selectedList.isNotEmpty) {
-      print("profile is   available");
+      customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
       profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
     } else {
-      print("profile is not  available");
+      customPrint("profile is not  available");
     }
 
     param['patient_id'] = patientId.text;
@@ -279,10 +250,8 @@ class AddPatientController extends GetxController {
 
     String date = visitDateController.text;
     String? time = selectedVisitTimeValue.value;
-    print(visitDateController.text);
-    print(selectedVisitTimeValue.value);
-
-    // DateTime dt = DateFormat("hh:mm:ss a").parse("10:30:00").toLocal();
+    customPrint(visitDateController.text);
+    customPrint(selectedVisitTimeValue.value);
 
     if (time != null) {
       DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
@@ -290,25 +259,28 @@ class AddPatientController extends GetxController {
       // Now format it to the hh:mm:ss format
       String formattedTime = DateFormat('HH:mm:ss').format(firstTime.toUtc());
 
-      print("date time is ${formattedTime}");
+      customPrint("date time is ${formattedTime}");
 
       param['visit_time'] = formattedTime;
     }
 
-    print("param is :- $param");
+    customPrint("param is :- $param");
 
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
-          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
-      print("_addPatientRepository response is ${addPatientModel.toJson()} ");
+      customPrint("_addPatientRepository response is ${addPatientModel.toJson()} ");
       CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
 
       if (isSaveAddAnother.value == false) {
         Get.back();
-        Get.back(result: 1);
+        if (visitDateController.text.isNotEmpty) {
+          Get.back(result: 1);
+        } else {
+          Get.back(result: 0);
+        }
       } else {
         Get.back();
         clearForm();
@@ -316,7 +288,7 @@ class AddPatientController extends GetxController {
     } catch (error) {
       Get.back();
       isLoading.value = false;
-      print("_addPatientRepository catch error is $error");
+      customPrint("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
     }
   }
@@ -359,7 +331,7 @@ class AddPatientController extends GetxController {
 
                   if (control == dobController) {
                     dob.value = strDate;
-                    print("controller dob is :- ${dob}");
+                    customPrint("controller dob is :- ${dob}");
                   }
 
                   if (control == visitDateController) {
@@ -371,7 +343,7 @@ class AddPatientController extends GetxController {
                     selectedVisitTimeValue.value = "12:00 AM";
                   }
 
-                  print('${_selectedDate.toLocal()}'.split(' ')[0]);
+                  customPrint('${_selectedDate.toLocal()}'.split(' ')[0]);
                 },
               ),
             ),
@@ -388,7 +360,7 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
-    print("launch url is :- ${url}");
+    customPrint("launch url is :- ${url}");
 
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');

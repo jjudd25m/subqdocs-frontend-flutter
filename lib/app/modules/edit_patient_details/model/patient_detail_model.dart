@@ -7,20 +7,20 @@ class PatientDetailModel {
   PatientDetailModel({this.responseData, this.message, this.toast, this.responseType});
 
   PatientDetailModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
+    responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['responseData'] = responseData!.toJson();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -73,28 +73,28 @@ class ResponseData {
     if (json['scheduledVisits'] != null) {
       scheduledVisits = <ScheduledVisits>[];
       json['scheduledVisits'].forEach((v) {
-        scheduledVisits!.add(new ScheduledVisits.fromJson(v));
+        scheduledVisits!.add(ScheduledVisits.fromJson(v));
       });
     }
     if (json['pastVisits'] != null) {
       pastVisits = <PastVisits>[];
       json['pastVisits'].forEach((v) {
-        pastVisits!.add(new PastVisits.fromJson(v));
+        pastVisits!.add(PastVisits.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['patient_id'] = this.patientId;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['middle_name'] = this.middleName;
-    data['date_of_birth'] = this.dateOfBirth;
-    data['age'] = this.age;
-    data['email'] = this.email;
-    data['gender'] = this.gender;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['patient_id'] = patientId;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['middle_name'] = middleName;
+    data['date_of_birth'] = dateOfBirth;
+    data['age'] = age;
+    data['email'] = email;
+    data['gender'] = gender;
 
     if (visitDate != null) {
       data['visit_date'] = visitDate;
@@ -103,12 +103,12 @@ class ResponseData {
     if (visitDate != null) {
       data['visit_time'] = visitTime;
     }
-    data['profile_image'] = this.profileImage;
-    if (this.scheduledVisits != null) {
-      data['scheduledVisits'] = this.scheduledVisits!.map((v) => v.toJson()).toList();
+    data['profile_image'] = profileImage;
+    if (scheduledVisits != null) {
+      data['scheduledVisits'] = scheduledVisits!.map((v) => v.toJson()).toList();
     }
-    if (this.pastVisits != null) {
-      data['pastVisits'] = this.pastVisits!.map((v) => v.toJson()).toList();
+    if (pastVisits != null) {
+      data['pastVisits'] = pastVisits!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -130,11 +130,11 @@ class ScheduledVisits {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visit_date'] = this.visitDate;
-    data['visit_time'] = this.visitTime;
-    data['visit_status'] = this.visitStatus;
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['visit_status'] = visitStatus;
+    data['id'] = id;
     return data;
   }
 }
@@ -157,12 +157,12 @@ class PastVisits {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visit_date'] = this.visitDate;
-    data['visit_time'] = this.visitTime;
-    data['visit_status'] = this.visitStatus;
-    data['id'] = this.id;
-    data['summary'] = this.summary;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['visit_status'] = visitStatus;
+    data['id'] = id;
+    data['summary'] = summary;
     return data;
   }
 }

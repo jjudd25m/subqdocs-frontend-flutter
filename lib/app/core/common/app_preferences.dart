@@ -9,10 +9,6 @@ class AppPreference {
 
   SharedPreferences? _prefs;
 
-  // Future<void> reload() async {
-  //   _prefs = await SharedPreferences.getInstance();
-  // }
-
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
   }

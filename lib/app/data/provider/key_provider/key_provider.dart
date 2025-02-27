@@ -1,5 +1,3 @@
-// import 'package:calendar_view/calendar_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class KeyProvider {
@@ -8,8 +6,6 @@ class KeyProvider {
   KeyProvider._internal();
 
   static KeyProvider get instance => _keyProvider;
-
-  // static final GlobalKey<DayViewState> calendarInstance = GlobalKey<DayViewState>();
 }
 
 class NavigatorKey {
@@ -34,8 +30,6 @@ class NavigatorKey {
   set setPageKey(Key key) {
     _pageKey = UniqueKey();
   }
-
-  // final calendarKey = GlobalKey<DayViewState>();
 
   Key? get getPageKey => _pageKey;
 

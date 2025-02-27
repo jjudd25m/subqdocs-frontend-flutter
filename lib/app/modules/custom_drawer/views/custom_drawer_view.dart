@@ -26,12 +26,6 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.only(
-      //         topLeft: Radius.circular(0),
-      //         topRight: Radius.circular(50),
-      //         bottomLeft: Radius.circular(0),
-      //         bottomRight: Radius.circular(50))),
       width: 321,
       backgroundColor: Colors.white,
       child: Container(
@@ -114,28 +108,11 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                   onTap: () async {
                                     controller.changeSelected(index);
                                     await onItemSelected!(index);
-                                    // if (index == 0) {
-                                    //   Get.toNamed(Routes.HOME, arguments: {
-                                    //     "tabIndex": 0,
-                                    //   });
-                                    // } else if (index == 1) {
-                                    //   Get.toNamed(Routes.HOME, arguments: {
-                                    //     "tabIndex": 1,
-                                    //   });
-                                    // } else if (index == 2) {
-                                    //   Get.toNamed(Routes.HOME, arguments: {
-                                    //     "tabIndex": 2,
-                                    //   });
-                                    // } else if (index == 3) {
-                                    // } else if (index == 4) {
-                                    //   // Get.toNamed(Routes.VISIT_MAIN);
-                                    // }
                                   },
                                   child: DrawerItem(
                                     isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
                                     itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
-                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ??
-                                        "", // Add any dummy icon path here
+                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ?? "", // Add any dummy icon path here
                                   ));
                             },
                             itemCount: controller.drawerItemModelList.value.length,

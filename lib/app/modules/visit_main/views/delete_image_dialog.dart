@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,7 +6,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
-import 'package:zoom_widget/zoom_widget.dart';
 
 import '../../../../widget/custom_animated_button.dart';
 

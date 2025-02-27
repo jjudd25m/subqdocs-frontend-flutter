@@ -20,6 +20,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/custom_animated_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
+import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/home_controller.dart';
@@ -152,14 +153,12 @@ class HomeView extends GetView<HomeController> {
                             children: [
                               Container(
                                 width: double.infinity,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                                 child: Obx(
                                   () {
                                     return Container(
                                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                         height: 65,
                                         child: SingleChildScrollView(
                                           physics: BouncingScrollPhysics(),
@@ -177,16 +176,10 @@ class HomeView extends GetView<HomeController> {
                                                   isOutline: true,
                                                   paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                   fontSize: 14,
-                                                  enabledTextColor: controller.tabIndex.value == 0
-                                                      ? AppColors.backgroundPurple
-                                                      : AppColors.textGrey,
-                                                  enabledColor: controller.tabIndex.value == 0
-                                                      ? AppColors.buttonPurpleLight
-                                                      : AppColors.clear,
+                                                  enabledTextColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                  enabledColor: controller.tabIndex.value == 0 ? AppColors.buttonPurpleLight : AppColors.clear,
                                                   outLineEnabledColor: AppColors.textGrey,
-                                                  outlineColor: controller.tabIndex.value == 0
-                                                      ? AppColors.backgroundPurple
-                                                      : AppColors.clear,
+                                                  outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
                                                 ),
                                               ),
                                               IntrinsicWidth(
@@ -200,16 +193,10 @@ class HomeView extends GetView<HomeController> {
                                                 isOutline: true,
                                                 paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
-                                                enabledTextColor: controller.tabIndex.value == 1
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.textGrey,
-                                                enabledColor: controller.tabIndex.value == 1
-                                                    ? AppColors.buttonPurpleLight
-                                                    : AppColors.clear,
+                                                enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
                                                 outLineEnabledColor: AppColors.textGrey,
-                                                outlineColor: controller.tabIndex.value == 1
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.clear,
+                                                outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
                                               )),
                                               IntrinsicWidth(
                                                   child: CustomAnimatedButton(
@@ -222,16 +209,10 @@ class HomeView extends GetView<HomeController> {
                                                 isOutline: true,
                                                 paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
-                                                enabledTextColor: controller.tabIndex.value == 2
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.textGrey,
-                                                enabledColor: controller.tabIndex.value == 2
-                                                    ? AppColors.buttonPurpleLight
-                                                    : AppColors.clear,
+                                                enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
                                                 outLineEnabledColor: AppColors.textGrey,
-                                                outlineColor: controller.tabIndex.value == 2
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.clear,
+                                                outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
                                               )),
                                             ],
                                           ),
@@ -243,8 +224,7 @@ class HomeView extends GetView<HomeController> {
                               Expanded(
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  decoration:
-                                      BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                   child: Column(
                                     children: [
                                       Obx(
@@ -268,19 +248,17 @@ class HomeView extends GetView<HomeController> {
                                                     if (value == "1") {
                                                       // Do custom logic for Item 1
                                                       // Example: close the popup programmatically
-                                                      print('Closing popup manually for Item 1');
+                                                      customPrint('Closing popup manually for Item 1');
                                                     }
                                                   },
                                                   onCanceled: () {
-                                                    // controller.selectedValue.clear();
-
                                                     controller.tabIndex.value == 0
                                                         ? controller.getPatientList()
                                                         : controller.tabIndex.value == 1
                                                             ? controller.getScheduleVisitList()
                                                             : controller.getPastVisitList();
 
-                                                    print("dailog is cancelled");
+                                                    customPrint("dailog is cancelled");
                                                   },
                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                   color: AppColors.white,
@@ -314,31 +292,15 @@ class HomeView extends GetView<HomeController> {
                                                                   ),
                                                                   GestureDetector(
                                                                     onTap: () {
-                                                                      print("clicked");
+                                                                      customPrint("clicked");
 
                                                                       controller.clearFilter();
                                                                     },
                                                                     child: Text(
                                                                       "Clear",
-                                                                      style: AppFonts.medium(
-                                                                          14, AppColors.backgroundPurple),
+                                                                      style: AppFonts.medium(14, AppColors.backgroundPurple),
                                                                     ),
                                                                   ),
-                                                                  // SizedBox(
-                                                                  //   width: 20,
-                                                                  // ),
-                                                                  // GestureDetector(
-                                                                  //   onTap: () {
-                                                                  //     print("clicked");
-                                                                  //
-                                                                  //     controller.clearFilter();
-                                                                  //   },
-                                                                  //   child: Text(
-                                                                  //     "Apply",
-                                                                  //     style: AppFonts.medium(
-                                                                  //         14, AppColors.backgroundPurple),
-                                                                  //   ),
-                                                                  // ),
                                                                 ],
                                                               ),
                                                             ),
@@ -360,97 +322,45 @@ class HomeView extends GetView<HomeController> {
                                                             value: "",
                                                             child: Obx(() {
                                                               return Column(
-                                                                  children: List.generate(controller.statusModel.length,
-                                                                      (index) {
+                                                                  children: List.generate(controller.statusModel.length, (index) {
                                                                 return Padding(
-                                                                    padding: const EdgeInsets.symmetric(
-                                                                        horizontal: 16, vertical: 6),
+                                                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                                     child: Row(
                                                                       children: [
                                                                         controller.selectedStatusIndex.contains(index)
                                                                             ? GestureDetector(
                                                                                 onTap: () {
-                                                                                  print("true false");
+                                                                                  customPrint("true false");
 
-                                                                                  if (controller.selectedStatusIndex
-                                                                                      .contains(index)) {
-                                                                                    // int sindex = controller.selectedStatusIndex.indexOf(index);
-                                                                                    controller.selectedStatusIndex
-                                                                                        .remove(index);
+                                                                                  if (controller.selectedStatusIndex.contains(index)) {
+                                                                                    controller.selectedStatusIndex.remove(index);
                                                                                   } else {
-                                                                                    controller.selectedStatusIndex
-                                                                                        .add(index);
+                                                                                    controller.selectedStatusIndex.add(index);
                                                                                   }
-                                                                                  // controller.selectedIndex.value = index;
                                                                                 },
-                                                                                child: SvgPicture.asset(
-                                                                                    ImagePath.checkedBox),
+                                                                                child: SvgPicture.asset(ImagePath.checkedBox),
                                                                               )
                                                                             : GestureDetector(
                                                                                 onTap: () {
-                                                                                  print("");
-                                                                                  if (controller.selectedStatusIndex
-                                                                                      .contains(index)) {
-                                                                                    // int sindex = controller.selectedStatusIndex.indexOf(index);
-                                                                                    controller.selectedStatusIndex
-                                                                                        .remove(index);
+                                                                                  customPrint("");
+                                                                                  if (controller.selectedStatusIndex.contains(index)) {
+                                                                                    controller.selectedStatusIndex.remove(index);
                                                                                   } else {
-                                                                                    controller.selectedStatusIndex
-                                                                                        .add(index);
+                                                                                    controller.selectedStatusIndex.add(index);
                                                                                   }
-                                                                                  // controller.selectedIndex.value = index;
                                                                                 },
-                                                                                child: SvgPicture.asset(
-                                                                                    ImagePath.unCheckedBox),
+                                                                                child: SvgPicture.asset(ImagePath.unCheckedBox),
                                                                               ),
                                                                         SizedBox(
                                                                           width: 9,
                                                                         ),
                                                                         Text(
-                                                                          "${controller.statusModel[index].status ?? ""}",
-                                                                          style:
-                                                                              AppFonts.regular(14, AppColors.textBlack),
+                                                                          controller.statusModel[index].status ?? "",
+                                                                          style: AppFonts.regular(14, AppColors.textBlack),
                                                                         ),
                                                                       ],
                                                                     ));
-                                                              }) /*controller.statusModel.map((element) {
-                                                            return Padding(
-                                                                padding: const EdgeInsets.symmetric(
-                                                                    horizontal: 16, vertical: 6),
-                                                                child: Row(
-                                                                  children: [
-                                                                    element.selectedIndex ==
-                                                                        ? GestureDetector(
-                                                                            onTap: () {
-                                                                              print("true false");
-                                                                              element.selectedIndex = false;
-                                                                              controller.temp.value = false;
-                                                                              controller.statusModel.refresh();
-                                                                            },
-                                                                            child:
-                                                                                SvgPicture.asset(ImagePath.checkedBox),
-                                                                          )
-                                                                        : GestureDetector(
-                                                                            onTap: () {
-                                                                              print("");
-                                                                              element.isSelected = true;
-                                                                              controller.temp.value = false;
-                                                                              controller.statusModel.refresh();
-                                                                            },
-                                                                            child: SvgPicture.asset(
-                                                                                ImagePath.unCheckedBox),
-                                                                          ),
-                                                                    SizedBox(
-                                                                      width: 9,
-                                                                    ),
-                                                                    Text(
-                                                                      "${element.status}",
-                                                                      style: AppFonts.regular(14, AppColors.textBlack),
-                                                                    ),
-                                                                  ],
-                                                                )); // You can customize this to display your data
-                                                          }).toList(), */ //
-                                                                  );
+                                                              }));
                                                             }),
                                                           )
                                                         : PopupMenuItem(
@@ -460,14 +370,13 @@ class HomeView extends GetView<HomeController> {
                                                             value: "",
                                                             child: Obx(() {
                                                               return Padding(
-                                                                padding: const EdgeInsets.only(
-                                                                    right: 16, left: 16, bottom: 16, top: 10),
+                                                                padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
                                                                 child: TextFormFiledWidget(
                                                                     readOnly: true,
                                                                     label: "Visit Date",
                                                                     controller: controller.fromController,
                                                                     onTap: () async {
-                                                                      print("print");
+                                                                      customPrint("customPrint");
                                                                       showDialog(
                                                                         context: context,
                                                                         useSafeArea: true,
@@ -481,78 +390,50 @@ class HomeView extends GetView<HomeController> {
                                                                             title: Column(
                                                                               children: [
                                                                                 SizedBox(height: 10),
-                                                                                // Padding(
-                                                                                //   padding: EdgeInsets.symmetric(horizontal: DimensionConstant.d15),
-                                                                                //   child: WidgetConstant().textLight14(changeEventDateStr),
-                                                                                // ),
                                                                                 SizedBox(
                                                                                   width: 305,
                                                                                   height: 290,
                                                                                   child: GetBuilder<HomeController>(
                                                                                     builder: (controller) {
                                                                                       return CalendarDatePicker2(
-                                                                                        config:
-                                                                                            CalendarDatePicker2Config(
+                                                                                        config: CalendarDatePicker2Config(
                                                                                           // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
-                                                                                          weekdayLabelTextStyle:
-                                                                                              AppFonts.regular(14,
-                                                                                                  AppColors.textGrey),
-                                                                                          weekdayLabels: [
-                                                                                            "Mo",
-                                                                                            "Tu",
-                                                                                            "We",
-                                                                                            "Th",
-                                                                                            "Fr",
-                                                                                            "Sa",
-                                                                                            "su"
-                                                                                          ],
-                                                                                          daySplashColor:
-                                                                                              AppColors.clear,
-                                                                                          calendarViewMode:
-                                                                                              CalendarDatePicker2Mode
-                                                                                                  .day,
-                                                                                          selectedDayHighlightColor:
-                                                                                              AppColors
-                                                                                                  .backgroundPurple,
+                                                                                          weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                                                                          weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                                                                          daySplashColor: AppColors.clear,
+                                                                                          calendarViewMode: CalendarDatePicker2Mode.day,
+                                                                                          selectedDayHighlightColor: AppColors.backgroundPurple,
                                                                                           dayMaxWidth: 60,
                                                                                           allowSameValueSelection: true,
                                                                                           firstDayOfWeek: 6,
                                                                                           disableMonthPicker: true,
 
-                                                                                          scrollViewTopHeaderTextStyle:
-                                                                                              const TextStyle(
+                                                                                          scrollViewTopHeaderTextStyle: const TextStyle(
                                                                                             color: Colors.black87,
                                                                                             fontWeight: FontWeight.bold,
                                                                                           ),
 
-                                                                                          controlsTextStyle:
-                                                                                              const TextStyle(
+                                                                                          controlsTextStyle: const TextStyle(
                                                                                             color: Colors.black,
                                                                                             fontSize: 15,
                                                                                             fontWeight: FontWeight.bold,
                                                                                           ),
                                                                                           centerAlignModePicker: true,
-                                                                                          customModePickerIcon:
-                                                                                              const SizedBox(),
-                                                                                          calendarViewScrollPhysics:
-                                                                                              const NeverScrollableScrollPhysics(),
+                                                                                          customModePickerIcon: const SizedBox(),
+                                                                                          calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
 
-                                                                                          calendarType:
-                                                                                              CalendarDatePicker2Type
-                                                                                                  .range,
+                                                                                          calendarType: CalendarDatePicker2Type.range,
                                                                                         ),
                                                                                         onValueChanged: (value) {
-                                                                                          controller.selectedValue =
-                                                                                              value;
+                                                                                          controller.selectedValue = value;
 
-                                                                                          print("onchanged  ${value}");
+                                                                                          customPrint("onchanged  ${value}");
                                                                                         },
                                                                                         value: [DateTime.now()],
                                                                                       );
                                                                                     },
                                                                                   ),
                                                                                 ),
-
                                                                                 Row(
                                                                                   children: [
                                                                                     SizedBox(
@@ -560,17 +441,14 @@ class HomeView extends GetView<HomeController> {
                                                                                     ),
                                                                                     Expanded(
                                                                                       child: ContainerButton(
-                                                                                        padding: EdgeInsets.only(
-                                                                                            top: 10, bottom: 10),
+                                                                                        padding: EdgeInsets.only(top: 10, bottom: 10),
                                                                                         onPressed: () {
                                                                                           Navigator.pop(context);
                                                                                         },
                                                                                         backgroundColor: Colors.white,
                                                                                         needBorder: true,
-                                                                                        borderColor:
-                                                                                            AppColors.backgroundPurple,
-                                                                                        textColor:
-                                                                                            AppColors.backgroundPurple,
+                                                                                        borderColor: AppColors.backgroundPurple,
+                                                                                        textColor: AppColors.backgroundPurple,
                                                                                         text: "Cancel",
                                                                                       ),
                                                                                     ),
@@ -579,14 +457,12 @@ class HomeView extends GetView<HomeController> {
                                                                                     ),
                                                                                     Expanded(
                                                                                       child: ContainerButton(
-                                                                                        padding: EdgeInsets.only(
-                                                                                            top: 10, bottom: 10),
+                                                                                        padding: EdgeInsets.only(top: 10, bottom: 10),
                                                                                         onPressed: () {
                                                                                           controller.setDateRange();
                                                                                         },
                                                                                         text: "Choose Date",
-                                                                                        backgroundColor:
-                                                                                            AppColors.backgroundPurple,
+                                                                                        backgroundColor: AppColors.backgroundPurple,
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(
@@ -600,38 +476,9 @@ class HomeView extends GetView<HomeController> {
                                                                           );
                                                                         },
                                                                       );
-
-                                                                      // final date = await showDatePickerDialog(
-                                                                      //   context: context,
-                                                                      //   initialDate: DateTime(2022, 10, 10),
-                                                                      //   minDate: DateTime(2020, 10, 10),
-                                                                      //   maxDate: DateTime(2024, 10, 30),
-                                                                      //   width: 300,
-                                                                      //   height: 300,
-                                                                      //   currentDate: DateTime(2022, 10, 15),
-                                                                      //   selectedDate: DateTime(2022, 10, 16),
-                                                                      //   currentDateDecoration: const BoxDecoration(),
-                                                                      //   currentDateTextStyle: const TextStyle(),
-                                                                      //   daysOfTheWeekTextStyle: const TextStyle(),
-                                                                      //   disabledCellsDecoration: const BoxDecoration(),
-                                                                      //   disabledCellsTextStyle: const TextStyle(),
-                                                                      //   enabledCellsDecoration: const BoxDecoration(),
-                                                                      //   enabledCellsTextStyle: const TextStyle(),
-                                                                      //   initialPickerType: PickerType.days,
-                                                                      //   selectedCellDecoration: const BoxDecoration(),
-                                                                      //   selectedCellTextStyle: const TextStyle(),
-                                                                      //   leadingDateTextStyle: const TextStyle(),
-                                                                      //   slidersColor: Colors.lightBlue,
-                                                                      //   highlightColor: Colors.redAccent,
-                                                                      //   slidersSize: 20,
-                                                                      //   splashColor: Colors.lightBlueAccent,
-                                                                      //   splashRadius: 40,
-                                                                      //   centerLeadingDate: true,
-                                                                      // );
                                                                     },
                                                                     suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
-                                                                    hint:
-                                                                        "${controller.startDate}-${controller.endDate}",
+                                                                    hint: "${controller.startDate}-${controller.endDate}",
                                                                     checkValidation: (value) {
                                                                       return Validation.emailValidate(value);
                                                                     }),
@@ -646,14 +493,13 @@ class HomeView extends GetView<HomeController> {
                                                             value: "",
                                                             child: Obx(() {
                                                               return Padding(
-                                                                padding: const EdgeInsets.only(
-                                                                    right: 16, left: 16, bottom: 16, top: 10),
+                                                                padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
                                                                 child: TextFormFiledWidget(
                                                                     readOnly: true,
                                                                     label: "Visit Date",
                                                                     controller: controller.fromController,
                                                                     onTap: () async {
-                                                                      print("print");
+                                                                      customPrint("customPrint");
                                                                       showDialog(
                                                                         context: context,
                                                                         useSafeArea: true,
@@ -667,78 +513,46 @@ class HomeView extends GetView<HomeController> {
                                                                             title: Column(
                                                                               children: [
                                                                                 SizedBox(height: 10),
-                                                                                // Padding(
-                                                                                //   padding: EdgeInsets.symmetric(horizontal: DimensionConstant.d15),
-                                                                                //   child: WidgetConstant().textLight14(changeEventDateStr),
-                                                                                // ),
                                                                                 SizedBox(
                                                                                   width: 305,
                                                                                   height: 290,
                                                                                   child: GetBuilder<HomeController>(
                                                                                     builder: (controller) {
                                                                                       return CalendarDatePicker2(
-                                                                                        config:
-                                                                                            CalendarDatePicker2Config(
-                                                                                          // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
-                                                                                          weekdayLabelTextStyle:
-                                                                                              AppFonts.regular(14,
-                                                                                                  AppColors.textGrey),
-                                                                                          weekdayLabels: [
-                                                                                            "Mo",
-                                                                                            "Tu",
-                                                                                            "We",
-                                                                                            "Th",
-                                                                                            "Fr",
-                                                                                            "Sa",
-                                                                                            "su"
-                                                                                          ],
-                                                                                          daySplashColor:
-                                                                                              AppColors.clear,
-                                                                                          calendarViewMode:
-                                                                                              CalendarDatePicker2Mode
-                                                                                                  .day,
-                                                                                          selectedDayHighlightColor:
-                                                                                              AppColors
-                                                                                                  .backgroundPurple,
+                                                                                        config: CalendarDatePicker2Config(
+                                                                                          weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                                                                          weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                                                                          daySplashColor: AppColors.clear,
+                                                                                          calendarViewMode: CalendarDatePicker2Mode.day,
+                                                                                          selectedDayHighlightColor: AppColors.backgroundPurple,
                                                                                           dayMaxWidth: 60,
                                                                                           allowSameValueSelection: true,
                                                                                           firstDayOfWeek: 6,
                                                                                           disableMonthPicker: true,
-
-                                                                                          scrollViewTopHeaderTextStyle:
-                                                                                              const TextStyle(
+                                                                                          scrollViewTopHeaderTextStyle: const TextStyle(
                                                                                             color: Colors.black87,
                                                                                             fontWeight: FontWeight.bold,
                                                                                           ),
-
-                                                                                          controlsTextStyle:
-                                                                                              const TextStyle(
+                                                                                          controlsTextStyle: const TextStyle(
                                                                                             color: Colors.black,
                                                                                             fontSize: 15,
                                                                                             fontWeight: FontWeight.bold,
                                                                                           ),
                                                                                           centerAlignModePicker: true,
-                                                                                          customModePickerIcon:
-                                                                                              const SizedBox(),
-                                                                                          calendarViewScrollPhysics:
-                                                                                              const NeverScrollableScrollPhysics(),
-
-                                                                                          calendarType:
-                                                                                              CalendarDatePicker2Type
-                                                                                                  .range,
+                                                                                          customModePickerIcon: const SizedBox(),
+                                                                                          calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
+                                                                                          calendarType: CalendarDatePicker2Type.range,
                                                                                         ),
                                                                                         onValueChanged: (value) {
-                                                                                          controller.selectedValue =
-                                                                                              value;
+                                                                                          controller.selectedValue = value;
 
-                                                                                          print("onchanged  ${value}");
+                                                                                          customPrint("onchanged  ${value}");
                                                                                         },
                                                                                         value: [DateTime.now()],
                                                                                       );
                                                                                     },
                                                                                   ),
                                                                                 ),
-
                                                                                 Row(
                                                                                   children: [
                                                                                     SizedBox(
@@ -746,17 +560,14 @@ class HomeView extends GetView<HomeController> {
                                                                                     ),
                                                                                     Expanded(
                                                                                       child: ContainerButton(
-                                                                                        padding: EdgeInsets.only(
-                                                                                            top: 10, bottom: 10),
+                                                                                        padding: EdgeInsets.only(top: 10, bottom: 10),
                                                                                         onPressed: () {
                                                                                           Navigator.pop(context);
                                                                                         },
                                                                                         backgroundColor: Colors.white,
                                                                                         needBorder: true,
-                                                                                        borderColor:
-                                                                                            AppColors.backgroundPurple,
-                                                                                        textColor:
-                                                                                            AppColors.backgroundPurple,
+                                                                                        borderColor: AppColors.backgroundPurple,
+                                                                                        textColor: AppColors.backgroundPurple,
                                                                                         text: "Cancel",
                                                                                       ),
                                                                                     ),
@@ -765,14 +576,12 @@ class HomeView extends GetView<HomeController> {
                                                                                     ),
                                                                                     Expanded(
                                                                                       child: ContainerButton(
-                                                                                        padding: EdgeInsets.only(
-                                                                                            top: 10, bottom: 10),
+                                                                                        padding: EdgeInsets.only(top: 10, bottom: 10),
                                                                                         onPressed: () {
                                                                                           controller.setDateRange();
                                                                                         },
                                                                                         text: "Choose Date",
-                                                                                        backgroundColor:
-                                                                                            AppColors.backgroundPurple,
+                                                                                        backgroundColor: AppColors.backgroundPurple,
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(
@@ -786,38 +595,9 @@ class HomeView extends GetView<HomeController> {
                                                                           );
                                                                         },
                                                                       );
-
-                                                                      // final date = await showDatePickerDialog(
-                                                                      //   context: context,
-                                                                      //   initialDate: DateTime(2022, 10, 10),
-                                                                      //   minDate: DateTime(2020, 10, 10),
-                                                                      //   maxDate: DateTime(2024, 10, 30),
-                                                                      //   width: 300,
-                                                                      //   height: 300,
-                                                                      //   currentDate: DateTime(2022, 10, 15),
-                                                                      //   selectedDate: DateTime(2022, 10, 16),
-                                                                      //   currentDateDecoration: const BoxDecoration(),
-                                                                      //   currentDateTextStyle: const TextStyle(),
-                                                                      //   daysOfTheWeekTextStyle: const TextStyle(),
-                                                                      //   disabledCellsDecoration: const BoxDecoration(),
-                                                                      //   disabledCellsTextStyle: const TextStyle(),
-                                                                      //   enabledCellsDecoration: const BoxDecoration(),
-                                                                      //   enabledCellsTextStyle: const TextStyle(),
-                                                                      //   initialPickerType: PickerType.days,
-                                                                      //   selectedCellDecoration: const BoxDecoration(),
-                                                                      //   selectedCellTextStyle: const TextStyle(),
-                                                                      //   leadingDateTextStyle: const TextStyle(),
-                                                                      //   slidersColor: Colors.lightBlue,
-                                                                      //   highlightColor: Colors.redAccent,
-                                                                      //   slidersSize: 20,
-                                                                      //   splashColor: Colors.lightBlueAccent,
-                                                                      //   splashRadius: 40,
-                                                                      //   centerLeadingDate: true,
-                                                                      // );
                                                                     },
                                                                     suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
-                                                                    hint:
-                                                                        "${controller.startDate}-${controller.endDate}",
+                                                                    hint: "${controller.startDate}-${controller.endDate}",
                                                                     checkValidation: (value) {
                                                                       return Validation.emailValidate(value);
                                                                     }),
@@ -836,11 +616,9 @@ class HomeView extends GetView<HomeController> {
                                                       border: Border.all(
                                                         color: AppColors.textDarkGrey, // Border color
                                                         width: 0.5,
-                                                        // Border width
                                                       ),
 
-                                                      borderRadius: BorderRadius.circular(
-                                                          10), // Optional: to make the corners rounded
+                                                      borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                                     ),
                                                     child: Padding(
                                                       padding: const EdgeInsets.all(10),
@@ -858,8 +636,7 @@ class HomeView extends GetView<HomeController> {
                                                 Container(
                                                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                                                   decoration: BoxDecoration(
-                                                    border:
-                                                        Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                    border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                                     // color: AppColors.backgroundWhite,
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
@@ -885,15 +662,9 @@ class HomeView extends GetView<HomeController> {
                                                                     : controller.getPastVisitList();
                                                           },
                                                           maxLines: 1, //or null
-                                                          decoration: InputDecoration.collapsed(
-                                                              hintText: "Search",
-                                                              hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                                         ),
                                                       ),
-                                                      // Text(
-                                                      //   "Attachments",
-                                                      //   style: AppFonts.medium(16, AppColors.textBlack),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
@@ -916,9 +687,7 @@ class HomeView extends GetView<HomeController> {
                                                       controller.getScheduleVisitList();
                                                       controller.getPatientList();
                                                     },
-                                                    label: controller.tabIndex.value == 0
-                                                        ? "Add Patient"
-                                                        : "Schedule Visit",
+                                                    label: controller.tabIndex.value == 0 ? "Add Patient" : "Schedule Visit",
                                                   ),
                                                 )
                                               ],

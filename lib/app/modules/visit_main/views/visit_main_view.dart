@@ -1,16 +1,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
@@ -21,12 +18,11 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_table.dart';
+import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../add_patient/widgets/custom_dailog.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../home/views/schedule_patient_dialog.dart';
 import '../controllers/visit_main_controller.dart';
-import 'attachmentDailog.dart';
 import 'delete_image_dialog.dart';
 import 'delete_schedule_visit.dart';
 
@@ -416,7 +412,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "Dr ${controller.patientData.value?.responseData?.doctorFirstName}  ${controller.patientData.value?.responseData?.doctorLastName}",
+                                                    "Dr ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
                                                     style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                   SizedBox(width: 5),
@@ -517,19 +513,6 @@ class VisitMainView extends GetView<VisitMainController> {
                                     SizedBox(
                                       height: 10,
                                     )
-                                    // ExpansionTile(
-                                    //   title: Text(
-                                    //     'Sub title',
-                                    //   ),
-                                    //   children: <Widget>[
-                                    //     // ListTile(
-                                    //     //   title: Text('data'),
-                                    //     // )
-                                    //   ],
-                                    // ),
-                                    // ListTile(
-                                    //   title: Text('data'),
-                                    // )
                                   ],
                                 ),
                               ),
@@ -572,14 +555,6 @@ class VisitMainView extends GetView<VisitMainController> {
                                                   padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
                                                   child: CustomTable(
                                                     rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
-                                                    // rows: [
-                                                    //   ['Visit Date', 'Time', "Action"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    //   ["10/12/2024", '11:00 PM', 'View ', "Reschedule", "Cancel visit"],
-                                                    // ],
                                                     cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                                                       return colIndex == 2 && rowIndex != 0
                                                           ? GestureDetector(
@@ -589,7 +564,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                   "patientId": controller.patientId,
                                                                 });
 
-                                                                print("row index is :- $rowIndex");
+                                                                customPrint("row index is :- $rowIndex");
                                                               },
                                                               child: Text(
                                                                 cellData,
@@ -615,9 +590,9 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                             builder: (BuildContext context) {
                                                                               return SchedulePatientDialog(
                                                                                 receiveParam: (p0, p1) {
-                                                                                  print("p0 is $p0 p1 is $p1");
-                                                                                  print("row index is :- ${rowIndex}");
-                                                                                  print(
+                                                                                  customPrint("p0 is $p0 p1 is $p1");
+                                                                                  customPrint("row index is :- ${rowIndex}");
+                                                                                  customPrint(
                                                                                       "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
                                                                                   controller.patientReScheduleCreate(
                                                                                       param: {"visit_date": p1, "visit_time": p0},
@@ -641,7 +616,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                             },
                                                                           );
                                                                         }
-                                                                        print("col index is :- $colIndex");
+                                                                        customPrint("col index is :- $colIndex");
                                                                       },
                                                                       child: Text(
                                                                         cellData ?? "",
@@ -671,7 +646,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                     },
                                                     columnCount: 5,
                                                     context: context,
-                                                    columnWidths: isPortrait ? [0.25, 0.25, 0.11, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
+                                                    columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
                                                   ),
                                                 ),
                                               )
@@ -876,11 +851,6 @@ class VisitMainView extends GetView<VisitMainController> {
                                               ),
                                             ),
                                           )
-
-                                          // Text(
-                                          //   "Attachments",
-                                          //   style: AppFonts.medium(16, AppColors.textBlack),
-                                          // ),
                                         ],
                                       ),
                                     ),
@@ -1012,7 +982,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                         ),
                                                         GestureDetector(
                                                           onTap: () {
-                                                            print("clicked");
+                                                            customPrint("clicked");
 
                                                             controller.clearFilter();
                                                           },
@@ -1026,7 +996,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                         // ),
                                                         // GestureDetector(
                                                         //   onTap: () {
-                                                        //     print("clicked");
+                                                        //     customPrint("clicked");
                                                         //
                                                         //     controller.clearFilter();
                                                         //   },
@@ -1215,7 +1185,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                         height: 120,
                                                                         child: GestureDetector(
                                                                           onTap: () {
-                                                                            print(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+                                                                            customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
 
                                                                             if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
                                                                               showDialog(
@@ -1235,7 +1205,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                               );
                                                                             } else {
                                                                               Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
-                                                                              print("attchmentUri is :- ${attchmentUri}");
+                                                                              customPrint("attchmentUri is :- ${attchmentUri}");
                                                                               controller.launchInAppWithBrowserOptions(attchmentUri);
                                                                             }
 
@@ -1384,7 +1354,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                         // controller.pickProfileImage();
                                         controller.captureImage(context);
 
-                                        // print(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                                        // customPrint(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                                       },
                                       // value: "",
                                       child: Padding(
@@ -1761,7 +1731,7 @@ class VisitMainView extends GetView<VisitMainController> {
               //                       GestureDetector(
               //                           onTap: () async {
               //                             File? audioFile = await controller.recorderService.stopRecording();
-              //                             print("audio file url is :- ${audioFile?.absolute}");
+              //                             customPrint("audio file url is :- ${audioFile?.absolute}");
               //                             controller.submitAudio(audioFile!);
               //                           },
               //                           child: Column(
@@ -1843,7 +1813,7 @@ class VisitMainView extends GetView<VisitMainController> {
               //                                 allowedExtensions: ['mp3', 'aac', 'm4a'],
               //                               );
               //
-              //                               print("audio is:- ${result?.files.first.xFile.path}");
+              //                               customPrint("audio is:- ${result?.files.first.xFile.path}");
               //
               //                               controller.submitAudio(File(result?.files.first.path ?? ""));
               //                             },
@@ -1932,7 +1902,7 @@ class VisitMainView extends GetView<VisitMainController> {
               //                   GestureDetector(
               //                     onTap: () async {
               //                       File? audioFile = await controller.recorderService.stopRecording();
-              //                       print("audio file url is :- ${audioFile?.absolute}");
+              //                       customPrint("audio file url is :- ${audioFile?.absolute}");
               //                       controller.submitAudio(audioFile!);
               //                     },
               //                     child: SvgPicture.asset(
@@ -2131,7 +2101,7 @@ class VisitMainView extends GetView<VisitMainController> {
                               GestureDetector(
                                 onTap: () async {
                                   File? audioFile = await controller.recorderService.stopRecording();
-                                  print("audio file url is :- ${audioFile?.absolute}");
+                                  customPrint("audio file url is :- ${audioFile?.absolute}");
                                   if (audioFile != null) {
                                     controller.submitAudio(audioFile!);
                                   }
@@ -2216,7 +2186,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                         allowedExtensions: ['mp3', 'aac', 'm4a'],
                                       );
 
-                                      print("audio is:- ${result?.files.first.xFile.path}");
+                                      customPrint("audio is:- ${result?.files.first.xFile.path}");
                                       controller.submitAudio(File(result?.files.first.path ?? ""));
                                     },
                                     child: Container(
@@ -2293,7 +2263,7 @@ class VisitMainView extends GetView<VisitMainController> {
                               GestureDetector(
                                 onTap: () async {
                                   File? audioFile = await controller.recorderService.stopRecording();
-                                  print("audio file url is :- ${audioFile?.absolute}");
+                                  customPrint("audio file url is :- ${audioFile?.absolute}");
 
                                   if (audioFile != null) {
                                     controller.submitAudio(audioFile!);
@@ -2374,7 +2344,7 @@ class VisitMainView extends GetView<VisitMainController> {
         DateTime visitdateTime = DateTime.parse(patient.visitTime ?? "").toLocal();
 
         // Create a DateFormat to format the date
-        DateFormat visitdateFormat = DateFormat('hh:mm: a');
+        DateFormat visitdateFormat = DateFormat('hh:mm a');
 
         // Format the DateTime object to the desired format
         String visitformattedDate = visitdateFormat.format(visitdateTime);

@@ -16,12 +16,10 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/custom_animated_button.dart';
-import '../../../../widget/custom_textfiled.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/patient_info_controller.dart';
-import 'custom_table.dart';
 import 'full_transcript_view.dart';
 
 class PatientInfoView extends GetView<PatientInfoController> {
@@ -265,9 +263,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                     visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
                                                 itemBuilder: (context) => [
                                                       PopupMenuItem(
-                                                          onTap: () {
-                                                            // controller.isSelectedAttchmentOption.value = 0;
-                                                          },
+                                                          onTap: () {},
                                                           // height: 30,
                                                           padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                           child: Container(

@@ -14,11 +14,10 @@ import '../../../../widget/custom_textfiled.dart';
 import '../controllers/forgot_password_controller.dart';
 
 class ForgotPasswordView extends GetView<ForgotPasswordController> {
-  ForgotPasswordView({super.key});
+  const ForgotPasswordView({super.key});
 
   bool isWidthLessThan428(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // print("mobile widh is ${width}");
     return width < 428;
   }
 

@@ -17,7 +17,6 @@ import '../../../../widget/custom_textfiled.dart';
 class EnterOtpView extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // print("mobile widh is ${width}");
     return width < 428;
   }
 
@@ -100,8 +99,6 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
                 if (controller.otpCode.length == 6) {
                   controller.verifyOtp();
                 }
-
-                // controller.currentScreen.value = controller.enterPassword;
               },
               height: 45,
               text: "Verify OTP",

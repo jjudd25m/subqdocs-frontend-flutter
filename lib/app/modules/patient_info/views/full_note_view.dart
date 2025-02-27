@@ -844,105 +844,11 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                           style: {"body": Style(margin: Margins.all(0), fontFamily: "Poppins", fontSize: FontSize(14.0))},
                                                                         ),
                                                                       )
-                                                                      // Text(
-                                                                      //   textAlign: TextAlign.start,
-                                                                      //   'Plan',
-                                                                      //   style: AppFonts.semiBold(15, AppColors.textGrey),
-                                                                      // )
                                                                     ],
                                                                   ),
                                                                   SizedBox(
                                                                     height: 5,
                                                                   ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Text(
-                                                                  //       textAlign: TextAlign.start,
-                                                                  //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].plan?.join("\n") ?? '',
-                                                                  //       style: AppFonts.regular(15, AppColors.textGrey),
-                                                                  //     )
-                                                                  //   ],
-                                                                  // ),
-                                                                  // SizedBox(
-                                                                  //   height: 5,
-                                                                  // ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Text(
-                                                                  //       textAlign: TextAlign.start,
-                                                                  //       'Procedures',
-                                                                  //       style: AppFonts.semiBold(15, AppColors.textGrey),
-                                                                  //     )
-                                                                  //   ],
-                                                                  // ),
-                                                                  // SizedBox(
-                                                                  //   height: 5,
-                                                                  // ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     for (Procedures procedures
-                                                                  //         in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedures ?? [])
-                                                                  //       Text(
-                                                                  //         textAlign: TextAlign.start,
-                                                                  //         '${procedures.name} - ${procedures.cptCode}',
-                                                                  //         style: AppFonts.regular(15, AppColors.textGrey),
-                                                                  //       )
-                                                                  //   ],
-                                                                  // ),
-                                                                  // SizedBox(
-                                                                  //   height: 10,
-                                                                  // ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Text(
-                                                                  //       textAlign: TextAlign.start,
-                                                                  //       'Monitoring and Adjustments:',
-                                                                  //       style: AppFonts.semiBold(15, AppColors.textGrey),
-                                                                  //     )
-                                                                  //   ],
-                                                                  // ),
-                                                                  // SizedBox(
-                                                                  //   height: 5,
-                                                                  // ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Expanded(
-                                                                  //       child: Text(
-                                                                  //         textAlign: TextAlign.start,
-                                                                  //         controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].monitoringAndAdjustments
-                                                                  //                 ?.join("\n") ??
-                                                                  //             '',
-                                                                  //         style: AppFonts.regular(15, AppColors.textGrey),
-                                                                  //       ),
-                                                                  //     )
-                                                                  //   ],
-                                                                  // ),
-                                                                  // SizedBox(
-                                                                  //   height: 10,
-                                                                  // ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Text(
-                                                                  //       textAlign: TextAlign.start,
-                                                                  //       'Follow Up:',
-                                                                  //       style: AppFonts.semiBold(15, AppColors.textGrey),
-                                                                  //     )
-                                                                  //   ],
-                                                                  // ),
-                                                                  // SizedBox(
-                                                                  //   height: 5,
-                                                                  // ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Expanded(
-                                                                  //       child: Text(
-                                                                  //         textAlign: TextAlign.start,
-                                                                  //         controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].followUp?.join("\n") ?? '',
-                                                                  //         style: AppFonts.regular(15, AppColors.textGrey),
-                                                                  //       ),
-                                                                  //     )
-                                                                  //   ],
-                                                                  // ),
                                                                   SizedBox(height: 10),
                                                                 ],
                                                               ),

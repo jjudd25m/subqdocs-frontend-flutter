@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,7 +11,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/empty_patient_screen.dart';
-import '../../../../widgets/rounded_image_widget.dart';
+import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../model/patient_list_model.dart';
 
@@ -37,8 +35,7 @@ class HomePatientListView extends GetView<HomeController> {
                     }
                   },
                   title: "Your Patient List is Empty",
-                  description:
-                      "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
             )
           : CustomTable(
               rows: _getTableRows(controller.patientList),
@@ -53,7 +50,6 @@ class HomePatientListView extends GetView<HomeController> {
   }
 
   // This function creates rows from the API model
-  // This function creates rows from the API model
   List<List<String>> _getTableRows(List<PatientListData> patients) {
     List<List<String>> rows = [];
 
@@ -65,9 +61,8 @@ class HomePatientListView extends GetView<HomeController> {
       rows.add([
         "${patient.firstName}, ${patient.lastName}", // Patient Name
         patient.age.toString(), // Age
-        patient.gender.toString()[0] ?? "N/A", // Gender
+        patient.gender.toString()[0], // Gender
         patient.lastVisitDate ?? "N/A", // Last Visit Date
-        // patient.visits?.lastOrNull?.visitDate ?? "N/A", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
         "Action",
         patient.profileImage ?? "" // Action (could be a button or some interaction)
@@ -123,12 +118,8 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-                            print(" patient id is ${controller.patientList[rowIndex - 1].id}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
-                              "visitId": "",
-                              "fromSchedule": false
-                            });
+                            customPrint(" patient id is ${controller.patientList[rowIndex - 1].id}");
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
                           },
                           // value: "",
                           child: Padding(
@@ -139,22 +130,17 @@ class HomePatientListView extends GetView<HomeController> {
                             ),
                           )),
                       PopupMenuItem(
-                          // value: "",
                           padding: EdgeInsets.zero,
                           onTap: () async {
-                            print("row index is :- ${rowIndex}");
-                            print("column index is :- ${colIndex}");
-                            print(
-                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
+                            customPrint("row index is :- ${rowIndex}");
+                            customPrint("column index is :- ${colIndex}");
+                            customPrint(" patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
 
-                            // print(" our element is $");
+                            // customPrint(" our element is $");
 
-                            final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
-                              "visitId": "",
-                              "fromSchedule": false
-                            });
-                            print("our result is $result");
+                            final result =
+                                await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                            customPrint("our result is $result");
 
                             if (result == 1) {
                               controller.getScheduleVisitList();
@@ -189,18 +175,12 @@ class HomePatientListView extends GetView<HomeController> {
                               builder: (BuildContext context) {
                                 return SchedulePatientDialog(
                                   receiveParam: (p0, p1) {
-                                    print("p0 is $p0 p1 is $p1");
-                                    controller.patientScheduleCreate(param: {
-                                      "patient_id": controller.patientList[rowIndex - 1].id.toString(),
-                                      "visit_date": p1,
-                                      "visit_time": p0
-                                    });
+                                    customPrint("p0 is $p0 p1 is $p1");
+                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
                                   },
                                 ); // Our custom dialog
                               },
                             );
-
-                            // controller.deletePatientById(controller.patientList[rowIndex - 1].visits!.first.id);
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +201,6 @@ class HomePatientListView extends GetView<HomeController> {
                           )),
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
-                          // value: "",
                           onTap: () {
                             controller.deletePatientById(controller.patientList[rowIndex - 1].visits!.first.id);
                           },
@@ -251,9 +230,8 @@ class HomePatientListView extends GetView<HomeController> {
             : rowIndex == 0
                 ? GestureDetector(
                     onTap: () {
-                      // controller.sortingSchedulePatient();
                       controller.patientSorting(colIndex: colIndex, cellData: cellData);
-                      print(cellData);
+                      customPrint(cellData);
                     },
                     child: Row(
                       mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
@@ -265,18 +243,14 @@ class HomePatientListView extends GetView<HomeController> {
                           softWrap: true, // Allows text to wrap
                           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                         ),
-                        colIndex == controller.colIndexPatient.value &&
-                                controller.isAsendingPatient.value &&
-                                colIndex != 5
+                        colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
                             ? Icon(
-                                CupertinoIcons.up_arrow,
+                                CupertinoIcons.down_arrow,
                                 size: 15,
                               )
-                            : colIndex == controller.colIndexPatient.value &&
-                                    !controller.isAsendingPatient.value &&
-                                    colIndex != 5
+                            : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
                                 ? Icon(
-                                    CupertinoIcons.down_arrow,
+                                    CupertinoIcons.up_arrow,
                                     size: 15,
                                   )
                                 : SizedBox()

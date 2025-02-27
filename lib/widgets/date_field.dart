@@ -139,27 +139,6 @@ class _DateFormatFieldState extends State<DateFormatField> {
 
   @override
   Widget build(BuildContext context) {
-    // return TextFormFiledWidget(
-    //   label: "",
-    //   readOnly: true,
-    //   controller: _dobFormater,
-    //   onTap: () {
-    //     _dobFormater.selection = TextSelection.fromPosition(
-    //       TextPosition(offset: _dobFormater.text.length),
-    //     );
-    //   },
-    //   suffixIcon: IconButton(
-    //     onPressed: pickDate,
-    //     icon: const Icon(Icons.calendar_month),
-    //   ),
-    //   checkValidation: widget.checkValidation,
-    //   // focusNode: widget.focusNode,
-    //   // decoration: decoration(),
-    //   // va: widget.checkValidation,
-    //   // keyboardType: TextInputType.datetime,
-    //   onChanged: formatInput,
-    // );
-
     return TextFormField(
       readOnly: true,
       controller: _dobFormater,

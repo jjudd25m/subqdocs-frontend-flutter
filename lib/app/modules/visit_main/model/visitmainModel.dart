@@ -7,7 +7,7 @@ class VisitMainPatientDetails {
   VisitMainPatientDetails({this.responseData, this.message, this.toast, this.responseType});
 
   VisitMainPatientDetails.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
+    responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
@@ -80,7 +80,7 @@ class ResponseData {
       attachments = <Null>[];
       json['attachments'].forEach((v) {});
     }
-    personalNote = json['personal_note'] != null ? new PersonalNote.fromJson(json['personal_note']) : null;
+    personalNote = json['personal_note'] != null ? PersonalNote.fromJson(json['personal_note']) : null;
   }
 
   Map<String, dynamic> toJson() {

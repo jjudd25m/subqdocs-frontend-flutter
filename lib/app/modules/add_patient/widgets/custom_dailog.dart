@@ -1,15 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:subqdocs/app/modules/add_patient/controllers/add_patient_controller.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
-
-import '../../../../services/media_picker_services.dart';
 
 class CustomDialogAttachment extends GetView<AddPatientController> {
   @override
@@ -57,7 +53,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: 360,
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -152,8 +148,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(controller.list.value[index].fileName ?? ""),
-                                        Text(
-                                            "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                        Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
                                       ],
                                     ),
                                     Spacer(),

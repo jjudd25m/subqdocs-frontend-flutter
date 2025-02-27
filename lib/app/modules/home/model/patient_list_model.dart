@@ -14,7 +14,7 @@ class PatientListModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (responseData != null) {
       data['responseData'] = responseData!.toJson();
     }
@@ -42,7 +42,7 @@ class ResponseData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -161,7 +161,7 @@ class PatientListData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['patient_id'] = patientId;
     data['visit_id'] = visitId;
@@ -216,7 +216,7 @@ class Visits {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['visitDate'] = visitDate;
     data['visitTime'] = visitTime;

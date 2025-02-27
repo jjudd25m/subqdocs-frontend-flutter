@@ -129,42 +129,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
     );
-
-    AppBar(
-      surfaceTintColor: AppColors.textWhite,
-      backgroundColor: backgroundColor ?? AppColors.textWhite,
-      scrolledUnderElevation: elevation,
-      // This will fix the problem
-      elevation: elevation,
-      leadingWidth: leadingWidth,
-      leading: Container(
-        margin: const EdgeInsets.only(left: 10, right: 20),
-        child: leadingWidget ??
-            InkWell(
-              onTap: () {
-                // leadingImage == null ? Navigator.of(context).pop() : onTapBack?.call();
-              },
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: SvgPicture.asset(
-                leadingImage ?? ImagePath.drawer,
-                height: 44,
-                width: 44,
-              ),
-            ),
-      ),
-      actions: [...actions, SizedBox(width: actionRightPadding)],
-      centerTitle: centerTitle,
-      title: (titleText ?? "").isNotEmpty
-          ? Text(
-              titleText!,
-              textAlign: titleAlign,
-              style: AppFonts.bold(18, AppColors.textBlack),
-            )
-          : titleWidget ?? Container(),
-    );
   }
 
   @override
