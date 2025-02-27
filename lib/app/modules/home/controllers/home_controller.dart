@@ -37,11 +37,14 @@ class HomeController extends GetxController {
 
   RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
+  Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
 
   Rxn<ScheduleVisitListModel> scheduleVisitListModel = Rxn<ScheduleVisitListModel>();
+  Rxn<ScheduleVisitListModel> scheduleVisitListModelOffline = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> scheduleVisitList = RxList<ScheduleVisitListData>();
 
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
+  Rxn<ScheduleVisitListModel> pastVisitListModelOfLine = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
 
   RxList<StatusModel> statusModel = RxList();
@@ -135,7 +138,6 @@ class HomeController extends GetxController {
 
     getPatientList();
     getStatus();
-
     getScheduleVisitList();
     getPastVisitList();
   }
@@ -255,6 +257,46 @@ class HomeController extends GetxController {
     return sorting.where((map) => map['id'] == key).toList();
   }
 
+  Future<void> getLast2DaysData() async {
+    Map<String, dynamic> patientParam = {};
+    //param for the
+    patientParam['page'] = 1;
+    patientParam['limit'] = "1000";
+    String formattedStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
+    String formattedEndDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    patientParam['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+
+    Map<String, dynamic> scheduleParam = {};
+
+    scheduleParam['page'] = 1;
+    scheduleParam['limit'] = "20";
+    scheduleParam['isPastPatient'] = 'false';
+    String formattedStartDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String formattedEndDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 2)));
+    scheduleParam['dateRange'] = '{"startDate":"$formattedStartDateSchedule", "endDate":"$formattedEndDateSchedule"}';
+    Map<String, dynamic> pastParam = {};
+
+    pastParam['page'] = 1;
+    pastParam['limit'] = "20";
+    pastParam['isPastPatient'] = 'true';
+    String formattedStartDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
+    String formattedEndDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    pastParam['dateRange'] = '{"startDate":"$formattedStartDatePast", "endDate":"$formattedEndDatePast"}';
+
+    try {
+      patientListModelOOffLine.value = await _homeRepository.getPatient(param: patientParam);
+      scheduleVisitListModelOffline.value = await _homeRepository.getScheduleVisit(param: scheduleParam);
+      pastVisitListModelOfLine.value = await _homeRepository.getPastVisit(param: pastParam);
+
+      await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModelOOffLine.toJson()));
+      await AppPreference.instance
+          .setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
+      await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModelOfLine.toJson()));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
 
@@ -288,67 +330,7 @@ class HomeController extends GetxController {
 
     patientList.value = patientListModel.value?.responseData?.data ?? [];
 
-    await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModel.toJson()));
-
-    print("*******************************************************");
-    print("patient list is the :- ${patientList.first.toJson()}");
-    print("*******************************************************");
-  }
-
-  Future<void> getPatientListFetchMore({int? page}) async {
-    Map<String, dynamic> param = {};
-
-    param['page'] = ++pagePatient;
-    param['limit'] = "20";
-    param['search'] = searchController.text;
-
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
-      // Add more sorting parameters as needed
-    ];
-
-    // Dynamically add sorting to the param map
-    param["sorting"] = sorting;
-
-    if (startDate.value != "" && endDate.value != "") {
-      // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
-
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
-      // Format the DateTime to the required format (yyyy mm dd)
-
-      print("start date is the ${startDateTime}");
-
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      print("start format date is  date is the ${formattedStartDate}");
-
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
-      // Format the DateTime to the required format (yyyy mm dd)
-
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
-
-      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
-    }
-
-    patientListModel.value = await _homeRepository.getPatient(param: param);
-
-    if (patientListModel.value?.responseData?.data != null) {
-      int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
-      int? dataCount = patientList.length;
-
-      if (patientList.length >= totalCount!) {
-        print("no data fetch and add");
-        pagePatient--;
-      } else {
-        print(" data fetch and add");
-        patientList.addAll(patientListModel.value?.responseData?.data as Iterable<PatientListData>);
-      }
-    } else {
-      print("no data fetch and add");
-      pagePatient--;
-    }
-
-    print("patient list is the :- ${patientList}");
+    getLast2DaysData();
   }
 
   Future<void> getScheduleVisitList({String? sortingName = ""}) async {
@@ -385,7 +367,52 @@ class HomeController extends GetxController {
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
 
     scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
-    await AppPreference.instance.setString(AppString.schedulePatientList, json.encode(scheduleVisitListModel.toJson()));
+    getLast2DaysData();
+  }
+
+  Future<void> getPastVisitList({String? sortingName = ""}) async {
+    Map<String, dynamic> param = {};
+    param['page'] = 1;
+    param['limit'] = "20";
+    param['isPastPatient'] = 'true';
+    param['search'] = searchController.text;
+
+    param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
+
+    if (selectedStatusIndex.isNotEmpty) {
+      List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status.toString()!).toList();
+
+      print("status array is- $statusList");
+      if (statusList.length == 1) {
+        param['status[0]'] = statusList;
+      } else {
+        param['status'] = statusList;
+      }
+    }
+
+    if (startDate.value != "" && endDate.value != "") {
+      // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      print("start date is the ${startDateTime}");
+
+      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+      print("start format date is  date is the ${formattedStartDate}");
+
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+      // Format the DateTime to the required format (yyyy mm dd)
+
+      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+
+      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    }
+
+    pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
+    pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
+    getLast2DaysData();
+    // await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModel.toJson()));
   }
 
   Future<void> getScheduleVisitListFetchMore() async {
@@ -445,25 +472,21 @@ class HomeController extends GetxController {
     // scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
   }
 
-  Future<void> getPastVisitList({String? sortingName = ""}) async {
+  Future<void> getPatientListFetchMore({int? page}) async {
     Map<String, dynamic> param = {};
-    param['page'] = 1;
+
+    param['page'] = ++pagePatient;
     param['limit'] = "20";
-    param['isPastPatient'] = 'true';
     param['search'] = searchController.text;
 
-    param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
+    List<Map<String, dynamic>> sorting = [
+      {"id": "first_name", "desc": sortName},
+      {"id": "last_name", "desc": sortName}
+      // Add more sorting parameters as needed
+    ];
 
-    if (selectedStatusIndex.isNotEmpty) {
-      List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status.toString()!).toList();
-
-      print("status array is- $statusList");
-      if (statusList.length == 1) {
-        param['status[0]'] = statusList;
-      } else {
-        param['status'] = statusList;
-      }
-    }
+    // Dynamically add sorting to the param map
+    param["sorting"] = sorting;
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -484,10 +507,25 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
-    pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
-    pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
+    patientListModel.value = await _homeRepository.getPatient(param: param);
 
-    await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModel.toJson()));
+    if (patientListModel.value?.responseData?.data != null) {
+      int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
+      int? dataCount = patientList.length;
+
+      if (patientList.length >= totalCount!) {
+        print("no data fetch and add");
+        pagePatient--;
+      } else {
+        print(" data fetch and add");
+        patientList.addAll(patientListModel.value?.responseData?.data as Iterable<PatientListData>);
+      }
+    } else {
+      print("no data fetch and add");
+      pagePatient--;
+    }
+
+    print("patient list is the :- ${patientList}");
   }
 
   Future<void> getPastVisitListFetchMore() async {
@@ -575,21 +613,6 @@ class HomeController extends GetxController {
     // patientFetchMoreData();
   }
 
-  // Future<void> patientFetchMoreData() async {
-  //   isPagination.value = true;
-  //   print("fetch more data API called");
-  //   page = page + 1;
-  //
-  //   Map<String, dynamic> param = {};
-  //   param['page'] = page;
-  //   param['limit'] = "4";
-  //
-  //   PatientListModel localPatientList = await _homeRepository.getPatient(param: param);
-  //   // findContractorListData.add = findContractorListModel.data ?? [];
-  //   patientList.addAll(localPatientList.responseData?.data as Iterable<PatientListData>);
-  //   isPagination.value = false;
-  // }
-
   Future<void> deletePatientById(int? id) async {
     DeletePatientModel deletePatientModel = await _homeRepository.deletePatientById(id: id!);
     getPatientList();
@@ -625,6 +648,7 @@ class HomeController extends GetxController {
           getPastVisitList();
           getScheduleVisitList();
           getPatientList();
+          getStatus();
 
           print('---------------------------------hahahahaha');
           List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
@@ -711,14 +735,6 @@ class HomeController extends GetxController {
       return false;
     }
   }
-
-  // Future<PatientTranscriptUploadModel> uploadLocalAudio(AudioFile data) async {
-  //   var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-  //
-  //   PatientTranscriptUploadModel patientTranscriptUploadModel =
-  //       await _visitMainRepository.uploadAudio(audioFile: File.fromRawPath(data.audioData), token: loginData.responseData?.token ?? "", patientVisitId: data.visitId ?? "");
-  //   return patientTranscriptUploadModel;
-  // }
 
   Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {
     Loader().showLoadingDialogForSimpleLoader();
