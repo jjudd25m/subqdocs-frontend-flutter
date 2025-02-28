@@ -589,12 +589,14 @@ class HomeController extends GetxController {
   }
 
   Future<void> deletePatientById(int? id) async {
+    print("delete id is :- ${id}");
     DeletePatientModel deletePatientModel = await _homeRepository.deletePatientById(id: id!);
+
+    CustomToastification().showToast("Patient deleted successfully");
+    customPrint("deleted data is :- ${deletePatientModel}");
     getPatientList();
     getPastVisitList();
     getScheduleVisitList();
-
-    customPrint("deleted data is :- ${deletePatientModel}");
   }
 
   void scheduleSorting({String cellData = "", int colIndex = -1}) {

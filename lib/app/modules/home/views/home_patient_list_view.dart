@@ -202,7 +202,8 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-                            controller.deletePatientById(controller.patientList[rowIndex - 1].visits!.first.id);
+                            print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                            controller.deletePatientById(controller.patientList[rowIndex - 1].id);
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

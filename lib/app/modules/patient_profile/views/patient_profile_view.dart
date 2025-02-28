@@ -365,8 +365,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                           builder: (BuildContext context) {
                                                                             return DeleteScheduleVisit(
                                                                               onDelete: () {
+                                                                                print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
+
                                                                                 controller.deletePatientVisit(
-                                                                                    id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                                    id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
                                                                               },
                                                                             );
                                                                           },
@@ -402,7 +404,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                   },
                                                   columnCount: 5,
                                                   context: context,
-                                                  columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.30, 0.10, 0.15, 0.13, 0.12],
+                                                  columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.17, 0.13, 0.12],
+                                                  // columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.30, 0.10, 0.15, 0.13, 0.12],
                                                 ),
                                               ),
                                             )

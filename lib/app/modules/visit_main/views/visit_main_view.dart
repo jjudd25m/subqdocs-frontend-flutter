@@ -496,7 +496,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 controller.patientData.value?.responseData?.personalNote?.visitDate != null
                                                     ? DateFormat('E MM/dd hh:mm a').format(DateTime.parse(controller.patientData.value?.responseData?.personalNote?.visitDate ?? "").toUtc())
                                                     : "",
-                                                style: AppFonts.regular(10, AppColors.textDarkGrey),
+                                                style: AppFonts.regular(12, AppColors.textDarkGrey),
                                               ),
                                               SizedBox(width: 7),
                                               SvgPicture.asset(
@@ -578,7 +578,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                               ? Row(
                                                                   children: [
                                                                     Text(
-                                                                      "|  ",
+                                                                      colIndex == 3 ? "" : "|  ",
                                                                       style: AppFonts.regular(12, AppColors.appbarBorder),
                                                                     ),
                                                                     GestureDetector(
@@ -610,7 +610,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                               return DeleteScheduleVisit(
                                                                                 onDelete: () {
                                                                                   controller.deletePatientVisit(
-                                                                                      id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                                      id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
                                                                                 },
                                                                               );
                                                                             },
@@ -646,7 +646,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                                     },
                                                     columnCount: 5,
                                                     context: context,
-                                                    columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
+                                                    columnWidths: isPortrait ? [0.23, 0.21, 0.0, 0.17, 0.18] : [0.25, 0.10, 0.0, 0.13, 0.12],
+                                                    // columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
                                                   ),
                                                 ),
                                               )
@@ -2320,7 +2321,7 @@ class VisitMainView extends GetView<VisitMainController> {
 
     // Add header row first
     rows.add(
-      ['Visit Date', 'Time', "Action"],
+      ['Visit Date', 'Time', "", "Action"],
     );
 
     // Iterate over each patient and extract data for each row

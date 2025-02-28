@@ -352,10 +352,14 @@ class VisitMainController extends GetxController {
     customPrint("visit id :- $visitId");
     dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
     customPrint("patientReScheduleCreate API  internal response $response");
+    CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
   }
 
   Future<void> deletePatientVisit({required String id}) async {
     var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
     customPrint(response);
+    CustomToastification().showToast("Visit delete successfully", type: ToastificationType.success);
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
   }
 }

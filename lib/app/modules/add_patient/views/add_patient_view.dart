@@ -430,6 +430,18 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   initialDate: DateTime.now().subtract(Duration(days: 400)),
                                                   firstDate: DateTime.now().subtract(Duration(days: 36700)),
                                                   lastDate: DateTime.now().subtract(Duration(days: 400)),
+                                                  builder: (context, child) {
+                                                    return Theme(
+                                                      data: ThemeData.light().copyWith(
+                                                        cardColor: AppColors.white,
+                                                        primaryColor: AppColors.backgroundPurple,
+                                                        hintColor: AppColors.backgroundPurple,
+                                                        colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                      ),
+                                                      child: child!,
+                                                    );
+                                                  },
                                                 );
                                                 if (picked != null) {
                                                   String inputText;
@@ -513,6 +525,18 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 initialDate: DateTime.now(),
                                                 firstDate: DateTime.now(),
                                                 lastDate: DateTime.now().add(Duration(days: 1000)),
+                                                builder: (context, child) {
+                                                  return Theme(
+                                                    data: ThemeData.light().copyWith(
+                                                      cardColor: AppColors.white,
+                                                      primaryColor: AppColors.backgroundPurple,
+                                                      hintColor: AppColors.backgroundPurple,
+                                                      colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                      buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                    ),
+                                                    child: child!,
+                                                  );
+                                                },
                                               );
                                               if (picked != null) {
                                                 String inputText;

@@ -168,33 +168,44 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) => InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 2),
-                                                    Row(
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory?.length != 0
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) => InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                    child: Column(
                                                       children: [
-                                                        SizedBox(width: 15),
-                                                        Expanded(
-                                                            child: Text(
-                                                          textAlign: TextAlign.left,
-                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory?[index] ?? "",
-                                                          style: AppFonts.regular(15, AppColors.textGrey),
-                                                        )),
+                                                        SizedBox(height: 2),
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(width: 15),
+                                                            Expanded(
+                                                                child: Text(
+                                                              textAlign: TextAlign.left,
+                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory?[index] ?? "",
+                                                              style: AppFonts.regular(15, AppColors.textGrey),
+                                                            )),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 0),
                                                       ],
                                                     ),
-                                                    SizedBox(height: 0),
-                                                  ],
+                                                  ),
                                                 ),
+                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory?.length ?? 0)
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                "-",
+                                                style: AppFonts.medium(16, AppColors.textPurple),
                                               ),
-                                            ),
-                                        itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory?.length ?? 0),
+                                              Spacer()
+                                            ],
+                                          ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -246,33 +257,44 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) => InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 2),
-                                                    Row(
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory?.length != 0
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) => InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                    child: Column(
                                                       children: [
-                                                        SizedBox(width: 15),
-                                                        Expanded(
-                                                            child: Text(
-                                                          textAlign: TextAlign.left,
-                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory?[index] ?? "",
-                                                          style: AppFonts.regular(15, AppColors.textGrey),
-                                                        )),
+                                                        SizedBox(height: 2),
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(width: 15),
+                                                            Expanded(
+                                                                child: Text(
+                                                              textAlign: TextAlign.left,
+                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory?[index] ?? "",
+                                                              style: AppFonts.regular(15, AppColors.textGrey),
+                                                            )),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 0),
                                                       ],
                                                     ),
-                                                    SizedBox(height: 0),
-                                                  ],
+                                                  ),
                                                 ),
+                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory?.length ?? 0)
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                "-",
+                                                style: AppFonts.medium(16, AppColors.textPurple),
                                               ),
-                                            ),
-                                        itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory?.length ?? 0),
+                                              Spacer()
+                                            ],
+                                          ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -324,33 +346,44 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) => InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 2),
-                                                    Row(
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length != 0
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) => InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                    child: Column(
                                                       children: [
-                                                        SizedBox(width: 15),
-                                                        Expanded(
-                                                            child: Text(
-                                                          textAlign: TextAlign.left,
-                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index] ?? "",
-                                                          style: AppFonts.regular(15, AppColors.textGrey),
-                                                        )),
+                                                        SizedBox(height: 2),
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(width: 15),
+                                                            Expanded(
+                                                                child: Text(
+                                                              textAlign: TextAlign.left,
+                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index] ?? "",
+                                                              style: AppFonts.regular(15, AppColors.textGrey),
+                                                            )),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 0),
                                                       ],
                                                     ),
-                                                    SizedBox(height: 0),
-                                                  ],
+                                                  ),
                                                 ),
+                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length ?? 0)
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                "-",
+                                                style: AppFonts.medium(16, AppColors.textPurple),
                                               ),
-                                            ),
-                                        itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length ?? 0),
+                                              Spacer()
+                                            ],
+                                          ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -402,32 +435,43 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) => InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 2),
-                                                    Row(
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies?.length != 0
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) => InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                    child: Column(
                                                       children: [
-                                                        Expanded(
-                                                            child: Text(
-                                                          textAlign: TextAlign.left,
-                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies?[index] ?? "",
-                                                          style: AppFonts.regular(15, AppColors.textGrey),
-                                                        )),
+                                                        SizedBox(height: 2),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                                child: Text(
+                                                              textAlign: TextAlign.left,
+                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies?[index] ?? "",
+                                                              style: AppFonts.regular(15, AppColors.textGrey),
+                                                            )),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 0),
                                                       ],
                                                     ),
-                                                    SizedBox(height: 0),
-                                                  ],
+                                                  ),
                                                 ),
+                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies?.length ?? 0)
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                "-",
+                                                style: AppFonts.medium(16, AppColors.textPurple),
                                               ),
-                                            ),
-                                        itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies?.length ?? 0),
+                                              Spacer()
+                                            ],
+                                          ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -487,10 +531,15 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(
-                                      textAlign: TextAlign.left,
-                                      controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "",
-                                      style: AppFonts.medium(14, AppColors.textGrey),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          textAlign: TextAlign.left,
+                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "",
+                                          style: AppFonts.medium(14, AppColors.textGrey),
+                                        ),
+                                        Spacer()
+                                      ],
                                     ),
                                   ),
                                   SizedBox(

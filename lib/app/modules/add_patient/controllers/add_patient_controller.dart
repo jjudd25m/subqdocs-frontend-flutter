@@ -302,6 +302,9 @@ class AddPatientController extends GetxController {
     emailAddressController.clear();
     visitDateController.clear();
     formKey.currentState!.reset();
+
+    list.clear();
+    selectedList.clear();
   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {

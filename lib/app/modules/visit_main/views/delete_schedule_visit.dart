@@ -116,7 +116,10 @@ class DeleteScheduleVisit extends StatelessWidget {
                           width: 90,
                           height: 40,
                           child: CustomAnimatedButton(
-                            onPressed: onDelete,
+                            onPressed: () {
+                              Get.back();
+                              onDelete!();
+                            },
                             text: " Delete ",
                             isOutline: true,
                             enabledTextColor: AppColors.textWhite,
