@@ -5,6 +5,7 @@ class AppString {
   static const String patientList = 'patientList';
   static const String schedulePatientList = 'schedulePatient';
   static const String pastPatientList = 'pastPatient';
+  static const String offLineData = 'offLineData';
   static const String prefKeyRememberMe = "prefKeyRememberMe";
   static const String prefKeyRememberEmail = "prefKeyRememberEmail";
   static const String prefKeyRememberPassword = "prefKeyRememberPassword";
