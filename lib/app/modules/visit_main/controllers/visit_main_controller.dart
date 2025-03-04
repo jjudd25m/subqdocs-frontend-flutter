@@ -45,6 +45,8 @@ class VisitMainController extends GetxController {
   // Rxn<'List<ScheduledVisits>> scheduledVisits = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
 
+  RxBool isConnected = RxBool(true);
+
   final HomeRepository _homeRepository = HomeRepository();
 
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
@@ -54,7 +56,6 @@ class VisitMainController extends GetxController {
 
   RxBool isImage = RxBool(false);
   RxBool isDocument = RxBool(false);
-  bool isConnected = true;
 
   String visitRecaps = "visitRecaps";
   String visitMainData = "visitMainData";
@@ -217,6 +218,8 @@ class VisitMainController extends GetxController {
 
     var status = await InternetConnection().internetStatus;
 
+    isConnected.value = status == InternetStatus.disconnected ? false : true;
+
     if (status == InternetStatus.disconnected) {
       print("you net is now Disconnected");
 
@@ -314,9 +317,11 @@ class VisitMainController extends GetxController {
       switch (status) {
         case InternetStatus.connected:
           onLine();
+          isConnected.value = true;
 
           break;
         case InternetStatus.disconnected:
+          isConnected.value = false;
           offLine();
 
           break;

@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
@@ -18,6 +19,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_table.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
@@ -492,15 +494,20 @@ class VisitMainView extends GetView<VisitMainController> {
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                controller.patientData.value?.responseData?.personalNote?.personalNote
-                                                        ?.join(" \n") ??
-                                                    "",
-                                                // "He enjoys fishing and gardening. His wife's name is Julie.",
-                                                style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                              Expanded(
+                                                child: Text(
+                                                  textAlign: TextAlign.start,
+                                                  maxLines: 2,
+                                                  controller.patientData.value?.responseData?.personalNote?.personalNote
+                                                          ?.join(" \n") ??
+                                                      "",
+                                                  // "He enjoys fishing and gardening. His wife's name is Julie.",
+                                                  style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                ),
                                               ),
-                                              Spacer(),
+                                              SizedBox(
+                                                width: 7,
+                                              ),
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 controller.patientData.value?.responseData?.personalNote?.visitDate !=
@@ -611,58 +618,67 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                     GestureDetector(
                                                                       onTap: () {
                                                                         if (colIndex == 3) {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            barrierDismissible:
-                                                                                true, // Allows dismissing the dialog by tapping outside
-                                                                            builder: (BuildContext context) {
-                                                                              return SchedulePatientDialog(
-                                                                                receiveParam: (p0, p1) {
-                                                                                  customPrint("p0 is $p0 p1 is $p1");
-                                                                                  customPrint(
-                                                                                      "row index is :- ${rowIndex}");
-                                                                                  customPrint(
-                                                                                      "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
-                                                                                  controller.patientReScheduleCreate(
-                                                                                      param: {
-                                                                                        "visit_date": p1,
-                                                                                        "visit_time": p0
+                                                                          controller.isConnected.value
+                                                                              ? showDialog(
+                                                                                  context: context,
+                                                                                  barrierDismissible:
+                                                                                      true, // Allows dismissing the dialog by tapping outside
+                                                                                  builder: (BuildContext context) {
+                                                                                    return SchedulePatientDialog(
+                                                                                      receiveParam: (p0, p1) {
+                                                                                        customPrint(
+                                                                                            "p0 is $p0 p1 is $p1");
+                                                                                        customPrint(
+                                                                                            "row index is :- ${rowIndex}");
+                                                                                        customPrint(
+                                                                                            "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                                        controller.patientReScheduleCreate(
+                                                                                            param: {
+                                                                                              "visit_date": p1,
+                                                                                              "visit_time": p0
+                                                                                            },
+                                                                                            visitId: controller
+                                                                                                    .patientDetailModel
+                                                                                                    .value
+                                                                                                    ?.responseData
+                                                                                                    ?.scheduledVisits![
+                                                                                                        rowIndex - 1]
+                                                                                                    .id
+                                                                                                    .toString() ??
+                                                                                                "-1");
                                                                                       },
-                                                                                      visitId: controller
-                                                                                              .patientDetailModel
-                                                                                              .value
-                                                                                              ?.responseData
-                                                                                              ?.scheduledVisits![
-                                                                                                  rowIndex - 1]
-                                                                                              .id
-                                                                                              .toString() ??
-                                                                                          "-1");
-                                                                                },
-                                                                              ); // Our custom dialog
-                                                                            },
-                                                                          );
+                                                                                    ); // Our custom dialog
+                                                                                  },
+                                                                                )
+                                                                              : CustomToastification().showToast(
+                                                                                  "Internet is required for this feature",
+                                                                                  type: ToastificationType.info);
                                                                         } else if (colIndex == 4) {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            barrierDismissible: true,
-                                                                            builder: (BuildContext context) {
-                                                                              // return SizedBox();
-                                                                              return DeleteScheduleVisit(
-                                                                                onDelete: () {
-                                                                                  controller.deletePatientVisit(
-                                                                                      id: controller
-                                                                                              .patientDetailModel
-                                                                                              .value
-                                                                                              ?.responseData
-                                                                                              ?.scheduledVisits?[
-                                                                                                  rowIndex - 1]
-                                                                                              .id
-                                                                                              .toString() ??
-                                                                                          "");
-                                                                                },
-                                                                              );
-                                                                            },
-                                                                          );
+                                                                          controller.isConnected.value
+                                                                              ? showDialog(
+                                                                                  context: context,
+                                                                                  barrierDismissible: true,
+                                                                                  builder: (BuildContext context) {
+                                                                                    // return SizedBox();
+                                                                                    return DeleteScheduleVisit(
+                                                                                      onDelete: () {
+                                                                                        controller.deletePatientVisit(
+                                                                                            id: controller
+                                                                                                    .patientDetailModel
+                                                                                                    .value
+                                                                                                    ?.responseData
+                                                                                                    ?.scheduledVisits?[
+                                                                                                        rowIndex - 1]
+                                                                                                    .id
+                                                                                                    .toString() ??
+                                                                                                "");
+                                                                                      },
+                                                                                    );
+                                                                                  },
+                                                                                )
+                                                                              : CustomToastification().showToast(
+                                                                                  "Internet is required for this feature",
+                                                                                  type: ToastificationType.info);
                                                                         }
                                                                         customPrint("col index is :- $colIndex");
                                                                       },
