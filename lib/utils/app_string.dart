@@ -22,4 +22,15 @@ class AppString {
 
   // forgot Password email link screen
   static String appName = "SubQDocs";
+
+  static const String visitRecaps = "visitRecaps";
+  static const String doctorView = "doctorView";
+  static const String fullNote = "fullNote";
+  static const String patientVisitDetails = "patientVisitDetails";
+  static const String fullTranscript = "fullTranscript";
+  static const String patientView = "patientView";
+  static const String visitMainData = "visitMainData";
+  static const String scheduledVisits = "scheduledVisits";
+  static const String scheduleVisitsList = "scheduleVisitsList";
+  static const String pastPatientVisitsList = "pastPatientVisitsList";
 }

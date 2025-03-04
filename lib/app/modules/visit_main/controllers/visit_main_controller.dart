@@ -42,6 +42,9 @@ class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
+  // Rxn<'List<ScheduledVisits>> scheduledVisits = Rxn();
+  RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
+
   final HomeRepository _homeRepository = HomeRepository();
 
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
@@ -464,11 +467,21 @@ class VisitMainController extends GetxController {
     }
 
     // Return the formatted response
-    return {
-      "responseData": responseDataResult,
-      "message": " Details Fetched Successfully",
-      "toast": true,
-      "response_type": "success"
-    };
+
+    if (modelType == scheduledVisits) {
+      return {
+        "responseData": {"scheduledVisits": responseDataResult},
+        "message": " Details Fetched Successfully",
+        "toast": true,
+        "response_type": "success"
+      };
+    } else {
+      return {
+        "responseData": responseDataResult,
+        "message": " Details Fetched Successfully",
+        "toast": true,
+        "response_type": "success"
+      };
+    }
   }
 }
