@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -54,6 +55,16 @@ class EnterMailView extends GetView<ForgotPasswordController> {
               format: [NoSpaceLowercaseTextFormatter()],
               controller: controller.emailController,
               hint: AppString.emailPlaceHolder,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  controller.emailController.clear();
+                },
+                child: Icon(
+                  Icons.highlight_remove,
+                  color: AppColors.textGrey,
+                  size: 25,
+                ),
+              ),
               checkValidation: (value) {
                 return Validation.emailValidate(value);
               }),

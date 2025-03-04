@@ -13,6 +13,7 @@ import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/service/database_helper.dart';
 import '../../login/model/login_model.dart';
@@ -27,6 +28,7 @@ import '../repository/home_repository.dart';
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
+  final GlobalController globalController = Get.find();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
 
   final HomeRepository _homeRepository = HomeRepository();
@@ -128,7 +130,7 @@ class HomeController extends GetxController {
     handelInternetConnection();
     if (Get.arguments != null) {
       tabIndex.value = Get.arguments["tabIndex"] ?? 0;
-
+      globalController.homeTabIndex.value = tabIndex.value;
       customPrint("tabe index is:- ${Get.arguments["tabIndex"]}");
     }
 
@@ -305,6 +307,10 @@ class HomeController extends GetxController {
     patientListModel.value = await _homeRepository.getPatient(param: param);
 
     patientList.value = patientListModel.value?.responseData?.data ?? [];
+
+    for (var element in patientList) {
+      print("element is ${element.toJson()}");
+    }
 
     getLast2DaysData();
   }
@@ -704,6 +710,12 @@ class HomeController extends GetxController {
       customPrint("patientVisitCreate API  internal response $response");
       CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
       tabIndex.value = 1;
+      globalController.homeTabIndex.value = 1;
+
+      getPastVisitList();
+      getScheduleVisitList();
+      getPatientList();
+
       Get.back();
     } catch (e) {
       Get.back();

@@ -23,6 +23,8 @@ import '../repository/edit_patient_details_repository.dart';
 class EditPatentDetailsController extends GetxController {
   //TODO: Implement EditPatentDetailsController
 
+  Rxn<DateTime> selectedDOBDate = Rxn<DateTime>();
+
   PatientDetailModel patientDetailModel = PatientDetailModel();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   TextEditingController firstNameController = TextEditingController();
@@ -344,6 +346,7 @@ class EditPatentDetailsController extends GetxController {
     XFile? pickedImage = await MediaPickerServices().pickImage(fromCamera: false);
 
     if (pickedImage != null) {
+      profileImageUrl.value = null;
       profileImage.value = File(pickedImage.path);
       profileImage.refresh();
     }
@@ -354,6 +357,7 @@ class EditPatentDetailsController extends GetxController {
     customPrint("picked image is  ${pickedImage}");
 
     if (pickedImage != null) {
+      profileImageUrl.value = null;
       profileImage.value = File(pickedImage.path);
       profileImage.refresh();
     }

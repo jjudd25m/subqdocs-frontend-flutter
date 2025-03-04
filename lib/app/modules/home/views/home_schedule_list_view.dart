@@ -209,12 +209,18 @@ class HomeScheduleListView extends GetView<HomeController> {
                 columnCount: 6,
                 context: context,
                 columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
-                onRowSelected: (rowIndex, rowData) {
+                onRowSelected: (rowIndex, rowData) async {
                   customPrint("row index is :- $rowIndex");
-                  Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                  dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                     "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                     "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
                   });
+
+                  print("back from response");
+
+                  controller.getPastVisitList();
+                  controller.getScheduleVisitList();
+                  controller.getPatientList();
                 },
                 onLoadMore: () {
                   controller.getScheduleVisitListFetchMore();
@@ -229,7 +235,7 @@ class HomeScheduleListView extends GetView<HomeController> {
 
     // Add header row first
     rows.add(
-      ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Prev.Visits", "Action"],
+      ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Previous Visits", "Action"],
     );
 
     // Iterate over each patient and extract data for each row

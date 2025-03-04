@@ -202,27 +202,27 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                   ),
                                                 ],
                                               )),
-                                          PopupMenuItem(
-                                              padding: EdgeInsets.zero,
-                                              value: "",
-                                              onTap: () {},
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    width: double.infinity,
-                                                    height: 1,
-                                                    color: AppColors.appbarBorder,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      "Delete",
-                                                      style: AppFonts.regular(14, AppColors.textBlack),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ))
+                                          // PopupMenuItem(
+                                          //     padding: EdgeInsets.zero,
+                                          //     value: "",
+                                          //     onTap: () {},
+                                          //     child: Column(
+                                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                                          //       children: [
+                                          //         Container(
+                                          //           width: double.infinity,
+                                          //           height: 1,
+                                          //           color: AppColors.appbarBorder,
+                                          //         ),
+                                          //         Padding(
+                                          //           padding: const EdgeInsets.all(8.0),
+                                          //           child: Text(
+                                          //             "Delete",
+                                          //             style: AppFonts.regular(14, AppColors.textBlack),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     ))
                                         ],
                                     child: SvgPicture.asset(
                                       "assets/images/logo_threedots.svg",
@@ -278,7 +278,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                   },
                   columnCount: 7,
                   context: context,
-                  columnWidths: [0.21, 0.17, 0.08, 0.11, 0.13, 0.19, 0.10],
+                  columnWidths: [0.21, 0.17, 0.08, 0.10, 0.14, 0.19, 0.10],
                 ),
         );
       },
@@ -289,7 +289,7 @@ class HomePastVisitsList extends GetView<HomeController> {
     List<List<String>> rows = [];
 
     // Add header row first
-    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Prev.Visits", "Status", "Action"]);
+    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous Visits", "Status", "Action"]);
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {

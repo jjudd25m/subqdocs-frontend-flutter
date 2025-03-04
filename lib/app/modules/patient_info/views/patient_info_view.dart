@@ -17,6 +17,7 @@ import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/ContainerButton.dart';
+import '../../../core/common/common_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/patient_info_controller.dart';
@@ -98,7 +99,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          Get.back();
+                                          Get.offAllNamed(Routes.HOME);
+                                          // Get.back();
                                         },
                                         child: SvgPicture.asset(
                                           ImagePath.logo_back,

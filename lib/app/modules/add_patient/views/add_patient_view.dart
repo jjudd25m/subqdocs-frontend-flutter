@@ -24,6 +24,7 @@ import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
+import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
@@ -178,19 +179,24 @@ class AddPatientView extends GetView<AddPatientController> {
             },
           ),
         ),
-        body: SafeArea(
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              children: [
-                CustomAppBar(drawerkey: _key),
-                Expanded(
+        body: GestureDetector(
+          onTap: removeFocus,
+          child: SafeArea(
+            child: Form(
+              key: controller.formKey,
+              child: Column(
+                children: [
+                  CustomAppBar(drawerkey: _key),
+                  Expanded(
+                      child: SingleChildScrollView(
                     child: Container(
                         color: AppColors.ScreenBackGround,
                         child: Padding(
                           padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                           child: ListView(
-                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            // physics: BouncingScrollPhysics(),
                             padding: EdgeInsets.zero,
                             children: [
                               Container(
@@ -232,9 +238,25 @@ class AddPatientView extends GetView<AddPatientController> {
                                       prefixIcon: SvgPicture.asset(
                                         ImagePath.search,
                                         fit: BoxFit.cover,
-                                        width: Dimen.margin12,
-                                        height: Dimen.margin12,
+                                        width: 10,
+                                        height: 10,
                                       ),
+                                      suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            controller.searchController.clear();
+                                          },
+                                          child: Icon(
+                                            Icons.highlight_remove,
+                                            color: AppColors.textDarkGrey,
+                                            size: 25,
+                                          )
+
+                                          // Icon(
+                                          //   Icons.add,
+                                          //   color: AppColors.textGrey,
+                                          //   size: 25,
+                                          // ),
+                                          ),
                                       controller: controller.searchController,
                                       hint: "Search Patient Name, ID, Date of Birth or Email",
                                       label: '',
@@ -357,6 +379,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                               ],
                                               controller: controller.patientId,
                                               hint: "123",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.patientId.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
                                               }),
@@ -374,6 +406,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                               ],
                                               controller: controller.firstNameController,
                                               hint: "Don",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.firstNameController.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
                                               }),
@@ -389,6 +431,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                             label: "Middle Name",
                                             controller: controller.middleNameController,
                                             hint: "Joseph",
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                controller.middleNameController.clear();
+                                              },
+                                              child: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -408,6 +460,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                               // isImportant: true,
                                               controller: controller.lastNameController,
                                               hint: "Jones",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.lastNameController.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
                                               }),
@@ -504,6 +566,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                               label: "Email Address",
                                               controller: controller.emailAddressController,
                                               hint: "donjones@example.com",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.emailAddressController.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
                                               checkValidation: (value) {
                                                 return Validation.emailValidate(value);
                                               }),
@@ -888,8 +960,10 @@ class AddPatientView extends GetView<AddPatientController> {
                               )
                             ],
                           ),
-                        ))),
-              ],
+                        )),
+                  )),
+                ],
+              ),
             ),
           ),
         ));

@@ -8,6 +8,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:subqdocs/widget/base_image_view.dart';
 
 import '../app/core/common/app_preferences.dart';
+import '../app/core/common/global_controller.dart';
 import '../app/modules/login/model/login_model.dart';
 import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
@@ -72,10 +73,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Image.asset(
-                  ImagePath.subqdocs_text_logo,
-                  width: 200,
-                  height: 50,
+                GestureDetector(
+                  onTap: () {
+                    if (Get.currentRoute == Routes.HOME) {
+                      print("It's home screen");
+                    } else {
+                      print("current route is :- ${Get.currentRoute}");
+                      // Get.offAllNamed(Routes.HOME);
+
+                      final GlobalController globalController = Get.find();
+
+                      Get.toNamed(Routes.HOME, arguments: {
+                        "tabIndex": globalController.homeTabIndex.value,
+                      });
+                    }
+                  },
+                  child: Image.asset(
+                    ImagePath.subqdocs_text_logo,
+                    width: 200,
+                    height: 50,
+                  ),
                 ),
                 Spacer(),
                 Row(
@@ -108,19 +125,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     )
                   ],
                 ),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () async {
-                    await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
-                    await AppPreference.instance.removeKey(AppString.prefKeyToken);
-                    Get.offAllNamed(Routes.LOGIN);
-                  },
-                  child: SvgPicture.asset(
-                    ImagePath.logo_signout,
-                    height: 30,
-                    width: 30,
-                  ),
-                ),
+                SizedBox(width: 10),
+                // GestureDetector(
+                //   onTap: () async {
+                //     await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                //     await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                //     Get.offAllNamed(Routes.LOGIN);
+                //   },
+                //   child: SvgPicture.asset(
+                //     ImagePath.logo_signout,
+                //     height: 30,
+                //     width: 30,
+                //   ),
+                // ),
               ],
             ),
           ),

@@ -1,22 +1,18 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
-import 'package:subqdocs/widgets/custom_button.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
-
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/base_dropdown.dart';
-import '../../../../widgets/custom_textfiled.dart';
 import '../../../../widgets/date_field.dart';
 
-class SchedulePatientDialog extends GetView<HomeController> {
+class ReschedulePatientDialog extends GetView<HomeController> {
   RxBool isCalendarOpen = RxBool(true);
 
   RxBool isLoading = RxBool(false);
@@ -61,7 +57,7 @@ class SchedulePatientDialog extends GetView<HomeController> {
 
   final void Function(String, String) receiveParam;
 
-  SchedulePatientDialog({super.key, required this.receiveParam});
+  ReschedulePatientDialog({super.key, required this.receiveParam});
 
   @override
   Widget build(BuildContext context) {

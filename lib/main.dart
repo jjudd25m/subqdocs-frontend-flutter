@@ -6,6 +6,7 @@ import 'package:subqdocs/app/data/service/socket_service.dart';
 import 'package:toastification/toastification.dart';
 
 import 'app/core/common/app_preferences.dart';
+import 'app/core/common/global_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -33,6 +34,7 @@ Future<void> main() async {
     },
   );
 
+  Get.put(GlobalController());
   await SentryFlutter.init(
     (options) {
       options.dsn = 'https://51d562a8649b2d66ba8553d8b09ae40d@o4508879490646016.ingest.us.sentry.io/4508879495954432';

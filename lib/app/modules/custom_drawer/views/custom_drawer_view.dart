@@ -72,8 +72,8 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                         },
                         child: SvgPicture.asset(
                           ImagePath.crossWithContainer,
-                          height: 24,
-                          width: 24,
+                          height: 30,
+                          width: 30,
                         ),
                       )
                     ],

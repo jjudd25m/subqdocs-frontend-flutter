@@ -44,6 +44,7 @@ class VisitMainController extends GetxController {
 
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
+  RxBool isStartTranscript = RxBool(false);
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
 
@@ -360,6 +361,11 @@ class VisitMainController extends GetxController {
     var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
     customPrint(response);
     CustomToastification().showToast("Visit delete successfully", type: ToastificationType.success);
+
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+      Get.back();
+    }
   }
 }

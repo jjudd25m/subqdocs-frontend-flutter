@@ -272,10 +272,12 @@ class DoctorView extends GetView<PatientInfoController> {
                                                                 SizedBox(
                                                                   width: 5,
                                                                 ),
-                                                                Text(
-                                                                  textAlign: TextAlign.center,
-                                                                  " $note",
-                                                                  style: AppFonts.regular(14, AppColors.black),
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    textAlign: TextAlign.left,
+                                                                    " $note",
+                                                                    style: AppFonts.regular(14, AppColors.black),
+                                                                  ),
                                                                 ),
                                                               ],
                                                             ),

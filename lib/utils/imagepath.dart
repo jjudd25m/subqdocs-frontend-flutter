@@ -97,4 +97,6 @@ class ImagePath {
   static const String dark_pause = 'assets/images/dark_pause.svg';
   static const String dark_play = 'assets/images/dark_play.svg';
   static const String subqdocs_icon = 'assets/images/subqdocs_icon.png';
+  static const String textfield_clear = 'assets/images/textfield_clear.svg';
+  static const String textfield_clear_png = 'assets/images/textfield_clear.png';
 }

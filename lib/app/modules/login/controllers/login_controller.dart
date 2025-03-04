@@ -68,7 +68,7 @@ class LoginController extends GetxController {
       await AppPreference.instance.removeKey(AppString.pastPatientList);
       await AppPreference.instance.removeKey(AppString.schedulePatientList);
       AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
-      CustomToastification().showToast("Login success", type: ToastificationType.success);
+      CustomToastification().showToast("User logged in successfully", type: ToastificationType.success);
       Get.offAllNamed(Routes.HOME);
     } catch (error) {
       isLoading.value = false;

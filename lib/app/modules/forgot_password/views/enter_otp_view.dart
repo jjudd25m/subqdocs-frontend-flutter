@@ -8,6 +8,7 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:subqdocs/app/modules/forgot_password/controllers/forgot_password_controller.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../../utils/validation_service.dart';
@@ -40,7 +41,7 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
           width: 330,
           child: Text(
             textAlign: TextAlign.center,
-            "Please enter a verification code that has been sent to your email ID.",
+            "Please enter a verification code that has been sent to your email at ${controller.emailController.text}",
             style: AppFonts.regular(14, AppColors.textDarkGrey),
           ),
         ),
@@ -98,10 +99,12 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
                 // controller.authLoginUser();
                 if (controller.otpCode.length == 6) {
                   controller.verifyOtp();
+                } else {
+                  CustomToastification().showToast("Verification code must be 6 digits");
                 }
               },
               height: 45,
-              text: "Verify OTP",
+              text: "Verify code",
               isLoading: controller.isLoading.value,
               enabledTextColor: AppColors.white,
               enabledColor: AppColors.backgroundPurple,
@@ -110,6 +113,43 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
         }),
         SizedBox(
           height: 30,
+        ),
+        SizedBox(
+          width: isSmallScreen ? Get.width - 30 : 416,
+          child: Obx(() {
+            int minutes = controller.timeRemaining.value ~/ 60;
+            int seconds = controller.timeRemaining.value % 60;
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    controller.resendOtp();
+                  },
+                  child: Text(
+                    'Time Remaining: $minutes:${seconds.toString().padLeft(2, '0')}',
+                    style: AppFonts.medium(12, AppColors.textDarkGrey),
+                  ),
+                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    if (controller.isTimerActive.value == false) {
+                      controller.resendOtp();
+                    }
+                  },
+                  child: Text(
+                    "Resend verification code",
+                    style: AppFonts.medium(12, controller.isTimerActive.value ? AppColors.textGrey : AppColors.backgroundPurple),
+                  ),
+                ),
+              ],
+            );
+          }),
+        ),
+        SizedBox(
+          height: 20,
         ),
         GestureDetector(
           onTap: () {

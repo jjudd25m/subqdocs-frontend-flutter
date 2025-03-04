@@ -37,10 +37,10 @@ class ResponseData {
   String? patientFirstName;
   String? patientMiddleName;
   String? patientLastName;
-  Null? profileImage;
+  String? profileImage;
   int? age;
   String? gender;
-  List<Null>? attachments;
+  // List<Null>? attachments;
   PersonalNote? personalNote;
 
   ResponseData(
@@ -58,7 +58,7 @@ class ResponseData {
       this.profileImage,
       this.age,
       this.gender,
-      this.attachments,
+      // this.attachments,
       this.personalNote});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
@@ -76,10 +76,10 @@ class ResponseData {
     profileImage = json['profile_image'];
     age = json['age'];
     gender = json['gender'];
-    if (json['attachments'] != null) {
-      attachments = <Null>[];
-      json['attachments'].forEach((v) {});
-    }
+    // if (json['attachments'] != null) {
+    //   attachments = <Null>[];
+    //   json['attachments'].forEach((v) {});
+    // }
     personalNote = json['personal_note'] != null ? PersonalNote.fromJson(json['personal_note']) : null;
   }
 

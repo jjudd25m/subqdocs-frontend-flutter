@@ -53,9 +53,13 @@ class PatientInfoController extends GetxController {
 
   String visitId = "";
 
+  Rxn<LoginModel> loginData = Rxn();
+
   @override
   void onInit() {
     super.onInit();
+
+    loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     customPrint("argument is :- ${Get.arguments}");
 

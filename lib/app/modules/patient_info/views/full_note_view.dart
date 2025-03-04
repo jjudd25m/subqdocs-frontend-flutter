@@ -346,7 +346,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length != 0
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
                                         ? ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -359,15 +359,26 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                         SizedBox(height: 2),
                                                         Row(
                                                           children: [
-                                                            SizedBox(width: 15),
+                                                            SizedBox(width: 10),
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
-                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index] ?? "",
+                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].name ?? "",
                                                               style: AppFonts.regular(15, AppColors.textGrey),
                                                             )),
                                                           ],
                                                         ),
+                                                        // Row(
+                                                        //   children: [
+                                                        //     SizedBox(width: 10),
+                                                        //     Expanded(
+                                                        //         child: Text(
+                                                        //       textAlign: TextAlign.left,
+                                                        //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "",
+                                                        //       style: AppFonts.regular(15, AppColors.textGrey),
+                                                        //     )),
+                                                        //   ],
+                                                        // ),
                                                         SizedBox(height: 0),
                                                       ],
                                                     ),
@@ -533,10 +544,12 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
                                     child: Row(
                                       children: [
-                                        Text(
-                                          textAlign: TextAlign.left,
-                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "",
-                                          style: AppFonts.medium(14, AppColors.textGrey),
+                                        Expanded(
+                                          child: Text(
+                                            textAlign: TextAlign.left,
+                                            controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "",
+                                            style: AppFonts.medium(14, AppColors.textGrey),
+                                          ),
                                         ),
                                         Spacer()
                                       ],

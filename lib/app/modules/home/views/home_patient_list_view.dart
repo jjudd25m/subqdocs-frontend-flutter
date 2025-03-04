@@ -43,6 +43,14 @@ class HomePatientListView extends GetView<HomeController> {
               // Number of columns in the table (for example, 6 here)
               cellBuilder: _buildTableCell,
               context: context,
+              onRowSelected: (rowIndex, rowData) {
+                // Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                //   "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
+                //   "patientId": controller.patientList[rowIndex - 1].id.toString(),
+                // });
+
+                // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+              },
               onLoadMore: () => controller.patientLoadMore(),
               columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10], // Set the column widths based on your needs
             );
@@ -54,7 +62,7 @@ class HomePatientListView extends GetView<HomeController> {
     List<List<String>> rows = [];
 
     // Add header row first
-    rows.add(['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Prev.Visits', 'Action']);
+    rows.add(['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action']);
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
@@ -225,7 +233,7 @@ class HomePatientListView extends GetView<HomeController> {
                     ],
                 child: SvgPicture.asset(
                   "assets/images/logo_threedots.svg",
-                  width: 20,
+                  width: 40,
                   height: 20,
                 ))
             : rowIndex == 0
