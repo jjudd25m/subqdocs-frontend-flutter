@@ -117,7 +117,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                     ),
                                     children: [
                                       _headerBuildTableCell('Total'),
-                                      _headerBuildTableCell("\$${controller.doctorViewList.value?.responseData?.diagnosisCodesProcedures?.financialInformation?.totalCharges}"),
+                                      _headerBuildTableCell("\$${controller.doctorViewList.value?.responseData?.totalCharges}"),
                                     ],
                                   ),
                                   // Add more rows if needed
@@ -199,7 +199,7 @@ class DoctorView extends GetView<PatientInfoController> {
                             controller.tasks.insert(newIndex, task);
                           },
                           children: [
-                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.diagnosisCodesProcedures?.impressionsAndPlan ?? [])
+                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
                               Container(
                                 key: ValueKey(task),
                                 child: Column(
@@ -249,11 +249,13 @@ class DoctorView extends GetView<PatientInfoController> {
                                                           SizedBox(
                                                             width: 10,
                                                           ),
-                                                          Text(
-                                                            textAlign: TextAlign.center,
-                                                            "${specifications.parameter}: ${specifications.value}",
-                                                            style: AppFonts.regular(14, AppColors.black),
-                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              textAlign: TextAlign.start,
+                                                              "${specifications.parameter}: ${specifications.value}",
+                                                              style: AppFonts.regular(14, AppColors.black),
+                                                            ),
+                                                          )
                                                         ],
                                                       ),
                                                     SizedBox(height: 10),
@@ -274,8 +276,9 @@ class DoctorView extends GetView<PatientInfoController> {
                                                                 ),
                                                                 Expanded(
                                                                   child: Text(
+                                                                    maxLines: 2,
                                                                     textAlign: TextAlign.left,
-                                                                    " $note",
+                                                                    " $note ",
                                                                     style: AppFonts.regular(14, AppColors.black),
                                                                   ),
                                                                 ),
@@ -351,7 +354,7 @@ class DoctorView extends GetView<PatientInfoController> {
     ));
 
     // Iterate over each diagnosis procedure data
-    for (SubDiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures?.subDiagnosisCodesProcedures ?? []) {
+    for (DiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures ?? []) {
       // Ensure each row has exactly 4 children
       rows.add(
         TableRow(
@@ -359,7 +362,7 @@ class DoctorView extends GetView<PatientInfoController> {
             color: AppColors.white, // Background color for row (you can alternate rows if needed)
           ),
           children: [
-            _buildTableCell("${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}", false),
+            _buildTableCell("${diagnosis.diagnosisCodesProceduresProcedure?.code ?? 'No code'} \n ${diagnosis.diagnosisCodesProceduresProcedure?.description ?? 'No description'}", false),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(

@@ -90,33 +90,44 @@ class FullNoteView extends GetView<PatientInfoController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) => InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 2),
-                                                    Row(
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?.isNotEmpty ?? false
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) => InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                    child: Column(
                                                       children: [
-                                                        SizedBox(width: 15),
-                                                        Expanded(
-                                                            child: Text(
-                                                          textAlign: TextAlign.left,
-                                                          controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
-                                                          style: AppFonts.regular(15, AppColors.textGrey),
-                                                        )),
+                                                        SizedBox(height: 2),
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(width: 15),
+                                                            Expanded(
+                                                                child: Text(
+                                                              textAlign: TextAlign.left,
+                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
+                                                              style: AppFonts.regular(15, AppColors.textGrey),
+                                                            )),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 0),
                                                       ],
                                                     ),
-                                                    SizedBox(height: 0),
-                                                  ],
+                                                  ),
                                                 ),
+                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?.length ?? 0)
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                "-",
+                                                style: AppFonts.medium(16, AppColors.textPurple),
                                               ),
-                                            ),
-                                        itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?.length ?? 0),
+                                              Spacer()
+                                            ],
+                                          ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -363,7 +374,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
-                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].name ?? "",
+                                                              "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].name} - ${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage} ",
                                                               style: AppFonts.regular(15, AppColors.textGrey),
                                                             )),
                                                           ],
@@ -551,7 +562,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                             style: AppFonts.medium(14, AppColors.textGrey),
                                           ),
                                         ),
-                                        Spacer()
+                                        // Spacer()
                                       ],
                                     ),
                                   ),

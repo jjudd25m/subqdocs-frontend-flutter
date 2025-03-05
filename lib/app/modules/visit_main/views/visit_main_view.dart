@@ -148,11 +148,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                     highlightColor: Colors.transparent, // Remove highlight color
                                   ),
                                   child: ExpansionTile(
-                                    initiallyExpanded: true,
-                                    collapsedShape: OutlineInputBorder(
-                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    shape: OutlineInputBorder(
-                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundWhite,
                                     collapsedBackgroundColor: AppColors.backgroundWhite,
                                     title: Padding(
@@ -165,17 +162,15 @@ class VisitMainView extends GetView<VisitMainController> {
                                             },
                                             child: SvgPicture.asset(
                                               ImagePath.logo_back,
-                                              height: 18,
+                                              height: 15,
                                               width: 18,
-                                              fit: BoxFit.contain,
                                             ),
                                           ),
                                           SizedBox(
                                             width: 11,
                                           ),
                                           BaseImageView(
-                                            imageUrl:
-                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                             width: 60,
                                             height: 60,
                                           ),
@@ -215,425 +210,403 @@ class VisitMainView extends GetView<VisitMainController> {
                                             },
                                             text: 'Patient History',
 
-                                          borderColor: AppColors.appbarBorder,
-                                          // Custom border color
-                                          backgroundColor: AppColors.white,
-                                          // Custom background color
-                                          needBorder: true,
-                                          // Show border
-                                          textColor: AppColors.textDarkGrey,
-                                          // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
-                                          // Custom padding
-                                          radius: 6, // Custom border radius
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  children: <Widget>[
-                                    Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: AppColors.appbarBorder,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Age",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                height: 6,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                controller.patientData.value?.responseData?.age.toString() ?? "",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Gender",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                height: 6,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                controller.patientData.value?.responseData?.gender ?? "",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Visit Date & Time",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                height: 6,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                formatDateTime(
-                                                    firstDate:
-                                                        controller.patientData.value?.responseData?.visitDate ?? "",
-                                                    secondDate:
-                                                        controller.patientData.value?.responseData?.visitTime ?? ""),
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.start,
-                                                "Medical Assistant",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                height: 6,
-                                              ),
-                                              // PopupMenuButton<String>(
-                                              //     shape: const RoundedRectangleBorder(
-                                              //         borderRadius: BorderRadius.all(Radius.circular(8))),
-                                              //     offset: const Offset(0, 5),
-                                              //     color: AppColors.white,
-                                              //     position: PopupMenuPosition.over,
-                                              //     style: const ButtonStyle(
-                                              //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              //         maximumSize: WidgetStatePropertyAll(Size.zero),
-                                              //         visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                              //     itemBuilder: (context) => [
-                                              //           PopupMenuItem(
-                                              //               onTap: () {
-                                              //                 // controller.isSelectedAttchmentOption.value = 0;
-                                              //               },
-                                              //               // height: 30,
-                                              //               padding: const EdgeInsets.only(
-                                              //                   top: 10, bottom: 8, left: 8, right: 8),
-                                              //               child: Container(
-                                              //                 width: 200,
-                                              //                 child: Column(
-                                              //                   children: [
-                                              //                     const SizedBox(width: 5),
-                                              //                     Container(
-                                              //                       padding: EdgeInsets.symmetric(
-                                              //                           horizontal: 8, vertical: 7),
-                                              //                       decoration: BoxDecoration(
-                                              //                         border: Border.all(
-                                              //                             color: AppColors.textGrey
-                                              //                                 .withValues(alpha: 0.5)),
-                                              //                         // color: AppColors.backgroundWhite,
-                                              //                         borderRadius: BorderRadius.circular(8),
-                                              //                       ),
-                                              //                       child: Row(
-                                              //                         children: [
-                                              //                           SvgPicture.asset(
-                                              //                             ImagePath.search,
-                                              //                             height: 25,
-                                              //                             width: 25,
-                                              //                           ),
-                                              //                           SizedBox(
-                                              //                             width: 10,
-                                              //                           ),
-                                              //                           SizedBox(
-                                              //                             width: 120,
-                                              //                             child: TextField(
-                                              //                               maxLines: 1, //or null
-                                              //
-                                              //                               decoration: InputDecoration.collapsed(
-                                              //                                   hintText: "Search",
-                                              //                                   hintStyle: AppFonts.regular(
-                                              //                                       14, AppColors.textGrey)),
-                                              //                             ),
-                                              //                           ),
-                                              //                         ],
-                                              //                       ),
-                                              //                     ),
-                                              //                     const SizedBox(height: 10),
-                                              //                     ListView.builder(
-                                              //                         shrinkWrap: true,
-                                              //                         physics: NeverScrollableScrollPhysics(),
-                                              //                         itemBuilder: (context, index) => InkWell(
-                                              //                               onTap: () {},
-                                              //                               child: Padding(
-                                              //                                 padding: const EdgeInsets.symmetric(
-                                              //                                     horizontal: 10),
-                                              //                                 child: Column(
-                                              //                                   children: [
-                                              //                                     SizedBox(height: 10),
-                                              //                                     Row(
-                                              //                                       children: [
-                                              //                                         SvgPicture.asset(
-                                              //                                           ImagePath.checkbox_true,
-                                              //                                           width: 20,
-                                              //                                           height: 20,
-                                              //                                         ),
-                                              //                                         Spacer(),
-                                              //                                         Text(
-                                              //                                           textAlign: TextAlign.center,
-                                              //                                           "Missie Cooper",
-                                              //                                           style: AppFonts.regular(
-                                              //                                               15, AppColors.textPurple),
-                                              //                                         ),
-                                              //                                       ],
-                                              //                                     ),
-                                              //                                     SizedBox(height: 10),
-                                              //                                     if (index != 4) ...[
-                                              //                                       Divider(
-                                              //                                         height: 1,
-                                              //                                       )
-                                              //                                     ]
-                                              //                                   ],
-                                              //                                 ),
-                                              //                               ),
-                                              //                             ),
-                                              //                         itemCount: 5),
-                                              //                   ],
-                                              //                 ),
-                                              //               )),
-                                              //         ],
-                                              //     child: ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    textAlign: TextAlign.center,
-                                                    "Missie Cooper",
-                                                    style: AppFonts.regular(14, AppColors.textPurple),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors.textPurple,
-                                                      borderRadius: BorderRadius.circular(12),
-                                                      border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
-                                                    child: Text(
-                                                      textAlign: TextAlign.center,
-                                                      "+2",
-                                                      style: AppFonts.bold(10, AppColors.textWhite),
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    ImagePath.down_arrow,
-                                                    width: 20,
-                                                    height: 20,
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                "Doctor",
-                                                style: AppFonts.regular(12, AppColors.textBlack),
-                                              ),
-                                              SizedBox(
-                                                width: 15,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    textAlign: TextAlign.center,
-                                                    "Dr ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
-                                                    style: AppFonts.regular(14, AppColors.textGrey),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    ImagePath.down_arrow,
-                                                    width: 20,
-                                                    height: 20,
-                                                  )
-                                                ],
-                                              ),
-                                            ],
+                                            borderColor: AppColors.appbarBorder,
+                                            // Custom border color
+                                            backgroundColor: AppColors.white,
+                                            // Custom background color
+                                            needBorder: true,
+                                            // Show border
+                                            textColor: AppColors.textDarkGrey,
+                                            // Custom text color
+                                            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                            // Custom padding
+                                            radius: 6, // Custom border radius
                                           ),
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20,
-                                    )
-                                    // ExpansionTile(
-                                    //   title: Text(
-                                    //     'Sub title',
-                                    //   ),
-                                    //   children: <Widget>[
-                                    //     // ListTile(
-                                    //     //   title: Text('data'),
-                                    //     // )
-                                    //   ],
-                                    // ),
-                                    // ListTile(
-                                    //   title: Text('data'),
-                                    // )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Theme(
-                                data: ThemeData(
-                                  splashColor: Colors.transparent, // Remove splash color
-                                  highlightColor: Colors.transparent, // Remove highlight color
-                                ),
-                                child: ExpansionTile(
-                                  childrenPadding: EdgeInsets.all(0),
-                                  collapsedShape: OutlineInputBorder(
-                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(
-                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  backgroundColor: AppColors.backgroundWhite,
-                                  collapsedBackgroundColor: AppColors.backgroundWhite,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        "Personal Note",
-                                        style: AppFonts.regular(16, AppColors.textBlack),
+                                    children: <Widget>[
+                                      Container(
+                                        width: double.infinity,
+                                        height: 1,
+                                        color: AppColors.appbarBorder,
                                       ),
-                                      Spacer(),
-                                    ],
-                                  ),
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                                      child: Container(
-                                          height: 48,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                            color: AppColors.backgroundWhite,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  textAlign: TextAlign.start,
-                                                  maxLines: 2,
-                                                  controller.patientData.value?.responseData?.personalNote?.personalNote
-                                                          ?.join(" \n") ??
-                                                      "",
-                                                  // "He enjoys fishing and gardening. His wife's name is Julie.",
-                                                  style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 7,
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                controller.patientData.value?.responseData?.personalNote?.visitDate !=
-                                                        null
-                                                    ? DateFormat('E MM/dd hh:mm a').format(DateTime.parse(controller
-                                                                .patientData
-                                                                .value
-                                                                ?.responseData
-                                                                ?.personalNote
-                                                                ?.visitDate ??
-                                                            "")
-                                                        .toUtc())
-                                                    : "",
-                                                style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                              ),
-                                              SizedBox(width: 7),
-                                              SvgPicture.asset(
-                                                ImagePath.edit_outline,
-                                                height: 28,
-                                                width: 28,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                            ],
-                                          )),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(width: 0.5, color: AppColors.white),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(1),
-                                  child: Theme(
-                                    data: ThemeData(
-                                      splashColor: Colors.transparent, // Remove splash color
-                                      highlightColor: Colors.transparent, // Remove highlight color
-                                    ),
-                                    child: ExpansionTile(
-                                      childrenPadding: EdgeInsets.all(0),
-                                      shape: OutlineInputBorder(
-                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      collapsedShape: OutlineInputBorder(
-                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      backgroundColor: AppColors.white,
-                                      collapsedBackgroundColor: AppColors.white,
-                                      title: Container(
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20),
                                         child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Scheduled Visit",
-                                              style: AppFonts.regular(16, AppColors.textBlack),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "Age",
+                                                  style: AppFonts.regular(12, AppColors.textBlack),
+                                                ),
+                                                SizedBox(
+                                                  height: 6,
+                                                ),
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  controller.patientData.value?.responseData?.age.toString() ?? "",
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "Gender",
+                                                  style: AppFonts.regular(12, AppColors.textBlack),
+                                                ),
+                                                SizedBox(
+                                                  height: 6,
+                                                ),
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  controller.patientData.value?.responseData?.gender ?? "",
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "Visit Date & Time",
+                                                  style: AppFonts.regular(12, AppColors.textBlack),
+                                                ),
+                                                SizedBox(
+                                                  height: 6,
+                                                ),
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  formatDateTime(
+                                                      firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.start,
+                                                  "Medical Assistant",
+                                                  style: AppFonts.regular(12, AppColors.textBlack),
+                                                ),
+                                                SizedBox(
+                                                  height: 6,
+                                                ),
+                                                // PopupMenuButton<String>(
+                                                //     shape: const RoundedRectangleBorder(
+                                                //         borderRadius: BorderRadius.all(Radius.circular(8))),
+                                                //     offset: const Offset(0, 5),
+                                                //     color: AppColors.white,
+                                                //     position: PopupMenuPosition.over,
+                                                //     style: const ButtonStyle(
+                                                //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                //         maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                //         visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                                //     itemBuilder: (context) => [
+                                                //           PopupMenuItem(
+                                                //               onTap: () {
+                                                //                 // controller.isSelectedAttchmentOption.value = 0;
+                                                //               },
+                                                //               // height: 30,
+                                                //               padding: const EdgeInsets.only(
+                                                //                   top: 10, bottom: 8, left: 8, right: 8),
+                                                //               child: Container(
+                                                //                 width: 200,
+                                                //                 child: Column(
+                                                //                   children: [
+                                                //                     const SizedBox(width: 5),
+                                                //                     Container(
+                                                //                       padding: EdgeInsets.symmetric(
+                                                //                           horizontal: 8, vertical: 7),
+                                                //                       decoration: BoxDecoration(
+                                                //                         border: Border.all(
+                                                //                             color: AppColors.textGrey
+                                                //                                 .withValues(alpha: 0.5)),
+                                                //                         // color: AppColors.backgroundWhite,
+                                                //                         borderRadius: BorderRadius.circular(8),
+                                                //                       ),
+                                                //                       child: Row(
+                                                //                         children: [
+                                                //                           SvgPicture.asset(
+                                                //                             ImagePath.search,
+                                                //                             height: 25,
+                                                //                             width: 25,
+                                                //                           ),
+                                                //                           SizedBox(
+                                                //                             width: 10,
+                                                //                           ),
+                                                //                           SizedBox(
+                                                //                             width: 120,
+                                                //                             child: TextField(
+                                                //                               maxLines: 1, //or null
+                                                //
+                                                //                               decoration: InputDecoration.collapsed(
+                                                //                                   hintText: "Search",
+                                                //                                   hintStyle: AppFonts.regular(
+                                                //                                       14, AppColors.textGrey)),
+                                                //                             ),
+                                                //                           ),
+                                                //                         ],
+                                                //                       ),
+                                                //                     ),
+                                                //                     const SizedBox(height: 10),
+                                                //                     ListView.builder(
+                                                //                         shrinkWrap: true,
+                                                //                         physics: NeverScrollableScrollPhysics(),
+                                                //                         itemBuilder: (context, index) => InkWell(
+                                                //                               onTap: () {},
+                                                //                               child: Padding(
+                                                //                                 padding: const EdgeInsets.symmetric(
+                                                //                                     horizontal: 10),
+                                                //                                 child: Column(
+                                                //                                   children: [
+                                                //                                     SizedBox(height: 10),
+                                                //                                     Row(
+                                                //                                       children: [
+                                                //                                         SvgPicture.asset(
+                                                //                                           ImagePath.checkbox_true,
+                                                //                                           width: 20,
+                                                //                                           height: 20,
+                                                //                                         ),
+                                                //                                         Spacer(),
+                                                //                                         Text(
+                                                //                                           textAlign: TextAlign.center,
+                                                //                                           "Missie Cooper",
+                                                //                                           style: AppFonts.regular(
+                                                //                                               15, AppColors.textPurple),
+                                                //                                         ),
+                                                //                                       ],
+                                                //                                     ),
+                                                //                                     SizedBox(height: 10),
+                                                //                                     if (index != 4) ...[
+                                                //                                       Divider(
+                                                //                                         height: 1,
+                                                //                                       )
+                                                //                                     ]
+                                                //                                   ],
+                                                //                                 ),
+                                                //                               ),
+                                                //                             ),
+                                                //                         itemCount: 5),
+                                                //                   ],
+                                                //                 ),
+                                                //               )),
+                                                //         ],
+                                                //     child: ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      "Missie Cooper",
+                                                      style: AppFonts.regular(14, AppColors.textPurple),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors.textPurple,
+                                                        borderRadius: BorderRadius.circular(12),
+                                                        border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
+                                                      ),
+                                                      padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
+                                                      child: Text(
+                                                        textAlign: TextAlign.center,
+                                                        "+2",
+                                                        style: AppFonts.bold(10, AppColors.textWhite),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    SvgPicture.asset(
+                                                      ImagePath.down_arrow,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "Doctor",
+                                                  style: AppFonts.regular(12, AppColors.textBlack),
+                                                ),
+                                                SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      "Dr ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
+                                                      style: AppFonts.regular(14, AppColors.textGrey),
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    SvgPicture.asset(
+                                                      ImagePath.down_arrow,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
-                                      children: <Widget>[
-                                        controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
-                                            ? Container(
-                                                width: double.infinity,
-                                                color: Colors.white,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
-                                                  child: CustomTable(
-                                                    rows: _getTableRows(controller
-                                                            .patientDetailModel.value?.responseData?.scheduledVisits ??
-                                                        []),
-                                                    cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
-                                                      return colIndex == 2 && rowIndex != 0
-                                                          ? GestureDetector(
-                                                              onTap: () {
-                                                                Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                                  "visitId": controller.patientDetailModel.value
-                                                                      ?.responseData?.scheduledVisits?[rowIndex - 1].id
-                                                                      .toString(),
-                                                                  "patientId": controller.patientId,
-                                                                });
+                                      SizedBox(
+                                        height: 20,
+                                      )
+                                      // ExpansionTile(
+                                      //   title: Text(
+                                      //     'Sub title',
+                                      //   ),
+                                      //   children: <Widget>[
+                                      //     // ListTile(
+                                      //     //   title: Text('data'),
+                                      //     // )
+                                      //   ],
+                                      // ),
+                                      // ListTile(
+                                      //   title: Text('data'),
+                                      // )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10.0),
+                                Theme(
+                                  data: ThemeData(
+                                    splashColor: Colors.transparent, // Remove splash color
+                                    highlightColor: Colors.transparent, // Remove highlight color
+                                  ),
+                                  child: ExpansionTile(
+                                    childrenPadding: EdgeInsets.all(0),
+                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    backgroundColor: AppColors.backgroundWhite,
+                                    collapsedBackgroundColor: AppColors.backgroundWhite,
+                                    title: Row(
+                                      children: [
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          "Personal Note",
+                                          style: AppFonts.regular(16, AppColors.textBlack),
+                                        ),
+                                        Spacer(),
+                                      ],
+                                    ),
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+                                        child: Container(
+                                            height: 48,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                              color: AppColors.backgroundWhite,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    textAlign: TextAlign.start,
+                                                    maxLines: 2,
+                                                    controller.patientData.value?.responseData?.personalNote?.personalNote?.join(" \n") ?? "",
+                                                    // "He enjoys fishing and gardening. His wife's name is Julie.",
+                                                    style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 7,
+                                                ),
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  controller.patientData.value?.responseData?.personalNote?.visitDate != null
+                                                      ? DateFormat('E MM/dd hh:mm a').format(DateTime.parse(controller.patientData.value?.responseData?.personalNote?.visitDate ?? "").toUtc())
+                                                      : "",
+                                                  style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                ),
+                                                SizedBox(width: 7),
+                                                SvgPicture.asset(
+                                                  ImagePath.edit_outline,
+                                                  height: 28,
+                                                  width: 28,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(width: 0.5, color: AppColors.white),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(1),
+                                    child: Theme(
+                                      data: ThemeData(
+                                        splashColor: Colors.transparent, // Remove splash color
+                                        highlightColor: Colors.transparent, // Remove highlight color
+                                      ),
+                                      child: ExpansionTile(
+                                        childrenPadding: EdgeInsets.all(0),
+                                        shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                        collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                        backgroundColor: AppColors.white,
+                                        collapsedBackgroundColor: AppColors.white,
+                                        title: Container(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.center,
+                                                "Scheduled Visit",
+                                                style: AppFonts.regular(16, AppColors.textBlack),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        children: <Widget>[
+                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                              ? Container(
+                                                  width: double.infinity,
+                                                  color: Colors.white,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
+                                                    child: CustomTable(
+                                                      rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
+                                                      cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
+                                                        return colIndex == 2 && rowIndex != 0
+                                                            ? GestureDetector(
+                                                                onTap: () {
+                                                                  Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                                                    "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                    "patientId": controller.patientId,
+                                                                  });
 
                                                                   customPrint("row index is :- $rowIndex");
                                                                 },
@@ -1263,53 +1236,27 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                             onTap: () {
                                                                               customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
 
-                                                                            if (controller.patientAttachmentList.value
-                                                                                    ?.responseData?[index].fileType
-                                                                                    ?.contains("image") ??
-                                                                                false) {
-                                                                              showDialog(
-                                                                                context: context,
-                                                                                barrierDismissible:
-                                                                                    true, // Allows dismissing the dialog by tapping outside
-                                                                                builder: (BuildContext context) {
-                                                                                  return controller
-                                                                                              .patientAttachmentList
-                                                                                              .value
-                                                                                              ?.responseData?[index]
-                                                                                              .fileType
-                                                                                              ?.contains("image") ??
-                                                                                          false
-                                                                                      ? ViewAttchmentImage(
-                                                                                          imageUrl: controller
-                                                                                                  .patientAttachmentList
-                                                                                                  .value
-                                                                                                  ?.responseData?[index]
-                                                                                                  .filePath ??
-                                                                                              "",
-                                                                                          attchmentUrl: '',
-                                                                                        )
-                                                                                      : ViewAttchmentImage(
-                                                                                          imageUrl: "",
-                                                                                          attchmentUrl: controller
-                                                                                                  .patientAttachmentList
-                                                                                                  .value
-                                                                                                  ?.responseData?[index]
-                                                                                                  .filePath ??
-                                                                                              ""); // Our custom dialog
-                                                                                },
-                                                                              );
-                                                                            } else {
-                                                                              Uri attchmentUri = Uri.parse(controller
-                                                                                      .patientAttachmentList
-                                                                                      .value
-                                                                                      ?.responseData?[index]
-                                                                                      .filePath ??
-                                                                                  "");
-                                                                              customPrint(
-                                                                                  "attchmentUri is :- ${attchmentUri}");
-                                                                              controller.launchInAppWithBrowserOptions(
-                                                                                  attchmentUri);
-                                                                            }
+                                                                              if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                                showDialog(
+                                                                                  context: context,
+                                                                                  barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                                  builder: (BuildContext context) {
+                                                                                    return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                                        ? ViewAttchmentImage(
+                                                                                            imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                            attchmentUrl: '',
+                                                                                          )
+                                                                                        : ViewAttchmentImage(
+                                                                                            imageUrl: "",
+                                                                                            attchmentUrl:
+                                                                                                controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                                  },
+                                                                                );
+                                                                              } else {
+                                                                                Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
+                                                                                customPrint("attchmentUri is :- ${attchmentUri}");
+                                                                                controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                              }
                                                                               if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
                                                                                 showDialog(
                                                                                   context: context,

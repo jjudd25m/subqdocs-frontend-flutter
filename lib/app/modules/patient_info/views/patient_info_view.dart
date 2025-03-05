@@ -512,20 +512,20 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                             //   outLineEnabledColor: AppColors.textGrey,
                                             //   outlineColor: controller.tabIndex.value == 5 ? AppColors.backgroundPurple : AppColors.clear,
                                             // )),
-                                            IntrinsicWidth(
-                                                child: CustomAnimatedButton(
-                                              onPressed: () {
-                                                controller.tabIndex.value = 6;
-                                              },
-                                              text: " Visit Data ",
-                                              isOutline: true,
-                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                              fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 6 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 6 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                              outLineEnabledColor: AppColors.textGrey,
-                                              outlineColor: controller.tabIndex.value == 6 ? AppColors.backgroundPurple : AppColors.clear,
-                                            ))
+                                            // IntrinsicWidth(
+                                            //     child: CustomAnimatedButton(
+                                            //   onPressed: () {
+                                            //     controller.tabIndex.value = 6;
+                                            //   },
+                                            //   text: " Visit Data ",
+                                            //   isOutline: true,
+                                            //   paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                            //   fontSize: 14,
+                                            //   enabledTextColor: controller.tabIndex.value == 6 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                            //   enabledColor: controller.tabIndex.value == 6 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                            //   outLineEnabledColor: AppColors.textGrey,
+                                            //   outlineColor: controller.tabIndex.value == 6 ? AppColors.backgroundPurple : AppColors.clear,
+                                            // ))
                                           ],
                                         ),
                                       ));
