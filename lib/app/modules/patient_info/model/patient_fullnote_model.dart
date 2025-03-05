@@ -225,7 +225,17 @@ class FullNoteDetails {
   List<String>? exam;
   List<ImpressionsAndPlan>? impressionsAndPlan;
 
-  FullNoteDetails({this.cancerHistory, this.skinHistory, this.socialHistory, this.medications, this.allergies, this.chiefComplain, this.hpi, this.reviewOfSystem, this.exam, this.impressionsAndPlan});
+  FullNoteDetails(
+      {this.cancerHistory,
+      this.skinHistory,
+      this.socialHistory,
+      this.medications,
+      this.allergies,
+      this.chiefComplain,
+      this.hpi,
+      this.reviewOfSystem,
+      this.exam,
+      this.impressionsAndPlan});
 
   FullNoteDetails.fromJson(Map<String, dynamic> json) {
     if (json['cancer_history'] != null) {

@@ -248,7 +248,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                             child: Text(
                                               textAlign: TextAlign.center,
                                               "Treatments:",
-                                              style: AppFonts.bold(16, AppColors.black),
+                                              style: AppFonts.bold(15, AppColors.textBlack),
                                             ),
                                           ),
                                           for (Treatments treatments in task.treatments ?? [])
@@ -264,7 +264,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                       Expanded(
                                                         child: Text(
                                                           " ${treatments.type} ${treatments.name} \n",
-                                                          style: AppFonts.regular(14, AppColors.black),
+                                                          style: AppFonts.regular(14, AppColors.textGrey),
                                                         ),
                                                       ),
                                                     ],
@@ -369,7 +369,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                             child: Text(
                                               textAlign: TextAlign.center,
                                               "Orders:",
-                                              style: AppFonts.bold(16, AppColors.black),
+                                              style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
                                           for (var details in task.orders ?? [])
@@ -385,7 +385,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                       Expanded(
                                                         child: Text(
                                                           " $details \n",
-                                                          style: AppFonts.regular(14, AppColors.black),
+                                                          style: AppFonts.regular(14, AppColors.textGrey),
                                                         ),
                                                       ),
                                                     ],
@@ -403,7 +403,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                             child: Text(
                                               textAlign: TextAlign.center,
                                               "Medications:",
-                                              style: AppFonts.bold(16, AppColors.black),
+                                              style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
                                           for (Map medication in task.medications ?? [])
@@ -420,7 +420,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                         child: Text(
                                                           textAlign: TextAlign.center,
                                                           " ${medication['name'] ?? ""} - ${medication['dosage'] ?? ""} \n",
-                                                          style: AppFonts.regular(14, AppColors.black),
+                                                          style: AppFonts.regular(14, AppColors.textGrey),
                                                         ),
                                                       ),
                                                     ],
@@ -438,7 +438,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                             child: Text(
                                               textAlign: TextAlign.center,
                                               "Counseling and Discussion:",
-                                              style: AppFonts.bold(16, AppColors.black),
+                                              style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
                                           for (var counseling in task.counselingAndDiscussion ?? [])
@@ -454,7 +454,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                       Expanded(
                                                         child: Text(
                                                           "$counseling \n",
-                                                          style: AppFonts.regular(14, AppColors.black),
+                                                          style: AppFonts.regular(14, AppColors.textGrey),
                                                         ),
                                                       ),
                                                     ],
@@ -472,7 +472,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                             child: Text(
                                               textAlign: TextAlign.center,
                                               "Follow Up:",
-                                              style: AppFonts.bold(16, AppColors.black),
+                                              style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
                                           Padding(
@@ -487,7 +487,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                     Expanded(
                                                       child: Text(
                                                         task.followUp ?? "",
-                                                        style: AppFonts.regular(14, AppColors.black),
+                                                        style: AppFonts.regular(14, AppColors.textGrey),
                                                       ),
                                                     ),
                                                   ],
