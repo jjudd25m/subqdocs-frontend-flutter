@@ -58,6 +58,72 @@ class attachmentDailog extends GetView<VisitMainController> {
                 ),
               ),
             ),
+            SizedBox(
+              width: 360,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    DottedBorder(
+                      color: AppColors.textDarkGrey,
+                      strokeWidth: 0.5,
+                      child: Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            SvgPicture.asset("assets/images/upload_image.svg"),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                              child: Text(
+                                "Upload and manage Photos",
+                                style: AppFonts.medium(14, AppColors.black),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 80, right: 80),
+                              child: CustomButton(
+                                  navigate: () async {
+                                    await controller.pickFiles(context, clear: false);
+                                  },
+                                  label: "Choose Files"),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "Supported Formats: JPG, PNG, WEBP, MP3, WAV,MP4, DOC, PDF",
+                      textAlign: TextAlign.start,
+                      style: AppFonts.medium(
+                        10,
+                        AppColors.textDarkGrey,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    CustomButton(
+                      navigate: () async {
+                        await controller.captureImage(context, fromCamera: true, clear: false);
+                      },
+                      label: "Take a photo",
+                      backGround: Colors.white,
+                      isTrue: false,
+                      textColor: AppColors.backgroundPurple,
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Container(
               width: 360,
               child: Padding(
@@ -104,7 +170,8 @@ class attachmentDailog extends GetView<VisitMainController> {
                                             Text(controller.list.value[index].fileName ?? ""),
                                             //
                                             Text(controller.visitId.value),
-                                            Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                            Text(
+                                                "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
                                           ],
                                         ),
                                         Spacer(),
@@ -112,9 +179,6 @@ class attachmentDailog extends GetView<VisitMainController> {
                                           onTap: () {
                                             controller.list.removeAt(index);
                                             controller.list.refresh();
-                                            if (controller.list.isEmpty) {
-                                              Get.back();
-                                            }
                                           },
                                           child: SvgPicture.asset(
                                             "assets/images/logo_cross.svg",

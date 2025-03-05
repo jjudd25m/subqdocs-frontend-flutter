@@ -97,8 +97,51 @@ class VisitMainController extends GetxController {
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
 
-  Future<void> captureImage(BuildContext context, {bool fromCamera = true}) async {
-    list.clear();
+  // Future<void> captureImage(BuildContext context, {bool fromCamera = true}) async {
+  //   list.clear();
+  //
+  //   XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
+  //
+  //   customPrint("media  file is  $image");
+  //
+  //   XFile? _pickedFile;
+  //   String? _fileName;
+  //   DateTime? _pickDate;
+  //   int? _fileSize;
+  //   if (image != null) {
+  //     _fileName = image.name; // Get the file name
+  //     _pickDate = DateTime.now(); // Get the date when the file is picked
+  //
+  //     // Get the size of the file
+  //     File file = File(image.path);
+  //     _fileSize = file.lengthSync(); // Size in bytes
+  //
+  //     String? _filesizeString = _formatFileSize(_fileSize);
+  //     String? _shortFileName;
+  //     if (p.basename(_fileName).length > 15) {
+  //       // Truncate the name to 12 characters and add ellipsis
+  //       _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+  //     } else {
+  //       _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+  //     }
+  //     list.value.add(MediaListingModel(
+  //         file: file,
+  //         previewImage: null,
+  //         fileName: _shortFileName,
+  //         date: _formatDate(_pickDate),
+  //         Size: _filesizeString));
+  //   }
+  //
+  //   list.refresh();
+  //   if (list.isNotEmpty) {
+  //     showCustomDialog(context);
+  //   }
+  // }
+
+  Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
+    if (clear) {
+      list.clear();
+    }
 
     XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
 
@@ -133,8 +176,11 @@ class VisitMainController extends GetxController {
     }
 
     list.refresh();
-    if (list.isNotEmpty) {
-      showCustomDialog(context);
+
+    if (clear) {
+      if (list.isNotEmpty) {
+        showCustomDialog(context);
+      }
     }
   }
 
@@ -145,9 +191,58 @@ class VisitMainController extends GetxController {
     getPatientAttachment();
     Get.back();
   }
+  //
+  // Future<void> pickFiles(BuildContext context) async {
+  //   list.clear();
+  //
+  //   List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
+  //
+  //   customPrint("media  file is  $fileList");
+  //
+  //   fileList?.forEach(
+  //     (element) {
+  //       XFile? _pickedFile;
+  //       String? _fileName;
+  //       DateTime? _pickDate;
+  //       int? _fileSize;
+  //       if (element != null) {
+  //         _fileName = element.name; // Get the file name
+  //         _pickDate = DateTime.now(); // Get the date when the file is picked
+  //
+  //         // Get the size of the file
+  //         File file = File(element.xFile.path);
+  //         _fileSize = file.lengthSync(); // Size in bytes
+  //
+  //         String? _filesizeString = _formatFileSize(_fileSize);
+  //
+  //         String? _shortFileName;
+  //         if (p.basename(_fileName).length > 15) {
+  //           // Truncate the name to 12 characters and add ellipsis
+  //           _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+  //         } else {
+  //           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+  //         }
+  //         list.value.add(MediaListingModel(
+  //             file: file,
+  //             previewImage: null,
+  //             fileName: _shortFileName,
+  //             date: _formatDate(_pickDate),
+  //             Size: _filesizeString));
+  //       }
+  //
+  //       list.refresh();
+  //
+  //       if (list.isNotEmpty) {
+  //         showCustomDialog(context);
+  //       }
+  //     },
+  //   );
+  // }
 
-  Future<void> pickFiles(BuildContext context) async {
-    list.clear();
+  Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
+    if (clear) {
+      list.clear();
+    }
 
     List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
 
@@ -183,14 +278,14 @@ class VisitMainController extends GetxController {
               date: _formatDate(_pickDate),
               Size: _filesizeString));
         }
-
-        list.refresh();
-
-        if (list.isNotEmpty) {
-          showCustomDialog(context);
-        }
       },
     );
+    list.refresh();
+    if (clear) {
+      if (list.isNotEmpty) {
+        showCustomDialog(context);
+      }
+    }
   }
 
   RxString visitId = RxString("");
