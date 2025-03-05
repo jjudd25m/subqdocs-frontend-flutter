@@ -27,7 +27,7 @@ class PatientViewListModel {
 
 class VisitNoteDetails {
   String yourVisitSummary;
-  Map<String, List<String>> dynamicData;
+  Map<String, dynamic> dynamicData;
 
   VisitNoteDetails({
     required this.yourVisitSummary,
@@ -38,7 +38,8 @@ class VisitNoteDetails {
   factory VisitNoteDetails.fromJson(Map<String, dynamic> json) {
     return VisitNoteDetails(
       yourVisitSummary: json['your_visit_summary'] ?? '',
-      dynamicData: _parseDynamicData(json),
+      // dynamicData: _parseDynamicData(json),
+      dynamicData: json,
     );
   }
 

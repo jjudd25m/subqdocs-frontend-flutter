@@ -79,51 +79,63 @@ class PatientView extends GetView<PatientInfoController> {
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) => InkWell(
-                                            onTap: () {},
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        textAlign: TextAlign.left,
-                                                        controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index).replaceAll("_", " ").capitalizeFirst ??
-                                                            '',
-                                                        style: AppFonts.medium(14, AppColors.textBlack),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 10),
+                                      itemBuilder: (context, index) {
+                                        Map<String, dynamic> dynamicData = controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData ?? {};
+                                        var data = dynamicData[dynamicData.keys.elementAt(index)];
+                                        if (data is List && data.isEmpty) {
+                                          return SizedBox();
+                                        } else if (data is String && data.isEmpty) {
+                                          return SizedBox();
+                                        }
+                                        return InkWell(
+                                          onTap: () {},
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      textAlign: TextAlign.left,
+                                                      dynamicData.keys.elementAt(index).replaceAll("_", " ").capitalizeFirst ?? '',
+                                                      style: AppFonts.medium(14, AppColors.textBlack),
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(height: 10),
+                                                if (dynamicData[dynamicData.keys.elementAt(index)] is List) ...[
                                                   ListView.builder(
                                                     shrinkWrap: true,
                                                     physics: NeverScrollableScrollPhysics(),
-                                                    itemCount: controller.patientViewListModel.value?.responseData!.visitNoteDetails
-                                                            .dynamicData[controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]?.length ??
-                                                        0, // Number of items
+                                                    itemCount: dynamicData[dynamicData.keys.elementAt(index)]?.length ?? 0, // Number of items
                                                     itemBuilder: (context, subIndex) {
                                                       return Row(
                                                         children: [
                                                           Expanded(
                                                               child: Text(
+                                                            "• ${dynamicData[dynamicData.keys.elementAt(index)]?[subIndex] ?? ''}",
                                                             textAlign: TextAlign.left,
-                                                            controller.patientViewListModel.value?.responseData!.visitNoteDetails
-                                                                    .dynamicData[controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.elementAt(index)]?[subIndex] ??
-                                                                "",
                                                             style: AppFonts.regular(14, AppColors.textGrey),
                                                           )),
                                                         ],
                                                       );
                                                     },
                                                   ),
-                                                  SizedBox(height: 20),
+                                                ] else if (dynamicData[dynamicData.keys.elementAt(index)] is String) ...[
+                                                  Text(
+                                                    dynamicData[dynamicData.keys.elementAt(index)] ?? "",
+                                                    textAlign: TextAlign.left,
+                                                    style: AppFonts.regular(14, AppColors.textGrey),
+                                                  )
                                                 ],
-                                              ),
+                                                SizedBox(height: 20),
+                                              ],
                                             ),
                                           ),
-                                      itemCount: controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.values.length ?? 0),
+                                        );
+                                      },
+                                      itemCount: controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.length ?? 0),
                                   //
                                 ),
                                 SizedBox(
