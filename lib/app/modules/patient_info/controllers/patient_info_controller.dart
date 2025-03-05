@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
@@ -56,7 +57,7 @@ class PatientInfoController extends GetxController {
   Rxn<LoginModel> loginData = Rxn();
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
 
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
@@ -67,7 +68,17 @@ class PatientInfoController extends GetxController {
       visitId = Get.arguments["visitId"];
       customPrint("visit id :- $visitId");
 
-      getAllPatientInfo();
+      var status = await InternetConnection().internetStatus;
+
+      if (status == InternetStatus.disconnected) {
+        print("you net is now Disconnected");
+
+        offLine();
+      } else {
+        getAllPatientInfo();
+      }
+
+      handelInternetConnection();
     }
 
     if (Get.arguments["trascriptUploadData"] != null) {
@@ -88,7 +99,8 @@ class PatientInfoController extends GetxController {
       if (socketService.socket.connected) {
         customPrint("socket is connected");
 
-        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
+        socketService.socket
+            .emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
         socketService.socket.on(
           "AllTabStatus",
@@ -230,7 +242,8 @@ class PatientInfoController extends GetxController {
             String status = res["status"];
             String message = res["message"];
 
-            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint(
+                "$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("PatientViewStatus inside condition");
@@ -268,7 +281,8 @@ class PatientInfoController extends GetxController {
             String status = res["status"];
             String message = res["message"];
 
-            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint(
+                "$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("transcriptStatus inside condition");
@@ -340,5 +354,94 @@ class PatientInfoController extends GetxController {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
     customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
     customPrint("diagnos is :- ${doctorViewList.value?.responseData?.diagnosisCodesProcedures?.toJson()}");
+  }
+
+  void offLine() {
+    var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
+
+    var doctorViewResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.doctorView,
+        visitId: visitId,
+        responseData: responseData);
+
+    var fullNoteResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.fullNote,
+        visitId: visitId,
+        responseData: responseData);
+
+    var visitDataResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.patientVisitDetails,
+        visitId: visitId,
+        responseData: responseData);
+
+    var fullTransScriptResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.fullTranscript,
+        visitId: visitId,
+        responseData: responseData);
+
+    var patientViewResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.patientView,
+        visitId: visitId,
+        responseData: responseData);
+    doctorViewList.value = DoctorViewModel.fromJson(doctorViewResponse);
+    patientFullNoteModel.value = PatientFullNoteModel.fromJson(fullNoteResponse);
+    patientDoctorVisitDataModel.value = PatientDoctorVisitDataModel.fromJson(visitDataResponse);
+    transcriptListModel.value = TranscriptListModel.fromJson(fullTransScriptResponse);
+    patientViewListModel.value = PatientViewListModel.fromJson(patientViewResponse);
+  }
+
+  Map<String, dynamic> fetchVisitDetails(
+      {required Map<String, dynamic> responseData,
+      required String type,
+      required String visitId,
+      required String modelType}) {
+    // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
+    List<dynamic> visitList = responseData['responseData'][type];
+
+    // Initialize the result data
+    var responseDataResult;
+
+    // Search for the visit with the matching visit_id
+    for (var visit in visitList) {
+      // Check for the nested visit by visit-<visit_id> key
+      var visitKey = 'visit-$visitId';
+      if (visit.containsKey(visitKey)) {
+        var visitDetails = visit[visitKey];
+
+        // Check for the value of the key that we need (e.g., scheduledVisits)
+        if (visitDetails['$modelType'] != null && visitDetails['$modelType'].isNotEmpty) {
+          responseDataResult = visitDetails['$modelType']; // Set the value to return
+        }
+        break;
+      }
+    }
+
+    // Return the formatted response
+    return {
+      "responseData": responseDataResult,
+      "message": " Details Fetched Successfully",
+      "toast": true,
+      "response_type": "success"
+    };
+  }
+
+  void handelInternetConnection() {
+    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+      switch (status) {
+        case InternetStatus.connected:
+          getAllPatientInfo();
+
+          break;
+        case InternetStatus.disconnected:
+          offLine();
+
+          break;
+      }
+    });
   }
 }

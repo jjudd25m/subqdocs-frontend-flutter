@@ -172,20 +172,26 @@ class HomeController extends GetxController {
         // Format the date to 'MM-dd-yyyy'
         customPrint("goint to this ");
         if (selectedValue.length == 1) {
-          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          startDate.value =
+              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value =
+              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
         } else {
           if (i == 0) {
-            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            startDate.value =
+                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           } else {
-            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            endDate.value =
+                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           }
         }
       }
     } else {
       DateTime dateTime = DateTime.now();
-      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      startDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
     }
     Get.back();
   }
@@ -265,7 +271,8 @@ class HomeController extends GetxController {
       pastVisitListModelOfLine.value = await _homeRepository.getPastVisit(param: pastParam);
 
       await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModelOOffLine.toJson()));
-      await AppPreference.instance.setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
+      await AppPreference.instance
+          .setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
       await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModelOfLine.toJson()));
     } catch (e) {
       customPrint(e);
@@ -313,6 +320,7 @@ class HomeController extends GetxController {
     }
 
     getLast2DaysData();
+    getOfflineData();
   }
 
   Future<void> getScheduleVisitList({String? sortingName = ""}) async {
@@ -352,6 +360,7 @@ class HomeController extends GetxController {
 
     scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
     getLast2DaysData();
+    getOfflineData();
   }
 
   Future<void> getPastVisitList({String? sortingName = ""}) async {
@@ -398,6 +407,8 @@ class HomeController extends GetxController {
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
     pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
     getLast2DaysData();
+    getOfflineData();
+
     // await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModel.toJson()));
   }
 
@@ -577,6 +588,16 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> getOfflineData() async {
+    var response = await _homeRepository.getOfflineData();
+
+    print(" response type is  the ${response["response_type"]}");
+
+    if (response["response_type"] == "success") {
+      await AppPreference.instance.setString(AppString.offLineData, json.encode(response));
+    }
+  }
+
   Future<void> getStatus() async {
     StatusResponseModel statusResponseModel = await _homeRepository.getStatus();
 
@@ -633,7 +654,6 @@ class HomeController extends GetxController {
           getPatientList();
           getStatus();
 
-          customPrint('---------------------------------hahahahaha');
           List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
           customPrint("audio file count is :- ${audio.length}");
@@ -641,7 +661,8 @@ class HomeController extends GetxController {
             CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
 
             uploadAllAudioFiles(() {
-              CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+              CustomToastification()
+                  .showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
               customPrint('All audio files have been uploaded!');
             });
           }
@@ -650,9 +671,11 @@ class HomeController extends GetxController {
         case InternetStatus.disconnected:
           var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
 
-          var schedule = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+          var schedule = ScheduleVisitListModel.fromJson(
+              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
 
-          var past = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
+          var past =
+              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
           patientList.value = patient.responseData?.data ?? [];
           scheduleVisitList.value = schedule.responseData?.data ?? [];
           pastVisitList.value = past.responseData?.data ?? [];
@@ -660,7 +683,7 @@ class HomeController extends GetxController {
           scheduleVisitList.refresh();
           pastVisitList.refresh();
 
-          customPrint("now its not connected ");
+          customPrint("now its not connected from the home repository ");
           break;
       }
     });
@@ -691,8 +714,10 @@ class HomeController extends GetxController {
 
       customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+          audioFile: File.fromUri(Uri.file(file.fileName ?? "")),
+          token: loginData.responseData?.token ?? "",
+          patientVisitId: file.visitId ?? "");
       customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {

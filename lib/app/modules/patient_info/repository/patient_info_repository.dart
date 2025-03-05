@@ -32,7 +32,7 @@ class PatientInfoRepository {
   }
 
   Future<DoctorViewModel> getDoctorNote({required String id}) async {
-    var response = await ApiProvider.instance.callGet("doctors-view/$id");
+    var response = await ApiProvider.instance.callGet(" q");
     customPrint("getDoctorNote API  internal response $response");
     return DoctorViewModel.fromJson(response);
   }

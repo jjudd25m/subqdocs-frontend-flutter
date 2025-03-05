@@ -5,6 +5,7 @@ class AppString {
   static const String patientList = 'patientList';
   static const String schedulePatientList = 'schedulePatient';
   static const String pastPatientList = 'pastPatient';
+  static const String offLineData = 'offLineData';
   static const String prefKeyRememberMe = "prefKeyRememberMe";
   static const String prefKeyRememberEmail = "prefKeyRememberEmail";
   static const String prefKeyRememberPassword = "prefKeyRememberPassword";
@@ -21,4 +22,15 @@ class AppString {
 
   // forgot Password email link screen
   static String appName = "SubQDocs";
+
+  static const String visitRecaps = "visitRecaps";
+  static const String doctorView = "doctorView";
+  static const String fullNote = "fullNote";
+  static const String patientVisitDetails = "patientVisitDetails";
+  static const String fullTranscript = "fullTranscript";
+  static const String patientView = "patientView";
+  static const String visitMainData = "visitMainData";
+  static const String scheduledVisits = "scheduledVisits";
+  static const String scheduleVisitsList = "scheduleVisitsList";
+  static const String pastPatientVisitsList = "pastPatientVisitsList";
 }
