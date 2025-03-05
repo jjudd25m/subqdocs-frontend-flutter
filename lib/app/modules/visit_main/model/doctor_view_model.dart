@@ -389,7 +389,17 @@ class DoctorViewResponseData {
   Null? deletedAt;
 
   DoctorViewResponseData(
-      {this.id, this.patientId, this.visitId, this.status, this.visitDate, this.diagnosisCodesProcedures, this.impressionsAndPlan, this.totalCharges, this.createdAt, this.updatedAt, this.deletedAt});
+      {this.id,
+      this.patientId,
+      this.visitId,
+      this.status,
+      this.visitDate,
+      this.diagnosisCodesProcedures,
+      this.impressionsAndPlan,
+      this.totalCharges,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   DoctorViewResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -445,7 +455,8 @@ class DiagnosisCodesProcedures {
   DiagnosisCodesProcedures({this.diagnosisCodesProceduresProcedure, this.diagnosis, this.units, this.unitCharge});
 
   DiagnosisCodesProcedures.fromJson(Map<String, dynamic> json) {
-    diagnosisCodesProceduresProcedure = json['procedure'] != null ? DiagnosisCodesProceduresProcedure.fromJson(json['procedure']) : null;
+    diagnosisCodesProceduresProcedure =
+        json['procedure'] != null ? DiagnosisCodesProceduresProcedure.fromJson(json['procedure']) : null;
     if (json['diagnosis'] != null) {
       diagnosis = <Diagnosis>[];
       json['diagnosis'].forEach((v) {
@@ -545,12 +556,21 @@ class ImpressionsAndPlan {
   String? description;
   List<Treatments>? treatments;
   Procedure? procedure;
-  List<Null>? medications;
-  List<Null>? orders;
-  List<Null>? counselingAndDiscussion;
+  List? medications;
+  List? orders;
+  List? counselingAndDiscussion;
   String? followUp;
 
-  ImpressionsAndPlan({this.number, this.title, this.description, this.treatments, this.procedure, this.medications, this.orders, this.counselingAndDiscussion, this.followUp});
+  ImpressionsAndPlan(
+      {this.number,
+      this.title,
+      this.description,
+      this.treatments,
+      this.procedure,
+      this.medications,
+      this.orders,
+      this.counselingAndDiscussion,
+      this.followUp});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -563,24 +583,24 @@ class ImpressionsAndPlan {
       });
     }
     procedure = json['procedure'] != null ? Procedure.fromJson(json['procedure']) : null;
-    // if (json['medications'] != null) {
-    //   medications = <Null>[];
-    //   json['medications'].forEach((v) {
-    //     medications!.add(new Null.fromJson(v));
-    //   });
-    // }
-    // if (json['orders'] != null) {
-    //   orders = <Null>[];
-    //   json['orders'].forEach((v) {
-    //     orders!.add(new Null.fromJson(v));
-    //   });
-    // }
-    // if (json['counseling_and_discussion'] != null) {
-    //   counselingAndDiscussion = <Null>[];
-    //   json['counseling_and_discussion'].forEach((v) {
-    //     counselingAndDiscussion!.add(new Null.fromJson(v));
-    //   });
-    // }
+    if (json['medications'] != null) {
+      medications = [];
+      json['medications'].forEach((v) {
+        medications!.add(v);
+      });
+    }
+    if (json['orders'] != null) {
+      orders = [];
+      json['orders'].forEach((v) {
+        orders!.add(v);
+      });
+    }
+    if (json['counseling_and_discussion'] != null) {
+      counselingAndDiscussion = [];
+      json['counseling_and_discussion'].forEach((v) {
+        counselingAndDiscussion!.add(v);
+      });
+    }
     followUp = json['follow_up'];
   }
 
@@ -670,17 +690,17 @@ class Specifications {
 
 class Procedure {
   String? type;
-  List<Null>? details;
+  List? details;
 
   Procedure({this.type, this.details});
 
   Procedure.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     if (json['details'] != null) {
-      details = <Null>[];
-      // json['details'].forEach((v) {
-      //   details!.add(new Null.fromJson(v));
-      // });
+      details = [];
+      json['details'].forEach((v) {
+        details!.add(v);
+      });
     }
   }
 
