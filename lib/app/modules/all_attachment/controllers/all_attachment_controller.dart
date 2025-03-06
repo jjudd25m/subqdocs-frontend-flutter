@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../widgets/custom_toastification.dart';
 import '../../forgot_password/models/common_respons.dart';
@@ -26,8 +27,7 @@ class AllAttachmentController extends GetxController {
 
     patientAttachmentList = Get.arguments["attachmentList"];
 
-    Map<String, List<ResponseData>> groupedAttachments =
-        groupAttachmentsByDate(patientAttachmentList.value?.responseData ?? []);
+    Map<String, List<ResponseData>> groupedAttachments = groupAttachmentsByDate(patientAttachmentList.value?.responseData ?? []);
 
     attachmentDic.value = groupedAttachments;
 
@@ -84,5 +84,15 @@ class AllAttachmentController extends GetxController {
     }
 
     return groupedAttachments;
+  }
+
+  Future<void> launchInAppWithBrowserOptions(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppBrowserView,
+      browserConfiguration: const BrowserConfiguration(showTitle: true),
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

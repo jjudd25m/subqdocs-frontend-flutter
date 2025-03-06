@@ -144,7 +144,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                       width: 60,
                                                       height: 60,
                                                       fontSize: 14,
-                                                      nameLetters: "mihir",
+                                                      nameLetters: "${controller.firstNameController.text} ${controller.lastNameController.text}",
                                                     ),
                                         ),
                                         PopupMenuButton<String>(
@@ -282,7 +282,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       child: TextFormFiledWidget(
                                           label: "First Name",
                                           format: [
-                                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                            CustomTextInputFormatter(),
                                           ],
                                           // isImportant: true,
                                           isValid: true,
@@ -309,7 +309,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       child: TextFormFiledWidget(
                                         label: "Middle Name",
                                         format: [
-                                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                          CustomTextInputFormatter(),
                                         ],
                                         suffixIcon: GestureDetector(
                                           onTap: () {
@@ -336,7 +336,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       child: TextFormFiledWidget(
                                         label: "Last Name",
                                         format: [
-                                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                          CustomTextInputFormatter(),
                                         ],
                                         isValid: true,
                                         // isImportant: true,

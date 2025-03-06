@@ -65,6 +65,7 @@ dependencies:
   url_launcher: ^6.3.1
   sentry_flutter: ^8.13.2
   flutter_html:
+  wakelock_plus: ^1.2.10
 
 
 dev_dependencies:

@@ -230,11 +230,11 @@ class DoctorView extends GetView<PatientInfoController> {
                                         style: AppFonts.regular(14, AppColors.black),
                                       ),
                                     ),
-                                    SizedBox(height: 10),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         if ((task.treatments ?? []).isNotEmpty) ...[
+                                          SizedBox(height: 10),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -244,127 +244,132 @@ class DoctorView extends GetView<PatientInfoController> {
                                             ),
                                           ),
                                           for (Treatments treatments in task.treatments ?? [])
+                                            if (treatments.type?.isNotEmpty ?? false) ...[
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                      child: Row(
+                                                        children: [
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              " ${treatments.type} ${treatments.name} \n",
+                                                              style: AppFonts.regular(14, AppColors.textBlack),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        for (Specifications specifications in treatments.specifications ?? [])
+                                                          Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                width: 20,
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  textAlign: TextAlign.start,
+                                                                  "• ${specifications.parameter}: ${specifications.value}",
+                                                                  style: AppFonts.regular(14, AppColors.black),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        SizedBox(height: 5),
+                                                        for (String note in treatments.notes ?? [])
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      width: 20,
+                                                                    ),
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "•",
+                                                                      style: AppFonts.regular(14, AppColors.black),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    Expanded(
+                                                                      child: Text(
+                                                                        maxLines: 2,
+                                                                        textAlign: TextAlign.left,
+                                                                        " $note ",
+                                                                        style: AppFonts.regular(14, AppColors.black),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ]
+                                        ],
+
+                                        if (task.procedure != null) ...[
+                                          if (task.procedure?.type?.isNotEmpty ?? false) ...[
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                    child: Row(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                task.procedure?.type != null ? "${task.procedure?.type}:" : "",
+                                                style: AppFonts.bold(16, AppColors.black),
+                                              ),
+                                            ),
+                                            for (var details in task.procedure?.details ?? [])
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
                                                       children: [
                                                         SizedBox(
-                                                          width: 10,
+                                                          width: 0,
                                                         ),
                                                         Expanded(
                                                           child: Text(
-                                                            " ${treatments.type} ${treatments.name} \n",
-                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                            textAlign: TextAlign.left,
+                                                            " $details",
+                                                            style: AppFonts.regular(14, AppColors.black),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      for (Specifications specifications in treatments.specifications ?? [])
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(
-                                                              width: 20,
-                                                            ),
-                                                            Expanded(
-                                                              child: Text(
-                                                                textAlign: TextAlign.start,
-                                                                "• ${specifications.parameter}: ${specifications.value}",
-                                                                style: AppFonts.regular(14, AppColors.black),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      SizedBox(height: 5),
-                                                      for (String note in treatments.notes ?? [])
-                                                        Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                          child: Column(
-                                                            children: [
-                                                              Row(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    width: 20,
-                                                                  ),
-                                                                  Text(
-                                                                    textAlign: TextAlign.left,
-                                                                    "•",
-                                                                    style: AppFonts.regular(14, AppColors.black),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 5,
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      maxLines: 2,
-                                                                      textAlign: TextAlign.left,
-                                                                      " $note ",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                ],
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                        ],
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        if (task.procedure != null) ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.left,
-                                              task.procedure?.type != null ? "${task.procedure?.type}:" : "",
-                                              style: AppFonts.bold(16, AppColors.black),
-                                            ),
-                                          ),
-                                          for (var details in task.procedure?.details ?? [])
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 0,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          textAlign: TextAlign.left,
-                                                          " $details",
-                                                          style: AppFonts.regular(14, AppColors.black),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                          ]
                                         ],
                                         SizedBox(height: 10),
                                         if (task.medications?.isNotEmpty ?? false) ...[
@@ -390,8 +395,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                             ],
                                           ),
+                                          SizedBox(height: 10),
                                         ],
-                                        SizedBox(height: 10),
                                         if (task.orders?.isNotEmpty ?? false) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),

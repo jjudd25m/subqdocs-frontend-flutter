@@ -11,6 +11,7 @@ import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/widget/appbar.dart';
+import 'package:subqdocs/widgets/rounded_image_widget.dart';
 
 import '../../../../utils/Formetors.dart';
 import 'package:path/path.dart' as p;
@@ -273,11 +274,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     imagePath: controller.profileImage.value,
                                                   )
                                                 : BaseImageView(
-                                                    imageUrl: "",
-                                                    width: 40,
-                                                    height: 40,
-                                                    fontSize: 14,
-                                                    nameLetters: "mihit thakkar",
+                                                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                    width: 50,
+                                                    height: 50,
                                                   ),
                                             PopupMenuButton<String>(
                                               offset: const Offset(0, 8),
@@ -402,7 +401,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               // isImportant: true,
                                               isValid: true,
                                               format: [
-                                                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                CustomTextInputFormatter(),
                                               ],
                                               controller: controller.firstNameController,
                                               hint: "Don",
@@ -426,7 +425,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         Expanded(
                                           child: TextFormFiledWidget(
                                             format: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                              CustomTextInputFormatter(),
                                             ],
                                             label: "Middle Name",
                                             controller: controller.middleNameController,
@@ -453,7 +452,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               format: [
-                                                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                CustomTextInputFormatter(),
                                               ],
                                               label: "Last Name",
                                               isValid: true,

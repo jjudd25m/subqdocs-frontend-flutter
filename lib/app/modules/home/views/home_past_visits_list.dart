@@ -33,11 +33,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                       onBtnPress: () async {
                         final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                        if (result == 1) {
-                          controller.getPastVisitList();
-                          controller.getScheduleVisitList();
-                          controller.getPatientList();
-                        }
+                        controller.getPastVisitList();
+                        controller.getScheduleVisitList();
+                        controller.getPatientList();
                       },
                       title: "Your Past Visit List is Empty",
                       description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
@@ -278,7 +276,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                   },
                   columnCount: 7,
                   context: context,
-                  columnWidths: [0.21, 0.17, 0.08, 0.10, 0.14, 0.19, 0.10],
+                  columnWidths: [0.20, 0.17, 0.08, 0.11, 0.14, 0.19, 0.10],
                 ),
         );
       },
@@ -289,19 +287,26 @@ class HomePastVisitsList extends GetView<HomeController> {
     List<List<String>> rows = [];
 
     // Add header row first
-    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous Visits", "Status", "Action"]);
+    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"]);
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
       String formatedDateTime = "N/A";
 
-      if (patient.appointmentTime != null) {
-        DateTime dateTime = DateTime.parse(patient.appointmentTime ?? "");
-
+      if (patient.appointmentTime != null && patient.visitDate != null) {
+        DateTime dateTime = DateTime.parse(patient.appointmentTime ?? "").toLocal();
         DateTime formatdateLocal = DateTime.parse(patient.visitDate ?? "");
 
         formatedDateTime = "${DateFormat('MM/dd').format(formatdateLocal)} ${DateFormat('h:mm a').format(dateTime)}";
       }
+
+      // if (patient.appointmentTime != null) {
+      //   DateTime dateTime = DateTime.parse(patient.appointmentTime ?? "");
+      //
+      //   DateTime formatdateLocal = DateTime.parse(patient.visitDate ?? "");
+      //
+      //   formatedDateTime = "${DateFormat('MM/dd').format(formatdateLocal)} ${DateFormat('h:mm a').format(dateTime)}";
+      // }
 
       String getFirstLetter(String input) {
         return input.isNotEmpty ? input[0] : '';
@@ -315,6 +320,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         patient.previousVisitCount.toString(), // Last Visit Date
         patient.visitStatus ?? "0", // Previous Visits
         "Action",
+        patient.profileImage ?? ""
 
         // Action (could be a button or some interaction)
       ]);

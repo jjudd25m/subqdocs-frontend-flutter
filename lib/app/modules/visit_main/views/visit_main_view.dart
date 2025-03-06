@@ -148,6 +148,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                     highlightColor: Colors.transparent, // Remove highlight color
                                   ),
                                   child: ExpansionTile(
+                                    initiallyExpanded: true,
                                     collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundWhite,
@@ -169,11 +170,16 @@ class VisitMainView extends GetView<VisitMainController> {
                                           SizedBox(
                                             width: 11,
                                           ),
-                                          BaseImageView(
-                                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                            width: 60,
-                                            height: 60,
-                                          ),
+                                          ClipRRect(
+                                              borderRadius: BorderRadius.circular(30),
+                                              child: BaseImageView(
+                                                imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
+                                                height: 60,
+                                                width: 60,
+                                                nameLetters:
+                                                    "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                                fontSize: 14,
+                                              )),
                                           SizedBox(
                                             width: 10,
                                           ),
@@ -493,6 +499,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                     highlightColor: Colors.transparent, // Remove highlight color
                                   ),
                                   child: ExpansionTile(
+                                    initiallyExpanded: true,
                                     childrenPadding: EdgeInsets.all(0),
                                     collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -527,7 +534,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                   child: Text(
                                                     textAlign: TextAlign.start,
                                                     maxLines: 2,
-                                                    controller.patientData.value?.responseData?.personalNote?.personalNote ?? "",
+                                                    controller.patientData.value?.responseData?.personalNote?.personalNote?.join("\n") ?? "",
                                                     // "He enjoys fishing and gardening. His wife's name is Julie.",
                                                     style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                   ),
@@ -537,8 +544,8 @@ class VisitMainView extends GetView<VisitMainController> {
                                                 ),
                                                 Text(
                                                   textAlign: TextAlign.center,
-                                                  controller.patientData.value?.responseData?.personalNote?.visitDate != null
-                                                      ? DateFormat('E MM/dd hh:mm a').format(DateTime.parse(controller.patientData.value?.responseData?.personalNote?.visitDate ?? "").toUtc())
+                                                  controller.patientData.value?.responseData?.visitDate != null
+                                                      ? DateFormat('E MM/dd hh:mm a').format(DateTime.parse(controller.patientData.value?.responseData?.visitDate ?? "").toUtc())
                                                       : "",
                                                   style: AppFonts.regular(12, AppColors.textDarkGrey),
                                                 ),
@@ -574,6 +581,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                         highlightColor: Colors.transparent, // Remove highlight color
                                       ),
                                       child: ExpansionTile(
+                                        initiallyExpanded: true,
                                         childrenPadding: EdgeInsets.all(0),
                                         shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                         collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -598,6 +606,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
                                                     child: CustomTable(
+                                                      physics: NeverScrollableScrollPhysics(),
                                                       rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
                                                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                                                         return colIndex == 2 && rowIndex != 0
@@ -628,38 +637,44 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                       GestureDetector(
                                                                         onTap: () {
                                                                           if (colIndex == 3) {
-                                                                            showDialog(
-                                                                              context: context,
-                                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                              builder: (BuildContext context) {
-                                                                                return ReschedulePatientDialog(
-                                                                                  receiveParam: (p0, p1) {
-                                                                                    customPrint("p0 is $p0 p1 is $p1");
-                                                                                    customPrint("row index is :- ${rowIndex}");
-                                                                                    customPrint(
-                                                                                        "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
-                                                                                    controller.patientReScheduleCreate(
-                                                                                        param: {"visit_date": p1, "visit_time": p0},
-                                                                                        visitId:
-                                                                                            controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
-                                                                                  },
-                                                                                ); // Our custom dialog
-                                                                              },
-                                                                            );
+                                                                            controller.isConnected.value
+                                                                                ? showDialog(
+                                                                                    context: context,
+                                                                                    barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                                    builder: (BuildContext context) {
+                                                                                      return ReschedulePatientDialog(
+                                                                                        receiveParam: (p0, p1) {
+                                                                                          customPrint("p0 is $p0 p1 is $p1");
+                                                                                          customPrint("row index is :- ${rowIndex}");
+                                                                                          customPrint(
+                                                                                              "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                                          controller.patientReScheduleCreate(
+                                                                                              param: {"visit_date": p1, "visit_time": p0},
+                                                                                              visitId:
+                                                                                                  controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ??
+                                                                                                      "-1");
+                                                                                        },
+                                                                                      ); // Our custom dialog
+                                                                                    },
+                                                                                  )
+                                                                                : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                                                           } else if (colIndex == 4) {
-                                                                            showDialog(
-                                                                              context: context,
-                                                                              barrierDismissible: true,
-                                                                              builder: (BuildContext context) {
-                                                                                // return SizedBox();
-                                                                                return DeleteScheduleVisit(
-                                                                                  onDelete: () {
-                                                                                    controller.deletePatientVisit(
-                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
-                                                                                  },
-                                                                                );
-                                                                              },
-                                                                            );
+                                                                            controller.isConnected.value
+                                                                                ? showDialog(
+                                                                                    context: context,
+                                                                                    barrierDismissible: true,
+                                                                                    builder: (BuildContext context) {
+                                                                                      // return SizedBox();
+                                                                                      return DeleteScheduleVisit(
+                                                                                        onDelete: () {
+                                                                                          controller.deletePatientVisit(
+                                                                                              id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ??
+                                                                                                  "");
+                                                                                        },
+                                                                                      );
+                                                                                    },
+                                                                                  )
+                                                                                : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                                                           }
                                                                           customPrint("col index is :- $colIndex");
                                                                         },
@@ -985,12 +1000,16 @@ class VisitMainView extends GetView<VisitMainController> {
                                       Spacer(),
                                       GestureDetector(
                                         onTap: () async {
-                                          var result = await Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
-                                            "attachmentList": controller.patientAttachmentList,
-                                          });
+                                          if (controller.isConnected.value) {
+                                            var result = await Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
+                                              "attachmentList": controller.patientAttachmentList,
+                                            });
 
-                                          if (result != null) {
-                                            controller.getPatientAttachment();
+                                            if (result != null) {
+                                              controller.getPatientAttachment();
+                                            }
+                                          } else {
+                                            CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                           }
                                         },
                                         child: Text(
@@ -1257,27 +1276,28 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                                 customPrint("attchmentUri is :- ${attchmentUri}");
                                                                                 controller.launchInAppWithBrowserOptions(attchmentUri);
                                                                               }
-                                                                              if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
-                                                                                showDialog(
-                                                                                  context: context,
-                                                                                  barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                                  builder: (BuildContext context) {
-                                                                                    return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
-                                                                                        ? ViewAttchmentImage(
-                                                                                            imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                                            attchmentUrl: '',
-                                                                                          )
-                                                                                        : ViewAttchmentImage(
-                                                                                            imageUrl: "",
-                                                                                            attchmentUrl:
-                                                                                                controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
-                                                                                  },
-                                                                                );
-                                                                              } else {
-                                                                                Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
-                                                                                customPrint("attchmentUri is :- ${attchmentUri}");
-                                                                                controller.launchInAppWithBrowserOptions(attchmentUri);
-                                                                              }
+
+                                                                              // if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                              //   showDialog(
+                                                                              //     context: context,
+                                                                              //     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                              //     builder: (BuildContext context) {
+                                                                              //       return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                              //           ? ViewAttchmentImage(
+                                                                              //               imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                              //               attchmentUrl: '',
+                                                                              //             )
+                                                                              //           : ViewAttchmentImage(
+                                                                              //               imageUrl: "",
+                                                                              //               attchmentUrl:
+                                                                              //                   controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                              //     },
+                                                                              //   );
+                                                                              // } else {
+                                                                              //   Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
+                                                                              //   customPrint("attchmentUri is :- ${attchmentUri}");
+                                                                              //   controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                              // }
 
                                                                               // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
                                                                               // } else {

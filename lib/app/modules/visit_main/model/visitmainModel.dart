@@ -76,6 +76,7 @@ class ResponseData {
     profileImage = json['profile_image'];
     age = json['age'];
     gender = json['gender'];
+
     // if (json['attachments'] != null) {
     //   attachments = <Null>[];
     //   json['attachments'].forEach((v) {});
@@ -109,7 +110,7 @@ class ResponseData {
 class PersonalNote {
   int? id;
   String? visitDate;
-  String? personalNote;
+  List<dynamic>? personalNote;
 
   PersonalNote({this.id, this.visitDate, this.personalNote});
 

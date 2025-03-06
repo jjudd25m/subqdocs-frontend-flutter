@@ -990,80 +990,86 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                   SizedBox(
                                                                     height: 10,
                                                                   ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          textAlign: TextAlign.left,
-                                                                          "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type}.",
-                                                                          style: AppFonts.bold(15, AppColors.textBlack),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  for (final details
-                                                                      in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details ?? [])
+                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type != "-") ...[
                                                                     Row(
                                                                       children: [
                                                                         Expanded(
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
-                                                                            "$details.",
+                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type}.",
+                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 10,
+                                                                    ),
+                                                                    for (final details
+                                                                        in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details ?? [])
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            child: Text(
+                                                                              textAlign: TextAlign.left,
+                                                                              "$details.",
+                                                                              style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                  ],
+                                                                  SizedBox(height: 10),
+                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications != "-") ...[
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.left,
+                                                                            "Medications",
+                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.left,
+                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications}.",
                                                                             style: AppFonts.regular(15, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),
                                                                       ],
                                                                     ),
+                                                                  ],
                                                                   SizedBox(height: 10),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          textAlign: TextAlign.left,
-                                                                          "Medications",
-                                                                          style: AppFonts.bold(15, AppColors.textBlack),
+                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders != "-") ...[
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.left,
+                                                                            "Orders:",
+                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          textAlign: TextAlign.left,
-                                                                          "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications}.",
-                                                                          style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.left,
+                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders}.",
+                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(height: 10),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          textAlign: TextAlign.left,
-                                                                          "Orders:",
-                                                                          style: AppFonts.bold(15, AppColors.textBlack),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          textAlign: TextAlign.left,
-                                                                          "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders}.",
-                                                                          style: AppFonts.regular(15, AppColors.textDarkGrey),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(height: 10),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(height: 10),
+                                                                  ],
                                                                   Row(
                                                                     children: [
                                                                       Expanded(

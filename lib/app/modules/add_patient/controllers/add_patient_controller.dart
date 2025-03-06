@@ -294,6 +294,8 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> clearForm() async {
+    // selectedVisitTime.value = "";
+    selectedVisitTimeValue.value = null;
     patientId.clear();
     firstNameController.clear();
     middleNameController.clear();
@@ -302,9 +304,9 @@ class AddPatientController extends GetxController {
     emailAddressController.clear();
     visitDateController.clear();
     formKey.currentState!.reset();
-
     list.clear();
     selectedList.clear();
+    profileImage.value = null;
   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {

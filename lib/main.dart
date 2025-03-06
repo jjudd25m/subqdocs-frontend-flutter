@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:subqdocs/app/data/service/socket_service.dart';
 import 'package:toastification/toastification.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'app/core/common/app_preferences.dart';
 import 'app/core/common/global_controller.dart';
@@ -15,6 +16,8 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreference.instance.init();
+
+  WakelockPlus.enable();
 
   socketService.socket.onConnect((_) {
     print('connect');

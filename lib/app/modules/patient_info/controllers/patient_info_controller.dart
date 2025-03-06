@@ -97,6 +97,7 @@ class PatientInfoController extends GetxController {
     if (Get.arguments["trascriptUploadData"] != null) {
       patientTranscriptUploadModel = Get.arguments["trascriptUploadData"];
       visitId = patientTranscriptUploadModel.responseData!.visitId.toString();
+      getPatientDetails();
       customPrint("patientTranscriptUploadModel data is:- \n \n ${patientTranscriptUploadModel.toJson()}");
     }
   }
@@ -377,12 +378,15 @@ class PatientInfoController extends GetxController {
 
     var fullTransScriptResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.fullTranscript, visitId: visitId, responseData: responseData);
 
+    var patientDetailsResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.visitMainData, visitId: visitId, responseData: responseData);
     var patientViewResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.patientView, visitId: visitId, responseData: responseData);
     doctorViewList.value = DoctorViewModel.fromJson(doctorViewResponse);
+
     patientFullNoteModel.value = PatientFullNoteModel.fromJson(fullNoteResponse);
     patientDoctorVisitDataModel.value = PatientDoctorVisitDataModel.fromJson(visitDataResponse);
     transcriptListModel.value = TranscriptListModel.fromJson(fullTransScriptResponse);
     patientViewListModel.value = PatientViewListModel.fromJson(patientViewResponse);
+    patientData.value = VisitMainPatientDetails.fromJson(patientDetailsResponse);
   }
 
   Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {

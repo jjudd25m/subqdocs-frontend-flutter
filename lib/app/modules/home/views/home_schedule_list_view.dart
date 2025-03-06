@@ -31,11 +31,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                     onBtnPress: () async {
                       final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                      if (result == 1) {
-                        controller.getPastVisitList();
-                        controller.getScheduleVisitList();
-                        controller.getPatientList();
-                      }
+                      controller.getPastVisitList();
+                      controller.getScheduleVisitList();
+                      controller.getPatientList();
                     },
                     title: "Your Schedule Visits List is Empty",
                     description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),

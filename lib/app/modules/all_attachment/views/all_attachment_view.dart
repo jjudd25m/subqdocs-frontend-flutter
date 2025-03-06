@@ -17,6 +17,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../core/common/common_service.dart';
+import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/all_attachment_controller.dart';
 
@@ -175,19 +176,74 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                               borderRadius: BorderRadius.circular(8),
                                                             ),
                                                             padding: const EdgeInsets.only(bottom: Dimen.margin2),
-                                                            child: ClipRRect(
-                                                              borderRadius: BorderRadius.circular(8),
-                                                              child: Container(
-                                                                color: AppColors.backgroundPdfAttchment,
-                                                                width: 120,
-                                                                height: 120,
-                                                                child: Center(
-                                                                  child: BaseImageView(
-                                                                    imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
-                                                                    width: 120,
-                                                                    height: 120,
-                                                                    errorWidget: Image.asset(
-                                                                      ImagePath.file_placeHolder,
+                                                            child: GestureDetector(
+                                                              onTap: () {
+                                                                customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+
+                                                                if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                  showDialog(
+                                                                    context: context,
+                                                                    barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                    builder: (BuildContext context) {
+                                                                      return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                          ? ViewAttchmentImage(
+                                                                              imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                              attchmentUrl: '',
+                                                                            )
+                                                                          : ViewAttchmentImage(
+                                                                              imageUrl: "",
+                                                                              attchmentUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                    },
+                                                                  );
+                                                                } else {
+                                                                  Uri attchmentUri = Uri.parse(controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "");
+                                                                  customPrint("attchmentUri is :- ${attchmentUri}");
+                                                                  controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                }
+
+                                                                // if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                //   showDialog(
+                                                                //     context: context,
+                                                                //     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                //     builder: (BuildContext context) {
+                                                                //       return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                //           ? ViewAttchmentImage(
+                                                                //               imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
+                                                                //               attchmentUrl: '',
+                                                                //             )
+                                                                //           : ViewAttchmentImage(
+                                                                //               imageUrl: "",
+                                                                //               attchmentUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? ""); // Our custom dialog
+                                                                //     },
+                                                                //   );
+                                                                // } else {
+                                                                //   Uri attchmentUri = Uri.parse(controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "");
+                                                                //   customPrint("attchmentUri is :- ${attchmentUri}");
+                                                                //   controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                // }
+
+                                                                // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
+                                                                // } else {
+                                                                //   FullscreenImageViewer.open(
+                                                                //     context: context,
+                                                                //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
+                                                                //   );
+                                                                // }
+                                                              },
+                                                              child: ClipRRect(
+                                                                borderRadius: BorderRadius.circular(8),
+                                                                child: Container(
+                                                                  color: AppColors.backgroundPdfAttchment,
+                                                                  width: 120,
+                                                                  height: 120,
+                                                                  child: Center(
+                                                                    child: BaseImageView(
+                                                                      imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
+                                                                      width: 120,
+                                                                      height: 120,
+                                                                      errorWidget: Image.asset(
+                                                                        ImagePath.file_placeHolder,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -273,16 +329,16 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                              builder: (BuildContext context) {
-                                return ViewAttchmentImage(
-                                  imageUrl: '',
-                                  attchmentUrl: '',
-                                ); // Our custom dialog
-                              },
-                            );
+                            // showDialog(
+                            //   context: context,
+                            //   barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                            //   builder: (BuildContext context) {
+                            //     return ViewAttchmentImage(
+                            //       imageUrl: '',
+                            //       attchmentUrl: '',
+                            //     ); // Our custom dialog
+                            //   },
+                            // );
                           },
                           child: Container(
                             height: 100,
