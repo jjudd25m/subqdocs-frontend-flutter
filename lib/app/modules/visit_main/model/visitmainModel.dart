@@ -109,7 +109,7 @@ class ResponseData {
 class PersonalNote {
   int? id;
   String? visitDate;
-  List<dynamic>? personalNote;
+  String? personalNote;
 
   PersonalNote({this.id, this.visitDate, this.personalNote});
 

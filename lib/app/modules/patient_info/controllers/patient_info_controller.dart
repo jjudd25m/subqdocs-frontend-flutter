@@ -63,6 +63,7 @@ class PatientInfoController extends GetxController {
 
   Future<void> getPatientDetails() async {
     patientData.value = await _visitMainRepository.getPatientDetails(id: visitId);
+    print("patient data is :- ${patientData.value?.toJson()}");
     // Get.back();Get
     // back  customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
@@ -111,8 +112,7 @@ class PatientInfoController extends GetxController {
       if (socketService.socket.connected) {
         customPrint("socket is connected");
 
-        socketService.socket
-            .emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
+        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
         socketService.socket.on(
           "AllTabStatus",
@@ -254,8 +254,7 @@ class PatientInfoController extends GetxController {
             String status = res["status"];
             String message = res["message"];
 
-            customPrint(
-                "$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("PatientViewStatus inside condition");
@@ -293,8 +292,7 @@ class PatientInfoController extends GetxController {
             String status = res["status"];
             String message = res["message"];
 
-            customPrint(
-                "$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("transcriptStatus inside condition");
@@ -371,35 +369,15 @@ class PatientInfoController extends GetxController {
   void offLine() {
     var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
 
-    var doctorViewResponse = fetchVisitDetails(
-        type: AppString.pastPatientVisitsList,
-        modelType: AppString.doctorView,
-        visitId: visitId,
-        responseData: responseData);
+    var doctorViewResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.doctorView, visitId: visitId, responseData: responseData);
 
-    var fullNoteResponse = fetchVisitDetails(
-        type: AppString.pastPatientVisitsList,
-        modelType: AppString.fullNote,
-        visitId: visitId,
-        responseData: responseData);
+    var fullNoteResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.fullNote, visitId: visitId, responseData: responseData);
 
-    var visitDataResponse = fetchVisitDetails(
-        type: AppString.pastPatientVisitsList,
-        modelType: AppString.patientVisitDetails,
-        visitId: visitId,
-        responseData: responseData);
+    var visitDataResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.patientVisitDetails, visitId: visitId, responseData: responseData);
 
-    var fullTransScriptResponse = fetchVisitDetails(
-        type: AppString.pastPatientVisitsList,
-        modelType: AppString.fullTranscript,
-        visitId: visitId,
-        responseData: responseData);
+    var fullTransScriptResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.fullTranscript, visitId: visitId, responseData: responseData);
 
-    var patientViewResponse = fetchVisitDetails(
-        type: AppString.pastPatientVisitsList,
-        modelType: AppString.patientView,
-        visitId: visitId,
-        responseData: responseData);
+    var patientViewResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.patientView, visitId: visitId, responseData: responseData);
     doctorViewList.value = DoctorViewModel.fromJson(doctorViewResponse);
     patientFullNoteModel.value = PatientFullNoteModel.fromJson(fullNoteResponse);
     patientDoctorVisitDataModel.value = PatientDoctorVisitDataModel.fromJson(visitDataResponse);
@@ -407,11 +385,7 @@ class PatientInfoController extends GetxController {
     patientViewListModel.value = PatientViewListModel.fromJson(patientViewResponse);
   }
 
-  Map<String, dynamic> fetchVisitDetails(
-      {required Map<String, dynamic> responseData,
-      required String type,
-      required String visitId,
-      required String modelType}) {
+  Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {
     // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
     List<dynamic> visitList = responseData['responseData'][type];
 
@@ -434,12 +408,7 @@ class PatientInfoController extends GetxController {
     }
 
     // Return the formatted response
-    return {
-      "responseData": responseDataResult,
-      "message": " Details Fetched Successfully",
-      "toast": true,
-      "response_type": "success"
-    };
+    return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
   }
 
   void handelInternetConnection() {

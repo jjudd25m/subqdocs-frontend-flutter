@@ -527,7 +527,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                   child: Text(
                                                     textAlign: TextAlign.start,
                                                     maxLines: 2,
-                                                    controller.patientData.value?.responseData?.personalNote?.personalNote?.join(" \n") ?? "",
+                                                    controller.patientData.value?.responseData?.personalNote?.personalNote ?? "",
                                                     // "He enjoys fishing and gardening. His wife's name is Julie.",
                                                     style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                   ),

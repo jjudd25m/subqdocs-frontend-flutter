@@ -90,28 +90,21 @@ class DoctorView extends GetView<PatientInfoController> {
                                 border: TableBorder.all(
                                   color: AppColors.buttonBackgroundGrey, // Table border color
                                   width: 1, // Border width
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(5),
-                                      topRight: Radius.circular(5)), // Optional rounded corners
+                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
                                 ),
                                 columnWidths: {
                                   0: FractionColumnWidth(0.35), // Fixed width for "Procedure" column
                                   1: FractionColumnWidth(0.35), // Fixed width for "Diagnosis" column
                                   2: FractionColumnWidth(0.15), // Flexible width for "Unit" column (20% of screen)
-                                  3: FractionColumnWidth(
-                                      0.15), // Flexible width for "Unit charges" column (40% of screen)
+                                  3: FractionColumnWidth(0.15), // Flexible width for "Unit charges" column (40% of screen)
                                 },
-                                children: controller.doctorViewList.value?.responseData != null
-                                    ? _getTableRows(controller.doctorViewList.value!.responseData!)
-                                    : [],
+                                children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
                               ),
                               Table(
                                 border: TableBorder.all(
                                   color: AppColors.buttonBackgroundGrey, // Table border color
                                   width: 1, // Border width
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(5),
-                                      bottomRight: Radius.circular(5)), // Optional rounded corners
+                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
                                 ),
                                 columnWidths: {
                                   0: FractionColumnWidth(0.85), // Fixed width for "Procedure" column
@@ -124,8 +117,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                     ),
                                     children: [
                                       _headerBuildTableCell('Total'),
-                                      _headerBuildTableCell(
-                                          "\$${controller.doctorViewList.value?.responseData?.totalCharges}"),
+                                      _headerBuildTableCell("\$${controller.doctorViewList.value?.responseData?.totalCharges}"),
                                     ],
                                   ),
                                   // Add more rows if needed
@@ -207,8 +199,7 @@ class DoctorView extends GetView<PatientInfoController> {
                             controller.tasks.insert(newIndex, task);
                           },
                           children: [
-                            for (ImpressionsAndPlan task
-                                in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
+                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
                               Container(
                                 key: ValueKey(task),
                                 child: Column(
@@ -216,16 +207,16 @@ class DoctorView extends GetView<PatientInfoController> {
                                   children: [
                                     Row(
                                       children: [
-                                        SvgPicture.asset(
-                                          ImagePath.reorder,
-                                          height: 15,
-                                          width: 10,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
+                                        // SvgPicture.asset(
+                                        //   ImagePath.reorder,
+                                        //   height: 15,
+                                        //   width: 10,
+                                        // ),
+                                        // SizedBox(
+                                        //   width: 10,
+                                        // ),
                                         Text(
-                                          textAlign: TextAlign.center,
+                                          textAlign: TextAlign.left,
                                           "${task.number} ${task.title}",
                                           style: AppFonts.medium(14, AppColors.textPurple),
                                         ),
@@ -234,11 +225,12 @@ class DoctorView extends GetView<PatientInfoController> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 25),
                                       child: Text(
-                                        textAlign: TextAlign.center,
+                                        textAlign: TextAlign.left,
                                         task.description ?? "",
                                         style: AppFonts.regular(14, AppColors.black),
                                       ),
                                     ),
+                                    SizedBox(height: 10),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -256,6 +248,9 @@ class DoctorView extends GetView<PatientInfoController> {
                                               padding: const EdgeInsets.symmetric(horizontal: 20),
                                               child: Column(
                                                 children: [
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
                                                   Row(
                                                     children: [
                                                       SizedBox(
@@ -264,19 +259,18 @@ class DoctorView extends GetView<PatientInfoController> {
                                                       Expanded(
                                                         child: Text(
                                                           " ${treatments.type} ${treatments.name} \n",
-                                                          style: AppFonts.regular(14, AppColors.textGrey),
+                                                          style: AppFonts.regular(14, AppColors.textBlack),
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                   Column(
                                                     children: [
-                                                      for (Specifications specifications
-                                                          in treatments.specifications ?? [])
+                                                      for (Specifications specifications in treatments.specifications ?? [])
                                                         Row(
                                                           children: [
                                                             SizedBox(
-                                                              width: 10,
+                                                              width: 5,
                                                             ),
                                                             Expanded(
                                                               child: Text(
@@ -287,7 +281,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                             )
                                                           ],
                                                         ),
-                                                      SizedBox(height: 10),
+                                                      SizedBox(height: 5),
                                                       for (String note in treatments.notes ?? [])
                                                         Padding(
                                                           padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -328,11 +322,14 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                             ),
                                         ],
+                                        SizedBox(
+                                          height: 10,
+                                        ),
                                         if (task.procedure != null) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
-                                              textAlign: TextAlign.center,
+                                              textAlign: TextAlign.left,
                                               task.procedure?.type != null ? "${task.procedure?.type}:" : "",
                                               style: AppFonts.bold(16, AppColors.black),
                                             ),
@@ -345,12 +342,12 @@ class DoctorView extends GetView<PatientInfoController> {
                                                   Row(
                                                     children: [
                                                       SizedBox(
-                                                        width: 10,
+                                                        width: 0,
                                                       ),
                                                       Expanded(
                                                         child: Text(
-                                                          textAlign: TextAlign.center,
-                                                          " $details \n",
+                                                          textAlign: TextAlign.left,
+                                                          " $details",
                                                           style: AppFonts.regular(14, AppColors.black),
                                                         ),
                                                       ),
@@ -363,41 +360,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                             ),
                                         ],
-                                        if ((task.orders ?? []).isNotEmpty) ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.center,
-                                              "Orders:",
-                                              style: AppFonts.bold(15, AppColors.black),
-                                            ),
-                                          ),
-                                          for (var details in task.orders ?? [])
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          " $details \n",
-                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                        ],
-                                        if ((task.medications ?? []).isNotEmpty) ...[
+                                        SizedBox(height: 10),
+                                        if (task.medications?.isNotEmpty ?? false) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -406,33 +370,46 @@ class DoctorView extends GetView<PatientInfoController> {
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
-                                          for (Map medication in task.medications ?? [])
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          textAlign: TextAlign.center,
-                                                          " ${medication['name'] ?? ""} - ${medication['dosage'] ?? ""} \n",
-                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                ],
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 25,
                                               ),
-                                            ),
+                                              Expanded(
+                                                child: Text(
+                                                  " ${task.medications}",
+                                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
-                                        if ((task.counselingAndDiscussion ?? []).isNotEmpty) ...[
+                                        SizedBox(height: 10),
+                                        if (task.orders?.isNotEmpty ?? false) ...[
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 25),
+                                            child: Text(
+                                              textAlign: TextAlign.center,
+                                              "Orders:",
+                                              style: AppFonts.bold(15, AppColors.black),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 25,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  " ${task.orders}",
+                                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                        SizedBox(height: 10),
+                                        if (task.counselingAndDiscussion?.isNotEmpty ?? false) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -441,32 +418,22 @@ class DoctorView extends GetView<PatientInfoController> {
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
-                                          for (var counseling in task.counselingAndDiscussion ?? [])
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          "$counseling \n",
-                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                ],
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 25,
                                               ),
-                                            ),
+                                              Expanded(
+                                                child: Text(
+                                                  " ${task.counselingAndDiscussion}",
+                                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
-                                        if ((task.followUp ?? "").isNotEmpty) ...[
+                                        SizedBox(height: 10),
+                                        if (task.followUp?.isNotEmpty ?? false) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -475,30 +442,122 @@ class DoctorView extends GetView<PatientInfoController> {
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        task.followUp ?? "",
-                                                        style: AppFonts.regular(14, AppColors.textGrey),
-                                                      ),
-                                                    ),
-                                                  ],
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 25,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  " ${task.followUp}",
+                                                  style: AppFonts.regular(14, AppColors.textBlack),
                                                 ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ]
+                                        ],
+                                        // if ((task.medications ?? []).isNotEmpty) ...[
+                                        //   Padding(
+                                        //     padding: const EdgeInsets.only(left: 25),
+                                        //     child: Text(
+                                        //       textAlign: TextAlign.center,
+                                        //       "Medications:",
+                                        //       style: AppFonts.bold(15, AppColors.black),
+                                        //     ),
+                                        //   ),
+                                        //   for (Map medication in task.medications ?? [])
+                                        //     Padding(
+                                        //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        //       child: Column(
+                                        //         children: [
+                                        //           Row(
+                                        //             children: [
+                                        //               SizedBox(
+                                        //                 width: 10,
+                                        //               ),
+                                        //               Expanded(
+                                        //                 child: Text(
+                                        //                   textAlign: TextAlign.center,
+                                        //                   " ${medication['name'] ?? ""} - ${medication['dosage'] ?? ""} \n",
+                                        //                   style: AppFonts.regular(14, AppColors.textGrey),
+                                        //                 ),
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //           SizedBox(
+                                        //             width: 10,
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        // ],
+                                        // if ((task.counselingAndDiscussion ?? []).isNotEmpty) ...[
+                                        //   Padding(
+                                        //     padding: const EdgeInsets.only(left: 25),
+                                        //     child: Text(
+                                        //       textAlign: TextAlign.center,
+                                        //       "Counseling and Discussion:",
+                                        //       style: AppFonts.bold(15, AppColors.black),
+                                        //     ),
+                                        //   ),
+                                        //   for (var counseling in task.counselingAndDiscussion ?? [])
+                                        //     Padding(
+                                        //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        //       child: Column(
+                                        //         children: [
+                                        //           Row(
+                                        //             children: [
+                                        //               SizedBox(
+                                        //                 width: 10,
+                                        //               ),
+                                        //               Expanded(
+                                        //                 child: Text(
+                                        //                   "$counseling \n",
+                                        //                   style: AppFonts.regular(14, AppColors.textGrey),
+                                        //                 ),
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //           SizedBox(
+                                        //             width: 10,
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        // ],
+                                        // if ((task.followUp ?? "").isNotEmpty) ...[
+                                        //   Padding(
+                                        //     padding: const EdgeInsets.only(left: 25),
+                                        //     child: Text(
+                                        //       textAlign: TextAlign.center,
+                                        //       "Follow Up:",
+                                        //       style: AppFonts.bold(15, AppColors.black),
+                                        //     ),
+                                        //   ),
+                                        //   Padding(
+                                        //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        //     child: Column(
+                                        //       children: [
+                                        //         Row(
+                                        //           children: [
+                                        //             SizedBox(
+                                        //               width: 10,
+                                        //             ),
+                                        //             Expanded(
+                                        //               child: Text(
+                                        //                 task.followUp ?? "",
+                                        //                 style: AppFonts.regular(14, AppColors.textGrey),
+                                        //               ),
+                                        //             ),
+                                        //           ],
+                                        //         ),
+                                        //         SizedBox(
+                                        //           width: 10,
+                                        //         ),
+                                        //       ],
+                                        //     ),
+                                        //   ),
+                                        // ]
                                       ],
                                     ),
                                     SizedBox(
@@ -535,8 +594,7 @@ class DoctorView extends GetView<PatientInfoController> {
   Widget _buildTableCell(String text, bool isTotal) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child:
-          Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
+      child: Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
     );
   }
 
@@ -555,6 +613,8 @@ class DoctorView extends GetView<PatientInfoController> {
       ],
     ));
 
+    print("procedure List is :- ${patients.diagnosisCodesProcedures}");
+
     // Iterate over each diagnosis procedure data
     for (DiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures ?? []) {
       // Ensure each row has exactly 4 children
@@ -564,9 +624,7 @@ class DoctorView extends GetView<PatientInfoController> {
             color: AppColors.white, // Background color for row (you can alternate rows if needed)
           ),
           children: [
-            _buildTableCell(
-                "${diagnosis.diagnosisCodesProceduresProcedure?.code ?? 'No code'} \n ${diagnosis.diagnosisCodesProceduresProcedure?.description ?? 'No description'}",
-                false),
+            _buildTableCell("${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}", false),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(
@@ -596,20 +654,22 @@ class DoctorView extends GetView<PatientInfoController> {
                                               recognizer: TapGestureRecognizer()..onTap = () {},
                                               style: AppFonts.regular(14, AppColors.black),
                                             ),
-                                            WidgetSpan(
-                                              alignment: PlaceholderAlignment.middle,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                                decoration: BoxDecoration(
-                                                  color: AppColors.lightgreenPastVisit, // Background color
-                                                  borderRadius: BorderRadius.circular(8), // Corner radius
-                                                ),
-                                                child: Text(
-                                                  diagnosis.diagnosis?[index].confidenceScore ?? "",
-                                                  style: AppFonts.regular(14, AppColors.greenPastVisit), // Text color
+                                            if (diagnosis.diagnosis?[index].confidenceScore?.isNotEmpty ?? false) ...[
+                                              WidgetSpan(
+                                                alignment: PlaceholderAlignment.middle,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.lightgreenPastVisit, // Background color
+                                                    borderRadius: BorderRadius.circular(8), // Corner radius
+                                                  ),
+                                                  child: Text(
+                                                    diagnosis.diagnosis?[index].confidenceScore ?? "",
+                                                    style: AppFonts.regular(14, AppColors.greenPastVisit), // Text color
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                            ]
                                           ],
                                         ),
                                         textAlign: TextAlign.left,

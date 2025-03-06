@@ -161,6 +161,182 @@
 //     return data;
 //   }
 // }
+//---------------------------------------------------------------------
+// class PatientFullNoteModel {
+//   ResponseData? responseData;
+//   String? message;
+//   bool? toast;
+//   String? responseType;
+//
+//   PatientFullNoteModel({this.responseData, this.message, this.toast, this.responseType});
+//
+//   PatientFullNoteModel.fromJson(Map<String, dynamic> json) {
+//     responseData = json['responseData'] != null ? ResponseData.fromJson(json['responseData']) : null;
+//     message = json['message'];
+//     toast = json['toast'];
+//     responseType = json['response_type'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     if (responseData != null) {
+//       data['responseData'] = responseData!.toJson();
+//     }
+//     data['message'] = message;
+//     data['toast'] = toast;
+//     data['response_type'] = responseType;
+//     return data;
+//   }
+// }
+//
+// class ResponseData {
+//   int? id;
+//   String? status;
+//   FullNoteDetails? fullNoteDetails;
+//
+//   ResponseData({this.id, this.status, this.fullNoteDetails});
+//
+//   ResponseData.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     status = json['status'];
+//     fullNoteDetails = json['full_note_details'] != null ? FullNoteDetails.fromJson(json['full_note_details']) : null;
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['id'] = id;
+//     data['status'] = status;
+//     if (fullNoteDetails != null) {
+//       data['full_note_details'] = fullNoteDetails!.toJson();
+//     }
+//     return data;
+//   }
+// }
+//
+// class FullNoteDetails {
+//   List<String>? cancerHistory;
+//   List<String>? skinHistory;
+//   List<String>? socialHistory;
+//   List<Medications>? medications;
+//   List<String>? allergies;
+//   String? chiefComplain;
+//   String? hpi;
+//   List<String>? reviewOfSystem;
+//   List<String>? exam;
+//   List<ImpressionsAndPlan>? impressionsAndPlan;
+//
+//   FullNoteDetails(
+//       {this.cancerHistory,
+//       this.skinHistory,
+//       this.socialHistory,
+//       this.medications,
+//       this.allergies,
+//       this.chiefComplain,
+//       this.hpi,
+//       this.reviewOfSystem,
+//       this.exam,
+//       this.impressionsAndPlan});
+//
+//   FullNoteDetails.fromJson(Map<String, dynamic> json) {
+//     if (json['cancer_history'] != null) {
+//       cancerHistory = json['cancer_history'].cast<String>();
+//       // json['cancer_history'].forEach((v) {
+//       //   cancerHistory!.add(new Null.fromJson(v));
+//       // });
+//     }
+//     skinHistory = json['skin_history'].cast<String>();
+//     if (json['social_history'] != null) {
+//       socialHistory = json['social_history'].cast<String>();
+//       // json['social_history'].forEach((v) {
+//       //   socialHistory!.add(new Null.fromJson(v));
+//       // });
+//     }
+//     if (json['medications'] != null) {
+//       medications = <Medications>[];
+//       json['medications'].forEach((v) {
+//         medications!.add(Medications.fromJson(v));
+//       });
+//     }
+//     allergies = json['allergies'].cast<String>();
+//     chiefComplain = json['chief_complain'];
+//     hpi = json['hpi'];
+//     reviewOfSystem = json['review_of_system'].cast<String>();
+//     exam = json['exam'].cast<String>();
+//     if (json['impressions_and_plan'] != null) {
+//       impressionsAndPlan = <ImpressionsAndPlan>[];
+//       json['impressions_and_plan'].forEach((v) {
+//         impressionsAndPlan!.add(ImpressionsAndPlan.fromJson(v));
+//       });
+//     }
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     if (cancerHistory != null) {
+//       data['cancer_history'] = cancerHistory;
+//     }
+//     data['skin_history'] = skinHistory;
+//     if (socialHistory != null) {
+//       data['social_history'] = socialHistory;
+//     }
+//     if (medications != null) {
+//       data['medications'] = medications!.map((v) => v.toJson()).toList();
+//     }
+//     data['allergies'] = allergies;
+//     data['chief_complain'] = chiefComplain;
+//     data['hpi'] = hpi;
+//     data['review_of_system'] = reviewOfSystem;
+//     data['exam'] = exam;
+//     if (impressionsAndPlan != null) {
+//       data['impressions_and_plan'] = impressionsAndPlan!.map((v) => v.toJson()).toList();
+//     }
+//     return data;
+//   }
+// }
+//
+// class Medications {
+//   String? name;
+//   String? dosage;
+//
+//   Medications({this.name, this.dosage});
+//
+//   Medications.fromJson(Map<String, dynamic> json) {
+//     name = json['name'];
+//     dosage = json['dosage'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['name'] = name;
+//     data['dosage'] = dosage;
+//     return data;
+//   }
+// }
+//
+// class ImpressionsAndPlan {
+//   String? number;
+//   String? title;
+//   String? code;
+//   String? description;
+//
+//   ImpressionsAndPlan({this.number, this.title, this.code, this.description});
+//
+//   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
+//     number = json['number'];
+//     title = json['title'];
+//     code = json['code'];
+//     description = json['description'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['number'] = number;
+//     data['title'] = title;
+//     data['code'] = code;
+//     data['description'] = description;
+//     return data;
+//   }
+// }
 
 class PatientFullNoteModel {
   ResponseData? responseData;
@@ -214,54 +390,34 @@ class ResponseData {
 }
 
 class FullNoteDetails {
-  List<String>? cancerHistory;
-  List<String>? skinHistory;
-  List<String>? socialHistory;
+  String? cancerHistory;
+  String? skinHistory;
+  String? socialHistory;
   List<Medications>? medications;
-  List<String>? allergies;
+  String? allergies;
   String? chiefComplain;
   String? hpi;
-  List<String>? reviewOfSystem;
-  List<String>? exam;
+  ReviewOfSystem? reviewOfSystem;
+  String? exam;
   List<ImpressionsAndPlan>? impressionsAndPlan;
 
-  FullNoteDetails(
-      {this.cancerHistory,
-      this.skinHistory,
-      this.socialHistory,
-      this.medications,
-      this.allergies,
-      this.chiefComplain,
-      this.hpi,
-      this.reviewOfSystem,
-      this.exam,
-      this.impressionsAndPlan});
+  FullNoteDetails({this.cancerHistory, this.skinHistory, this.socialHistory, this.medications, this.allergies, this.chiefComplain, this.hpi, this.reviewOfSystem, this.exam, this.impressionsAndPlan});
 
   FullNoteDetails.fromJson(Map<String, dynamic> json) {
-    if (json['cancer_history'] != null) {
-      cancerHistory = json['cancer_history'].cast<String>();
-      // json['cancer_history'].forEach((v) {
-      //   cancerHistory!.add(new Null.fromJson(v));
-      // });
-    }
-    skinHistory = json['skin_history'].cast<String>();
-    if (json['social_history'] != null) {
-      socialHistory = json['social_history'].cast<String>();
-      // json['social_history'].forEach((v) {
-      //   socialHistory!.add(new Null.fromJson(v));
-      // });
-    }
+    cancerHistory = json['cancer_history'];
+    skinHistory = json['skin_history'];
+    socialHistory = json['social_history'];
     if (json['medications'] != null) {
       medications = <Medications>[];
       json['medications'].forEach((v) {
         medications!.add(Medications.fromJson(v));
       });
     }
-    allergies = json['allergies'].cast<String>();
+    allergies = json['allergies'];
     chiefComplain = json['chief_complain'];
     hpi = json['hpi'];
-    reviewOfSystem = json['review_of_system'].cast<String>();
-    exam = json['exam'].cast<String>();
+    reviewOfSystem = json['review_of_system'] != null ? ReviewOfSystem.fromJson(json['review_of_system']) : null;
+    exam = json['exam'];
     if (json['impressions_and_plan'] != null) {
       impressionsAndPlan = <ImpressionsAndPlan>[];
       json['impressions_and_plan'].forEach((v) {
@@ -272,20 +428,18 @@ class FullNoteDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (cancerHistory != null) {
-      data['cancer_history'] = cancerHistory;
-    }
+    data['cancer_history'] = cancerHistory;
     data['skin_history'] = skinHistory;
-    if (socialHistory != null) {
-      data['social_history'] = socialHistory;
-    }
+    data['social_history'] = socialHistory;
     if (medications != null) {
       data['medications'] = medications!.map((v) => v.toJson()).toList();
     }
     data['allergies'] = allergies;
     data['chief_complain'] = chiefComplain;
     data['hpi'] = hpi;
-    data['review_of_system'] = reviewOfSystem;
+    if (reviewOfSystem != null) {
+      data['review_of_system'] = reviewOfSystem!.toJson();
+    }
     data['exam'] = exam;
     if (impressionsAndPlan != null) {
       data['impressions_and_plan'] = impressionsAndPlan!.map((v) => v.toJson()).toList();
@@ -295,20 +449,54 @@ class FullNoteDetails {
 }
 
 class Medications {
-  String? name;
+  String? title;
   String? dosage;
+  String? purpose;
 
-  Medications({this.name, this.dosage});
+  Medications({this.title, this.dosage, this.purpose});
 
   Medications.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
+    title = json['title'];
     dosage = json['dosage'];
+    purpose = json['purpose'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
+    data['title'] = title;
     data['dosage'] = dosage;
+    data['purpose'] = purpose;
+    return data;
+  }
+}
+
+class ReviewOfSystem {
+  String? constitutional;
+  String? skin;
+  String? respiratory;
+  String? cardiovascular;
+  String? allergicImmunologic;
+  String? other;
+
+  ReviewOfSystem({this.constitutional, this.skin, this.respiratory, this.cardiovascular, this.allergicImmunologic, this.other});
+
+  ReviewOfSystem.fromJson(Map<String, dynamic> json) {
+    constitutional = json['Constitutional'];
+    skin = json['Skin'];
+    respiratory = json['Respiratory'];
+    cardiovascular = json['Cardiovascular'];
+    allergicImmunologic = json['Allergic/Immunologic'];
+    other = json['Other'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['Constitutional'] = constitutional;
+    data['Skin'] = skin;
+    data['Respiratory'] = respiratory;
+    data['Cardiovascular'] = cardiovascular;
+    data['Allergic/Immunologic'] = allergicImmunologic;
+    data['Other'] = other;
     return data;
   }
 }
@@ -318,14 +506,24 @@ class ImpressionsAndPlan {
   String? title;
   String? code;
   String? description;
+  Procedure? procedure;
+  String? medications;
+  String? orders;
+  String? counselingAndDiscussion;
+  String? followUp;
 
-  ImpressionsAndPlan({this.number, this.title, this.code, this.description});
+  ImpressionsAndPlan({this.number, this.title, this.code, this.description, this.procedure, this.medications, this.orders, this.counselingAndDiscussion, this.followUp});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     title = json['title'];
     code = json['code'];
     description = json['description'];
+    procedure = json['procedure'] != null ? Procedure.fromJson(json['procedure']) : null;
+    medications = json['medications'];
+    orders = json['orders'];
+    counselingAndDiscussion = json['counseling_and_discussion'];
+    followUp = json['follow_up'];
   }
 
   Map<String, dynamic> toJson() {
@@ -334,6 +532,32 @@ class ImpressionsAndPlan {
     data['title'] = title;
     data['code'] = code;
     data['description'] = description;
+    if (procedure != null) {
+      data['procedure'] = procedure!.toJson();
+    }
+    data['medications'] = medications;
+    data['orders'] = orders;
+    data['counseling_and_discussion'] = counselingAndDiscussion;
+    data['follow_up'] = followUp;
+    return data;
+  }
+}
+
+class Procedure {
+  String? type;
+  List<String>? details;
+
+  Procedure({this.type, this.details});
+
+  Procedure.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    details = json['details'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['details'] = details;
     return data;
   }
 }
