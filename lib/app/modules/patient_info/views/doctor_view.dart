@@ -217,7 +217,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                         // ),
                                         Text(
                                           textAlign: TextAlign.left,
-                                          "${task.number} ${task.title}",
+                                          "${task.number}. ${task.title} (${task.code})",
                                           style: AppFonts.medium(14, AppColors.textPurple),
                                         ),
                                       ],
@@ -245,24 +245,27 @@ class DoctorView extends GetView<PatientInfoController> {
                                           ),
                                           for (Treatments treatments in task.treatments ?? [])
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                                              padding: const EdgeInsets.symmetric(horizontal: 10),
                                               child: Column(
                                                 children: [
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          " ${treatments.type} ${treatments.name} \n",
-                                                          style: AppFonts.regular(14, AppColors.textBlack),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 10,
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Expanded(
+                                                          child: Text(
+                                                            " ${treatments.type} ${treatments.name} \n",
+                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                   Column(
                                                     children: [
@@ -270,7 +273,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                                         Row(
                                                           children: [
                                                             SizedBox(
-                                                              width: 5,
+                                                              width: 20,
                                                             ),
                                                             Expanded(
                                                               child: Text(
@@ -289,6 +292,9 @@ class DoctorView extends GetView<PatientInfoController> {
                                                             children: [
                                                               Row(
                                                                 children: [
+                                                                  SizedBox(
+                                                                    width: 20,
+                                                                  ),
                                                                   Text(
                                                                     textAlign: TextAlign.left,
                                                                     "•",
@@ -365,7 +371,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
-                                              textAlign: TextAlign.center,
+                                              textAlign: TextAlign.left,
                                               "Medications:",
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
@@ -377,7 +383,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  " ${task.medications}",
+                                                  textAlign: TextAlign.left,
+                                                  "${task.medications}",
                                                   style: AppFonts.regular(14, AppColors.textBlack),
                                                 ),
                                               ),
@@ -389,7 +396,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
-                                              textAlign: TextAlign.center,
+                                              textAlign: TextAlign.left,
                                               "Orders:",
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
@@ -401,7 +408,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  " ${task.orders}",
+                                                  "${task.orders}",
                                                   style: AppFonts.regular(14, AppColors.textBlack),
                                                 ),
                                               ),
@@ -413,7 +420,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
-                                              textAlign: TextAlign.center,
+                                              textAlign: TextAlign.left,
                                               "Counseling and Discussion:",
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
@@ -425,7 +432,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  " ${task.counselingAndDiscussion}",
+                                                  "${task.counselingAndDiscussion}",
                                                   style: AppFonts.regular(14, AppColors.textBlack),
                                                 ),
                                               ),
@@ -437,7 +444,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
-                                              textAlign: TextAlign.center,
+                                              textAlign: TextAlign.left,
                                               "Follow Up:",
                                               style: AppFonts.bold(15, AppColors.black),
                                             ),
@@ -449,7 +456,7 @@ class DoctorView extends GetView<PatientInfoController> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  " ${task.followUp}",
+                                                  "${task.followUp}",
                                                   style: AppFonts.regular(14, AppColors.textBlack),
                                                 ),
                                               ),

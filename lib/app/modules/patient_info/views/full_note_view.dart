@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
@@ -718,22 +719,62 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                     child: Column(
                                                       children: [
                                                         SizedBox(height: 0),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              textAlign: TextAlign.center,
-                                                              '\u2022',
-                                                              style: AppFonts.regular(20, AppColors.textGrey),
-                                                            ),
-                                                            SizedBox(width: 15),
-                                                            Expanded(
-                                                                child: Text(
-                                                              textAlign: TextAlign.left,
-                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index] ?? "",
-                                                              style: AppFonts.regular(15, AppColors.textGrey),
-                                                            )),
-                                                          ],
-                                                        ),
+                                                        if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!
+                                                                .toJson()
+                                                                .values
+                                                                .toList()[index]
+                                                                .toString()
+                                                                .isNotEmpty ??
+                                                            false) ...[
+                                                          Row(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            // mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: [
+                                                              // Text(
+                                                              //   textAlign: TextAlign.center,
+                                                              //   '\u2022',
+                                                              //   style: AppFonts.regular(20, AppColors.textGrey),
+                                                              // ),
+                                                              SizedBox(width: 5),
+                                                              Expanded(
+                                                                child: Text.rich(
+                                                                  TextSpan(
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text:
+                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index]}: ",
+                                                                        recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                        style: AppFonts.semiBold(14, AppColors.black),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] ??
+                                                                            "-",
+                                                                        recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                        style: AppFonts.regular(14, AppColors.black),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  textAlign: TextAlign.left,
+                                                                ),
+                                                              )
+                                                              // Row(
+                                                              //   children: [
+                                                              //     Text(
+                                                              //       textAlign: TextAlign.left,
+                                                              //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index] ?? "",
+                                                              //       style: AppFonts.regular(15, AppColors.textGrey),
+                                                              //     ),
+                                                              //     Expanded(
+                                                              //         child: Text(
+                                                              //       textAlign: TextAlign.left,
+                                                              //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] ?? "",
+                                                              //       style: AppFonts.regular(15, AppColors.textGrey),
+                                                              //     )),
+                                                              //   ],
+                                                              // ),
+                                                            ],
+                                                          ),
+                                                        ],
                                                         SizedBox(height: 0),
                                                       ],
                                                     ),
@@ -797,7 +838,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(height: 10),
+                                        SizedBox(height: 0),
                                         ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -920,8 +961,8 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                     children: [
                                                                       Text(
                                                                         textAlign: TextAlign.center,
-                                                                        "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].number}." ?? "",
-                                                                        style: AppFonts.regular(15, AppColors.textPurple),
+                                                                        "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].number}.",
+                                                                        style: AppFonts.bold(15, AppColors.textPurple),
                                                                       ),
                                                                       SizedBox(width: 5),
                                                                       Expanded(
@@ -955,7 +996,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type}.",
-                                                                          style: AppFonts.bold(15, AppColors.textPurple),
+                                                                          style: AppFonts.bold(15, AppColors.textBlack),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -983,7 +1024,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "Medications",
-                                                                          style: AppFonts.bold(15, AppColors.textPurple),
+                                                                          style: AppFonts.bold(15, AppColors.textBlack),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -1006,7 +1047,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "Orders:",
-                                                                          style: AppFonts.bold(15, AppColors.textPurple),
+                                                                          style: AppFonts.bold(15, AppColors.textBlack),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -1029,7 +1070,7 @@ class FullNoteView extends GetView<PatientInfoController> {
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "Counseling and Discussion:",
-                                                                          style: AppFonts.bold(15, AppColors.textPurple),
+                                                                          style: AppFonts.bold(15, AppColors.textBlack),
                                                                         ),
                                                                       ),
                                                                     ],

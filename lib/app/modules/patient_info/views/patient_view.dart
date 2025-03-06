@@ -105,28 +105,34 @@ class PatientView extends GetView<PatientInfoController> {
                                                 ),
                                                 SizedBox(height: 10),
                                                 if (dynamicData[dynamicData.keys.elementAt(index)] is List) ...[
-                                                  ListView.builder(
-                                                    shrinkWrap: true,
-                                                    physics: NeverScrollableScrollPhysics(),
-                                                    itemCount: dynamicData[dynamicData.keys.elementAt(index)]?.length ?? 0, // Number of items
-                                                    itemBuilder: (context, subIndex) {
-                                                      return Row(
-                                                        children: [
-                                                          Expanded(
-                                                              child: Text(
-                                                            "• ${dynamicData[dynamicData.keys.elementAt(index)]?[subIndex] ?? ''}",
-                                                            textAlign: TextAlign.left,
-                                                            style: AppFonts.regular(14, AppColors.textGrey),
-                                                          )),
-                                                        ],
-                                                      );
-                                                    },
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 10),
+                                                    child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      physics: NeverScrollableScrollPhysics(),
+                                                      itemCount: dynamicData[dynamicData.keys.elementAt(index)]?.length ?? 0, // Number of items
+                                                      itemBuilder: (context, subIndex) {
+                                                        return Row(
+                                                          children: [
+                                                            Expanded(
+                                                                child: Text(
+                                                              "• ${dynamicData[dynamicData.keys.elementAt(index)]?[subIndex] ?? ''}",
+                                                              textAlign: TextAlign.left,
+                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                            )),
+                                                          ],
+                                                        );
+                                                      },
+                                                    ),
                                                   ),
                                                 ] else if (dynamicData[dynamicData.keys.elementAt(index)] is String) ...[
-                                                  Text(
-                                                    dynamicData[dynamicData.keys.elementAt(index)] ?? "",
-                                                    textAlign: TextAlign.left,
-                                                    style: AppFonts.regular(14, AppColors.textGrey),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 10),
+                                                    child: Text(
+                                                      dynamicData[dynamicData.keys.elementAt(index)] ?? "",
+                                                      textAlign: TextAlign.left,
+                                                      style: AppFonts.regular(14, AppColors.textGrey),
+                                                    ),
                                                   )
                                                 ],
                                                 SizedBox(height: 20),
