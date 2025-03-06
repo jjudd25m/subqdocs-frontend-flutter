@@ -497,6 +497,7 @@ class VisitMainController extends GetxController {
     customPrint("patientReScheduleCreate API  internal response $response");
     CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    getPatientDetails();
   }
 
   Future<void> deletePatientVisit({required String id}) async {

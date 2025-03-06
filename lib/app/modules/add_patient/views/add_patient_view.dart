@@ -11,6 +11,7 @@ import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/widget/appbar.dart';
+import 'package:subqdocs/widgets/rounded_image_widget.dart';
 
 import '../../../../utils/Formetors.dart';
 import 'package:path/path.dart' as p;
@@ -192,7 +193,8 @@ class AddPatientView extends GetView<AddPatientController> {
                     child: Container(
                         color: AppColors.ScreenBackGround,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                          padding:
+                              const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                           child: ListView(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
@@ -202,7 +204,8 @@ class AddPatientView extends GetView<AddPatientController> {
                               Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.all(Dimen.margin16),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -273,11 +276,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     imagePath: controller.profileImage.value,
                                                   )
                                                 : BaseImageView(
-                                                    imageUrl: "",
-                                                    width: 40,
-                                                    height: 40,
-                                                    fontSize: 14,
-                                                    nameLetters: "mihit thakkar",
+                                                    imageUrl:
+                                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                    width: 50,
+                                                    height: 50,
                                                   ),
                                             PopupMenuButton<String>(
                                               offset: const Offset(0, 8),
@@ -302,7 +304,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     },
                                                     // value: "",
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                      padding: const EdgeInsets.only(
+                                                          left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
                                                         children: [
                                                           Icon(
@@ -334,7 +337,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                           color: AppColors.appbarBorder,
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          padding: const EdgeInsets.only(
+                                                              left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(CupertinoIcons.camera),
@@ -498,8 +502,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                                         cardColor: AppColors.white,
                                                         primaryColor: AppColors.backgroundPurple,
                                                         hintColor: AppColors.backgroundPurple,
-                                                        colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                        colorScheme:
+                                                            ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                        buttonTheme:
+                                                            ButtonThemeData(textTheme: ButtonTextTheme.primary),
                                                       ),
                                                       child: child!,
                                                     );
@@ -508,7 +514,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 if (picked != null) {
                                                   String inputText;
                                                   String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                  inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                  inputText =
+                                                      '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                   controller.dobController.text = inputText;
                                                 }
                                               },
@@ -603,7 +610,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       cardColor: AppColors.white,
                                                       primaryColor: AppColors.backgroundPurple,
                                                       hintColor: AppColors.backgroundPurple,
-                                                      colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                      colorScheme:
+                                                          ColorScheme.light(primary: AppColors.backgroundPurple),
                                                       buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
                                                     ),
                                                     child: child!,
@@ -613,7 +621,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                               if (picked != null) {
                                                 String inputText;
                                                 String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                inputText =
+                                                    '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                 controller.visitDateController.text = inputText;
                                               }
                                             },
@@ -668,10 +677,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                               highlightColor: Colors.transparent, // Remove highlight color
                                             ),
                                             child: ExpansionTile(
-                                              shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                              shape: OutlineInputBorder(
+                                                  borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                               backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                              collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                              collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                              collapsedShape: OutlineInputBorder(
+                                                  borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                              collapsedBackgroundColor:
+                                                  AppColors.backgroundPurple.withValues(alpha: 0.2),
                                               title: Container(
                                                 child: Row(
                                                   children: [
@@ -692,7 +704,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       color: Colors.white,
                                                       child: controller.selectedList.length != 0
                                                           ? Padding(
-                                                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                              padding:
+                                                                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                                               child: SizedBox(
                                                                   height: 200,
                                                                   width: double.infinity,
@@ -709,7 +722,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                               children: [
                                                                                 SizedBox(height: 10),
                                                                                 Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  crossAxisAlignment:
+                                                                                      CrossAxisAlignment.start,
                                                                                   mainAxisSize: MainAxisSize.min,
                                                                                   children: [
                                                                                     Stack(
@@ -718,8 +732,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                       children: [
                                                                                         Container(
                                                                                           decoration: BoxDecoration(
-                                                                                            color: AppColors.appbarBorder,
-                                                                                            borderRadius: BorderRadius.circular(10),
+                                                                                            color:
+                                                                                                AppColors.appbarBorder,
+                                                                                            borderRadius:
+                                                                                                BorderRadius.circular(
+                                                                                                    10),
                                                                                           ),
                                                                                           width: 120,
                                                                                           height: 120,
@@ -732,26 +749,57 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                             },
                                                                                             child: GestureDetector(
                                                                                               onTap: () {
-                                                                                                if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
+                                                                                                if (getFileExtension(controller
+                                                                                                            .selectedList[
+                                                                                                                index]
+                                                                                                            .file
+                                                                                                            ?.path ??
+                                                                                                        "") ==
+                                                                                                    "image") {
                                                                                                   customPrint("1");
-                                                                                                  FullscreenImageViewer.open(
+                                                                                                  FullscreenImageViewer
+                                                                                                      .open(
                                                                                                     context: context,
-                                                                                                    child: Image.file(controller.selectedList[index].file ?? File("")),
+                                                                                                    child: Image.file(
+                                                                                                        controller
+                                                                                                                .selectedList[
+                                                                                                                    index]
+                                                                                                                .file ??
+                                                                                                            File("")),
                                                                                                   );
                                                                                                 } else {
                                                                                                   customPrint("2");
-                                                                                                  controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
+                                                                                                  controller.launchInAppWithBrowserOptions(
+                                                                                                      Uri.file(controller
+                                                                                                              .selectedList[
+                                                                                                                  index]
+                                                                                                              .file
+                                                                                                              ?.path ??
+                                                                                                          ""));
                                                                                                 }
                                                                                               },
                                                                                               child: ClipRRect(
-                                                                                                borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                                                child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
+                                                                                                borderRadius:
+                                                                                                    BorderRadius.circular(
+                                                                                                        10), // Set the radius here
+                                                                                                child: getFileExtension(controller
+                                                                                                                .selectedList[
+                                                                                                                    index]
+                                                                                                                .file
+                                                                                                                ?.path ??
+                                                                                                            "") ==
+                                                                                                        "image"
                                                                                                     ? Image.file(
-                                                                                                        controller.selectedList[index].file!,
-                                                                                                        fit: BoxFit.cover,
+                                                                                                        controller
+                                                                                                            .selectedList[
+                                                                                                                index]
+                                                                                                            .file!,
+                                                                                                        fit: BoxFit
+                                                                                                            .cover,
                                                                                                       )
                                                                                                     : Image.asset(
-                                                                                                        ImagePath.file_placeHolder,
+                                                                                                        ImagePath
+                                                                                                            .file_placeHolder,
                                                                                                       ), // Display a placeholder if the file is not an image
                                                                                               ),
                                                                                             ),
@@ -769,9 +817,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                               color: Colors.white,
                                                                                               boxShadow: [
                                                                                                 BoxShadow(
-                                                                                                  color: Colors.black.withOpacity(0.2),
+                                                                                                  color: Colors.black
+                                                                                                      .withOpacity(0.2),
                                                                                                   blurRadius: 2.2,
-                                                                                                  offset: Offset(0.2, 0),
+                                                                                                  offset:
+                                                                                                      Offset(0.2, 0),
                                                                                                 ),
                                                                                               ],
                                                                                             ),
@@ -779,14 +829,23 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                               onTap: () {
                                                                                                 showDialog(
                                                                                                   context: context,
-                                                                                                  barrierDismissible: true,
-                                                                                                  builder: (BuildContext context) {
+                                                                                                  barrierDismissible:
+                                                                                                      true,
+                                                                                                  builder: (BuildContext
+                                                                                                      context) {
                                                                                                     // return SizedBox();
                                                                                                     return DeleteImageDialog(
                                                                                                       onDelete: () {
-                                                                                                        controller.deleteAttachments(index);
+                                                                                                        controller
+                                                                                                            .deleteAttachments(
+                                                                                                                index);
                                                                                                       },
-                                                                                                      extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
+                                                                                                      extension: getFileExtension(controller
+                                                                                                              .selectedList[
+                                                                                                                  index]
+                                                                                                              .file
+                                                                                                              ?.path ??
+                                                                                                          ""),
                                                                                                     );
                                                                                                   },
                                                                                                 );
@@ -803,15 +862,21 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                       height: 6,
                                                                                     ),
                                                                                     Text(
-                                                                                      controller.selectedList[index].fileName ?? "",
-                                                                                      style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                                      controller.selectedList[index]
+                                                                                              .fileName ??
+                                                                                          "",
+                                                                                      style: AppFonts.regular(
+                                                                                          12, AppColors.textDarkGrey),
                                                                                     ),
                                                                                     SizedBox(
                                                                                       height: 6,
                                                                                     ),
                                                                                     Text(
-                                                                                      controller.selectedList[index].date ?? "",
-                                                                                      style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                                      controller.selectedList[index]
+                                                                                              .date ??
+                                                                                          "",
+                                                                                      style: AppFonts.regular(
+                                                                                          12, AppColors.textDarkGrey),
                                                                                     ),
                                                                                   ],
                                                                                 ),
@@ -819,7 +884,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                             ),
                                                                           );
                                                                         },
-                                                                        separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                                        separatorBuilder: (context, index) =>
+                                                                            const SizedBox(width: Dimen.margin15),
                                                                         itemCount: controller.selectedList.length,
                                                                       );
                                                                     },
@@ -931,7 +997,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                             }
                                           },
                                           child: Container(
-                                            decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
+                                            decoration: BoxDecoration(
+                                                color: AppColors.backgroundPurple,
+                                                borderRadius: BorderRadius.circular(6)),
                                             width: 70,
                                             height: 40,
                                             child: Padding(

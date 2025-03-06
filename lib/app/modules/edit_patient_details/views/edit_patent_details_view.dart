@@ -144,7 +144,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                       width: 60,
                                                       height: 60,
                                                       fontSize: 14,
-                                                      nameLetters: "mihir",
+                                                      nameLetters:
+                                                          "${controller.firstNameController.text} ${controller.lastNameController.text}",
                                                     ),
                                         ),
                                         PopupMenuButton<String>(
@@ -168,7 +169,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                       },
                                                       // value: "",
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                        padding: const EdgeInsets.only(
+                                                            left: 10, right: 20, top: 10, bottom: 10),
                                                         child: Row(
                                                           children: [
                                                             Icon(
@@ -200,7 +202,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                             color: AppColors.appbarBorder,
                                                           ),
                                                           Padding(
-                                                            padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                            padding: const EdgeInsets.only(
+                                                                left: 10, right: 20, top: 10, bottom: 10),
                                                             child: Row(
                                                               children: [
                                                                 Icon(CupertinoIcons.camera),
@@ -372,7 +375,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           onTap: () async {
                                             final picked = await showDatePicker(
                                               context: context,
-                                              initialDate: controller.selectedDOBDate.value ?? DateTime.now().subtract(Duration(days: 400)),
+                                              initialDate: controller.selectedDOBDate.value ??
+                                                  DateTime.now().subtract(Duration(days: 400)),
                                               firstDate: DateTime.now().subtract(Duration(days: 36700)),
                                               lastDate: DateTime.now().subtract(Duration(days: 400)),
                                               builder: (context, child) {
@@ -393,7 +397,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
 
                                               controller.selectedDOBDate.value = picked;
                                               String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                              inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                              inputText =
+                                                  '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                               controller.dobController.text = inputText;
                                             }
                                           },
@@ -484,8 +489,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                             cardColor: AppColors.white,
                                                             primaryColor: AppColors.backgroundPurple,
                                                             hintColor: AppColors.backgroundPurple,
-                                                            colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                            colorScheme:
+                                                                ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                            buttonTheme:
+                                                                ButtonThemeData(textTheme: ButtonTextTheme.primary),
                                                           ),
                                                           child: child!,
                                                         );
@@ -494,7 +501,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     if (picked != null) {
                                                       String inputText;
                                                       String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                      inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                      inputText =
+                                                          '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                       controller.visitDateController.text = inputText;
                                                     }
                                                   },

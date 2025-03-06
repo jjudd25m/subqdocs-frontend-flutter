@@ -85,6 +85,7 @@ class ImagePath {
   static const String delete_round_icon = 'assets/images/round_delete_icon.svg';
   // static const String avatar = 'assets/images/Avatar.svg';
   static const String avatarPng = 'assets/images/img.png';
+  static const String personPlaceHolder = 'assets/images/person.png';
   static const String user = 'assets/images/user.png';
   // static const String pdf = 'assets/images/pdf.svg';
   static const String crossWithContainer = 'assets/images/cross_container.svg';

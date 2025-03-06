@@ -146,7 +146,12 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
 
         list.refresh();
@@ -196,7 +201,12 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -269,7 +279,8 @@ class AddPatientController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
+          param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       isLoading.value = false;
       customPrint("_addPatientRepository response is ${addPatientModel.toJson()} ");
       CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
@@ -294,6 +305,8 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> clearForm() async {
+    // selectedVisitTime.value = "";
+    selectedVisitTimeValue.value = null;
     patientId.clear();
     firstNameController.clear();
     middleNameController.clear();
@@ -302,9 +315,9 @@ class AddPatientController extends GetxController {
     emailAddressController.clear();
     visitDateController.clear();
     formKey.currentState!.reset();
-
     list.clear();
     selectedList.clear();
+    profileImage.value = null;
   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {

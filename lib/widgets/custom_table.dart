@@ -11,12 +11,21 @@ class CustomTable extends StatelessWidget {
   BuildContext context;
 
   final VoidCallback? onLoadMore;
+  ScrollPhysics? physics = BouncingScrollPhysics();
 
   List<double> columnWidths;
 
   final void Function(int rowIndex, List<String> rowData)? onRowSelected;
 
-  CustomTable({required this.rows, this.onLoadMore, required this.cellBuilder, required this.columnCount, required this.context, required this.columnWidths, this.onRowSelected});
+  CustomTable(
+      {required this.rows,
+      this.onLoadMore,
+      required this.cellBuilder,
+      required this.columnCount,
+      required this.context,
+      required this.columnWidths,
+      this.onRowSelected,
+      this.physics});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +44,7 @@ class CustomTable extends StatelessWidget {
         return false;
       },
       child: ListView(
+        physics: physics,
         shrinkWrap: true,
         children: [
           Container(
@@ -80,7 +90,8 @@ class CustomTable extends StatelessWidget {
               Container(
                 width: screenWidth * columnWidths[colIndex], // Set the width based on percentage
                 padding: EdgeInsets.symmetric(horizontal: 5),
-                child: cellBuilder(context, rowIndex, colIndex, rowData.length > colIndex ? rowData[colIndex] : '', rowData.last),
+                child: cellBuilder(
+                    context, rowIndex, colIndex, rowData.length > colIndex ? rowData[colIndex] : '', rowData.last),
               ),
           ],
         ),

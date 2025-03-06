@@ -35,7 +35,8 @@ class HomePatientListView extends GetView<HomeController> {
                     }
                   },
                   title: "Your Patient List is Empty",
-                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                  description:
+                      "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
             )
           : CustomTable(
               rows: _getTableRows(controller.patientList),
@@ -127,7 +128,11 @@ class HomePatientListView extends GetView<HomeController> {
                           padding: EdgeInsets.zero,
                           onTap: () {
                             customPrint(" patient id is ${controller.patientList[rowIndex - 1].id}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
+                              "visitId": "",
+                              "fromSchedule": false
+                            });
                           },
                           // value: "",
                           child: Padding(
@@ -142,12 +147,16 @@ class HomePatientListView extends GetView<HomeController> {
                           onTap: () async {
                             customPrint("row index is :- ${rowIndex}");
                             customPrint("column index is :- ${colIndex}");
-                            customPrint(" patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
+                            customPrint(
+                                " patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
 
                             // customPrint(" our element is $");
 
-                            final result =
-                                await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                            final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
+                              "visitId": "",
+                              "fromSchedule": false
+                            });
                             customPrint("our result is $result");
 
                             if (result == 1) {
@@ -184,7 +193,11 @@ class HomePatientListView extends GetView<HomeController> {
                                 return SchedulePatientDialog(
                                   receiveParam: (p0, p1) {
                                     customPrint("p0 is $p0 p1 is $p1");
-                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
+                                    controller.patientScheduleCreate(param: {
+                                      "patient_id": controller.patientList[rowIndex - 1].id.toString(),
+                                      "visit_date": p1,
+                                      "visit_time": p0
+                                    });
                                   },
                                 ); // Our custom dialog
                               },
@@ -252,12 +265,16 @@ class HomePatientListView extends GetView<HomeController> {
                           softWrap: true, // Allows text to wrap
                           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                         ),
-                        colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
+                        colIndex == controller.colIndexPatient.value &&
+                                controller.isAsendingPatient.value &&
+                                colIndex != 5
                             ? Icon(
                                 CupertinoIcons.down_arrow,
                                 size: 15,
                               )
-                            : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
+                            : colIndex == controller.colIndexPatient.value &&
+                                    !controller.isAsendingPatient.value &&
+                                    colIndex != 5
                                 ? Icon(
                                     CupertinoIcons.up_arrow,
                                     size: 15,

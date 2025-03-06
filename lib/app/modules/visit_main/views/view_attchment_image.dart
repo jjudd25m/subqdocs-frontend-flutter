@@ -92,6 +92,7 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
                     GestureDetector(
                       onTap: () {
                         Get.back();
+                        Get.back();
                       },
                       child: SvgPicture.asset(
                         ImagePath.logo_cross,
