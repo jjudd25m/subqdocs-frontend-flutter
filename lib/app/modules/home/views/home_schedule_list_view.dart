@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/app/modules/visit_main/controllers/visit_main_controller.dart';
 import 'package:subqdocs/widgets/empty_patient_screen.dart';
 
 import '../../../../utils/app_colors.dart';
@@ -209,6 +210,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                 columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
                 onRowSelected: (rowIndex, rowData) async {
                   customPrint("row index is :- $rowIndex");
+
+                  Get.delete<VisitMainController>();
+
                   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                     "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                     "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),

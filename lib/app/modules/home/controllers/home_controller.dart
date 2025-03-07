@@ -1020,7 +1020,7 @@ class HomeController extends GetxController {
 
     if (sortingName!.isNotEmpty) {
       lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
-      param["sorting"] = toggleSortDesc(sortingPatientList, sortingName ?? "");
+      param["sorting"] = lastSorting;
     }
 
     if (startDate.value != "" && endDate.value != "") {

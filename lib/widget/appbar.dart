@@ -60,12 +60,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     drawerkey.currentState!.openDrawer();
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.only(left: 0.0, top: 15.0, bottom: 15.0, right: 30.0),
                     child: SvgPicture.asset(
                       ImagePath.drawer,
                       height: 20,

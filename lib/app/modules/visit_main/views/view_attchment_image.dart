@@ -90,15 +90,18 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
                       style: AppFonts.medium(15, Colors.white),
                     ),
                     Spacer(),
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         Get.back();
                       },
-                      child: SvgPicture.asset(
-                        ImagePath.logo_cross,
-                        width: 20,
-                        height: 20,
-                        colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                        child: SvgPicture.asset(
+                          ImagePath.logo_cross,
+                          width: 25,
+                          height: 25,
+                          colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
+                        ),
                       ),
                     ),
                     SizedBox(width: 10)
