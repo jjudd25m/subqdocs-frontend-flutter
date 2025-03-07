@@ -220,9 +220,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                   controller.getScheduleVisitList();
                   controller.getPatientList();
                 },
-                // onLoadMore: () {
-                //   controller.getScheduleVisitListFetchMore();
-                // },
+                onLoadMore: () {
+                  controller.getScheduleVisitListFetchMore();
+                },
               );
       }),
     );
@@ -250,7 +250,7 @@ class HomeScheduleListView extends GetView<HomeController> {
       }
 
       rows.add([
-        "${patient.firstName}, ${patient.lastName}",
+        "${patient.firstName} ${patient.lastName}",
         formatedDateTime, // Last Visit Date// Patient Name
         patient.age.toString(), // Age
         patient.gender.toString()[0], // Gender

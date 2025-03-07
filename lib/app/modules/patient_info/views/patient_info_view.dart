@@ -904,54 +904,55 @@ class PatientInfoView extends GetView<PatientInfoController> {
                               ),
                             ),
                           ),
+                          // Expanded(
+                          //   child: GestureDetector(
+                          //     onTap: () {
+                          //       showDialog(
+                          //         context: context,
+                          //         barrierDismissible: true,
+                          //         builder: (BuildContext context) {
+                          //           return ConfirmFinalizeDialog();
+                          //         },
+                          //       );
+                          //     },
+                          //     child: Container(
+                          //       height: 81,
+                          //       decoration: BoxDecoration(
+                          //         border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                          //         color: AppColors.backgroundLightGrey,
+                          //         borderRadius: BorderRadius.circular(8),
+                          //       ),
+                          //       child: Row(
+                          //         mainAxisAlignment: MainAxisAlignment.center,
+                          //         children: [
+                          //           Column(
+                          //             mainAxisAlignment: MainAxisAlignment.center,
+                          //             children: [
+                          //               SvgPicture.asset(
+                          //                 ImagePath.finalize_time,
+                          //                 height: 30,
+                          //                 width: 30,
+                          //               ),
+                          //               SizedBox(
+                          //                 height: 10,
+                          //               ),
+                          //               Text(
+                          //                 textAlign: TextAlign.center,
+                          //                 "Finalize Later",
+                          //                 style: AppFonts.medium(16, AppColors.textBlack),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return ConfirmFinalizeDialog();
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 81,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                  color: AppColors.backgroundLightGrey,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          ImagePath.finalize_time,
-                                          height: 30,
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          textAlign: TextAlign.center,
-                                          "Finalize Later",
-                                          style: AppFonts.medium(16, AppColors.textBlack),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                controller.isSignatureDone.value = true;
+                                Get.offAndToNamed(Routes.HOME);
+                                // controller.isSignatureDone.value = true;
                               },
                               child: Container(
                                 height: 81,

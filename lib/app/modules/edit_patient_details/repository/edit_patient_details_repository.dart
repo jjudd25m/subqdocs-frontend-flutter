@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../../../data/provider/api_provider.dart';
+import '../../../models/MedicalRecords.dart';
 import '../model/patient_detail_model.dart';
 
 class EditPatientDetailsRepository {
@@ -14,6 +15,12 @@ class EditPatientDetailsRepository {
     var response = await ApiProvider.instance.callGet("patient/${id}/profileDetails", queryParameters: {});
     print("response is for getPatient ID  $response");
     return PatientDetailModel.fromJson(response);
+  }
+
+  Future<MedicalRecords> getMedicalRecords({required String id}) async {
+    var response = await ApiProvider.instance.callGet("patient/visitFullNoteData/${id}", queryParameters: {});
+    print("response is for getPatient ID  $response");
+    return MedicalRecords.fromJson(response);
   }
 
   Future<dynamic> updatePatient(

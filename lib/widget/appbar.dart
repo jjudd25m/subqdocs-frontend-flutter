@@ -65,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     drawerkey.currentState!.openDrawer();
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: SvgPicture.asset(
                       ImagePath.drawer,
                       height: 20,

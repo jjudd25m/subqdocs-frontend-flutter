@@ -49,7 +49,7 @@ class HomePatientListView extends GetView<HomeController> {
 
                 // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
               },
-              // onLoadMore: () => controller.patientLoadMore(),
+              onLoadMore: () => controller.patientLoadMore(),
               columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10], // Set the column widths based on your needs
             );
     });
@@ -65,7 +65,7 @@ class HomePatientListView extends GetView<HomeController> {
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
       rows.add([
-        "${patient.firstName}, ${patient.lastName}", // Patient Name
+        "${patient.firstName} ${patient.lastName}", // Patient Name
         patient.age.toString(), // Age
         patient.gender.toString()[0], // Gender
         patient.lastVisitDate ?? "N/A", // Last Visit Date

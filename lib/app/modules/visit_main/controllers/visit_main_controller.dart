@@ -23,6 +23,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
+import '../../../models/MedicalRecords.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
@@ -42,6 +43,7 @@ class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
+  Rxn<MedicalRecords> medicalRecords = Rxn();
   // Rxn<'List<ScheduledVisits>> scheduledVisits = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
 
@@ -62,8 +64,9 @@ class VisitMainController extends GetxController {
   String visitMainData = "visitMainData";
   String scheduledVisits = "scheduledVisits";
   String scheduleVisitsList = "scheduleVisitsList";
+  String fullNoteOfLastVisit = "fullNoteOfLastVisit";
 
-  final VisitMainRepository _visitMainRepository = VisitMainRepository();
+  final VisitMainRepository visitMainRepository = VisitMainRepository();
   RecorderService recorderService = RecorderService();
 
   TextEditingController searchController = TextEditingController();
@@ -368,7 +371,7 @@ class VisitMainController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+          await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -385,7 +388,7 @@ class VisitMainController extends GetxController {
     params["attachments"] = [id];
 
     customPrint("attch :- $params");
-    CommonResponse commonResponse = await _visitMainRepository.deleteAttachments(params: params);
+    CommonResponse commonResponse = await visitMainRepository.deleteAttachments(params: params);
     if (commonResponse.responseType == "success") {
       CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
     } else {
@@ -425,7 +428,7 @@ class VisitMainController extends GetxController {
     } else {
       customPrint("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     Get.back();
     getPatientAttachment();
@@ -433,7 +436,7 @@ class VisitMainController extends GetxController {
 
   Future<void> getVisitRecap() async {
     customPrint("patientID is :- ${patientId.value}");
-    visitRecapList.value = await _visitMainRepository.getVisitRecap(id: patientId.value);
+    visitRecapList.value = await visitMainRepository.getVisitRecap(id: patientId.value);
   }
 
   Future<void> getPatientAttachment() async {
@@ -452,7 +455,7 @@ class VisitMainController extends GetxController {
     }
 
     try {
-      patientAttachmentList.value = await _visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+      patientAttachmentList.value = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
       // Get.back();
     } catch (error) {
       // Get.back();
@@ -463,7 +466,7 @@ class VisitMainController extends GetxController {
 
   Future<void> getPatientDetails() async {
     Loader().showLoadingDialogForSimpleLoader();
-    patientData.value = await _visitMainRepository.getPatientDetails(id: visitId.value);
+    patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
     Get.back();
     customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
@@ -499,12 +502,19 @@ class VisitMainController extends GetxController {
     }
   }
 
+  Future<void> getMedicalRecords({required String id}) async {
+    medicalRecords.value = await _editPatientDetailsRepository.getMedicalRecords(id: patientId.value);
+
+    medicalRecords.refresh();
+  }
+
   void onLine() async {
     customPrint("now its disConnected");
 
     if (patientId.value.isNotEmpty) {
       getVisitRecap();
       getPatientAttachment();
+      getMedicalRecords(id: patientId.value);
     }
 
     if (visitId.value.isNotEmpty) {
@@ -524,11 +534,15 @@ class VisitMainController extends GetxController {
 
     var scheduleVisitResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
 
+    var medicalRecords1 = fetchVisitDetails(type: scheduleVisitsList, modelType: fullNoteOfLastVisit, visitId: visitId.value, responseData: responseData);
+
     patientDetailModel.value = PatientDetailModel.fromJson(scheduleVisitResponse);
 
     visitRecapList.value = VisitRecapListModel.fromJson(visitRecapListResponse);
 
     patientData.value = VisitMainPatientDetails.fromJson(patientDetailsResponse);
+
+    medicalRecords.value = MedicalRecords.fromJson(medicalRecords1);
   }
 
   Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {

@@ -8,6 +8,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
@@ -44,9 +45,9 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
           onHttpError: (HttpResponseError error) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              return NavigationDecision.prevent;
-            }
+            // if (request.url.startsWith('https://www.youtube.com/')) {
+            //   return NavigationDecision.prevent;
+            // }
             return NavigationDecision.navigate;
           },
         ),
@@ -114,7 +115,9 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
                         gaplessPlayback: true,
                         imageProvider: NetworkImage(widget.imageUrl),
                       ))
-                    : WebViewWidget(controller: widget.controller)),
+                    : SizedBox(width: 10))
+            // WebViewWidget(controller: widget.controller))
+            ,
             Container(
               width: double.infinity,
               color: AppColors.white,

@@ -117,7 +117,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                     ),
                                     children: [
                                       _headerBuildTableCell('Total'),
-                                      _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}"),
+                                      _headerBuildTableCell("\$0"),
+                                      // _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}"),
                                       // _headerBuildTableCell("${controller.doctorViewList.value?.responseData?.totalCharges}"),
                                     ],
                                   ),
@@ -630,10 +631,10 @@ class DoctorView extends GetView<PatientInfoController> {
 
     print("procedure List is :- ${patients.diagnosisCodesProcedures}");
 
-    controller.totalUnitCost.value = 0;
+    // controller.totalUnitCost.value = 0;
     // Iterate over each diagnosis procedure data
     for (DiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures ?? []) {
-      controller.totalUnitCost.value += double.parse(diagnosis.unitCharge.toString().isEmpty ? "0.0" : diagnosis.unitCharge.toString().replaceAll("\$", "").replaceAll(",", ""));
+      // controller.totalUnitCost.value += double.parse(diagnosis.unitCharge.toString().isEmpty ? "0.0" : diagnosis.unitCharge.toString().replaceAll("\$", "").replaceAll(",", ""));
 
       // Ensure each row has exactly 4 children
       rows.add(
