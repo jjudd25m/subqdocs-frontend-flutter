@@ -39,7 +39,7 @@ import '../model/visitmainModel.dart';
 import '../repository/visit_main_repository.dart';
 import '../views/attachmentDailog.dart';
 
-class VisitMainController extends GetxController {
+class VisitMainController extends GetxController with WidgetsBindingObserver {
   //TODO: Implement VisitMainController
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
@@ -140,6 +140,21 @@ class VisitMainController extends GetxController {
   //     showCustomDialog(context);
   //   }
   // }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // Code to run when app comes to the foreground (onResume equivalent)
+      onLine();
+
+      // Run any code you need here
+    } else if (state == AppLifecycleState.paused) {
+      // Code to run when app goes to the background (onPause equivalent)
+      print("App is in the background");
+    }
+  }
 
   Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
     if (clear) {
@@ -298,7 +313,7 @@ class VisitMainController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-
+    WidgetsBinding.instance.removeObserver(this);
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
 
@@ -306,6 +321,7 @@ class VisitMainController extends GetxController {
     //it  will check the internet  connection and handel   offline and online mode
 
     var status = await InternetConnection().internetStatus;
+    onLine();
 
     isConnected.value = status == InternetStatus.disconnected ? false : true;
 
@@ -314,7 +330,7 @@ class VisitMainController extends GetxController {
 
       offLine();
     } else {
-      onLine();
+      onLine(isLoading: true);
     }
 
     handelInternetConnection();
@@ -326,11 +342,14 @@ class VisitMainController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    onLine();
+    customPrint("its on claaed");
   }
 
   @override
   void onClose() {
     super.onClose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   void increment() => count.value++;
@@ -375,6 +394,7 @@ class VisitMainController extends GetxController {
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
+      isStartTranscript.value = false;
 
       Get.toNamed(Routes.PATIENT_INFO, arguments: {
         "trascriptUploadData": patientTranscriptUploadModel,
@@ -464,10 +484,16 @@ class VisitMainController extends GetxController {
     customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
-  Future<void> getPatientDetails() async {
-    Loader().showLoadingDialogForSimpleLoader();
+  Future<void> getPatientDetails({bool isLoading = false}) async {
+    if (isLoading) {
+      Loader().showLoadingDialogForSimpleLoader();
+    }
+
     patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
-    Get.back();
+    if (isLoading) {
+      Get.back();
+    }
+
     customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
@@ -508,7 +534,7 @@ class VisitMainController extends GetxController {
     medicalRecords.refresh();
   }
 
-  void onLine() async {
+  void onLine({bool isLoading = false}) async {
     customPrint("now its disConnected");
 
     if (patientId.value.isNotEmpty) {

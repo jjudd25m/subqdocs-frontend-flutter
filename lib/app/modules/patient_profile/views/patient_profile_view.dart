@@ -535,6 +535,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                         Expanded(
                                                                             child: Text(
                                                                           maxLines: 2,
+                                                                          overflow: TextOverflow.ellipsis,
                                                                           textAlign: TextAlign.start,
                                                                           controller.patientDetailModel.value?.responseData?.pastVisits?[index].summary ?? "",
                                                                           style: AppFonts.regular(15, AppColors.textGrey),

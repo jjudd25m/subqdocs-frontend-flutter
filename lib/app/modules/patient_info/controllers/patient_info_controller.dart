@@ -20,7 +20,7 @@ import '../model/transcript_list_model.dart';
 import '../repository/patient_info_repository.dart';
 import '../views/confirm_finalize_dialog.dart';
 
-class PatientInfoController extends GetxController {
+class PatientInfoController extends GetxController with WidgetsBindingObserver {
   //TODO: Implement PatientInfoController
 
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();
@@ -57,6 +57,7 @@ class PatientInfoController extends GetxController {
   RxString isFullTranscriptLoadText = RxString("Waiting for response!");
 
   String visitId = "";
+  String patientId = "";
 
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
@@ -71,9 +72,24 @@ class PatientInfoController extends GetxController {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // Code to run when app comes to the foreground (onResume equivalent)
+
+      // Run any code you need here
+    } else if (state == AppLifecycleState.paused) {
+      // Code to run when app goes to the background (onPause equivalent)
+      print("App is in the background");
+    }
+  }
+
+  @override
   void onInit() async {
     super.onInit();
-
+    // WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     customPrint("argument is :- ${Get.arguments}");
@@ -85,6 +101,9 @@ class PatientInfoController extends GetxController {
 
       var status = await InternetConnection().internetStatus;
 
+      getAllPatientInfo();
+
+      // getAllPatientInfo();
       if (status == InternetStatus.disconnected) {
         print("you net is now Disconnected");
 
@@ -94,6 +113,11 @@ class PatientInfoController extends GetxController {
       }
 
       handelInternetConnection();
+    }
+
+    if (Get.arguments["patientId"] != null) {
+      tabIndex.value = 0;
+      patientId = Get.arguments["patientId"];
     }
 
     if (Get.arguments["trascriptUploadData"] != null) {
@@ -107,7 +131,8 @@ class PatientInfoController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-
+    // getAllPatientInfo();
+    customPrint("its on claaed");
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     if (patientTranscriptUploadModel.responseData != null) {
@@ -537,6 +562,21 @@ class PatientInfoController extends GetxController {
     }
   }
 
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //
+  //   if (state == AppLifecycleState.resumed) {
+  //     // Code to run when app comes to the foreground (onResume equivalent)
+  //     print("App is in the foreground");
+  //     getAllPatientInfo();
+  //     // Run any code you need here
+  //   } else if (state == AppLifecycleState.paused) {
+  //     // Code to run when app goes to the background (onPause equivalent)
+  //
+  //     print("App is in the background");
+  //   }
+  // }
+
   Future<void> showPrompError(BuildContext context, String message) async {
     showDialog(
       context: context,
@@ -547,7 +587,7 @@ class PatientInfoController extends GetxController {
     );
   }
 
-  Future<void> getAllPatientInfo() async {
+  Future<void> getAllPatientInfo({bool isLoading = false}) async {
     await getTranscript();
     getPatientView();
     getPatientDoctorVisitData();
@@ -559,9 +599,9 @@ class PatientInfoController extends GetxController {
     transcriptListModel.value = await _patientInfoRepository.getTranscript(id: visitId);
     customPrint("transcriptListModel is :- ${transcriptListModel.value?.toJson()}");
 
-    if (transcriptListModel.value?.responseType == null) {
-      showPrompError(Get.context!, "Transcript Not Found");
-    }
+    // if (transcriptListModel.value?.responseType == null) {
+    //   showPrompError(Get.context!, "Transcript Not Found");
+    // }
   }
 
   Future<void> getPatientView() async {

@@ -174,32 +174,33 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                           ],
                                         ),
                                         Spacer(),
-                                        SvgPicture.asset(
-                                          ImagePath.edit,
-                                          height: 15,
-                                          width: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 12,
-                                        ),
-                                        ContainerButton(
-                                          onPressed: () {
-                                            // Your onPressed function
-                                          },
-                                          text: 'Patient History',
+                                        // SvgPicture.asset(
+                                        //   ImagePath.edit,
+                                        //   height: 15,
+                                        //   width: 15,
+                                        // ),
+                                        // SizedBox(
+                                        //   width: 12,
+                                        // ),
+                                        // ContainerButton(
 
-                                          borderColor: AppColors.appbarBorder,
-                                          // Custom border color
-                                          backgroundColor: AppColors.white,
-                                          // Custom background color
-                                          needBorder: true,
-                                          // Show border
-                                          textColor: AppColors.textDarkGrey,
-                                          // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
-                                          // Custom padding
-                                          radius: 6, // Custom border radius
-                                        ),
+                                        //   onPressed: () {
+                                        //     // Your onPressed function
+                                        //   },
+                                        //   text: 'Patient History',
+                                        //
+                                        //   borderColor: AppColors.appbarBorder,
+                                        //   // Custom border color
+                                        //   backgroundColor: AppColors.white,
+                                        //   // Custom background color
+                                        //   needBorder: true,
+                                        //   // Show border
+                                        //   textColor: AppColors.textDarkGrey,
+                                        //   // Custom text color
+                                        //   padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                        //   // Custom padding
+                                        //   radius: 6, // Custom border radius
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -950,8 +951,26 @@ class PatientInfoView extends GetView<PatientInfoController> {
                           // ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {
-                                Get.offAndToNamed(Routes.HOME);
+                              onTap: () async {
+                                if (controller.patientTranscriptUploadModel.responseData?.id != null) {
+                                  Get.back();
+                                } else {
+                                  Get.back();
+                                  dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                    "visitId": controller.visitId,
+                                    "patientId": controller.patientId,
+                                  });
+                                }
+
+                                // if (controller.visitId.isNotEmpty && controller.patientTranscriptUploadModel.responseData?.id != null) {
+                                //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                //     "visitId": controller.visitId,
+                                //     "patientId": controller.patientTranscriptUploadModel.responseData?.id.toString(),
+                                //   });
+                                // }
+
+                                // Get.toNamed(Routes.VISIT_MAIN);
+                                // Get.offAndToNamed(Routes.HOME);
                                 // controller.isSignatureDone.value = true;
                               },
                               child: Container(

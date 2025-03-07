@@ -1392,11 +1392,13 @@ class VisitMainView extends GetView<VisitMainController> {
                                                             Expanded(
                                                                 child: Text(
                                                               maxLines: 1,
+                                                              overflow: TextOverflow.ellipsis,
                                                               textAlign: TextAlign.left,
                                                               controller.visitRecapList.value?.responseData?[index].summary ?? "",
                                                               style: AppFonts.regular(14, AppColors.textGrey),
                                                             )),
-                                                            Spacer(),
+                                                            // Spacer(),
+                                                            SizedBox(width: 5),
                                                             Text(
                                                               textAlign: TextAlign.center,
                                                               "View",
@@ -1703,15 +1705,20 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                                     context: context,
                                                                                     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                                                                     builder: (BuildContext context) {
-                                                                                      return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
-                                                                                          ? ViewAttchmentImage(
-                                                                                              imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                                              attchmentUrl: '',
-                                                                                            )
-                                                                                          : ViewAttchmentImage(
-                                                                                              imageUrl: "",
-                                                                                              attchmentUrl:
-                                                                                                  controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                                      return ViewAttchmentImage(
+                                                                                        imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                        attchmentUrl: '',
+                                                                                      );
+
+                                                                                      // return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                                      //     ? ViewAttchmentImage(
+                                                                                      //         imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                      //         attchmentUrl: '',
+                                                                                      //       )
+                                                                                      //     : ViewAttchmentImage(
+                                                                                      //         imageUrl: "",
+                                                                                      //         attchmentUrl:
+                                                                                      //             controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
                                                                                     },
                                                                                   );
                                                                                 } else {

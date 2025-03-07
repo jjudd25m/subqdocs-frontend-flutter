@@ -842,13 +842,13 @@ class HomeController extends GetxController {
   var pagePast = 1;
 
   RxInt colIndex = RxInt(-1);
-  RxBool isAsending = RxBool(false);
+  RxBool isAsending = RxBool(true);
 
   RxInt colindexSchedule = RxInt(-1);
-  RxBool isAsendingSchedule = RxBool(false);
+  RxBool isAsendingSchedule = RxBool(true);
 
   RxInt colIndexPatient = RxInt(-1);
-  RxBool isAsendingPatient = RxBool(false);
+  RxBool isAsendingPatient = RxBool(true);
 
   @override
   void onInit() {
@@ -918,6 +918,14 @@ class HomeController extends GetxController {
   }
 
   void clearFilter({bool canPop = false}) {
+    colIndexPatient.value = -1;
+    colindexSchedule.value = -1;
+    colIndex.value = -1;
+
+    isAsendingPatient.value = true;
+    isAsendingSchedule.value = true;
+    isAsending.value = true;
+
     searchController.text = "";
     lastSorting = [];
     startDate.value = "MM/DD/YYYY";

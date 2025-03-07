@@ -48,6 +48,7 @@ class HomePastVisitsList extends GetView<HomeController> {
 
                     Get.toNamed(Routes.PATIENT_INFO, arguments: {
                       "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
+                      "patientId": controller.pastVisitList[rowIndex - 1].id.toString(),
                     });
                   },
                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {

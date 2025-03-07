@@ -18,7 +18,7 @@ class ViewAttchmentImage extends StatefulWidget {
   String imageUrl = "";
   String attchmentUrl = "";
 
-  late final WebViewController controller;
+  // late final WebViewController controller;
 
   ViewAttchmentImage({super.key, required this.imageUrl, required this.attchmentUrl});
 
@@ -33,27 +33,27 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
     customPrint("_ViewAttchmentImageState called");
 
     // #docregion webview_controller
-    widget.controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onHttpError: (HttpResponseError error) {},
-          onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            // if (request.url.startsWith('https://www.youtube.com/')) {
-            //   return NavigationDecision.prevent;
-            // }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse('https://flutter.dev'));
-    widget.controller.loadRequest(Uri.https(widget.attchmentUrl));
+    // widget.controller = WebViewController()
+    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    //   ..setNavigationDelegate(
+    //     NavigationDelegate(
+    //       onProgress: (int progress) {
+    //         // Update loading bar.
+    //       },
+    //       onPageStarted: (String url) {},
+    //       onPageFinished: (String url) {},
+    //       onHttpError: (HttpResponseError error) {},
+    //       onWebResourceError: (WebResourceError error) {},
+    //       onNavigationRequest: (NavigationRequest request) {
+    //         // if (request.url.startsWith('https://www.youtube.com/')) {
+    //         //   return NavigationDecision.prevent;
+    //         // }
+    //         return NavigationDecision.navigate;
+    //       },
+    //     ),
+    //   )
+    //   ..loadRequest(Uri.parse('https://flutter.dev'));
+    // widget.controller.loadRequest(Uri.https(widget.attchmentUrl));
   }
 
   @override
