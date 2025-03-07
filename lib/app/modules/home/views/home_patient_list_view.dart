@@ -49,7 +49,7 @@ class HomePatientListView extends GetView<HomeController> {
 
                 // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
               },
-              onLoadMore: () => controller.patientLoadMore(),
+              // onLoadMore: () => controller.patientLoadMore(),
               columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10], // Set the column widths based on your needs
             );
     });

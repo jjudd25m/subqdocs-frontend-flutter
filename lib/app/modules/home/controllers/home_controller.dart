@@ -245,7 +245,7 @@ class HomeController extends GetxController {
     Map<String, dynamic> scheduleParam = {};
 
     scheduleParam['page'] = 1;
-    scheduleParam['limit'] = "20";
+    scheduleParam['limit'] = "3000";
     scheduleParam['isPastPatient'] = 'false';
     String formattedStartDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now());
     String formattedEndDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 2)));
@@ -253,7 +253,7 @@ class HomeController extends GetxController {
     Map<String, dynamic> pastParam = {};
 
     pastParam['page'] = 1;
-    pastParam['limit'] = "20";
+    pastParam['limit'] = "3000";
     pastParam['isPastPatient'] = 'true';
     String formattedStartDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
     String formattedEndDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -276,8 +276,12 @@ class HomeController extends GetxController {
     Map<String, dynamic> param = {};
 
     param['page'] = 1;
-    param['limit'] = "20";
-    param['search'] = searchController.text;
+    param['limit'] = "3000";
+    // param['search'] = searchController.text;
+
+    if (searchController.text.isNotEmpty) {
+      param['search'] = searchController.text;
+    }
 
     // Dynamically add sorting to the param map
 
@@ -320,7 +324,7 @@ class HomeController extends GetxController {
   Future<void> getScheduleVisitList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
-    param['limit'] = "20";
+    param['limit'] = "3000";
     param['isPastPatient'] = 'false';
     if (searchController.text.isNotEmpty) {
       param['search'] = searchController.text;
@@ -362,9 +366,12 @@ class HomeController extends GetxController {
   Future<void> getPastVisitList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
-    param['limit'] = "20";
+    param['limit'] = "3000";
     param['isPastPatient'] = 'true';
-    param['search'] = searchController.text;
+
+    if (searchController.text.isNotEmpty) {
+      param['search'] = searchController.text;
+    }
 
     if (sortingName!.isNotEmpty) {
       param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
@@ -414,7 +421,7 @@ class HomeController extends GetxController {
   Future<void> getScheduleVisitListFetchMore() async {
     Map<String, dynamic> param = {};
     param['page'] = ++pageSchedule;
-    param['limit'] = "20";
+    param['limit'] = "3000";
     param['isPastPatient'] = 'false';
     if (searchController.text.isNotEmpty) {
       param['search'] = searchController.text;
@@ -471,7 +478,7 @@ class HomeController extends GetxController {
     Map<String, dynamic> param = {};
 
     param['page'] = ++pagePatient;
-    param['limit'] = "20";
+    param['limit'] = "3000";
     param['search'] = searchController.text;
 
     List<Map<String, dynamic>> sorting = [
@@ -526,9 +533,11 @@ class HomeController extends GetxController {
   Future<void> getPastVisitListFetchMore() async {
     Map<String, dynamic> param = {};
     param['page'] = ++pagePast;
-    param['limit'] = "20";
+    param['limit'] = "3000";
     param['isPastPatient'] = 'true';
-    param['search'] = searchController.text;
+    if (searchController.text.isNotEmpty) {
+      param['search'] = searchController.text;
+    }
 
     List<Map<String, dynamic>> sorting = [
       {"id": "first_name", "desc": sortName},

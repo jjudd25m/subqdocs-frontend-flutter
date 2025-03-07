@@ -100,6 +100,18 @@ class PatientInfoView extends GetView<PatientInfoController> {
                         Column(
                           children: <Widget>[
                             SizedBox(height: 20.0),
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(14),
+                                child: Text(
+                                  "Patient Visit Record",
+                                  style: AppFonts.regular(17, AppColors.textBlack),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15.0),
                             Obx(() {
                               return Theme(
                                 data: ThemeData(
@@ -119,10 +131,13 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                           onTap: () {
                                             Get.back();
                                           },
-                                          child: SvgPicture.asset(
-                                            ImagePath.logo_back,
-                                            height: 15,
-                                            width: 18,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 8),
+                                            child: SvgPicture.asset(
+                                              ImagePath.logo_back,
+                                              height: 15,
+                                              width: 18,
+                                            ),
                                           ),
                                         ),
                                         SizedBox(
@@ -473,7 +488,7 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                   controller.tabIndex.value = 0;
                                                 },
                                                 isDoctorView: true,
-                                                text: " Q-view ",
+                                                text: " Power View ",
                                                 isOutline: true,
                                                 paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
@@ -483,34 +498,6 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                 outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
                                               ),
                                             ),
-                                            IntrinsicWidth(
-                                                child: CustomAnimatedButton(
-                                              onPressed: () {
-                                                controller.tabIndex.value = 1;
-                                              },
-                                              text: " Full Transcript ",
-                                              isOutline: true,
-                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                              fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                              outLineEnabledColor: AppColors.textGrey,
-                                              outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                            )),
-                                            IntrinsicWidth(
-                                                child: CustomAnimatedButton(
-                                              onPressed: () {
-                                                controller.tabIndex.value = 2;
-                                              },
-                                              text: " Patient View ",
-                                              isOutline: true,
-                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                              fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                              outLineEnabledColor: AppColors.textGrey,
-                                              outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                            )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
                                               onPressed: () {
@@ -525,6 +512,35 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                               outLineEnabledColor: AppColors.textGrey,
                                               outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
                                             )),
+                                            IntrinsicWidth(
+                                                child: CustomAnimatedButton(
+                                              onPressed: () {
+                                                controller.tabIndex.value = 2;
+                                              },
+                                              text: " Patient Note ",
+                                              isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                              fontSize: 14,
+                                              enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                            )),
+                                            IntrinsicWidth(
+                                                child: CustomAnimatedButton(
+                                              onPressed: () {
+                                                controller.tabIndex.value = 1;
+                                              },
+                                              text: " Full Transcript ",
+                                              isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                              fontSize: 14,
+                                              enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                            )),
+
                                             // IntrinsicWidth(
                                             //     child: CustomAnimatedButton(
                                             //   onPressed: () {
@@ -579,192 +595,193 @@ class PatientInfoView extends GetView<PatientInfoController> {
                               child: Obx(() {
                                 return Column(
                                   children: [
-                                    controller.tabIndex.value != 1
-                                        ? Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 19,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      "Patient Medical Record",
-                                                      style: AppFonts.medium(20, AppColors.textBlack),
-                                                    ),
-                                                    Spacer(),
-                                                    PopupMenuButton<String>(
-                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                                                        offset: const Offset(0, 5),
-                                                        color: AppColors.white,
-                                                        position: PopupMenuPosition.under,
-                                                        style: const ButtonStyle(
-                                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                            maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                            visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                                        itemBuilder: (context) => [
-                                                              PopupMenuItem(
-                                                                  onTap: () {},
-                                                                  padding: EdgeInsets.zero,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.all(10),
-                                                                        child: Row(
-                                                                          children: [
-                                                                            const SizedBox(width: 5),
-                                                                            SvgPicture.asset(
-                                                                              ImagePath.share_copy_link,
-                                                                              width: 30,
-                                                                              height: 30,
-                                                                            ),
-                                                                            const SizedBox(width: 8),
-                                                                            Text("Copy Link", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                                            const SizedBox(width: 5),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        height: 1,
-                                                                        color: AppColors.appbarBorder,
-                                                                        width: double.infinity,
-                                                                      )
-                                                                    ],
-                                                                  )),
-                                                              PopupMenuItem(
-                                                                  onTap: () {},
-                                                                  padding: EdgeInsets.zero,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.all(10),
-                                                                        child: Row(
-                                                                          children: [
-                                                                            const SizedBox(width: 5),
-                                                                            SvgPicture.asset(
-                                                                              ImagePath.share_email,
-                                                                              width: 30,
-                                                                              height: 30,
-                                                                            ),
-                                                                            const SizedBox(width: 8),
-                                                                            Text("Email", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                                            const SizedBox(width: 5),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        height: 1,
-                                                                        color: AppColors.appbarBorder,
-                                                                        width: double.infinity,
-                                                                      )
-                                                                    ],
-                                                                  )),
-                                                              PopupMenuItem(
-                                                                  onTap: () {},
-                                                                  padding: EdgeInsets.zero,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.all(10),
-                                                                        child: Row(
-                                                                          children: [
-                                                                            const SizedBox(width: 5),
-                                                                            SvgPicture.asset(
-                                                                              ImagePath.share_pdf,
-                                                                              width: 30,
-                                                                              height: 30,
-                                                                            ),
-                                                                            const SizedBox(width: 8),
-                                                                            Text("Download (PDF)", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                                            const SizedBox(width: 5),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        height: 1,
-                                                                        color: AppColors.appbarBorder,
-                                                                        width: double.infinity,
-                                                                      )
-                                                                    ],
-                                                                  )),
-                                                              PopupMenuItem(
-                                                                  onTap: () {},
-                                                                  padding: EdgeInsets.zero,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.all(10),
-                                                                        child: Row(
-                                                                          children: [
-                                                                            const SizedBox(width: 5),
-                                                                            SvgPicture.asset(
-                                                                              ImagePath.share_text,
-                                                                              width: 30,
-                                                                              height: 30,
-                                                                            ),
-                                                                            const SizedBox(width: 8),
-                                                                            Text("Download (Text)", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                                            const SizedBox(width: 5),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        height: 1,
-                                                                        color: AppColors.appbarBorder,
-                                                                        width: double.infinity,
-                                                                      )
-                                                                    ],
-                                                                  )),
-                                                              PopupMenuItem(
-                                                                  onTap: () {},
-                                                                  padding: EdgeInsets.zero,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.all(10),
-                                                                        child: Row(
-                                                                          children: [
-                                                                            const SizedBox(width: 5),
-                                                                            SvgPicture.asset(
-                                                                              ImagePath.share_print,
-                                                                              width: 30,
-                                                                              height: 30,
-                                                                            ),
-                                                                            const SizedBox(width: 8),
-                                                                            Text("Print", style: AppFonts.medium(17, AppColors.textBlack)),
-                                                                            const SizedBox(width: 5),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  )),
-                                                            ],
-                                                        child: SvgPicture.asset(
-                                                          ImagePath.share,
-                                                          width: 36,
-                                                          height: 36,
-                                                        )),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 19,
-                                              ),
-                                              Container(
-                                                color: AppColors.appbarBorder,
-                                                height: 1,
-                                                width: double.infinity,
-                                              ),
-                                              SizedBox(
-                                                height: 16,
-                                              ),
-                                            ],
-                                          )
-                                        : SizedBox(
-                                            height: 10,
-                                          ),
+                                    SizedBox(height: 20),
+                                    // controller.tabIndex.value != 1
+                                    //     ? Column(
+                                    //         children: [
+                                    //           SizedBox(
+                                    //             height: 19,
+                                    //           ),
+                                    //           Padding(
+                                    //             padding: EdgeInsets.symmetric(horizontal: 16),
+                                    //             child: Row(
+                                    //               children: [
+                                    //                 Text(
+                                    //                   textAlign: TextAlign.center,
+                                    //                   "Patient Medical Record",
+                                    //                   style: AppFonts.medium(20, AppColors.textBlack),
+                                    //                 ),
+                                    //                 Spacer(),
+                                    //                 PopupMenuButton<String>(
+                                    //                     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                    //                     offset: const Offset(0, 5),
+                                    //                     color: AppColors.white,
+                                    //                     position: PopupMenuPosition.under,
+                                    //                     style: const ButtonStyle(
+                                    //                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    //                         maximumSize: WidgetStatePropertyAll(Size.zero),
+                                    //                         visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                    //                     itemBuilder: (context) => [
+                                    //                           PopupMenuItem(
+                                    //                               onTap: () {},
+                                    //                               padding: EdgeInsets.zero,
+                                    //                               child: Column(
+                                    //                                 children: [
+                                    //                                   Padding(
+                                    //                                     padding: const EdgeInsets.all(10),
+                                    //                                     child: Row(
+                                    //                                       children: [
+                                    //                                         const SizedBox(width: 5),
+                                    //                                         SvgPicture.asset(
+                                    //                                           ImagePath.share_copy_link,
+                                    //                                           width: 30,
+                                    //                                           height: 30,
+                                    //                                         ),
+                                    //                                         const SizedBox(width: 8),
+                                    //                                         Text("Copy Link", style: AppFonts.medium(17, AppColors.textBlack)),
+                                    //                                         const SizedBox(width: 5),
+                                    //                                       ],
+                                    //                                     ),
+                                    //                                   ),
+                                    //                                   Container(
+                                    //                                     height: 1,
+                                    //                                     color: AppColors.appbarBorder,
+                                    //                                     width: double.infinity,
+                                    //                                   )
+                                    //                                 ],
+                                    //                               )),
+                                    //                           PopupMenuItem(
+                                    //                               onTap: () {},
+                                    //                               padding: EdgeInsets.zero,
+                                    //                               child: Column(
+                                    //                                 children: [
+                                    //                                   Padding(
+                                    //                                     padding: const EdgeInsets.all(10),
+                                    //                                     child: Row(
+                                    //                                       children: [
+                                    //                                         const SizedBox(width: 5),
+                                    //                                         SvgPicture.asset(
+                                    //                                           ImagePath.share_email,
+                                    //                                           width: 30,
+                                    //                                           height: 30,
+                                    //                                         ),
+                                    //                                         const SizedBox(width: 8),
+                                    //                                         Text("Email", style: AppFonts.medium(17, AppColors.textBlack)),
+                                    //                                         const SizedBox(width: 5),
+                                    //                                       ],
+                                    //                                     ),
+                                    //                                   ),
+                                    //                                   Container(
+                                    //                                     height: 1,
+                                    //                                     color: AppColors.appbarBorder,
+                                    //                                     width: double.infinity,
+                                    //                                   )
+                                    //                                 ],
+                                    //                               )),
+                                    //                           PopupMenuItem(
+                                    //                               onTap: () {},
+                                    //                               padding: EdgeInsets.zero,
+                                    //                               child: Column(
+                                    //                                 children: [
+                                    //                                   Padding(
+                                    //                                     padding: const EdgeInsets.all(10),
+                                    //                                     child: Row(
+                                    //                                       children: [
+                                    //                                         const SizedBox(width: 5),
+                                    //                                         SvgPicture.asset(
+                                    //                                           ImagePath.share_pdf,
+                                    //                                           width: 30,
+                                    //                                           height: 30,
+                                    //                                         ),
+                                    //                                         const SizedBox(width: 8),
+                                    //                                         Text("Download (PDF)", style: AppFonts.medium(17, AppColors.textBlack)),
+                                    //                                         const SizedBox(width: 5),
+                                    //                                       ],
+                                    //                                     ),
+                                    //                                   ),
+                                    //                                   Container(
+                                    //                                     height: 1,
+                                    //                                     color: AppColors.appbarBorder,
+                                    //                                     width: double.infinity,
+                                    //                                   )
+                                    //                                 ],
+                                    //                               )),
+                                    //                           PopupMenuItem(
+                                    //                               onTap: () {},
+                                    //                               padding: EdgeInsets.zero,
+                                    //                               child: Column(
+                                    //                                 children: [
+                                    //                                   Padding(
+                                    //                                     padding: const EdgeInsets.all(10),
+                                    //                                     child: Row(
+                                    //                                       children: [
+                                    //                                         const SizedBox(width: 5),
+                                    //                                         SvgPicture.asset(
+                                    //                                           ImagePath.share_text,
+                                    //                                           width: 30,
+                                    //                                           height: 30,
+                                    //                                         ),
+                                    //                                         const SizedBox(width: 8),
+                                    //                                         Text("Download (Text)", style: AppFonts.medium(17, AppColors.textBlack)),
+                                    //                                         const SizedBox(width: 5),
+                                    //                                       ],
+                                    //                                     ),
+                                    //                                   ),
+                                    //                                   Container(
+                                    //                                     height: 1,
+                                    //                                     color: AppColors.appbarBorder,
+                                    //                                     width: double.infinity,
+                                    //                                   )
+                                    //                                 ],
+                                    //                               )),
+                                    //                           PopupMenuItem(
+                                    //                               onTap: () {},
+                                    //                               padding: EdgeInsets.zero,
+                                    //                               child: Column(
+                                    //                                 children: [
+                                    //                                   Padding(
+                                    //                                     padding: const EdgeInsets.all(10),
+                                    //                                     child: Row(
+                                    //                                       children: [
+                                    //                                         const SizedBox(width: 5),
+                                    //                                         SvgPicture.asset(
+                                    //                                           ImagePath.share_print,
+                                    //                                           width: 30,
+                                    //                                           height: 30,
+                                    //                                         ),
+                                    //                                         const SizedBox(width: 8),
+                                    //                                         Text("Print", style: AppFonts.medium(17, AppColors.textBlack)),
+                                    //                                         const SizedBox(width: 5),
+                                    //                                       ],
+                                    //                                     ),
+                                    //                                   ),
+                                    //                                 ],
+                                    //                               )),
+                                    //                         ],
+                                    //                     child: SvgPicture.asset(
+                                    //                       ImagePath.share,
+                                    //                       width: 36,
+                                    //                       height: 36,
+                                    //                     )),
+                                    //               ],
+                                    //             ),
+                                    //           ),
+                                    //           SizedBox(
+                                    //             height: 19,
+                                    //           ),
+                                    //           Container(
+                                    //             color: AppColors.appbarBorder,
+                                    //             height: 1,
+                                    //             width: double.infinity,
+                                    //           ),
+                                    //           SizedBox(
+                                    //             height: 16,
+                                    //           ),
+                                    //         ],
+                                    //       )
+                                    //     : SizedBox(
+                                    //         height: 10,
+                                    //       ),
                                     if (controller.tabIndex.value == 0) ...[DoctorView()],
                                     if (controller.tabIndex.value == 1) ...[FullTranscriptView()],
                                     if (controller.tabIndex.value == 2) ...[PatientView()],

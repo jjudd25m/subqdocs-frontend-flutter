@@ -220,9 +220,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                   controller.getScheduleVisitList();
                   controller.getPatientList();
                 },
-                onLoadMore: () {
-                  controller.getScheduleVisitListFetchMore();
-                },
+                // onLoadMore: () {
+                //   controller.getScheduleVisitListFetchMore();
+                // },
               );
       }),
     );

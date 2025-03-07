@@ -22,7 +22,22 @@ class FullNoteView extends GetView<PatientInfoController> {
     return Obx(() {
       return Column(
         children: [
-          if (controller.isFullNoteLoading.value || controller.patientFullNoteModel.value?.responseData == null) ...[
+          // if (controller.patientFullNoteModel.value == null) ...[
+          //   Center(
+          //       child: Column(
+          //     children: [
+          //       SvgPicture.asset(
+          //         ImagePath.patient_no_data,
+          //         width: 300,
+          //       ),
+          //       Text("No data found!"),
+          //       SizedBox(
+          //         height: 30,
+          //       )
+          //     ],
+          //   ))
+          // ] else ...[
+          if ((controller.isFullNoteLoading.value || controller.patientFullNoteModel.value?.responseData == null)) ...[
             Center(
                 child: Column(
               children: [
@@ -1118,6 +1133,7 @@ class FullNoteView extends GetView<PatientInfoController> {
               height: 20,
             ),
           ]
+          // ],
         ],
       );
     });

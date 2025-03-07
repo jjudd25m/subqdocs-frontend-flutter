@@ -161,10 +161,13 @@ class VisitMainView extends GetView<VisitMainController> {
                                             onTap: () {
                                               Get.back();
                                             },
-                                            child: SvgPicture.asset(
-                                              ImagePath.logo_back,
-                                              height: 15,
-                                              width: 18,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 8),
+                                              child: SvgPicture.asset(
+                                                ImagePath.logo_back,
+                                                height: 15,
+                                                width: 18,
+                                              ),
                                             ),
                                           ),
                                           SizedBox(

@@ -32,6 +32,21 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                     border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                 child: Column(
                   children: [
+                    // if (controller.transcriptListModel.value?.responseData?.cleanedTranscript == null) ...[
+                    //   Center(
+                    //       child: Column(
+                    //     children: [
+                    //       SvgPicture.asset(
+                    //         ImagePath.patient_no_data,
+                    //         width: 300,
+                    //       ),
+                    //       Text("No data found!"),
+                    //       SizedBox(
+                    //         height: 30,
+                    //       )
+                    //     ],
+                    //   ))
+                    // ] else ...[
                     Container(
                       // height: 80,
                       decoration: BoxDecoration(
@@ -44,11 +59,11 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            "Transcribing Summary",
-                            style: AppFonts.medium(20, AppColors.textBlack),
-                          ),
+                          // Text(
+                          //   textAlign: TextAlign.center,
+                          //   "Transcribing Summary",
+                          //   style: AppFonts.medium(20, AppColors.textBlack),
+                          // ),
                           SizedBox(
                             height: 4,
                           ),
@@ -156,6 +171,7 @@ class FullTranscriptView extends GetView<PatientInfoController> {
                     SizedBox(
                       height: 6,
                     ),
+                    // ]
                   ],
                 )),
           ),

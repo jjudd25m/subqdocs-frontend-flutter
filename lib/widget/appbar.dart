@@ -64,14 +64,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onTap: () {
                     drawerkey.currentState!.openDrawer();
                   },
-                  child: SvgPicture.asset(
-                    ImagePath.drawer,
-                    height: 20,
-                    width: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: SvgPicture.asset(
+                      ImagePath.drawer,
+                      height: 20,
+                      width: 20,
+                    ),
                   ),
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 5,
                 ),
                 GestureDetector(
                   onTap: () {

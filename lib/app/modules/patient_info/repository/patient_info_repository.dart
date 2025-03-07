@@ -8,9 +8,14 @@ import '../model/transcript_list_model.dart';
 
 class PatientInfoRepository {
   Future<TranscriptListModel> getTranscript({required String id}) async {
-    var response = await ApiProvider.instance.callGet("patient/transcript/$id");
-    customPrint("getTranscript API  internal response $response");
-    return TranscriptListModel.fromJson(response);
+    try {
+      var response = await ApiProvider.instance.callGet("patient/transcript/$id");
+      customPrint("getTranscript API  internal response $response");
+      return TranscriptListModel.fromJson(response);
+    } catch (e) {
+      customPrint("getTranscript API  internal response $e");
+      return TranscriptListModel();
+    }
   }
 
   Future<PatientViewListModel> getPatientView({required String id}) async {

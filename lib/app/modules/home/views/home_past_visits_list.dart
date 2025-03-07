@@ -41,7 +41,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                       description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
                 )
               : CustomTable(
-                  onLoadMore: () => controller.getPastVisitListFetchMore(),
+                  // onLoadMore: () => controller.getPastVisitListFetchMore(),
                   rows: _getTableRows(controller.pastVisitList),
                   onRowSelected: (rowIndex, rowData) {
                     customPrint("row index is :- $rowIndex");
