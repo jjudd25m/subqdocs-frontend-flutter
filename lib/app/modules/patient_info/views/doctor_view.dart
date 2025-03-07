@@ -90,21 +90,28 @@ class DoctorView extends GetView<PatientInfoController> {
                                 border: TableBorder.all(
                                   color: AppColors.buttonBackgroundGrey, // Table border color
                                   width: 1, // Border width
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5)), // Optional rounded corners
                                 ),
                                 columnWidths: {
                                   0: FractionColumnWidth(0.35), // Fixed width for "Procedure" column
                                   1: FractionColumnWidth(0.35), // Fixed width for "Diagnosis" column
                                   2: FractionColumnWidth(0.15), // Flexible width for "Unit" column (20% of screen)
-                                  3: FractionColumnWidth(0.15), // Flexible width for "Unit charges" column (40% of screen)
+                                  3: FractionColumnWidth(
+                                      0.15), // Flexible width for "Unit charges" column (40% of screen)
                                 },
-                                children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
+                                children: controller.doctorViewList.value?.responseData != null
+                                    ? _getTableRows(controller.doctorViewList.value!.responseData!)
+                                    : [],
                               ),
                               Table(
                                 border: TableBorder.all(
                                   color: AppColors.buttonBackgroundGrey, // Table border color
                                   width: 1, // Border width
-                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(5),
+                                      bottomRight: Radius.circular(5)), // Optional rounded corners
                                 ),
                                 columnWidths: {
                                   0: FractionColumnWidth(0.85), // Fixed width for "Procedure" column
@@ -117,7 +124,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                     ),
                                     children: [
                                       _headerBuildTableCell('Total'),
-                                      _headerBuildTableCell("\$${controller.doctorViewList.value?.responseData?.totalCharges}"),
+                                      _headerBuildTableCell(
+                                          "\$${controller.doctorViewList.value?.responseData?.totalCharges}"),
                                     ],
                                   ),
                                   // Add more rows if needed
@@ -199,7 +207,8 @@ class DoctorView extends GetView<PatientInfoController> {
                             controller.tasks.insert(newIndex, task);
                           },
                           children: [
-                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
+                            for (ImpressionsAndPlan task
+                                in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
                               Container(
                                 key: ValueKey(task),
                                 child: Column(
@@ -270,7 +279,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                                     ),
                                                     Column(
                                                       children: [
-                                                        for (Specifications specifications in treatments.specifications ?? [])
+                                                        for (Specifications specifications
+                                                            in treatments.specifications ?? [])
                                                           Row(
                                                             children: [
                                                               SizedBox(
@@ -606,7 +616,8 @@ class DoctorView extends GetView<PatientInfoController> {
   Widget _buildTableCell(String text, bool isTotal) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
+      child:
+          Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
     );
   }
 
@@ -636,7 +647,9 @@ class DoctorView extends GetView<PatientInfoController> {
             color: AppColors.white, // Background color for row (you can alternate rows if needed)
           ),
           children: [
-            _buildTableCell("${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}", false),
+            _buildTableCell(
+                "${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}",
+                false),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(
@@ -697,7 +710,7 @@ class DoctorView extends GetView<PatientInfoController> {
                   itemCount: diagnosis.diagnosis?.length ?? 0),
             ),
             _buildTableCell(diagnosis.units?.toString() ?? '0', false), // Default to '0' if null
-            _buildTableCell("\$${diagnosis.unitCharge?.toString()}", false), // Default to '0' if null
+            _buildTableCell("${diagnosis.unitCharge?.toString()}", false), // Default to '0' if null
           ],
         ),
       );

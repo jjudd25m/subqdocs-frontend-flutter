@@ -23,6 +23,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
+import '../../../models/MedicalRecords.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
@@ -42,6 +43,7 @@ class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
+  Rxn<MedicalRecords> medicalRecords = Rxn();
   // Rxn<'List<ScheduledVisits>> scheduledVisits = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
 
@@ -167,7 +169,12 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -266,7 +273,12 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
       },
     );
@@ -345,7 +357,8 @@ class VisitMainController extends GetxController {
       loadingMessage.value = "Uploading Audio";
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave =
+          AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
 
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
@@ -353,7 +366,8 @@ class VisitMainController extends GetxController {
       loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
       isLoading.value = false;
 
-      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      CustomToastification()
+          .showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
       List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
@@ -367,8 +381,8 @@ class VisitMainController extends GetxController {
 
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+          audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -425,7 +439,8 @@ class VisitMainController extends GetxController {
     } else {
       customPrint("profile is not  available");
     }
-    await _visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await _visitMainRepository.uploadAttachments(
+        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     Get.back();
     getPatientAttachment();
@@ -499,12 +514,19 @@ class VisitMainController extends GetxController {
     }
   }
 
+  Future<void> getMedicalRecords({required String id}) async {
+    medicalRecords.value = await _editPatientDetailsRepository.getMedicalRecords(id: patientId.value);
+
+    medicalRecords.refresh();
+  }
+
   void onLine() async {
     customPrint("now its disConnected");
 
     if (patientId.value.isNotEmpty) {
       getVisitRecap();
       getPatientAttachment();
+      getMedicalRecords(id: patientId.value);
     }
 
     if (visitId.value.isNotEmpty) {
@@ -518,11 +540,14 @@ class VisitMainController extends GetxController {
   void offLine() async {
     var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
 
-    var visitRecapListResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitRecaps, visitId: visitId.value, responseData: responseData);
+    var visitRecapListResponse = fetchVisitDetails(
+        type: scheduleVisitsList, modelType: visitRecaps, visitId: visitId.value, responseData: responseData);
 
-    var patientDetailsResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitMainData, visitId: visitId.value, responseData: responseData);
+    var patientDetailsResponse = fetchVisitDetails(
+        type: scheduleVisitsList, modelType: visitMainData, visitId: visitId.value, responseData: responseData);
 
-    var scheduleVisitResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
+    var scheduleVisitResponse = fetchVisitDetails(
+        type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
 
     patientDetailModel.value = PatientDetailModel.fromJson(scheduleVisitResponse);
 
@@ -531,7 +556,11 @@ class VisitMainController extends GetxController {
     patientData.value = VisitMainPatientDetails.fromJson(patientDetailsResponse);
   }
 
-  Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {
+  Map<String, dynamic> fetchVisitDetails(
+      {required Map<String, dynamic> responseData,
+      required String type,
+      required String visitId,
+      required String modelType}) {
     // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
     List<dynamic> visitList = responseData['responseData'][type];
 
@@ -563,7 +592,12 @@ class VisitMainController extends GetxController {
         "response_type": "success"
       };
     } else {
-      return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
+      return {
+        "responseData": responseDataResult,
+        "message": " Details Fetched Successfully",
+        "toast": true,
+        "response_type": "success"
+      };
     }
   }
 }

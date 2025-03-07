@@ -38,7 +38,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                         controller.getPatientList();
                       },
                       title: "Your Past Visit List is Empty",
-                      description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                      description:
+                          "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
                 )
               : CustomTable(
                   onLoadMore: () => controller.getPastVisitListFetchMore(),
@@ -114,7 +115,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                customPrint("visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
+                                                customPrint(
+                                                    "visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
 
                                                 Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                   "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
@@ -136,7 +138,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               onTap: () async {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
-                                                final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                                final result =
+                                                    await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
                                                   "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
                                                   "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
                                                   "fromSchedule": false
@@ -171,13 +174,18 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               onTap: () {
                                                 showDialog(
                                                   context: context,
-                                                  barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                  barrierDismissible:
+                                                      true, // Allows dismissing the dialog by tapping outside
                                                   builder: (BuildContext context) {
                                                     return SchedulePatientDialog(
                                                       receiveParam: (p0, p1) {
                                                         customPrint("p0 is $p0 p1 is $p1");
-                                                        controller
-                                                            .patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
+                                                        controller.patientScheduleCreate(param: {
+                                                          "patient_id":
+                                                              controller.pastVisitList[rowIndex - 1].id.toString(),
+                                                          "visit_date": p1,
+                                                          "visit_time": p0
+                                                        });
                                                       },
                                                     ); // Our custom dialog
                                                   },
@@ -234,14 +242,16 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           controller.getPastVisitList(sortingName: cellData);
                                           controller.colIndex.value = colIndex;
 
-                                          controller.isAsending.value = controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
+                                          controller.isAsending.value =
+                                              controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
                                           controller.colIndex.refresh();
                                           controller.isAsending.refresh();
                                           customPrint("col index is the $colIndex");
                                           customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
                                         },
                                         child: Row(
-                                          mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               cellData,
@@ -251,12 +261,16 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               softWrap: true, // Allows text to wrap
                                               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                             ),
-                                            colIndex == controller.colIndex.value && controller.isAsending.value && colIndex != 6
+                                            colIndex == controller.colIndex.value &&
+                                                    controller.isAsending.value &&
+                                                    colIndex != 6
                                                 ? Icon(
                                                     CupertinoIcons.down_arrow,
                                                     size: 15,
                                                   )
-                                                : colIndex == controller.colIndex.value && !controller.isAsending.value && colIndex != 6
+                                                : colIndex == controller.colIndex.value &&
+                                                        !controller.isAsending.value &&
+                                                        colIndex != 6
                                                     ? Icon(
                                                         CupertinoIcons.up_arrow,
                                                         size: 15,
@@ -313,7 +327,7 @@ class HomePastVisitsList extends GetView<HomeController> {
       }
 
       rows.add([
-        "${patient.firstName}, ${patient.lastName}", // Patient Name
+        "${patient.firstName} ${patient.lastName}", // Patient Name
         formatedDateTime, // Last Visit Date
         patient.age.toString(), // Age
         patient.gender.toString()[0], // Gender

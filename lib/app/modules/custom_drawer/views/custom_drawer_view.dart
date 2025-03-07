@@ -9,6 +9,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/drawer_item.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../core/common/app_preferences.dart';
@@ -42,9 +43,11 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                   ),
                   Row(
                     children: [
-                      RoundedImageWidget(
-                        size: 40,
-                        imagePath: ImagePath.user,
+                      BaseImageView(
+                        imageUrl:
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                        width: 40,
+                        height: 40,
                       ),
                       SizedBox(
                         width: 8,
@@ -112,7 +115,8 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                   child: DrawerItem(
                                     isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
                                     itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
-                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ?? "", // Add any dummy icon path here
+                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ??
+                                        "", // Add any dummy icon path here
                                   ));
                             },
                             itemCount: controller.drawerItemModelList.value.length,
