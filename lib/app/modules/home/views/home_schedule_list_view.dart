@@ -220,8 +220,8 @@ class HomeScheduleListView extends GetView<HomeController> {
 
                   print("back from response");
 
-                  controller.getPastVisitList();
-                  controller.getScheduleVisitList();
+                  controller.getPastVisitList(isFist: true);
+                  controller.getScheduleVisitList(isFist: true);
                   controller.getPatientList();
                 },
                 onLoadMore: () {

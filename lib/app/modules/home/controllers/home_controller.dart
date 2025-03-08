@@ -950,7 +950,7 @@ class HomeController extends GetxController {
     toController.clear();
     getPatientList();
     getScheduleVisitList();
-    getPastVisitList();
+    getPastVisitList(isFist:true );
   }
 
   void changeScreen(bool isPast) async {
@@ -1134,10 +1134,11 @@ class HomeController extends GetxController {
     }
 
 
-    if(isFist) {
-
+    if(isFist){
 
         param["sorting"] = defaultPastPatient;
+        lastSorting = defaultPastPatient;
+
 
     }else{
       if (sortingName!.isNotEmpty) {
@@ -1428,7 +1429,7 @@ class HomeController extends GetxController {
       switch (status) {
         case InternetStatus.connected:
           // customPrint("now its  connected ");
-          getPastVisitList();
+          getPastVisitList(isFist: true);
           getScheduleVisitList();
           getPatientList();
           getStatus();
