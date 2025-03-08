@@ -11,6 +11,10 @@ import 'package:subqdocs/utils/imagepath.dart';
 import '../../../../widget/custom_animated_button.dart';
 
 class ConfirmFinalizeDialog extends StatelessWidget {
+  final VoidCallback? onDelete;
+
+  ConfirmFinalizeDialog({this.onDelete});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -95,9 +99,7 @@ class ConfirmFinalizeDialog extends StatelessWidget {
                       ),
                       Expanded(
                         child: CustomAnimatedButton(
-                          onPressed: () {
-                            Get.toNamed(Routes.PATIENT_VIEW_READ_ONLY);
-                          },
+                          onPressed: onDelete,
                           text: " Finalize ",
                           isOutline: true,
                           enabledTextColor: AppColors.textWhite,

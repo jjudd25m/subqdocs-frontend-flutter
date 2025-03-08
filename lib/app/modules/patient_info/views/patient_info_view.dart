@@ -119,8 +119,10 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                   highlightColor: Colors.transparent, // Remove highlight color
                                 ),
                                 child: ExpansionTile(
-                                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  collapsedShape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  shape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   backgroundColor: AppColors.backgroundWhite,
                                   collapsedBackgroundColor: AppColors.backgroundWhite,
                                   title: Padding(
@@ -149,7 +151,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                               imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
                                               height: 60,
                                               width: 60,
-                                              nameLetters: "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                              nameLetters:
+                                                  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                               fontSize: 14,
                                             )),
                                         SizedBox(
@@ -265,7 +268,10 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 formatDateTime(
-                                                    firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                                    firstDate:
+                                                        controller.patientData.value?.responseData?.visitDate ?? "",
+                                                    secondDate:
+                                                        controller.patientData.value?.responseData?.visitTime ?? ""),
                                                 style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
@@ -471,12 +477,14 @@ class PatientInfoView extends GetView<PatientInfoController> {
                             SizedBox(height: 10),
                             Container(
                               width: double.infinity,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Obx(
                                 () {
                                   return Container(
                                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
+                                      decoration:
+                                          BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                       height: 45,
                                       child: SingleChildScrollView(
                                         physics: BouncingScrollPhysics(),
@@ -493,10 +501,16 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                                 isOutline: true,
                                                 paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
-                                                enabledTextColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                enabledColor: controller.tabIndex.value == 0 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                                enabledTextColor: controller.tabIndex.value == 0
+                                                    ? AppColors.backgroundPurple
+                                                    : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 0
+                                                    ? AppColors.buttonPurpleLight
+                                                    : AppColors.clear,
                                                 outLineEnabledColor: AppColors.textGrey,
-                                                outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
+                                                outlineColor: controller.tabIndex.value == 0
+                                                    ? AppColors.backgroundPurple
+                                                    : AppColors.clear,
                                               ),
                                             ),
                                             IntrinsicWidth(
@@ -508,10 +522,16 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                               isOutline: true,
                                               paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 3 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 3
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 3
+                                                  ? AppColors.buttonPurpleLight
+                                                  : AppColors.clear,
                                               outLineEnabledColor: AppColors.textGrey,
-                                              outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
+                                              outlineColor: controller.tabIndex.value == 3
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.clear,
                                             )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
@@ -522,10 +542,16 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                               isOutline: true,
                                               paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 2
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 2
+                                                  ? AppColors.buttonPurpleLight
+                                                  : AppColors.clear,
                                               outLineEnabledColor: AppColors.textGrey,
-                                              outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                              outlineColor: controller.tabIndex.value == 2
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.clear,
                                             )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
@@ -536,10 +562,16 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                               isOutline: true,
                                               paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                              enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 1
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 1
+                                                  ? AppColors.buttonPurpleLight
+                                                  : AppColors.clear,
                                               outLineEnabledColor: AppColors.textGrey,
-                                              outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                              outlineColor: controller.tabIndex.value == 1
+                                                  ? AppColors.backgroundPurple
+                                                  : AppColors.clear,
                                             )),
 
                                             // IntrinsicWidth(
@@ -592,7 +624,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                             ),
                             SizedBox(height: 10),
                             Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Obx(() {
                                 return Column(
                                   children: [
@@ -861,7 +894,8 @@ class PatientInfoView extends GetView<PatientInfoController> {
                                   Text(
                                     textAlign: TextAlign.center,
                                     "Amend Note",
-                                    style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline),
+                                    style: AppFonts.medium(15, AppColors.textGrey)
+                                        .copyWith(decoration: TextDecoration.underline),
                                   ),
                                 ],
                               ),
@@ -952,15 +986,17 @@ class PatientInfoView extends GetView<PatientInfoController> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                if (controller.patientTranscriptUploadModel.responseData?.id != null) {
-                                  Get.back();
-                                } else {
-                                  Get.back();
-                                  dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                    "visitId": controller.visitId,
-                                    "patientId": controller.patientId,
-                                  });
-                                }
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return ConfirmFinalizeDialog(
+                                      onDelete: () {
+                                        controller.changeStatus();
+                                      },
+                                    );
+                                  },
+                                );
 
                                 // if (controller.visitId.isNotEmpty && controller.patientTranscriptUploadModel.responseData?.id != null) {
                                 //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {

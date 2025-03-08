@@ -3,11 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:subqdocs/utils/Loader.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_string.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/service/socket_service.dart';
+import '../../../models/ChangeModel.dart';
+import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -141,7 +146,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       if (socketService.socket.connected) {
         customPrint("socket is connected");
 
-        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
+        socketService.socket
+            .emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
         socketService.socket.on(
           "AllTabStatus",
@@ -283,7 +289,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
             String status = res["status"];
             String message = res["message"];
 
-            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint(
+                "$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("PatientViewStatus inside condition");
@@ -321,7 +328,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
             String status = res["status"];
             String message = res["message"];
 
-            customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+            customPrint(
+                "$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("transcriptStatus inside condition");
@@ -595,6 +603,42 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     getDoctorNote();
   }
 
+  Future<void> changeStatus() async {
+    try {
+      Loader().showLoadingDialogForSimpleLoader();
+
+      Map<String, dynamic> param = {};
+
+      param['status'] = "Finalized";
+
+      ChangeStatusModel changeStatusModel = await _patientInfoRepository.changeStatus(id: visitId, params: param);
+      if (changeStatusModel.responseType == "success") {
+        Get.back();
+        Get.back();
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+        if (patientTranscriptUploadModel.responseData?.id != null) {
+          Get.back();
+          Get.back();
+        } else {
+          Get.back();
+          Get.back();
+          dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+            "visitId": visitId,
+            "patientId": patientId,
+          });
+        }
+      } else {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+        Get.back();
+        Get.back();
+      }
+    } catch (e) {
+      // customPrint("$e");
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+      // Get.back();
+    }
+  }
+
   Future<void> getTranscript() async {
     transcriptListModel.value = await _patientInfoRepository.getTranscript(id: visitId);
     customPrint("transcriptListModel is :- ${transcriptListModel.value?.toJson()}");
@@ -628,16 +672,40 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   void offLine() {
     var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
 
-    var doctorViewResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.doctorView, visitId: visitId, responseData: responseData);
+    var doctorViewResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.doctorView,
+        visitId: visitId,
+        responseData: responseData);
 
-    var fullNoteResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.fullNote, visitId: visitId, responseData: responseData);
+    var fullNoteResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.fullNote,
+        visitId: visitId,
+        responseData: responseData);
 
-    var visitDataResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.patientVisitDetails, visitId: visitId, responseData: responseData);
+    var visitDataResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.patientVisitDetails,
+        visitId: visitId,
+        responseData: responseData);
 
-    var fullTransScriptResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.fullTranscript, visitId: visitId, responseData: responseData);
+    var fullTransScriptResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.fullTranscript,
+        visitId: visitId,
+        responseData: responseData);
 
-    var patientDetailsResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.visitMainData, visitId: visitId, responseData: responseData);
-    var patientViewResponse = fetchVisitDetails(type: AppString.pastPatientVisitsList, modelType: AppString.patientView, visitId: visitId, responseData: responseData);
+    var patientDetailsResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.visitMainData,
+        visitId: visitId,
+        responseData: responseData);
+    var patientViewResponse = fetchVisitDetails(
+        type: AppString.pastPatientVisitsList,
+        modelType: AppString.patientView,
+        visitId: visitId,
+        responseData: responseData);
     doctorViewList.value = DoctorViewModel.fromJson(doctorViewResponse);
 
     patientFullNoteModel.value = PatientFullNoteModel.fromJson(fullNoteResponse);
@@ -647,7 +715,11 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     patientData.value = VisitMainPatientDetails.fromJson(patientDetailsResponse);
   }
 
-  Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {
+  Map<String, dynamic> fetchVisitDetails(
+      {required Map<String, dynamic> responseData,
+      required String type,
+      required String visitId,
+      required String modelType}) {
     // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
     List<dynamic> visitList = responseData['responseData'][type];
 
@@ -670,7 +742,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
 
     // Return the formatted response
-    return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
+    return {
+      "responseData": responseDataResult,
+      "message": " Details Fetched Successfully",
+      "toast": true,
+      "response_type": "success"
+    };
   }
 
   void handelInternetConnection() {
