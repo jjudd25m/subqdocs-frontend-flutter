@@ -244,7 +244,7 @@ class HomeView extends GetView<HomeController> {
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      controller.tabIndex.value != 1 ? "Patient List" : "Scheduled List",
+                                                      controller.tabIndex.value != 1 ? "Patient List" : "Scheduling View",
                                                       style: AppFonts.medium(16, AppColors.black),
                                                     ),
                                                   ),
@@ -334,40 +334,29 @@ class HomeView extends GetView<HomeController> {
                                                                     children: List.generate(controller.statusModel.length, (index) {
                                                                   return Padding(
                                                                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                                      child: Row(
-                                                                        children: [
-                                                                          controller.selectedStatusIndex.contains(index)
-                                                                              ? GestureDetector(
-                                                                                  onTap: () {
-                                                                                    customPrint("true false");
-
-                                                                                    if (controller.selectedStatusIndex.contains(index)) {
-                                                                                      controller.selectedStatusIndex.remove(index);
-                                                                                    } else {
-                                                                                      controller.selectedStatusIndex.add(index);
-                                                                                    }
-                                                                                  },
-                                                                                  child: SvgPicture.asset(ImagePath.checkedBox),
-                                                                                )
-                                                                              : GestureDetector(
-                                                                                  onTap: () {
-                                                                                    customPrint("");
-                                                                                    if (controller.selectedStatusIndex.contains(index)) {
-                                                                                      controller.selectedStatusIndex.remove(index);
-                                                                                    } else {
-                                                                                      controller.selectedStatusIndex.add(index);
-                                                                                    }
-                                                                                  },
-                                                                                  child: SvgPicture.asset(ImagePath.unCheckedBox),
-                                                                                ),
-                                                                          SizedBox(
-                                                                            width: 9,
-                                                                          ),
-                                                                          Text(
-                                                                            controller.statusModel[index].status ?? "",
-                                                                            style: AppFonts.regular(14, AppColors.textBlack),
-                                                                          ),
-                                                                        ],
+                                                                      child: GestureDetector(
+                                                                        onTap: () {
+                                                                          if (controller.selectedStatusIndex.contains(index)) {
+                                                                            controller.selectedStatusIndex.remove(index);
+                                                                          } else {
+                                                                            controller.selectedStatusIndex.add(index);
+                                                                          }
+                                                                        },
+                                                                        child: Row(
+                                                                          children: [
+                                                                            controller.selectedStatusIndex.contains(index)
+                                                                                ? SvgPicture.asset(ImagePath.checkedBox,width: 25, height: 25,)
+                                                                                : SvgPicture.asset(ImagePath.unCheckedBox,width: 25, height: 25,),
+                                                                            SizedBox(
+                                                                              width: 9,
+                                                                            ),
+                                                                            Text(
+                                                                              controller.statusModel[index].status ?? "",
+                                                                              style: AppFonts.regular(14, AppColors.textBlack),
+                                                                            ),
+                                                                            Spacer()
+                                                                          ],
+                                                                        ),
                                                                       ));
                                                                 }));
                                                               }),
@@ -382,7 +371,7 @@ class HomeView extends GetView<HomeController> {
                                                                   padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
                                                                   child: TextFormFiledWidget(
                                                                       readOnly: true,
-                                                                      label: "Visit Date",
+                                                                      label: controller.tabIndex.value == 0 ? "Last Visit Date" : "Visit Date",
                                                                       controller: controller.fromController,
                                                                       onTap: () async {
                                                                         customPrint("customPrint");

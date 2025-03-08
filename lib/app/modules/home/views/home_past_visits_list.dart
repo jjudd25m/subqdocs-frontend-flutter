@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/home/views/schedule_patient_dialog.dart';
+import 'package:subqdocs/app/modules/patient_info/controllers/patient_info_controller.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -45,6 +46,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                   rows: _getTableRows(controller.pastVisitList),
                   onRowSelected: (rowIndex, rowData) {
                     customPrint("row index is :- $rowIndex");
+
+                    Get.delete<PatientInfoController>();
+
 
                     Get.toNamed(Routes.PATIENT_INFO, arguments: {
                       "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),

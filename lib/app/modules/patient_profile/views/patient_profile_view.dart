@@ -127,7 +127,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                         width: 50,
                                                         fontSize: 16,
                                                         imageUrl: controller.patientDetailModel.value?.responseData?.profileImage ?? "",
-                                                        nameLetters: "${controller.patientDetailModel.value?.responseData?.firstName}  ${controller.patientDetailModel.value?.responseData?.lastName} ",
+                                                        nameLetters: "${controller.patientDetailModel.value?.responseData?.firstName} ${controller.patientDetailModel.value?.responseData?.lastName} ",
                                                       )),
                                                   SizedBox(
                                                     width: 10,
@@ -501,7 +501,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                 ),
                                                 Text(
                                                   textAlign: TextAlign.center,
-                                                  "Past Visits",
+                                                  "Visit Recaps",
                                                   style: AppFonts.medium(16, AppColors.backgroundPurple),
                                                 ),
                                               ],

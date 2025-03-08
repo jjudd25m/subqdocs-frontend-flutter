@@ -1035,7 +1035,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                               children: [
                                                 Text(
                                                   textAlign: TextAlign.center,
-                                                  "Scheduled Visit",
+                                                  "Scheduled Visits",
                                                   style: AppFonts.regular(16, AppColors.textBlack),
                                                 ),
                                               ],
@@ -1399,10 +1399,21 @@ class VisitMainView extends GetView<VisitMainController> {
                                                             )),
                                                             // Spacer(),
                                                             SizedBox(width: 5),
-                                                            Text(
-                                                              textAlign: TextAlign.center,
-                                                              "View",
-                                                              style: AppFonts.medium(12, AppColors.textPurple),
+                                                            GestureDetector(
+                                                            onTap: () {
+
+
+                                                              Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                                                                "visitId": controller.visitId.value,
+                                                                "patientId": controller.patientId.value,
+                                                              });
+
+                                                            },
+                                                              child: Text(
+                                                                textAlign: TextAlign.center,
+                                                                "View",
+                                                                style: AppFonts.medium(12, AppColors.textPurple),
+                                                              ),
                                                             ),
                                                           ],
                                                         ),

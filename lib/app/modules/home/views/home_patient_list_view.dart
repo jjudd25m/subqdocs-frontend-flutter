@@ -13,6 +13,7 @@ import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/empty_patient_screen.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
+import '../../visit_main/views/delete_image_dialog.dart';
 import '../model/patient_list_model.dart';
 
 class HomePatientListView extends GetView<HomeController> {
@@ -131,46 +132,93 @@ class HomePatientListView extends GetView<HomeController> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "View",
+                              "Patient Details",
                               style: AppFonts.regular(14, AppColors.textBlack),
                             ),
                           )),
-                      PopupMenuItem(
-                          padding: EdgeInsets.zero,
-                          onTap: () async {
-                            customPrint("row index is :- ${rowIndex}");
-                            customPrint("column index is :- ${colIndex}");
-                            customPrint(" patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
+                  PopupMenuItem(
+                      padding: EdgeInsets.zero,
+                      // value: "",
+                      onTap: () async {
+                        dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                          "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
+                          "patientId": controller.patientList[rowIndex - 1].id.toString(),
+                        });
 
-                            // customPrint(" our element is $");
+                        print("back from response");
 
-                            final result =
-                                await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-                            customPrint("our result is $result");
-
-                            if (result == 1) {
-                              controller.getScheduleVisitList();
-                              controller.getPastVisitList();
-                              controller.getPatientList();
-                            }
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: AppColors.appbarBorder,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Edit",
-                                  style: AppFonts.regular(14, AppColors.textBlack),
-                                ),
-                              ),
-                            ],
-                          )),
+                        // showDialog(
+                        //   context: context,
+                        //   barrierDismissible:
+                        //   true, // Allows dismissing the dialog by tapping outside
+                        //   builder: (BuildContext context) {
+                        //     return SchedulePatientDialog(
+                        //       receiveParam: (p0, p1) {
+                        //         customPrint("p0 is $p0 p1 is $p1");
+                        //         controller.patientScheduleCreate(param: {
+                        //           "patient_id":
+                        //           controller.pastVisitList[rowIndex - 1].id.toString(),
+                        //           "visit_date": p1,
+                        //           "visit_time": p0
+                        //         });
+                        //       },
+                        //     ); // Our custom dialog
+                        //   },
+                        // );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 1,
+                            color: AppColors.appbarBorder,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Medical record",
+                              style: AppFonts.regular(14, AppColors.textBlack),
+                            ),
+                          ),
+                        ],
+                      )),
+                      // PopupMenuItem(
+                      //     padding: EdgeInsets.zero,
+                      //     onTap: () async {
+                      //       customPrint("row index is :- ${rowIndex}");
+                      //       customPrint("column index is :- ${colIndex}");
+                      //       customPrint(" patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
+                      //
+                      //       // customPrint(" our element is $");
+                      //
+                      //       final result =
+                      //           await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                      //       customPrint("our result is $result");
+                      //
+                      //       if (result == 1) {
+                      //         controller.getScheduleVisitList();
+                      //         controller.getPastVisitList();
+                      //         controller.getPatientList();
+                      //       }
+                      //     },
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Container(
+                      //           width: double.infinity,
+                      //           height: 1,
+                      //           color: AppColors.appbarBorder,
+                      //         ),
+                      //         Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: Text(
+                      //             "Edit",
+                      //             style: AppFonts.regular(14, AppColors.textBlack),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     )),
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           // value: "",
@@ -208,8 +256,18 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-                            print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
-                            controller.deletePatientById(controller.patientList[rowIndex - 1].id);
+
+                            showDialog(
+                              context: context,
+                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                              builder: (BuildContext context) {
+                                return DeletePatientDialog(title: "Are you sure want to delete patient", onDelete: () {
+                                  print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                                  Get.back();
+                                  controller.deletePatientById(controller.patientList[rowIndex - 1].id);
+                                },); // Our custom dialog
+                              },
+                            );
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

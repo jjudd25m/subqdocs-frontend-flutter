@@ -43,6 +43,15 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                   ),
                   Row(
                     children: [
+                      loginData.responseData?.user?.id == 49 ? ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Image.asset(
+                          fit: BoxFit.cover,
+                          ImagePath.user,
+                          height: 40,
+                          width: 40,
+                        ),
+                      ) :
                       BaseImageView(
                         imageUrl:
                             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",

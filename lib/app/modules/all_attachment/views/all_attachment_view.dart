@@ -178,21 +178,17 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                             padding: const EdgeInsets.only(bottom: Dimen.margin2),
                                                             child: GestureDetector(
                                                               onTap: () {
-                                                                customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+                                                                // customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
 
-                                                                if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                if (controller.attachmentDic.values.elementAt(index)[subindex].fileType?.contains("image") ?? false) {
                                                                   showDialog(
                                                                     context: context,
                                                                     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                                                     builder: (BuildContext context) {
-                                                                      return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
-                                                                          ? ViewAttchmentImage(
-                                                                              imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                      return ViewAttchmentImage(
+                                                                              imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
                                                                               attchmentUrl: '',
-                                                                            )
-                                                                          : ViewAttchmentImage(
-                                                                              imageUrl: "",
-                                                                              attchmentUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                            );
                                                                     },
                                                                   );
                                                                 } else {

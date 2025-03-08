@@ -100,6 +100,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Spacer(),
                 Row(
                   children: [
+                    loginData.responseData?.user?.id == 49 ? ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image.asset(
+                        fit: BoxFit.cover,
+                        ImagePath.user,
+                        height: 50,
+                        width: 50,
+                      ),
+                    ) :
                     BaseImageView(
                       imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                       width: 50,
