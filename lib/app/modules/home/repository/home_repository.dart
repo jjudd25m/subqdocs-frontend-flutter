@@ -37,7 +37,7 @@ class HomeRepository {
 
   Future<Map<String, dynamic>> getOfflineData() async {
     var response = await ApiProvider.instance.callGet("patient-visit-offline", queryParameters: {});
-    customPrint("offLineData is  $response");
+    // customPrint("offLineData is  $response");
     return response;
   }
 
