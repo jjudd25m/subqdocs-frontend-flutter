@@ -1520,4 +1520,14 @@ class HomeController extends GetxController {
       Get.back();
     }
   }
+
+  Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
+    customPrint("visit id :- $visitId");
+    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+    customPrint("patientReScheduleCreate API  internal response $response");
+    CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
+    getScheduleVisitList(isFist: true);
+    // patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    // getPatientDetails();
+  }
 }

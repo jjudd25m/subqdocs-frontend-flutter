@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/app/modules/home/views/reschedule_patient_dialog.dart';
 import 'package:subqdocs/app/modules/visit_main/controllers/visit_main_controller.dart';
 import 'package:subqdocs/widgets/empty_patient_screen.dart';
 
@@ -105,6 +106,66 @@ class HomeScheduleListView extends GetView<HomeController> {
                                             style: AppFonts.regular(14, AppColors.textBlack),
                                           ),
                                         )),
+                                PopupMenuItem(
+                                    padding: EdgeInsets.zero,
+                                    value: "",
+                                    onTap: () async {
+
+                                      if(rowIndex != 0) {
+                                        print("visit time is :- ${controller.scheduleVisitList[rowIndex - 1].visitTime}");
+                                        DateTime visitdate = DateTime.parse(controller.scheduleVisitList[rowIndex - 1].visitTime ?? "");
+                                        DateTime visitTimeS = DateTime.parse(controller.scheduleVisitList[rowIndex - 1].visitTime ?? ""); // Parsing the string to DateTime
+                                        // Formatting to "hh:mm a" format
+                                        String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
+
+
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                          builder: (BuildContext context) {
+                                            return HomeReschedulePatientDialog(
+                                              receiveParam: (p0, p1) {
+                                                customPrint("p0 is $p0 p1 is $p1");
+                                                controller.patientReScheduleCreate(
+                                                    param: {"visit_date": p1, "visit_time": p0},
+                                                    visitId:
+                                                    controller.scheduleVisitList[rowIndex - 1].visitId.toString());
+                                              }, visitDate: visitdate, selectedVisitTimeValue: RxnString(formattedTime),
+                                            ); // Our custom dialog
+                                          },
+                                        );
+                                      }
+
+
+                                      // final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                      //   "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                                      //   "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                      //   "fromSchedule": true
+                                      // });
+                                      //
+                                      // if (result == 1) {
+                                      //   controller.getScheduleVisitList();
+                                      //   controller.getPastVisitList();
+                                      //   controller.getPatientList();
+                                      // }
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Reschedule",
+                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         value: "",

@@ -95,14 +95,24 @@ class HomePatientListView extends GetView<HomeController> {
               SizedBox(
                 width: 10,
               ),
-              Flexible(
-                child: Text(
-                  cellData,
-                  maxLines: 2,
-                  textAlign: TextAlign.start,
-                  style: AppFonts.regular(14, AppColors.textDarkGrey),
-                  softWrap: true, // Allows text to wrap
-                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+              GestureDetector(
+                onTap: () {
+
+                  if(rowIndex != 0 && colIndex == 0) {
+                    Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                  }
+
+                  print("col is :- ${colIndex} row is:- ${rowIndex}");
+                },
+                child: Flexible(
+                  child: Text(
+                    cellData,
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    style: AppFonts.regular(14, AppColors.textDarkGrey),
+                    softWrap: true, // Allows text to wrap
+                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                  ),
                 ),
               ),
             ],
