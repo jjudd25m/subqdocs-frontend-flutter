@@ -14,6 +14,7 @@ import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
+import '../../visit_main/views/delete_image_dialog.dart';
 import '../controllers/home_controller.dart';
 import '../model/schedule_visit_list_model.dart';
 
@@ -141,7 +142,22 @@ class HomeScheduleListView extends GetView<HomeController> {
                                         padding: EdgeInsets.zero,
                                         value: "",
                                         onTap: () {
-                                          controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].visitId);
+
+
+                                          if(rowIndex != 0) {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                              builder: (BuildContext context) {
+                                                return DeletePatientDialog(title: "Are you sure want to delete schedule", onDelete: () {
+                                                  print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                                                  Get.back();
+                                                  controller.deletePatientById(controller.scheduleVisitList[rowIndex - 1].id);
+                                                }, header: "Delete Schedule",); // Our custom dialog
+                                              },
+                                            );
+                                          }
+
                                         },
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,20 +225,24 @@ class HomeScheduleListView extends GetView<HomeController> {
                 context: context,
                 columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
                 onRowSelected: (rowIndex, rowData) async {
-                  customPrint("row index is :- $rowIndex");
 
-                  Get.delete<VisitMainController>();
+                  if(rowIndex != 0) {
+                    customPrint("row index is :- $rowIndex");
 
-                  dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                    "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                    "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
-                  });
+                    Get.delete<VisitMainController>();
 
-                  print("back from response");
+                    dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                      "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                      "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                    });
 
-                  controller.getPastVisitList(isFist: true);
-                  controller.getScheduleVisitList(isFist: true);
-                  controller.getPatientList();
+                    print("back from response");
+
+                    controller.getPastVisitList(isFist: true);
+                    controller.getScheduleVisitList(isFist: true);
+                    controller.getPatientList();
+                  }
+
                 },
                 onLoadMore: () {
                   controller.getScheduleVisitListFetchMore();

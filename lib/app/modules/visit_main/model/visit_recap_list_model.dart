@@ -31,18 +31,21 @@ class VisitRecapListModel {
 }
 
 class ResponseData {
+  int? id;
   String? visitDate;
   String? summary;
 
   ResponseData({this.visitDate, this.summary});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     visitDate = json['visit_date'];
     summary = json['summary'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     data['visit_date'] = visitDate;
     data['summary'] = summary;
     return data;

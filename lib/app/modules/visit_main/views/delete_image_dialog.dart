@@ -141,10 +141,11 @@ class DeleteImageDialog extends StatelessWidget {
 class DeletePatientDialog extends StatelessWidget {
 
 
+  String header;
   String? title;
   final VoidCallback? onDelete;
 
-  DeletePatientDialog({required this.onDelete, required this.title});
+  DeletePatientDialog({required this.header,required this.onDelete, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +177,7 @@ class DeletePatientDialog extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Delete Image",
+                      header,
                       style: AppFonts.medium(15, Colors.white),
                     ),
                     Spacer(),

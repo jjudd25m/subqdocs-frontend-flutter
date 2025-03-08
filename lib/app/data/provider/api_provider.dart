@@ -233,7 +233,8 @@ class ApiProvider {
 
   Future<Map<String, dynamic>> callGet(String url, {Map<String, dynamic>? queryParameters}) async {
     if (kDebugMode) {
-      customPrint(UrlProvider.baseUrl + url);
+      print(UrlProvider.baseUrl + url);
+      print("queryParameters: $queryParameters");
     }
     try {
       customPrint("-------------------------------");

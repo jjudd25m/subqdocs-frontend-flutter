@@ -1402,9 +1402,10 @@ class VisitMainView extends GetView<VisitMainController> {
                                                             GestureDetector(
                                                             onTap: () {
 
+                                                              print("vid:- ${controller.visitRecapList.value?.responseData?[index].id} pid:- ${controller.patientId.value}");
 
                                                               Get.toNamed(Routes.PATIENT_INFO, arguments: {
-                                                                "visitId": controller.visitId.value,
+                                                                "visitId": controller.visitRecapList.value?.responseData?[index].id.toString(),
                                                                 "patientId": controller.patientId.value,
                                                               });
 

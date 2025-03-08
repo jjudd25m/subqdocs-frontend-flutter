@@ -1077,12 +1077,11 @@ class HomeController extends GetxController {
     param['isPastPatient'] = 'false';
 
 
+
     if(isFist)
       {
-
+          lastSorting = defaultSchedulePatient;
           param["sorting"] = defaultSchedulePatient;
-
-
 
       }else{
       if (sortingName!.isNotEmpty) {

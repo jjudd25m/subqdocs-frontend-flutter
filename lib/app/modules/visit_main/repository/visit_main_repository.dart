@@ -36,6 +36,7 @@ class VisitMainRepository {
 
   Future<VisitRecapListModel> getVisitRecap({required String id}) async {
     var response = await ApiProvider.instance.callGet("patient-visit/getAllVisitRecap/$id");
+    print("getVisitRecap API  internal response :- $response");
     customPrint("getVisitRecap API  internal response $response");
     return VisitRecapListModel.fromJson(response);
   }
