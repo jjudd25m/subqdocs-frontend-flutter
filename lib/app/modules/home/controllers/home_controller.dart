@@ -70,6 +70,18 @@ class HomeController extends GetxController {
     // Add more sorting parameters as needed
   ];
 
+  List<Map<String, dynamic>> defaultPastPatient = [
+    {"id": "appointmentTime", "desc": "true"},
+
+    // Add more sorting parameters as needed
+  ];
+
+  List<Map<String, dynamic>> defaultSchedulePatient = [
+    {"id": "appointmentTime", "desc": "false"},
+
+    // Add more sorting parameters as needed
+  ];
+
   List<Map<String, dynamic>> sortingSchedulePatient = [
     {"id": "first_name", "desc": "true"},
     {"id": "appointmentTime", "desc": "true"},
@@ -116,13 +128,13 @@ class HomeController extends GetxController {
   var pagePast = 1;
 
   RxInt colIndex = RxInt(-1);
-  RxBool isAsending = RxBool(false);
+  RxBool isAsending = RxBool(true);
 
   RxInt colindexSchedule = RxInt(-1);
-  RxBool isAsendingSchedule = RxBool(false);
+  RxBool isAsendingSchedule = RxBool(true);
 
   RxInt colIndexPatient = RxInt(-1);
-  RxBool isAsendingPatient = RxBool(false);
+  RxBool isAsendingPatient = RxBool(true);
 
   @override
   void onInit() {
@@ -328,20 +340,26 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> getScheduleVisitList({String? sortingName = ""}) async {
+  Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
     param['limit'] = "20";
     param['isPastPatient'] = 'false';
+
+    if (isFist) {
+      lastSorting = defaultSchedulePatient;
+      param["sorting"] = defaultSchedulePatient;
+    } else {
+      if (sortingName!.isNotEmpty) {
+        lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
+        param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
+      }
+    }
     if (searchController.text.isNotEmpty) {
       param['search'] = searchController.text;
     }
 
     // Dynamically add sorting to the param map
-    if (sortingName!.isNotEmpty) {
-      lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
-      param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
-    }
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -371,7 +389,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> getPastVisitList({String? sortingName = ""}) async {
+  Future<void> getPastVisitList({String? sortingName = "", bool isFist = false}) async {
     Map<String, dynamic> param = {};
     param['page'] = 1;
     param['limit'] = "20";
@@ -380,9 +398,14 @@ class HomeController extends GetxController {
       param['search'] = searchController.text;
     }
 
-    if (sortingName!.isNotEmpty) {
-      lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
-      param["sorting"] = toggleSortDesc(sortingPastPatient, sortingName ?? "");
+    if (isFist) {
+      lastSorting = defaultPastPatient;
+      param["sorting"] = defaultPastPatient;
+    } else {
+      if (sortingName!.isNotEmpty) {
+        lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
+        param["sorting"] = lastSorting;
+      }
     }
 
     if (selectedStatusIndex.isNotEmpty) {

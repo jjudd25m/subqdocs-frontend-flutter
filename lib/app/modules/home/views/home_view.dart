@@ -107,8 +107,8 @@ class HomeView extends GetView<HomeController> {
               final result = await Get.toNamed(Routes.ADD_PATIENT);
 
               if (result == 1) {
-                controller.getPastVisitList();
-                controller.getScheduleVisitList();
+                controller.getPastVisitList(isFist: true);
+                controller.getScheduleVisitList(isFist: true);
                 controller.getPatientList();
               }
               _key.currentState!.closeDrawer();
@@ -219,7 +219,7 @@ class HomeView extends GetView<HomeController> {
                                                   onPressed: () {
                                                     controller.tabIndex.value = 1;
                                                     controller.globalController.homeTabIndex.value = 1;
-                                                    controller.getScheduleVisitList(sortingName: "Visit Date & Time");
+                                                    controller.getScheduleVisitList(isFist: true);
                                                     controller.clearFilter();
                                                   },
                                                   text: "Scheduled Visits",
@@ -242,7 +242,8 @@ class HomeView extends GetView<HomeController> {
                                                   onPressed: () {
                                                     controller.tabIndex.value = 2;
                                                     controller.globalController.homeTabIndex.value = 2;
-                                                    controller.getPastVisitList(sortingName: "Visit Date");
+                                                    controller.getPastVisitList(isFist: true);
+                                                    // controller.scheduleSorting(cellData: "Visit Date", colIndex: 1);
                                                     controller.clearFilter();
                                                   },
                                                   text: "Past Visits",
@@ -303,7 +304,7 @@ class HomeView extends GetView<HomeController> {
                                                           ? controller.getPatientList()
                                                           : controller.tabIndex.value == 1
                                                               ? controller.getScheduleVisitList()
-                                                              : controller.getPastVisitList();
+                                                              : controller.getPastVisitList(isFist: true);
 
                                                       customPrint("dailog is cancelled");
                                                     },
@@ -829,8 +830,8 @@ class HomeView extends GetView<HomeController> {
                                                           controller.tabIndex.refresh();
                                                         }
 
-                                                        controller.getPastVisitList();
-                                                        controller.getScheduleVisitList();
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
                                                         controller.getPatientList();
                                                       },
                                                       label: controller.tabIndex.value == 0
