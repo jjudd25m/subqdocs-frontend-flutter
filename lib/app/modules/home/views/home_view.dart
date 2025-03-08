@@ -656,8 +656,8 @@ class HomeView extends GetView<HomeController> {
                                                               controller.tabIndex.value == 0
                                                                   ? controller.getPatientList()
                                                                   : controller.tabIndex.value == 1
-                                                                      ? controller.getScheduleVisitList()
-                                                                      : controller.getPastVisitList();
+                                                                      ? controller.getScheduleVisitList(isFist: true)
+                                                                      : controller.getPastVisitList(isFist: true);
                                                             },
                                                             maxLines: 1, //or null
 

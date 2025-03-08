@@ -544,7 +544,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
     }
 
     if (visitId.value.isNotEmpty) {
-      getPatientDetails();
+      getPatientDetails(isLoading: isLoading);
     }
 
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
