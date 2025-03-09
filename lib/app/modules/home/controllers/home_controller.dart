@@ -15,6 +15,7 @@ import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
+import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../login/model/login_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -803,4 +804,19 @@ class HomeController extends GetxController {
     // patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
     // getPatientDetails();
   }
+
+  Future<void> deletePatientVisit({required String id}) async {
+    var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
+    customPrint(response);
+    CustomToastification().showToast("Visit delete successfully", type: ToastificationType.success);
+
+    getScheduleVisitList(isFist: true);
+
+    // patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    //
+    // if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+    //   Get.back();
+    // }
+  }
+
 }

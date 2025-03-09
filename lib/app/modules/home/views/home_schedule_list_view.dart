@@ -16,6 +16,7 @@ import '../../../../widgets/rounded_image_widget.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
+import '../../visit_main/views/delete_schedule_visit.dart';
 import '../controllers/home_controller.dart';
 import '../model/schedule_visit_list_model.dart';
 
@@ -241,7 +242,64 @@ class HomeScheduleListView extends GetView<HomeController> {
                                               ),
                                             ),
                                           ],
-                                        ))
+                                        )),
+                                PopupMenuItem(
+                                    padding: EdgeInsets.zero,
+                                    value: "",
+                                    onTap: () {
+                                      if (rowIndex != 0) {
+
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          builder: (BuildContext context) {
+                                            // return SizedBox();
+                                            return DeleteScheduleVisit(
+                                              onDelete: () {
+
+                                                controller.deletePatientVisit(
+                                                    id: controller.scheduleVisitList[rowIndex - 1].visitId.toString());
+                                              },
+                                            );
+                                          },
+                                        );
+
+                                        // showDialog(
+                                        //   context: context,
+                                        //   barrierDismissible:
+                                        //   true, // Allows dismissing the dialog by tapping outside
+                                        //   builder: (BuildContext context) {
+                                        //     return DeletePatientDialog(
+                                        //       title: "Are you sure want to delete schedule",
+                                        //       onDelete: () {
+                                        //         print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                                        //         Get.back();
+                                        //         controller.deletePatientById(
+                                        //             controller.scheduleVisitList[rowIndex - 1].id);
+                                        //       },
+                                        //       header: "Delete Schedule",
+                                        //     ); // Our custom dialog
+                                        //   },
+                                        // );
+                                      }
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Cancel Visit",
+                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                          ),
+                                        ),
+                                      ],
+                                    ))
                                   ],
                               child: SvgPicture.asset(
                                 "assets/images/logo_threedots.svg",

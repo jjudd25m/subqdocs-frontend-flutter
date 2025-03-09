@@ -24,10 +24,12 @@ class PatientProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    print("PatientProfileController init called");
     patientId = Get.arguments["patientData"];
     visitId = Get.arguments["visitId"];
 
-    print("our patient data is $patientId visitId is $visitId");
+    // print("our patient data is $patientId visitId is $visitId");
     getPatient(patientId, visitId);
   }
 
@@ -48,7 +50,14 @@ class PatientProfileController extends GetxController {
       param['visit_id'] = visitId;
     }
 
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: id);
+
+
+    PatientDetailModel localPatientDetailModel =  await _editPatientDetailsRepository.getPatientDetails(id: id);
+    patientDetailModel.value = localPatientDetailModel;
+
+    // patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: id);
+
+    print("patientDetailModel-----:- ${patientDetailModel.value?.toJson()}");
 
     // Parse the date string to a DateTime object
     DateTime dateTime = DateTime.parse(patientDetailModel.value?.responseData?.dateOfBirth ?? "").toLocal();
