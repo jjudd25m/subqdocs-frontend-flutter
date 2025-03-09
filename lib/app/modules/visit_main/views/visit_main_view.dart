@@ -1471,7 +1471,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                           },
                                           child: Text(
                                             textAlign: TextAlign.center,
-                                            "View All Attachments",
+                                            "",
                                             style: AppFonts.regular(15, AppColors.textPurple),
                                           ),
                                         ),

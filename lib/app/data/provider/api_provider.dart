@@ -243,7 +243,7 @@ class ApiProvider {
       customPrint("-------------------------------");
       var response = await dio.get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
       customPrint("-------------------------------");
-      customPrint("API response $response");
+      // customPrint("API response $response");
       customPrint("-------------------------------");
       if (response.data is List) {
         return {"data": response.data};

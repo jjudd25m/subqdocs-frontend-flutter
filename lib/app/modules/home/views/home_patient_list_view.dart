@@ -29,7 +29,7 @@ class HomePatientListView extends GetView<HomeController> {
                   onBtnPress: () async {
                     final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                    controller.getPastVisitList();
+                    controller.getPastVisitList(isFist: true);
                     controller.getScheduleVisitList();
                     controller.getPatientList();
                   },
@@ -81,30 +81,25 @@ class HomePatientListView extends GetView<HomeController> {
   // This is the cell builder function where you can customize how each cell is built.
   Widget _buildTableCell(BuildContext context, int rowIndex, int colIndex, String cellData, String profileImage) {
     return colIndex == 0 && rowIndex != 0
-        ? Row(
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(14),
-                  child: BaseImageView(
-                    imageUrl: profileImage,
-                    height: 28,
-                    width: 28,
-                    nameLetters: cellData,
-                    fontSize: 12,
-                  )),
-              SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () {
+        ?GestureDetector(
+      onTap: () {
 
-                  if(rowIndex != 0 && colIndex == 0) {
-                    Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-                  }
-
-                  print("col is :- ${colIndex} row is:- ${rowIndex}");
-                },
-                child: Flexible(
+      },
+          child: Row(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: BaseImageView(
+                      imageUrl: profileImage,
+                      height: 28,
+                      width: 28,
+                      nameLetters: cellData,
+                      fontSize: 12,
+                    )),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
                   child: Text(
                     cellData,
                     maxLines: 2,
@@ -114,9 +109,9 @@ class HomePatientListView extends GetView<HomeController> {
                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                   ),
                 ),
-              ),
-            ],
-          )
+              ],
+            ),
+        )
         : colIndex == 5 && rowIndex != 0
             ? PopupMenuButton<String>(
                 offset: const Offset(0, 8),

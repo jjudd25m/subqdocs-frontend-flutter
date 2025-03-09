@@ -60,12 +60,12 @@ class HomeController extends GetxController {
   List<DateTime> selectedValue = [];
 
   List<Map<String, dynamic>> sortingPastPatient = [
-    {"id": "first_name", "desc": "true"},
-    {"id": "appointmentTime", "desc": "false"},
-    {"id": "age", "desc": "true"},
-    {"id": "gender", "desc": "true"},
-    {"id": "previousVisitCount", "desc": "true"},
-    {"id": "status", "desc": "true"},
+    {"id": "first_name", "desc": true},
+    {"id": "appointmentTime", "desc": true},
+    {"id": "age", "desc": true},
+    {"id": "gender", "desc": true},
+    {"id": "previousVisitCount", "desc": true},
+    {"id": "status", "desc": true},
 
     // Add more sorting parameters as needed
   ];
@@ -101,6 +101,7 @@ class HomeController extends GetxController {
 
     // Add more sorting parameters as needed
   ];
+
   Map<String, String> nameToIdMap = {
     "Patient Name": "first_name",
     "Visit Date": "appointmentTime",
@@ -136,6 +137,10 @@ class HomeController extends GetxController {
   RxInt colIndexPatient = RxInt(-1);
   RxBool isAsendingPatient = RxBool(true);
 
+
+
+
+
   @override
   void onInit() {
     super.onInit();
@@ -146,11 +151,10 @@ class HomeController extends GetxController {
       globalController.homeTabIndex.value = tabIndex.value;
       // customPrint("tabe index is:- ${Get.arguments["tabIndex"]}");
     }
-
     getPatientList();
     getStatus();
-    getScheduleVisitList();
-    getPastVisitList();
+    getScheduleVisitList(isFist: true);
+    getPastVisitList(isFist: true);
   }
 
   void increment() => count.value++;
@@ -176,56 +180,6 @@ class HomeController extends GetxController {
     return null; // Return null if no matching 'id' is found
   }
 
-  void setDateRange() {
-    // customPrint("function  is called ");
-
-    if (selectedValue.isNotEmpty) {
-      for (int i = 0; i < selectedValue.length; i++) {
-        var dateTime = selectedValue[i];
-        // Format the date to 'MM-dd-yyyy'
-        // customPrint("goint to this ");
-        if (selectedValue.length == 1) {
-          startDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value =
-              '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-        } else {
-          if (i == 0) {
-            startDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          } else {
-            endDate.value =
-                '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          }
-        }
-      }
-    } else {
-      DateTime dateTime = DateTime.now();
-      startDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-    }
-    Get.back();
-  }
-
-  void clearFilter({bool canPop = false}) {
-    searchController.text = "";
-    lastSorting = [];
-    startDate.value = "MM/DD/YYYY";
-    endDate.value = "";
-    selectedStatusIndex.clear();
-    fromController.clear();
-    toController.clear();
-    getPatientList();
-    getScheduleVisitList();
-    getPastVisitList();
-  }
-
-  void changeScreen(bool isPast) async {
-    this.isPast.value = isPast;
-    this.isPast.refresh();
-  }
 
   List<Map<String, dynamic>> toggleSortDesc(List<Map<String, dynamic>> sorting, String displayName) {
     // Find the actual key (id) from the name-to-id map
@@ -252,45 +206,7 @@ class HomeController extends GetxController {
     return sorting.where((map) => map['id'] == key).toList();
   }
 
-  Future<void> getLast2DaysData() async {
-    Map<String, dynamic> patientParam = {};
-    //param for the
-    patientParam['page'] = 1;
-    patientParam['limit'] = "1000";
-    String formattedStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
-    String formattedEndDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    patientParam['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
 
-    Map<String, dynamic> scheduleParam = {};
-
-    scheduleParam['page'] = 1;
-    scheduleParam['limit'] = "20";
-    scheduleParam['isPastPatient'] = 'false';
-    String formattedStartDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    String formattedEndDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 2)));
-    scheduleParam['dateRange'] = '{"startDate":"$formattedStartDateSchedule", "endDate":"$formattedEndDateSchedule"}';
-    Map<String, dynamic> pastParam = {};
-
-    pastParam['page'] = 1;
-    pastParam['limit'] = "20";
-    pastParam['isPastPatient'] = 'true';
-    String formattedStartDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
-    String formattedEndDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    pastParam['dateRange'] = '{"startDate":"$formattedStartDatePast", "endDate":"$formattedEndDatePast"}';
-
-    try {
-      patientListModelOOffLine.value = await _homeRepository.getPatient(param: patientParam);
-      scheduleVisitListModelOffline.value = await _homeRepository.getScheduleVisit(param: scheduleParam);
-      pastVisitListModelOfLine.value = await _homeRepository.getPastVisit(param: pastParam);
-
-      await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModelOOffLine.toJson()));
-      await AppPreference.instance
-          .setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
-      await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModelOfLine.toJson()));
-    } catch (e) {
-      // customPrint(e);
-    }
-  }
 
   Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
@@ -305,7 +221,7 @@ class HomeController extends GetxController {
 
     if (sortingName!.isNotEmpty) {
       lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
-      param["sorting"] = toggleSortDesc(sortingPatientList, sortingName ?? "");
+      param["sorting"] = lastSorting;
     }
 
     if (startDate.value != "" && endDate.value != "") {
@@ -403,7 +319,7 @@ class HomeController extends GetxController {
       param["sorting"] = defaultPastPatient;
     } else {
       if (sortingName!.isNotEmpty) {
-        lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
+        lastSorting = toggleSortDesc(sortingPastPatient, sortingName ?? "");
         param["sorting"] = lastSorting;
       }
     }
@@ -637,6 +553,96 @@ class HomeController extends GetxController {
     if (response["response_type"] == "success") {
       await AppPreference.instance.setString(AppString.offLineData, json.encode(response));
     }
+  }
+
+  Future<void> getLast2DaysData() async {
+    Map<String, dynamic> patientParam = {};
+    //param for the
+    patientParam['page'] = 1;
+    patientParam['limit'] = "1000";
+    String formattedStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
+    String formattedEndDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    patientParam['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+
+    Map<String, dynamic> scheduleParam = {};
+
+    scheduleParam['page'] = 1;
+    scheduleParam['limit'] = "20";
+    scheduleParam['isPastPatient'] = 'false';
+    String formattedStartDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String formattedEndDateSchedule = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 2)));
+    scheduleParam['dateRange'] = '{"startDate":"$formattedStartDateSchedule", "endDate":"$formattedEndDateSchedule"}';
+    Map<String, dynamic> pastParam = {};
+
+    pastParam['page'] = 1;
+    pastParam['limit'] = "20";
+    pastParam['isPastPatient'] = 'true';
+    String formattedStartDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 2)));
+    String formattedEndDatePast = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    pastParam['dateRange'] = '{"startDate":"$formattedStartDatePast", "endDate":"$formattedEndDatePast"}';
+
+    try {
+      patientListModelOOffLine.value = await _homeRepository.getPatient(param: patientParam);
+      scheduleVisitListModelOffline.value = await _homeRepository.getScheduleVisit(param: scheduleParam);
+      pastVisitListModelOfLine.value = await _homeRepository.getPastVisit(param: pastParam);
+
+      await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModelOOffLine.toJson()));
+      await AppPreference.instance
+          .setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
+      await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModelOfLine.toJson()));
+    } catch (e) {
+      // customPrint(e);
+    }
+  }
+  void setDateRange() {
+    // customPrint("function  is called ");
+
+    if (selectedValue.isNotEmpty) {
+      for (int i = 0; i < selectedValue.length; i++) {
+        var dateTime = selectedValue[i];
+        // Format the date to 'MM-dd-yyyy'
+        // customPrint("goint to this ");
+        if (selectedValue.length == 1) {
+          startDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value =
+          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+        } else {
+          if (i == 0) {
+            startDate.value =
+            '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          } else {
+            endDate.value =
+            '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          }
+        }
+      }
+    } else {
+      DateTime dateTime = DateTime.now();
+      startDate.value =
+      '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value =
+      '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+    }
+    Get.back();
+  }
+
+  void clearFilter({bool canPop = false}) {
+    searchController.text = "";
+    lastSorting = [];
+    startDate.value = "MM/DD/YYYY";
+    endDate.value = "";
+    selectedStatusIndex.clear();
+    fromController.clear();
+    toController.clear();
+    getPatientList();
+    getScheduleVisitList(isFist: true);
+    getPastVisitList(isFist: true);
+  }
+
+  void changeScreen(bool isPast) async {
+    this.isPast.value = isPast;
+    this.isPast.refresh();
   }
 
   Future<void> getStatus() async {

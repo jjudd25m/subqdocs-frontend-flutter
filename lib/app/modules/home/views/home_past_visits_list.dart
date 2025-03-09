@@ -148,8 +148,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                 });
 
                                                 if (result == 1) {
-                                                  controller.getScheduleVisitList();
-                                                  controller.getPastVisitList();
+                                                  controller.getScheduleVisitList(isFist: true);
+                                                  controller.getPastVisitList(isFist: true);
                                                   controller.getPatientList();
                                                 }
                                               },
@@ -290,7 +290,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           controller.colIndex.refresh();
                                           controller.isAsending.refresh();
                                           customPrint("col index is the $colIndex");
-                                          customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
+                                          // customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
                                         },
                                         child: Row(
                                           mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,

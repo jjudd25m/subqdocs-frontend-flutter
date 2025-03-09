@@ -784,6 +784,7 @@ class HomeView extends GetView<HomeController> {
                                                         SizedBox(
                                                           width: 130,
                                                           child: TextFormField(
+
                                                             controller: controller.searchController,
                                                             onChanged: (value) {
                                                               controller.tabIndex.value == 0
