@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:lottie/lottie.dart';
@@ -14,8 +16,9 @@ import '../../../../widget/base_image_view.dart';
 import '../controllers/patient_info_controller.dart';
 import '../model/transcript_list_model.dart';
 
-class FullTranscriptView extends GetView<PatientInfoController> {
-  const FullTranscriptView({super.key});
+class FullTranscriptView extends StatelessWidget {
+   FullTranscriptView({super.key});
+   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
 
   @override
   Widget build(BuildContext context) {

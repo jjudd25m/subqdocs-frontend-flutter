@@ -413,7 +413,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              Get.toNamed(Routes.PATIENT_INFO);
+                              // Get.toNamed(Routes.PATIENT_INFO);
                             },
                             child: Container(
                               height: 100,

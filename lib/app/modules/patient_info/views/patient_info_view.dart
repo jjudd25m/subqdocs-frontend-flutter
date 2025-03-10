@@ -24,8 +24,19 @@ import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../controllers/patient_info_controller.dart';
 import 'full_transcript_view.dart';
 
-class PatientInfoView extends GetView<PatientInfoController> {
-  PatientInfoView({super.key});
+class PatientInfoView extends StatefulWidget {
+  const PatientInfoView({super.key});
+
+  @override
+  State<PatientInfoView> createState() => _PatientInfoViewState();
+}
+
+
+class _PatientInfoViewState extends  State<PatientInfoView> {
+
+
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
+
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   String formatDateTime({required String firstDate, required String secondDate}) {

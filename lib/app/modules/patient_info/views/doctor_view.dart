@@ -10,9 +10,9 @@ import '../../../../utils/imagepath.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 
-class DoctorView extends GetView<PatientInfoController> {
-  const DoctorView({super.key});
-
+class DoctorView extends StatelessWidget {
+   DoctorView({super.key});
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
   @override
   Widget build(BuildContext context) {
     return Obx(() {

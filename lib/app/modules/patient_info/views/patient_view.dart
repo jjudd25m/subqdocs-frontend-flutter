@@ -11,9 +11,9 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
 
-class PatientView extends GetView<PatientInfoController> {
-  const PatientView({super.key});
-
+class PatientView extends StatelessWidget {
+   PatientView({super.key});
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
   @override
   Widget build(BuildContext context) {
     return Obx(() {

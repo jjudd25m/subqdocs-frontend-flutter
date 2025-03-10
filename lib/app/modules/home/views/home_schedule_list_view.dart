@@ -357,11 +357,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                   if (rowIndex != 0) {
                     customPrint("row index is :- $rowIndex");
 
-                    Get.delete<VisitMainController>();
+                    // Get.delete<VisitMainController>();
 
                     dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                       "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
                       "patientId": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                      "unique_tag": DateTime.now().toString(),
                     });
 
                     print("back from response");

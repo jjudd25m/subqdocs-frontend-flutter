@@ -34,8 +34,17 @@ import '../model/patient_attachment_list_model.dart';
 import 'delete_image_dialog.dart';
 import 'delete_schedule_visit.dart';
 
-class VisitMainView extends GetView<VisitMainController> {
-  VisitMainView({super.key});
+class VisitMainView extends StatefulWidget {
+  const VisitMainView({super.key});
+
+  @override
+  State<VisitMainView> createState() => _VisitMainViewState();
+}
+
+
+class _VisitMainViewState extends State<VisitMainView> {
+
+  VisitMainController controller = Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -1407,6 +1416,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                               Get.toNamed(Routes.PATIENT_INFO, arguments: {
                                                                 "visitId": controller.visitRecapList.value?.responseData?[index].id.toString(),
                                                                 "patientId": controller.patientId.value,
+                                                                "unique_tag": DateTime.now().toString(),
                                                               });
 
                                                             },
@@ -2113,7 +2123,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      Get.toNamed(Routes.PATIENT_INFO);
+                                      // Get.toNamed(Routes.PATIENT_INFO);
                                     },
                                     child: Container(
                                       height: 81,

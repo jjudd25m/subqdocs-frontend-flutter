@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:lottie/lottie.dart';
@@ -14,8 +16,9 @@ import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
 import '../model/patient_fullnote_model.dart';
 
-class FullNoteView extends GetView<PatientInfoController> {
-  const FullNoteView({super.key});
+class FullNoteView extends StatelessWidget{
+   FullNoteView({super.key});
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
 
   @override
   Widget build(BuildContext context) {

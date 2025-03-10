@@ -47,12 +47,13 @@ class HomePastVisitsList extends GetView<HomeController> {
                   onRowSelected: (rowIndex, rowData) {
                     customPrint("row index is :- $rowIndex");
 
-                    Get.delete<PatientInfoController>();
+                    // Get.delete<PatientInfoController>();
 
 
                     Get.toNamed(Routes.PATIENT_INFO, arguments: {
                       "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
                       "patientId": controller.pastVisitList[rowIndex - 1].id.toString(),
+                      "unique_tag": DateTime.now().toString(),
                     });
                   },
                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
