@@ -260,7 +260,7 @@ class VisitMainController extends GetxController  {
       context: context,
       barrierDismissible: true, // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
-        return attachmentDailog(); // Our custom dialog
+        return attachmentDailog(this); // Our custom dialog
       },
     );
   }

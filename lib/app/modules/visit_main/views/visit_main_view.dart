@@ -817,7 +817,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
                                                             children: [
-                                                              Row(
+                                                              controller.medicalRecords.value?.responseData
+                                                                  ?.fullNoteDetails?.medications !=
+                                                                  null ? Row(
                                                                 mainAxisAlignment: MainAxisAlignment
                                                                     .start, // Align the row content to the start
                                                                 crossAxisAlignment: CrossAxisAlignment
@@ -849,7 +851,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   ),
                                                                   SizedBox(width: 7),
                                                                 ],
-                                                              ),
+                                                              ) :SizedBox(),
                                                               Container(
                                                                 height: 0.5,
                                                                 width: double.infinity,

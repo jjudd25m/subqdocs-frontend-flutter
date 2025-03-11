@@ -667,6 +667,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               highlightColor: Colors.transparent, // Remove highlight color
                                             ),
                                             child: ExpansionTile(
+                                              initiallyExpanded: true,
                                               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                               backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                               collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
