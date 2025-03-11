@@ -85,7 +85,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                   padding: const EdgeInsets.all(16),
                                   child: Container(
                                     padding: EdgeInsets.all(Dimen.margin16),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                                    decoration:
+                                        BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -126,8 +127,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                         height: 50,
                                                         width: 50,
                                                         fontSize: 16,
-                                                        imageUrl: controller.patientDetailModel.value?.responseData?.profileImage ?? "",
-                                                        nameLetters: "${controller.patientDetailModel.value?.responseData?.firstName} ${controller.patientDetailModel.value?.responseData?.lastName} ",
+                                                        imageUrl: controller
+                                                                .patientDetailModel.value?.responseData?.profileImage ??
+                                                            "",
+                                                        nameLetters:
+                                                            "${controller.patientDetailModel.value?.responseData?.firstName} ${controller.patientDetailModel.value?.responseData?.lastName} ",
                                                       )),
                                                   SizedBox(
                                                     width: 10,
@@ -195,7 +199,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               children: [
                                                 CommonPatientData(
                                                   label: "Patient ID",
-                                                  data: controller.patientDetailModel.value?.responseData?.patientId.toString(),
+                                                  data: controller.patientDetailModel.value?.responseData?.patientId
+                                                      .toString(),
                                                 ),
                                                 SizedBox(
                                                   height: 30,
@@ -211,12 +216,16 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               children: [
                                                 CommonPatientData(
                                                   label: "First Name",
-                                                  data: controller.patientDetailModel.value?.responseData?.firstName ?? "",
+                                                  data: controller.patientDetailModel.value?.responseData?.firstName ??
+                                                      "",
                                                 ),
                                                 SizedBox(
                                                   height: 30,
                                                 ),
-                                                CommonPatientData(label: "Sex", data: controller.patientDetailModel.value?.responseData?.gender ?? ""),
+                                                CommonPatientData(
+                                                    label: "Sex",
+                                                    data: controller.patientDetailModel.value?.responseData?.gender ??
+                                                        ""),
                                               ],
                                             ),
                                             Column(
@@ -226,7 +235,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                   children: [
                                                     CommonPatientData(
                                                       label: "Middle Name",
-                                                      data: controller.patientDetailModel.value?.responseData?.middleName,
+                                                      data:
+                                                          controller.patientDetailModel.value?.responseData?.middleName,
                                                     ),
                                                     SizedBox(
                                                       width: 120,
@@ -290,8 +300,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                       padding: const EdgeInsets.all(1),
                                       child: ExpansionTile(
                                         initiallyExpanded: true,
-                                        shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                        shape: OutlineInputBorder(
+                                            borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                        collapsedShape: OutlineInputBorder(
+                                            borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                         backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                         collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                         title: Container(
@@ -309,21 +321,33 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           ),
                                         ),
                                         children: <Widget>[
-                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.length !=
+                                                  0
                                               ? Container(
                                                   width: double.infinity,
                                                   color: Colors.white,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
+                                                    padding:
+                                                        const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
                                                     child: CustomTable(
-                                                      rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
-                                                      cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
+                                                      rows: _getTableRows(controller.patientDetailModel.value
+                                                              ?.responseData?.scheduledVisits ??
+                                                          []),
+                                                      cellBuilder:
+                                                          (context, rowIndex, colIndex, cellData, profileImage) {
                                                         return colIndex == 2 && rowIndex != 0
                                                             ? GestureDetector(
                                                                 onTap: () {
                                                                   Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                                    "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                    "visitId": controller
+                                                                        .patientDetailModel
+                                                                        .value
+                                                                        ?.responseData
+                                                                        ?.scheduledVisits?[rowIndex - 1]
+                                                                        .id
+                                                                        .toString(),
                                                                     "patientId": controller.patientId,
+                                                                    "unique_tag": DateTime.now().toString(),
                                                                   });
 
                                                                   customPrint("row index is :- $rowIndex");
@@ -331,9 +355,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                 child: Text(
                                                                   cellData,
                                                                   textAlign: TextAlign.center,
-                                                                  style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                  style:
+                                                                      AppFonts.regular(14, AppColors.backgroundPurple),
                                                                   softWrap: true, // Allows text to wrap
-                                                                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                  overflow: TextOverflow
+                                                                      .ellipsis, // Adds ellipsis if text overflows
                                                                 ),
                                                               )
                                                             : (colIndex == 3 || colIndex == 4) && rowIndex != 0
@@ -341,25 +367,38 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                     children: [
                                                                       Text(
                                                                         "|  ",
-                                                                        style: AppFonts.regular(12, AppColors.appbarBorder),
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.appbarBorder),
                                                                       ),
                                                                       GestureDetector(
                                                                         onTap: () {
                                                                           if (colIndex == 3) {
                                                                             showDialog(
                                                                               context: context,
-                                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                              barrierDismissible:
+                                                                                  true, // Allows dismissing the dialog by tapping outside
                                                                               builder: (BuildContext context) {
                                                                                 return SchedulePatientDialog(
                                                                                   receiveParam: (p0, p1) {
                                                                                     customPrint("p0 is $p0 p1 is $p1");
-                                                                                    customPrint("row index is :- ${rowIndex}");
+                                                                                    customPrint(
+                                                                                        "row index is :- ${rowIndex}");
                                                                                     customPrint(
                                                                                         "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
                                                                                     controller.patientReScheduleCreate(
-                                                                                        param: {"visit_date": p1, "visit_time": p0},
-                                                                                        visitId:
-                                                                                            controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
+                                                                                        param: {
+                                                                                          "visit_date": p1,
+                                                                                          "visit_time": p0
+                                                                                        },
+                                                                                        visitId: controller
+                                                                                                .patientDetailModel
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.scheduledVisits![
+                                                                                                    rowIndex - 1]
+                                                                                                .id
+                                                                                                .toString() ??
+                                                                                            "-1");
                                                                                   },
                                                                                 ); // Our custom dialog
                                                                               },
@@ -371,10 +410,19 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                               builder: (BuildContext context) {
                                                                                 return DeleteScheduleVisit(
                                                                                   onDelete: () {
-                                                                                    print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
+                                                                                    print(
+                                                                                        "id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
 
                                                                                     controller.deletePatientVisit(
-                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
+                                                                                        id: controller
+                                                                                                .patientDetailModel
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.scheduledVisits?[
+                                                                                                    rowIndex - 1]
+                                                                                                .id
+                                                                                                .toString() ??
+                                                                                            "");
                                                                                   },
                                                                                 );
                                                                               },
@@ -385,9 +433,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                         child: Text(
                                                                           cellData ?? "",
                                                                           textAlign: TextAlign.center,
-                                                                          style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                          style: AppFonts.regular(
+                                                                              14, AppColors.backgroundPurple),
                                                                           softWrap: true, // Allows text to wrap
-                                                                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                          overflow: TextOverflow
+                                                                              .ellipsis, // Adds ellipsis if text overflows
                                                                         ),
                                                                       ),
                                                                     ],
@@ -395,22 +445,31 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                 : rowIndex == 0
                                                                     ? Text(
                                                                         cellData ?? "",
-                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                        textAlign: colIndex == 0
+                                                                            ? TextAlign.start
+                                                                            : TextAlign.center,
                                                                         style: AppFonts.regular(12, AppColors.black),
                                                                         softWrap: true, // Allows text to wrap
-                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                        overflow: TextOverflow
+                                                                            .ellipsis, // Adds ellipsis if text overflows
                                                                       )
                                                                     : Text(
                                                                         cellData ?? "",
-                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                                        textAlign: colIndex == 0
+                                                                            ? TextAlign.start
+                                                                            : TextAlign.center,
+                                                                        style: AppFonts.regular(
+                                                                            14, AppColors.textDarkGrey),
                                                                         softWrap: true, // Allows text to wrap
-                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                        overflow: TextOverflow
+                                                                            .ellipsis, // Adds ellipsis if text overflows
                                                                       );
                                                       },
                                                       columnCount: 5,
                                                       context: context,
-                                                      columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.17, 0.13, 0.12],
+                                                      columnWidths: isPortrait
+                                                          ? [0.23, 0.21, 0.17, 0.17, 0.18]
+                                                          : [0.25, 0.10, 0.17, 0.13, 0.12],
                                                       // columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.30, 0.10, 0.15, 0.13, 0.12],
                                                     ),
                                                   ),
@@ -489,8 +548,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                         ),
                                         child: ExpansionTile(
                                           initiallyExpanded: true,
-                                          shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                          collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                          shape: OutlineInputBorder(
+                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                          collapsedShape: OutlineInputBorder(
+                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                           backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                           collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                           title: Container(
@@ -513,7 +574,9 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               color: Colors.white,
                                               child: Padding(
                                                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                child: controller.patientDetailModel.value?.responseData?.pastVisits?.isNotEmpty ?? false
+                                                child: controller.patientDetailModel.value?.responseData?.pastVisits
+                                                            ?.isNotEmpty ??
+                                                        false
                                                     ? ListView.builder(
                                                         padding: EdgeInsets.zero,
                                                         shrinkWrap: true,
@@ -528,8 +591,14 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                       children: [
                                                                         Text(
                                                                           textAlign: TextAlign.start,
-                                                                          _getDate(controller.patientDetailModel.value?.responseData?.pastVisits?[index].visitDate),
-                                                                          style: AppFonts.regular(15, AppColors.textGrey),
+                                                                          _getDate(controller
+                                                                              .patientDetailModel
+                                                                              .value
+                                                                              ?.responseData
+                                                                              ?.pastVisits?[index]
+                                                                              .visitDate),
+                                                                          style:
+                                                                              AppFonts.regular(15, AppColors.textGrey),
                                                                         ),
                                                                         SizedBox(width: 20),
                                                                         Expanded(
@@ -537,8 +606,15 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                           maxLines: 2,
                                                                           overflow: TextOverflow.ellipsis,
                                                                           textAlign: TextAlign.start,
-                                                                          controller.patientDetailModel.value?.responseData?.pastVisits?[index].summary ?? "",
-                                                                          style: AppFonts.regular(15, AppColors.textGrey),
+                                                                          controller
+                                                                                  .patientDetailModel
+                                                                                  .value
+                                                                                  ?.responseData
+                                                                                  ?.pastVisits?[index]
+                                                                                  .summary ??
+                                                                              "",
+                                                                          style:
+                                                                              AppFonts.regular(15, AppColors.textGrey),
                                                                         )),
                                                                         SizedBox(
                                                                           width: 30,
@@ -546,7 +622,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                         Text(
                                                                           textAlign: TextAlign.center,
                                                                           "View",
-                                                                          style: AppFonts.regular(15, AppColors.textPurple),
+                                                                          style: AppFonts.regular(
+                                                                              15, AppColors.textPurple),
                                                                         ),
                                                                       ],
                                                                     ),
@@ -561,12 +638,14 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                 ),
                                                               ),
                                                             ),
-                                                        itemCount: controller.patientDetailModel.value?.responseData?.pastVisits?.length)
+                                                        itemCount: controller
+                                                            .patientDetailModel.value?.responseData?.pastVisits?.length)
                                                     : Container(
                                                         width: double.infinity,
                                                         color: Colors.white,
                                                         child: Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+                                                          padding:
+                                                              const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
                                                           child: Row(
                                                             children: [
                                                               SvgPicture.asset(ImagePath.noVisitFound),
@@ -604,7 +683,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                 // Show border
                                                                 textColor: AppColors.white,
                                                                 // Custom text color
-                                                                padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                                                padding:
+                                                                    EdgeInsets.symmetric(vertical: 11, horizontal: 12),
                                                                 // Custom padding
                                                                 radius: 6, // Custom border radius
                                                               ),

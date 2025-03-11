@@ -1186,6 +1186,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                           .id
                                                                           .toString(),
                                                                       "patientId": controller.patientId,
+                                                                      "unique_tag": DateTime.now().toString(),
                                                                     });
 
                                                                     customPrint("row index is :- $rowIndex");

@@ -34,7 +34,8 @@ class HomePatientListView extends GetView<HomeController> {
                     controller.getPatientList();
                   },
                   title: "Your Patient List is Empty",
-                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                  description:
+                      "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
             )
           : CustomTable(
               rows: _getTableRows(controller.patientList),
@@ -81,11 +82,9 @@ class HomePatientListView extends GetView<HomeController> {
   // This is the cell builder function where you can customize how each cell is built.
   Widget _buildTableCell(BuildContext context, int rowIndex, int colIndex, String cellData, String profileImage) {
     return colIndex == 0 && rowIndex != 0
-        ?GestureDetector(
-      onTap: () {
-
-      },
-          child: Row(
+        ? GestureDetector(
+            onTap: () {},
+            child: Row(
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(14),
@@ -102,9 +101,12 @@ class HomePatientListView extends GetView<HomeController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      if(rowIndex != 0) {
-                        Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-
+                      if (rowIndex != 0) {
+                        Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                          "patientData": controller.patientList[rowIndex - 1].id.toString(),
+                          "visitId": "",
+                          "fromSchedule": false
+                        });
                       }
                     },
                     child: Text(
@@ -119,7 +121,7 @@ class HomePatientListView extends GetView<HomeController> {
                 ),
               ],
             ),
-        )
+          )
         : colIndex == 5 && rowIndex != 0
             ? PopupMenuButton<String>(
                 offset: const Offset(0, 8),
@@ -139,7 +141,11 @@ class HomePatientListView extends GetView<HomeController> {
                           padding: EdgeInsets.zero,
                           onTap: () {
                             customPrint(" patient id is ${controller.patientList[rowIndex - 1].id}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                              "patientData": controller.patientList[rowIndex - 1].id.toString(),
+                              "visitId": "",
+                              "fromSchedule": false
+                            });
                           },
                           // value: "",
                           child: Padding(
@@ -149,53 +155,54 @@ class HomePatientListView extends GetView<HomeController> {
                               style: AppFonts.regular(14, AppColors.textBlack),
                             ),
                           )),
-                  PopupMenuItem(
-                      padding: EdgeInsets.zero,
-                      // value: "",
-                      onTap: () async {
-                        dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                          "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
-                          "patientId": controller.patientList[rowIndex - 1].id.toString(),
-                        });
+                      PopupMenuItem(
+                          padding: EdgeInsets.zero,
+                          // value: "",
+                          onTap: () async {
+                            dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                              "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
+                              "patientId": controller.patientList[rowIndex - 1].id.toString(),
+                              "unique_tag": DateTime.now().toString(),
+                            });
 
-                        print("back from response");
+                            print("back from response");
 
-                        // showDialog(
-                        //   context: context,
-                        //   barrierDismissible:
-                        //   true, // Allows dismissing the dialog by tapping outside
-                        //   builder: (BuildContext context) {
-                        //     return SchedulePatientDialog(
-                        //       receiveParam: (p0, p1) {
-                        //         customPrint("p0 is $p0 p1 is $p1");
-                        //         controller.patientScheduleCreate(param: {
-                        //           "patient_id":
-                        //           controller.pastVisitList[rowIndex - 1].id.toString(),
-                        //           "visit_date": p1,
-                        //           "visit_time": p0
-                        //         });
-                        //       },
-                        //     ); // Our custom dialog
-                        //   },
-                        // );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 1,
-                            color: AppColors.appbarBorder,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Medical record",
-                              style: AppFonts.regular(14, AppColors.textBlack),
-                            ),
-                          ),
-                        ],
-                      )),
+                            // showDialog(
+                            //   context: context,
+                            //   barrierDismissible:
+                            //   true, // Allows dismissing the dialog by tapping outside
+                            //   builder: (BuildContext context) {
+                            //     return SchedulePatientDialog(
+                            //       receiveParam: (p0, p1) {
+                            //         customPrint("p0 is $p0 p1 is $p1");
+                            //         controller.patientScheduleCreate(param: {
+                            //           "patient_id":
+                            //           controller.pastVisitList[rowIndex - 1].id.toString(),
+                            //           "visit_date": p1,
+                            //           "visit_time": p0
+                            //         });
+                            //       },
+                            //     ); // Our custom dialog
+                            //   },
+                            // );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: AppColors.appbarBorder,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Medical record",
+                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                ),
+                              ),
+                            ],
+                          )),
                       // PopupMenuItem(
                       //     padding: EdgeInsets.zero,
                       //     onTap: () async {
@@ -243,7 +250,11 @@ class HomePatientListView extends GetView<HomeController> {
                                 return SchedulePatientDialog(
                                   receiveParam: (p0, p1) {
                                     customPrint("p0 is $p0 p1 is $p1");
-                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
+                                    controller.patientScheduleCreate(param: {
+                                      "patient_id": controller.patientList[rowIndex - 1].id.toString(),
+                                      "visit_date": p1,
+                                      "visit_time": p0
+                                    });
                                   },
                                 ); // Our custom dialog
                               },
@@ -269,21 +280,23 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-
-                            if(rowIndex != 0) {
+                            if (rowIndex != 0) {
                               showDialog(
                                 context: context,
                                 barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                 builder: (BuildContext context) {
-                                  return DeletePatientDialog(title: "Are you sure want to delete patient", onDelete: () {
-                                    print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
-                                    Get.back();
-                                    controller.deletePatientById(controller.patientList[rowIndex - 1].id);
-                                  }, header: "Delete Patient",); // Our custom dialog
+                                  return DeletePatientDialog(
+                                    title: "Are you sure want to delete patient",
+                                    onDelete: () {
+                                      print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                                      Get.back();
+                                      controller.deletePatientById(controller.patientList[rowIndex - 1].id);
+                                    },
+                                    header: "Delete Patient",
+                                  ); // Our custom dialog
                                 },
                               );
                             }
-
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,12 +337,16 @@ class HomePatientListView extends GetView<HomeController> {
                           softWrap: true, // Allows text to wrap
                           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                         ),
-                        colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
+                        colIndex == controller.colIndexPatient.value &&
+                                controller.isAsendingPatient.value &&
+                                colIndex != 5
                             ? Icon(
                                 CupertinoIcons.down_arrow,
                                 size: 15,
                               )
-                            : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
+                            : colIndex == controller.colIndexPatient.value &&
+                                    !controller.isAsendingPatient.value &&
+                                    colIndex != 5
                                 ? Icon(
                                     CupertinoIcons.up_arrow,
                                     size: 15,

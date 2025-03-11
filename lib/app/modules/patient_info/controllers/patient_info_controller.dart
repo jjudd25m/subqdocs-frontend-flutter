@@ -625,6 +625,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
           dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
             "visitId": visitId,
             "patientId": patientId,
+            "unique_tag": DateTime.now().toString(),
           });
         }
       } else {
