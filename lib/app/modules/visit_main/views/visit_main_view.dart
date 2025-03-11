@@ -635,27 +635,30 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(12),
-                                                            topRight: Radius.circular(12),
-                                                            bottomLeft: Radius.circular(8),
-                                                            bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border:
-                                                            Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6),
+                                                          topRight: Radius.circular(6),
+                                                          bottomLeft: Radius.circular(8),
+                                                          bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(
+                                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          width: 1),
+                                                    ),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius.circular(12),
-                                                                  topRight: Radius.circular(12)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(
-                                                                  color:
-                                                                      AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                                  width: 1)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius.circular(6),
+                                                                topRight: Radius.circular(6)),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(
+                                                                color:
+                                                                    AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                width: 0.1),
+                                                          ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -769,27 +772,30 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(12),
-                                                            topRight: Radius.circular(12),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border:
-                                                            Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6),
+                                                          topRight: Radius.circular(6),
+                                                          bottomLeft: Radius.circular(6),
+                                                          bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(
+                                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          width: 1),
+                                                    ),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius.circular(12),
-                                                                  topRight: Radius.circular(12)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(
-                                                                  color:
-                                                                      AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                                  width: 1)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius.circular(6),
+                                                                topRight: Radius.circular(6)),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(
+                                                                color:
+                                                                    AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                width: 0.01),
+                                                          ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -818,40 +824,45 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                           child: Column(
                                                             children: [
                                                               controller.medicalRecords.value?.responseData
-                                                                  ?.fullNoteDetails?.medications !=
-                                                                  null ? Row(
-                                                                mainAxisAlignment: MainAxisAlignment
-                                                                    .start, // Align the row content to the start
-                                                                crossAxisAlignment: CrossAxisAlignment
-                                                                    .center, // Align the content vertically centered
-                                                                children: [
-                                                                  SizedBox(width: 7),
-                                                                  SizedBox(
-                                                                    width: Get.width * .25,
-                                                                    child: Text(
-                                                                      "Medication Name",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: 7),
-                                                                  SizedBox(
-                                                                    width: Get.width * .45,
-                                                                    child: Text(
-                                                                      "Purpose",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: 7),
-                                                                  SizedBox(
-                                                                    width: Get.width * .15,
-                                                                    child: Text(
-                                                                      "Dosage",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: 7),
-                                                                ],
-                                                              ) :SizedBox(),
+                                                                          ?.fullNoteDetails?.medications !=
+                                                                      null
+                                                                  ? Row(
+                                                                      mainAxisAlignment: MainAxisAlignment
+                                                                          .start, // Align the row content to the start
+                                                                      crossAxisAlignment: CrossAxisAlignment
+                                                                          .center, // Align the content vertically centered
+                                                                      children: [
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .25,
+                                                                          child: Text(
+                                                                            "Medication Name",
+                                                                            style:
+                                                                                AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .45,
+                                                                          child: Text(
+                                                                            "Purpose",
+                                                                            style:
+                                                                                AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .15,
+                                                                          child: Text(
+                                                                            "Dosage",
+                                                                            style:
+                                                                                AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                      ],
+                                                                    )
+                                                                  : SizedBox(),
                                                               Container(
                                                                 height: 0.5,
                                                                 width: double.infinity,
@@ -989,27 +1000,31 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(12),
-                                                            topRight: Radius.circular(12),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border:
-                                                            Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6),
+                                                          topRight: Radius.circular(6),
+                                                          bottomLeft: Radius.circular(6),
+                                                          bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(
+                                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          width: 1),
+                                                    ),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius.circular(12),
-                                                                  topRight: Radius.circular(12)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(
-                                                                  color:
-                                                                      AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                                  width: 1)),
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(
+                                                                color:
+                                                                    AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                width: 0.01),
+                                                          ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -1071,6 +1086,282 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                                 ?.responseData
                                                                                                 ?.fullNoteDetails
                                                                                                 ?.skinHistory ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )
+
+                                                                            // Column(
+                                                                            //   children: [
+                                                                            //     SizedBox(height: 2),
+                                                                            //     Row(
+                                                                            //       children: [
+                                                                            //         SizedBox(width: 10),
+                                                                            //         Expanded(
+                                                                            //             child: Text(
+                                                                            //           textAlign: TextAlign.left,
+                                                                            //           controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
+                                                                            //           style: AppFonts.regular(14, AppColors.textGrey),
+                                                                            //         )),
+                                                                            //       ],
+                                                                            //     ),
+                                                                            //     SizedBox(height: 0),
+                                                                            //   ],
+                                                                            // ),
+                                                                            ),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "-",
+                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6),
+                                                          topRight: Radius.circular(6),
+                                                          bottomLeft: Radius.circular(6),
+                                                          bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(
+                                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(
+                                                                color:
+                                                                    AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                width: 0.01),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Social History",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData
+                                                                          ?.fullNoteDetails?.socialHistory !=
+                                                                      null ??
+                                                                  false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment
+                                                                                      .start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                                      .center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(
+                                                                                          24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.socialHistory ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )
+
+                                                                            // Column(
+                                                                            //   children: [
+                                                                            //     SizedBox(height: 2),
+                                                                            //     Row(
+                                                                            //       children: [
+                                                                            //         SizedBox(width: 10),
+                                                                            //         Expanded(
+                                                                            //             child: Text(
+                                                                            //           textAlign: TextAlign.left,
+                                                                            //           controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
+                                                                            //           style: AppFonts.regular(14, AppColors.textGrey),
+                                                                            //         )),
+                                                                            //       ],
+                                                                            //     ),
+                                                                            //     SizedBox(height: 0),
+                                                                            //   ],
+                                                                            // ),
+                                                                            ),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "-",
+                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6),
+                                                          topRight: Radius.circular(6),
+                                                          bottomLeft: Radius.circular(6),
+                                                          bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(
+                                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(
+                                                                color:
+                                                                    AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                width: 0.01),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Allergies",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData
+                                                                          ?.fullNoteDetails?.allergies !=
+                                                                      null ??
+                                                                  false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment
+                                                                                      .start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                                      .center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(
+                                                                                          24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.allergies ??
                                                                                             "",
                                                                                         style: AppFonts.regular(
                                                                                             14, AppColors.textGrey),

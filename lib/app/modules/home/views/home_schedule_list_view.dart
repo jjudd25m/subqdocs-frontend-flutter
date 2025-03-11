@@ -109,66 +109,70 @@ class HomeScheduleListView extends GetView<HomeController> {
                                             style: AppFonts.regular(14, AppColors.textBlack),
                                           ),
                                         )),
-                                PopupMenuItem(
-                                    padding: EdgeInsets.zero,
-                                    value: "",
-                                    onTap: () async {
+                                    PopupMenuItem(
+                                        padding: EdgeInsets.zero,
+                                        value: "",
+                                        onTap: () async {
+                                          if (rowIndex != 0) {
+                                            print(
+                                                "visit time is :- ${controller.scheduleVisitList[rowIndex - 1].visitTime}");
+                                            DateTime visitdate = DateTime.parse(
+                                                controller.scheduleVisitList[rowIndex - 1].visitTime ?? "");
+                                            DateTime visitTimeS = DateTime.parse(
+                                                controller.scheduleVisitList[rowIndex - 1].visitTime ??
+                                                    ""); // Parsing the string to DateTime
+                                            // Formatting to "hh:mm a" format
+                                            String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
 
-                                      if(rowIndex != 0) {
-                                        print("visit time is :- ${controller.scheduleVisitList[rowIndex - 1].visitTime}");
-                                        DateTime visitdate = DateTime.parse(controller.scheduleVisitList[rowIndex - 1].visitTime ?? "");
-                                        DateTime visitTimeS = DateTime.parse(controller.scheduleVisitList[rowIndex - 1].visitTime ?? ""); // Parsing the string to DateTime
-                                        // Formatting to "hh:mm a" format
-                                        String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible:
+                                                  true, // Allows dismissing the dialog by tapping outside
+                                              builder: (BuildContext context) {
+                                                return HomeReschedulePatientDialog(
+                                                  receiveParam: (p0, p1) {
+                                                    customPrint("p0 is $p0 p1 is $p1");
+                                                    controller.patientReScheduleCreate(
+                                                        param: {"visit_date": p1, "visit_time": p0},
+                                                        visitId: controller.scheduleVisitList[rowIndex - 1].visitId
+                                                            .toString());
+                                                  },
+                                                  visitDate: visitdate,
+                                                  selectedVisitTimeValue: RxnString(formattedTime),
+                                                ); // Our custom dialog
+                                              },
+                                            );
+                                          }
 
-
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                          builder: (BuildContext context) {
-                                            return HomeReschedulePatientDialog(
-                                              receiveParam: (p0, p1) {
-                                                customPrint("p0 is $p0 p1 is $p1");
-                                                controller.patientReScheduleCreate(
-                                                    param: {"visit_date": p1, "visit_time": p0},
-                                                    visitId:
-                                                    controller.scheduleVisitList[rowIndex - 1].visitId.toString());
-                                              }, visitDate: visitdate, selectedVisitTimeValue: RxnString(formattedTime),
-                                            ); // Our custom dialog
-                                          },
-                                        );
-                                      }
-
-
-                                      // final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                                      //   "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
-                                      //   "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
-                                      //   "fromSchedule": true
-                                      // });
-                                      //
-                                      // if (result == 1) {
-                                      //   controller.getScheduleVisitList();
-                                      //   controller.getPastVisitList();
-                                      //   controller.getPatientList();
-                                      // }
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          height: 1,
-                                          color: AppColors.appbarBorder,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Reschedule",
-                                            style: AppFonts.regular(14, AppColors.textBlack),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
+                                          // final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                          //   "patientData": controller.scheduleVisitList[rowIndex - 1].id.toString(),
+                                          //   "visitId": controller.scheduleVisitList[rowIndex - 1].visitId.toString(),
+                                          //   "fromSchedule": true
+                                          // });
+                                          //
+                                          // if (result == 1) {
+                                          //   controller.getScheduleVisitList();
+                                          //   controller.getPastVisitList();
+                                          //   controller.getPatientList();
+                                          // }
+                                        },
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: double.infinity,
+                                              height: 1,
+                                              color: AppColors.appbarBorder,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                "Reschedule",
+                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         value: "",
@@ -202,6 +206,49 @@ class HomeScheduleListView extends GetView<HomeController> {
                                             ),
                                           ],
                                         )),
+                                    if (false)
+                                      PopupMenuItem(
+                                          padding: EdgeInsets.zero,
+                                          value: "",
+                                          onTap: () {
+                                            if (rowIndex != 0) {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible:
+                                                    true, // Allows dismissing the dialog by tapping outside
+                                                builder: (BuildContext context) {
+                                                  return DeletePatientDialog(
+                                                    title: "Are you sure want to delete schedule",
+                                                    onDelete: () {
+                                                      print(
+                                                          "delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                                                      Get.back();
+                                                      controller.deletePatientById(
+                                                          controller.scheduleVisitList[rowIndex - 1].id);
+                                                    },
+                                                    header: "Delete Schedule",
+                                                  ); // Our custom dialog
+                                                },
+                                              );
+                                            }
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                height: 1,
+                                                color: AppColors.appbarBorder,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Delete",
+                                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         value: "",
@@ -209,21 +256,36 @@ class HomeScheduleListView extends GetView<HomeController> {
                                           if (rowIndex != 0) {
                                             showDialog(
                                               context: context,
-                                              barrierDismissible:
-                                                  true, // Allows dismissing the dialog by tapping outside
+                                              barrierDismissible: true,
                                               builder: (BuildContext context) {
-                                                return DeletePatientDialog(
-                                                  title: "Are you sure want to delete schedule",
+                                                // return SizedBox();
+                                                return DeleteScheduleVisit(
                                                   onDelete: () {
-                                                    print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
-                                                    Get.back();
-                                                    controller.deletePatientById(
-                                                        controller.scheduleVisitList[rowIndex - 1].id);
+                                                    controller.deletePatientVisit(
+                                                        id: controller.scheduleVisitList[rowIndex - 1].visitId
+                                                            .toString());
                                                   },
-                                                  header: "Delete Schedule",
-                                                ); // Our custom dialog
+                                                );
                                               },
                                             );
+
+                                            // showDialog(
+                                            //   context: context,
+                                            //   barrierDismissible:
+                                            //   true, // Allows dismissing the dialog by tapping outside
+                                            //   builder: (BuildContext context) {
+                                            //     return DeletePatientDialog(
+                                            //       title: "Are you sure want to delete schedule",
+                                            //       onDelete: () {
+                                            //         print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
+                                            //         Get.back();
+                                            //         controller.deletePatientById(
+                                            //             controller.scheduleVisitList[rowIndex - 1].id);
+                                            //       },
+                                            //       header: "Delete Schedule",
+                                            //     ); // Our custom dialog
+                                            //   },
+                                            // );
                                           }
                                         },
                                         child: Column(
@@ -237,69 +299,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                                             Padding(
                                               padding: const EdgeInsets.all(8.0),
                                               child: Text(
-                                                "Delete",
+                                                "Cancel Visit",
                                                 style: AppFonts.regular(14, AppColors.textBlack),
                                               ),
                                             ),
                                           ],
-                                        )),
-                                PopupMenuItem(
-                                    padding: EdgeInsets.zero,
-                                    value: "",
-                                    onTap: () {
-                                      if (rowIndex != 0) {
-
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (BuildContext context) {
-                                            // return SizedBox();
-                                            return DeleteScheduleVisit(
-                                              onDelete: () {
-
-                                                controller.deletePatientVisit(
-                                                    id: controller.scheduleVisitList[rowIndex - 1].visitId.toString());
-                                              },
-                                            );
-                                          },
-                                        );
-
-                                        // showDialog(
-                                        //   context: context,
-                                        //   barrierDismissible:
-                                        //   true, // Allows dismissing the dialog by tapping outside
-                                        //   builder: (BuildContext context) {
-                                        //     return DeletePatientDialog(
-                                        //       title: "Are you sure want to delete schedule",
-                                        //       onDelete: () {
-                                        //         print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
-                                        //         Get.back();
-                                        //         controller.deletePatientById(
-                                        //             controller.scheduleVisitList[rowIndex - 1].id);
-                                        //       },
-                                        //       header: "Delete Schedule",
-                                        //     ); // Our custom dialog
-                                        //   },
-                                        // );
-                                      }
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          height: 1,
-                                          color: AppColors.appbarBorder,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Cancel Visit",
-                                            style: AppFonts.regular(14, AppColors.textBlack),
-                                          ),
-                                        ),
-                                      ],
-                                    ))
+                                        ))
                                   ],
                               child: SvgPicture.asset(
                                 "assets/images/logo_threedots.svg",

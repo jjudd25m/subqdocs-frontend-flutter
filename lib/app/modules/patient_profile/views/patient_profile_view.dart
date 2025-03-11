@@ -619,11 +619,28 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                         SizedBox(
                                                                           width: 30,
                                                                         ),
-                                                                        Text(
-                                                                          textAlign: TextAlign.center,
-                                                                          "View",
-                                                                          style: AppFonts.regular(
-                                                                              15, AppColors.textPurple),
+                                                                        GestureDetector(
+                                                                          onTap: () {
+                                                                            Get.toNamed(Routes.PATIENT_INFO,
+                                                                                arguments: {
+                                                                                  "visitId": controller
+                                                                                      .patientDetailModel
+                                                                                      .value
+                                                                                      ?.responseData
+                                                                                      ?.pastVisits?[index]
+                                                                                      .id
+                                                                                      .toString(),
+                                                                                  "patientId": controller.patientId,
+                                                                                  "unique_tag":
+                                                                                      DateTime.now().toString(),
+                                                                                });
+                                                                          },
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.center,
+                                                                            "View",
+                                                                            style: AppFonts.regular(
+                                                                                15, AppColors.textPurple),
+                                                                          ),
                                                                         ),
                                                                       ],
                                                                     ),

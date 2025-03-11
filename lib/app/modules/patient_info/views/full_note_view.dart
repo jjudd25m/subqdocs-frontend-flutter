@@ -68,23 +68,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(6),
-                                      bottomRight: Radius.circular(6)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(6),
+                                    bottomRight: Radius.circular(6)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -190,23 +192,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.1),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -289,23 +293,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -388,23 +394,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -509,23 +517,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -615,23 +625,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -686,23 +698,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -748,23 +762,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -901,23 +917,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -1005,23 +1023,25 @@ class FullNoteView extends StatelessWidget {
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  color: AppColors.white,
-                                  border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                              ),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(
-                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                      borderRadius:
+                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                      color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                      border: Border.all(
+                                          color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                    ),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
