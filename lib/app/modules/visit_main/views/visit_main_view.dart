@@ -41,9 +41,7 @@ class VisitMainView extends StatefulWidget {
   State<VisitMainView> createState() => _VisitMainViewState();
 }
 
-
 class _VisitMainViewState extends State<VisitMainView> {
-
   VisitMainController controller = Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -156,7 +154,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   SizedBox(height: 20.0),
                                   Container(
                                     width: double.infinity,
-                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                                    decoration:
+                                        BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(14),
                                       child: Text(
@@ -174,8 +173,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     ),
                                     child: ExpansionTile(
                                       initiallyExpanded: true,
-                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      collapsedShape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                       backgroundColor: AppColors.backgroundWhite,
                                       collapsedBackgroundColor: AppColors.backgroundWhite,
                                       title: Padding(
@@ -201,7 +202,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                             ClipRRect(
                                                 borderRadius: BorderRadius.circular(30),
                                                 child: BaseImageView(
-                                                  imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
+                                                  imageUrl:
+                                                      controller.patientData.value?.responseData?.profileImage ?? "",
                                                   height: 60,
                                                   width: 60,
                                                   nameLetters:
@@ -320,8 +322,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     formatDateTime(
-                                                        firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                                        secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                                        firstDate:
+                                                            controller.patientData.value?.responseData?.visitDate ?? "",
+                                                        secondDate:
+                                                            controller.patientData.value?.responseData?.visitTime ??
+                                                                ""),
                                                     style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                 ],
@@ -530,8 +535,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     child: ExpansionTile(
                                       initiallyExpanded: true,
                                       childrenPadding: EdgeInsets.all(0),
-                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      collapsedShape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                       backgroundColor: AppColors.backgroundWhite,
                                       collapsedBackgroundColor: AppColors.backgroundWhite,
                                       title: Row(
@@ -555,7 +562,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                               ),
                                               child: Column(
                                                 children: [
-                                                  for (String note in controller.patientData.value?.responseData?.personalNote?.personalNote ?? [])
+                                                  for (String note in controller.patientData.value?.responseData
+                                                          ?.personalNote?.personalNote ??
+                                                      [])
                                                     Row(
                                                       children: [
                                                         SizedBox(
@@ -601,8 +610,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     child: ExpansionTile(
                                       initiallyExpanded: true,
                                       childrenPadding: EdgeInsets.all(0),
-                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      collapsedShape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(
+                                          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                       backgroundColor: AppColors.backgroundWhite,
                                       collapsedBackgroundColor: AppColors.backgroundWhite,
                                       title: Row(
@@ -625,17 +636,26 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                            topLeft: Radius.circular(12),
+                                                            topRight: Radius.circular(12),
+                                                            bottomLeft: Radius.circular(8),
+                                                            bottomRight: Radius.circular(6)),
                                                         color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                        border:
+                                                            Border.all(color: AppColors.backgroundLightGrey, width: 2)),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(12),
+                                                                  topRight: Radius.circular(12)),
                                                               color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                  width: 1)),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -661,31 +681,45 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         ),
                                                         Padding(
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory != null ?? false
+                                                          child: controller.medicalRecords.value?.responseData
+                                                                          ?.fullNoteDetails?.cancerHistory !=
+                                                                      null ??
+                                                                  false
                                                               ? ListView.builder(
                                                                   shrinkWrap: true,
                                                                   physics: NeverScrollableScrollPhysics(),
                                                                   itemBuilder: (context, index) => InkWell(
                                                                         onTap: () {},
                                                                         child: Padding(
-                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 0),
                                                                             child: Column(
                                                                               children: [
                                                                                 SizedBox(height: 2),
                                                                                 Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  mainAxisAlignment: MainAxisAlignment
+                                                                                      .start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                                      .center, // Align the content vertically centered
                                                                                   children: [
                                                                                     SizedBox(width: 10),
                                                                                     Text(
                                                                                       "•",
-                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                      style: AppFonts.regular(
+                                                                                          24, AppColors.black),
                                                                                     ),
                                                                                     SizedBox(width: 10),
                                                                                     Expanded(
                                                                                       child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory ?? "",
-                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.cancerHistory ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                   ],
@@ -736,17 +770,26 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                            topLeft: Radius.circular(12),
+                                                            topRight: Radius.circular(12),
+                                                            bottomLeft: Radius.circular(6),
+                                                            bottomRight: Radius.circular(6)),
                                                         color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                        border:
+                                                            Border.all(color: AppColors.backgroundLightGrey, width: 2)),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(12),
+                                                                  topRight: Radius.circular(12)),
                                                               color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                  width: 1)),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -775,8 +818,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                           child: Column(
                                                             children: [
                                                               Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                mainAxisAlignment: MainAxisAlignment
+                                                                    .start, // Align the row content to the start
+                                                                crossAxisAlignment: CrossAxisAlignment
+                                                                    .center, // Align the content vertically centered
                                                                 children: [
                                                                   SizedBox(width: 7),
                                                                   SizedBox(
@@ -818,43 +863,73 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         ),
                                                         Padding(
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ?? false
+                                                          child: controller.medicalRecords.value?.responseData
+                                                                          ?.fullNoteDetails?.medications !=
+                                                                      null ??
+                                                                  false
                                                               ? ListView.builder(
                                                                   shrinkWrap: true,
                                                                   physics: NeverScrollableScrollPhysics(),
                                                                   itemBuilder: (context, index) => InkWell(
                                                                         onTap: () {},
                                                                         child: Padding(
-                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 0),
                                                                             child: Column(
                                                                               children: [
                                                                                 SizedBox(height: 2),
                                                                                 Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  mainAxisAlignment: MainAxisAlignment
+                                                                                      .start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                                      .center, // Align the content vertically centered
                                                                                   children: [
                                                                                     SizedBox(width: 7),
                                                                                     SizedBox(
                                                                                       width: Get.width * .25,
                                                                                       child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "",
-                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.medications?[index]
+                                                                                                .title ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(width: 7),
                                                                                     SizedBox(
                                                                                       width: Get.width * .45,
                                                                                       child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "",
-                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.medications?[index]
+                                                                                                .purpose ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(width: 7),
                                                                                     SizedBox(
                                                                                       width: Get.width * .15,
                                                                                       child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "",
-                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.medications?[index]
+                                                                                                .dosage ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(width: 7),
@@ -883,7 +958,14 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                             // ),
                                                                             ),
                                                                       ),
-                                                                  itemCount: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?.length ?? 0)
+                                                                  itemCount: controller
+                                                                          .medicalRecords
+                                                                          .value
+                                                                          ?.responseData
+                                                                          ?.fullNoteDetails
+                                                                          ?.medications
+                                                                          ?.length ??
+                                                                      0)
                                                               : Row(
                                                                   children: [
                                                                     Text(
@@ -906,17 +988,26 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                            topLeft: Radius.circular(12),
+                                                            topRight: Radius.circular(12),
+                                                            bottomLeft: Radius.circular(6),
+                                                            bottomRight: Radius.circular(6)),
                                                         color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                        border:
+                                                            Border.all(color: AppColors.backgroundLightGrey, width: 2)),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(12),
+                                                                  topRight: Radius.circular(12)),
                                                               color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                                  width: 1)),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -942,31 +1033,45 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         ),
                                                         Padding(
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory != null ?? false
+                                                          child: controller.medicalRecords.value?.responseData
+                                                                          ?.fullNoteDetails?.skinHistory !=
+                                                                      null ??
+                                                                  false
                                                               ? ListView.builder(
                                                                   shrinkWrap: true,
                                                                   physics: NeverScrollableScrollPhysics(),
                                                                   itemBuilder: (context, index) => InkWell(
                                                                         onTap: () {},
                                                                         child: Padding(
-                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 0),
                                                                             child: Column(
                                                                               children: [
                                                                                 SizedBox(height: 2),
                                                                                 Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  mainAxisAlignment: MainAxisAlignment
+                                                                                      .start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                                      .center, // Align the content vertically centered
                                                                                   children: [
                                                                                     SizedBox(width: 10),
                                                                                     Text(
                                                                                       "•",
-                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                      style: AppFonts.regular(
+                                                                                          24, AppColors.black),
                                                                                     ),
                                                                                     SizedBox(width: 10),
                                                                                     Expanded(
                                                                                       child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory ?? "",
-                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                        controller
+                                                                                                .medicalRecords
+                                                                                                .value
+                                                                                                ?.responseData
+                                                                                                ?.fullNoteDetails
+                                                                                                ?.skinHistory ??
+                                                                                            "",
+                                                                                        style: AppFonts.regular(
+                                                                                            14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                   ],
@@ -1035,8 +1140,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         child: ExpansionTile(
                                           initiallyExpanded: true,
                                           childrenPadding: EdgeInsets.all(0),
-                                          shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                          collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                          shape: OutlineInputBorder(
+                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                          collapsedShape: OutlineInputBorder(
+                                              borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                           backgroundColor: AppColors.white,
                                           collapsedBackgroundColor: AppColors.white,
                                           title: Container(
@@ -1051,21 +1158,33 @@ class _VisitMainViewState extends State<VisitMainView> {
                                             ),
                                           ),
                                           children: <Widget>[
-                                            controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                            controller.patientDetailModel.value?.responseData?.scheduledVisits
+                                                        ?.length !=
+                                                    0
                                                 ? Container(
                                                     width: double.infinity,
                                                     color: Colors.white,
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
+                                                      padding: const EdgeInsets.only(
+                                                          left: 16, top: 16, bottom: 16, right: 16),
                                                       child: CustomTable(
                                                         physics: NeverScrollableScrollPhysics(),
-                                                        rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
-                                                        cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
+                                                        rows: _getTableRows(controller.patientDetailModel.value
+                                                                ?.responseData?.scheduledVisits ??
+                                                            []),
+                                                        cellBuilder:
+                                                            (context, rowIndex, colIndex, cellData, profileImage) {
                                                           return colIndex == 2 && rowIndex != 0
                                                               ? GestureDetector(
                                                                   onTap: () {
                                                                     Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                                      "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                      "visitId": controller
+                                                                          .patientDetailModel
+                                                                          .value
+                                                                          ?.responseData
+                                                                          ?.scheduledVisits?[rowIndex - 1]
+                                                                          .id
+                                                                          .toString(),
                                                                       "patientId": controller.patientId,
                                                                     });
 
@@ -1073,10 +1192,14 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   },
                                                                   child: Text(
                                                                     cellData,
-                                                                    textAlign: colIndex == 4 ? TextAlign.left : TextAlign.center,
-                                                                    style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                    textAlign: colIndex == 4
+                                                                        ? TextAlign.left
+                                                                        : TextAlign.center,
+                                                                    style: AppFonts.regular(
+                                                                        14, AppColors.backgroundPurple),
                                                                     softWrap: true, // Allows text to wrap
-                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                    overflow: TextOverflow
+                                                                        .ellipsis, // Adds ellipsis if text overflows
                                                                   ),
                                                                 )
                                                               : (colIndex == 3 || colIndex == 4) && rowIndex != 0
@@ -1084,7 +1207,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       children: [
                                                                         Text(
                                                                           colIndex == 3 ? "" : "|  ",
-                                                                          style: AppFonts.regular(12, AppColors.appbarBorder),
+                                                                          style: AppFonts.regular(
+                                                                              12, AppColors.appbarBorder),
                                                                         ),
                                                                         GestureDetector(
                                                                           onTap: () {
@@ -1092,24 +1216,39 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                               controller.isConnected.value
                                                                                   ? showDialog(
                                                                                       context: context,
-                                                                                      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                                      barrierDismissible:
+                                                                                          true, // Allows dismissing the dialog by tapping outside
                                                                                       builder: (BuildContext context) {
                                                                                         return ReschedulePatientDialog(
                                                                                           receiveParam: (p0, p1) {
-                                                                                            customPrint("p0 is $p0 p1 is $p1");
-                                                                                            customPrint("row index is :- ${rowIndex}");
+                                                                                            customPrint(
+                                                                                                "p0 is $p0 p1 is $p1");
+                                                                                            customPrint(
+                                                                                                "row index is :- ${rowIndex}");
                                                                                             customPrint(
                                                                                                 "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
                                                                                             controller.patientReScheduleCreate(
-                                                                                                param: {"visit_date": p1, "visit_time": p0},
-                                                                                                visitId:
-                                                                                                    controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ??
-                                                                                                        "-1");
+                                                                                                param: {
+                                                                                                  "visit_date": p1,
+                                                                                                  "visit_time": p0
+                                                                                                },
+                                                                                                visitId: controller
+                                                                                                        .patientDetailModel
+                                                                                                        .value
+                                                                                                        ?.responseData
+                                                                                                        ?.scheduledVisits![
+                                                                                                            rowIndex -
+                                                                                                                1]
+                                                                                                        .id
+                                                                                                        .toString() ??
+                                                                                                    "-1");
                                                                                           },
                                                                                         ); // Our custom dialog
                                                                                       },
                                                                                     )
-                                                                                  : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
+                                                                                  : CustomToastification().showToast(
+                                                                                      "Internet is require for this feature",
+                                                                                      type: ToastificationType.info);
                                                                             } else if (colIndex == 4) {
                                                                               controller.isConnected.value
                                                                                   ? showDialog(
@@ -1120,22 +1259,34 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                         return DeleteScheduleVisit(
                                                                                           onDelete: () {
                                                                                             controller.deletePatientVisit(
-                                                                                                id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ??
+                                                                                                id: controller
+                                                                                                        .patientDetailModel
+                                                                                                        .value
+                                                                                                        ?.responseData
+                                                                                                        ?.scheduledVisits?[
+                                                                                                            rowIndex -
+                                                                                                                1]
+                                                                                                        .id
+                                                                                                        .toString() ??
                                                                                                     "");
                                                                                           },
                                                                                         );
                                                                                       },
                                                                                     )
-                                                                                  : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
+                                                                                  : CustomToastification().showToast(
+                                                                                      "Internet is require for this feature",
+                                                                                      type: ToastificationType.info);
                                                                             }
                                                                             customPrint("col index is :- $colIndex");
                                                                           },
                                                                           child: Text(
                                                                             cellData ?? "",
                                                                             textAlign: TextAlign.center,
-                                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                                            style: AppFonts.regular(
+                                                                                14, AppColors.backgroundPurple),
                                                                             softWrap: true, // Allows text to wrap
-                                                                            overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis, // Adds ellipsis if text overflows
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1143,22 +1294,31 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   : rowIndex == 0
                                                                       ? Text(
                                                                           cellData ?? "",
-                                                                          textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                          textAlign: colIndex == 0
+                                                                              ? TextAlign.start
+                                                                              : TextAlign.center,
                                                                           style: AppFonts.regular(12, AppColors.black),
                                                                           softWrap: true, // Allows text to wrap
-                                                                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                          overflow: TextOverflow
+                                                                              .ellipsis, // Adds ellipsis if text overflows
                                                                         )
                                                                       : Text(
                                                                           cellData ?? "",
-                                                                          textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                          style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                                          textAlign: colIndex == 0
+                                                                              ? TextAlign.start
+                                                                              : TextAlign.center,
+                                                                          style: AppFonts.regular(
+                                                                              14, AppColors.textDarkGrey),
                                                                           softWrap: true, // Allows text to wrap
-                                                                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                          overflow: TextOverflow
+                                                                              .ellipsis, // Adds ellipsis if text overflows
                                                                         );
                                                         },
                                                         columnCount: 5,
                                                         context: context,
-                                                        columnWidths: isPortrait ? [0.23, 0.21, 0.0, 0.15, 0.18] : [0.25, 0.10, 0.0, 0.10, 0.12],
+                                                        columnWidths: isPortrait
+                                                            ? [0.23, 0.21, 0.0, 0.15, 0.18]
+                                                            : [0.25, 0.10, 0.0, 0.10, 0.12],
                                                         // columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
                                                       ),
                                                     ),
@@ -1324,8 +1484,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   child: ExpansionTile(
                                     initiallyExpanded: true,
                                     childrenPadding: EdgeInsets.all(0),
-                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundWhite,
                                     collapsedBackgroundColor: AppColors.backgroundWhite,
                                     title: Row(
@@ -1358,7 +1520,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 height: 25,
                                                 child: TextField(
                                                   maxLines: 1,
-                                                  textAlignVertical: TextAlignVertical.center, // Centers the text vertically
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center, // Centers the text vertically
                                                   decoration: InputDecoration.collapsed(
                                                     hintText: "Search",
                                                     hintStyle: AppFonts.regular(14, AppColors.textGrey),
@@ -1394,7 +1557,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                           children: [
                                                             Text(
                                                               textAlign: TextAlign.center,
-                                                              visitRecapformatDate(firstDate: controller.visitRecapList.value?.responseData?[index].visitDate ?? ""),
+                                                              visitRecapformatDate(
+                                                                  firstDate: controller.visitRecapList.value
+                                                                          ?.responseData?[index].visitDate ??
+                                                                      ""),
                                                               style: AppFonts.medium(14, AppColors.textGrey),
                                                             ),
                                                             SizedBox(width: 15),
@@ -1403,23 +1569,26 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               maxLines: 1,
                                                               overflow: TextOverflow.ellipsis,
                                                               textAlign: TextAlign.left,
-                                                              controller.visitRecapList.value?.responseData?[index].summary ?? "",
+                                                              controller.visitRecapList.value?.responseData?[index]
+                                                                      .summary ??
+                                                                  "",
                                                               style: AppFonts.regular(14, AppColors.textGrey),
                                                             )),
                                                             // Spacer(),
                                                             SizedBox(width: 5),
                                                             GestureDetector(
-                                                            onTap: () {
+                                                              onTap: () {
+                                                                print(
+                                                                    "vid:- ${controller.visitRecapList.value?.responseData?[index].id} pid:- ${controller.patientId.value}");
 
-                                                              print("vid:- ${controller.visitRecapList.value?.responseData?[index].id} pid:- ${controller.patientId.value}");
-
-                                                              Get.toNamed(Routes.PATIENT_INFO, arguments: {
-                                                                "visitId": controller.visitRecapList.value?.responseData?[index].id.toString(),
-                                                                "patientId": controller.patientId.value,
-                                                                "unique_tag": DateTime.now().toString(),
-                                                              });
-
-                                                            },
+                                                                Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                                                                  "visitId": controller
+                                                                      .visitRecapList.value?.responseData?[index].id
+                                                                      .toString(),
+                                                                  "patientId": controller.patientId.value,
+                                                                  "unique_tag": DateTime.now().toString(),
+                                                                });
+                                                              },
                                                               child: Text(
                                                                 textAlign: TextAlign.center,
                                                                 "View",
@@ -1453,8 +1622,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   child: ExpansionTile(
                                     initiallyExpanded: true,
                                     childrenPadding: EdgeInsets.all(0),
-                                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    collapsedShape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                    shape: OutlineInputBorder(
+                                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                     backgroundColor: AppColors.backgroundWhite,
                                     collapsedBackgroundColor: AppColors.backgroundWhite,
                                     title: Row(
@@ -1476,7 +1647,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 controller.getPatientAttachment();
                                               }
                                             } else {
-                                              CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
+                                              CustomToastification().showToast("Internet is require for this feature",
+                                                  type: ToastificationType.info);
                                             }
                                           },
                                           child: Text(
@@ -1489,7 +1661,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           width: 10,
                                         ),
                                         PopupMenuButton<String>(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(4))),
                                             offset: const Offset(0, 5),
                                             color: AppColors.white,
                                             position: PopupMenuPosition.over,
@@ -1504,7 +1677,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                       padding: EdgeInsets.zero,
                                                       value: "1",
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(left: 16, right: 5, bottom: 5, top: 10),
+                                                        padding: const EdgeInsets.only(
+                                                            left: 16, right: 5, bottom: 5, top: 10),
                                                         child: Row(
                                                           children: [
                                                             Text(
@@ -1551,7 +1725,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         controller.getPatientAttachment();
                                                       },
                                                       height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      padding:
+                                                          const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                       child: Row(
                                                         children: [
                                                           const SizedBox(width: 5),
@@ -1560,11 +1735,18 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             width: 30,
                                                             height: 30,
                                                             colorFilter: ColorFilter.mode(
-                                                                controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                                controller.isSelectedAttchmentOption.value == 0
+                                                                    ? AppColors.backgroundPurple
+                                                                    : AppColors.textDarkGrey,
+                                                                BlendMode.srcIn),
                                                           ),
                                                           const SizedBox(width: 8),
                                                           Text("Document",
-                                                              style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                              style: AppFonts.medium(
+                                                                  17,
+                                                                  controller.isSelectedAttchmentOption.value == 0
+                                                                      ? AppColors.backgroundPurple
+                                                                      : AppColors.textBlack)),
                                                           const SizedBox(width: 5),
                                                           if (controller.isSelectedAttchmentOption.value == 0) ...[
                                                             SvgPicture.asset(
@@ -1583,7 +1765,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         controller.getPatientAttachment();
                                                       },
                                                       height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      padding:
+                                                          const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                       child: Row(
                                                         children: [
                                                           const SizedBox(width: 5),
@@ -1591,9 +1774,17 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               width: 30,
                                                               height: 30,
                                                               colorFilter: ColorFilter.mode(
-                                                                  controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                                                  controller.isSelectedAttchmentOption.value == 1
+                                                                      ? AppColors.backgroundPurple
+                                                                      : AppColors.textDarkGrey,
+                                                                  BlendMode.srcIn)),
                                                           const SizedBox(width: 8),
-                                                          Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                          Text("Image",
+                                                              style: AppFonts.medium(
+                                                                  17,
+                                                                  controller.isSelectedAttchmentOption.value == 1
+                                                                      ? AppColors.backgroundPurple
+                                                                      : AppColors.textBlack)),
                                                           const SizedBox(width: 5),
                                                           if (controller.isSelectedAttchmentOption.value == 1) ...[
                                                             SvgPicture.asset(
@@ -1609,7 +1800,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         controller.isSelectedAttchmentOption.value = 2;
                                                       },
                                                       height: 30,
-                                                      padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                                      padding:
+                                                          const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
                                                       child: Row(
                                                         children: [
                                                           const SizedBox(width: 5),
@@ -1618,10 +1810,18 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             width: 30,
                                                             height: 30,
                                                             colorFilter: ColorFilter.mode(
-                                                                controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                                controller.isSelectedAttchmentOption.value == 2
+                                                                    ? AppColors.backgroundPurple
+                                                                    : AppColors.textDarkGrey,
+                                                                BlendMode.srcIn),
                                                           ),
                                                           const SizedBox(width: 8),
-                                                          Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                          Text("Date",
+                                                              style: AppFonts.medium(
+                                                                  17,
+                                                                  controller.isSelectedAttchmentOption.value == 2
+                                                                      ? AppColors.backgroundPurple
+                                                                      : AppColors.textBlack)),
                                                           const SizedBox(width: 5),
                                                           if (controller.isSelectedAttchmentOption.value == 2) ...[
                                                             SvgPicture.asset(
@@ -1666,7 +1866,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     controller.getPatientAttachment();
                                                   },
                                                   maxLines: 1, //or null
-                                                  decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                                  decoration: InputDecoration.collapsed(
+                                                      hintText: "Search",
+                                                      hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                                                 ),
                                               ),
                                             ],
@@ -1720,15 +1922,32 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                             height: 120,
                                                                             child: GestureDetector(
                                                                               onTap: () {
-                                                                                customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+                                                                                customPrint(controller
+                                                                                    .patientAttachmentList
+                                                                                    .value
+                                                                                    ?.responseData?[index]
+                                                                                    .fileType
+                                                                                    ?.contains("image"));
 
-                                                                                if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
+                                                                                if (controller
+                                                                                        .patientAttachmentList
+                                                                                        .value
+                                                                                        ?.responseData?[index]
+                                                                                        .fileType
+                                                                                        ?.contains("image") ??
+                                                                                    false) {
                                                                                   showDialog(
                                                                                     context: context,
-                                                                                    barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                                    barrierDismissible:
+                                                                                        true, // Allows dismissing the dialog by tapping outside
                                                                                     builder: (BuildContext context) {
                                                                                       return ViewAttchmentImage(
-                                                                                        imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                        imageUrl: controller
+                                                                                                .patientAttachmentList
+                                                                                                .value
+                                                                                                ?.responseData?[index]
+                                                                                                .filePath ??
+                                                                                            "",
                                                                                         attchmentUrl: '',
                                                                                       );
 
@@ -1744,9 +1963,18 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                     },
                                                                                   );
                                                                                 } else {
-                                                                                  Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
-                                                                                  customPrint("attchmentUri is :- ${attchmentUri}");
-                                                                                  controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                                  Uri attchmentUri = Uri.parse(
+                                                                                      controller
+                                                                                              .patientAttachmentList
+                                                                                              .value
+                                                                                              ?.responseData?[index]
+                                                                                              .filePath ??
+                                                                                          "");
+                                                                                  customPrint(
+                                                                                      "attchmentUri is :- ${attchmentUri}");
+                                                                                  controller
+                                                                                      .launchInAppWithBrowserOptions(
+                                                                                          attchmentUri);
                                                                                 }
 
                                                                                 // if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
@@ -1780,9 +2008,15 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                 // }
                                                                               },
                                                                               child: ClipRRect(
-                                                                                borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                                borderRadius: BorderRadius.circular(
+                                                                                    10), // Set the radius here
                                                                                 child: CachedNetworkImage(
-                                                                                  imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                  imageUrl: controller
+                                                                                          .patientAttachmentList
+                                                                                          .value
+                                                                                          ?.responseData?[index]
+                                                                                          .filePath ??
+                                                                                      "",
                                                                                   width: 120,
                                                                                   height: 120,
                                                                                   errorWidget: (context, url, error) {
@@ -1812,7 +2046,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                 color: Colors.white,
                                                                                 boxShadow: [
                                                                                   BoxShadow(
-                                                                                    color: Colors.black.withOpacity(0.2),
+                                                                                    color:
+                                                                                        Colors.black.withOpacity(0.2),
                                                                                     blurRadius: 2.2,
                                                                                     offset: Offset(0.2, 0),
                                                                                   ),
@@ -1827,9 +2062,20 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                       // return SizedBox();
                                                                                       return DeleteImageDialog(
                                                                                         onDelete: () {
-                                                                                          controller.deleteAttachments(controller.patientAttachmentList.value?.responseData![index].id ?? 0);
+                                                                                          controller.deleteAttachments(
+                                                                                              controller
+                                                                                                      .patientAttachmentList
+                                                                                                      .value
+                                                                                                      ?.responseData![
+                                                                                                          index]
+                                                                                                      .id ??
+                                                                                                  0);
                                                                                         },
-                                                                                        extension: controller.patientAttachmentList.value?.responseData?[index].fileType,
+                                                                                        extension: controller
+                                                                                            .patientAttachmentList
+                                                                                            .value
+                                                                                            ?.responseData?[index]
+                                                                                            .fileType,
                                                                                       );
                                                                                     },
                                                                                   );
@@ -1847,16 +2093,26 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       ),
                                                                       Text(
                                                                         maxLines: 1,
-                                                                        controller.patientAttachmentList.value?.responseData?[index].fileName ?? "",
-                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                        controller.patientAttachmentList.value
+                                                                                ?.responseData?[index].fileName ??
+                                                                            "",
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.textDarkGrey),
                                                                       ),
                                                                       SizedBox(
                                                                         height: 6,
                                                                       ),
                                                                       Text(
-                                                                        DateFormat('MM/dd/yyyy')
-                                                                            .format(DateTime.parse(controller.patientAttachmentList.value?.responseData?[index].createdAt ?? "").toLocal()),
-                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                        DateFormat('MM/dd/yyyy').format(DateTime.parse(
+                                                                                controller
+                                                                                        .patientAttachmentList
+                                                                                        .value
+                                                                                        ?.responseData?[index]
+                                                                                        .createdAt ??
+                                                                                    "")
+                                                                            .toLocal()),
+                                                                        style: AppFonts.regular(
+                                                                            12, AppColors.textDarkGrey),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -1864,8 +2120,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               ),
                                                             );
                                                           },
-                                                          separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                                          itemCount: controller.patientAttachmentList.value?.responseData?.length ?? 0,
+                                                          separatorBuilder: (context, index) =>
+                                                              const SizedBox(width: Dimen.margin15),
+                                                          itemCount: controller
+                                                                  .patientAttachmentList.value?.responseData?.length ??
+                                                              0,
                                                         );
                                                       },
                                                     )))
@@ -1890,7 +2149,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Container(
                           // color: AppColors.backgroundWhite,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                          decoration:
+                              BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Row(
                             spacing: 15,
@@ -2513,7 +2773,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                           borderRadius: BorderRadius.circular(12),
                           color: controller.isExpandRecording.value ? AppColors.backgroundWhite : AppColors.black,
                         ),
-                        padding: controller.isExpandRecording.value ? EdgeInsets.symmetric(horizontal: 0, vertical: 0) : EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: controller.isExpandRecording.value
+                            ? EdgeInsets.symmetric(horizontal: 0, vertical: 0)
+                            : EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         curve: Curves.easeInOut,
                         child: Column(
                           children: [
@@ -2550,7 +2812,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         controller.isExpandRecording.value = !controller.isExpandRecording.value;
                                       },
                                       child: SvgPicture.asset(
-                                        controller.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording,
+                                        controller.isExpandRecording.value
+                                            ? ImagePath.collpase
+                                            : ImagePath.expand_recording,
                                         height: 30,
                                         width: 30,
                                       ),
@@ -2719,7 +2983,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         child: Container(
                                           height: 50,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
+                                            border:
+                                                Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
                                             color: AppColors.white,
                                             borderRadius: BorderRadius.circular(8),
                                           ),

@@ -16,8 +16,8 @@ import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
 import '../model/patient_fullnote_model.dart';
 
-class FullNoteView extends StatelessWidget{
-   FullNoteView({super.key});
+class FullNoteView extends StatelessWidget {
+  FullNoteView({super.key});
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
 
   @override
@@ -68,7 +68,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(6),
+                                      bottomRight: Radius.circular(6)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -76,9 +80,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -109,7 +115,9 @@ class FullNoteView extends StatelessWidget{
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?.isNotEmpty ?? false
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails
+                                                ?.cancerHistory?.isNotEmpty ??
+                                            false
                                         ? ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -121,14 +129,18 @@ class FullNoteView extends StatelessWidget{
                                                         children: [
                                                           SizedBox(height: 2),
                                                           Row(
-                                                            mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                            crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                            mainAxisAlignment: MainAxisAlignment
+                                                                .start, // Align the row content to the start
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .center, // Align the content vertically centered
                                                             children: [
                                                               SizedBox(width: 10),
                                                               Expanded(
                                                                 child: Text(
                                                                   textAlign: TextAlign.left,
-                                                                  controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory ?? "",
+                                                                  controller.patientFullNoteModel.value?.responseData
+                                                                          ?.fullNoteDetails?.cancerHistory ??
+                                                                      "",
                                                                   style: AppFonts.regular(14, AppColors.textGrey),
                                                                 ),
                                                               ),
@@ -178,7 +190,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -186,9 +202,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -219,7 +237,9 @@ class FullNoteView extends StatelessWidget{
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory?.isNotEmpty ?? false
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails
+                                                ?.skinHistory?.isNotEmpty ??
+                                            false
                                         ? ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -236,7 +256,9 @@ class FullNoteView extends StatelessWidget{
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
-                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistory ?? "",
+                                                              controller.patientFullNoteModel.value?.responseData
+                                                                      ?.fullNoteDetails?.skinHistory ??
+                                                                  "",
                                                               style: AppFonts.regular(15, AppColors.textGrey),
                                                             )),
                                                           ],
@@ -267,7 +289,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -275,9 +301,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -308,7 +336,9 @@ class FullNoteView extends StatelessWidget{
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory?.isNotEmpty ?? false
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails
+                                                ?.socialHistory?.isNotEmpty ??
+                                            false
                                         ? ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -325,7 +355,9 @@ class FullNoteView extends StatelessWidget{
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
-                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistory ?? "",
+                                                              controller.patientFullNoteModel.value?.responseData
+                                                                      ?.fullNoteDetails?.socialHistory ??
+                                                                  "",
                                                               style: AppFonts.regular(15, AppColors.textGrey),
                                                             )),
                                                           ],
@@ -356,7 +388,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -364,9 +400,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -397,7 +435,9 @@ class FullNoteView extends StatelessWidget{
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails
+                                                ?.medications?.isNotEmpty ??
+                                            false
                                         ? ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -446,7 +486,9 @@ class FullNoteView extends StatelessWidget{
                                                     ),
                                                   ),
                                                 ),
-                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length ?? 0)
+                                            itemCount: controller.patientFullNoteModel.value?.responseData
+                                                    ?.fullNoteDetails?.medications?.length ??
+                                                0)
                                         : Row(
                                             children: [
                                               Text(
@@ -467,7 +509,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -475,9 +521,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -508,7 +556,9 @@ class FullNoteView extends StatelessWidget{
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies?.isNotEmpty ?? false
+                                    child: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails
+                                                ?.allergies?.isNotEmpty ??
+                                            false
                                         ? ListView.builder(
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
@@ -524,7 +574,9 @@ class FullNoteView extends StatelessWidget{
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
-                                                              controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "",
+                                                              controller.patientFullNoteModel.value?.responseData
+                                                                      ?.fullNoteDetails?.allergies ??
+                                                                  "",
                                                               style: AppFonts.regular(15, AppColors.textGrey),
                                                             )),
                                                           ],
@@ -563,7 +615,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -571,9 +627,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -609,7 +667,9 @@ class FullNoteView extends StatelessWidget{
                                         Expanded(
                                           child: Text(
                                             textAlign: TextAlign.left,
-                                            controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "",
+                                            controller.patientFullNoteModel.value?.responseData?.fullNoteDetails
+                                                    ?.chiefComplain ??
+                                                "",
                                             style: AppFonts.medium(14, AppColors.textGrey),
                                           ),
                                         ),
@@ -626,7 +686,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -634,9 +698,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -682,7 +748,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -690,9 +760,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -737,7 +809,8 @@ class FullNoteView extends StatelessWidget{
                                                     child: Column(
                                                       children: [
                                                         SizedBox(height: 0),
-                                                        if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!
+                                                        if (controller.patientFullNoteModel.value?.responseData
+                                                                ?.fullNoteDetails?.reviewOfSystem!
                                                                 .toJson()
                                                                 .values
                                                                 .toList()[index]
@@ -761,13 +834,23 @@ class FullNoteView extends StatelessWidget{
                                                                       TextSpan(
                                                                         text:
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index]}: ",
-                                                                        recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                        recognizer: TapGestureRecognizer()
+                                                                          ..onTap = () {},
                                                                         style: AppFonts.semiBold(14, AppColors.black),
                                                                       ),
                                                                       TextSpan(
-                                                                        text: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] ??
+                                                                        text: controller
+                                                                                .patientFullNoteModel
+                                                                                .value
+                                                                                ?.responseData
+                                                                                ?.fullNoteDetails
+                                                                                ?.reviewOfSystem!
+                                                                                .toJson()
+                                                                                .values
+                                                                                .toList()[index] ??
                                                                             "-",
-                                                                        recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                        recognizer: TapGestureRecognizer()
+                                                                          ..onTap = () {},
                                                                         style: AppFonts.regular(14, AppColors.black),
                                                                       ),
                                                                     ],
@@ -798,7 +881,13 @@ class FullNoteView extends StatelessWidget{
                                                     ),
                                                   ),
                                                 ),
-                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem?.toJson().keys.toList().length ?? 0),
+                                            itemCount: controller.patientFullNoteModel.value?.responseData
+                                                    ?.fullNoteDetails?.reviewOfSystem
+                                                    ?.toJson()
+                                                    .keys
+                                                    .toList()
+                                                    .length ??
+                                                0),
                                         SizedBox(height: 10),
                                       ],
                                     ),
@@ -812,7 +901,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -820,9 +913,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -872,8 +967,15 @@ class FullNoteView extends StatelessWidget{
                                                             SizedBox(width: 15),
                                                             Expanded(
                                                                 child: Html(
-                                                              data: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "",
-                                                              style: {"body": Style(margin: Margins.all(0), fontFamily: "Poppins", fontSize: FontSize(14.0))},
+                                                              data: controller.patientFullNoteModel.value?.responseData
+                                                                      ?.fullNoteDetails?.exam ??
+                                                                  "",
+                                                              style: {
+                                                                "body": Style(
+                                                                    margin: Margins.all(0),
+                                                                    fontFamily: "Poppins",
+                                                                    fontSize: FontSize(14.0))
+                                                              },
                                                             )
 
                                                                 //     Text(
@@ -903,7 +1005,11 @@ class FullNoteView extends StatelessWidget{
                               width: double.infinity,
                               padding: EdgeInsets.symmetric(horizontal: 0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                      bottomRight: Radius.circular(12)),
                                   color: AppColors.white,
                                   border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                               child: Column(
@@ -911,9 +1017,11 @@ class FullNoteView extends StatelessWidget{
                                   Container(
                                     height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                        border: Border.all(
+                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
                                     // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
@@ -988,7 +1096,8 @@ class FullNoteView extends StatelessWidget{
                                                                         textAlign: TextAlign.left,
                                                                         "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].title} (${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].code})" ??
                                                                             "",
-                                                                        style: AppFonts.regular(15, AppColors.textPurple),
+                                                                        style:
+                                                                            AppFonts.regular(15, AppColors.textPurple),
                                                                       )),
                                                                     ],
                                                                   ),
@@ -999,8 +1108,20 @@ class FullNoteView extends StatelessWidget{
                                                                     children: [
                                                                       Expanded(
                                                                         child: Html(
-                                                                          data: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].description ?? "",
-                                                                          style: {"body": Style(margin: Margins.all(0), fontFamily: "Poppins", fontSize: FontSize(14.0))},
+                                                                          data: controller
+                                                                                  .patientFullNoteModel
+                                                                                  .value
+                                                                                  ?.responseData
+                                                                                  ?.fullNoteDetails
+                                                                                  ?.impressionsAndPlan?[index]
+                                                                                  .description ??
+                                                                              "",
+                                                                          style: {
+                                                                            "body": Style(
+                                                                                margin: Margins.all(0),
+                                                                                fontFamily: "Poppins",
+                                                                                fontSize: FontSize(14.0))
+                                                                          },
                                                                         ),
                                                                       )
                                                                     ],
@@ -1008,14 +1129,23 @@ class FullNoteView extends StatelessWidget{
                                                                   SizedBox(
                                                                     height: 10,
                                                                   ),
-                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type != "-") ...[
+                                                                  if (controller
+                                                                          .patientFullNoteModel
+                                                                          .value
+                                                                          ?.responseData
+                                                                          ?.fullNoteDetails
+                                                                          ?.impressionsAndPlan?[index]
+                                                                          .procedure
+                                                                          ?.type !=
+                                                                      "-") ...[
                                                                     Row(
                                                                       children: [
                                                                         Expanded(
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type}.",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style:
+                                                                                AppFonts.bold(15, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1023,29 +1153,45 @@ class FullNoteView extends StatelessWidget{
                                                                     SizedBox(
                                                                       height: 10,
                                                                     ),
-                                                                    for (final details
-                                                                        in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details ?? [])
+                                                                    for (final details in controller
+                                                                            .patientFullNoteModel
+                                                                            .value
+                                                                            ?.responseData
+                                                                            ?.fullNoteDetails
+                                                                            ?.impressionsAndPlan?[index]
+                                                                            .procedure
+                                                                            ?.details ??
+                                                                        [])
                                                                       Row(
                                                                         children: [
                                                                           Expanded(
                                                                             child: Text(
                                                                               textAlign: TextAlign.left,
                                                                               "$details.",
-                                                                              style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                              style: AppFonts.regular(
+                                                                                  15, AppColors.textDarkGrey),
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
                                                                   ],
                                                                   SizedBox(height: 10),
-                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications != "-") ...[
+                                                                  if (controller
+                                                                          .patientFullNoteModel
+                                                                          .value
+                                                                          ?.responseData
+                                                                          ?.fullNoteDetails
+                                                                          ?.impressionsAndPlan?[index]
+                                                                          .medications !=
+                                                                      "-") ...[
                                                                     Row(
                                                                       children: [
                                                                         Expanded(
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "Medications",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style:
+                                                                                AppFonts.bold(15, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1056,21 +1202,30 @@ class FullNoteView extends StatelessWidget{
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications}.",
-                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                            style: AppFonts.regular(
+                                                                                15, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),
                                                                       ],
                                                                     ),
                                                                   ],
                                                                   SizedBox(height: 10),
-                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders != "-") ...[
+                                                                  if (controller
+                                                                          .patientFullNoteModel
+                                                                          .value
+                                                                          ?.responseData
+                                                                          ?.fullNoteDetails
+                                                                          ?.impressionsAndPlan?[index]
+                                                                          .orders !=
+                                                                      "-") ...[
                                                                     Row(
                                                                       children: [
                                                                         Expanded(
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "Orders:",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style:
+                                                                                AppFonts.bold(15, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1081,7 +1236,8 @@ class FullNoteView extends StatelessWidget{
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders}.",
-                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                            style: AppFonts.regular(
+                                                                                15, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1105,7 +1261,8 @@ class FullNoteView extends StatelessWidget{
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].counselingAndDiscussion}.",
-                                                                          style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                          style: AppFonts.regular(
+                                                                              15, AppColors.textDarkGrey),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -1114,7 +1271,9 @@ class FullNoteView extends StatelessWidget{
                                                               ),
                                                             ),
                                                           ),
-                                                      itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?.length ?? 0),
+                                                      itemCount: controller.patientFullNoteModel.value?.responseData
+                                                              ?.fullNoteDetails?.impressionsAndPlan?.length ??
+                                                          0),
                                                 ),
                                               ],
                                             ),
