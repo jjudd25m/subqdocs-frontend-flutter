@@ -233,8 +233,8 @@ class ApiProvider {
 
   Future<Map<String, dynamic>> callGet(String url, {Map<String, dynamic>? queryParameters}) async {
     if (kDebugMode) {
-      print(UrlProvider.baseUrl + url);
-      print("queryParameters: $queryParameters");
+      // print(UrlProvider.baseUrl + url);
+      // print("queryParameters: $queryParameters");
     }
     try {
       customPrint("-------------------------------");
@@ -243,7 +243,7 @@ class ApiProvider {
       customPrint("-------------------------------");
       var response = await dio.get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
       customPrint("-------------------------------");
-      // customPrint("API response $response");
+      customPrint("API response $response");
       customPrint("-------------------------------");
       if (response.data is List) {
         return {"data": response.data};

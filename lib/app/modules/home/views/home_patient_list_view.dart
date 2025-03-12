@@ -21,39 +21,95 @@ class HomePatientListView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return controller.patientList.isEmpty
-          ? Padding(
-              padding: const EdgeInsets.all(10),
-              child: EmptyPatientScreen(
-                  onBtnPress: () async {
-                    final result = await Get.toNamed(Routes.ADD_PATIENT);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Obx(() {
+        return controller.patientList.isEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: EmptyPatientScreen(
+                    onBtnPress: () async {
+                      final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                    controller.getPastVisitList(isFist: true);
-                    controller.getScheduleVisitList();
-                    controller.getPatientList();
-                  },
-                  title: "Your Patient List is Empty",
-                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
-            )
-          : CustomTable(
-              rows: _getTableRows(controller.patientList),
-              columnCount: 6,
-              // Number of columns in the table (for example, 6 here)
-              cellBuilder: _buildTableCell,
-              context: context,
-              onRowSelected: (rowIndex, rowData) {
-                // Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                //   "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
-                //   "patientId": controller.patientList[rowIndex - 1].id.toString(),
-                // });
+                      controller.getPastVisitList(isFist: true);
+                      controller.getScheduleVisitList();
+                      controller.getPatientList();
+                    },
+                    title: "Your Patient List is Empty",
+                    description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+              )
+            : CustomTable(
+                rows: _getTableRows(controller.patientList),
+                columnCount: 6,
+                // Number of columns in the table (for example, 6 here)
+                cellBuilder: _buildTableCell,
+                context: context,
+                onRowSelected: (rowIndex, rowData) {
+                  // Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                  //   "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
+                  //   "patientId": controller.patientList[rowIndex - 1].id.toString(),
+                  // });
 
-                // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-              },
-              onLoadMore: () => controller.patientLoadMore(),
-              columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10], // Set the column widths based on your needs
-            );
-    });
+                  // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                },
+                onLoadMore: () async {
+                  controller.patientLoadMore();
+                },
+                columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10],
+                headerBuilder: (context, colIndex) {
+                  List<String> headers = ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action'];
+                  return GestureDetector(
+                    onTap: () {
+                      if (colIndex != 5) {
+                        controller.patientSorting(colIndex: colIndex, cellData: headers[colIndex]);
+                      }
+                      // customPrint(cellData);
+                    },
+                    child: Container(
+                      color: AppColors.backgroundWhite,
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            headers[colIndex],
+                            textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                            style: AppFonts.medium(12, AppColors.black),
+                            softWrap: true, // Allows text to wrap
+                            overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                          ),
+                          colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
+                                  controller.globalController.homePatientListSortingModel.value!.isAscending &&
+                                  colIndex != 5
+                              ? Icon(
+                                  CupertinoIcons.down_arrow,
+                                  size: 15,
+                                )
+                              : colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
+                                      !controller.globalController.homePatientListSortingModel.value!.isAscending &&
+                                      colIndex != 5
+                                  ? Icon(
+                                      CupertinoIcons.up_arrow,
+                                      size: 15,
+                                    )
+                                  : SizedBox()
+                        ],
+                      ),
+                    ),
+                  );
+
+                  //   Text(
+                  //   headers[colIndex],
+                  //   textAlign: colIndex == 0 ? TextAlign.left : TextAlign.center,
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // );
+                },
+                isLoading: controller.isLoading.value,
+                // headerRows: ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action'],
+                // Set the column widths based on your needs
+              );
+      }),
+    );
   }
 
   // This function creates rows from the API model
@@ -61,7 +117,7 @@ class HomePatientListView extends GetView<HomeController> {
     List<List<String>> rows = [];
 
     // Add header row first
-    rows.add(['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action']);
+    // rows.add(['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action']);
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
@@ -80,12 +136,10 @@ class HomePatientListView extends GetView<HomeController> {
 
   // This is the cell builder function where you can customize how each cell is built.
   Widget _buildTableCell(BuildContext context, int rowIndex, int colIndex, String cellData, String profileImage) {
-    return colIndex == 0 && rowIndex != 0
-        ?GestureDetector(
-      onTap: () {
-
-      },
-          child: Row(
+    return colIndex == 0
+        ? GestureDetector(
+            onTap: () {},
+            child: Row(
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(14),
@@ -102,9 +156,8 @@ class HomePatientListView extends GetView<HomeController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      if(rowIndex != 0) {
-                        Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-
+                      if (rowIndex != 0) {
+                        Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
                       }
                     },
                     child: Text(
@@ -119,8 +172,8 @@ class HomePatientListView extends GetView<HomeController> {
                 ),
               ],
             ),
-        )
-        : colIndex == 5 && rowIndex != 0
+          )
+        : colIndex == 5
             ? PopupMenuButton<String>(
                 offset: const Offset(0, 8),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -138,8 +191,8 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-                            customPrint(" patient id is ${controller.patientList[rowIndex - 1].id}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                            customPrint(" patient id is ${controller.patientList[rowIndex].id}");
+                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
                           },
                           // value: "",
                           child: Padding(
@@ -149,53 +202,53 @@ class HomePatientListView extends GetView<HomeController> {
                               style: AppFonts.regular(14, AppColors.textBlack),
                             ),
                           )),
-                  PopupMenuItem(
-                      padding: EdgeInsets.zero,
-                      // value: "",
-                      onTap: () async {
-                        dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                          "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
-                          "patientId": controller.patientList[rowIndex - 1].id.toString(),
-                        });
+                      PopupMenuItem(
+                          padding: EdgeInsets.zero,
+                          // value: "",
+                          onTap: () async {
+                            dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                              "visitId": controller.patientList[rowIndex].visitId.toString(),
+                              "patientId": controller.patientList[rowIndex].id.toString(),
+                            });
 
-                        print("back from response");
+                            print("back from response");
 
-                        // showDialog(
-                        //   context: context,
-                        //   barrierDismissible:
-                        //   true, // Allows dismissing the dialog by tapping outside
-                        //   builder: (BuildContext context) {
-                        //     return SchedulePatientDialog(
-                        //       receiveParam: (p0, p1) {
-                        //         customPrint("p0 is $p0 p1 is $p1");
-                        //         controller.patientScheduleCreate(param: {
-                        //           "patient_id":
-                        //           controller.pastVisitList[rowIndex - 1].id.toString(),
-                        //           "visit_date": p1,
-                        //           "visit_time": p0
-                        //         });
-                        //       },
-                        //     ); // Our custom dialog
-                        //   },
-                        // );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 1,
-                            color: AppColors.appbarBorder,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Medical record",
-                              style: AppFonts.regular(14, AppColors.textBlack),
-                            ),
-                          ),
-                        ],
-                      )),
+                            // showDialog(
+                            //   context: context,
+                            //   barrierDismissible:
+                            //   true, // Allows dismissing the dialog by tapping outside
+                            //   builder: (BuildContext context) {
+                            //     return SchedulePatientDialog(
+                            //       receiveParam: (p0, p1) {
+                            //         customPrint("p0 is $p0 p1 is $p1");
+                            //         controller.patientScheduleCreate(param: {
+                            //           "patient_id":
+                            //           controller.pastVisitList[rowIndex - 1].id.toString(),
+                            //           "visit_date": p1,
+                            //           "visit_time": p0
+                            //         });
+                            //       },
+                            //     ); // Our custom dialog
+                            //   },
+                            // );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 1,
+                                color: AppColors.appbarBorder,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Medical record",
+                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                ),
+                              ),
+                            ],
+                          )),
                       // PopupMenuItem(
                       //     padding: EdgeInsets.zero,
                       //     onTap: () async {
@@ -243,7 +296,7 @@ class HomePatientListView extends GetView<HomeController> {
                                 return SchedulePatientDialog(
                                   receiveParam: (p0, p1) {
                                     customPrint("p0 is $p0 p1 is $p1");
-                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
+                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex].id.toString(), "visit_date": p1, "visit_time": p0});
                                   },
                                 ); // Our custom dialog
                               },
@@ -269,21 +322,23 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-
-                            if(rowIndex != 0) {
+                            if (rowIndex != 0) {
                               showDialog(
                                 context: context,
                                 barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                 builder: (BuildContext context) {
-                                  return DeletePatientDialog(title: "Are you sure want to delete patient", onDelete: () {
-                                    print("delete id is :- ${controller.patientList[rowIndex - 1].id}");
-                                    Get.back();
-                                    controller.deletePatientById(controller.patientList[rowIndex - 1].id);
-                                  }, header: "Delete Patient",); // Our custom dialog
+                                  return DeletePatientDialog(
+                                    title: "Are you sure want to delete patient",
+                                    onDelete: () {
+                                      print("delete id is :- ${controller.patientList[rowIndex].id}");
+                                      Get.back();
+                                      controller.deletePatientById(controller.patientList[rowIndex].id);
+                                    },
+                                    header: "Delete Patient",
+                                  ); // Our custom dialog
                                 },
                               );
                             }
-
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,42 +363,50 @@ class HomePatientListView extends GetView<HomeController> {
                   width: 40,
                   height: 20,
                 ))
-            : rowIndex == 0
-                ? GestureDetector(
-                    onTap: () {
-                      controller.patientSorting(colIndex: colIndex, cellData: cellData);
-                      customPrint(cellData);
-                    },
-                    child: Row(
-                      mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          cellData,
-                          textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                          style: AppFonts.regular(12, AppColors.black),
-                          softWrap: true, // Allows text to wrap
-                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                        ),
-                        colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
-                            ? Icon(
-                                CupertinoIcons.down_arrow,
-                                size: 15,
-                              )
-                            : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
-                                ? Icon(
-                                    CupertinoIcons.up_arrow,
-                                    size: 15,
-                                  )
-                                : SizedBox()
-                      ],
-                    ),
-                  )
-                : Text(
-                    cellData,
-                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                    style: AppFonts.regular(14, AppColors.textDarkGrey),
-                    softWrap: true, // Allows text to wrap
-                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                  );
+            : Text(
+                cellData,
+                textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                style: AppFonts.regular(14, AppColors.textDarkGrey),
+                softWrap: true, // Allows text to wrap
+                overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+              );
+
+    // : rowIndex == 0
+    //     ? GestureDetector(
+    //         onTap: () {
+    //           controller.patientSorting(colIndex: colIndex, cellData: cellData);
+    //           customPrint(cellData);
+    //         },
+    //         child: Row(
+    //           mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+    //           children: [
+    //             Text(
+    //               cellData,
+    //               textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+    //               style: AppFonts.regular(12, AppColors.black),
+    //               softWrap: true, // Allows text to wrap
+    //               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+    //             ),
+    //             colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
+    //                 ? Icon(
+    //                     CupertinoIcons.down_arrow,
+    //                     size: 15,
+    //                   )
+    //                 : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
+    //                     ? Icon(
+    //                         CupertinoIcons.up_arrow,
+    //                         size: 15,
+    //                       )
+    //                     : SizedBox()
+    //           ],
+    //         ),
+    //       )
+    //     : Text(
+    //         cellData,
+    //         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+    //         style: AppFonts.regular(14, AppColors.textDarkGrey),
+    //         softWrap: true, // Allows text to wrap
+    //         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+    //       );
   }
 }

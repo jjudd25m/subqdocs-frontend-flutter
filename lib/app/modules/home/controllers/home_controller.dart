@@ -31,7 +31,7 @@ class HomeController extends GetxController {
 
   final GlobalController globalController = Get.find();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
-  List<Map<String, dynamic>> lastSorting = [];
+  // List<Map<String, dynamic>> lastSorting = [];
 
   final HomeRepository _homeRepository = HomeRepository();
   TextEditingController fromController = TextEditingController();
@@ -58,50 +58,20 @@ class HomeController extends GetxController {
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
 
+  List<DateTime> selectedPatientListDateValue = [];
   List<DateTime> selectedValue = [];
 
-  List<Map<String, dynamic>> sortingPastPatient = [
-    {"id": "first_name", "desc": true},
-    {"id": "appointmentTime", "desc": true},
-    {"id": "age", "desc": true},
-    {"id": "gender", "desc": true},
-    {"id": "previousVisitCount", "desc": true},
-    {"id": "status", "desc": true},
-
-    // Add more sorting parameters as needed
-  ];
-
-  List<Map<String, dynamic>> defaultPastPatient = [
-    {"id": "appointmentTime", "desc": "true"},
-
-    // Add more sorting parameters as needed
-  ];
-
-  List<Map<String, dynamic>> defaultSchedulePatient = [
-    {"id": "appointmentTime", "desc": "false"},
-
-    // Add more sorting parameters as needed
-  ];
-
-  List<Map<String, dynamic>> sortingSchedulePatient = [
-    {"id": "first_name", "desc": "true"},
-    {"id": "appointmentTime", "desc": "true"},
-    {"id": "age", "desc": "true"},
-    {"id": "gender", "desc": "true"},
-    {"id": "previousVisitCount", "desc": "true"},
-
-    // Add more sorting parameters as needed
-  ];
-
-  List<Map<String, dynamic>> sortingPatientList = [
-    {"id": "first_name", "desc": true},
-    {"id": "lastVisitDate", "desc": true},
-    {"id": "age", "desc": true},
-    {"id": "gender", "desc": true},
-    {"id": "visitCount", "desc": true},
-
-    // Add more sorting parameters as needed
-  ];
+  // List<Map<String, dynamic>> defaultPastPatient = [
+  //   {"id": "appointmentTime", "desc": "true"},
+  //
+  //   // Add more sorting parameters as needed
+  // ];
+  //
+  // List<Map<String, dynamic>> defaultSchedulePatient = [
+  //   {"id": "appointmentTime", "desc": "false"},
+  //
+  //   // Add more sorting parameters as needed
+  // ];
 
   Map<String, String> nameToIdMap = {
     "Patient Name": "first_name",
@@ -115,32 +85,30 @@ class HomeController extends GetxController {
     "Status": "status",
   };
 
-  bool sortName = false;
+  // bool sortName = false;
   RxBool isInternetConnected = RxBool(true);
 
-  final count = 0.obs;
+  // final count = 0.obs;
 
   RxInt tabIndex = RxInt(0);
 
-  RxBool isPast = RxBool(false);
-  RxBool isPagination = RxBool(false);
+  // RxBool isPast = RxBool(false);
+  // RxBool isPagination = RxBool(false);
 
   var pagePatient = 1;
   var pageSchedule = 1;
   var pagePast = 1;
 
-  RxInt colIndex = RxInt(-1);
-  RxBool isAsending = RxBool(true);
+  // RxInt colIndex = RxInt(-1);
+  // RxBool isAsending = RxBool(true);
+  //
+  // RxInt colindexSchedule = RxInt(-1);
+  // RxBool isAsendingSchedule = RxBool(true);
+  //
+  // RxInt colIndexPatient = RxInt(-1);
+  // RxBool isAsendingPatient = RxBool(true);
 
-  RxInt colindexSchedule = RxInt(-1);
-  RxBool isAsendingSchedule = RxBool(true);
-
-  RxInt colIndexPatient = RxInt(-1);
-  RxBool isAsendingPatient = RxBool(true);
-
-
-
-
+  RxBool isLoading = RxBool(false);
 
   @override
   void onInit() {
@@ -154,15 +122,25 @@ class HomeController extends GetxController {
     }
     getPatientList();
     getStatus();
-    getScheduleVisitList(isFist: true);
-    getPastVisitList(isFist: true);
+    // getScheduleVisitList(isFist: true);
+    // getPastVisitList(isFist: true);
   }
 
-  void increment() => count.value++;
-
-  bool? getDescValue(List<Map<String, dynamic>> sorting, String displayName) {
+  bool? getDescValue(List<Map<String, dynamic>> sorting, String displayName, int tabIndex) {
     // Find the actual key (id) from the name-to-id map
     String? key = nameToIdMap[displayName];
+    print("display name is :- ${displayName}");
+
+    if (tabIndex == 0) {
+      if (displayName == "Previous Visits") {
+        key = "visitCount";
+        print("is :- ${key}");
+      }
+    } else if (tabIndex == 2) {
+      if (displayName == "Previous \nVisits") {
+        key = "previousVisitCount";
+      }
+    }
 
     if (key == null) {
       // customPrint("Invalid display name: $displayName");
@@ -181,10 +159,20 @@ class HomeController extends GetxController {
     return null; // Return null if no matching 'id' is found
   }
 
-
-  List<Map<String, dynamic>> toggleSortDesc(List<Map<String, dynamic>> sorting, String displayName) {
+  List<Map<String, dynamic>> toggleSortDesc(List<Map<String, dynamic>> sorting, String displayName, int tabIndex) {
     // Find the actual key (id) from the name-to-id map
+
     String? key = nameToIdMap[displayName];
+
+    print("tabindex is :- $tabIndex display name is :- $displayName");
+    print("key name:- $key");
+
+    if (tabIndex == 0 && displayName == "Previous Visits") {
+      key = "visitCount";
+      print("inside key visitCount");
+    } else if (tabIndex == 2 && displayName == "Previous \nVisits") {
+      key = "previousVisitCount";
+    }
 
     if (key == null) {
       // customPrint("Invalid display name: $displayName");
@@ -195,8 +183,10 @@ class HomeController extends GetxController {
       return empty; // Return the original list if no matching key is found
     }
 
+    // print("sorting val is :- $sorting");
     // Iterate over the sorting list to find the map with the matching 'id'
     for (var map in sorting) {
+      // print("map value is :- ${map}");
       if (map["id"] == key) {
         // Toggle the 'desc' value: if it's true, set it to false, and vice versa
         map["desc"] = map["desc"] == true ? false : true;
@@ -206,8 +196,6 @@ class HomeController extends GetxController {
 
     return sorting.where((map) => map['id'] == key).toList();
   }
-
-
 
   Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
@@ -221,8 +209,13 @@ class HomeController extends GetxController {
     // Dynamically add sorting to the param map
 
     if (sortingName!.isNotEmpty) {
-      lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
-      param["sorting"] = lastSorting;
+      // lastSorting = toggleSortDesc(sortingPatientList, sortingName, 0);
+      globalController.homePatientListSortingModel.value?.patientListSelectedSorting = toggleSortDesc(globalController.sortingPatientList, sortingName, 0);
+      // globalController.patientListSelectedSorting = toggleSortDesc(globalController.sortingPatientList, sortingName, 0);
+      // param["sorting"] = globalController.patientListSelectedSorting;
+      param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
+    } else {
+      param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
     }
 
     if (startDate.value != "" && endDate.value != "") {
@@ -244,6 +237,8 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
+    print("param:- $param");
+    globalController.saveHomePatientListData();
     patientListModel.value = await _homeRepository.getPatient(param: param);
 
     if (patientListModel.value?.responseData?.data != null) {
@@ -253,7 +248,7 @@ class HomeController extends GetxController {
     }
 
     for (var element in patientList) {
-      print("element is ${element.toJson()}");
+      // print("element is ${element.toJson()}");
     }
   }
 
@@ -263,15 +258,25 @@ class HomeController extends GetxController {
     param['limit'] = "20";
     param['isPastPatient'] = 'false';
 
-    if (isFist) {
-      lastSorting = defaultSchedulePatient;
-      param["sorting"] = defaultSchedulePatient;
+    print("Schedule sorting name:- $sortingName");
+    // if (isFist) {
+    //   // lastSorting = defaultSchedulePatient;
+    //   // globalController.scheduleVisitSelectedSorting = defaultPastPatient;
+    //   param["sorting"] = globalController.scheduleVisitSelectedSorting;
+    // } else {
+    if (sortingName!.isNotEmpty) {
+      // lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "", 1);
+      // globalController.scheduleVisitSelectedSorting = toggleSortDesc(globalController.sortingPatientList, sortingName ?? "", 1);
+      globalController.homeScheduleListSortingModel.value?.scheduleVisitSelectedSorting = toggleSortDesc(globalController.sortingSchedulePatient, sortingName ?? "", 1);
+      print("toggle name:- ${toggleSortDesc(globalController.sortingPatientList, sortingName ?? "", 1)}");
+      // param["sorting"] = globalController.scheduleVisitSelectedSorting;
+      param["sorting"] = globalController.homeScheduleListSortingModel.value?.scheduleVisitSelectedSorting;
+      print("getScheduleVisitList if sorting empty");
     } else {
-      if (sortingName!.isNotEmpty) {
-        lastSorting = toggleSortDesc(sortingPatientList, sortingName ?? "");
-        param["sorting"] = toggleSortDesc(sortingSchedulePatient, sortingName ?? "");
-      }
+      param["sorting"] = globalController.homeScheduleListSortingModel.value?.scheduleVisitSelectedSorting;
+      print("getScheduleVisitList else sorting empty");
     }
+    // }
     if (searchController.text.isNotEmpty) {
       param['search'] = searchController.text;
     }
@@ -297,6 +302,8 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
+    print("param:- $param");
+    globalController.saveHomeScheduleListData();
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
 
     if (scheduleVisitListModel.value?.responseData?.data != null) {
@@ -315,15 +322,24 @@ class HomeController extends GetxController {
       param['search'] = searchController.text;
     }
 
-    if (isFist) {
-      lastSorting = defaultPastPatient;
-      param["sorting"] = defaultPastPatient;
+    // if (isFist) {
+    //   // lastSorting = defaultPastPatient;
+    //   // globalController.pastVisitSelectedSorting = defaultPastPatient;
+    //   print("global if sort:- ${globalController.pastVisitSelectedSorting}");
+    //   param["sorting"] = globalController.pastVisitSelectedSorting;
+    // } else {
+    if (sortingName!.isNotEmpty) {
+      // lastSorting = toggleSortDesc(sortingPastPatient, sortingName ?? "", 2);
+
+      globalController.homePastPatientListSortingModel.value?.pastVisitSelectedSorting = toggleSortDesc(globalController.sortingPastPatient, sortingName ?? "", 2);
+      // globalController.pastVisitSelectedSorting = toggleSortDesc(globalController.sortingPastPatient, sortingName ?? "", 2);
+      // param["sorting"] = globalController.pastVisitSelectedSorting;
+      param["sorting"] = globalController.homePastPatientListSortingModel.value?.pastVisitSelectedSorting;
+      // print("global else if sort:- ${globalController.pastVisitSelectedSorting}");
     } else {
-      if (sortingName!.isNotEmpty) {
-        lastSorting = toggleSortDesc(sortingPastPatient, sortingName ?? "");
-        param["sorting"] = lastSorting;
-      }
+      param["sorting"] = globalController.homePastPatientListSortingModel.value?.pastVisitSelectedSorting;
     }
+    // }
 
     if (selectedStatusIndex.isNotEmpty) {
       List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status.toString()!).toList();
@@ -355,6 +371,8 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
+    print("param:- $param");
+    globalController.saveHomePastPatientData();
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
 
     if (pastVisitListModel.value?.responseData?.data != null) {
@@ -367,6 +385,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getScheduleVisitListFetchMore() async {
+    isLoading.value = true;
     Map<String, dynamic> param = {};
     param['page'] = ++pageSchedule;
     param['limit'] = "20";
@@ -375,14 +394,15 @@ class HomeController extends GetxController {
       param['search'] = searchController.text;
     }
 
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
-      // Add more sorting parameters as needed
-    ];
+    // List<Map<String, dynamic>> sorting = [
+    //   {"id": "first_name", "desc": sortName},
+    //   {"id": "last_name", "desc": sortName}
+    //   // Add more sorting parameters as needed
+    // ];
 
     // Dynamically add sorting to the param map
-    param["sorting"] = lastSorting;
+    param["sorting"] = globalController.homeScheduleListSortingModel.value?.scheduleVisitSelectedSorting;
+    // param["sorting"] = globalController.scheduleVisitSelectedSorting;
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -403,8 +423,10 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
+    globalController.saveHomeScheduleListData();
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
 
+    isLoading.value = false;
     if (scheduleVisitListModel.value?.responseData?.data != null) {
       int? totalCount = scheduleVisitListModel.value?.responseData?.totalCount ?? 0;
       int? dataCount = scheduleVisitList.length;
@@ -423,6 +445,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getPatientListFetchMore({int? page}) async {
+    isLoading.value = true;
     Map<String, dynamic> param = {};
 
     param['page'] = ++pagePatient;
@@ -431,14 +454,16 @@ class HomeController extends GetxController {
       param['search'] = searchController.text;
     }
 
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
-      // Add more sorting parameters as needed
-    ];
+    // List<Map<String, dynamic>> sorting = [
+    //   {"id": "first_name", "desc": sortName},
+    //   {"id": "last_name", "desc": sortName}
+    //   // Add more sorting parameters as needed
+    // ];
 
     // Dynamically add sorting to the param map
-    param["sorting"] = lastSorting;
+    param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
+
+    // param["sorting"] = globalController.patientListSelectedSorting;
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -459,8 +484,10 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
+    globalController.saveHomePatientListData();
     patientListModel.value = await _homeRepository.getPatient(param: param);
 
+    isLoading.value = false;
     if (patientListModel.value?.responseData?.data != null) {
       int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
       int? dataCount = patientList.length;
@@ -481,6 +508,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getPastVisitListFetchMore() async {
+    isLoading.value = true;
     Map<String, dynamic> param = {};
     param['page'] = ++pagePast;
     param['limit'] = "20";
@@ -489,11 +517,11 @@ class HomeController extends GetxController {
       param['search'] = searchController.text;
     }
 
-    List<Map<String, dynamic>> sorting = [
-      {"id": "first_name", "desc": sortName},
-      {"id": "last_name", "desc": sortName}
-      // Add more sorting parameters as needed
-    ];
+    // List<Map<String, dynamic>> sorting = [
+    //   {"id": "first_name", "desc": sortName},
+    //   {"id": "last_name", "desc": sortName}
+    //   // Add more sorting parameters as needed
+    // ];
 
     if (selectedStatusIndex.isNotEmpty) {
       List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status!).toList();
@@ -506,7 +534,8 @@ class HomeController extends GetxController {
       }
     }
 
-    param["sorting"] = lastSorting;
+    param["sorting"] = globalController.homePastPatientListSortingModel.value?.pastVisitSelectedSorting;
+    // param["sorting"] = globalController.pastVisitSelectedSorting;
 
     if (startDate.value != "" && endDate.value != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
@@ -527,7 +556,10 @@ class HomeController extends GetxController {
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
 
+    globalController.saveHomePastPatientData();
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
+
+    isLoading.value = false;
 
     if (pastVisitListModel.value?.responseData?.data != null) {
       int? totalCount = pastVisitListModel.value?.responseData?.totalCount ?? 0;
@@ -549,7 +581,7 @@ class HomeController extends GetxController {
   Future<void> getOfflineData() async {
     var response = await _homeRepository.getOfflineData();
 
-    print(" response type is  the ${response["response_type"]}");
+    // print(" response type is  the ${response["response_type"]}");
 
     if (response["response_type"] == "success") {
       await AppPreference.instance.setString(AppString.offLineData, json.encode(response));
@@ -588,13 +620,13 @@ class HomeController extends GetxController {
       pastVisitListModelOfLine.value = await _homeRepository.getPastVisit(param: pastParam);
 
       await AppPreference.instance.setString(AppString.patientList, json.encode(patientListModelOOffLine.toJson()));
-      await AppPreference.instance
-          .setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
+      await AppPreference.instance.setString(AppString.schedulePatientList, json.encode(scheduleVisitListModelOffline.toJson()));
       await AppPreference.instance.setString(AppString.pastPatientList, json.encode(pastVisitListModelOfLine.toJson()));
     } catch (e) {
       // customPrint(e);
     }
   }
+
   void setDateRange() {
     // customPrint("function  is called ");
 
@@ -604,47 +636,49 @@ class HomeController extends GetxController {
         // Format the date to 'MM-dd-yyyy'
         // customPrint("goint to this ");
         if (selectedValue.length == 1) {
-          startDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-          endDate.value =
-          '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
         } else {
           if (i == 0) {
-            startDate.value =
-            '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           } else {
-            endDate.value =
-            '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
           }
         }
       }
     } else {
       DateTime dateTime = DateTime.now();
-      startDate.value =
-      '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
-      endDate.value =
-      '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
     }
     Get.back();
   }
 
-  void clearFilter({bool canPop = false}) {
+  void clearFilter({bool canPop = false, bool isRefresh = true}) {
     searchController.text = "";
-    lastSorting = [];
+    // lastSorting = [];
+
+    // globalController.patientListSelectedSorting = [];
+    // globalController.scheduleVisitSelectedSorting = [];
+    // globalController.pastVisitSelectedSorting = [];
+
     startDate.value = "MM/DD/YYYY";
     endDate.value = "";
     selectedStatusIndex.clear();
     fromController.clear();
     toController.clear();
-    getPatientList();
-    getScheduleVisitList(isFist: true);
-    getPastVisitList(isFist: true);
+
+    if (isRefresh) {
+      getPatientList();
+      getScheduleVisitList();
+      getPastVisitList();
+    }
   }
 
-  void changeScreen(bool isPast) async {
-    this.isPast.value = isPast;
-    this.isPast.refresh();
-  }
+  // void changeScreen(bool isPast) async {
+  //   this.isPast.value = isPast;
+  //   this.isPast.refresh();
+  // }
 
   Future<void> getStatus() async {
     StatusResponseModel statusResponseModel = await _homeRepository.getStatus();
@@ -659,7 +693,7 @@ class HomeController extends GetxController {
   }
 
   void patientLoadMore() async {
-    // customPrint("fetch more data beacuse needed");
+    customPrint("fetch more data beacuse needed");
     getPatientListFetchMore();
   }
 
@@ -676,20 +710,41 @@ class HomeController extends GetxController {
 
   void scheduleSorting({String cellData = "", int colIndex = -1}) {
     getScheduleVisitList(sortingName: cellData);
-    colindexSchedule.value = colIndex;
 
-    isAsendingSchedule.value = getDescValue(sortingSchedulePatient, cellData) ?? false;
-    colindexSchedule.refresh();
-    isAsendingSchedule.refresh();
+    globalController.homeScheduleListSortingModel.value?.colIndex = colIndex;
+    // colindexSchedule.value = colIndex;
+
+    globalController.homeScheduleListSortingModel.value?.isAscending = getDescValue(globalController.sortingSchedulePatient, cellData, 1) ?? false;
+    globalController.saveHomeScheduleListData();
+    // isAsendingSchedule.value = getDescValue(globalController.sortingSchedulePatient, cellData, 1) ?? false;
+    // colindexSchedule.refresh();
+    // isAsendingSchedule.refresh();
   }
 
   void patientSorting({String cellData = "", int colIndex = -1}) {
-    getPatientList(sortingName: cellData);
-    colIndexPatient.value = colIndex;
+    print("celldata is :- ${cellData}");
 
-    isAsendingPatient.value = getDescValue(sortingPatientList, cellData) ?? false;
-    colIndexPatient.refresh();
-    isAsendingPatient.refresh();
+    if (cellData == "Previous Visits") {
+      // key = "visitCount";
+      // print("is :- ${key}");
+      getPatientList(sortingName: cellData);
+    } else {
+      getPatientList(sortingName: cellData);
+    }
+
+    // colIndexPatient.value = colIndex;
+
+    globalController.homePatientListSortingModel.value?.colIndex = colIndex;
+
+    // print("sortingPatientList:- $sortingPatientList celldata:- $cellData");
+    // isAsendingPatient.value = getDescValue(globalController.sortingPatientList, cellData, 0) ?? false;
+    globalController.homePatientListSortingModel.value?.isAscending = getDescValue(globalController.sortingPatientList, cellData, 0) ?? false;
+
+    globalController.homePastPatientListSortingModel.refresh();
+    globalController.saveHomePatientListData();
+    // print("isAsendingPatient:- ${isAsendingPatient.value}");
+    // colIndexPatient.refresh();
+    // isAsendingPatient.refresh();
   }
 
   void handelInternetConnection() {
@@ -709,8 +764,7 @@ class HomeController extends GetxController {
             CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
 
             uploadAllAudioFiles(() {
-              CustomToastification()
-                  .showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+              CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
               // customPrint('All audio files have been uploaded!');
             });
           }
@@ -719,11 +773,9 @@ class HomeController extends GetxController {
         case InternetStatus.disconnected:
           var patient = PatientListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.patientList)));
 
-          var schedule = ScheduleVisitListModel.fromJson(
-              jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
+          var schedule = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.schedulePatientList)));
 
-          var past =
-              ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
+          var past = ScheduleVisitListModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.pastPatientList)));
           patientList.value = patient.responseData?.data ?? [];
           scheduleVisitList.value = schedule.responseData?.data ?? [];
           pastVisitList.value = past.responseData?.data ?? [];
@@ -762,10 +814,8 @@ class HomeController extends GetxController {
 
       // customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
-          audioFile: File.fromUri(Uri.file(file.fileName ?? "")),
-          token: loginData.responseData?.token ?? "",
-          patientVisitId: file.visitId ?? "");
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
       // customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {
@@ -784,6 +834,10 @@ class HomeController extends GetxController {
       CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
       tabIndex.value = 1;
       globalController.homeTabIndex.value = 1;
+
+      globalController.saveHomeScheduleListData();
+      globalController.saveHomePastPatientData();
+      globalController.saveHomePatientListData();
 
       getPastVisitList();
       getScheduleVisitList();
@@ -818,5 +872,4 @@ class HomeController extends GetxController {
     //   Get.back();
     // }
   }
-
 }

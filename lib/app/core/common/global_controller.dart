@@ -1,45 +1,138 @@
 import 'package:get/get.dart';
+import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
+import '../../modules/home/model/home_patient_list_sorting_model.dart';
+import '../../modules/home/model/home_schedule_list_sorting_model.dart';
+import 'app_preferences.dart';
 
 class GlobalController extends GetxController {
   RxInt homeTabIndex = RxInt(0);
 
-  // LoginModel loginData = LoginModel();
-  // Rxn<UserWorkStationModel> workStationData = Rxn<UserWorkStationModel>();
-  // RxList<ProjectRatingTradeModel> userProjectRating = RxList();
-  // RxDouble avgUserProjectRating = RxDouble(0.0);
-  //
-  // RxBool workStationFlowStep1 = RxBool(false);
-  // RxBool workStationFlowStep2 = RxBool(false);
-  // RxBool workStationFlowStep3 = RxBool(false);
-  // RxBool workStationFlowStep4 = RxBool(false);
-  // RxBool workStationFlowStep5 = RxBool(false);
-  //
-  // RxList<TradePassportJobListModel> tradePassportJobListModel = RxList<TradePassportJobListModel>();
-  // RxList<WorkStationSkillModel> workStationSkillModel = RxList<WorkStationSkillModel>();
-  // RxList<WorkStationInsuranceModel> workStationInsuranceModel = RxList<WorkStationInsuranceModel>();
-  // RxList<WorkStationCertificateModel> workStationCertificateModel = RxList<WorkStationCertificateModel>();
-  // RxList<WorkStationGalleryModel> workStationGalleryModel = RxList<WorkStationGalleryModel>();
-  // RxList<GetServiceSkillModel> getServiceSkillModel = RxList<GetServiceSkillModel>();
-  //
-  // RxList<TradeReviewListModel> tradeReviewListModel = RxList<TradeReviewListModel>();
-  //
-  // // RxList<GetServiceSkillModel> serviceSkillList = RxList<GetServiceSkillModel>();
-  // Rxn<UserDetailModel> userDetailModel = Rxn<UserDetailModel>();
-  // RxList<JobTemplateModel> getJobTemplateList = RxList<JobTemplateModel>();
-  // RxString profileUrl = RxString("");
+  List<Map<String, dynamic>> sortingPastPatient = [
+    {"id": "first_name", "desc": true},
+    {"id": "appointmentTime", "desc": true},
+    {"id": "age", "desc": true},
+    {"id": "gender", "desc": true},
+    {"id": "previousVisitCount", "desc": true},
+    {"id": "status", "desc": true},
+  ];
+
+  List<Map<String, dynamic>> sortingSchedulePatient = [
+    {"id": "first_name", "desc": true},
+    {"id": "appointmentTime", "desc": true},
+    {"id": "age", "desc": true},
+    {"id": "gender", "desc": true},
+    {"id": "previousVisitCount", "desc": true},
+  ];
+
+  List<Map<String, dynamic>> sortingPatientList = [
+    {"id": "first_name", "desc": true},
+    {"id": "lastVisitDate", "desc": true},
+    {"id": "age", "desc": true},
+    {"id": "gender", "desc": true},
+    {"id": "visitCount", "desc": true},
+  ];
+
+  List<Map<String, dynamic>> patientListSelectedSorting = [];
+  List<Map<String, dynamic>> scheduleVisitSelectedSorting = [
+    {"id": "appointmentTime", "desc": false}
+  ];
+
+  List<Map<String, dynamic>> pastVisitSelectedSorting = [
+    {"id": "appointmentTime", "desc": "true"}
+  ];
+
+  Rxn<HomePastPatientListSortingModel> homePastPatientListSortingModel = Rxn();
+  Rxn<HomePatientListSortingModel> homePatientListSortingModel = Rxn();
+  Rxn<HomeScheduleListSortingModel> homeScheduleListSortingModel = Rxn();
 
   @override
   void onInit() async {
     super.onInit();
 
-    // loadData();
+    // homePastPatientListSortingModel.listen(
+    //   (p0) {
+    //     print("updated val:- ${p0}");
+    //   },
+    // );
+    //
+    // homePatientListSortingModel.listen(
+    //   (p0) {
+    //     print("updated val:- ${p0}");
+    //   },
+    // );
+    //
+    // homeScheduleListSortingModel.listen(
+    //   (p0) {
+    //     print("updated val:- ${p0}");
+    //   },
+    // );
+
+    HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+    if (homePastPatientData != null) {
+      homePastPatientListSortingModel.value = homePastPatientData;
+      print("existing HomePastPatientListSortingModel:- ${homePastPatientData.toJson()}");
+    } else {
+      Map<String, dynamic> json = <String, dynamic>{};
+      json['sortingPastPatient'] = sortingPastPatient;
+      json['pastVisitSelectedSorting'] = pastVisitSelectedSorting;
+      json['colIndex'] = 1;
+      json['isAscending'] = true;
+      homePastPatientListSortingModel.value = HomePastPatientListSortingModel.fromJson(json);
+      print("first initialize homePastPatientListSortingModel :- $json");
+    }
+
+    HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
+    if (homePatientListData != null) {
+      homePatientListSortingModel.value = homePatientListData;
+      print("existing HomePatientListSortingModel:- ${homePatientListData.toJson()}");
+    } else {
+      Map<String, dynamic> json = <String, dynamic>{};
+      json['sortingPatientList'] = sortingPatientList;
+      json['patientListSelectedSorting'] = patientListSelectedSorting;
+      json['colIndex'] = -1;
+      json['isAscending'] = true;
+      homePatientListSortingModel.value = HomePatientListSortingModel.fromJson(json);
+      print("first initialize homePatientListSortingModel :- $json");
+    }
+
+    HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
+    if (homeScheduleListData != null) {
+      homeScheduleListSortingModel.value = homeScheduleListData;
+      print("existing HomeScheduleListSortingModel:- ${homeScheduleListData.toJson()}");
+    } else {
+      Map<String, dynamic> json = <String, dynamic>{};
+      json['scheduleVisitSelectedSorting'] = scheduleVisitSelectedSorting;
+      json['sortingSchedulePatient'] = sortingSchedulePatient;
+      json['colIndex'] = 1;
+      json['isAscending'] = true;
+      homeScheduleListSortingModel.value = HomeScheduleListSortingModel.fromJson(json);
+      print("first initialize homeScheduleListSortingModel :- $json");
+    }
+
+    // HomePastPatientListSortingModel? retrievedModel = await AppPreference.instance.getHomePastPatientListSortingModel();
+    // if (retrievedModel != null) {
+    //   homePastPatientListSortingModel.value = retrievedModel;
+    // } else {}
+    //
+    // HomePastPatientListSortingModel? retrievedModel = await AppPreference.instance.getHomePastPatientListSortingModel();
+    // if (retrievedModel != null) {
+    //   homePastPatientListSortingModel.value = retrievedModel;
+    // } else {}
+
+    // patientListSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyPatientListSelectedSorting);
+    // scheduleVisitSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyScheduleVisitSelectedSorting);
+    // pastVisitSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyPastVisitSelectedSorting);
   }
 
-  // Future<void> loadData() async {
-  //   loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-  //
-  //   String activeWorkStation = AppPreference.instance.getString(AppString.prefkeyActiveWorkStation);
-  //   Map<String, dynamic> dsd = json.decode(activeWorkStation);
-  //   workStationData.value = UserWorkStationModel.fromJson(dsd);
-  // }
+  Future<void> saveHomePastPatientData() async {
+    AppPreference.instance.setHomePastPatientListSortingModel(homePastPatientListSortingModel.value!);
+  }
+
+  Future<void> saveHomePatientListData() async {
+    AppPreference.instance.setHomePatientListSortingModel(homePatientListSortingModel.value!);
+  }
+
+  Future<void> saveHomeScheduleListData() async {
+    AppPreference.instance.setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
+  }
 }

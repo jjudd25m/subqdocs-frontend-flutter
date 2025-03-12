@@ -76,8 +76,6 @@ class BaseScreen extends StatelessWidget {
       ),
       // Sets the bottom navigation bar of the screen.
       bottomNavigationBar: bottomNavigationBar,
-      // Sets the floating action button of the screen.
-      floatingActionButton: floatingActionButton,
     );
   }
 }

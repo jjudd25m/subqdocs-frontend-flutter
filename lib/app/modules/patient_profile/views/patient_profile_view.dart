@@ -309,7 +309,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           ),
                                         ),
                                         children: <Widget>[
-                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.isNotEmpty ?? false
                                               ? Container(
                                                   width: double.infinity,
                                                   color: Colors.white,
@@ -318,11 +318,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                     child: CustomTable(
                                                       rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
                                                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
-                                                        return colIndex == 2 && rowIndex != 0
+                                                        return colIndex == 2
                                                             ? GestureDetector(
                                                                 onTap: () {
                                                                   Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                                    "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
+                                                                    "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString(),
                                                                     "patientId": controller.patientId,
                                                                   });
 
@@ -336,7 +336,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                   overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                                 ),
                                                               )
-                                                            : (colIndex == 3 || colIndex == 4) && rowIndex != 0
+                                                            : (colIndex == 3 || colIndex == 4)
                                                                 ? Row(
                                                                     children: [
                                                                       Text(
@@ -355,11 +355,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                                     customPrint("p0 is $p0 p1 is $p1");
                                                                                     customPrint("row index is :- ${rowIndex}");
                                                                                     customPrint(
-                                                                                        "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                                        "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString()}");
                                                                                     controller.patientReScheduleCreate(
                                                                                         param: {"visit_date": p1, "visit_time": p0},
-                                                                                        visitId:
-                                                                                            controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
+                                                                                        visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex].id.toString() ?? "-1");
                                                                                   },
                                                                                 ); // Our custom dialog
                                                                               },
@@ -371,10 +370,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                               builder: (BuildContext context) {
                                                                                 return DeleteScheduleVisit(
                                                                                   onDelete: () {
-                                                                                    print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
+                                                                                    print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id}");
 
                                                                                     controller.deletePatientVisit(
-                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
+                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
                                                                                   },
                                                                                 );
                                                                               },
@@ -392,25 +391,35 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                       ),
                                                                     ],
                                                                   )
-                                                                : rowIndex == 0
-                                                                    ? Text(
-                                                                        cellData ?? "",
-                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                        style: AppFonts.regular(12, AppColors.black),
-                                                                        softWrap: true, // Allows text to wrap
-                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                      )
-                                                                    : Text(
-                                                                        cellData ?? "",
-                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                                        softWrap: true, // Allows text to wrap
-                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                      );
+                                                                : Text(
+                                                                    cellData ?? "",
+                                                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                    style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                                    softWrap: true, // Allows text to wrap
+                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                  );
                                                       },
                                                       columnCount: 5,
                                                       context: context,
                                                       columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.17, 0.13, 0.12],
+                                                      headerBuilder: (context, colIndex) {
+                                                        List<String> headers = ['Visit Date', 'Time', "", "", "Action"];
+
+                                                        return Container(
+                                                          color: AppColors.backgroundWhite,
+                                                          height: 40,
+                                                          child: Row(
+                                                            mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                                            children: [
+                                                              Text(
+                                                                headers[colIndex],
+                                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                      isLoading: false,
                                                       // columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.30, 0.10, 0.15, 0.13, 0.12],
                                                     ),
                                                   ),
@@ -662,9 +671,9 @@ List<List<String>> _getTableRows(List<ScheduledVisits> patients) {
   List<List<String>> rows = [];
 
   // Add header row first
-  rows.add(
-    ['Visit Date', 'Time', "", "Action"],
-  );
+  // rows.add(
+  //   ['Visit Date', 'Time', "", "Action"],
+  // );
 
   // Iterate over each patient and extract data for each row
   for (var patient in patients) {

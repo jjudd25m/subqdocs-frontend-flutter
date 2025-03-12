@@ -10,6 +10,10 @@ class AppString {
   static const String prefKeyRememberEmail = "prefKeyRememberEmail";
   static const String prefKeyRememberPassword = "prefKeyRememberPassword";
 
+  static const String prefKeyPatientListSelectedSorting = "prefKeyPatientListSelectedSorting";
+  static const String prefKeyScheduleVisitSelectedSorting = "prefKeyscheduleVisitSelectedSorting";
+  static const String prefKeyPastVisitSelectedSorting = "prefKeyPastVisitSelectedSorting";
+
   //login screen
   static const String login = 'Log in';
   static const String welcomeBack = 'Welcome back';

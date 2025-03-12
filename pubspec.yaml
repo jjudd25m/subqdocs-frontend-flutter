@@ -67,6 +67,7 @@ dependencies:
   flutter_html:
   wakelock_plus: ^1.2.10
   pull_to_refresh_flutter3: ^2.0.2
+  modal_bottom_sheet: ^3.0.0
 
 
 dev_dependencies:

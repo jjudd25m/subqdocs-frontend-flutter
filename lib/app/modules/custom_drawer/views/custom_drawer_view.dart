@@ -43,21 +43,21 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                   ),
                   Row(
                     children: [
-                      loginData.responseData?.user?.id == 49 ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Image.asset(
-                          fit: BoxFit.cover,
-                          ImagePath.user,
-                          height: 40,
-                          width: 40,
-                        ),
-                      ) :
-                      BaseImageView(
-                        imageUrl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                        width: 40,
-                        height: 40,
-                      ),
+                      loginData.responseData?.user?.id == 49
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.asset(
+                                fit: BoxFit.cover,
+                                ImagePath.user,
+                                height: 40,
+                                width: 40,
+                              ),
+                            )
+                          : BaseImageView(
+                              imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                              width: 40,
+                              height: 40,
+                            ),
                       SizedBox(
                         width: 8,
                       ),
@@ -124,8 +124,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                   child: DrawerItem(
                                     isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
                                     itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
-                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ??
-                                        "", // Add any dummy icon path here
+                                    iconPath: controller.drawerItemModelList.value[index].drawerIconPath ?? "", // Add any dummy icon path here
                                   ));
                             },
                             itemCount: controller.drawerItemModelList.value.length,
@@ -152,6 +151,11 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
               onTap: () async {
                 await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
                 await AppPreference.instance.removeKey(AppString.prefKeyToken);
+
+                await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+                await AppPreference.instance.removeKey("homePatientListSortingModel");
+                await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+
                 Get.offAllNamed(Routes.LOGIN);
               },
               child: Row(

@@ -23,13 +23,13 @@ class HomePastVisitsList extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: controller.pastVisitList.isEmpty
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Obx(
+        () {
+          return controller.pastVisitList.isEmpty
               ? Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10.0),
                   child: EmptyPatientScreen(
                       onBtnPress: () async {
                         final result = await Get.toNamed(Routes.ADD_PATIENT);
@@ -49,14 +49,13 @@ class HomePastVisitsList extends GetView<HomeController> {
 
                     Get.delete<PatientInfoController>();
 
-
                     Get.toNamed(Routes.PATIENT_INFO, arguments: {
-                      "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
-                      "patientId": controller.pastVisitList[rowIndex - 1].id.toString(),
+                      "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+                      "patientId": controller.pastVisitList[rowIndex].id.toString(),
                     });
                   },
                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
-                    return colIndex == 0 && rowIndex != 0
+                    return colIndex == 0
                         ? Row(
                             children: [
                               ClipRRect(
@@ -83,7 +82,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                               ),
                             ],
                           )
-                        : colIndex == 5 && rowIndex != 0
+                        : colIndex == 5
                             ? Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Container(
@@ -101,7 +100,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                   ),
                                 ),
                               )
-                            : colIndex == 6 && rowIndex != 0
+                            : colIndex == 6
                                 ? PopupMenuButton<String>(
                                     offset: const Offset(0, 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -119,11 +118,11 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
                                               onTap: () {
-                                                customPrint("visite is is ${controller.pastVisitList[rowIndex - 1].visitId.toString()}");
+                                                customPrint("visite is is ${controller.pastVisitList[rowIndex].visitId.toString()}");
 
                                                 Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
-                                                  "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
-                                                  "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
+                                                  "patientData": controller.pastVisitList[rowIndex].id.toString(),
+                                                  "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                                                   "fromSchedule": false
                                                 });
                                               },
@@ -142,8 +141,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                 // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
 
                                                 final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                                                  "patientData": controller.pastVisitList[rowIndex - 1].id.toString(),
-                                                  "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
+                                                  "patientData": controller.pastVisitList[rowIndex].id.toString(),
+                                                  "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                                                   "fromSchedule": false
                                                 });
 
@@ -181,8 +180,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                     return SchedulePatientDialog(
                                                       receiveParam: (p0, p1) {
                                                         customPrint("p0 is $p0 p1 is $p1");
-                                                        controller
-                                                            .patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex - 1].id.toString(), "visit_date": p1, "visit_time": p0});
+                                                        controller.patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex].id.toString(), "visit_date": p1, "visit_time": p0});
                                                       },
                                                     ); // Our custom dialog
                                                   },
@@ -210,8 +208,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               // value: "",
                                               onTap: () async {
                                                 dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                  "visitId": controller.pastVisitList[rowIndex - 1].visitId.toString(),
-                                                  "patientId": controller.pastVisitList[rowIndex - 1].id.toString(),
+                                                  "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+                                                  "patientId": controller.pastVisitList[rowIndex].id.toString(),
                                                 });
 
                                                 print("back from response");
@@ -279,59 +277,127 @@ class HomePastVisitsList extends GetView<HomeController> {
                                       width: 20,
                                       height: 20,
                                     ))
-                                : rowIndex == 0
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          customPrint(" data is the $cellData");
-                                          controller.getPastVisitList(sortingName: cellData);
-                                          controller.colIndex.value = colIndex;
+                                : Text(
+                                    cellData,
+                                    maxLines: 2,
+                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                    style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                    softWrap: true, // Allows text to wrap
+                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                  );
 
-                                          controller.isAsending.value = controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
-                                          controller.colIndex.refresh();
-                                          controller.isAsending.refresh();
-                                          customPrint("col index is the $colIndex");
-                                          // customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              cellData,
-                                              maxLines: 2,
-                                              textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                              style: AppFonts.regular(12, AppColors.black),
-                                              softWrap: true, // Allows text to wrap
-                                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                            ),
-                                            colIndex == controller.colIndex.value && controller.isAsending.value && colIndex != 6
-                                                ? Icon(
-                                                    CupertinoIcons.down_arrow,
-                                                    size: 15,
-                                                  )
-                                                : colIndex == controller.colIndex.value && !controller.isAsending.value && colIndex != 6
-                                                    ? Icon(
-                                                        CupertinoIcons.up_arrow,
-                                                        size: 15,
-                                                      )
-                                                    : SizedBox()
-                                          ],
-                                        ),
-                                      )
-                                    : Text(
-                                        cellData,
-                                        maxLines: 2,
-                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                        softWrap: true, // Allows text to wrap
-                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                      );
+                    // rowIndex == 0
+                    //                 ? GestureDetector(
+                    //                     onTap: () {
+                    //                       customPrint(" data is the $cellData");
+                    //                       controller.getPastVisitList(sortingName: cellData);
+                    //                       controller.colIndex.value = colIndex;
+                    //
+                    //                       controller.isAsending.value = controller.getDescValue(controller.sortingPastPatient, cellData) ?? false;
+                    //                       controller.colIndex.refresh();
+                    //                       controller.isAsending.refresh();
+                    //                       customPrint("col index is the $colIndex");
+                    //                       // customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
+                    //                     },
+                    //                     child: Row(
+                    //                       mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                    //                       children: [
+                    //                         Text(
+                    //                           cellData,
+                    //                           maxLines: 2,
+                    //                           textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                    //                           style: AppFonts.regular(12, AppColors.black),
+                    //                           softWrap: true, // Allows text to wrap
+                    //                           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                    //                         ),
+                    //                         colIndex == controller.colIndex.value && controller.isAsending.value && colIndex != 6
+                    //                             ? Icon(
+                    //                                 CupertinoIcons.down_arrow,
+                    //                                 size: 15,
+                    //                               )
+                    //                             : colIndex == controller.colIndex.value && !controller.isAsending.value && colIndex != 6
+                    //                                 ? Icon(
+                    //                                     CupertinoIcons.up_arrow,
+                    //                                     size: 15,
+                    //                                   )
+                    //                                 : SizedBox()
+                    //                       ],
+                    //                     ),
+                    //                   )
+                    //                 : Text(
+                    //                     cellData,
+                    //                     maxLines: 2,
+                    //                     textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                    //                     style: AppFonts.regular(14, AppColors.textDarkGrey),
+                    //                     softWrap: true, // Allows text to wrap
+                    //                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                    //                   );
                   },
                   columnCount: 7,
                   context: context,
                   columnWidths: [0.20, 0.17, 0.08, 0.11, 0.14, 0.19, 0.10],
-                ),
-        );
-      },
+                  headerBuilder: (context, colIndex) {
+                    List<String> headers = ['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"];
+                    return GestureDetector(
+                      onTap: () {
+                        if (colIndex != 6) {
+                          customPrint(" data is the ${headers[colIndex]}");
+                          controller.getPastVisitList(sortingName: headers[colIndex]);
+
+                          controller.globalController.homePastPatientListSortingModel.value?.colIndex = colIndex;
+                          controller.globalController.homePastPatientListSortingModel.value?.isAscending =
+                              controller.getDescValue(controller.globalController.sortingPastPatient, headers[colIndex], 2) ?? false;
+
+                          // controller.colIndex.value = colIndex;
+
+                          // controller.isAsending.value = controller.getDescValue(controller.globalController.sortingPastPatient, headers[colIndex], 2) ?? false;
+                          // controller.colIndex.refresh();
+                          // controller.isAsending.refresh();
+                          customPrint("col index is the $colIndex");
+                        }
+
+                        // customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
+                      },
+                      child: Container(
+                        color: AppColors.backgroundWhite,
+                        height: 40,
+                        // color: AppColors.backgroundPurple,
+                        child: Row(
+                          mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              headers[colIndex],
+                              maxLines: 2,
+                              textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                              style: AppFonts.medium(12, AppColors.black),
+                              softWrap: true, // Allows text to wrap
+                              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                            ),
+                            colIndex == controller.globalController.homePastPatientListSortingModel.value?.colIndex &&
+                                    controller.globalController.homePastPatientListSortingModel.value!.isAscending &&
+                                    colIndex != 6
+                                ? Icon(
+                                    CupertinoIcons.down_arrow,
+                                    size: 15,
+                                  )
+                                : colIndex == controller.globalController.homePastPatientListSortingModel.value?.colIndex &&
+                                        !controller.globalController.homePastPatientListSortingModel.value!.isAscending &&
+                                        colIndex != 6
+                                    ? Icon(
+                                        CupertinoIcons.up_arrow,
+                                        size: 15,
+                                      )
+                                    : SizedBox()
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  isLoading: controller.isLoading.value,
+                  // headerRows: ['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"],
+                );
+        },
+      ),
     );
   }
 
@@ -339,7 +405,7 @@ class HomePastVisitsList extends GetView<HomeController> {
     List<List<String>> rows = [];
 
     // Add header row first
-    rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"]);
+    // rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"]);
 
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
