@@ -375,17 +375,20 @@ class AddPatientView extends GetView<AddPatientController> {
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               label: "Patient Id ",
+
                                               // isImportant: true,
                                               type: TextInputType.number,
-                                              isValid: true,
+                                              isValid: controller.isValid.value,
                                               format: [
                                                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                                               ],
                                               controller: controller.patientId,
                                               hint: "123",
+                                              isSuffixIconVisible: controller.patientId.text.isNotEmpty ? true : false,
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
                                                   controller.patientId.clear();
+                                                  controller.isValid.refresh();
                                                 },
                                                 child: Icon(
                                                   Icons.highlight_remove,
@@ -404,12 +407,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                           child: TextFormFiledWidget(
                                               label: "First Name",
                                               // isImportant: true,
-                                              isValid: true,
+                                              isValid: controller.isValid.value,
                                               format: [
                                                 CustomTextInputFormatter(),
                                               ],
                                               controller: controller.firstNameController,
                                               hint: "Don",
+                                              isSuffixIconVisible:
+                                                  controller.firstNameController.text.isNotEmpty ? true : false,
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
                                                   controller.firstNameController.clear();
@@ -429,6 +434,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                            isValid: !controller.isValid.value,
+                                            isSuffixIconVisible:
+                                                controller.middleNameController.text.isNotEmpty ? true : false,
                                             format: [
                                               CustomTextInputFormatter(),
                                             ],
@@ -460,9 +468,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 CustomTextInputFormatter(),
                                               ],
                                               label: "Last Name",
-                                              isValid: true,
+                                              isValid: controller.isValid.value,
                                               // isImportant: true,
                                               controller: controller.lastNameController,
+                                              isSuffixIconVisible:
+                                                  controller.lastNameController.text.isNotEmpty ? true : false,
                                               hint: "Jones",
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
@@ -572,6 +582,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                               format: [NoSpaceLowercaseTextFormatter()],
                                               label: "Email Address",
                                               controller: controller.emailAddressController,
+                                              isValid: controller.isValid.value,
+                                              isSuffixIconVisible:
+                                                  controller.emailAddressController.text.isNotEmpty ? true : false,
                                               hint: "donjones@example.com",
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
@@ -657,6 +670,44 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ],
                                           ),
                                         ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                              format: [NoSpaceLowercaseTextFormatter()],
+                                              label: "Email Address",
+                                              controller: controller.emailAddressController,
+                                              isValid: controller.isValid.value,
+                                              isSuffixIconVisible:
+                                                  controller.emailAddressController.text.isNotEmpty ? true : false,
+                                              hint: "donjones@example.com",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.emailAddressController.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
+                                              checkValidation: (value) {
+                                                return Validation.emailValidate(value);
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Spacer(),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Spacer(),
                                       ],
                                     ),
                                     SizedBox(

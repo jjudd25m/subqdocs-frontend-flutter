@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 
-class TextFormFiledWidget extends StatelessWidget {
+class TextFormFiledWidget extends StatefulWidget {
   final String? label;
   final IconData? suffix;
   final bool visibility;
@@ -14,11 +14,12 @@ class TextFormFiledWidget extends StatelessWidget {
   final Widget? prefixIcon;
   final void Function()? onTap;
   final bool isValid;
+  bool isSuffixIconVisible;
 
   final String? hint;
   final String? Function(String?)? checkValidation;
   final Widget? iconButton;
-  void Function(String)? onChanged;
+
   bool readOnly;
 
   // final Widget? suffix;
@@ -29,10 +30,10 @@ class TextFormFiledWidget extends StatelessWidget {
       this.checkValidation,
       this.isValid = false,
       this.iconButton,
+      this.isSuffixIconVisible = true,
       this.visibility = false,
       this.controller,
       this.readOnly = false,
-      this.onChanged,
       this.hint = "",
       this.format = const [],
       this.type = TextInputType.text,
@@ -41,21 +42,26 @@ class TextFormFiledWidget extends StatelessWidget {
       this.prefixIcon});
 
   @override
+  State<TextFormFiledWidget> createState() => _TextFormFiledWidgetState();
+}
+
+class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        label != ""
+        widget.label != ""
             ? Row(
                 children: [
                   Text(
-                    "$label",
+                    "${widget.label}",
                     style: AppFonts.regular(14, AppColors.textBlack),
                   ),
                   SizedBox(
                     width: 5,
                   ),
-                  isValid
+                  widget.isValid
                       ? Text(
                           "*",
                           style: AppFonts.regular(16, Colors.red),
@@ -66,7 +72,7 @@ class TextFormFiledWidget extends StatelessWidget {
             : SizedBox(
                 width: 0,
               ),
-        label != ""
+        widget.label != ""
             ? SizedBox(
                 height: 8,
               )
@@ -79,36 +85,44 @@ class TextFormFiledWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 child: TextFormField(
-                  readOnly: readOnly,
-                  onChanged: onChanged,
-                  inputFormatters: format,
-                  keyboardType: type,
+                  readOnly: widget.readOnly,
+                  onChanged: (value) {
+                    value.isEmpty ? widget.isSuffixIconVisible = false : widget.isSuffixIconVisible = true;
+
+                    if (value.isEmpty || value.length == 1) {
+                      setState(() {});
+                    }
+                  },
+                  inputFormatters: widget.format,
+                  keyboardType: widget.type,
                   cursorColor: AppColors.backgroundPurple,
-                  controller: controller,
+                  controller: widget.controller,
                   textAlign: TextAlign.start,
-                  obscureText: visibility,
+                  obscureText: widget.visibility,
                   decoration: InputDecoration(
-                    suffixIcon: InkWell(
-                      splashColor: Colors.transparent,
-                      onTap: onTap,
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: suffixIcon,
-                      ),
-                    ),
-                    prefixIcon: prefixIcon != null
+                    suffixIcon: widget.isSuffixIconVisible
                         ? InkWell(
                             splashColor: Colors.transparent,
-                            onTap: onTap,
+                            onTap: widget.onTap,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: widget.suffixIcon,
+                            ),
+                          )
+                        : null,
+                    prefixIcon: widget.prefixIcon != null
+                        ? InkWell(
+                            splashColor: Colors.transparent,
+                            onTap: widget.onTap,
                             child: Padding(
                               padding: EdgeInsets.only(top: 10, left: 10, right: 0, bottom: 10),
-                              child: prefixIcon,
+                              child: widget.prefixIcon,
                             ),
                           )
                         : null,
                     fillColor: Colors.white,
                     filled: true,
-                    hintText: "$hint",
+                    hintText: "${widget.hint}",
                     hintStyle: AppFonts.regular(14, AppColors.textDarkGrey),
                     contentPadding: EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
                     border: OutlineInputBorder(
@@ -133,7 +147,7 @@ class TextFormFiledWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  validator: checkValidation,
+                  validator: widget.checkValidation,
                 ),
               ),
             ),
