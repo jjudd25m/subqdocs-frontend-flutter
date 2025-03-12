@@ -8,6 +8,9 @@ class HomeScheduleListSortingModel {
   // RxBool isAscending = RxBool(true);
   int colIndex = -1;
   bool isAscending = true;
+  List<DateTime>? selectedDateValue = [DateTime.now()];
+  String? startDate;
+  String? endDate;
 
   // Constructor
   HomeScheduleListSortingModel({
@@ -17,6 +20,9 @@ class HomeScheduleListSortingModel {
     this.colIndex = -1,
     // bool? isAscending,
     this.isAscending = true,
+    this.selectedDateValue,
+    this.startDate,
+    this.endDate,
   });
 
   // fromJson method to create an instance from a Map (JSON)
@@ -26,6 +32,9 @@ class HomeScheduleListSortingModel {
       sortingSchedulePatient: json['sortingSchedulePatient'] != null ? List<Map<String, dynamic>>.from(json['sortingSchedulePatient']) : null,
       colIndex: json['colIndex'] ?? -1,
       isAscending: json['isAscending'] ?? true,
+      selectedDateValue: json['selectedDateValue'] != null ? (json['selectedDateValue'] as List).map((e) => DateTime.parse(e)).toList() : [DateTime.now()], // Default to the current date
+      startDate: json['startDate'],
+      endDate: json['endDate'],
     );
   }
 
@@ -36,6 +45,9 @@ class HomeScheduleListSortingModel {
       'sortingSchedulePatient': sortingSchedulePatient,
       'colIndex': colIndex,
       'isAscending': isAscending,
+      'selectedDateValue': selectedDateValue?.map((e) => e.toIso8601String()).toList(),
+      'startDate': startDate,
+      'endDate': endDate,
     };
   }
 }

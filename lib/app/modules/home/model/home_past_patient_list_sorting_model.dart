@@ -1,8 +1,14 @@
+import 'package:get/get.dart';
+
 class HomePastPatientListSortingModel {
   List<Map<String, dynamic>>? sortingPastPatient;
   List<Map<String, dynamic>>? pastVisitSelectedSorting;
   int colIndex = -1;
   bool isAscending = true;
+  List<int>? selectedStatusIndex = RxList();
+  List<DateTime>? selectedDateValue = [DateTime.now()];
+  String? startDate;
+  String? endDate;
 
   // Constructor
   HomePastPatientListSortingModel({
@@ -10,6 +16,10 @@ class HomePastPatientListSortingModel {
     this.pastVisitSelectedSorting,
     this.colIndex = -1,
     this.isAscending = true,
+    this.selectedStatusIndex,
+    this.selectedDateValue,
+    this.startDate,
+    this.endDate,
   });
 
   // fromJson method to create an instance from a Map (JSON)
@@ -19,6 +29,10 @@ class HomePastPatientListSortingModel {
       pastVisitSelectedSorting: json['pastVisitSelectedSorting'] != null ? List<Map<String, dynamic>>.from(json['pastVisitSelectedSorting']) : null,
       colIndex: json['colIndex'] ?? -1,
       isAscending: json['isAscending'] ?? true,
+      selectedStatusIndex: json['selectedStatusIndex'] != null ? List<int>.from(json['selectedStatusIndex']) : [], // Default to empty List<int>
+      selectedDateValue: json['selectedDateValue'] != null ? (json['selectedDateValue'] as List).map((e) => DateTime.parse(e)).toList() : [DateTime.now()], // Default to the current date
+      startDate: json['startDate'],
+      endDate: json['endDate'],
     );
   }
 
@@ -29,6 +43,10 @@ class HomePastPatientListSortingModel {
       'pastVisitSelectedSorting': pastVisitSelectedSorting,
       'colIndex': colIndex,
       'isAscending': isAscending,
+      'selectedStatusIndex': selectedStatusIndex,
+      'selectedDateValue': selectedDateValue?.map((e) => e.toIso8601String()).toList(),
+      'startDate': startDate,
+      'endDate': endDate,
     };
   }
 }

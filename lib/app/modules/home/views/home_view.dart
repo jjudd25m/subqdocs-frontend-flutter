@@ -272,401 +272,406 @@ class HomeView extends GetView<HomeController> {
                                                   SizedBox(
                                                     width: 5,
                                                   ),
-                                                  PopupMenuButton<String>(
-                                                    offset: const Offset(0, 0),
-                                                    onSelected: (value) {
-                                                      if (value == "1") {
-                                                        // Do custom logic for Item 1
-                                                        // Example: close the popup programmatically
-                                                        customPrint('Closing popup manually for Item 1');
-                                                      }
-                                                    },
-                                                    onCanceled: () {
-                                                      controller.tabIndex.value == 0
-                                                          ? controller.getPatientList()
-                                                          : controller.tabIndex.value == 1
-                                                              ? controller.getScheduleVisitList()
-                                                              : controller.getPastVisitList(isFist: true);
-
-                                                      customPrint("dailog is cancelled");
-                                                    },
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                                    color: AppColors.white,
-                                                    position: PopupMenuPosition.under,
-                                                    padding: EdgeInsetsDirectional.zero,
-                                                    menuPadding: EdgeInsetsDirectional.only(bottom: 0),
-                                                    style: const ButtonStyle(
-                                                      padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                      visualDensity: VisualDensity(horizontal: 0, vertical: 2),
-                                                    ),
-                                                    itemBuilder: (context) => [
-                                                      PopupMenuItem(
-                                                          enabled: false,
-                                                          onTap: () {},
-                                                          padding: EdgeInsets.zero,
-                                                          value: "1",
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets.all(16),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      "Filters",
-                                                                      style: AppFonts.medium(16, AppColors.textBlack),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 145,
-                                                                    ),
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        customPrint("clicked");
-
-                                                                        controller.clearFilter();
-                                                                      },
-                                                                      child: Text(
-                                                                        "Clear",
-                                                                        style: AppFonts.medium(14, AppColors.backgroundPurple),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              controller.tabIndex.value == 2
-                                                                  ? Padding(
-                                                                      padding: const EdgeInsets.only(left: 16, bottom: 0),
-                                                                      child: Text(
-                                                                        "Status",
-                                                                        style: AppFonts.medium(14, AppColors.textBlack),
-                                                                      ),
-                                                                    )
-                                                                  : SizedBox()
-                                                            ],
-                                                          )),
-                                                      controller.tabIndex.value == 2
-                                                          ? PopupMenuItem(
-                                                              enabled: false,
-                                                              padding: EdgeInsets.zero,
-                                                              value: "",
-                                                              child: Obx(() {
-                                                                return Column(
-                                                                    children: List.generate(controller.statusModel.length, (index) {
-                                                                  return Padding(
-                                                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                                      child: GestureDetector(
-                                                                        onTap: () {
-                                                                          if (controller.selectedStatusIndex.contains(index)) {
-                                                                            controller.selectedStatusIndex.remove(index);
-                                                                          } else {
-                                                                            controller.selectedStatusIndex.add(index);
-                                                                          }
-                                                                        },
-                                                                        child: Row(
-                                                                          children: [
-                                                                            controller.selectedStatusIndex.contains(index)
-                                                                                ? SvgPicture.asset(
-                                                                                    ImagePath.checkedBox,
-                                                                                    width: 25,
-                                                                                    height: 25,
-                                                                                  )
-                                                                                : SvgPicture.asset(
-                                                                                    ImagePath.unCheckedBox,
-                                                                                    width: 25,
-                                                                                    height: 25,
-                                                                                  ),
-                                                                            SizedBox(
-                                                                              width: 9,
-                                                                            ),
-                                                                            Text(
-                                                                              controller.statusModel[index].status ?? "",
-                                                                              style: AppFonts.regular(14, AppColors.textBlack),
-                                                                            ),
-                                                                            Spacer()
-                                                                          ],
-                                                                        ),
-                                                                      ));
-                                                                }));
-                                                              }),
-                                                            )
-                                                          : PopupMenuItem(
-                                                              enabled: false,
-                                                              onTap: () {},
-                                                              padding: EdgeInsets.zero,
-                                                              value: "",
-                                                              child: Obx(() {
-                                                                return Padding(
-                                                                  padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
-                                                                  child: TextFormFiledWidget(
-                                                                      readOnly: true,
-                                                                      label: controller.tabIndex.value == 0 ? "Last Visit Date" : "Visit Date",
-                                                                      controller: controller.fromController,
-                                                                      onTap: () async {
-                                                                        customPrint("customPrint");
-                                                                        showDialog(
-                                                                          context: context,
-                                                                          useSafeArea: true,
-                                                                          builder: (context) {
-                                                                            return AlertDialog(
-                                                                              backgroundColor: AppColors.backgroundWhite,
-                                                                              titlePadding: EdgeInsets.zero,
-                                                                              shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.circular(10),
-                                                                              ),
-                                                                              title: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 10),
-                                                                                  SizedBox(
-                                                                                    width: 305,
-                                                                                    height: 290,
-                                                                                    child: GetBuilder<HomeController>(
-                                                                                      builder: (controller) {
-                                                                                        return CalendarDatePicker2(
-                                                                                          config: CalendarDatePicker2Config(
-                                                                                            // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
-                                                                                            weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                                                                                            weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
-                                                                                            daySplashColor: AppColors.clear,
-                                                                                            calendarViewMode: CalendarDatePicker2Mode.day,
-                                                                                            selectedDayHighlightColor: AppColors.backgroundPurple,
-                                                                                            dayMaxWidth: 60,
-                                                                                            allowSameValueSelection: true,
-                                                                                            firstDayOfWeek: 6,
-                                                                                            disableMonthPicker: true,
-
-                                                                                            scrollViewTopHeaderTextStyle: const TextStyle(
-                                                                                              color: Colors.black87,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                            ),
-
-                                                                                            controlsTextStyle: const TextStyle(
-                                                                                              color: Colors.black,
-                                                                                              fontSize: 15,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                            ),
-                                                                                            centerAlignModePicker: true,
-                                                                                            customModePickerIcon: const SizedBox(),
-                                                                                            calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
-
-                                                                                            calendarType: CalendarDatePicker2Type.range,
-                                                                                          ),
-                                                                                          onValueChanged: (value) {
-                                                                                            controller.selectedValue = value;
-
-                                                                                            customPrint("onchanged  ${value}");
-                                                                                          },
-                                                                                          value: [DateTime.now()],
-                                                                                        );
-                                                                                      },
-                                                                                    ),
-                                                                                  ),
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      SizedBox(
-                                                                                        width: 5,
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: ContainerButton(
-                                                                                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                                                                                          onPressed: () {
-                                                                                            Navigator.pop(context);
-                                                                                          },
-                                                                                          backgroundColor: Colors.white,
-                                                                                          needBorder: true,
-                                                                                          borderColor: AppColors.backgroundPurple,
-                                                                                          textColor: AppColors.backgroundPurple,
-                                                                                          text: "Cancel",
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 5,
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: ContainerButton(
-                                                                                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                                                                                          onPressed: () {
-                                                                                            controller.setDateRange();
-                                                                                          },
-                                                                                          text: "Choose Date",
-                                                                                          backgroundColor: AppColors.backgroundPurple,
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 5,
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 10),
-                                                                                ],
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                      suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
-                                                                      hint: "${controller.startDate}-${controller.endDate}",
-                                                                      checkValidation: (value) {
-                                                                        return Validation.emailValidate(value);
-                                                                      }),
-                                                                );
-                                                              }),
-                                                            ),
-                                                      controller.tabIndex.value == 2
-                                                          ? PopupMenuItem(
-                                                              enabled: false,
-                                                              onTap: () {},
-                                                              padding: EdgeInsets.zero,
-                                                              value: "",
-                                                              child: Obx(() {
-                                                                return Padding(
-                                                                  padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
-                                                                  child: TextFormFiledWidget(
-                                                                      readOnly: true,
-                                                                      label: "Visit Date",
-                                                                      controller: controller.fromController,
-                                                                      onTap: () async {
-                                                                        customPrint("customPrint");
-                                                                        showDialog(
-                                                                          context: context,
-                                                                          useSafeArea: true,
-                                                                          builder: (context) {
-                                                                            return AlertDialog(
-                                                                              backgroundColor: AppColors.backgroundWhite,
-                                                                              titlePadding: EdgeInsets.zero,
-                                                                              shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.circular(10),
-                                                                              ),
-                                                                              title: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 10),
-                                                                                  SizedBox(
-                                                                                    width: 305,
-                                                                                    height: 290,
-                                                                                    child: GetBuilder<HomeController>(
-                                                                                      builder: (controller) {
-                                                                                        return CalendarDatePicker2(
-                                                                                          config: CalendarDatePicker2Config(
-                                                                                            weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                                                                                            weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
-                                                                                            daySplashColor: AppColors.clear,
-                                                                                            calendarViewMode: CalendarDatePicker2Mode.day,
-                                                                                            selectedDayHighlightColor: AppColors.backgroundPurple,
-                                                                                            dayMaxWidth: 60,
-                                                                                            allowSameValueSelection: true,
-                                                                                            firstDayOfWeek: 6,
-                                                                                            disableMonthPicker: true,
-                                                                                            scrollViewTopHeaderTextStyle: const TextStyle(
-                                                                                              color: Colors.black87,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                            ),
-                                                                                            controlsTextStyle: const TextStyle(
-                                                                                              color: Colors.black,
-                                                                                              fontSize: 15,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                            ),
-                                                                                            centerAlignModePicker: true,
-                                                                                            customModePickerIcon: const SizedBox(),
-                                                                                            calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
-                                                                                            calendarType: CalendarDatePicker2Type.range,
-                                                                                          ),
-                                                                                          onValueChanged: (value) {
-                                                                                            controller.selectedValue = value;
-
-                                                                                            customPrint("onchanged  ${value}");
-                                                                                          },
-                                                                                          value: [DateTime.now()],
-                                                                                        );
-                                                                                      },
-                                                                                    ),
-                                                                                  ),
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      SizedBox(
-                                                                                        width: 5,
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: ContainerButton(
-                                                                                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                                                                                          onPressed: () {
-                                                                                            Navigator.pop(context);
-                                                                                          },
-                                                                                          backgroundColor: Colors.white,
-                                                                                          needBorder: true,
-                                                                                          borderColor: AppColors.backgroundPurple,
-                                                                                          textColor: AppColors.backgroundPurple,
-                                                                                          text: "Cancel",
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 5,
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: ContainerButton(
-                                                                                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                                                                                          onPressed: () {
-                                                                                            controller.setDateRange();
-                                                                                          },
-                                                                                          text: "Choose Date",
-                                                                                          backgroundColor: AppColors.backgroundPurple,
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 5,
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 10),
-                                                                                ],
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                      suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
-                                                                      hint: "${controller.startDate}-${controller.endDate}",
-                                                                      checkValidation: (value) {
-                                                                        return Validation.emailValidate(value);
-                                                                      }),
-                                                                );
-                                                              }),
-                                                            )
-                                                          : PopupMenuDivider(
-                                                              height: 0,
-                                                            ),
-                                                    ],
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        border: Border.all(
-                                                          color: AppColors.textDarkGrey, // Border color
-                                                          width: 0.5,
-                                                        ),
-
-                                                        borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(10),
-                                                        child: SvgPicture.asset(
-                                                          "assets/images/filter_logo.svg",
-                                                          width: 40,
-                                                          height: 40,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  // PopupMenuButton<String>(
+                                                  //   offset: const Offset(0, 0),
+                                                  //   onSelected: (value) {
+                                                  //     if (value == "1") {
+                                                  //       // Do custom logic for Item 1
+                                                  //       // Example: close the popup programmatically
+                                                  //       customPrint('Closing popup manually for Item 1');
+                                                  //     }
+                                                  //   },
+                                                  //   onCanceled: () {
+                                                  //     controller.tabIndex.value == 0
+                                                  //         ? controller.getPatientList()
+                                                  //         : controller.tabIndex.value == 1
+                                                  //             ? controller.getScheduleVisitList()
+                                                  //             : controller.getPastVisitList(isFist: true);
+                                                  //
+                                                  //     customPrint("dailog is cancelled");
+                                                  //   },
+                                                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                  //   color: AppColors.white,
+                                                  //   position: PopupMenuPosition.under,
+                                                  //   padding: EdgeInsetsDirectional.zero,
+                                                  //   menuPadding: EdgeInsetsDirectional.only(bottom: 0),
+                                                  //   style: const ButtonStyle(
+                                                  //     padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                  //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                  //     visualDensity: VisualDensity(horizontal: 0, vertical: 2),
+                                                  //   ),
+                                                  //   itemBuilder: (context) => [
+                                                  //     PopupMenuItem(
+                                                  //         enabled: false,
+                                                  //         onTap: () {},
+                                                  //         padding: EdgeInsets.zero,
+                                                  //         value: "1",
+                                                  //         child: Column(
+                                                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                                                  //           children: [
+                                                  //             Padding(
+                                                  //               padding: const EdgeInsets.all(16),
+                                                  //               child: Row(
+                                                  //                 children: [
+                                                  //                   Text(
+                                                  //                     "Filters",
+                                                  //                     style: AppFonts.medium(16, AppColors.textBlack),
+                                                  //                   ),
+                                                  //                   SizedBox(
+                                                  //                     width: 145,
+                                                  //                   ),
+                                                  //                   GestureDetector(
+                                                  //                     onTap: () {
+                                                  //                       customPrint("clicked");
+                                                  //
+                                                  //                       controller.clearFilter();
+                                                  //                     },
+                                                  //                     child: Text(
+                                                  //                       "Clear",
+                                                  //                       style: AppFonts.medium(14, AppColors.backgroundPurple),
+                                                  //                     ),
+                                                  //                   ),
+                                                  //                 ],
+                                                  //               ),
+                                                  //             ),
+                                                  //             controller.tabIndex.value == 2
+                                                  //                 ? Padding(
+                                                  //                     padding: const EdgeInsets.only(left: 16, bottom: 0),
+                                                  //                     child: Text(
+                                                  //                       "Status",
+                                                  //                       style: AppFonts.medium(14, AppColors.textBlack),
+                                                  //                     ),
+                                                  //                   )
+                                                  //                 : SizedBox()
+                                                  //           ],
+                                                  //         )),
+                                                  //     controller.tabIndex.value == 2
+                                                  //         ? PopupMenuItem(
+                                                  //             enabled: false,
+                                                  //             padding: EdgeInsets.zero,
+                                                  //             value: "",
+                                                  //             child: Obx(() {
+                                                  //               return Column(
+                                                  //                   children: List.generate(controller.statusModel.length, (index) {
+                                                  //                 return Padding(
+                                                  //                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                  //                     child: GestureDetector(
+                                                  //                       onTap: () {
+                                                  //                         if (controller.selectedStatusIndex.contains(index)) {
+                                                  //                           controller.selectedStatusIndex.remove(index);
+                                                  //                         } else {
+                                                  //                           controller.selectedStatusIndex.add(index);
+                                                  //                         }
+                                                  //                       },
+                                                  //                       child: Row(
+                                                  //                         children: [
+                                                  //                           controller.selectedStatusIndex.contains(index)
+                                                  //                               ? SvgPicture.asset(
+                                                  //                                   ImagePath.checkedBox,
+                                                  //                                   width: 25,
+                                                  //                                   height: 25,
+                                                  //                                 )
+                                                  //                               : SvgPicture.asset(
+                                                  //                                   ImagePath.unCheckedBox,
+                                                  //                                   width: 25,
+                                                  //                                   height: 25,
+                                                  //                                 ),
+                                                  //                           SizedBox(
+                                                  //                             width: 9,
+                                                  //                           ),
+                                                  //                           Text(
+                                                  //                             controller.statusModel[index].status ?? "",
+                                                  //                             style: AppFonts.regular(14, AppColors.textBlack),
+                                                  //                           ),
+                                                  //                           Spacer()
+                                                  //                         ],
+                                                  //                       ),
+                                                  //                     ));
+                                                  //               }));
+                                                  //             }),
+                                                  //           )
+                                                  //         : PopupMenuItem(
+                                                  //             enabled: false,
+                                                  //             onTap: () {},
+                                                  //             padding: EdgeInsets.zero,
+                                                  //             value: "",
+                                                  //             child: Obx(() {
+                                                  //               return Padding(
+                                                  //                 padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
+                                                  //                 child: TextFormFiledWidget(
+                                                  //                     readOnly: true,
+                                                  //                     label: controller.tabIndex.value == 0 ? "Last Visit Date" : "Visit Date",
+                                                  //                     controller: controller.fromController,
+                                                  //                     onTap: () async {
+                                                  //                       customPrint("customPrint");
+                                                  //                       showDialog(
+                                                  //                         context: context,
+                                                  //                         useSafeArea: true,
+                                                  //                         builder: (context) {
+                                                  //                           return AlertDialog(
+                                                  //                             backgroundColor: AppColors.backgroundWhite,
+                                                  //                             titlePadding: EdgeInsets.zero,
+                                                  //                             shape: RoundedRectangleBorder(
+                                                  //                               borderRadius: BorderRadius.circular(10),
+                                                  //                             ),
+                                                  //                             title: Column(
+                                                  //                               children: [
+                                                  //                                 SizedBox(height: 10),
+                                                  //                                 SizedBox(
+                                                  //                                   width: 305,
+                                                  //                                   height: 290,
+                                                  //                                   child: GetBuilder<HomeController>(
+                                                  //                                     builder: (controller) {
+                                                  //                                       return CalendarDatePicker2(
+                                                  //                                         config: CalendarDatePicker2Config(
+                                                  //                                           // weekdayLabelBuilder: ({isScrollViewTopHeader, required weekday}) => Text(weekday.toString()),
+                                                  //                                           weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                                  //                                           weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                                  //                                           daySplashColor: AppColors.clear,
+                                                  //                                           calendarViewMode: CalendarDatePicker2Mode.day,
+                                                  //                                           selectedDayHighlightColor: AppColors.backgroundPurple,
+                                                  //                                           dayMaxWidth: 60,
+                                                  //                                           allowSameValueSelection: true,
+                                                  //                                           firstDayOfWeek: 6,
+                                                  //                                           disableMonthPicker: true,
+                                                  //
+                                                  //                                           scrollViewTopHeaderTextStyle: const TextStyle(
+                                                  //                                             color: Colors.black87,
+                                                  //                                             fontWeight: FontWeight.bold,
+                                                  //                                           ),
+                                                  //
+                                                  //                                           controlsTextStyle: const TextStyle(
+                                                  //                                             color: Colors.black,
+                                                  //                                             fontSize: 15,
+                                                  //                                             fontWeight: FontWeight.bold,
+                                                  //                                           ),
+                                                  //                                           centerAlignModePicker: true,
+                                                  //                                           customModePickerIcon: const SizedBox(),
+                                                  //                                           calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
+                                                  //
+                                                  //                                           calendarType: CalendarDatePicker2Type.range,
+                                                  //                                         ),
+                                                  //                                         onValueChanged: (value) {
+                                                  //                                           controller.selectedValue = value;
+                                                  //
+                                                  //                                           customPrint("onchanged  ${value}");
+                                                  //                                         },
+                                                  //                                         value: [DateTime.now()],
+                                                  //                                       );
+                                                  //                                     },
+                                                  //                                   ),
+                                                  //                                 ),
+                                                  //                                 Row(
+                                                  //                                   children: [
+                                                  //                                     SizedBox(
+                                                  //                                       width: 5,
+                                                  //                                     ),
+                                                  //                                     Expanded(
+                                                  //                                       child: ContainerButton(
+                                                  //                                         padding: EdgeInsets.only(top: 10, bottom: 10),
+                                                  //                                         onPressed: () {
+                                                  //                                           Navigator.pop(context);
+                                                  //                                         },
+                                                  //                                         backgroundColor: Colors.white,
+                                                  //                                         needBorder: true,
+                                                  //                                         borderColor: AppColors.backgroundPurple,
+                                                  //                                         textColor: AppColors.backgroundPurple,
+                                                  //                                         text: "Cancel",
+                                                  //                                       ),
+                                                  //                                     ),
+                                                  //                                     SizedBox(
+                                                  //                                       width: 5,
+                                                  //                                     ),
+                                                  //                                     Expanded(
+                                                  //                                       child: ContainerButton(
+                                                  //                                         padding: EdgeInsets.only(top: 10, bottom: 10),
+                                                  //                                         onPressed: () {
+                                                  //                                           controller.setDateRange();
+                                                  //                                         },
+                                                  //                                         text: "Choose Date",
+                                                  //                                         backgroundColor: AppColors.backgroundPurple,
+                                                  //                                       ),
+                                                  //                                     ),
+                                                  //                                     SizedBox(
+                                                  //                                       width: 5,
+                                                  //                                     ),
+                                                  //                                   ],
+                                                  //                                 ),
+                                                  //                                 SizedBox(height: 10),
+                                                  //                               ],
+                                                  //                             ),
+                                                  //                           );
+                                                  //                         },
+                                                  //                       );
+                                                  //                     },
+                                                  //                     suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
+                                                  //                     hint: "${controller.startDate}-${controller.endDate}",
+                                                  //                     checkValidation: (value) {
+                                                  //                       return Validation.emailValidate(value);
+                                                  //                     }),
+                                                  //               );
+                                                  //             }),
+                                                  //           ),
+                                                  //     controller.tabIndex.value == 2
+                                                  //         ? PopupMenuItem(
+                                                  //             enabled: false,
+                                                  //             onTap: () {},
+                                                  //             padding: EdgeInsets.zero,
+                                                  //             value: "",
+                                                  //             child: Obx(() {
+                                                  //               return Padding(
+                                                  //                 padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
+                                                  //                 child: TextFormFiledWidget(
+                                                  //                     readOnly: true,
+                                                  //                     label: "Visit Date",
+                                                  //                     controller: controller.fromController,
+                                                  //                     onTap: () async {
+                                                  //                       customPrint("customPrint");
+                                                  //                       showDialog(
+                                                  //                         context: context,
+                                                  //                         useSafeArea: true,
+                                                  //                         builder: (context) {
+                                                  //                           return AlertDialog(
+                                                  //                             backgroundColor: AppColors.backgroundWhite,
+                                                  //                             titlePadding: EdgeInsets.zero,
+                                                  //                             shape: RoundedRectangleBorder(
+                                                  //                               borderRadius: BorderRadius.circular(10),
+                                                  //                             ),
+                                                  //                             title: Column(
+                                                  //                               children: [
+                                                  //                                 SizedBox(height: 10),
+                                                  //                                 SizedBox(
+                                                  //                                   width: 305,
+                                                  //                                   height: 290,
+                                                  //                                   child: GetBuilder<HomeController>(
+                                                  //                                     builder: (controller) {
+                                                  //                                       return CalendarDatePicker2(
+                                                  //                                         config: CalendarDatePicker2Config(
+                                                  //                                           weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                                  //                                           weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                                  //                                           daySplashColor: AppColors.clear,
+                                                  //                                           calendarViewMode: CalendarDatePicker2Mode.day,
+                                                  //                                           selectedDayHighlightColor: AppColors.backgroundPurple,
+                                                  //                                           dayMaxWidth: 60,
+                                                  //                                           allowSameValueSelection: true,
+                                                  //                                           firstDayOfWeek: 6,
+                                                  //                                           disableMonthPicker: true,
+                                                  //                                           scrollViewTopHeaderTextStyle: const TextStyle(
+                                                  //                                             color: Colors.black87,
+                                                  //                                             fontWeight: FontWeight.bold,
+                                                  //                                           ),
+                                                  //                                           controlsTextStyle: const TextStyle(
+                                                  //                                             color: Colors.black,
+                                                  //                                             fontSize: 15,
+                                                  //                                             fontWeight: FontWeight.bold,
+                                                  //                                           ),
+                                                  //                                           centerAlignModePicker: true,
+                                                  //                                           customModePickerIcon: const SizedBox(),
+                                                  //                                           calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
+                                                  //                                           calendarType: CalendarDatePicker2Type.range,
+                                                  //                                         ),
+                                                  //                                         onValueChanged: (value) {
+                                                  //                                           controller.selectedValue = value;
+                                                  //
+                                                  //                                           customPrint("onchanged  ${value}");
+                                                  //                                         },
+                                                  //                                         value: [DateTime.now()],
+                                                  //                                       );
+                                                  //                                     },
+                                                  //                                   ),
+                                                  //                                 ),
+                                                  //                                 Row(
+                                                  //                                   children: [
+                                                  //                                     SizedBox(
+                                                  //                                       width: 5,
+                                                  //                                     ),
+                                                  //                                     Expanded(
+                                                  //                                       child: ContainerButton(
+                                                  //                                         padding: EdgeInsets.only(top: 10, bottom: 10),
+                                                  //                                         onPressed: () {
+                                                  //                                           Navigator.pop(context);
+                                                  //                                         },
+                                                  //                                         backgroundColor: Colors.white,
+                                                  //                                         needBorder: true,
+                                                  //                                         borderColor: AppColors.backgroundPurple,
+                                                  //                                         textColor: AppColors.backgroundPurple,
+                                                  //                                         text: "Cancel",
+                                                  //                                       ),
+                                                  //                                     ),
+                                                  //                                     SizedBox(
+                                                  //                                       width: 5,
+                                                  //                                     ),
+                                                  //                                     Expanded(
+                                                  //                                       child: ContainerButton(
+                                                  //                                         padding: EdgeInsets.only(top: 10, bottom: 10),
+                                                  //                                         onPressed: () {
+                                                  //                                           controller.setDateRange();
+                                                  //                                         },
+                                                  //                                         text: "Choose Date",
+                                                  //                                         backgroundColor: AppColors.backgroundPurple,
+                                                  //                                       ),
+                                                  //                                     ),
+                                                  //                                     SizedBox(
+                                                  //                                       width: 5,
+                                                  //                                     ),
+                                                  //                                   ],
+                                                  //                                 ),
+                                                  //                                 SizedBox(height: 10),
+                                                  //                               ],
+                                                  //                             ),
+                                                  //                           );
+                                                  //                         },
+                                                  //                       );
+                                                  //                     },
+                                                  //                     suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
+                                                  //                     hint: "${controller.startDate}-${controller.endDate}",
+                                                  //                     checkValidation: (value) {
+                                                  //                       return Validation.emailValidate(value);
+                                                  //                     }),
+                                                  //               );
+                                                  //             }),
+                                                  //           )
+                                                  //         : PopupMenuDivider(
+                                                  //             height: 0,
+                                                  //           ),
+                                                  //   ],
+                                                  //   child: Container(
+                                                  //     height: 40,
+                                                  //     width: 40,
+                                                  //     decoration: BoxDecoration(
+                                                  //       color: Colors.white,
+                                                  //       border: Border.all(
+                                                  //         color: AppColors.textDarkGrey, // Border color
+                                                  //         width: 0.5,
+                                                  //       ),
+                                                  //
+                                                  //       borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
+                                                  //     ),
+                                                  //     child: Padding(
+                                                  //       padding: const EdgeInsets.all(10),
+                                                  //       child: SvgPicture.asset(
+                                                  //         "assets/images/filter_logo.svg",
+                                                  //         width: 40,
+                                                  //         height: 40,
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      showMaterialModalBottomSheet(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return PatientListFilterBottomSheet(
-                                                            onTap: () {},
-                                                          );
-                                                        },
-                                                      );
+                                                      if (controller.tabIndex.value == 0) {
+                                                        showMaterialModalBottomSheet(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PatientListFilterBottomSheet(
+                                                              onTap: () {
+                                                                controller.getPatientList();
+                                                              },
+                                                            );
+                                                          },
+                                                        );
+                                                      } else if (controller.tabIndex.value == 1) {
+                                                      } else {}
                                                     },
                                                     child: Container(
                                                       height: 40,

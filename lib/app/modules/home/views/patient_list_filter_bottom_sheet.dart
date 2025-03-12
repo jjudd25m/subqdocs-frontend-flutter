@@ -81,7 +81,9 @@ import '../../../../widgets/custom_textfiled.dart';
 class PatientListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
 
-  const PatientListFilterBottomSheet({super.key, required this.onTap});
+  List<DateTime>? selectedDate = [DateTime.now()];
+
+  PatientListFilterBottomSheet({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +257,7 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                   child: Row(
                     children: [
                       Text(
-                        controller.endDate.value.isNotEmpty ? "${controller.startDate.value}-${controller.endDate.value}" : "Select",
+                        controller.globalController.homePatientListSortingModel.value?.startDate != null ? "${controller.startDate.value}-${controller.endDate.value}" : "Select",
                         style: AppFonts.regular(14, AppColors.textBlack),
                       ),
                       Spacer(),
@@ -296,11 +298,12 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                     calendarType: CalendarDatePicker2Type.range,
                   ),
                   onValueChanged: (value) {
-                    controller.selectedPatientListDateValue = value;
-                    controller.selectedValue = value;
+                    selectedDate = value;
+                    // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
+                    // controller.selectedValue = value;
                     // customPrint("onchanged  ${value}");
                   },
-                  value: [DateTime.now()],
+                  value: controller.globalController.homePatientListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
                 ),
               ),
               Row(
@@ -328,7 +331,14 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                       onPressed: () {
                         Get.back();
                         onTap();
-                        controller.setDateRange();
+                        controller.globalController.homePatientListSortingModel.value?.selectedDateValue = selectedDate;
+                        List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+                        if (dates.length == 2) {
+                          controller.globalController.homePatientListSortingModel.value?.startDate = dates[0];
+                          controller.globalController.homePatientListSortingModel.value?.endDate = dates[1];
+                          controller.globalController.saveHomePatientListData();
+                        }
+                        // controller.setDateRange();
                       },
                     ),
                   ),

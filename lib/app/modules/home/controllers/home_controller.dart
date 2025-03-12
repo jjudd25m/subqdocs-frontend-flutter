@@ -58,7 +58,6 @@ class HomeController extends GetxController {
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
 
-  List<DateTime> selectedPatientListDateValue = [];
   List<DateTime> selectedValue = [];
 
   // List<Map<String, dynamic>> defaultPastPatient = [
@@ -218,10 +217,10 @@ class HomeController extends GetxController {
       param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
     }
 
-    if (startDate.value != "" && endDate.value != "") {
+    if (globalController.homePatientListSortingModel.value?.startDate != null && globalController.homePatientListSortingModel.value?.endDate != null) {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.startDate ?? "");
       // Format the DateTime to the required format (yyyy mm dd)
 
       // customPrint("start date is the ${startDateTime}");
@@ -229,13 +228,32 @@ class HomeController extends GetxController {
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       // customPrint("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.endDate ?? "");
       // Format the DateTime to the required format (yyyy mm dd)
 
       String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
+
+    // if (startDate.value != "" && endDate.value != "") {
+    //   // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+    //
+    //   DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+    //   // Format the DateTime to the required format (yyyy mm dd)
+    //
+    //   // customPrint("start date is the ${startDateTime}");
+    //
+    //   String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+    //   // customPrint("start format date is  date is the ${formattedStartDate}");
+    //
+    //   DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+    //   // Format the DateTime to the required format (yyyy mm dd)
+    //
+    //   String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+    //
+    //   param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    // }
 
     print("param:- $param");
     globalController.saveHomePatientListData();
@@ -625,6 +643,38 @@ class HomeController extends GetxController {
     } catch (e) {
       // customPrint(e);
     }
+  }
+
+  List<String> getCustomDateRange(List<DateTime> selectedDate) {
+    String startDate = '';
+    String endDate = '';
+
+    if (selectedDate.isNotEmpty) {
+      for (int i = 0; i < selectedDate.length; i++) {
+        var dateTime = selectedDate[i];
+        if (selectedDate.length == 1) {
+          // If there's only one date, set both startDate and endDate to the same value
+          startDate = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate = startDate;
+        } else {
+          if (i == 0) {
+            // Set startDate to the first date
+            startDate = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          } else {
+            // Set endDate to the second date
+            endDate = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          }
+        }
+      }
+    } else {
+      // If no date is selected, set startDate and endDate to the current date
+      DateTime dateTime = DateTime.now();
+      startDate = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate = startDate; // Set both dates to the current date
+    }
+
+    // Return both dates in a list
+    return [startDate, endDate];
   }
 
   void setDateRange() {
