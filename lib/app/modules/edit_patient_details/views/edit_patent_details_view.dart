@@ -496,7 +496,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                       ),
                                                     ),
                                                     checkValidation: (value) {
-                                                      return Validation.emailValidateRequired(value);
+                                                      return Validation.phoneValidate(value);
                                                     }),
                                               ),
                                               SizedBox(
@@ -580,7 +580,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                       ),
                                                     ),
                                                     checkValidation: (value) {
-                                                      return Validation.emailValidateRequired(value);
+                                                      return Validation.phoneValidate(value);
                                                     }),
                                               ),
                                               Expanded(child: SizedBox()),
