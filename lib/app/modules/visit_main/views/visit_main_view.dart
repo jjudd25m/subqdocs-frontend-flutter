@@ -755,7 +755,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -983,7 +983,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -1121,7 +1121,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -1259,7 +1259,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -1397,7 +1397,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
