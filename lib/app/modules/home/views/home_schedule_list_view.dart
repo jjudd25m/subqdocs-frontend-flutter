@@ -347,22 +347,22 @@ class HomeScheduleListView extends GetView<HomeController> {
                 context: context,
                 columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
                 onRowSelected: (rowIndex, rowData) async {
-                  if (rowIndex != 0) {
-                    customPrint("row index is :- $rowIndex");
+                  // if (rowIndex != 0) {
+                  customPrint("row index is :- $rowIndex");
 
-                    Get.delete<VisitMainController>();
+                  Get.delete<VisitMainController>();
 
-                    dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                      "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
-                      "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
-                    });
+                  dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                    "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
+                    "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
+                  });
 
-                    print("back from response");
+                  print("back from response");
 
-                    controller.getPastVisitList();
-                    controller.getScheduleVisitList();
-                    controller.getPatientList();
-                  }
+                  controller.getPastVisitList();
+                  controller.getScheduleVisitList();
+                  controller.getPatientList();
+                  // }
                 },
                 onLoadMore: () async {
                   controller.getScheduleVisitListFetchMore();

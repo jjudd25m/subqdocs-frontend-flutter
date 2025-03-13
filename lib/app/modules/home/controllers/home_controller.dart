@@ -53,7 +53,7 @@ class HomeController extends GetxController {
   RxList<StatusModel> statusModel = RxList();
 
   // RxInt selectedIndex = RxInt(-1);
-  RxList<int> selectedStatusIndex = RxList();
+  // RxList<int> selectedStatusIndex = RxList();
 
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
@@ -217,7 +217,7 @@ class HomeController extends GetxController {
       param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
     }
 
-    if (globalController.homePatientListSortingModel.value?.startDate != null && globalController.homePatientListSortingModel.value?.endDate != null) {
+    if (globalController.homePatientListSortingModel.value?.startDate != "" && globalController.homePatientListSortingModel.value?.endDate != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.startDate ?? "");
@@ -301,10 +301,27 @@ class HomeController extends GetxController {
 
     // Dynamically add sorting to the param map
 
-    if (startDate.value != "" && endDate.value != "") {
-      // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+    // if (startDate.value != "" && endDate.value != "") {
+    //   // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+    //
+    //   DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+    //   // Format the DateTime to the required format (yyyy mm dd)
+    //
+    //   // customPrint("start date is the ${startDateTime}");
+    //
+    //   String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+    //   // customPrint("start format date is  date is the ${formattedStartDate}");
+    //
+    //   DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+    //   // Format the DateTime to the required format (yyyy mm dd)
+    //
+    //   String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+    //
+    //   param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    // }
 
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+    if (globalController.homeScheduleListSortingModel.value?.startDate != "" && globalController.homeScheduleListSortingModel.value?.endDate != "") {
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homeScheduleListSortingModel.value?.startDate ?? "");
       // Format the DateTime to the required format (yyyy mm dd)
 
       // customPrint("start date is the ${startDateTime}");
@@ -312,7 +329,7 @@ class HomeController extends GetxController {
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       // customPrint("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homeScheduleListSortingModel.value?.endDate ?? "");
       // Format the DateTime to the required format (yyyy mm dd)
 
       String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
@@ -359,8 +376,10 @@ class HomeController extends GetxController {
     }
     // }
 
-    if (selectedStatusIndex.isNotEmpty) {
-      List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status.toString()!).toList();
+    if (globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.isNotEmpty ?? false) {
+      // List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedStatusIndex!.map((e) => statusModel[e].status.toString()!).toList();
+
+      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
 
       // customPrint("status array is- $statusList");
       if (statusList.length == 1) {
@@ -370,10 +389,10 @@ class HomeController extends GetxController {
       }
     }
 
-    if (startDate.value != "" && endDate.value != "") {
+    if (globalController.homePastPatientListSortingModel.value?.startDate != "" && globalController.homePastPatientListSortingModel.value?.endDate != "") {
       // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
 
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePastPatientListSortingModel.value?.startDate ?? "");
       // Format the DateTime to the required format (yyyy mm dd)
 
       // customPrint("start date is the ${startDateTime}");
@@ -381,13 +400,32 @@ class HomeController extends GetxController {
       String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
       // customPrint("start format date is  date is the ${formattedStartDate}");
 
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePastPatientListSortingModel.value?.endDate ?? "");
       // Format the DateTime to the required format (yyyy mm dd)
 
       String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
       param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
     }
+
+    // if (startDate.value != "" && endDate.value != "") {
+    //   // DateTime startDate = DateFormat('dd-MM-yyyy').parse(fromController.text);
+    //
+    //   DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+    //   // Format the DateTime to the required format (yyyy mm dd)
+    //
+    //   // customPrint("start date is the ${startDateTime}");
+    //
+    //   String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+    //   // customPrint("start format date is  date is the ${formattedStartDate}");
+    //
+    //   DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+    //   // Format the DateTime to the required format (yyyy mm dd)
+    //
+    //   String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+    //
+    //   param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+    // }
 
     print("param:- $param");
     globalController.saveHomePastPatientData();
@@ -541,8 +579,9 @@ class HomeController extends GetxController {
     //   // Add more sorting parameters as needed
     // ];
 
-    if (selectedStatusIndex.isNotEmpty) {
-      List<String> statusList = selectedStatusIndex.map((e) => statusModel[e].status!).toList();
+    if (globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.isNotEmpty ?? false) {
+      // List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedStatusIndex!.map((e) => statusModel[e].status.toString()!).toList();
+      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
 
       // customPrint("status array is- $statusList");
       if (statusList.length == 1) {
@@ -714,7 +753,8 @@ class HomeController extends GetxController {
 
     startDate.value = "MM/DD/YYYY";
     endDate.value = "";
-    selectedStatusIndex.clear();
+    globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.clear();
+    // selectedStatusIndex.clear();
     fromController.clear();
     toController.clear();
 

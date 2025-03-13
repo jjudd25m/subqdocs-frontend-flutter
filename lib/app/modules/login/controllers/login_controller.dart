@@ -7,6 +7,7 @@ import 'package:toastification/toastification.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../model/login_model.dart';
@@ -46,6 +47,8 @@ class LoginController extends GetxController {
   }
 
   Future<void> authLoginUser() async {
+    Get.put(GlobalController());
+
     if (isRememberMe.value) {
       AppPreference.instance.setBool(AppString.prefKeyRememberMe, true);
       AppPreference.instance.setString(AppString.prefKeyRememberEmail, emailController.text);

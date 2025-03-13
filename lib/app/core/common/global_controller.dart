@@ -77,6 +77,10 @@ class GlobalController extends GetxController {
       json['pastVisitSelectedSorting'] = pastVisitSelectedSorting;
       json['colIndex'] = 1;
       json['isAscending'] = true;
+      json['selectedStatusIndex'] = [];
+      json['selectedDateValue'] = [];
+      json['startDate'] = "";
+      json['endDate'] = "";
       homePastPatientListSortingModel.value = HomePastPatientListSortingModel.fromJson(json);
       print("first initialize homePastPatientListSortingModel :- $json");
     }
@@ -91,6 +95,9 @@ class GlobalController extends GetxController {
       json['patientListSelectedSorting'] = patientListSelectedSorting;
       json['colIndex'] = -1;
       json['isAscending'] = true;
+      json['selectedDateValue'] = [];
+      json['startDate'] = "";
+      json['endDate'] = "";
       homePatientListSortingModel.value = HomePatientListSortingModel.fromJson(json);
       print("first initialize homePatientListSortingModel :- $json");
     }
@@ -105,6 +112,9 @@ class GlobalController extends GetxController {
       json['sortingSchedulePatient'] = sortingSchedulePatient;
       json['colIndex'] = 1;
       json['isAscending'] = true;
+      json['selectedDateValue'] = [];
+      json['startDate'] = "";
+      json['endDate'] = "";
       homeScheduleListSortingModel.value = HomeScheduleListSortingModel.fromJson(json);
       print("first initialize homeScheduleListSortingModel :- $json");
     }

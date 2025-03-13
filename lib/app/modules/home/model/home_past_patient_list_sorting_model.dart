@@ -5,7 +5,7 @@ class HomePastPatientListSortingModel {
   List<Map<String, dynamic>>? pastVisitSelectedSorting;
   int colIndex = -1;
   bool isAscending = true;
-  List<int>? selectedStatusIndex = RxList();
+  List<String>? selectedStatusIndex = [];
   List<DateTime>? selectedDateValue = [DateTime.now()];
   String? startDate;
   String? endDate;
@@ -29,7 +29,7 @@ class HomePastPatientListSortingModel {
       pastVisitSelectedSorting: json['pastVisitSelectedSorting'] != null ? List<Map<String, dynamic>>.from(json['pastVisitSelectedSorting']) : null,
       colIndex: json['colIndex'] ?? -1,
       isAscending: json['isAscending'] ?? true,
-      selectedStatusIndex: json['selectedStatusIndex'] != null ? List<int>.from(json['selectedStatusIndex']) : [], // Default to empty List<int>
+      selectedStatusIndex: json['selectedStatusIndex'] != null ? List<String>.from(json['selectedStatusIndex']) : [], // Default to empty List<int>
       selectedDateValue: json['selectedDateValue'] != null ? (json['selectedDateValue'] as List).map((e) => DateTime.parse(e)).toList() : [DateTime.now()], // Default to the current date
       startDate: json['startDate'],
       endDate: json['endDate'],

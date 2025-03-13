@@ -1,24 +1,26 @@
+import 'dart:ui';
+
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/custom_animated_button.dart';
-import '../../../../widgets/custom_textfiled.dart';
+import '../controllers/home_controller.dart';
 
-class PatientListFilterBottomSheet extends GetView<HomeController> {
+class ScheduleListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
 
   List<DateTime>? selectedDate = [DateTime.now()];
 
-  PatientListFilterBottomSheet({super.key, required this.onTap});
+  ScheduleListFilterBottomSheet({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +56,10 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                   Spacer(),
                   GestureDetector(
                     onTap: () {
-                      controller.globalController.homePatientListSortingModel.value?.selectedDateValue?.clear();
-                      controller.globalController.homePatientListSortingModel.value?.startDate = "";
-                      controller.globalController.homePatientListSortingModel.value?.endDate = "";
-                      controller.globalController.saveHomePatientListData();
+                      controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue?.clear();
+                      controller.globalController.homeScheduleListSortingModel.value?.startDate = "";
+                      controller.globalController.homeScheduleListSortingModel.value?.endDate = "";
+                      controller.globalController.saveHomeScheduleListData();
                       Get.back();
                       onTap();
                     },
@@ -90,8 +92,8 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                   child: Row(
                     children: [
                       Text(
-                        controller.globalController.homePatientListSortingModel.value?.startDate != ""
-                            ? "${controller.globalController.homePatientListSortingModel.value?.startDate}-${controller.globalController.homePatientListSortingModel.value?.endDate}"
+                        controller.globalController.homeScheduleListSortingModel.value?.startDate != ""
+                            ? "${controller.globalController.homeScheduleListSortingModel.value?.startDate}-${controller.globalController.homeScheduleListSortingModel.value?.endDate}"
                             : "Select",
                         style: AppFonts.regular(14, AppColors.textBlack),
                       ),
@@ -138,7 +140,7 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                     // controller.selectedValue = value;
                     // customPrint("onchanged  ${value}");
                   },
-                  value: controller.globalController.homePatientListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
+                  value: controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
                 ),
               ),
               Row(
@@ -164,12 +166,12 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                       enabledColor: AppColors.backgroundPurple,
                       height: 45,
                       onPressed: () {
-                        controller.globalController.homePatientListSortingModel.value?.selectedDateValue = selectedDate;
+                        controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue = selectedDate;
                         List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
                         if (dates.length == 2) {
-                          controller.globalController.homePatientListSortingModel.value?.startDate = dates[0];
-                          controller.globalController.homePatientListSortingModel.value?.endDate = dates[1];
-                          controller.globalController.saveHomePatientListData();
+                          controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
+                          controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
+                          controller.globalController.saveHomeScheduleListData();
                           Get.back();
                           onTap();
                         } else {

@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:subqdocs/app/modules/home/views/home_past_visits_list.dart';
 import 'package:subqdocs/app/modules/home/views/home_schedule_list_view.dart';
+import 'package:subqdocs/app/modules/home/views/past_patient_list_filter_bottom_sheet.dart';
 import 'package:subqdocs/app/modules/home/views/patient_list_filter_bottom_sheet.dart';
+import 'package:subqdocs/app/modules/home/views/schedule_list_filter_bottom_sheet.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widget/appbar.dart';
@@ -351,7 +353,9 @@ class HomeView extends GetView<HomeController> {
                                                   //             padding: EdgeInsets.zero,
                                                   //             value: "",
                                                   //             child: Obx(() {
-                                                  //               return Column(
+                                                  //               return
+                                                  //
+                                                  //                 Column(
                                                   //                   children: List.generate(controller.statusModel.length, (index) {
                                                   //                 return Padding(
                                                   //                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -671,7 +675,28 @@ class HomeView extends GetView<HomeController> {
                                                           },
                                                         );
                                                       } else if (controller.tabIndex.value == 1) {
-                                                      } else {}
+                                                        showMaterialModalBottomSheet(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return ScheduleListFilterBottomSheet(
+                                                              onTap: () {
+                                                                controller.getScheduleVisitList();
+                                                              },
+                                                            );
+                                                          },
+                                                        );
+                                                      } else if (controller.tabIndex.value == 2) {
+                                                        showMaterialModalBottomSheet(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PastPatientListFilterBottomSheet(
+                                                              onTap: () {
+                                                                controller.getPastVisitList(isFist: true);
+                                                              },
+                                                            );
+                                                          },
+                                                        );
+                                                      }
                                                     },
                                                     child: Container(
                                                       height: 40,

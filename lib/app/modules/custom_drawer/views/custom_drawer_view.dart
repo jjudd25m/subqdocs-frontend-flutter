@@ -13,7 +13,11 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/drawer_item.dart';
 import '../../../../widgets/rounded_image_widget.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../routes/app_pages.dart';
+import '../../home/model/home_past_patient_list_sorting_model.dart';
+import '../../home/model/home_patient_list_sorting_model.dart';
+import '../../home/model/home_schedule_list_sorting_model.dart';
 import '../../login/model/login_model.dart';
 import '../controllers/custom_drawer_controller.dart';
 
@@ -155,6 +159,16 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                 await AppPreference.instance.removeKey("homePastPatientListSortingModel");
                 await AppPreference.instance.removeKey("homePatientListSortingModel");
                 await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+
+                HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
+                HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
+                HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+
+                print(homePatientListData);
+                print(homeScheduleListData);
+                print(homePastPatientData);
+
+                Get.delete<GlobalController>();
 
                 Get.offAllNamed(Routes.LOGIN);
               },
