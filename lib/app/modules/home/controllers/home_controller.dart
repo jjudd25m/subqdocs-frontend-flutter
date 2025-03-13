@@ -140,7 +140,25 @@ class HomeController extends GetxController {
 
 
 
+  String getNextRoundedTime() {
+    DateTime now = DateTime.now();
 
+
+    int minutes = now.minute;
+    int roundedMinutes = ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
+
+    if (roundedMinutes == 60) {
+
+      now = now.add(Duration(minutes: 60 - minutes));
+      now = DateTime(now.year, now.month, now.day, now.hour + 1, 0);
+    } else {
+      now = DateTime(now.year, now.month, now.day, now.hour, roundedMinutes);
+    }
+
+
+    final DateFormat formatter = DateFormat('hh:mm a');
+    return formatter.format(now);
+  }
 
   @override
   void onInit() {

@@ -157,17 +157,46 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               child: Row(
                                                 children: [
                                                   Spacer(),
-                                                  SvgPicture.asset(
-                                                    ImagePath.edit,
-                                                    width: 26,
-                                                    height: 26,
-                                                    fit: BoxFit.cover,
+                                                  GestureDetector(
+                                                    onTap: ()async{
+                                                      final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
+                                                        "patientData": controller.patientId,
+                                                        "visitId": controller.visitId,
+                                                        "fromSchedule": true
+                                                      });
+                                                    },
+                                                    child: SvgPicture.asset(
+                                                      ImagePath.edit,
+                                                      width: 26,
+                                                      height: 26,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 10,
                                                   ),
                                                   ContainerButton(
-                                                    onPressed: () {},
+                                                    onPressed: ()async {
+
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                        builder: (BuildContext context) {
+                                                          return SchedulePatientDialog(
+                                                            receiveParam: (p0, p1) {
+                                                              customPrint("p0 is $p0 p1 is $p1");
+                                                              controller.patientScheduleCreate(param: {
+                                                                "patient_id": controller.patientId,
+                                                                "visit_date": p1,
+                                                                "visit_time": p0
+                                                              });
+                                                            },
+                                                          ); // Our custom dialog
+                                                        },
+                                                      );
+                                                      // final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                                                    },
                                                     text: 'Schedule Visit',
 
                                                     borderColor: AppColors.backgroundPurple,
@@ -503,8 +532,27 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                         ),
                                                         Spacer(),
                                                         ContainerButton(
-                                                          onPressed: () {
+                                                          onPressed: ()async {
                                                             // Your onPressed function
+                                                            showDialog(
+                                                              context: context,
+                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                              builder: (BuildContext context) {
+                                                                return SchedulePatientDialog(
+                                                                  receiveParam: (p0, p1) {
+                                                                    customPrint("p0 is $p0 p1 is $p1");
+                                                                    controller.patientScheduleCreate(param: {
+                                                                      "patient_id": controller.patientId,
+                                                                      "visit_date": p1,
+                                                                      "visit_time": p0
+                                                                    });
+                                                                  },
+                                                                ); // Our custom dialog
+                                                              },
+                                                            );
+
+
+
                                                           },
                                                           text: 'Schedule Visit',
 
@@ -687,7 +735,26 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                               ),
                                                               Spacer(),
                                                               ContainerButton(
-                                                                onPressed: () {
+                                                                onPressed: ()async {
+                                                                  // Get.back();
+                                                                  // final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                                                                  showDialog(
+                                                                    context: context,
+                                                                    barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                    builder: (BuildContext context) {
+                                                                      return SchedulePatientDialog(
+                                                                        receiveParam: (p0, p1) {
+                                                                          customPrint("p0 is $p0 p1 is $p1");
+                                                                           controller.patientScheduleCreate(param: {
+                                                                            "patient_id": controller.patientId,
+                                                                            "visit_date": p1,
+                                                                            "visit_time": p0
+                                                                          });
+                                                                        },
+                                                                      ); // Our custom dialog
+                                                                    },
+                                                                  );
                                                                   // Your onPressed function
                                                                 },
                                                                 text: 'Schedule Visit',

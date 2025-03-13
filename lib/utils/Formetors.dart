@@ -13,3 +13,18 @@ class NoSpaceTextFormatter extends TextInputFormatter {
     );
   }
 }
+
+
+class PlusTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Ensure the text starts with +1, and allow additional characters after that
+    if (newValue.text.startsWith('+1')) {
+      return newValue;
+    } else if (newValue.text.isEmpty || !newValue.text.startsWith('+1')) {
+      return TextEditingValue(text: '+1', selection: TextSelection.collapsed(offset: 3));
+    }
+    return newValue;
+  }
+}

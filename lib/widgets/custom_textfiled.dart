@@ -16,6 +16,9 @@ class TextFormFiledWidget extends StatefulWidget {
   final bool isValid;
   bool isSuffixIconVisible;
 
+  bool isFirst ;
+
+
   final String? hint;
   final String? Function(String?)? checkValidation;
   final Widget? iconButton;
@@ -27,6 +30,7 @@ class TextFormFiledWidget extends StatefulWidget {
   TextFormFiledWidget(
       {required this.label,
       this.suffix,
+        this.isFirst = false,
       this.checkValidation,
       this.isValid = false,
       this.iconButton,
@@ -87,10 +91,15 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
                 child: TextFormField(
                   readOnly: widget.readOnly,
                   onChanged: (value) {
-                    value.isEmpty ? widget.isSuffixIconVisible = false : widget.isSuffixIconVisible = true;
 
-                    if (value.isEmpty || value.length == 1) {
-                      setState(() {});
+                    if(widget.isFirst == true) {
+                      value.isEmpty
+                          ? widget.isSuffixIconVisible = false
+                          : widget.isSuffixIconVisible = true;
+
+                      if (value.isEmpty || value.length == 1) {
+                        setState(() {});
+                      }
                     }
                   },
                   inputFormatters: widget.format,

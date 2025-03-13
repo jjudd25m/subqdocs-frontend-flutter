@@ -238,8 +238,12 @@ class AddPatientView extends GetView<AddPatientController> {
                                       height: Dimen.margin24,
                                     ),
                                     TextFormFiledWidget(
+                                      isSuffixIconVisible:false,
+                                      isFirst: true,
+
                                       prefixIcon: SvgPicture.asset(
                                         ImagePath.search,
+
                                         fit: BoxFit.cover,
                                         width: 10,
                                         height: 10,
@@ -377,14 +381,15 @@ class AddPatientView extends GetView<AddPatientController> {
                                               label: "Patient Id ",
 
                                               // isImportant: true,
-                                              type: TextInputType.number,
-                                              isValid: controller.isValid.value,
+
+                                              isSuffixIconVisible:false,
+                                              isFirst: true,
                                               format: [
                                                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                                               ],
                                               controller: controller.patientId,
                                               hint: "123",
-                                              isSuffixIconVisible: controller.patientId.text.isNotEmpty ? true : false,
+
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
                                                   controller.patientId.clear();
@@ -413,8 +418,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                               ],
                                               controller: controller.firstNameController,
                                               hint: "Don",
-                                              isSuffixIconVisible:
-                                                  controller.firstNameController.text.isNotEmpty ? true : false,
+                                              isSuffixIconVisible:false,
+                                              isFirst: true,
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
                                                   controller.firstNameController.clear();
@@ -435,8 +440,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                         Expanded(
                                           child: TextFormFiledWidget(
                                             isValid: !controller.isValid.value,
-                                            isSuffixIconVisible:
-                                                controller.middleNameController.text.isNotEmpty ? true : false,
+                                            isSuffixIconVisible:false,
+                                            isFirst: true,
                                             format: [
                                               CustomTextInputFormatter(),
                                             ],
@@ -471,8 +476,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                               isValid: controller.isValid.value,
                                               // isImportant: true,
                                               controller: controller.lastNameController,
-                                              isSuffixIconVisible:
-                                                  controller.lastNameController.text.isNotEmpty ? true : false,
+                                              isSuffixIconVisible:false,
+                                              isFirst: true,
                                               hint: "Jones",
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
@@ -583,8 +588,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                               label: "Email Address",
                                               controller: controller.emailAddressController,
                                               isValid: controller.isValid.value,
-                                              isSuffixIconVisible:
-                                                  controller.emailAddressController.text.isNotEmpty ? true : false,
+                                              isSuffixIconVisible:false,
+                                              isFirst: true,
                                               hint: "donjones@example.com",
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
@@ -597,15 +602,45 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 ),
                                               ),
                                               checkValidation: (value) {
-                                                return Validation.emailValidate(value);
+                                                return Validation.emailValidateRequired(value);
                                               }),
                                         ),
+
                                         SizedBox(
                                           width: Dimen.margin10,
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
-                                            format: [NoSpaceTextFormatter()],
+                                              format: [PlusTextFormatter()],
+                                              label: "Contact Number",
+                                              controller: controller.contactNumberController,
+                                              isValid: true,
+                                              isSuffixIconVisible:false,
+                                              isFirst: true,
+
+                                              type: TextInputType.number,
+                                              hint: "123456789",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.emailAddressController.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
+                                              checkValidation: (value) {
+                                                return Validation.phoneValidate(value);
+                                              }),
+                                        ),
+
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                            //format: [NoSpaceTextFormatter()],
                                             suffixIcon: Icon(Icons.calendar_month),
                                             label: "Visit Date",
                                             readOnly: true,
@@ -614,7 +649,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                             onTap: () async {
                                               final picked = await showDatePicker(
                                                 context: context,
-                                                initialDate: DateTime.now(),
+
+                                                // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
+                                                initialDate:   DateTime.now(),
                                                 firstDate: DateTime.now(),
                                                 lastDate: DateTime.now().add(Duration(days: 1000)),
                                                 builder: (context, child) {
@@ -624,7 +661,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       primaryColor: AppColors.backgroundPurple,
                                                       hintColor: AppColors.backgroundPurple,
                                                       colorScheme:
-                                                          ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                      ColorScheme.light(primary: AppColors.backgroundPurple),
                                                       buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
                                                     ),
                                                     child: child!,
@@ -635,16 +672,21 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 String inputText;
                                                 String padDayMonth(int value) => value.toString().padLeft(2, '0');
                                                 inputText =
-                                                    '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
                                                 controller.visitDateController.text = inputText;
                                               }
                                             },
                                             hint: "mm/dd/yyyy",
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
+
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -669,36 +711,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                               })
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: Dimen.margin16,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextFormFiledWidget(
-                                              format: [NoSpaceLowercaseTextFormatter()],
-                                              label: "Email Address",
-                                              controller: controller.emailAddressController,
-                                              isValid: controller.isValid.value,
-                                              isSuffixIconVisible:
-                                                  controller.emailAddressController.text.isNotEmpty ? true : false,
-                                              hint: "donjones@example.com",
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  controller.emailAddressController.clear();
-                                                },
-                                                child: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: AppColors.textDarkGrey,
-                                                  size: 25,
-                                                ),
-                                              ),
-                                              checkValidation: (value) {
-                                                return Validation.emailValidate(value);
-                                              }),
                                         ),
                                         SizedBox(
                                           width: Dimen.margin10,

@@ -32,6 +32,7 @@ class EditPatentDetailsController extends GetxController {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
+  TextEditingController contactNumberController = TextEditingController();
   TextEditingController visitDateController = TextEditingController();
   TextEditingController patientIdController = TextEditingController();
   TextEditingController searchController = TextEditingController();
@@ -93,6 +94,7 @@ class EditPatentDetailsController extends GetxController {
     isFromSchedule.value = Get.arguments["fromSchedule"];
 
     isFromSchedule.refresh();
+    contactNumberController.text = "+1";
 
     getPatient(patientId, visitId);
   }
@@ -127,6 +129,7 @@ class EditPatentDetailsController extends GetxController {
     customPrint("dob is :- $formattedDate");
 
     emailAddressController.text = patientDetailModel.responseData?.email ?? "";
+    contactNumberController.text = patientDetailModel.responseData?.contactNumber ?? "+1";
 
     customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
 
@@ -297,6 +300,9 @@ class EditPatentDetailsController extends GetxController {
     param['gender'] = selectedSexValue.value;
     if (emailAddressController.text != "") {
       param['email'] = emailAddressController.text;
+    }
+    if (contactNumberController.text != "") {
+      param['contact_no'] = contactNumberController.text.trim();
     }
 
     if (visitDateController.text != "") {
