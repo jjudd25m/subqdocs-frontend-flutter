@@ -12,7 +12,16 @@ import 'package:subqdocs/widgets/custom_button.dart';
 
 import '../../../../services/media_picker_services.dart';
 
-class attachmentDailog extends GetView<VisitMainController> {
+class attachmentDailog extends StatelessWidget {
+
+
+
+  VisitMainController controller ;
+
+  attachmentDailog(this.controller);
+  
+
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

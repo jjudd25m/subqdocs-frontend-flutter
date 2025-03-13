@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/visit_main/views/delete_schedule_visit.dart';
+import 'package:subqdocs/app/modules/visit_main/views/table_custom.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widget/base_image_view.dart';
 
@@ -34,7 +35,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
     return Scaffold(
         key: _key,
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.ScreenBackGround,
         drawer: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 5.0,
@@ -153,17 +154,37 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               child: Row(
                                                 children: [
                                                   Spacer(),
-                                                  SvgPicture.asset(
-                                                    ImagePath.edit,
-                                                    width: 26,
-                                                    height: 26,
-                                                    fit: BoxFit.cover,
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
+                                                          arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true});
+                                                    },
+                                                    child: SvgPicture.asset(
+                                                      ImagePath.edit,
+                                                      width: 26,
+                                                      height: 26,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 10,
                                                   ),
                                                   ContainerButton(
-                                                    onPressed: () {},
+                                                    onPressed: () async {
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                        builder: (BuildContext context) {
+                                                          return SchedulePatientDialog(
+                                                            receiveParam: (p0, p1) {
+                                                              customPrint("p0 is $p0 p1 is $p1");
+                                                              controller.patientScheduleCreate(param: {"patient_id": controller.patientId, "visit_date": p1, "visit_time": p0});
+                                                            },
+                                                          ); // Our custom dialog
+                                                        },
+                                                      );
+                                                      // final result = await Get.toNamed(Routes.ADD_PATIENT);
+                                                    },
                                                     text: 'Schedule Visit',
 
                                                     borderColor: AppColors.backgroundPurple,
@@ -309,21 +330,22 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           ),
                                         ),
                                         children: <Widget>[
-                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.isNotEmpty ?? false
+                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
                                               ? Container(
                                                   width: double.infinity,
                                                   color: Colors.white,
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
-                                                    child: CustomTable(
+                                                    child: TableCustom(
                                                       rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
                                                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
-                                                        return colIndex == 2
+                                                        return colIndex == 2 && rowIndex != 0
                                                             ? GestureDetector(
                                                                 onTap: () {
                                                                   Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                                    "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString(),
+                                                                    "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
                                                                     "patientId": controller.patientId,
+                                                                    "unique_tag": DateTime.now().toString(),
                                                                   });
 
                                                                   customPrint("row index is :- $rowIndex");
@@ -336,7 +358,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                   overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                                                 ),
                                                               )
-                                                            : (colIndex == 3 || colIndex == 4)
+                                                            : (colIndex == 3 || colIndex == 4) && rowIndex != 0
                                                                 ? Row(
                                                                     children: [
                                                                       Text(
@@ -355,10 +377,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                                     customPrint("p0 is $p0 p1 is $p1");
                                                                                     customPrint("row index is :- ${rowIndex}");
                                                                                     customPrint(
-                                                                                        "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString()}");
+                                                                                        "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
                                                                                     controller.patientReScheduleCreate(
                                                                                         param: {"visit_date": p1, "visit_time": p0},
-                                                                                        visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex].id.toString() ?? "-1");
+                                                                                        visitId:
+                                                                                            controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1");
                                                                                   },
                                                                                 ); // Our custom dialog
                                                                               },
@@ -370,10 +393,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                               builder: (BuildContext context) {
                                                                                 return DeleteScheduleVisit(
                                                                                   onDelete: () {
-                                                                                    print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id}");
+                                                                                    print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
 
                                                                                     controller.deletePatientVisit(
-                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex].id.toString() ?? "");
+                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
                                                                                   },
                                                                                 );
                                                                               },
@@ -391,35 +414,25 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                       ),
                                                                     ],
                                                                   )
-                                                                : Text(
-                                                                    cellData ?? "",
-                                                                    textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                    style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                                    softWrap: true, // Allows text to wrap
-                                                                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                  );
+                                                                : rowIndex == 0
+                                                                    ? Text(
+                                                                        cellData ?? "",
+                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                        style: AppFonts.regular(12, AppColors.black),
+                                                                        softWrap: true, // Allows text to wrap
+                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                      )
+                                                                    : Text(
+                                                                        cellData ?? "",
+                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                                        softWrap: true, // Allows text to wrap
+                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                      );
                                                       },
                                                       columnCount: 5,
                                                       context: context,
                                                       columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.17, 0.13, 0.12],
-                                                      headerBuilder: (context, colIndex) {
-                                                        List<String> headers = ['Visit Date', 'Time', "", "", "Action"];
-
-                                                        return Container(
-                                                          color: AppColors.backgroundWhite,
-                                                          height: 40,
-                                                          child: Row(
-                                                            mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
-                                                            children: [
-                                                              Text(
-                                                                headers[colIndex],
-                                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
-                                                      isLoading: false,
                                                       // columnWidths: isPortrait ? [0.25, 0.29, 0.11, 0.17, 0.18] : [0.30, 0.10, 0.15, 0.13, 0.12],
                                                     ),
                                                   ),
@@ -453,8 +466,20 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                         ),
                                                         Spacer(),
                                                         ContainerButton(
-                                                          onPressed: () {
+                                                          onPressed: () async {
                                                             // Your onPressed function
+                                                            showDialog(
+                                                              context: context,
+                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                              builder: (BuildContext context) {
+                                                                return SchedulePatientDialog(
+                                                                  receiveParam: (p0, p1) {
+                                                                    customPrint("p0 is $p0 p1 is $p1");
+                                                                    controller.patientScheduleCreate(param: {"patient_id": controller.patientId, "visit_date": p1, "visit_time": p0});
+                                                                  },
+                                                                ); // Our custom dialog
+                                                              },
+                                                            );
                                                           },
                                                           text: 'Schedule Visit',
 
@@ -552,10 +577,19 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                         SizedBox(
                                                                           width: 30,
                                                                         ),
-                                                                        Text(
-                                                                          textAlign: TextAlign.center,
-                                                                          "View",
-                                                                          style: AppFonts.regular(15, AppColors.textPurple),
+                                                                        GestureDetector(
+                                                                          onTap: () {
+                                                                            Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                                                                              "visitId": controller.patientDetailModel.value?.responseData?.pastVisits?[index].id.toString(),
+                                                                              "patientId": controller.patientId,
+                                                                              "unique_tag": DateTime.now().toString(),
+                                                                            });
+                                                                          },
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.center,
+                                                                            "View",
+                                                                            style: AppFonts.regular(15, AppColors.textPurple),
+                                                                          ),
                                                                         ),
                                                                       ],
                                                                     ),
@@ -600,7 +634,22 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                               ),
                                                               Spacer(),
                                                               ContainerButton(
-                                                                onPressed: () {
+                                                                onPressed: () async {
+                                                                  // Get.back();
+                                                                  // final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                                                                  showDialog(
+                                                                    context: context,
+                                                                    barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                    builder: (BuildContext context) {
+                                                                      return SchedulePatientDialog(
+                                                                        receiveParam: (p0, p1) {
+                                                                          customPrint("p0 is $p0 p1 is $p1");
+                                                                          controller.patientScheduleCreate(param: {"patient_id": controller.patientId, "visit_date": p1, "visit_time": p0});
+                                                                        },
+                                                                      ); // Our custom dialog
+                                                                    },
+                                                                  );
                                                                   // Your onPressed function
                                                                 },
                                                                 text: 'Schedule Visit',
@@ -671,9 +720,9 @@ List<List<String>> _getTableRows(List<ScheduledVisits> patients) {
   List<List<String>> rows = [];
 
   // Add header row first
-  // rows.add(
-  //   ['Visit Date', 'Time', "", "Action"],
-  // );
+  rows.add(
+    ['Visit Date', 'Time', "", "Action"],
+  );
 
   // Iterate over each patient and extract data for each row
   for (var patient in patients) {

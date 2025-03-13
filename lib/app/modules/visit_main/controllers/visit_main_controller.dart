@@ -39,7 +39,7 @@ import '../model/visitmainModel.dart';
 import '../repository/visit_main_repository.dart';
 import '../views/attachmentDailog.dart';
 
-class VisitMainController extends GetxController with WidgetsBindingObserver {
+class VisitMainController extends GetxController  {
   //TODO: Implement VisitMainController
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
@@ -100,20 +100,6 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.resumed) {
-      // Code to run when app comes to the foreground (onResume equivalent)
-      onLine();
-
-      // Run any code you need here
-    } else if (state == AppLifecycleState.paused) {
-      // Code to run when app goes to the background (onPause equivalent)
-      print("App is in the background");
-    }
-  }
 
   Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
     if (clear) {
@@ -274,7 +260,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
       context: context,
       barrierDismissible: true, // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
-        return attachmentDailog(); // Our custom dialog
+        return attachmentDailog(this); // Our custom dialog
       },
     );
   }
@@ -282,30 +268,34 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   @override
   Future<void> onInit() async {
     super.onInit();
-    WidgetsBinding.instance.removeObserver(this);
+
+
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
 
-    customPrint("visit id is :- $visitId");
-    //it  will check the internet  connection and handel   offline and online mode
+    if(visitId.value.isNotEmpty ) {
+      customPrint("visit id is :- $visitId");
+      //it  will check the internet  connection and handel   offline and online mode
 
-    var status = await InternetConnection().internetStatus;
-    onLine();
+      var status = await InternetConnection().internetStatus;
+      onLine();
 
-    isConnected.value = status == InternetStatus.disconnected ? false : true;
+      isConnected.value = status == InternetStatus.disconnected ? false : true;
 
-    if (status == InternetStatus.disconnected) {
-      print("you net is now Disconnected");
+      if (status == InternetStatus.disconnected) {
+        print("you net is now Disconnected");
 
-      offLine();
-    } else {
-      onLine(isLoading: true);
+        offLine();
+      } else {
+        onLine(isLoading: true);
+      }
+
+      handelInternetConnection();
+
+      List<AudioFile> pendingFiles = await DatabaseHelper.instance
+          .getPendingAudioFiles();
+      customPrint("local audio is :- $pendingFiles");
     }
-
-    handelInternetConnection();
-
-    List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
-    customPrint("local audio is :- $pendingFiles");
   }
 
   @override
@@ -318,7 +308,6 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   @override
   void onClose() {
     super.onClose();
-    WidgetsBinding.instance.removeObserver(this);
   }
 
   void increment() => count.value++;
@@ -369,6 +358,8 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
 
       Get.toNamed(Routes.PATIENT_INFO, arguments: {
         "trascriptUploadData": patientTranscriptUploadModel,
+        "unique_tag": DateTime.now().toString(),
+
       });
     }
   }

@@ -111,7 +111,7 @@ class GlobalController extends GetxController {
       json['scheduleVisitSelectedSorting'] = scheduleVisitSelectedSorting;
       json['sortingSchedulePatient'] = sortingSchedulePatient;
       json['colIndex'] = 1;
-      json['isAscending'] = true;
+      json['isAscending'] = false;
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";

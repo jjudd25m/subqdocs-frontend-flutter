@@ -257,6 +257,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           // isImportant: true,
                                           type: TextInputType.number,
                                           isValid: true,
+                                          isSuffixIconVisible:false,
+                                          isFirst: true,
                                           format: [
                                             FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                                           ],
@@ -282,6 +284,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     Expanded(
                                       child: TextFormFiledWidget(
                                           label: "First Name",
+                                          isSuffixIconVisible:false,
+                                          isFirst: true,
                                           format: [
                                             CustomTextInputFormatter(),
                                           ],
@@ -308,6 +312,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     ),
                                     Expanded(
                                       child: TextFormFiledWidget(
+                                        isSuffixIconVisible:false,
+                                        isFirst: true,
                                         label: "Middle Name",
                                         format: [
                                           CustomTextInputFormatter(),
@@ -340,6 +346,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           CustomTextInputFormatter(),
                                         ],
                                         isValid: true,
+                                        isSuffixIconVisible:false,
+                                        isFirst: true,
                                         // isImportant: true,
                                         controller: controller.lastNameController,
                                         suffixIcon: GestureDetector(
@@ -443,6 +451,8 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                             children: [
                                               Expanded(
                                                 child: TextFormFiledWidget(
+                                                  isSuffixIconVisible:false,
+                                                  isFirst: true,
                                                   format: [NoSpaceLowercaseTextFormatter()],
                                                   label: "Email Address",
                                                   controller: controller.emailAddressController,
@@ -461,6 +471,34 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     return Validation.emailValidate(value);
                                                   },
                                                 ),
+                                              ),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                    format: [PlusTextFormatter()],
+                                                    label: "Contact Number",
+                                                    controller: controller.contactNumberController,
+                                                    isValid: true,
+                                                    isSuffixIconVisible:false,
+                                                    isFirst: true,
+
+                                                    type: TextInputType.number,
+                                                    hint: "123456789",
+                                                    suffixIcon: GestureDetector(
+                                                      onTap: () {
+                                                        controller.emailAddressController.clear();
+                                                      },
+                                                      child: Icon(
+                                                        Icons.highlight_remove,
+                                                        color: AppColors.textDarkGrey,
+                                                        size: 25,
+                                                      ),
+                                                    ),
+                                                    checkValidation: (value) {
+                                                      return Validation.phoneValidate(value);
+                                                    }),
                                               ),
                                               SizedBox(
                                                 width: Dimen.margin10,
@@ -502,34 +540,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                   hint: "mm/dd/yyyy",
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: Dimen.margin10,
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Visit Time",
-                                                      style: AppFonts.regular(14, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    Obx(() {
-                                                      return BaseDropdown<String>(
-                                                        valueAsString: (value) => value ?? "",
-                                                        items: controller.visitTime,
-                                                        selectedValue: controller.selectedVisitTimeValue.value,
-                                                        onChanged: (value) {
-                                                          controller.selectedVisitTimeValue.value = value ?? "";
-                                                        },
-                                                        selectText: "12:00 AM",
-                                                      );
-                                                    }),
-                                                  ],
-                                                ),
-                                              ),
+
                                             ],
                                           )
                                         : Row(
@@ -548,11 +559,80 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               SizedBox(
                                                 width: Dimen.margin10,
                                               ),
-                                              Expanded(child: SizedBox()),
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                    format: [PlusTextFormatter()],
+                                                    label: "Contact Number",
+                                                    controller: controller.contactNumberController,
+                                                    isValid: true,
+                                                    isSuffixIconVisible:false,
+                                                    isFirst: true,
+
+                                                    type: TextInputType.number,
+                                                    hint: "123456789",
+                                                    suffixIcon: GestureDetector(
+                                                      onTap: () {
+                                                        controller.emailAddressController.clear();
+                                                      },
+                                                      child: Icon(
+                                                        Icons.highlight_remove,
+                                                        color: AppColors.textDarkGrey,
+                                                        size: 25,
+                                                      ),
+                                                    ),
+                                                    checkValidation: (value) {
+                                                      return Validation.phoneValidate(value);
+                                                    }),
+                                              ),
                                               Expanded(child: SizedBox()),
                                             ],
                                           );
                                   },
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+
+                                Obx(
+                                   () {
+                                    return  controller.isFromSchedule.value ? Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Visit Time",
+                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                              ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Obx(() {
+                                                return BaseDropdown<String>(
+                                                  valueAsString: (value) => value ?? "",
+                                                  items: controller.visitTime,
+                                                  selectedValue: controller.selectedVisitTimeValue.value,
+                                                  onChanged: (value) {
+                                                    controller.selectedVisitTimeValue.value = value;
+                                                  },
+                                                  selectText: "11 PM",
+                                                );
+                                              })
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Spacer(),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Spacer(),
+                                      ],
+                                    ):SizedBox();
+                                  }
                                 ),
                                 SizedBox(
                                   height: 20,

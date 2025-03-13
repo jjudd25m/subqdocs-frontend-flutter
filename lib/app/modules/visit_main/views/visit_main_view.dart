@@ -10,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:subqdocs/app/modules/visit_main/views/table_custom.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
@@ -34,8 +35,15 @@ import '../model/patient_attachment_list_model.dart';
 import 'delete_image_dialog.dart';
 import 'delete_schedule_visit.dart';
 
-class VisitMainView extends GetView<VisitMainController> {
-  VisitMainView({super.key});
+class VisitMainView extends StatefulWidget {
+  const VisitMainView({super.key});
+
+  @override
+  State<VisitMainView> createState() => _VisitMainViewState();
+}
+
+class _VisitMainViewState extends State<VisitMainView> {
+  VisitMainController controller = Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -615,18 +623,20 @@ class VisitMainView extends GetView<VisitMainController> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(8), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.1),
+                                                          ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -709,7 +719,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -726,18 +736,20 @@ class VisitMainView extends GetView<VisitMainController> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                          ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -765,37 +777,39 @@ class VisitMainView extends GetView<VisitMainController> {
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
                                                             children: [
-                                                              Row(
-                                                                mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                children: [
-                                                                  SizedBox(width: 7),
-                                                                  SizedBox(
-                                                                    width: Get.width * .25,
-                                                                    child: Text(
-                                                                      "Medication Name",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: 7),
-                                                                  SizedBox(
-                                                                    width: Get.width * .45,
-                                                                    child: Text(
-                                                                      "Purpose",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: 7),
-                                                                  SizedBox(
-                                                                    width: Get.width * .15,
-                                                                    child: Text(
-                                                                      "Dosage",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(width: 7),
-                                                                ],
-                                                              ),
+                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null
+                                                                  ? Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                      crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                      children: [
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .25,
+                                                                          child: Text(
+                                                                            "Medication Name",
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .45,
+                                                                          child: Text(
+                                                                            "Purpose",
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .15,
+                                                                          child: Text(
+                                                                            "Dosage",
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                      ],
+                                                                    )
+                                                                  : SizedBox(),
                                                               Container(
                                                                 height: 0.5,
                                                                 width: double.infinity,
@@ -879,7 +893,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -896,18 +910,23 @@ class VisitMainView extends GetView<VisitMainController> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundLightGrey, width: 2)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
                                                     child: Column(
                                                       children: [
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                          ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                           child: Column(
@@ -990,7 +1009,239 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                   children: [
                                                                     Text(
                                                                       textAlign: TextAlign.left,
-                                                                      "-",
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Social History",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory != null ?? false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory ?? "",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )
+
+                                                                            // Column(
+                                                                            //   children: [
+                                                                            //     SizedBox(height: 2),
+                                                                            //     Row(
+                                                                            //       children: [
+                                                                            //         SizedBox(width: 10),
+                                                                            //         Expanded(
+                                                                            //             child: Text(
+                                                                            //           textAlign: TextAlign.left,
+                                                                            //           controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
+                                                                            //           style: AppFonts.regular(14, AppColors.textGrey),
+                                                                            //         )),
+                                                                            //       ],
+                                                                            //     ),
+                                                                            //     SizedBox(height: 0),
+                                                                            //   ],
+                                                                            // ),
+                                                                            ),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Allergies",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies != null ?? false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )
+
+                                                                            // Column(
+                                                                            //   children: [
+                                                                            //     SizedBox(height: 2),
+                                                                            //     Row(
+                                                                            //       children: [
+                                                                            //         SizedBox(width: 10),
+                                                                            //         Expanded(
+                                                                            //             child: Text(
+                                                                            //           textAlign: TextAlign.left,
+                                                                            //           controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
+                                                                            //           style: AppFonts.regular(14, AppColors.textGrey),
+                                                                            //         )),
+                                                                            //       ],
+                                                                            //     ),
+                                                                            //     SizedBox(height: 0),
+                                                                            //   ],
+                                                                            // ),
+                                                                            ),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
                                                                       style: AppFonts.medium(16, AppColors.textPurple),
                                                                     ),
                                                                     Spacer()
@@ -1011,215 +1262,6 @@ class VisitMainView extends GetView<VisitMainController> {
                                     ),
                                   ),
                                   SizedBox(height: 10),
-                                  // Container(
-                                  //   decoration: BoxDecoration(
-                                  //     borderRadius: BorderRadius.circular(10),
-                                  //     border: Border.all(width: 0.5, color: AppColors.white),
-                                  //   ),
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.all(1),
-                                  //     child: Theme(
-                                  //       data: ThemeData(
-                                  //         splashColor: Colors.transparent, // Remove splash color
-                                  //         highlightColor: Colors.transparent, // Remove highlight color
-                                  //       ),
-                                  //       child: ExpansionTile(
-                                  //         initiallyExpanded: true,
-                                  //         childrenPadding: EdgeInsets.all(0),
-                                  //         shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  //         collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  //         backgroundColor: AppColors.white,
-                                  //         collapsedBackgroundColor: AppColors.white,
-                                  //         title: Container(
-                                  //           child: Row(
-                                  //             children: [
-                                  //               Text(
-                                  //                 textAlign: TextAlign.center,
-                                  //                 "Scheduled Visits",
-                                  //                 style: AppFonts.regular(16, AppColors.textBlack),
-                                  //               ),
-                                  //             ],
-                                  //           ),
-                                  //         ),
-                                  //         children: <Widget>[
-                                  //           controller.patientDetailModel.value?.responseData?.scheduledVisits?.isNotEmpty ?? false
-                                  //               ? Container(
-                                  //                   width: double.infinity,
-                                  //                   color: Colors.white,
-                                  //                   child: Padding(
-                                  //                     padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
-                                  //                     child: VisitCustomTable(
-                                  //                       physics: NeverScrollableScrollPhysics(),
-                                  //                       rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
-                                  //                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
-                                  //                         return colIndex == 2 && rowIndex != 0
-                                  //                             ? GestureDetector(
-                                  //                                 onTap: () {
-                                  //                                   Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                  //                                     "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
-                                  //                                     "patientId": controller.patientId,
-                                  //                                   });
-                                  //
-                                  //                                   customPrint("row index is :- $rowIndex");
-                                  //                                 },
-                                  //                                 child: Text(
-                                  //                                   cellData,
-                                  //                                   textAlign: colIndex == 4 ? TextAlign.left : TextAlign.center,
-                                  //                                   style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                  //                                   softWrap: true, // Allows text to wrap
-                                  //                                   overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                  //                                 ),
-                                  //                               )
-                                  //                             : (colIndex == 3 || colIndex == 4) && rowIndex != 0
-                                  //                                 ? Row(
-                                  //                                     children: [
-                                  //                                       Text(
-                                  //                                         colIndex == 3 ? "" : "|  ",
-                                  //                                         style: AppFonts.regular(12, AppColors.appbarBorder),
-                                  //                                       ),
-                                  //                                       GestureDetector(
-                                  //                                         onTap: () {
-                                  //                                           if (colIndex == 3) {
-                                  //                                             controller.isConnected.value
-                                  //                                                 ? showDialog(
-                                  //                                                     context: context,
-                                  //                                                     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                  //                                                     builder: (BuildContext context) {
-                                  //                                                       return ReschedulePatientDialog(
-                                  //                                                         receiveParam: (p0, p1) {
-                                  //                                                           customPrint("p0 is $p0 p1 is $p1");
-                                  //                                                           customPrint("row index is :- ${rowIndex}");
-                                  //                                                           customPrint(
-                                  //                                                               "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
-                                  //                                                           controller.patientReScheduleCreate(
-                                  //                                                               param: {"visit_date": p1, "visit_time": p0},
-                                  //                                                               visitId:
-                                  //                                                                   controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ??
-                                  //                                                                       "-1");
-                                  //                                                         },
-                                  //                                                       ); // Our custom dialog
-                                  //                                                     },
-                                  //                                                   )
-                                  //                                                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
-                                  //                                           } else if (colIndex == 4) {
-                                  //                                             controller.isConnected.value
-                                  //                                                 ? showDialog(
-                                  //                                                     context: context,
-                                  //                                                     barrierDismissible: true,
-                                  //                                                     builder: (BuildContext context) {
-                                  //                                                       // return SizedBox();
-                                  //                                                       return DeleteScheduleVisit(
-                                  //                                                         onDelete: () {
-                                  //                                                           controller.deletePatientVisit(
-                                  //                                                               id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ??
-                                  //                                                                   "");
-                                  //                                                         },
-                                  //                                                       );
-                                  //                                                     },
-                                  //                                                   )
-                                  //                                                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
-                                  //                                           }
-                                  //                                           customPrint("col index is :- $colIndex");
-                                  //                                         },
-                                  //                                         child: Text(
-                                  //                                           cellData ?? "",
-                                  //                                           textAlign: TextAlign.center,
-                                  //                                           style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                  //                                           softWrap: true, // Allows text to wrap
-                                  //                                           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                  //                                         ),
-                                  //                                       ),
-                                  //                                     ],
-                                  //                                   )
-                                  //                                 : rowIndex == 0
-                                  //                                     ? Text(
-                                  //                                         cellData ?? "",
-                                  //                                         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                  //                                         style: AppFonts.regular(12, AppColors.black),
-                                  //                                         softWrap: true, // Allows text to wrap
-                                  //                                         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                  //                                       )
-                                  //                                     : Text(
-                                  //                                         cellData ?? "",
-                                  //                                         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                  //                                         style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                  //                                         softWrap: true, // Allows text to wrap
-                                  //                                         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                  //                                       );
-                                  //                       },
-                                  //                       columnCount: 5,
-                                  //                       context: context,
-                                  //                       columnWidths: isPortrait ? [0.23, 0.21, 0.0, 0.15, 0.18] : [0.25, 0.10, 0.0, 0.10, 0.12],
-                                  //                       // headerBuilder: (context, colIndex) {
-                                  //                       //   List<String> headers = ['Visit Date', 'Time', "", "Action"];
-                                  //                       //   return Text(
-                                  //                       //     headers[colIndex],
-                                  //                       //     style: TextStyle(fontWeight: FontWeight.bold),
-                                  //                       //   );
-                                  //                       // },
-                                  //                       // isLoading: false,
-                                  //                       // columnWidths: isPortrait ? [0.23, 0.21, 0.17, 0.17, 0.18] : [0.25, 0.10, 0.15, 0.13, 0.12],
-                                  //                     ),
-                                  //                   ),
-                                  //                 )
-                                  //               : Container(
-                                  //                   width: double.infinity,
-                                  //                   color: Colors.white,
-                                  //                   child: Padding(
-                                  //                     padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
-                                  //                     child: Row(
-                                  //                       children: [
-                                  //                         SvgPicture.asset(ImagePath.noVisitFound),
-                                  //                         SizedBox(
-                                  //                           width: 16,
-                                  //                         ),
-                                  //                         Column(
-                                  //                           crossAxisAlignment: CrossAxisAlignment.start,
-                                  //                           children: [
-                                  //                             Text(
-                                  //                               "No Visit Found",
-                                  //                               style: AppFonts.regular(16, AppColors.black),
-                                  //                             ),
-                                  //                             SizedBox(
-                                  //                               height: 4,
-                                  //                             ),
-                                  //                             Text(
-                                  //                               "Your scheduled visits will show here",
-                                  //                               style: AppFonts.regular(12, AppColors.black),
-                                  //                             ),
-                                  //                           ],
-                                  //                         ),
-                                  //                         Spacer(),
-                                  //                         ContainerButton(
-                                  //                           onPressed: () {
-                                  //                             // Your onPressed function
-                                  //                           },
-                                  //                           text: 'Schedule Visit',
-                                  //
-                                  //                           borderColor: AppColors.backgroundPurple,
-                                  //                           // Custom border color
-                                  //                           backgroundColor: AppColors.backgroundPurple,
-                                  //                           // Custom background color
-                                  //                           needBorder: false,
-                                  //                           // Show border
-                                  //                           textColor: AppColors.white,
-                                  //                           // Custom text color
-                                  //                           padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
-                                  //                           // Custom padding
-                                  //                           radius: 6, // Custom border radius
-                                  //                         ),
-                                  //                         SizedBox(
-                                  //                           width: 16,
-                                  //                         ),
-                                  //                       ],
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -1251,13 +1293,13 @@ class VisitMainView extends GetView<VisitMainController> {
                                             ),
                                           ),
                                           children: <Widget>[
-                                            controller.patientDetailModel.value?.responseData?.scheduledVisits?.length == 0
+                                            controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
                                                 ? Container(
                                                     width: double.infinity,
                                                     color: Colors.white,
                                                     child: Padding(
                                                       padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
-                                                      child: VisitCustomTable(
+                                                      child: TableCustom(
                                                         physics: NeverScrollableScrollPhysics(),
                                                         rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
                                                         cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
@@ -1267,6 +1309,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                     Get.toNamed(Routes.VISIT_MAIN, arguments: {
                                                                       "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString(),
                                                                       "patientId": controller.patientId,
+                                                                      "unique_tag": DateTime.now().toString(),
                                                                     });
 
                                                                     customPrint("row index is :- $rowIndex");
@@ -1615,6 +1658,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                                                 Get.toNamed(Routes.PATIENT_INFO, arguments: {
                                                                   "visitId": controller.visitRecapList.value?.responseData?[index].id.toString(),
                                                                   "patientId": controller.patientId.value,
+                                                                  "unique_tag": DateTime.now().toString(),
                                                                 });
                                                               },
                                                               child: Text(
@@ -2320,7 +2364,7 @@ class VisitMainView extends GetView<VisitMainController> {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      Get.toNamed(Routes.PATIENT_INFO);
+                                      // Get.toNamed(Routes.PATIENT_INFO);
                                     },
                                     child: Container(
                                       height: 81,

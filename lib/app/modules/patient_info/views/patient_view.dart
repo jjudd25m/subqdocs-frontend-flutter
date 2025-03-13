@@ -11,9 +11,9 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
 
-class PatientView extends GetView<PatientInfoController> {
-  const PatientView({super.key});
-
+class PatientView extends StatelessWidget {
+  PatientView({super.key});
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -27,17 +27,19 @@ class PatientView extends GetView<PatientInfoController> {
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                        color: AppColors.white,
-                        border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                    ),
                     child: Column(
                       children: [
                         Container(
                           height: 40,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                          ),
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             children: [
@@ -80,7 +82,9 @@ class PatientView extends GetView<PatientInfoController> {
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        Map<String, dynamic> dynamicData = controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData ?? {};
+                                        Map<String, dynamic> dynamicData = controller.patientViewListModel.value
+                                                ?.responseData?.visitNoteDetails.dynamicData ??
+                                            {};
                                         var data = dynamicData[dynamicData.keys.elementAt(index)];
                                         if (data is List && data.isEmpty) {
                                           return SizedBox();
@@ -98,7 +102,11 @@ class PatientView extends GetView<PatientInfoController> {
                                                   children: [
                                                     Text(
                                                       textAlign: TextAlign.left,
-                                                      dynamicData.keys.elementAt(index).replaceAll("_", " ").capitalizeFirst ?? '',
+                                                      dynamicData.keys
+                                                              .elementAt(index)
+                                                              .replaceAll("_", " ")
+                                                              .capitalizeFirst ??
+                                                          '',
                                                       style: AppFonts.medium(14, AppColors.textBlack),
                                                     )
                                                   ],
@@ -110,7 +118,9 @@ class PatientView extends GetView<PatientInfoController> {
                                                     child: ListView.builder(
                                                       shrinkWrap: true,
                                                       physics: NeverScrollableScrollPhysics(),
-                                                      itemCount: dynamicData[dynamicData.keys.elementAt(index)]?.length ?? 0, // Number of items
+                                                      itemCount:
+                                                          dynamicData[dynamicData.keys.elementAt(index)]?.length ??
+                                                              0, // Number of items
                                                       itemBuilder: (context, subIndex) {
                                                         return Row(
                                                           children: [
@@ -125,7 +135,8 @@ class PatientView extends GetView<PatientInfoController> {
                                                       },
                                                     ),
                                                   ),
-                                                ] else if (dynamicData[dynamicData.keys.elementAt(index)] is String) ...[
+                                                ] else if (dynamicData[dynamicData.keys.elementAt(index)]
+                                                    is String) ...[
                                                   Padding(
                                                     padding: const EdgeInsets.only(left: 10),
                                                     child: Text(
@@ -141,7 +152,9 @@ class PatientView extends GetView<PatientInfoController> {
                                           ),
                                         );
                                       },
-                                      itemCount: controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.length ?? 0),
+                                      itemCount: controller.patientViewListModel.value?.responseData?.visitNoteDetails
+                                              .dynamicData.keys.length ??
+                                          0),
                                   //
                                 ),
                                 SizedBox(

@@ -52,6 +52,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                     Get.toNamed(Routes.PATIENT_INFO, arguments: {
                       "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                       "patientId": controller.pastVisitList[rowIndex].id.toString(),
+                      "unique_tag": DateTime.now().toString(),
                     });
                   },
                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
@@ -87,7 +88,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: AppColors.lightgreenPastVisit,
+                                    color: cellData == "Finalized" ? AppColors.lightgreenPastVisit : AppColors.orangeText,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Padding(
@@ -95,7 +96,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                     child: Text(
                                       cellData,
                                       textAlign: TextAlign.center,
-                                      style: AppFonts.medium(13, AppColors.greenPastVisit),
+                                      style: AppFonts.medium(13, cellData == "Finalized" ? AppColors.greenPastVisit : AppColors.orange),
                                     ),
                                   ),
                                 ),
@@ -210,6 +211,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                 dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                                                   "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                                                   "patientId": controller.pastVisitList[rowIndex].id.toString(),
+                                                  "unique_tag": DateTime.now().toString(),
                                                 });
 
                                                 print("back from response");

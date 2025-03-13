@@ -33,6 +33,7 @@ class AddPatientController extends GetxController {
   RxBool isLoading = RxBool(false);
 
   TextEditingController firstNameController = TextEditingController();
+  TextEditingController contactNumberController = TextEditingController();
   TextEditingController patientId = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -46,6 +47,7 @@ class AddPatientController extends GetxController {
   Rxn<DateTime> rxnDob = Rxn();
 
   RxString visitDate = RxString("");
+  RxBool isValid = RxBool(true);
   Rxn<File> profileImage = Rxn();
   RxnString selectedSexValue = RxnString("Male");
   RxnString selectedPatientValue = RxnString();
@@ -89,14 +91,52 @@ class AddPatientController extends GetxController {
   RxList<MediaListingModel> list = RxList();
   RxList<MediaListingModel> selectedList = RxList();
 
-  final count = 0.obs;
+  String getNextRoundedTime() {
+    DateTime now = DateTime.now();
+
+    int minutes = now.minute;
+    int roundedMinutes = ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
+
+    if (roundedMinutes == 60) {
+      now = now.add(Duration(minutes: 60 - minutes));
+      now = DateTime(now.year, now.month, now.day, now.hour + 1, 0);
+    } else {
+      now = DateTime(now.year, now.month, now.day, now.hour, roundedMinutes);
+    }
+
+    final DateFormat formatter = DateFormat('hh:mm a');
+    return formatter.format(now);
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
+  }
 
   @override
   void onInit() {
     super.onInit();
+
+    // visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
+
+    // visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
+    contactNumberController.text = "+1";
+
+    // contactNumberController.addListener(() {
+    //   String currentText = contactNumberController.text;
+    //   if (currentText != '+1' && !currentText.startsWith('+1')) {
+    //     contactNumberController.text = '+1';
+    //     contactNumberController.selection = TextSelection.collapsed(offset: 3); // Keep the cursor after '+1'
+    //   }
+    // });
+
+    print(getNextRoundedTime());
+
+    selectedVisitTimeValue.value = getNextRoundedTime();
   }
 
-  void increment() => count.value++;
   String _formatFileSize(int bytes) {
     double sizeInKB = bytes / 1024; // Convert bytes to KB
     double sizeInMB = sizeInKB / 1024; // Convert KB to MB
@@ -236,6 +276,9 @@ class AddPatientController extends GetxController {
     if (middleNameController.text != "") {
       param['middle_name'] = middleNameController.text;
     }
+    if (contactNumberController.text != "") {
+      param['contact_no'] = contactNumberController.text.trim();
+    }
     param['last_name'] = lastNameController.text;
     param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
 
@@ -296,17 +339,24 @@ class AddPatientController extends GetxController {
   Future<void> clearForm() async {
     // selectedVisitTime.value = "";
     selectedVisitTimeValue.value = null;
+    visitDateController.clear();
+
     patientId.clear();
     firstNameController.clear();
     middleNameController.clear();
     lastNameController.clear();
     dobController.clear();
     emailAddressController.clear();
-    visitDateController.clear();
     formKey.currentState!.reset();
     list.clear();
     selectedList.clear();
     profileImage.value = null;
+
+    patientId.text = "";
+    firstNameController.text = "";
+    middleNameController.text = "";
+    lastNameController.text = "";
+    emailAddressController.text = "";
   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {

@@ -25,15 +25,12 @@ class Validation {
   }
 
   static phoneValidate(value) {
-    if (value == null || value.isEmpty) {
-      return "please filed above filed";
+    final bool phoneValid = RegExp(r'^\+1\d{10}$').hasMatch(value!);
+
+    if (phoneValid == false) {
+      return "Please enter a valid Contact number";
     }
 
-    final bool mobileValidate = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(value!);
-
-    if (mobileValidate == false) {
-      return "Please Enter Valid Mobile Number";
-    }
     return null;
   }
 
@@ -82,4 +79,7 @@ class Validation {
 
     return null;
   }
+
+
+
 }

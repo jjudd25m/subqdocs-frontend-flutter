@@ -10,9 +10,9 @@ import '../../../../utils/imagepath.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 
-class DoctorView extends GetView<PatientInfoController> {
-  const DoctorView({super.key});
-
+class DoctorView extends StatelessWidget {
+  DoctorView({super.key});
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -38,17 +38,19 @@ class DoctorView extends GetView<PatientInfoController> {
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 0),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                      color: AppColors.white,
-                      border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                    color: AppColors.white,
+                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                  ),
                   child: Column(
                     children: [
                       Container(
                         height: 40,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                            border: Border.all(color: AppColors.borderTable, width: 1)),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                        ),
                         // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -90,21 +92,28 @@ class DoctorView extends GetView<PatientInfoController> {
                                 border: TableBorder.all(
                                   color: AppColors.buttonBackgroundGrey, // Table border color
                                   width: 1, // Border width
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5)), // Optional rounded corners
                                 ),
                                 columnWidths: {
-                                  0: FractionColumnWidth(0.35), // Fixed width for "Procedure" column
-                                  1: FractionColumnWidth(0.35), // Fixed width for "Diagnosis" column
+                                  0: FractionColumnWidth(0.33), // Fixed width for "Procedure" column
+                                  1: FractionColumnWidth(0.33), // Fixed width for "Diagnosis" column
                                   2: FractionColumnWidth(0.15), // Flexible width for "Unit" column (20% of screen)
-                                  3: FractionColumnWidth(0.15), // Flexible width for "Unit charges" column (40% of screen)
+                                  3: FractionColumnWidth(
+                                      0.19), // Flexible width for "Unit charges" column (40% of screen)
                                 },
-                                children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
+                                children: controller.doctorViewList.value?.responseData != null
+                                    ? _getTableRows(controller.doctorViewList.value!.responseData!)
+                                    : [],
                               ),
                               Table(
                                 border: TableBorder.all(
                                   color: AppColors.buttonBackgroundGrey, // Table border color
                                   width: 1, // Border width
-                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(5),
+                                      bottomRight: Radius.circular(5)), // Optional rounded corners
                                 ),
                                 columnWidths: {
                                   0: FractionColumnWidth(0.85), // Fixed width for "Procedure" column
@@ -145,16 +154,18 @@ class DoctorView extends GetView<PatientInfoController> {
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 0),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                      color: AppColors.white,
-                      border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                    color: AppColors.white,
+                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                  ),
                   child: Column(
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1)),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                        ),
                         // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -201,7 +212,8 @@ class DoctorView extends GetView<PatientInfoController> {
                             controller.tasks.insert(newIndex, task);
                           },
                           children: [
-                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
+                            for (ImpressionsAndPlan task
+                                in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
                               Container(
                                 key: ValueKey(task),
                                 child: Column(
@@ -272,7 +284,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                                     ),
                                                     Column(
                                                       children: [
-                                                        for (Specifications specifications in treatments.specifications ?? [])
+                                                        for (Specifications specifications
+                                                            in treatments.specifications ?? [])
                                                           Row(
                                                             children: [
                                                               SizedBox(
@@ -600,9 +613,16 @@ class DoctorView extends GetView<PatientInfoController> {
   Widget _headerBuildTableCell(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      child: Text(
-        text,
-        style: AppFonts.medium(14, AppColors.black),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            textAlign: TextAlign.left,
+            style: AppFonts.medium(14, AppColors.black),
+          ),
+        ],
       ),
     );
   }
@@ -610,7 +630,8 @@ class DoctorView extends GetView<PatientInfoController> {
   Widget _buildTableCell(String text, bool isTotal) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
+      child:
+          Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)),
     );
   }
 
@@ -643,7 +664,9 @@ class DoctorView extends GetView<PatientInfoController> {
             color: AppColors.white, // Background color for row (you can alternate rows if needed)
           ),
           children: [
-            _buildTableCell("${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}", false),
+            _buildTableCell(
+                "${diagnosis.procedure?.code ?? 'No code'} \n ${diagnosis.procedure?.description ?? 'No description'}",
+                false),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(
@@ -673,7 +696,8 @@ class DoctorView extends GetView<PatientInfoController> {
                                               recognizer: TapGestureRecognizer()..onTap = () {},
                                               style: AppFonts.regular(14, AppColors.black),
                                             ),
-                                            if (diagnosis.diagnosis?[index].confidenceScore != "-" && (diagnosis.diagnosis?[index].confidenceScore != "")) ...[
+                                            if (diagnosis.diagnosis?[index].confidenceScore != "-" &&
+                                                (diagnosis.diagnosis?[index].confidenceScore != "")) ...[
                                               WidgetSpan(
                                                 alignment: PlaceholderAlignment.middle,
                                                 child: Container(

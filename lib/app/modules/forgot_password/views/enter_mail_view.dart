@@ -51,6 +51,8 @@ class EnterMailView extends GetView<ForgotPasswordController> {
           color: AppColors.white,
           width: isSmallScreen ? Get.width - 30 : 416,
           child: TextFormFiledWidget(
+              isSuffixIconVisible:false,
+              isFirst: true,
               label: AppString.emailAddress,
               format: [NoSpaceLowercaseTextFormatter()],
               controller: controller.emailController,

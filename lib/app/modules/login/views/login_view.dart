@@ -78,6 +78,8 @@ class LoginView extends GetView<LoginController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
+                        isSuffixIconVisible:false,
+                        isFirst: true,
                         label: AppString.emailAddress,
                         controller: controller.emailController,
                         format: [NoSpaceLowercaseTextFormatter()],

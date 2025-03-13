@@ -188,10 +188,12 @@ class HomeView extends GetView<HomeController> {
                                                 IntrinsicWidth(
                                                   child: CustomAnimatedButton(
                                                     onPressed: () {
+                                                      controller.searchController.clear();
                                                       controller.tabIndex.value = 0;
                                                       controller.globalController.homeTabIndex.value = 0;
-                                                      controller.getPatientList();
+
                                                       controller.clearFilter(isRefresh: false);
+                                                      controller.getPatientList();
                                                     },
                                                     text: "Patient List",
                                                     isOutline: true,
@@ -208,8 +210,9 @@ class HomeView extends GetView<HomeController> {
                                                   onPressed: () {
                                                     controller.tabIndex.value = 1;
                                                     controller.globalController.homeTabIndex.value = 1;
-                                                    controller.getScheduleVisitList(isFist: true);
+
                                                     controller.clearFilter(isRefresh: false);
+                                                    controller.getScheduleVisitList(isFist: true);
                                                   },
                                                   text: "Scheduled Visits",
                                                   isOutline: true,
@@ -225,9 +228,10 @@ class HomeView extends GetView<HomeController> {
                                                   onPressed: () {
                                                     controller.tabIndex.value = 2;
                                                     controller.globalController.homeTabIndex.value = 2;
-                                                    controller.getPastVisitList(isFist: true);
+
                                                     // controller.scheduleSorting(cellData: "Visit Date", colIndex: 1);
                                                     controller.clearFilter(isRefresh: false);
+                                                    controller.getPastVisitList(isFist: true);
                                                   },
                                                   text: "Past Visits",
                                                   isOutline: true,
@@ -257,14 +261,14 @@ class HomeView extends GetView<HomeController> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                               child: Row(
                                                 children: [
-                                                  Text(
-                                                    controller.tabIndex.value == 0
-                                                        ? (controller.patientList.length).toString()
-                                                        : controller.tabIndex.value == 1
-                                                            ? (controller.scheduleVisitList.length).toString()
-                                                            : "${controller.pastVisitList.length}",
-                                                    style: AppFonts.medium(16, AppColors.black),
-                                                  ),
+                                                  // Text(
+                                                  //   controller.tabIndex.value == 0
+                                                  //       ? (controller.patientList.length).toString()
+                                                  //       : controller.tabIndex.value == 1
+                                                  //           ? (controller.scheduleVisitList.length).toString()
+                                                  //           : "${controller.pastVisitList.length}",
+                                                  //   style: AppFonts.medium(16, AppColors.black),
+                                                  // ),
                                                   Expanded(
                                                     child: Text(
                                                       controller.tabIndex.value != 1 ? "" : "",
@@ -785,7 +789,6 @@ class HomeView extends GetView<HomeController> {
                                                           controller.globalController.homeTabIndex.value = result;
                                                           controller.tabIndex.refresh();
                                                         }
-
                                                         controller.getPastVisitList(isFist: true);
                                                         controller.getScheduleVisitList(isFist: true);
                                                         controller.getPatientList();

@@ -6,7 +6,7 @@ class VisitMainBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<VisitMainController>(
-      () => VisitMainController(),
+      () => VisitMainController(),tag: Get.arguments["unique_tag"]
     );
   }
 }

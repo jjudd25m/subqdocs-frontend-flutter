@@ -78,6 +78,8 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
+                        isSuffixIconVisible:false,
+                        isFirst: true,
                         label: "First Name",
                         controller: controller.firstNameController,
                         hint: "Enter First Name",
@@ -101,6 +103,8 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
+                        isSuffixIconVisible:false,
+                        isFirst: true,
                         label: "Last Name",
                         controller: controller.lastNameController,
                         hint: "Enter Last Name",
@@ -124,6 +128,8 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
+                        isSuffixIconVisible:false,
+                        isFirst: true,
                         label: AppString.emailAddress,
                         format: [NoSpaceLowercaseTextFormatter()],
                         controller: controller.emailController,

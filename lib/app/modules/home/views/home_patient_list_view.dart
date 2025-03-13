@@ -46,8 +46,8 @@ class HomePatientListView extends GetView<HomeController> {
                 context: context,
                 onRowSelected: (rowIndex, rowData) {
                   // Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                  //   "visitId": controller.patientList[rowIndex - 1].visitId.toString(),
-                  //   "patientId": controller.patientList[rowIndex - 1].id.toString(),
+                  //   "visitId": controller.patientList[rowIndex].visitId.toString(),
+                  //   "patientId": controller.patientList[rowIndex].id.toString(),
                   // });
 
                   // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
@@ -156,9 +156,9 @@ class HomePatientListView extends GetView<HomeController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      if (rowIndex != 0) {
-                        Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
-                      }
+                      // if (rowIndex != 0) {
+                      Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
+                      // }
                     },
                     child: Text(
                       cellData,
@@ -202,53 +202,95 @@ class HomePatientListView extends GetView<HomeController> {
                               style: AppFonts.regular(14, AppColors.textBlack),
                             ),
                           )),
-                      PopupMenuItem(
-                          padding: EdgeInsets.zero,
-                          // value: "",
-                          onTap: () async {
-                            dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                              "visitId": controller.patientList[rowIndex].visitId.toString(),
-                              "patientId": controller.patientList[rowIndex].id.toString(),
-                            });
+                      if (controller.patientList[rowIndex].visitId != null)
+                        PopupMenuItem(
+                            padding: EdgeInsets.zero,
+                            // value: "",
+                            onTap: () async {
+                              dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                "visitId": controller.patientList[rowIndex].visitId.toString(),
+                                "patientId": controller.patientList[rowIndex].id.toString(),
+                                "unique_tag": DateTime.now().toString(),
+                              });
 
-                            print("back from response");
+                              print("back from response");
 
-                            // showDialog(
-                            //   context: context,
-                            //   barrierDismissible:
-                            //   true, // Allows dismissing the dialog by tapping outside
-                            //   builder: (BuildContext context) {
-                            //     return SchedulePatientDialog(
-                            //       receiveParam: (p0, p1) {
-                            //         customPrint("p0 is $p0 p1 is $p1");
-                            //         controller.patientScheduleCreate(param: {
-                            //           "patient_id":
-                            //           controller.pastVisitList[rowIndex - 1].id.toString(),
-                            //           "visit_date": p1,
-                            //           "visit_time": p0
-                            //         });
-                            //       },
-                            //     ); // Our custom dialog
-                            //   },
-                            // );
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: AppColors.appbarBorder,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Medical record",
-                                  style: AppFonts.regular(14, AppColors.textBlack),
+                              // showDialog(
+                              //   context: context,
+                              //   barrierDismissible:
+                              //   true, // Allows dismissing the dialog by tapping outside
+                              //   builder: (BuildContext context) {
+                              //     return SchedulePatientDialog(
+                              //       receiveParam: (p0, p1) {
+                              //         customPrint("p0 is $p0 p1 is $p1");
+                              //         controller.patientScheduleCreate(param: {
+                              //           "patient_id":
+                              //           controller.pastVisitList[rowIndex - 1].id.toString(),
+                              //           "visit_date": p1,
+                              //           "visit_time": p0
+                              //         });
+                              //       },
+                              //     ); // Our custom dialog
+                              //   },
+                              // );
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 1,
+                                  color: AppColors.appbarBorder,
                                 ),
-                              ),
-                            ],
-                          )),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Medical record",
+                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      // showDialog(
+                      //   context: context,
+                      //   barrierDismissible:
+                      //   true, // Allows dismissing the dialog by tapping outside
+                      //   builder: (BuildContext context) {
+                      //     return SchedulePatientDialog(
+                      //       receiveParam: (p0, p1) {
+                      //         customPrint("p0 is $p0 p1 is $p1");
+                      //         controller.patientScheduleCreate(param: {
+                      //           "patient_id":
+                      //           controller.pastVisitList[rowIndex - 1].id.toString(),
+                      //           "visit_date": p1,
+                      //           "visit_time": p0
+                      //         });
+                      //       },
+                      //     ); // Our custom dialog
+                      //   },
+                      // );
+
+                      //--------------------------
+
+                      // },
+                      // child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // children: [
+                      // Container(
+                      // width: double.infinity,
+                      // height: 1,
+                      // color: AppColors.appbarBorder,
+                      // ),
+                      // Padding(
+                      // padding: const EdgeInsets.all(8.0),
+                      // child: Text(
+                      // "Medical record",
+                      // style: AppFonts.regular(14, AppColors.textBlack),
+                      // ),
+                      // ),
+                      // ],
+                      // )),
+
                       // PopupMenuItem(
                       //     padding: EdgeInsets.zero,
                       //     onTap: () async {

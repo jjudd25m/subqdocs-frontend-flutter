@@ -197,45 +197,45 @@ class HomeScheduleListView extends GetView<HomeController> {
                                             ),
                                           ],
                                         )),
-                                    PopupMenuItem(
-                                        padding: EdgeInsets.zero,
-                                        value: "",
-                                        onTap: () {
-                                          if (rowIndex != 0) {
-                                            showDialog(
-                                              context: context,
-                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                              builder: (BuildContext context) {
-                                                return DeletePatientDialog(
-                                                  title: "Are you sure want to delete schedule",
-                                                  onDelete: () {
-                                                    print("delete id is :- ${controller.patientList[rowIndex].id}");
-                                                    Get.back();
-                                                    controller.deletePatientById(controller.scheduleVisitList[rowIndex].id);
-                                                  },
-                                                  header: "Delete Schedule",
-                                                ); // Our custom dialog
-                                              },
-                                            );
-                                          }
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: double.infinity,
-                                              height: 1,
-                                              color: AppColors.appbarBorder,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                "Delete",
-                                                style: AppFonts.regular(14, AppColors.textBlack),
-                                              ),
-                                            ),
-                                          ],
-                                        )),
+                                    // PopupMenuItem(
+                                    //     padding: EdgeInsets.zero,
+                                    //     value: "",
+                                    //     onTap: () {
+                                    //       if (rowIndex != 0) {
+                                    //         showDialog(
+                                    //           context: context,
+                                    //           barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                    //           builder: (BuildContext context) {
+                                    //             return DeletePatientDialog(
+                                    //               title: "Are you sure want to delete schedule",
+                                    //               onDelete: () {
+                                    //                 print("delete id is :- ${controller.patientList[rowIndex].id}");
+                                    //                 Get.back();
+                                    //                 controller.deletePatientById(controller.scheduleVisitList[rowIndex].id);
+                                    //               },
+                                    //               header: "Delete Schedule",
+                                    //             ); // Our custom dialog
+                                    //           },
+                                    //         );
+                                    //       }
+                                    //     },
+                                    //     child: Column(
+                                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                                    //       children: [
+                                    //         Container(
+                                    //           width: double.infinity,
+                                    //           height: 1,
+                                    //           color: AppColors.appbarBorder,
+                                    //         ),
+                                    //         Padding(
+                                    //           padding: const EdgeInsets.all(8.0),
+                                    //           child: Text(
+                                    //             "Delete",
+                                    //             style: AppFonts.regular(14, AppColors.textBlack),
+                                    //           ),
+                                    //         ),
+                                    //       ],
+                                    //     )),
                                     PopupMenuItem(
                                         padding: EdgeInsets.zero,
                                         value: "",
@@ -350,11 +350,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                   // if (rowIndex != 0) {
                   customPrint("row index is :- $rowIndex");
 
-                  Get.delete<VisitMainController>();
+                  // Get.delete<VisitMainController>();
 
                   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                     "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
                     "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
+                    "unique_tag": DateTime.now().toString(),
                   });
 
                   print("back from response");

@@ -237,6 +237,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                       height: Dimen.margin24,
                                     ),
                                     TextFormFiledWidget(
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
                                       prefixIcon: SvgPicture.asset(
                                         ImagePath.search,
                                         fit: BoxFit.cover,
@@ -371,23 +373,23 @@ class AddPatientView extends GetView<AddPatientController> {
                                         Expanded(
                                           child: TextFormFiledWidget(
                                               label: "Patient Id ",
+
                                               // isImportant: true,
-                                              type: TextInputType.number,
-                                              isValid: true,
+
+                                              isSuffixIconVisible: false,
+                                              isFirst: true,
                                               format: [
                                                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                                               ],
                                               controller: controller.patientId,
                                               hint: "123",
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  controller.patientId.clear();
-                                                },
-                                                child: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: AppColors.textDarkGrey,
-                                                  size: 25,
-                                                ),
+                                              onTap: () {
+                                                controller.patientId.clear();
+                                              },
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
                                               ),
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
@@ -400,12 +402,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                           child: TextFormFiledWidget(
                                               label: "First Name",
                                               // isImportant: true,
-                                              isValid: true,
+                                              isValid: controller.isValid.value,
                                               format: [
                                                 CustomTextInputFormatter(),
                                               ],
                                               controller: controller.firstNameController,
                                               hint: "Don",
+                                              isSuffixIconVisible: false,
+                                              isFirst: true,
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
                                                   controller.firstNameController.clear();
@@ -425,6 +429,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
+                                            isValid: !controller.isValid.value,
+                                            isSuffixIconVisible: false,
+                                            isFirst: true,
                                             format: [
                                               CustomTextInputFormatter(),
                                             ],
@@ -456,9 +463,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 CustomTextInputFormatter(),
                                               ],
                                               label: "Last Name",
-                                              isValid: true,
+                                              isValid: controller.isValid.value,
                                               // isImportant: true,
                                               controller: controller.lastNameController,
+                                              isSuffixIconVisible: false,
+                                              isFirst: true,
                                               hint: "Jones",
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
@@ -565,6 +574,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                               format: [NoSpaceLowercaseTextFormatter()],
                                               label: "Email Address",
                                               controller: controller.emailAddressController,
+                                              isValid: controller.isValid.value,
+                                              isSuffixIconVisible: false,
+                                              isFirst: true,
                                               hint: "donjones@example.com",
                                               suffixIcon: GestureDetector(
                                                 onTap: () {
@@ -577,7 +589,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 ),
                                               ),
                                               checkValidation: (value) {
-                                                return Validation.emailValidate(value);
+                                                return Validation.emailValidateRequired(value);
                                               }),
                                         ),
                                         SizedBox(
@@ -585,7 +597,34 @@ class AddPatientView extends GetView<AddPatientController> {
                                         ),
                                         Expanded(
                                           child: TextFormFiledWidget(
-                                            format: [NoSpaceTextFormatter()],
+                                              format: [PlusTextFormatter()],
+                                              label: "Contact Number",
+                                              controller: controller.contactNumberController,
+                                              isValid: true,
+                                              isSuffixIconVisible: false,
+                                              isFirst: true,
+                                              type: TextInputType.number,
+                                              hint: "123456789",
+                                              suffixIcon: GestureDetector(
+                                                onTap: () {
+                                                  controller.emailAddressController.clear();
+                                                },
+                                                child: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                              ),
+                                              checkValidation: (value) {
+                                                return Validation.phoneValidate(value);
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Expanded(
+                                          child: TextFormFiledWidget(
+                                            //format: [NoSpaceTextFormatter()],
                                             suffixIcon: Icon(Icons.calendar_month),
                                             label: "Visit Date",
                                             readOnly: true,
@@ -594,6 +633,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                             onTap: () async {
                                               final picked = await showDatePicker(
                                                 context: context,
+
+                                                // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
                                                 initialDate: DateTime.now(),
                                                 firstDate: DateTime.now(),
                                                 lastDate: DateTime.now().add(Duration(days: 1000)),
@@ -620,9 +661,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                             hint: "mm/dd/yyyy",
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Dimen.margin16,
+                                    ),
+                                    Row(
+                                      children: [
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -648,6 +693,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ],
                                           ),
                                         ),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Spacer(),
+                                        SizedBox(
+                                          width: Dimen.margin10,
+                                        ),
+                                        Spacer(),
                                       ],
                                     ),
                                     SizedBox(
@@ -668,6 +721,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               highlightColor: Colors.transparent, // Remove highlight color
                                             ),
                                             child: ExpansionTile(
+                                              initiallyExpanded: true,
                                               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                               backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                               collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -855,7 +909,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                           // Show border
                                           textColor: AppColors.backgroundPurple,
                                           // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                           // Custom padding
                                           radius: 6, // Custom border radius
                                         ),
@@ -888,7 +942,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                           // Show border
                                           textColor: AppColors.backgroundPurple,
                                           // Custom text color
-                                          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                           // Custom padding
                                           radius: 6, // Custom border radius
                                         ),

@@ -90,6 +90,9 @@ class ConfirmFinalizeDialog extends StatelessWidget {
                       Expanded(
                         child: CustomAnimatedButton(
                           text: " Cancel ",
+                          onPressed: () {
+                            Get.back();
+                          },
                           isOutline: true,
                           enabledTextColor: AppColors.backgroundPurple,
                           enabledColor: AppColors.white,

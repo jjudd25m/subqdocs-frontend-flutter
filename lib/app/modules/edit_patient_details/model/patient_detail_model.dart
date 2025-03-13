@@ -30,6 +30,7 @@ class ResponseData {
   String? patientId;
   String? firstName;
   String? lastName;
+  String? contactNumber;
   String? middleName;
   String? dateOfBirth;
   int? age;
@@ -47,6 +48,7 @@ class ResponseData {
       this.firstName,
       this.lastName,
       this.middleName,
+        this.contactNumber,
       this.dateOfBirth,
       this.age,
       this.email,
@@ -62,6 +64,7 @@ class ResponseData {
     patientId = json['patient_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
+    contactNumber = json['contact_no'];
     middleName = json['middle_name'];
     dateOfBirth = json['date_of_birth'];
     age = json['age'];
@@ -89,6 +92,7 @@ class ResponseData {
     data['id'] = id;
     data['patient_id'] = patientId;
     data['first_name'] = firstName;
+    data['contact_no'] = contactNumber;
     data['last_name'] = lastName;
     data['middle_name'] = middleName;
     data['date_of_birth'] = dateOfBirth;
