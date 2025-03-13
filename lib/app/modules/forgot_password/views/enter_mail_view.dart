@@ -51,21 +51,19 @@ class EnterMailView extends GetView<ForgotPasswordController> {
           color: AppColors.white,
           width: isSmallScreen ? Get.width - 30 : 416,
           child: TextFormFiledWidget(
-              isSuffixIconVisible:false,
+              isSuffixIconVisible: false,
               isFirst: true,
               label: AppString.emailAddress,
               format: [NoSpaceLowercaseTextFormatter()],
               controller: controller.emailController,
               hint: AppString.emailPlaceHolder,
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  controller.emailController.clear();
-                },
-                child: Icon(
-                  Icons.highlight_remove,
-                  color: AppColors.textGrey,
-                  size: 25,
-                ),
+              onTap: () {
+                controller.emailController.clear();
+              },
+              suffixIcon: Icon(
+                Icons.highlight_remove,
+                color: AppColors.textDarkGrey,
+                size: 25,
               ),
               checkValidation: (value) {
                 return Validation.emailValidate(value);

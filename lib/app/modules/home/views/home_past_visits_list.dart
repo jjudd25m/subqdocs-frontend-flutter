@@ -88,7 +88,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: cellData == "Finalized" ? AppColors.lightgreenPastVisit : AppColors.orangeText,
+                                    color: cellData == "Finalized" ? AppColors.lightgreenPastVisit : AppColors.orange,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Padding(
@@ -96,7 +96,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                     child: Text(
                                       cellData,
                                       textAlign: TextAlign.center,
-                                      style: AppFonts.medium(13, cellData == "Finalized" ? AppColors.greenPastVisit : AppColors.orange),
+                                      style: AppFonts.medium(13, cellData == "Finalized" ? AppColors.greenPastVisit : AppColors.orangeText),
                                     ),
                                   ),
                                 ),

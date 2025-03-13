@@ -13,7 +13,9 @@ import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/custom_animated_button.dart';
+import '../../../core/common/app_preferences.dart';
 import '../controllers/home_controller.dart';
+import '../model/home_past_patient_list_sorting_model.dart';
 
 class PastPatientListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
@@ -25,7 +27,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    print(controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? []);
+    print("status list is ${controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? []}");
     selectedStatusIndex.value = controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
     return SizedBox(
       width: double.infinity, // Ensures full width
@@ -220,7 +222,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                       text: "Choose Date",
                       enabledColor: AppColors.backgroundPurple,
                       height: 45,
-                      onPressed: () {
+                      onPressed: () async {
                         if (selectedStatusIndex.isNotEmpty) {
                           // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
                           controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
@@ -229,9 +231,20 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                         controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
                         List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
                         if (dates.length == 2) {
-                          controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
-                          controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
-                          controller.globalController.saveHomePastPatientData();
+                          if (dates[0] == dates[1]) {
+                            controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
+                            controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
+                            controller.globalController.saveHomePastPatientData();
+                          } else {
+                            controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+                            controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+                            controller.globalController.saveHomePastPatientData();
+                          }
+
+                          HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+
+                          print("homePastPatientData:- ${homePastPatientData?.toJson()}");
+
                           Get.back();
                           onTap();
                         } else {

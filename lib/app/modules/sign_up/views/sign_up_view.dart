@@ -78,20 +78,18 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
-                        isSuffixIconVisible:false,
+                        isSuffixIconVisible: false,
                         isFirst: true,
                         label: "First Name",
                         controller: controller.firstNameController,
                         hint: "Enter First Name",
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            controller.firstNameController.clear();
-                          },
-                          child: Icon(
-                            Icons.highlight_remove,
-                            color: AppColors.textDarkGrey,
-                            size: 25,
-                          ),
+                        onTap: () {
+                          controller.firstNameController.clear();
+                        },
+                        suffixIcon: Icon(
+                          Icons.highlight_remove,
+                          color: AppColors.textDarkGrey,
+                          size: 25,
                         ),
                         checkValidation: (value) {
                           return Validation.requiredFiled(value);
@@ -103,20 +101,18 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
-                        isSuffixIconVisible:false,
+                        isSuffixIconVisible: false,
                         isFirst: true,
                         label: "Last Name",
                         controller: controller.lastNameController,
                         hint: "Enter Last Name",
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            controller.lastNameController.clear();
-                          },
-                          child: Icon(
-                            Icons.highlight_remove,
-                            color: AppColors.textDarkGrey,
-                            size: 25,
-                          ),
+                        onTap: () {
+                          controller.lastNameController.clear();
+                        },
+                        suffixIcon: Icon(
+                          Icons.highlight_remove,
+                          color: AppColors.textDarkGrey,
+                          size: 25,
                         ),
                         checkValidation: (value) {
                           return Validation.requiredFiled(value);
@@ -128,21 +124,19 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
-                        isSuffixIconVisible:false,
+                        isSuffixIconVisible: false,
                         isFirst: true,
                         label: AppString.emailAddress,
                         format: [NoSpaceLowercaseTextFormatter()],
                         controller: controller.emailController,
                         hint: "Enter Email",
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            controller.emailController.clear();
-                          },
-                          child: Icon(
-                            Icons.highlight_remove,
-                            color: AppColors.textDarkGrey,
-                            size: 25,
-                          ),
+                        onTap: () {
+                          controller.emailController.clear();
+                        },
+                        suffixIcon: Icon(
+                          Icons.highlight_remove,
+                          color: AppColors.textDarkGrey,
+                          size: 25,
                         ),
                         checkValidation: (value) {
                           return Validation.emailValidateRequired(value);

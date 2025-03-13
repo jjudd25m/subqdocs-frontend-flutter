@@ -110,7 +110,6 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
                             splashColor: Colors.transparent,
                             onTap: () {
                               widget.onTap?.call();
-                              widget.isFirst = true;
                               widget.isSuffixIconVisible = false;
 
                               setState(() {});

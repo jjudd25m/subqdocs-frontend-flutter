@@ -245,22 +245,14 @@ class AddPatientView extends GetView<AddPatientController> {
                                         width: 10,
                                         height: 10,
                                       ),
-                                      suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            controller.searchController.clear();
-                                          },
-                                          child: Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          )
-
-                                          // Icon(
-                                          //   Icons.add,
-                                          //   color: AppColors.textGrey,
-                                          //   size: 25,
-                                          // ),
-                                          ),
+                                      onTap: () {
+                                        controller.searchController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
                                       controller: controller.searchController,
                                       hint: "Search Patient Name, ID, Date of Birth or Email",
                                       label: '',
@@ -410,15 +402,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                               hint: "Don",
                                               isSuffixIconVisible: false,
                                               isFirst: true,
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  controller.firstNameController.clear();
-                                                },
-                                                child: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: AppColors.textDarkGrey,
-                                                  size: 25,
-                                                ),
+                                              onTap: () {
+                                                controller.firstNameController.clear();
+                                              },
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
                                               ),
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
@@ -438,15 +428,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                             label: "Middle Name",
                                             controller: controller.middleNameController,
                                             hint: "Joseph",
-                                            suffixIcon: GestureDetector(
-                                              onTap: () {
-                                                controller.middleNameController.clear();
-                                              },
-                                              child: Icon(
-                                                Icons.highlight_remove,
-                                                color: AppColors.textDarkGrey,
-                                                size: 25,
-                                              ),
+                                            onTap: () {
+                                              controller.middleNameController.clear();
+                                            },
+                                            suffixIcon: Icon(
+                                              Icons.highlight_remove,
+                                              color: AppColors.textDarkGrey,
+                                              size: 25,
                                             ),
                                           ),
                                         ),
@@ -469,15 +457,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                               isSuffixIconVisible: false,
                                               isFirst: true,
                                               hint: "Jones",
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  controller.lastNameController.clear();
-                                                },
-                                                child: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: AppColors.textDarkGrey,
-                                                  size: 25,
-                                                ),
+                                              onTap: () {
+                                                controller.lastNameController.clear();
+                                              },
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
                                               ),
                                               checkValidation: (value) {
                                                 return Validation.requiredFiled(value);
@@ -578,15 +564,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                               isSuffixIconVisible: false,
                                               isFirst: true,
                                               hint: "donjones@example.com",
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  controller.emailAddressController.clear();
-                                                },
-                                                child: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: AppColors.textDarkGrey,
-                                                  size: 25,
-                                                ),
+                                              onTap: () {
+                                                controller.emailAddressController.clear();
+                                              },
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
                                               ),
                                               checkValidation: (value) {
                                                 return Validation.emailValidateRequired(value);
@@ -605,15 +589,13 @@ class AddPatientView extends GetView<AddPatientController> {
                                               isFirst: true,
                                               type: TextInputType.number,
                                               hint: "123456789",
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  controller.emailAddressController.clear();
-                                                },
-                                                child: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: AppColors.textDarkGrey,
-                                                  size: 25,
-                                                ),
+                                              onTap: () {
+                                                controller.emailAddressController.clear();
+                                              },
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
                                               ),
                                               checkValidation: (value) {
                                                 return Validation.phoneValidate(value);

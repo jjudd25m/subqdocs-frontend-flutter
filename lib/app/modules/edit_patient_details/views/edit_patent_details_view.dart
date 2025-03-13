@@ -257,22 +257,20 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           // isImportant: true,
                                           type: TextInputType.number,
                                           isValid: true,
-                                          isSuffixIconVisible:false,
+                                          isSuffixIconVisible: false,
                                           isFirst: true,
                                           format: [
                                             FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                                           ],
                                           controller: controller.patientIdController,
                                           hint: "123",
-                                          suffixIcon: GestureDetector(
-                                            onTap: () {
-                                              controller.patientIdController.clear();
-                                            },
-                                            child: Icon(
-                                              Icons.highlight_remove,
-                                              color: AppColors.textDarkGrey,
-                                              size: 25,
-                                            ),
+                                          onTap: () {
+                                            controller.patientIdController.clear();
+                                          },
+                                          suffixIcon: Icon(
+                                            Icons.highlight_remove,
+                                            color: AppColors.textDarkGrey,
+                                            size: 25,
                                           ),
                                           checkValidation: (value) {
                                             return Validation.requiredFiled(value);
@@ -284,7 +282,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     Expanded(
                                       child: TextFormFiledWidget(
                                           label: "First Name",
-                                          isSuffixIconVisible:false,
+                                          isSuffixIconVisible: false,
                                           isFirst: true,
                                           format: [
                                             CustomTextInputFormatter(),
@@ -293,15 +291,13 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           isValid: true,
                                           controller: controller.firstNameController,
                                           hint: "Don",
-                                          suffixIcon: GestureDetector(
-                                            onTap: () {
-                                              controller.firstNameController.clear();
-                                            },
-                                            child: Icon(
-                                              Icons.highlight_remove,
-                                              color: AppColors.textDarkGrey,
-                                              size: 25,
-                                            ),
+                                          onTap: () {
+                                            controller.firstNameController.clear();
+                                          },
+                                          suffixIcon: Icon(
+                                            Icons.highlight_remove,
+                                            color: AppColors.textDarkGrey,
+                                            size: 25,
                                           ),
                                           checkValidation: (value) {
                                             return Validation.requiredFiled(value);
@@ -312,21 +308,19 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     ),
                                     Expanded(
                                       child: TextFormFiledWidget(
-                                        isSuffixIconVisible:false,
+                                        isSuffixIconVisible: false,
                                         isFirst: true,
                                         label: "Middle Name",
                                         format: [
                                           CustomTextInputFormatter(),
                                         ],
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            controller.middleNameController.clear();
-                                          },
-                                          child: Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
+                                        onTap: () {
+                                          controller.middleNameController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
                                         ),
                                         controller: controller.middleNameController,
                                         hint: "Joseph",
@@ -346,19 +340,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           CustomTextInputFormatter(),
                                         ],
                                         isValid: true,
-                                        isSuffixIconVisible:false,
+                                        isSuffixIconVisible: false,
                                         isFirst: true,
                                         // isImportant: true,
                                         controller: controller.lastNameController,
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            controller.lastNameController.clear();
-                                          },
-                                          child: Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
+                                        onTap: () {
+                                          controller.lastNameController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
                                         ),
                                         hint: "Jones",
                                         checkValidation: (value) {
@@ -451,21 +443,19 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                             children: [
                                               Expanded(
                                                 child: TextFormFiledWidget(
-                                                  isSuffixIconVisible:false,
+                                                  isSuffixIconVisible: false,
                                                   isFirst: true,
                                                   format: [NoSpaceLowercaseTextFormatter()],
                                                   label: "Email Address",
                                                   controller: controller.emailAddressController,
                                                   hint: "donjones@example.com",
-                                                  suffixIcon: GestureDetector(
-                                                    onTap: () {
-                                                      controller.emailAddressController.clear();
-                                                    },
-                                                    child: Icon(
-                                                      Icons.highlight_remove,
-                                                      color: AppColors.textDarkGrey,
-                                                      size: 25,
-                                                    ),
+                                                  onTap: () {
+                                                    controller.emailAddressController.clear();
+                                                  },
+                                                  suffixIcon: Icon(
+                                                    Icons.highlight_remove,
+                                                    color: AppColors.textDarkGrey,
+                                                    size: 25,
                                                   ),
                                                   checkValidation: (value) {
                                                     return Validation.emailValidate(value);
@@ -481,20 +471,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     label: "Contact Number",
                                                     controller: controller.contactNumberController,
                                                     isValid: true,
-                                                    isSuffixIconVisible:false,
+                                                    isSuffixIconVisible: false,
                                                     isFirst: true,
-
                                                     type: TextInputType.number,
                                                     hint: "123456789",
-                                                    suffixIcon: GestureDetector(
-                                                      onTap: () {
-                                                        controller.emailAddressController.clear();
-                                                      },
-                                                      child: Icon(
-                                                        Icons.highlight_remove,
-                                                        color: AppColors.textDarkGrey,
-                                                        size: 25,
-                                                      ),
+                                                    onTap: () {
+                                                      controller.emailAddressController.clear();
+                                                    },
+                                                    suffixIcon: Icon(
+                                                      Icons.highlight_remove,
+                                                      color: AppColors.textDarkGrey,
+                                                      size: 25,
                                                     ),
                                                     checkValidation: (value) {
                                                       return Validation.phoneValidate(value);
@@ -540,7 +527,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                   hint: "mm/dd/yyyy",
                                                 ),
                                               ),
-
                                             ],
                                           )
                                         : Row(
@@ -565,20 +551,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     label: "Contact Number",
                                                     controller: controller.contactNumberController,
                                                     isValid: true,
-                                                    isSuffixIconVisible:false,
+                                                    isSuffixIconVisible: false,
                                                     isFirst: true,
-
                                                     type: TextInputType.number,
                                                     hint: "123456789",
-                                                    suffixIcon: GestureDetector(
-                                                      onTap: () {
-                                                        controller.emailAddressController.clear();
-                                                      },
-                                                      child: Icon(
-                                                        Icons.highlight_remove,
-                                                        color: AppColors.textDarkGrey,
-                                                        size: 25,
-                                                      ),
+                                                    onTap: () {
+                                                      controller.contactNumberController.clear();
+                                                    },
+                                                    suffixIcon: Icon(
+                                                      Icons.highlight_remove,
+                                                      color: AppColors.textDarkGrey,
+                                                      size: 25,
                                                     ),
                                                     checkValidation: (value) {
                                                       return Validation.phoneValidate(value);
@@ -592,48 +575,47 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                 SizedBox(
                                   height: 20,
                                 ),
-
-                                Obx(
-                                   () {
-                                    return  controller.isFromSchedule.value ? Row(
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Visit Time",
-                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                Obx(() {
+                                  return controller.isFromSchedule.value
+                                      ? Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Visit Time",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Obx(() {
+                                                    return BaseDropdown<String>(
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.visitTime,
+                                                      selectedValue: controller.selectedVisitTimeValue.value,
+                                                      onChanged: (value) {
+                                                        controller.selectedVisitTimeValue.value = value;
+                                                      },
+                                                      selectText: "11 PM",
+                                                    );
+                                                  })
+                                                ],
                                               ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Obx(() {
-                                                return BaseDropdown<String>(
-                                                  valueAsString: (value) => value ?? "",
-                                                  items: controller.visitTime,
-                                                  selectedValue: controller.selectedVisitTimeValue.value,
-                                                  onChanged: (value) {
-                                                    controller.selectedVisitTimeValue.value = value;
-                                                  },
-                                                  selectText: "11 PM",
-                                                );
-                                              })
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
-                                        Spacer(),
-                                        SizedBox(
-                                          width: Dimen.margin10,
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ):SizedBox();
-                                  }
-                                ),
+                                            ),
+                                            SizedBox(
+                                              width: Dimen.margin10,
+                                            ),
+                                            Spacer(),
+                                            SizedBox(
+                                              width: Dimen.margin10,
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        )
+                                      : SizedBox();
+                                }),
                                 SizedBox(
                                   height: 20,
                                 ),

@@ -78,21 +78,19 @@ class LoginView extends GetView<LoginController> {
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
-                        isSuffixIconVisible:false,
+                        isSuffixIconVisible: false,
                         isFirst: true,
                         label: AppString.emailAddress,
                         controller: controller.emailController,
                         format: [NoSpaceLowercaseTextFormatter()],
                         hint: AppString.emailPlaceHolder,
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            controller.emailController.clear();
-                          },
-                          child: Icon(
-                            Icons.highlight_remove,
-                            color: AppColors.textDarkGrey,
-                            size: 25,
-                          ),
+                        onTap: () {
+                          controller.emailController.clear();
+                        },
+                        suffixIcon: Icon(
+                          Icons.highlight_remove,
+                          color: AppColors.textDarkGrey,
+                          size: 25,
                         ),
                         checkValidation: (value) {
                           return Validation.emailValidate(value);
