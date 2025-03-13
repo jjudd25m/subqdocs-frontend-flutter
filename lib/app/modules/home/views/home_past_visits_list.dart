@@ -44,16 +44,20 @@ class HomePastVisitsList extends GetView<HomeController> {
               : CustomTable(
                   onLoadMore: () => controller.getPastVisitListFetchMore(),
                   rows: _getTableRows(controller.pastVisitList),
-                  onRowSelected: (rowIndex, rowData) {
+                  onRowSelected: (rowIndex, rowData) async {
                     customPrint("row index is :- $rowIndex");
 
                     Get.delete<PatientInfoController>();
 
-                    Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                    await Get.toNamed(Routes.PATIENT_INFO, arguments: {
                       "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                       "patientId": controller.pastVisitList[rowIndex].id.toString(),
                       "unique_tag": DateTime.now().toString(),
                     });
+
+                    controller.getPastVisitList();
+                    controller.getScheduleVisitList();
+                    controller.getPatientList();
                   },
                   cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                     return colIndex == 0
@@ -131,7 +135,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               child: Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: Text(
-                                                  "View",
+                                                  "Patient Details",
                                                   style: AppFonts.regular(14, AppColors.textBlack),
                                                 ),
                                               )),

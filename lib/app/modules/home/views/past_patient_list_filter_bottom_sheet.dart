@@ -61,6 +61,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                   Spacer(),
                   GestureDetector(
                     onTap: () {
+                      selectedStatusIndex.clear();
                       controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue?.clear();
                       controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
                       controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
@@ -89,6 +90,11 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           } else {
                             print("add val");
                             selectedStatusIndex.add(controller.statusModel[index].status ?? "");
+                          }
+
+                          if (selectedStatusIndex.isNotEmpty) {
+                            // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+                            controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
                           }
 
                           print("selectedStatusIndex :- ${selectedStatusIndex}");
@@ -193,6 +199,26 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                   ),
                   onValueChanged: (value) {
                     selectedDate = value;
+
+                    if (selectedStatusIndex.isNotEmpty) {
+                      // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+                      controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+                    }
+
+                    controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                    List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+                    if (dates.length == 2) {
+                      if (dates[0] == dates[1]) {
+                        controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
+                        controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
+                        controller.globalController.saveHomePastPatientData();
+                      } else {
+                        controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+                        controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+                        controller.globalController.saveHomePastPatientData();
+                      }
+                    }
+
                     // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
                     // controller.selectedValue = value;
                     // customPrint("onchanged  ${value}");
@@ -200,62 +226,62 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                   value: controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
                 ),
               ),
-              Row(
-                spacing: 15,
-                children: [
-                  Expanded(
-                    child: CustomAnimatedButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      isOutline: true,
-                      outLineEnabledColor: AppColors.backgroundPurple,
-                      outlineColor: AppColors.backgroundPurple,
-                      enabledTextColor: AppColors.backgroundPurple,
-                      enabledColor: AppColors.backgroundWhite,
-                      text: "Cancel",
-                      height: 45,
-                    ),
-                  ),
-                  Expanded(
-                    child: CustomAnimatedButton(
-                      text: "Choose Date",
-                      enabledColor: AppColors.backgroundPurple,
-                      height: 45,
-                      onPressed: () async {
-                        if (selectedStatusIndex.isNotEmpty) {
-                          // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
-                          controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
-                        }
-
-                        controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                        List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-                        if (dates.length == 2) {
-                          if (dates[0] == dates[1]) {
-                            controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-                            controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-                            controller.globalController.saveHomePastPatientData();
-                          } else {
-                            controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
-                            controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
-                            controller.globalController.saveHomePastPatientData();
-                          }
-
-                          HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
-
-                          print("homePastPatientData:- ${homePastPatientData?.toJson()}");
-
-                          Get.back();
-                          onTap();
-                        } else {
-                          print("date is not proper selected");
-                        }
-                        // controller.setDateRange();
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   spacing: 15,
+              //   children: [
+              //     Expanded(
+              //       child: CustomAnimatedButton(
+              //         onPressed: () {
+              //           Get.back();
+              //         },
+              //         isOutline: true,
+              //         outLineEnabledColor: AppColors.backgroundPurple,
+              //         outlineColor: AppColors.backgroundPurple,
+              //         enabledTextColor: AppColors.backgroundPurple,
+              //         enabledColor: AppColors.backgroundWhite,
+              //         text: "Cancel",
+              //         height: 45,
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: CustomAnimatedButton(
+              //         text: "Choose Date",
+              //         enabledColor: AppColors.backgroundPurple,
+              //         height: 45,
+              //         onPressed: () async {
+              //           if (selectedStatusIndex.isNotEmpty) {
+              //             // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+              //             controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+              //           }
+              //
+              //           controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+              //           List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+              //           if (dates.length == 2) {
+              //             if (dates[0] == dates[1]) {
+              //               controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
+              //               controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
+              //               controller.globalController.saveHomePastPatientData();
+              //             } else {
+              //               controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+              //               controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+              //               controller.globalController.saveHomePastPatientData();
+              //             }
+              //
+              //             HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+              //
+              //             print("homePastPatientData:- ${homePastPatientData?.toJson()}");
+              //
+              //             Get.back();
+              //             onTap();
+              //           } else {
+              //             print("date is not proper selected");
+              //           }
+              //           // controller.setDateRange();
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
               // Add your filter options here...
 
               const SizedBox(height: 20),

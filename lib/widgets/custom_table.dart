@@ -368,6 +368,18 @@ class CustomTable extends StatelessWidget {
           // Scrollable Content
           Expanded(
             child: NotificationListener<ScrollEndNotification>(
+              // onNotification: (notification) {
+              //   if (notification is ScrollUpdateNotification) {
+              //     double currentScrollPosition = notification.metrics.pixels;
+              //     double halfScreenPosition = notification.metrics.maxScrollExtent / 2;
+              //
+              //     if (currentScrollPosition >= halfScreenPosition && !isLoading) {
+              //       print("User has scrolled past half of the screen.");
+              //       onLoadMore?.call(); // Trigger the load more function
+              //     }
+              //   }
+              //   return false; // Allow other notifications to propagate
+              // },
               onNotification: (notification) {
                 if (notification.metrics.atEdge) {
                   print("notification.metrics.atEdge");

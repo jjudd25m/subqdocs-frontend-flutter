@@ -624,7 +624,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
                                                       borderRadius:
-                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(8), bottomRight: Radius.circular(6)),
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                       color: AppColors.white,
                                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
                                                     ),
@@ -633,9 +633,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6.0), topRight: Radius.circular(6)),
                                                             color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.1),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
                                                           ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -748,7 +748,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                           decoration: BoxDecoration(
                                                             borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                                                             color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
                                                           ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -925,7 +925,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               topRight: Radius.circular(6),
                                                             ),
                                                             color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
                                                           ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -1041,7 +1041,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               topRight: Radius.circular(6),
                                                             ),
                                                             color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
                                                           ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -1157,7 +1157,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               topRight: Radius.circular(6),
                                                             ),
                                                             color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
                                                           ),
                                                           // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                           padding: EdgeInsets.symmetric(horizontal: 10),

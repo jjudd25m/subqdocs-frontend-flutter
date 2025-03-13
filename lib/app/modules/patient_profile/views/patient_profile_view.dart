@@ -133,19 +133,19 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                   SizedBox(
                                                     width: 10,
                                                   ),
-                                                  SvgPicture.asset(
-                                                    ImagePath.edit,
-                                                    width: 26,
-                                                    height: 26,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    "Edit Profile Image",
-                                                    style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                  )
+                                                  // SvgPicture.asset(
+                                                  //   ImagePath.edit,
+                                                  //   width: 26,
+                                                  //   height: 26,
+                                                  //   fit: BoxFit.cover,
+                                                  // ),
+                                                  // SizedBox(
+                                                  //   width: 5,
+                                                  // ),
+                                                  // Text(
+                                                  //   "Edit Profile Image",
+                                                  //   style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                  // )
                                                 ],
                                               ),
                                             ),
@@ -335,7 +335,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                   width: double.infinity,
                                                   color: Colors.white,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 0),
+                                                    padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16, right: 16),
                                                     child: TableCustom(
                                                       rows: _getTableRows(controller.patientDetailModel.value?.responseData?.scheduledVisits ?? []),
                                                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {

@@ -364,23 +364,23 @@ class HomePatientListView extends GetView<HomeController> {
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           onTap: () {
-                            if (rowIndex != 0) {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                builder: (BuildContext context) {
-                                  return DeletePatientDialog(
-                                    title: "Are you sure want to delete patient",
-                                    onDelete: () {
-                                      print("delete id is :- ${controller.patientList[rowIndex].id}");
-                                      Get.back();
-                                      controller.deletePatientById(controller.patientList[rowIndex].id);
-                                    },
-                                    header: "Delete Patient",
-                                  ); // Our custom dialog
-                                },
-                              );
-                            }
+                            // if (rowIndex != 0) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                              builder: (BuildContext context) {
+                                return DeletePatientDialog(
+                                  title: "Are you sure want to delete patient",
+                                  onDelete: () {
+                                    print("delete id is :- ${controller.patientList[rowIndex].id}");
+                                    Get.back();
+                                    controller.deletePatientById(controller.patientList[rowIndex].id);
+                                  },
+                                  header: "Delete Patient",
+                                ); // Our custom dialog
+                              },
+                            );
+                            // }
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

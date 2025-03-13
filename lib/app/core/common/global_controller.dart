@@ -77,7 +77,7 @@ class GlobalController extends GetxController {
       json['pastVisitSelectedSorting'] = pastVisitSelectedSorting;
       json['colIndex'] = 1;
       json['isAscending'] = true;
-      json['selectedStatusIndex'] = [];
+      json['selectedStatusIndex'] = ["Pending"];
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";

@@ -21,6 +21,7 @@ import '../../login/model/login_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
 import '../model/deletePatientModel.dart';
+import '../model/home_past_patient_list_sorting_model.dart';
 import '../model/patient_list_model.dart';
 import '../model/patient_schedule_model.dart';
 import '../model/schedule_visit_list_model.dart';
@@ -107,29 +108,31 @@ class HomeController extends GetxController {
   // RxInt colIndexPatient = RxInt(-1);
   // RxBool isAsendingPatient = RxBool(true);
 
-  RxBool isLoading = RxBool(false);  String getNextRoundedTime() {
+  RxBool isLoading = RxBool(false);
+  String getNextRoundedTime() {
     DateTime now = DateTime.now();
-
 
     int minutes = now.minute;
     int roundedMinutes = ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
 
     if (roundedMinutes == 60) {
-
       now = now.add(Duration(minutes: 60 - minutes));
       now = DateTime(now.year, now.month, now.day, now.hour + 1, 0);
     } else {
       now = DateTime(now.year, now.month, now.day, now.hour, roundedMinutes);
     }
 
-
     final DateFormat formatter = DateFormat('hh:mm a');
     return formatter.format(now);
   }
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
+
+    HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+
+    print("homePastPatientData:- ${homePastPatientData?.toJson()}");
 
     handelInternetConnection();
     if (Get.arguments != null) {
@@ -771,7 +774,7 @@ class HomeController extends GetxController {
 
     startDate.value = "MM/DD/YYYY";
     endDate.value = "";
-    globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.clear();
+    // globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.clear();
     // selectedStatusIndex.clear();
     fromController.clear();
     toController.clear();

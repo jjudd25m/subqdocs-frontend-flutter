@@ -665,65 +665,85 @@ class HomeView extends GetView<HomeController> {
                                                   //     ),
                                                   //   ),
                                                   // ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      if (controller.tabIndex.value == 0) {
-                                                        showMaterialModalBottomSheet(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return PatientListFilterBottomSheet(
-                                                              onTap: () {
-                                                                controller.getPatientList();
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      } else if (controller.tabIndex.value == 1) {
-                                                        showMaterialModalBottomSheet(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return ScheduleListFilterBottomSheet(
-                                                              onTap: () {
-                                                                controller.getScheduleVisitList();
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      } else if (controller.tabIndex.value == 2) {
-                                                        showMaterialModalBottomSheet(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return PastPatientListFilterBottomSheet(
-                                                              onTap: () {
-                                                                controller.getPastVisitList(isFist: true);
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        border: Border.all(
-                                                          color: AppColors.textDarkGrey, // Border color
-                                                          width: 0.5,
-                                                        ),
+                                                  if (controller.tabIndex.value != 0) ...[
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        // if (controller.tabIndex.value == 0) {
+                                                        //   showMaterialModalBottomSheet(
+                                                        //     context: context,
+                                                        //     builder: (context) {
+                                                        //       return PatientListFilterBottomSheet(
+                                                        //         onTap: () {
+                                                        //           controller.getPatientList();
+                                                        //         },
+                                                        //       );
+                                                        //     },
+                                                        //   ).then(
+                                                        //     (value) {
+                                                        //       controller.getPatientList();
+                                                        //       print("value");
+                                                        //     },
+                                                        //   );
+                                                        // } else
 
-                                                        borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(10),
-                                                        child: SvgPicture.asset(
-                                                          "assets/images/filter_logo.svg",
-                                                          width: 40,
-                                                          height: 40,
+                                                        if (controller.tabIndex.value == 1) {
+                                                          showMaterialModalBottomSheet(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return ScheduleListFilterBottomSheet(
+                                                                onTap: () {
+                                                                  controller.getScheduleVisitList();
+                                                                },
+                                                              );
+                                                            },
+                                                          ).then(
+                                                            (value) {
+                                                              controller.getScheduleVisitList();
+                                                              print("value");
+                                                            },
+                                                          );
+                                                        } else if (controller.tabIndex.value == 2) {
+                                                          showMaterialModalBottomSheet(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return PastPatientListFilterBottomSheet(
+                                                                onTap: () {
+                                                                  controller.getPastVisitList(isFist: true);
+                                                                },
+                                                              );
+                                                            },
+                                                          ).then(
+                                                            (value) {
+                                                              controller.getPastVisitList(isFist: true);
+                                                              print("value");
+                                                            },
+                                                          );
+                                                          ;
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                        height: 40,
+                                                        width: 40,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border.all(
+                                                            color: AppColors.textDarkGrey, // Border color
+                                                            width: 0.5,
+                                                          ),
+
+                                                          borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(10),
+                                                          child: SvgPicture.asset(
+                                                            "assets/images/filter_logo.svg",
+                                                            width: 40,
+                                                            height: 40,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
+                                                  ],
                                                   SizedBox(
                                                     width: 10,
                                                   ),
