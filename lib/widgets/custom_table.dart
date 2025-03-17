@@ -410,6 +410,7 @@ class CustomTable extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 5)
         ],
       ),
     );
@@ -451,14 +452,20 @@ class CustomTable extends StatelessWidget {
           color: Colors.white,
           border: Border(top: BorderSide(color: Colors.grey.shade300, width: rowIndex == 0 ? 0 : 1)),
         ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             for (int colIndex = 0; colIndex < columnCount; colIndex++)
               Container(
+                // decoration: BoxDecoration(
+                //   color: Colors.white,
+                //   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                //   // border: Border(bottom: BorderSide(color: Colors.grey.shade300, width: 1)),
+                // ),
+                color: AppColors.white,
                 width: screenWidth * columnWidths[colIndex],
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                 child: cellBuilder(
                   context,
                   rowIndex,

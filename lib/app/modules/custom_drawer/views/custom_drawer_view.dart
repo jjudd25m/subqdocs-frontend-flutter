@@ -39,7 +39,8 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 19, right: 19),
+              padding: EdgeInsets.only(left: 0, right: 0),
+              // padding: EdgeInsets.only(left: 19, right: 19),
               child: Column(
                 children: [
                   SizedBox(
@@ -47,6 +48,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                   ),
                   Row(
                     children: [
+                      SizedBox(width: 20),
                       loginData.responseData?.user?.id == 49
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
@@ -86,10 +88,14 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: SvgPicture.asset(
-                          ImagePath.crossWithContainer,
-                          height: 30,
-                          width: 30,
+                        child: Container(
+                          color: AppColors.white,
+                          padding: EdgeInsets.all(15),
+                          child: SvgPicture.asset(
+                            ImagePath.crossWithContainer,
+                            height: 30,
+                            width: 30,
+                          ),
                         ),
                       )
                     ],

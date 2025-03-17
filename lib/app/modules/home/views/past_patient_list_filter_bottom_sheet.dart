@@ -208,15 +208,15 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                     controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
                     List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
                     if (dates.length == 2) {
-                      if (dates[0] == dates[1]) {
-                        controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-                        controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-                        controller.globalController.saveHomePastPatientData();
-                      } else {
-                        controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
-                        controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
-                        controller.globalController.saveHomePastPatientData();
-                      }
+                      // if (dates[0] == dates[1]) {
+                      //   controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
+                      //   controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
+                      //   controller.globalController.saveHomePastPatientData();
+                      // } else {
+                      controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+                      controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+                      controller.globalController.saveHomePastPatientData();
+                      // }
                     }
 
                     // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;

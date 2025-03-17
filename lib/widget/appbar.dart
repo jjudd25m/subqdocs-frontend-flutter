@@ -56,7 +56,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -64,17 +65,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onTap: () {
                     drawerkey.currentState!.openDrawer();
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 0.0, top: 15.0, bottom: 15.0, right: 30.0),
+                  child: Container(
+                    color: AppColors.white,
+                    padding: const EdgeInsets.only(left: 15.0, top: 20.0, bottom: 20.0, right: 30.0),
                     child: SvgPicture.asset(
                       ImagePath.drawer,
-                      height: 20,
-                      width: 20,
+                      height: 25,
+                      width: 25,
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 5,
+                  width: 0,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -93,27 +95,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   },
                   child: Image.asset(
                     ImagePath.subqdocs_text_logo,
-                    width: 200,
-                    height: 50,
+                    width: 180,
+                    height: 55,
                   ),
                 ),
                 Spacer(),
                 Row(
                   children: [
-                    loginData.responseData?.user?.id == 49 ? ClipRRect(
-                      borderRadius: BorderRadius.circular(25.0),
-                      child: Image.asset(
-                        fit: BoxFit.cover,
-                        ImagePath.user,
-                        height: 50,
-                        width: 50,
-                      ),
-                    ) :
-                    BaseImageView(
-                      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                      width: 50,
-                      height: 50,
-                    ),
+                    loginData.responseData?.user?.id == 49
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: Image.asset(
+                              fit: BoxFit.cover,
+                              ImagePath.user,
+                              height: 50,
+                              width: 50,
+                            ),
+                          )
+                        : BaseImageView(
+                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                            width: 50,
+                            height: 50,
+                          ),
                     SizedBox(
                       width: 15,
                     ),
@@ -137,7 +140,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     )
                   ],
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 20),
                 // GestureDetector(
                 //   onTap: () async {
                 //     await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);

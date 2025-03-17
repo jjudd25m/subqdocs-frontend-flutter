@@ -28,15 +28,23 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
           children: [
             Container(
               width: 360,
-              color: AppColors.backgroundPurple,
+              decoration: BoxDecoration(
+                color: AppColors.backgroundPurple,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+              ),
+              // color: AppColors.backgroundPurple,
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(0),
+                // padding: const EdgeInsets.all(10),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      "Add Attachments",
-                      style: AppFonts.medium(14, Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Text(
+                        "Add Attachments",
+                        style: AppFonts.medium(14, Colors.white),
+                      ),
                     ),
                     Spacer(),
                     GestureDetector(
@@ -44,9 +52,13 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                         Navigator.pop(context);
                         controller.list.clear();
                       },
-                      child: SvgPicture.asset(
-                        "assets/images/cross_white.svg",
-                        width: 15,
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        color: AppColors.clear,
+                        child: SvgPicture.asset(
+                          "assets/images/cross_white.svg",
+                          width: 15,
+                        ),
                       ),
                     )
                   ],

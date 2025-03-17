@@ -10,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:sqflite/utils/utils.dart';
 import 'package:subqdocs/app/modules/visit_main/views/table_custom.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -185,18 +186,19 @@ class _VisitMainViewState extends State<VisitMainView> {
                                               onTap: () {
                                                 Get.back();
                                               },
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 8),
+                                              child: Container(
+                                                color: AppColors.white,
+                                                padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
                                                 child: SvgPicture.asset(
                                                   ImagePath.logo_back,
-                                                  height: 15,
-                                                  width: 18,
+                                                  height: 20,
+                                                  width: 20,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: 11,
-                                            ),
+                                            // SizedBox(
+                                            //   width: 11,
+                                            // ),
                                             ClipRRect(
                                                 borderRadius: BorderRadius.circular(30),
                                                 child: BaseImageView(
@@ -548,7 +550,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
                                           child: Container(
                                               decoration: BoxDecoration(
-                                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                // border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                                 color: AppColors.backgroundWhite,
                                                 borderRadius: BorderRadius.circular(8),
                                               ),
@@ -558,11 +560,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     Row(
                                                       children: [
                                                         SizedBox(
-                                                          width: 10,
+                                                          width: 5,
                                                         ),
                                                         Text(
                                                           "•",
-                                                          style: AppFonts.regular(24, AppColors.black),
+                                                          style: AppFonts.regular(24, AppColors.textDarkGrey),
                                                         ),
                                                         SizedBox(
                                                           width: 10,
@@ -680,7 +682,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                     SizedBox(width: 10),
                                                                                     Text(
                                                                                       "•",
-                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                      style: AppFonts.regular(24, AppColors.textGrey),
                                                                                     ),
                                                                                     SizedBox(width: 10),
                                                                                     Expanded(
@@ -810,6 +812,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       ],
                                                                     )
                                                                   : SizedBox(),
+                                                              SizedBox(height: 10),
                                                               Container(
                                                                 height: 0.5,
                                                                 width: double.infinity,
@@ -1268,7 +1271,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       border: Border.all(width: 0.5, color: AppColors.white),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(1),
+                                      padding: const EdgeInsets.all(0),
                                       child: Theme(
                                         data: ThemeData(
                                           splashColor: Colors.transparent, // Remove splash color
@@ -1293,7 +1296,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                             ),
                                           ),
                                           children: <Widget>[
-                                            controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
+                                            controller.patientDetailModel.value?.responseData?.scheduledVisits?.isNotEmpty ?? false
                                                 ? Container(
                                                     width: double.infinity,
                                                     color: Colors.white,

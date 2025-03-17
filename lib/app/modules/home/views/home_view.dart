@@ -179,7 +179,7 @@ class HomeView extends GetView<HomeController> {
                                       return Container(
                                           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
-                                          height: 65,
+                                          height: 70,
                                           child: SingleChildScrollView(
                                             physics: BouncingScrollPhysics(),
                                             scrollDirection: Axis.horizontal,

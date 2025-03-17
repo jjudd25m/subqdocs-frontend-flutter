@@ -193,7 +193,7 @@ class LoginView extends GetView<LoginController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account yet?",
+                        "Don't have an account yet? ",
                         style: AppFonts.medium(14, AppColors.textDarkGrey),
                       ),
                       GestureDetector(

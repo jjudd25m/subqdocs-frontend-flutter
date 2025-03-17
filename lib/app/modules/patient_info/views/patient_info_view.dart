@@ -140,18 +140,19 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           onTap: () {
                                             Get.back();
                                           },
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 8),
+                                          child: Container(
+                                            color: AppColors.white,
+                                            padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
                                             child: SvgPicture.asset(
                                               ImagePath.logo_back,
-                                              height: 15,
-                                              width: 18,
+                                              height: 20,
+                                              width: 20,
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 11,
-                                        ),
+                                        // SizedBox(
+                                        //   width: 11,
+                                        // ),
                                         ClipRRect(
                                             borderRadius: BorderRadius.circular(30),
                                             child: BaseImageView(
