@@ -380,7 +380,7 @@ class DoctorView extends StatelessWidget {
                                           ]
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.medications != "-") ...[
+                                        if (task.medications != "-" && task.medications != "")...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -405,7 +405,7 @@ class DoctorView extends StatelessWidget {
                                           ),
                                           SizedBox(height: 10),
                                         ],
-                                        if (task.orders != "-") ...[
+                                        if (task.orders != "-" && task.orders != "") ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -429,7 +429,7 @@ class DoctorView extends StatelessWidget {
                                           ),
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.counselingAndDiscussion != "-") ...[
+                                        if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "" ) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -453,7 +453,7 @@ class DoctorView extends StatelessWidget {
                                           ),
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.followUp != "-") ...[
+                                        if (task.followUp != "-" && task.followUp != "") ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(

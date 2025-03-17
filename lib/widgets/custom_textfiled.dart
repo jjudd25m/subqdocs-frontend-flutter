@@ -110,8 +110,11 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
                             splashColor: Colors.transparent,
                             onTap: () {
                               widget.onTap?.call();
-                              widget.isSuffixIconVisible = false;
 
+                              if(widget.isFirst == true)
+                              {
+                              widget.isSuffixIconVisible = false;
+                              }
                               setState(() {});
                             },
                             child: Padding(

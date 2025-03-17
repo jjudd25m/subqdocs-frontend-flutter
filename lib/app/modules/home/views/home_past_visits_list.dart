@@ -143,19 +143,20 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               value: "",
                                               onTap: () async {
-                                                // Get.toNamed(Routes.EDIT_PATENT_DETAILS);
+    customPrint("row index is :- $rowIndex");
 
-                                                final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {
-                                                  "patientData": controller.pastVisitList[rowIndex].id.toString(),
-                                                  "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
-                                                  "fromSchedule": false
-                                                });
+    Get.delete<PatientInfoController>();
 
-                                                if (result == 1) {
-                                                  controller.getScheduleVisitList(isFist: true);
-                                                  controller.getPastVisitList(isFist: true);
-                                                  controller.getPatientList();
-                                                }
+    await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+    "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+    "patientId": controller.pastVisitList[rowIndex].id.toString(),
+    "unique_tag": DateTime.now().toString(),
+    });
+
+    controller.getPastVisitList();
+    controller.getScheduleVisitList();
+    controller.getPatientList();
+
                                               },
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +169,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                   Padding(
                                                     padding: const EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      "Edit",
+                                                      "view visit",
                                                       style: AppFonts.regular(14, AppColors.textBlack),
                                                     ),
                                                   ),
@@ -212,13 +213,17 @@ class HomePastVisitsList extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               // value: "",
                                               onTap: () async {
-                                                dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                                  "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
-                                                  "patientId": controller.pastVisitList[rowIndex].id.toString(),
-                                                  "unique_tag": DateTime.now().toString(),
-                                                });
 
-                                                print("back from response");
+
+                                                String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+                                                controller.patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex].id.toString(), "visit_date": date, "visit_time": controller.getNextRoundedTimeHH()});
+                                                // dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                                //   "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+                                                //   "patientId": controller.pastVisitList[rowIndex].id.toString(),
+                                                //   "unique_tag": DateTime.now().toString(),
+                                                // });
+                                                //
+                                                // print("back from response");
 
                                                 // showDialog(
                                                 //   context: context,
@@ -250,7 +255,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                   Padding(
                                                     padding: const EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      "Medical record",
+                                                      "start now",
                                                       style: AppFonts.regular(14, AppColors.textBlack),
                                                     ),
                                                   ),

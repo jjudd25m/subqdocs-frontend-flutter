@@ -35,7 +35,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
     return Scaffold(
         key: _key,
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.ScreenBackGround,
         drawer: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: 5.0,
@@ -71,7 +71,6 @@ class PatientProfileView extends GetView<PatientProfileController> {
           onTap: removeFocus,
           child: SafeArea(
             child: Container(
-              color: AppColors.ScreenBackGround,
               child: Column(
                 children: [
                   CustomAppBar(drawerkey: _key),
@@ -86,8 +85,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Container(
-                                    padding: EdgeInsets.all(Dimen.margin0),
-                                    // padding: EdgeInsets.all(Dimen.margin16),
+                                    padding: EdgeInsets.all(Dimen.margin16),
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -98,15 +96,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                               onTap: () {
                                                 Get.back();
                                               },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                color: AppColors.clear,
-                                                child: SvgPicture.asset(
-                                                  ImagePath.arrowLeft,
-                                                  fit: BoxFit.cover,
-                                                  width: Dimen.margin30,
-                                                  height: Dimen.margin30,
-                                                ),
+                                              child: SvgPicture.asset(
+                                                ImagePath.arrowLeft,
+                                                fit: BoxFit.cover,
+                                                width: Dimen.margin24,
+                                                height: Dimen.margin24,
                                               ),
                                             ),
                                             SizedBox(
@@ -121,190 +115,185 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Row(
-                                                  children: [
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.circular(100),
-                                                        child: BaseImageView(
-                                                          height: 50,
-                                                          width: 50,
-                                                          fontSize: 16,
-                                                          imageUrl: controller.patientDetailModel.value?.responseData?.profileImage ?? "",
-                                                          nameLetters:
-                                                              "${controller.patientDetailModel.value?.responseData?.firstName} ${controller.patientDetailModel.value?.responseData?.lastName} ",
-                                                        )),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    // SvgPicture.asset(
-                                                    //   ImagePath.edit,
-                                                    //   width: 26,
-                                                    //   height: 26,
-                                                    //   fit: BoxFit.cover,
-                                                    // ),
-                                                    // SizedBox(
-                                                    //   width: 5,
-                                                    // ),
-                                                    // Text(
-                                                    //   "Edit Profile Image",
-                                                    //   style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                    // )
-                                                  ],
-                                                ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  ClipRRect(
+                                                      borderRadius: BorderRadius.circular(100),
+                                                      child: BaseImageView(
+                                                        height: 50,
+                                                        width: 50,
+                                                        fontSize: 16,
+                                                        imageUrl: controller.patientDetailModel.value?.responseData?.profileImage ?? "",
+                                                        nameLetters: "${controller.patientDetailModel.value?.responseData?.firstName} ${controller.patientDetailModel.value?.responseData?.lastName} ",
+                                                      )),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  // SvgPicture.asset(
+                                                  //   ImagePath.edit,
+                                                  //   width: 26,
+                                                  //   height: 26,
+                                                  //   fit: BoxFit.cover,
+                                                  // ),
+                                                  // SizedBox(
+                                                  //   width: 5,
+                                                  // ),
+                                                  // Text(
+                                                  //   "Edit Profile Image",
+                                                  //   style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                  // )
+                                                ],
                                               ),
-                                              Spacer(),
-                                              Expanded(
-                                                child: Row(
-                                                  children: [
-                                                    Spacer(),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
-                                                            arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true});
-                                                      },
-                                                      child: SvgPicture.asset(
-                                                        ImagePath.edit,
-                                                        width: 26,
-                                                        height: 26,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    ContainerButton(
-                                                      onPressed: () async {
-                                                        showDialog(
-                                                          context: context,
-                                                          barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                          builder: (BuildContext context) {
-                                                            return SchedulePatientDialog(
-                                                              receiveParam: (p0, p1) {
-                                                                customPrint("p0 is $p0 p1 is $p1");
-                                                                controller.patientScheduleCreate(param: {"patient_id": controller.patientId, "visit_date": p1, "visit_time": p0});
-                                                              },
-                                                            ); // Our custom dialog
-                                                          },
-                                                        );
-                                                        // final result = await Get.toNamed(Routes.ADD_PATIENT);
-                                                      },
-                                                      text: 'Schedule Visit',
+                                            ),
+                                            Spacer(),
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Spacer(),
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
+                                                          arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true});
 
-                                                      borderColor: AppColors.backgroundPurple,
-                                                      // Custom border color
-                                                      backgroundColor: AppColors.backgroundPurple,
-                                                      // Custom background color
-                                                      needBorder: true,
-                                                      // Show border
-                                                      textColor: AppColors.white,
-                                                      // Custom text color
-                                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
-                                                      // Custom padding
-                                                      radius: 6, // Custom border radius
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                                      controller.onReady();
+                                                    },
+                                                    child: SvgPicture.asset(
+                                                      ImagePath.edit,
+                                                      width: 26,
+                                                      height: 26,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  ContainerButton(
+                                                    onPressed: () async {
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                        builder: (BuildContext context) {
+                                                          return SchedulePatientDialog(
+                                                            receiveParam: (p0, p1) {
+                                                              customPrint("p0 is $p0 p1 is $p1");
+                                                              controller.patientScheduleCreate(param: {"patient_id": controller.patientId, "visit_date": p1, "visit_time": p0});
+                                                            },
+                                                          ); // Our custom dialog
+                                                        },
+                                                      );
+                                                      // final result = await Get.toNamed(Routes.ADD_PATIENT);
+                                                    },
+                                                    text: 'Schedule Visit',
+
+                                                    borderColor: AppColors.backgroundPurple,
+                                                    // Custom border color
+                                                    backgroundColor: AppColors.backgroundPurple,
+                                                    // Custom background color
+                                                    needBorder: true,
+                                                    // Show border
+                                                    textColor: AppColors.white,
+                                                    // Custom text color
+                                                    padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                                    // Custom padding
+                                                    radius: 6, // Custom border radius
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
                                         ),
                                         SizedBox(
                                           height: Dimen.margin16,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  CommonPatientData(
-                                                    label: "Patient ID",
-                                                    data: controller.patientDetailModel.value?.responseData?.patientId.toString(),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  CommonPatientData(
-                                                    label: "Date of Birth",
-                                                    data: controller.dob.value,
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  CommonPatientData(
-                                                    label: "First Name",
-                                                    data: controller.patientDetailModel.value?.responseData?.firstName ?? "",
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  CommonPatientData(label: "Sex", data: controller.patientDetailModel.value?.responseData?.gender ?? ""),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      CommonPatientData(
-                                                        label: "Middle Name",
-                                                        data: controller.patientDetailModel.value?.responseData?.middleName ?? "-",
-                                                      ),
-                                                      SizedBox(
-                                                        width: 120,
-                                                      ),
-                                                      CommonPatientData(
-                                                        label: "Last Name",
-                                                        data: controller.patientDetailModel.value?.responseData?.lastName,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  CommonPatientData(
-                                                    label: "Email Address",
-                                                    data: controller.patientDetailModel.value?.responseData?.email,
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      CommonPatientData(
-                                                        label: "",
-                                                        data: "",
-                                                      ),
-                                                      CommonPatientData(
-                                                        label: "",
-                                                        data: "",
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  CommonPatientData(
-                                                    label: "",
-                                                    data: "",
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CommonPatientData(
+                                                  label: "Patient ID",
+                                                  data: controller.patientDetailModel.value?.responseData?.patientId.toString(),
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                CommonPatientData(
+                                                  label: "Date of Birth",
+                                                  data: controller.dob.value,
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CommonPatientData(
+                                                  label: "First Name",
+                                                  data: controller.patientDetailModel.value?.responseData?.firstName ?? "",
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                CommonPatientData(label: "Sex", data: controller.patientDetailModel.value?.responseData?.gender ?? ""),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    CommonPatientData(
+                                                      label: "Middle Name",
+                                                      data: controller.patientDetailModel.value?.responseData?.middleName,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 120,
+                                                    ),
+                                                    CommonPatientData(
+                                                      label: "Last Name",
+                                                      data: controller.patientDetailModel.value?.responseData?.lastName,
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                CommonPatientData(
+                                                  label: "Email Address",
+                                                  data: controller.patientDetailModel.value?.responseData?.email,
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    CommonPatientData(
+                                                      label: "",
+                                                      data: "",
+                                                    ),
+                                                    CommonPatientData(
+                                                      label: "",
+                                                      data: "",
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                CommonPatientData(
+                                                  label: "",
+                                                  data: "",
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(
                                           height: Dimen.margin16,
@@ -321,7 +310,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                       border: Border.all(width: 0.5, color: AppColors.lightpurpule),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(0),
+                                      padding: const EdgeInsets.all(1),
                                       child: ExpansionTile(
                                         initiallyExpanded: true,
                                         shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -343,7 +332,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           ),
                                         ),
                                         children: <Widget>[
-                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.isNotEmpty ?? false
+                                          controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
                                               ? Container(
                                                   width: double.infinity,
                                                   color: Colors.white,
@@ -528,7 +517,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                       border: Border.all(width: 0.5, color: AppColors.lightpurpule),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(0),
+                                      padding: const EdgeInsets.all(1),
                                       child: Theme(
                                         data: ThemeData(
                                           splashColor: Colors.transparent, // Remove splash color
@@ -607,13 +596,11 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                       ],
                                                                     ),
                                                                     SizedBox(height: 10),
-                                                                    if (controller.patientDetailModel.value?.responseData?.pastVisits?.isNotEmpty ?? false) ...[
-                                                                      if (index != ((controller.patientDetailModel.value?.responseData?.pastVisits!.length ?? 0) - 1)) ...[
-                                                                        Divider(
-                                                                          height: 1,
-                                                                          color: AppColors.appbarBorder,
-                                                                        )
-                                                                      ]
+                                                                    if (index != 7) ...[
+                                                                      Divider(
+                                                                        height: 1,
+                                                                        color: AppColors.appbarBorder,
+                                                                      )
                                                                     ]
                                                                   ],
                                                                 ),
