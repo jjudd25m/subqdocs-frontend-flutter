@@ -444,6 +444,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               Expanded(
                                                 child: TextFormFiledWidget(
                                                   isSuffixIconVisible: false,
+                                                  isValid: true,
                                                   isFirst: true,
                                                   format: [NoSpaceLowercaseTextFormatter()],
                                                   label: "Email Address",
@@ -458,7 +459,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     size: 25,
                                                   ),
                                                   checkValidation: (value) {
-                                                    return Validation.emailValidate(value);
+                                                    return Validation.emailValidateRequired(value);
                                                   },
                                                 ),
                                               ),
@@ -533,12 +534,23 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                             children: [
                                               Expanded(
                                                 child: TextFormFiledWidget(
-                                                  label: "Email Address",
+                                                  isSuffixIconVisible: false,
+                                                  isValid: true,
+                                                  isFirst: true,
                                                   format: [NoSpaceLowercaseTextFormatter()],
+                                                  label: "Email Address",
                                                   controller: controller.emailAddressController,
                                                   hint: "donjones@example.com",
+                                                  onTap: () {
+                                                    controller.emailAddressController.clear();
+                                                  },
+                                                  suffixIcon: Icon(
+                                                    Icons.highlight_remove,
+                                                    color: AppColors.textDarkGrey,
+                                                    size: 25,
+                                                  ),
                                                   checkValidation: (value) {
-                                                    return Validation.emailValidate(value);
+                                                    return Validation.emailValidateRequired(value);
                                                   },
                                                 ),
                                               ),

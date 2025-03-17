@@ -158,6 +158,9 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                     onTap: () async {
                                                       final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
                                                           arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true});
+
+                                                      controller.onReady();
+
                                                     },
                                                     child: SvgPicture.asset(
                                                       ImagePath.edit,

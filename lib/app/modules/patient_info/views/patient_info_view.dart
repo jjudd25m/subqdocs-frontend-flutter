@@ -441,7 +441,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "Dr ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
+                                                    "${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
                                                     style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                   SizedBox(width: 5),
@@ -826,12 +826,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                controller.isSignatureDone.value = false;
+                                // controller.isSignatureDone.value = false;
                               },
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 120,
+                                    height: 80,
                                     decoration: BoxDecoration(
                                       border: Border.all(color: AppColors.backgroundPurple),
                                       color: AppColors.backgroundPurple,
@@ -853,14 +853,10 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
-                                              "Digitally Signed by Dr. Adrian Tinajero ",
+                                              "Digitally Signed by ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
                                               style: AppFonts.medium(16, AppColors.textWhite),
                                             ),
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "12/10/2024 5:02 PM",
-                                              style: AppFonts.medium(16, AppColors.textWhite),
-                                            ),
+
                                           ],
                                         ),
                                       ],

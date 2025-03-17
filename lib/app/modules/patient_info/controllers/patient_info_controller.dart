@@ -71,6 +71,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getPatientDetails() async {
     patientData.value = await _visitMainRepository.getPatientDetails(id: visitId);
+
+    if(patientData.value?.responseData?.visitStatus == "Finalized")
+      {
+        isSignatureDone.value  = true;
+
+      }
     print("patient data is :- ${patientData.value?.toJson()}");
     // Get.back();Get
     // back  customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");

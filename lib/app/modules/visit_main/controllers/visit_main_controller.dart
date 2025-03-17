@@ -470,6 +470,56 @@ class VisitMainController extends GetxController  {
     }
   }
 
+
+
+  String visitDate(String? date)
+  {
+    String visitDate = "N/A";
+
+
+    if (date != null) {
+      DateTime visitdateTime = DateTime.parse(date ?? "");
+
+      // Create a DateFormat to format the date
+      DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
+
+      // Format the DateTime object to the desired format
+      String visitformattedDate = visitdateFormat.format(visitdateTime);
+
+      visitDate = visitformattedDate;
+      return visitDate;
+
+    }else{
+      return "";
+    }
+
+
+  }
+
+
+  String visitTime(String? time)
+  {
+
+    String visitTime = "N/A";
+
+
+    if (time != null) {
+      DateTime visitdateTime = DateTime.parse(time ?? "").toLocal();
+
+      // Create a DateFormat to format the date
+      DateFormat visitdateFormat = DateFormat('hh:mm a');
+
+      // Format the DateTime object to the desired format
+      String visitformattedDate = visitdateFormat.format(visitdateTime);
+
+      visitTime = visitformattedDate;
+      return visitTime;
+
+    }else{
+      return "";
+    }
+  }
+
   Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
     customPrint("visit id :- $visitId");
     dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);

@@ -53,6 +53,24 @@ class HomeController extends GetxController {
 
   RxList<StatusModel> statusModel = RxList();
 
+
+  String getNextRoundedTime() {
+    DateTime now = DateTime.now();
+
+    int minutes = now.minute;
+    int roundedMinutes = ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
+
+    if (roundedMinutes == 60) {
+      now = now.add(Duration(minutes: 60 - minutes));
+      now = DateTime(now.year, now.month, now.day, now.hour + 1, 0);
+    } else {
+      now = DateTime(now.year, now.month, now.day, now.hour, roundedMinutes);
+    }
+
+    final DateFormat formatter = DateFormat('hh:mm a');
+    return formatter.format(now);
+  }
+
   // RxInt selectedIndex = RxInt(-1);
   // RxList<int> selectedStatusIndex = RxList();
 
@@ -109,8 +127,8 @@ class HomeController extends GetxController {
   // RxBool isAsendingPatient = RxBool(true);
 
   RxBool isLoading = RxBool(false);
-  String getNextRoundedTime() {
-    DateTime now = DateTime.now();
+  String getNextRoundedTimeHH() {
+    DateTime now = DateTime.now().toUtc();
 
     int minutes = now.minute;
     int roundedMinutes = ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
@@ -122,7 +140,7 @@ class HomeController extends GetxController {
       now = DateTime(now.year, now.month, now.day, now.hour, roundedMinutes);
     }
 
-    final DateFormat formatter = DateFormat('hh:mm a');
+    final DateFormat formatter = DateFormat('HH:mm:ss');
     return formatter.format(now);
   }
 
@@ -937,6 +955,32 @@ class HomeController extends GetxController {
   }
 
   Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {
+    Loader().showLoadingDialogForSimpleLoader();
+
+    try {
+      PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
+      // customPrint("patientVisitCreate API  internal response $response");
+      CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
+      tabIndex.value = 1;
+      globalController.homeTabIndex.value = 1;
+
+      globalController.saveHomeScheduleListData();
+      globalController.saveHomePastPatientData();
+      globalController.saveHomePatientListData();
+
+      getPastVisitList();
+      getScheduleVisitList();
+      getPatientList();
+
+      Get.back();
+    } catch (e) {
+      Get.back();
+    }
+  }
+
+
+
+  Future<void> startNow({required Map<String, dynamic> param}) async {
     Loader().showLoadingDialogForSimpleLoader();
 
     try {
