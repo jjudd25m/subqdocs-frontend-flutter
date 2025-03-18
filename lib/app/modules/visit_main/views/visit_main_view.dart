@@ -722,7 +722,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     Text(
                                                                       textAlign: TextAlign.left,
                                                                       "No data available",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
                                                                     ),
                                                                     Spacer()
                                                                   ],
@@ -812,12 +812,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       ],
                                                                     )
                                                                   : SizedBox(),
-                                                              SizedBox(height: 10),
+                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ?    SizedBox(height: 10): SizedBox(),
+                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ?
                                                               Container(
                                                                 height: 0.5,
                                                                 width: double.infinity,
                                                                 color: AppColors.textGrey,
-                                                              )
+                                                              ): SizedBox(),
                                                             ],
                                                           ),
                                                         ),
@@ -826,7 +827,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         ),
                                                         Padding(
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ?? false
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
                                                               ? ListView.builder(
                                                                   shrinkWrap: true,
                                                                   physics: NeverScrollableScrollPhysics(),
@@ -842,26 +843,44 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                   crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
                                                                                   children: [
                                                                                     SizedBox(width: 7),
+
                                                                                     SizedBox(
                                                                                       width: Get.width * .25,
-                                                                                      child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "",
+                                                                                      child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "" )!= "" ? Text(
+
+
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "-",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ):Text(
+
+
+                                                                                        "-",
                                                                                         style: AppFonts.regular(14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(width: 7),
                                                                                     SizedBox(
                                                                                       width: Get.width * .45,
-                                                                                      child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "",
+                                                                                      child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "" )!= "" ? Text(
+                                                                                        (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "-"),
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ):Text(
+
+
+                                                                                        "-",
                                                                                         style: AppFonts.regular(14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
                                                                                     SizedBox(width: 7),
                                                                                     SizedBox(
                                                                                       width: Get.width * .15,
-                                                                                      child: Text(
-                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "",
+                                                                                      child:  (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "" )!= "" ? Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "-",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ):Text(
+
+
+                                                                                        "-",
                                                                                         style: AppFonts.regular(14, AppColors.textGrey),
                                                                                       ),
                                                                                     ),
@@ -897,7 +916,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     Text(
                                                                       textAlign: TextAlign.left,
                                                                       "No data available",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
                                                                     ),
                                                                     Spacer()
                                                                   ],
@@ -955,7 +974,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         ),
                                                         Padding(
                                                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory != null ?? false
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory != null
                                                               ? ListView.builder(
                                                                   shrinkWrap: true,
                                                                   physics: NeverScrollableScrollPhysics(),
@@ -1013,7 +1032,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     Text(
                                                                       textAlign: TextAlign.left,
                                                                       "No data available",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
                                                                     ),
                                                                     Spacer()
                                                                   ],
@@ -1129,7 +1148,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     Text(
                                                                       textAlign: TextAlign.left,
                                                                       "No data available",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                      style: AppFonts.medium(16,AppColors.textBlack),
                                                                     ),
                                                                     Spacer()
                                                                   ],
@@ -1245,7 +1264,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     Text(
                                                                       textAlign: TextAlign.left,
                                                                       "No data available",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
                                                                     ),
                                                                     Spacer()
                                                                   ],
