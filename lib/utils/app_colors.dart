@@ -36,6 +36,8 @@ class AppColors {
 
   static const Color textfieldBorder = Color(0xFFD8DCE4);
   static const Color appbarBorder = Color(0xFFD8DCE4);
+  static const Color offBlackText = Color(0xFF333544);
+  static const Color filterBorder = Color(0xFFD0D0F6);
   static const Color blackLight = Color.fromRGBO(0, 0, 0, 0.03);
 
   static const Color ScreenBackGround = Color(0xFFF6F6FD);
@@ -52,4 +54,5 @@ class AppColors {
 
   static const Color lightpurpule = Color(0xFFE9E9FB);
   static const Color lightpurpuleButton = Color(0xFF5B5BE126);
+  static const Color filterText= Color(0xFF5B5BE1);
 }

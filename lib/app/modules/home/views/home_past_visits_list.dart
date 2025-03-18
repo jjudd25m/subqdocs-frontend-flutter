@@ -29,24 +29,38 @@ class HomePastVisitsList extends GetView<HomeController> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(
         () {
-          return controller.pastVisitList.isEmpty
-              ? Padding(
+   return Column(
+                children: [
+
+                  if(controller.globalController.pastFilterListingModel.isNotEmpty)
+                  CustomFilterListing(items: controller.globalController.pastFilterListingModel,
+                  onDeleteItem: (value) {
+                    controller.globalController.removePastFilter(keyName: value);
+                    controller.getPastVisitList();
+                  },
+                    oneClearAll: () {
+                      controller.globalController.removePastFilter();
+                      controller.getPastVisitList();
+                    },
+                  ),
+                  if(controller.globalController.pastFilterListingModel.isNotEmpty)
+                  SizedBox(height: 15,),
+
+                  controller.pastVisitList.isEmpty
+                  ? Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: EmptyPatientScreen(
-                      onBtnPress: () async {
-                        final result = await Get.toNamed(Routes.ADD_PATIENT);
+                  onBtnPress: () async {
+                  final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                        controller.getPastVisitList();
-                        controller.getScheduleVisitList();
-                        controller.getPatientList();
-                      },
-                      title: "Your Past Visit List is Empty",
-                      description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
-                )
-              : Column(
-                children: [
-                  CustomFilterListing(items: [FilterListingModel(filterName: "date", filterValue: "10/08/20020")],),
-                  SizedBox(height: 15,),
+                  controller.getPastVisitList();
+                  controller.getScheduleVisitList();
+                  controller.getPatientList();
+                  },
+                  title: "Your Past Visit List is Empty",
+                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                  )
+                      :
                   Expanded(
                     child: CustomTable(
                         onLoadMore: () => controller.getPastVisitListFetchMore(),

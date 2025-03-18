@@ -562,6 +562,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         SizedBox(
                                                           width: 5,
                                                         ),
+                                                        if(controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1)
                                                         Text(
                                                           "•",
                                                           style: AppFonts.regular(24, AppColors.textDarkGrey),

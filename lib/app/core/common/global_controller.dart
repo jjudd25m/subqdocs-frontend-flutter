@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../modules/home/model/FilterListingModel.dart';
 import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_schedule_list_sorting_model.dart';
@@ -15,6 +16,10 @@ class GlobalController extends GetxController {
     {"id": "previousVisitCount", "desc": true},
     {"id": "status", "desc": true},
   ];
+
+
+  RxList<FilterListingModel> pastFilterListingModel = RxList([]);
+  RxList<FilterListingModel> scheduleFilterListingModel = RxList([]);
 
   List<Map<String, dynamic>> sortingSchedulePatient = [
     {"id": "first_name", "desc": true},
@@ -67,10 +72,12 @@ class GlobalController extends GetxController {
     //   },
     // );
 
-    HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+    HomePastPatientListSortingModel? homePastPatientData = await AppPreference
+        .instance.getHomePastPatientListSortingModel();
     if (homePastPatientData != null) {
       homePastPatientListSortingModel.value = homePastPatientData;
-      print("existing HomePastPatientListSortingModel:- ${homePastPatientData.toJson()}");
+      print("existing HomePastPatientListSortingModel:- ${homePastPatientData
+          .toJson()}");
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['sortingPastPatient'] = sortingPastPatient;
@@ -81,14 +88,17 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homePastPatientListSortingModel.value = HomePastPatientListSortingModel.fromJson(json);
+      homePastPatientListSortingModel.value =
+          HomePastPatientListSortingModel.fromJson(json);
       print("first initialize homePastPatientListSortingModel :- $json");
     }
 
-    HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
+    HomePatientListSortingModel? homePatientListData = await AppPreference
+        .instance.getHomePatientListSortingModel();
     if (homePatientListData != null) {
       homePatientListSortingModel.value = homePatientListData;
-      print("existing HomePatientListSortingModel:- ${homePatientListData.toJson()}");
+      print("existing HomePatientListSortingModel:- ${homePatientListData
+          .toJson()}");
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['sortingPatientList'] = sortingPatientList;
@@ -98,14 +108,17 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homePatientListSortingModel.value = HomePatientListSortingModel.fromJson(json);
+      homePatientListSortingModel.value =
+          HomePatientListSortingModel.fromJson(json);
       print("first initialize homePatientListSortingModel :- $json");
     }
 
-    HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
+    HomeScheduleListSortingModel? homeScheduleListData = await AppPreference
+        .instance.getHomeScheduleListSortingModel();
     if (homeScheduleListData != null) {
       homeScheduleListSortingModel.value = homeScheduleListData;
-      print("existing HomeScheduleListSortingModel:- ${homeScheduleListData.toJson()}");
+      print("existing HomeScheduleListSortingModel:- ${homeScheduleListData
+          .toJson()}");
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['scheduleVisitSelectedSorting'] = scheduleVisitSelectedSorting;
@@ -115,9 +128,14 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homeScheduleListSortingModel.value = HomeScheduleListSortingModel.fromJson(json);
+      homeScheduleListSortingModel.value =
+          HomeScheduleListSortingModel.fromJson(json);
       print("first initialize homeScheduleListSortingModel :- $json");
     }
+
+
+    setPastListingModel();
+
 
     // HomePastPatientListSortingModel? retrievedModel = await AppPreference.instance.getHomePastPatientListSortingModel();
     // if (retrievedModel != null) {
@@ -134,15 +152,107 @@ class GlobalController extends GetxController {
     // pastVisitSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyPastVisitSelectedSorting);
   }
 
+
+  void setPastListingModel()
+  {
+      pastFilterListingModel.clear();
+
+      if((homePastPatientListSortingModel.value?.selectedStatusIndex ?? []).isNotEmpty    )
+        {
+          pastFilterListingModel.add(FilterListingModel(filterName: "Status", filterValue:homePastPatientListSortingModel.value!.selectedStatusIndex!.join(",") ));
+
+        }
+      
+
+    if((homePastPatientListSortingModel.value?.startDate ?? "" ).isNotEmpty && (homePastPatientListSortingModel.value?.endDate ?? "" ).isNotEmpty )
+      {
+          pastFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homePastPatientListSortingModel.value?.startDate} - ${homePastPatientListSortingModel.value?.endDate} "));
+      }
+
+  }
+
+
+  void setScheduleListingModel()
+  {
+    scheduleFilterListingModel.clear();
+
+
+
+    if((homeScheduleListSortingModel.value?.startDate ?? "" ).isNotEmpty && (homeScheduleListSortingModel.value?.endDate ?? "" ).isNotEmpty )
+    {
+      scheduleFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} "));
+    }
+
+  }
+
+
+  void removePastFilter({String? keyName})
+  {
+    if(keyName != null)
+      {
+        if(keyName == "Visit Date")
+          {
+            homePastPatientListSortingModel.value?.startDate="";
+            homePastPatientListSortingModel.value?.endDate="";
+            homePastPatientListSortingModel.value?.selectedDateValue=[];
+          }
+
+        if(keyName == "Status")
+        {
+          homePastPatientListSortingModel.value?.selectedStatusIndex =[];
+        }
+        saveHomePastPatientData();
+
+      }else{
+      homePastPatientListSortingModel.value?.startDate="";
+      homePastPatientListSortingModel.value?.endDate="";
+      homePastPatientListSortingModel.value?.selectedStatusIndex =[];
+      homePastPatientListSortingModel.value?.selectedDateValue=[];
+      saveHomePastPatientData();
+
+
+    }
+  }
+
+
+  void removeScheduleFilter({String? keyName}) {
+    if(keyName != null)
+    {
+      if(keyName == "Visit Date")
+      {
+        homeScheduleListSortingModel.value?.startDate="";
+        homeScheduleListSortingModel.value?.endDate="";
+        homeScheduleListSortingModel.value?.selectedDateValue = [];
+      }
+
+      saveHomeScheduleListData();
+
+    }else{
+      homeScheduleListSortingModel.value?.startDate="";
+      homeScheduleListSortingModel.value?.endDate="";
+      homeScheduleListSortingModel.value?.selectedDateValue = [];
+
+      saveHomeScheduleListData();
+
+
+    }
+  }
   Future<void> saveHomePastPatientData() async {
+    setPastListingModel();
     AppPreference.instance.setHomePastPatientListSortingModel(homePastPatientListSortingModel.value!);
+
   }
 
   Future<void> saveHomePatientListData() async {
+
     AppPreference.instance.setHomePatientListSortingModel(homePatientListSortingModel.value!);
   }
 
+
+
   Future<void> saveHomeScheduleListData() async {
+    setScheduleListingModel();
+
     AppPreference.instance.setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
   }
 }

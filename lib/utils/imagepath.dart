@@ -25,6 +25,7 @@ class ImagePath {
   static const String logo_filter = 'assets/images/logo_filter.svg';
   static const String file_placeHolder = 'assets/images/file_placeholder.png';
   static const String file_placeHolder1 = 'assets/images/file_paceholder.svg';
+  static const String filter_icon = 'assets/images/filter_icon.svg';
 
   static const String document_attchment = 'assets/images/document_attchment.svg';
   static const String image_attchment = 'assets/images/image_attchment.svg';
@@ -55,6 +56,7 @@ class ImagePath {
   static const String pause_recording = 'assets/images/pause_recording.svg';
   static const String start_recording = 'assets/images/resume.svg';
   static const String wave = 'assets/images/wave.png';
+  static const String filterCross = 'assets/images/filtercross.svg';
 
   static const String uploadImage = 'assets/images/upload_image.svg';
   static const String recording = 'assets/images/recording.svg';
