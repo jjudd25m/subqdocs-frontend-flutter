@@ -336,6 +336,7 @@ class CustomTable extends StatelessWidget {
   final ScrollPhysics? physics;
   final List<double> columnWidths;
   final void Function(int rowIndex, List<String> rowData)? onRowSelected;
+  final Future<void> Function()? onRefresh; // Add onRefresh for pull-to-refresh
 
   CustomTable({
     required this.headerBuilder,
@@ -348,6 +349,7 @@ class CustomTable extends StatelessWidget {
     required this.isLoading, // Accept isLoading
     this.physics = const BouncingScrollPhysics(),
     required BuildContext context,
+    this.onRefresh, // Accept onRefresh function
   });
 
   @override
@@ -367,46 +369,37 @@ class CustomTable extends StatelessWidget {
 
           // Scrollable Content
           Expanded(
-            child: NotificationListener<ScrollEndNotification>(
-              // onNotification: (notification) {
-              //   if (notification is ScrollUpdateNotification) {
-              //     double currentScrollPosition = notification.metrics.pixels;
-              //     double halfScreenPosition = notification.metrics.maxScrollExtent / 2;
-              //
-              //     if (currentScrollPosition >= halfScreenPosition && !isLoading) {
-              //       print("User has scrolled past half of the screen.");
-              //       onLoadMore?.call(); // Trigger the load more function
-              //     }
-              //   }
-              //   return false; // Allow other notifications to propagate
-              // },
-              onNotification: (notification) {
-                if (notification.metrics.atEdge) {
-                  print("notification.metrics.atEdge");
-                }
-
-                // If user reaches the bottom and no data is being loaded
-                if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading) {
-                  print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
-                  onLoadMore?.call(); // Call the onLoadMore function
-                }
-                return false; // Allow other notifications to propagate
-              },
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: physics,
-                itemCount: rows.length + (isLoading ? 1 : 0), // Add an extra item for loader
-                itemBuilder: (context, index) {
-                  if (index == rows.length && isLoading) {
-                    // Show loading spinner at the bottom when loading
-                    return Center(
-                      child: CircularProgressIndicator(color: AppColors.buttonBackgroundGrey),
-                    );
-                  } else {
-                    // Build and return the actual table row
-                    return _buildTableRow(context, index, screenWidth);
+            child: RefreshIndicator(
+              onRefresh: onRefresh ?? () async {}, // Use onRefresh if provided, // Use onRefresh if provided
+              child: NotificationListener<ScrollEndNotification>(
+                onNotification: (notification) {
+                  if (notification.metrics.atEdge) {
+                    print("notification.metrics.atEdge");
                   }
+
+                  // If user reaches the bottom and no data is being loaded
+                  if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading) {
+                    print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
+                    onLoadMore?.call(); // Call the onLoadMore function
+                  }
+                  return false; // Allow other notifications to propagate
                 },
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: physics,
+                  itemCount: rows.length + (isLoading ? 1 : 0), // Add an extra item for loader
+                  itemBuilder: (context, index) {
+                    if (index == rows.length && isLoading) {
+                      // Show loading spinner at the bottom when loading
+                      return Center(
+                        child: CircularProgressIndicator(color: AppColors.buttonBackgroundGrey),
+                      );
+                    } else {
+                      // Build and return the actual table row
+                      return _buildTableRow(context, index, screenWidth);
+                    }
+                  },
+                ),
               ),
             ),
           ),

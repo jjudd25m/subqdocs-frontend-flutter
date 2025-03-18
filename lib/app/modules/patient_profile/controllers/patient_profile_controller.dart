@@ -44,6 +44,10 @@ class PatientProfileController extends GetxController {
     super.onClose();
   }
 
+  Future<void> onRefresh() async {
+    print("_onRefresh called");
+  }
+
   Future<void> getPatient(String id, String visitId) async {
     Loader().showLoadingDialogForSimpleLoader();
 

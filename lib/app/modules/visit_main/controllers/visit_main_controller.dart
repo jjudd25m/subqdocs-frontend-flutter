@@ -39,7 +39,7 @@ import '../model/visitmainModel.dart';
 import '../repository/visit_main_repository.dart';
 import '../views/attachmentDailog.dart';
 
-class VisitMainController extends GetxController  {
+class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
@@ -100,7 +100,6 @@ class VisitMainController extends GetxController  {
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
 
-
   Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
     if (clear) {
       list.clear();
@@ -130,12 +129,7 @@ class VisitMainController extends GetxController  {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file,
-          previewImage: null,
-          fileName: _shortFileName,
-          date: _formatDate(_pickDate),
-          Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
     }
 
     list.refresh();
@@ -154,6 +148,7 @@ class VisitMainController extends GetxController  {
     getPatientAttachment();
     Get.back();
   }
+
   //
   // Future<void> pickFiles(BuildContext context) async {
   //   list.clear();
@@ -234,12 +229,7 @@ class VisitMainController extends GetxController  {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(
-              file: file,
-              previewImage: null,
-              fileName: _shortFileName,
-              date: _formatDate(_pickDate),
-              Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
         }
       },
     );
@@ -269,11 +259,10 @@ class VisitMainController extends GetxController  {
   Future<void> onInit() async {
     super.onInit();
 
-
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
 
-    if(visitId.value.isNotEmpty ) {
+    if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
       //it  will check the internet  connection and handel   offline and online mode
 
@@ -292,8 +281,7 @@ class VisitMainController extends GetxController  {
 
       handelInternetConnection();
 
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance
-          .getPendingAudioFiles();
+      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
       customPrint("local audio is :- $pendingFiles");
     }
   }
@@ -308,6 +296,33 @@ class VisitMainController extends GetxController  {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  Future<void> onRefresh() async {
+    print("_onRefresh called");
+
+    if (visitId.value.isNotEmpty) {
+      customPrint("visit id is :- $visitId");
+      //it  will check the internet  connection and handel   offline and online mode
+
+      var status = await InternetConnection().internetStatus;
+      onLine();
+
+      isConnected.value = status == InternetStatus.disconnected ? false : true;
+
+      if (status == InternetStatus.disconnected) {
+        print("you net is now Disconnected");
+
+        offLine();
+      } else {
+        onLine(isLoading: true);
+      }
+
+      handelInternetConnection();
+
+      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      customPrint("local audio is :- $pendingFiles");
+    }
   }
 
   void increment() => count.value++;
@@ -325,8 +340,7 @@ class VisitMainController extends GetxController  {
       loadingMessage.value = "Uploading Audio";
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave =
-          AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
 
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
@@ -334,8 +348,7 @@ class VisitMainController extends GetxController  {
       loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
       isLoading.value = false;
 
-      CustomToastification()
-          .showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
       List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
@@ -349,8 +362,8 @@ class VisitMainController extends GetxController  {
 
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(
-          audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+          await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       isLoading.value = false;
@@ -359,7 +372,6 @@ class VisitMainController extends GetxController  {
       Get.toNamed(Routes.PATIENT_INFO, arguments: {
         "trascriptUploadData": patientTranscriptUploadModel,
         "unique_tag": DateTime.now().toString(),
-
       });
     }
   }
@@ -410,8 +422,7 @@ class VisitMainController extends GetxController  {
     } else {
       customPrint("profile is not  available");
     }
-    await visitMainRepository.uploadAttachments(
-        files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     Get.back();
     getPatientAttachment();
@@ -470,12 +481,8 @@ class VisitMainController extends GetxController  {
     }
   }
 
-
-
-  String visitDate(String? date)
-  {
+  String visitDate(String? date) {
     String visitDate = "N/A";
-
 
     if (date != null) {
       DateTime visitdateTime = DateTime.parse(date ?? "");
@@ -488,20 +495,13 @@ class VisitMainController extends GetxController  {
 
       visitDate = visitformattedDate;
       return visitDate;
-
-    }else{
+    } else {
       return "";
     }
-
-
   }
 
-
-  String visitTime(String? time)
-  {
-
+  String visitTime(String? time) {
     String visitTime = "N/A";
-
 
     if (time != null) {
       DateTime visitdateTime = DateTime.parse(time ?? "").toLocal();
@@ -514,8 +514,7 @@ class VisitMainController extends GetxController  {
 
       visitTime = visitformattedDate;
       return visitTime;
-
-    }else{
+    } else {
       return "";
     }
   }
@@ -567,17 +566,13 @@ class VisitMainController extends GetxController  {
   void offLine() async {
     var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
 
-    var visitRecapListResponse = fetchVisitDetails(
-        type: scheduleVisitsList, modelType: visitRecaps, visitId: visitId.value, responseData: responseData);
+    var visitRecapListResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitRecaps, visitId: visitId.value, responseData: responseData);
 
-    var patientDetailsResponse = fetchVisitDetails(
-        type: scheduleVisitsList, modelType: visitMainData, visitId: visitId.value, responseData: responseData);
+    var patientDetailsResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitMainData, visitId: visitId.value, responseData: responseData);
 
-    var scheduleVisitResponse = fetchVisitDetails(
-        type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
+    var scheduleVisitResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
 
-    var medicalRecords1 = fetchVisitDetails(
-        type: scheduleVisitsList, modelType: fullNoteOfLastVisit, visitId: visitId.value, responseData: responseData);
+    var medicalRecords1 = fetchVisitDetails(type: scheduleVisitsList, modelType: fullNoteOfLastVisit, visitId: visitId.value, responseData: responseData);
 
     patientDetailModel.value = PatientDetailModel.fromJson(scheduleVisitResponse);
 
@@ -588,11 +583,7 @@ class VisitMainController extends GetxController  {
     medicalRecords.value = MedicalRecords.fromJson(medicalRecords1);
   }
 
-  Map<String, dynamic> fetchVisitDetails(
-      {required Map<String, dynamic> responseData,
-      required String type,
-      required String visitId,
-      required String modelType}) {
+  Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {
     // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
     List<dynamic> visitList = responseData['responseData'][type];
 
@@ -624,12 +615,7 @@ class VisitMainController extends GetxController  {
         "response_type": "success"
       };
     } else {
-      return {
-        "responseData": responseDataResult,
-        "message": " Details Fetched Successfully",
-        "toast": true,
-        "response_type": "success"
-      };
+      return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
     }
   }
 }

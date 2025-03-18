@@ -39,6 +39,10 @@ class HomePatientListView extends GetView<HomeController> {
                     description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
               )
             : CustomTable(
+                onRefresh: () async {
+                  controller.getPatientList();
+                  print("refresh patient list view");
+                },
                 rows: _getTableRows(controller.patientList),
                 columnCount: 6,
                 // Number of columns in the table (for example, 6 here)

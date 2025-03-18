@@ -29,40 +29,44 @@ class HomePastVisitsList extends GetView<HomeController> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(
         () {
-   return Column(
-                children: [
-
-                  if(controller.globalController.pastFilterListingModel.isNotEmpty)
-                  CustomFilterListing(items: controller.globalController.pastFilterListingModel,
+          return Column(
+            children: [
+              if (controller.globalController.pastFilterListingModel.isNotEmpty)
+                CustomFilterListing(
+                  items: controller.globalController.pastFilterListingModel,
                   onDeleteItem: (value) {
                     controller.globalController.removePastFilter(keyName: value);
                     controller.getPastVisitList();
                   },
-                    oneClearAll: () {
-                      controller.globalController.removePastFilter();
-                      controller.getPastVisitList();
-                    },
-                  ),
-                  if(controller.globalController.pastFilterListingModel.isNotEmpty)
-                  SizedBox(height: 15,),
-
-                  controller.pastVisitList.isEmpty
-                  ? Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: EmptyPatientScreen(
-                  onBtnPress: () async {
-                  final result = await Get.toNamed(Routes.ADD_PATIENT);
-
-                  controller.getPastVisitList();
-                  controller.getScheduleVisitList();
-                  controller.getPatientList();
+                  oneClearAll: () {
+                    controller.globalController.removePastFilter();
+                    controller.getPastVisitList();
                   },
-                  title: "Your Past Visit List is Empty",
-                  description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
-                  )
-                      :
-                  Expanded(
-                    child: CustomTable(
+                ),
+              if (controller.globalController.pastFilterListingModel.isNotEmpty)
+                SizedBox(
+                  height: 15,
+                ),
+              controller.pastVisitList.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: EmptyPatientScreen(
+                          onBtnPress: () async {
+                            final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                            controller.getPastVisitList();
+                            controller.getScheduleVisitList();
+                            controller.getPatientList();
+                          },
+                          title: "Your Past Visit List is Empty",
+                          description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                    )
+                  : Expanded(
+                      child: CustomTable(
+                        onRefresh: () async {
+                          controller.getPastVisitList(isFist: true);
+                          print("refresh past list view");
+                        },
                         onLoadMore: () => controller.getPastVisitListFetchMore(),
                         rows: _getTableRows(controller.pastVisitList),
                         onRowSelected: (rowIndex, rowData) async {
@@ -164,20 +168,19 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                     padding: EdgeInsets.zero,
                                                     value: "",
                                                     onTap: () async {
-                        customPrint("row index is :- $rowIndex");
+                                                      customPrint("row index is :- $rowIndex");
 
-                        Get.delete<PatientInfoController>();
+                                                      Get.delete<PatientInfoController>();
 
-                        await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-                        "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
-                        "patientId": controller.pastVisitList[rowIndex].id.toString(),
-                        "unique_tag": DateTime.now().toString(),
-                        });
+                                                      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                                                        "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+                                                        "patientId": controller.pastVisitList[rowIndex].id.toString(),
+                                                        "unique_tag": DateTime.now().toString(),
+                                                      });
 
-                        controller.getPastVisitList();
-                        controller.getScheduleVisitList();
-                        controller.getPatientList();
-
+                                                      controller.getPastVisitList();
+                                                      controller.getScheduleVisitList();
+                                                      controller.getPatientList();
                                                     },
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +210,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                           return SchedulePatientDialog(
                                                             receiveParam: (p0, p1) {
                                                               customPrint("p0 is $p0 p1 is $p1");
-                                                              controller.patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex].id.toString(), "visit_date": p1, "visit_time": p0});
+                                                              controller
+                                                                  .patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex].id.toString(), "visit_date": p1, "visit_time": p0});
                                                             },
                                                           ); // Our custom dialog
                                                         },
@@ -234,10 +238,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                     padding: EdgeInsets.zero,
                                                     // value: "",
                                                     onTap: () async {
-
-
                                                       String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-                                                      controller.patientScheduleCreate(param: {"patient_id": controller.pastVisitList[rowIndex].id.toString(), "visit_date": date, "visit_time": controller.getNextRoundedTimeHH()});
+                                                      controller.patientScheduleCreate(
+                                                          param: {"patient_id": controller.pastVisitList[rowIndex].id.toString(), "visit_date": date, "visit_time": controller.getNextRoundedTimeHH()});
                                                       // dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                                                       //   "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                                                       //   "patientId": controller.pastVisitList[rowIndex].id.toString(),
@@ -428,9 +431,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                         isLoading: controller.isLoading.value,
                         // headerRows: ['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"],
                       ),
-                  ),
-                ],
-              );
+                    ),
+            ],
+          );
         },
       ),
     );

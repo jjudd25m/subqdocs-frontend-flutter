@@ -9,6 +9,7 @@ import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../widget/custom_animated_button.dart';
+import '../../../core/common/global_controller.dart';
 
 class ConfirmFinalizeDialog extends StatelessWidget {
   final VoidCallback? onDelete;
@@ -195,6 +196,7 @@ class PrompErrorDialog extends StatelessWidget {
                       Expanded(
                         child: CustomAnimatedButton(
                           onPressed: () {
+                            Get.put(GlobalController());
                             Get.offAllNamed(Routes.HOME);
                           },
                           text: " Okay ",

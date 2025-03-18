@@ -29,43 +29,44 @@ class HomeScheduleListView extends GetView<HomeController> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(() {
-        return  Column(
-              children: [
+        return Column(
+          children: [
+            if (controller.globalController.scheduleFilterListingModel.isNotEmpty)
+              CustomFilterListing(
+                items: controller.globalController.scheduleFilterListingModel,
+                oneClearAll: () {
+                  controller.globalController.removeScheduleFilter();
+                  controller.getScheduleVisitList();
+                },
+                onDeleteItem: (value) {
+                  controller.globalController.removeScheduleFilter(keyName: value);
+                  controller.getScheduleVisitList();
+                },
+              ),
+            if (controller.globalController.scheduleFilterListingModel.isNotEmpty)
+              SizedBox(
+                height: 15,
+              ),
+            controller.scheduleVisitList.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: EmptyPatientScreen(
+                        onBtnPress: () async {
+                          final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                  if(controller.globalController.scheduleFilterListingModel.isNotEmpty)
-                CustomFilterListing(
-                    items: controller.globalController.scheduleFilterListingModel ,
-                  oneClearAll:() {
-                        controller.globalController.removeScheduleFilter();
-                        controller.getScheduleVisitList();
-
-                  },
-                  onDeleteItem: (value){
-                      controller.globalController.removeScheduleFilter(keyName: value);
-                      controller.getScheduleVisitList();
-
-
-                  },
-                ),
-                if(controller.globalController.scheduleFilterListingModel.isNotEmpty)
-                SizedBox(height: 15,),
-                controller.scheduleVisitList.isEmpty
-                    ? Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: EmptyPatientScreen(
-                      onBtnPress: () async {
-                        final result = await Get.toNamed(Routes.ADD_PATIENT);
-
-                        controller.getPastVisitList();
-                        controller.getScheduleVisitList();
-                        controller.getPatientList();
+                          controller.getPastVisitList();
+                          controller.getScheduleVisitList();
+                          controller.getPatientList();
+                        },
+                        title: "Your Schedule Visits List is Empty",
+                        description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
+                  )
+                : Expanded(
+                    child: CustomTable(
+                      onRefresh: () async {
+                        controller.getScheduleVisitList(isFist: true);
+                        print("refresh schedule list view");
                       },
-                      title: "Your Schedule Visits List is Empty",
-                      description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
-                )
-                    :
-                Expanded(
-                  child: CustomTable(
                       rows: _getTableRows(controller.scheduleVisitList),
                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                         return colIndex == 0
@@ -194,7 +195,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                                                     return HomeReschedulePatientDialog(
                                                       receiveParam: (p0, p1) {
                                                         customPrint("p0 is $p0 p1 is $p1");
-                                                        controller.patientReScheduleCreate(param: {"visit_date": p1, "visit_time": p0}, visitId: controller.scheduleVisitList[rowIndex].visitId.toString());
+                                                        controller
+                                                            .patientReScheduleCreate(param: {"visit_date": p1, "visit_time": p0}, visitId: controller.scheduleVisitList[rowIndex].visitId.toString());
                                                       },
                                                       visitDate: visitdate,
                                                       selectedVisitTimeValue: RxnString(formattedTime),
@@ -494,9 +496,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                       isLoading: controller.isLoading.value,
                       // headerRows: ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Previous Visits", "Action"],
                     ),
-                ),
-              ],
-            );
+                  ),
+          ],
+        );
       }),
     );
   }
