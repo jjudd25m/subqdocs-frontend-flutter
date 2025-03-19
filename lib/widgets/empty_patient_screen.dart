@@ -25,7 +25,7 @@ class EmptyPatientScreen extends StatelessWidget {
           children: [
             SvgPicture.asset(
               ImagePath.patient_no_data,
-              width: 300,
+              width: 260,
             ),
             const SizedBox(height: 10),
             Text(

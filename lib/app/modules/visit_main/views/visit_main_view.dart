@@ -1848,8 +1848,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                                 // return SizedBox();
                                                                                 return DeleteScheduleVisit(
                                                                                   onDelete: () {
-                                                                                    controller.deletePatientVisit(
-                                                                                        id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() ?? "");
+                                                                                    controller.changeStatus("Canceled");
+
+                                                                                    // controller.deletePatientVisit(
+                                                                                    //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() ?? "");
                                                                                   },
                                                                                 );
                                                                               },
@@ -2860,6 +2862,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   GestureDetector(
                                     onTap: () async {
                                       if (controller.recorderService.recordingStatus.value == 0) {
+                                        controller.changeStatus("In-Room");
                                         // If not recording, start the recording
                                         await controller.recorderService.startRecording(context);
                                       } else if (controller.recorderService.recordingStatus.value == 1) {
@@ -2947,6 +2950,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () async {
+                                      controller.changeStatus("In-Exam");
                                       File? audioFile = await controller.recorderService.stopRecording();
                                       customPrint("audio file url is :- ${audioFile?.absolute}");
                                       if (audioFile != null) {
@@ -3103,6 +3107,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   GestureDetector(onTap: () async {
                                     if (controller.recorderService.recordingStatus.value == 0) {
                                       // If not recording, start the recording
+                                      controller.changeStatus("In-Room");
                                       await controller.recorderService.startRecording(context);
                                     } else if (controller.recorderService.recordingStatus.value == 1) {
                                       // If recording, pause it
@@ -3147,6 +3152,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     onTap: () async {
                                       File? audioFile = await controller.recorderService.stopRecording();
                                       customPrint("audio file url is :- ${audioFile?.absolute}");
+
+                                      controller.changeStatus("In-Exam");
 
                                       if (audioFile != null) {
                                         controller.submitAudio(audioFile!);

@@ -217,6 +217,39 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                           ),
                                                         ],
                                                       )),
+                                                  PopupMenuItem(
+                                                      // value: "",
+                                                      padding: EdgeInsets.zero,
+                                                      onTap: () async {
+                                                        controller.profileImageUrl.value = null;
+                                                        controller.profileImage.value = null;
+                                                        // controller.captureProfileImage();
+                                                      },
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Container(
+                                                            width: double.infinity,
+                                                            height: 1,
+                                                            color: AppColors.appbarBorder,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(CupertinoIcons.camera),
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                Text(
+                                                                  "Remove photo",
+                                                                  style: AppFonts.regular(16, AppColors.textBlack),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
                                                 ],
                                             child: Row(
                                               children: [

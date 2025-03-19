@@ -23,6 +23,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../data/service/recorder_service.dart';
+import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalRecords.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
@@ -325,7 +326,49 @@ class VisitMainController extends GetxController {
     }
   }
 
-  void increment() => count.value++;
+  Future<void> changeStatus(String status) async {
+    try {
+      // Loader().showLoadingDialogForSimpleLoader();
+
+      Map<String, dynamic> param = {};
+
+      param['status'] = status;
+
+      ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
+      if (changeStatusModel.responseType == "success") {
+        // Get.back();
+        // Get.back();
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+
+        patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+        if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+          Get.back();
+        }
+
+        // if (patientTranscriptUploadModel.responseData?.id != null) {
+        //   Get.back();
+        //   Get.back();
+        // } else {
+        //   Get.back();
+        //   Get.back();
+        //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+        //     "visitId": visitId,
+        //     "patientId": patientId,
+        //     "unique_tag": DateTime.now().toString(),
+        //   });
+        // }
+      } else {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+        // Get.back();
+        // Get.back();
+      }
+    } catch (e) {
+      // customPrint("$e");
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+      // Get.back();
+    }
+  }
 
   Future<void> submitAudio(File audioFile) async {
     if (audioFile.path.isEmpty) {

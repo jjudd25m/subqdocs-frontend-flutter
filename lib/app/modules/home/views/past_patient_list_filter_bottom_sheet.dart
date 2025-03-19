@@ -20,13 +20,22 @@ import '../model/home_past_patient_list_sorting_model.dart';
 class PastPatientListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
 
-  List<DateTime>? selectedDate = [DateTime.now()];
+  RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
 
   PastPatientListFilterBottomSheet({super.key, required this.onTap});
+
   RxList<String> selectedStatusIndex = RxList();
+
+  PageController pageController = PageController();
+  // ScrollController pageController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    selectedDate?.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? RxList([DateTime.now()]);
+
+    print("date is :- ${selectedDate!.first}");
+    pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first));
+
     print("status list is ${controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? []}");
     selectedStatusIndex.value = controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
     return SizedBox(
@@ -144,88 +153,263 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                 ],
               ),
               const SizedBox(height: 10),
-              Container(
-                  height: 45,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.grey.shade300, width: 1),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        controller.globalController.homePastPatientListSortingModel.value?.startDate != ""
-                            ? "${controller.globalController.homePastPatientListSortingModel.value?.startDate}-${controller.globalController.homePastPatientListSortingModel.value?.endDate}"
-                            : "Select",
-                        style: AppFonts.regular(14, AppColors.textBlack),
+              Obx(() {
+                return PopupMenuButton<String>(
+                  offset: const Offset(0, 8),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  color: AppColors.white,
+                  position: PopupMenuPosition.under,
+                  padding: EdgeInsetsDirectional.zero,
+                  menuPadding: EdgeInsetsDirectional.zero,
+                  onSelected: (value) {},
+                  style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      maximumSize: WidgetStatePropertyAll(Size.infinite),
+                      visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        onTap: () {
+                          selectedDate?.value = [DateTime.now(), DateTime.now()];
+                          updateSelectedDate();
+                          controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                "Today",
+                                style: AppFonts.regular(14, AppColors.textBlack),
+                              ),
+                            ),
+                          ],
+                        )),
+                    PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        onTap: () {
+                          selectedDate?.value = [DateTime.now().subtract(Duration(days: 1)), DateTime.now().subtract(Duration(days: 1))];
+                          updateSelectedDate();
+                          controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 1,
+                              color: AppColors.appbarBorder,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Yesterday",
+                                style: AppFonts.regular(14, AppColors.textBlack),
+                              ),
+                            ),
+                          ],
+                        )),
+                    PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        onTap: () {
+                          selectedDate?.value = [DateTime.now().subtract(Duration(days: 7)), DateTime.now()];
+                          updateSelectedDate();
+                          controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 1,
+                              color: AppColors.appbarBorder,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Past 7 Days",
+                                style: AppFonts.regular(14, AppColors.textBlack),
+                              ),
+                            ),
+                          ],
+                        )),
+                    PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        onTap: () {
+                          DateTime now = DateTime.now();
+                          selectedDate?.value = [DateTime(now.year, now.month - 1, 1), DateTime(now.year, now.month, 0)];
+                          updateSelectedDate();
+                          controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                          // pageController.previousPage(duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 1,
+                              color: AppColors.appbarBorder,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Previous Month",
+                                style: AppFonts.regular(14, AppColors.textBlack),
+                              ),
+                            ),
+                          ],
+                        )),
+                    // PopupMenuItem(
+                    //     padding: EdgeInsets.zero,
+                    //     onTap: () {
+                    //
+                    //     },
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Container(
+                    //           width: double.infinity,
+                    //           height: 1,
+                    //           color: AppColors.appbarBorder,
+                    //         ),
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(8.0),
+                    //           child: Text(
+                    //             "Custom date",
+                    //             style: AppFonts.regular(14, AppColors.textBlack),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ))
+                  ],
+                  child: Container(
+                      height: 45,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: Colors.grey.shade300, width: 1),
                       ),
-                      Spacer(),
-                      SvgPicture.asset(
-                        ImagePath.down_arrow,
-                        width: 25,
-                        height: 25,
-                      )
-                    ],
-                  )),
-              SizedBox(
-                width: Get.width,
-                child: CalendarDatePicker2(
-                  config: CalendarDatePicker2Config(
-                    weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                    weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
-                    daySplashColor: AppColors.clear,
-                    calendarViewMode: CalendarDatePicker2Mode.day,
-                    selectedDayHighlightColor: AppColors.backgroundPurple,
-                    dayMaxWidth: 30,
-                    allowSameValueSelection: true,
-                    firstDayOfWeek: 6,
-                    dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
-                    disableMonthPicker: true,
-                    dayBorderRadius: BorderRadius.all(Radius.circular(6)),
-                    scrollViewTopHeaderTextStyle: const TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
+                      child: Row(
+                        children: [
+                          Text(
+                            controller.getCustomDateRange(selectedDate ?? []).length == 2
+                                ? "${controller.getCustomDateRange(selectedDate ?? [])[0]}-${controller.getCustomDateRange(selectedDate ?? [])[1]}"
+                                : "Select",
+                            style: AppFonts.regular(14, AppColors.textBlack),
+                          ),
+                          // Text(
+                          //   controller.globalController.homePastPatientListSortingModel.value?.startDate != ""
+                          //       ? "${controller.globalController.homePastPatientListSortingModel.value?.startDate}-${controller.globalController.homePastPatientListSortingModel.value?.endDate}"
+                          //       : "Select",
+                          //   style: AppFonts.regular(14, AppColors.textBlack),
+                          // ),
+                          Spacer(),
+                          SvgPicture.asset(
+                            ImagePath.down_arrow,
+                            width: 25,
+                            height: 25,
+                          )
+                        ],
+                      )),
+                );
+              }),
+              // Container(
+              //     height: 45,
+              //     padding: EdgeInsets.symmetric(horizontal: 10),
+              //     decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.circular(6),
+              //       border: Border.all(color: Colors.grey.shade300, width: 1),
+              //     ),
+              //     child: Row(
+              //       children: [
+              //         Text(
+              //           controller.globalController.homePastPatientListSortingModel.value?.startDate != ""
+              //               ? "${controller.globalController.homePastPatientListSortingModel.value?.startDate}-${controller.globalController.homePastPatientListSortingModel.value?.endDate}"
+              //               : "Select",
+              //           style: AppFonts.regular(14, AppColors.textBlack),
+              //         ),
+              //         Spacer(),
+              //         SvgPicture.asset(
+              //           ImagePath.down_arrow,
+              //           width: 25,
+              //           height: 25,
+              //         )
+              //       ],
+              //     )),
+              Obx(() {
+                return SizedBox(
+                  width: Get.width,
+                  child: CalendarDatePicker2(
+                    config: CalendarDatePicker2Config(
+                      dayViewController: pageController,
+                      weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                      weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                      daySplashColor: AppColors.clear,
+                      calendarViewMode: CalendarDatePicker2Mode.day,
+                      selectedDayHighlightColor: AppColors.backgroundPurple,
+                      dayMaxWidth: 30,
+                      allowSameValueSelection: true,
+                      firstDayOfWeek: 6,
+                      rangeBidirectional: true,
+                      animateToDisplayedMonthDate: true,
+                      dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
+                      disableMonthPicker: true,
+                      dayBorderRadius: BorderRadius.all(Radius.circular(6)),
+                      scrollViewTopHeaderTextStyle: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      controlsTextStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      centerAlignModePicker: true,
+                      customModePickerIcon: const SizedBox(),
+                      calendarViewScrollPhysics: RangeMaintainingScrollPhysics(),
+                      // calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
+                      calendarType: CalendarDatePicker2Type.range,
+                      firstDate: DateTime(2000, 01, 01),
+                      lastDate: DateTime.now().add(Duration(days: 365)),
                     ),
-                    controlsTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    centerAlignModePicker: true,
-                    customModePickerIcon: const SizedBox(),
-                    calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
-                    calendarType: CalendarDatePicker2Type.range,
+                    onValueChanged: (value) {
+                      selectedDate?.value = value;
+
+                      if (selectedStatusIndex.isNotEmpty) {
+                        // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+                        controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+                      }
+
+                      controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                      List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+                      if (dates.length == 2) {
+                        // if (dates[0] == dates[1]) {
+                        //   controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
+                        //   controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
+                        //   controller.globalController.saveHomePastPatientData();
+                        // } else {
+                        controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+                        controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+                        controller.globalController.saveHomePastPatientData();
+                        // }
+                      }
+
+                      // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
+                      // controller.selectedValue = value;
+                      // customPrint("onchanged  ${value}");
+                    },
+                    value: selectedDate ?? [DateTime.now()],
                   ),
-                  onValueChanged: (value) {
-                    selectedDate = value;
-
-                    if (selectedStatusIndex.isNotEmpty) {
-                      // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
-                      controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
-                    }
-
-                    controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                    List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-                    if (dates.length == 2) {
-                      // if (dates[0] == dates[1]) {
-                      //   controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-                      //   controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-                      //   controller.globalController.saveHomePastPatientData();
-                      // } else {
-                      controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
-                      controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
-                      controller.globalController.saveHomePastPatientData();
-                      // }
-                    }
-
-                    // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
-                    // controller.selectedValue = value;
-                    // customPrint("onchanged  ${value}");
-                  },
-                  value: controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
-                ),
-              ),
+                );
+              }),
               // Row(
               //   spacing: 15,
               //   children: [
@@ -290,5 +474,34 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
         ),
       ),
     );
+  }
+
+  Future<void> updateSelectedDate() async {
+    if (selectedStatusIndex.isNotEmpty) {
+      // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+      controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+    }
+
+    controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+    List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+    if (dates.length == 2) {
+      // if (dates[0] == dates[1]) {
+      //   controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
+      //   controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
+      //   controller.globalController.saveHomePastPatientData();
+      // } else {
+      controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+      controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+      controller.globalController.saveHomePastPatientData();
+      // }
+    }
+
+    // controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue = selectedDate;
+    // List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+    // if (dates.length == 2) {
+    //   controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
+    //   controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
+    //   controller.globalController.saveHomeScheduleListData();
+    // }
   }
 }

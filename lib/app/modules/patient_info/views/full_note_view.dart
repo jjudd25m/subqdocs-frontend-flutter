@@ -1130,6 +1130,33 @@ class FullNoteView extends StatelessWidget {
                                                                       ),
                                                                     ],
                                                                   ),
+                                                                  if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].followUp?.isNotEmpty ??
+                                                                      false) ...[
+                                                                    SizedBox(height: 10),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.left,
+                                                                            "Follow up:",
+                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            textAlign: TextAlign.left,
+                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].followUp}.",
+                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(height: 10),
+                                                                  ]
                                                                 ],
                                                               ),
                                                             ),

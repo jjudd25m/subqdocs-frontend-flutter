@@ -192,18 +192,18 @@ class DoctorView extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ReorderableListView(
+                        child: ListView(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          onReorder: (oldIndex, newIndex) {
-                            // setState(() {
-                            if (newIndex > oldIndex) {
-                              newIndex = newIndex - 1;
-                            }
-                            // });
-                            final task = controller.tasks.removeAt(oldIndex);
-                            controller.tasks.insert(newIndex, task);
-                          },
+                          // onReorder: (oldIndex, newIndex) {
+                          //   // setState(() {
+                          //   if (newIndex > oldIndex) {
+                          //     newIndex = newIndex - 1;
+                          //   }
+                          //   // });
+                          //   final task = controller.tasks.removeAt(oldIndex);
+                          //   controller.tasks.insert(newIndex, task);
+                          // },
                           children: [
                             for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
                               Container(
@@ -380,7 +380,7 @@ class DoctorView extends StatelessWidget {
                                           ]
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.medications != "-" && task.medications != "")...[
+                                        if (task.medications != "-" && task.medications != "") ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(
@@ -429,7 +429,7 @@ class DoctorView extends StatelessWidget {
                                           ),
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "" ) ...[
+                                        if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "") ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(

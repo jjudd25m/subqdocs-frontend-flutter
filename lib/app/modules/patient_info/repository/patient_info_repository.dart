@@ -25,6 +25,12 @@ class PatientInfoRepository {
     return PatientViewListModel.fromJson(response);
   }
 
+  Future<ChangeStatusModel> getStatus() async {
+    var response = await ApiProvider.instance.callGet("patient/visit/status", queryParameters: {});
+    customPrint("getPatientView API  internal response $response");
+    return ChangeStatusModel.fromJson(response);
+  }
+
   Future<ChangeStatusModel> changeStatus({required String id, required Map<String, dynamic> params}) async {
     var response = await ApiProvider.instance.callPut("patient/updateVisitStatus/$id", params);
     customPrint("getPatientView API  internal response $response");

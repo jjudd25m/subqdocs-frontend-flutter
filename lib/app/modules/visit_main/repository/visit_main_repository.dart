@@ -6,6 +6,7 @@ import 'package:mime/mime.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
+import '../../../models/ChangeModel.dart';
 import '../../forgot_password/models/common_respons.dart';
 import '../../forgot_password/models/send_otp_model.dart';
 import '../../patient_info/model/patient_view_list_model.dart';
@@ -51,5 +52,11 @@ class VisitMainRepository {
     var response = await ApiProvider.instance.callGet("patient/visitMainPatientData/$id", queryParameters: {});
     customPrint("getPatientAttachment API internal response $response");
     return VisitMainPatientDetails.fromJson(response);
+  }
+
+  Future<ChangeStatusModel> changeStatus({required String id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("patient/updateVisitStatus/$id", params);
+    customPrint("getPatientView API  internal response $response");
+    return ChangeStatusModel.fromJson(response);
   }
 }

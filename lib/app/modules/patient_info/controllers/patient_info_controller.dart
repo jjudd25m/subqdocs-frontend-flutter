@@ -74,6 +74,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
     if (patientData.value?.responseData?.visitStatus == "Finalized") {
       isSignatureDone.value = true;
+    } else if (patientData.value?.responseData?.visitStatus == "Pending") {
+      // isSignatureDone.value = true;
     }
     print("patient data is :- ${patientData.value?.toJson()}");
     // Get.back();Get
@@ -167,6 +169,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
             if (status.toLowerCase() == "failure") {
               customPrint("PatientViewStatus failure");
 
+              getPatientDetails();
               showPrompError(Get.context!, message);
             }
           },
@@ -332,6 +335,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
             customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
+            getPatientDetails();
             if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
               customPrint("transcriptStatus inside condition");
               if (status.toLowerCase() == "pending") {

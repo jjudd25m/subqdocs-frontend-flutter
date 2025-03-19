@@ -401,8 +401,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                                     onDelete: () {
                                                                                       print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
 
-                                                                                      controller.deletePatientVisit(
-                                                                                          id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
+                                                                                      controller.changeStatus("Canceled");
+
+                                                                                      // controller.deletePatientVisit(
+                                                                                      //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
                                                                                     },
                                                                                   );
                                                                                 },

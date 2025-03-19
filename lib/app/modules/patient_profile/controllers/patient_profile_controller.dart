@@ -5,6 +5,7 @@ import 'package:toastification/toastification.dart';
 
 import '../../../../widgets/custom_toastification.dart';
 import '../../../data/provider/api_provider.dart';
+import '../../../models/ChangeModel.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../home/model/patient_schedule_model.dart';
@@ -46,6 +47,26 @@ class PatientProfileController extends GetxController {
 
   Future<void> onRefresh() async {
     print("_onRefresh called");
+  }
+
+  Future<void> changeStatus(String status) async {
+    try {
+      Loader().showLoadingDialogForSimpleLoader();
+
+      Map<String, dynamic> param = {};
+
+      param['status'] = status;
+
+      ChangeStatusModel changeStatusModel = await _editPatientDetailsRepository.changeStatus(id: visitId, params: param);
+      if (changeStatusModel.responseType == "success") {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+        getPatient(patientId, visitId);
+      } else {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+      }
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+    }
   }
 
   Future<void> getPatient(String id, String visitId) async {

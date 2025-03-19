@@ -837,7 +837,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 80,
+                                    height: 95,
                                     decoration: BoxDecoration(
                                       border: Border.all(color: AppColors.backgroundPurple),
                                       color: AppColors.backgroundPurple,
@@ -860,6 +860,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             Text(
                                               textAlign: TextAlign.center,
                                               "Digitally Signed by ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
+                                              style: AppFonts.medium(16, AppColors.textWhite),
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              formatDateTime(
+                                                  firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                               style: AppFonts.medium(16, AppColors.textWhite),
                                             ),
                                           ],
@@ -959,65 +965,67 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                           //     ),
                           //   ),
                           // ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return ConfirmFinalizeDialog(
-                                      onDelete: () {
-                                        controller.changeStatus();
-                                      },
-                                    );
-                                  },
-                                );
+                          if (controller.patientData.value?.responseData?.visitStatus == "Pending") ...[
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () async {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return ConfirmFinalizeDialog(
+                                        onDelete: () {
+                                          controller.changeStatus();
+                                        },
+                                      );
+                                    },
+                                  );
 
-                                // if (controller.visitId.isNotEmpty && controller.patientTranscriptUploadModel.responseData?.id != null) {
-                                //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                //     "visitId": controller.visitId,
-                                //     "patientId": controller.patientTranscriptUploadModel.responseData?.id.toString(),
-                                //   });
-                                // }
+                                  // if (controller.visitId.isNotEmpty && controller.patientTranscriptUploadModel.responseData?.id != null) {
+                                  //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                                  //     "visitId": controller.visitId,
+                                  //     "patientId": controller.patientTranscriptUploadModel.responseData?.id.toString(),
+                                  //   });
+                                  // }
 
-                                // Get.toNamed(Routes.VISIT_MAIN);
-                                // Get.offAndToNamed(Routes.HOME);
-                                // controller.isSignatureDone.value = true;
-                              },
-                              child: Container(
-                                height: 81,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.backgroundPurple),
-                                  color: AppColors.backgroundPurple,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          ImagePath.signature,
-                                          height: 30,
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          textAlign: TextAlign.center,
-                                          "Sign and Finalize",
-                                          style: AppFonts.medium(16, AppColors.textWhite),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  // Get.toNamed(Routes.VISIT_MAIN);
+                                  // Get.offAndToNamed(Routes.HOME);
+                                  // controller.isSignatureDone.value = true;
+                                },
+                                child: Container(
+                                  height: 81,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.backgroundPurple),
+                                    color: AppColors.backgroundPurple,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            ImagePath.signature,
+                                            height: 30,
+                                            width: 30,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Sign and Finalize",
+                                            style: AppFonts.medium(16, AppColors.textWhite),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ]
                         ],
                       ],
                     );

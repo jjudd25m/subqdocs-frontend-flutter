@@ -282,6 +282,7 @@ class EditPatentDetailsController extends GetxController {
       // param['profile_image'] = profileImage.value;
       profileParams['profile_image'] = [profileImage.value!];
     } else {
+      param['isDeleteProfileImage'] = true;
       customPrint("profile is not  available");
     }
 
