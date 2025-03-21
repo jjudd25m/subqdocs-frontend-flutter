@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../widgets/custom_toastification.dart';
 import '../../forgot_password/models/common_respons.dart';
+import '../../visit_main/model/all_attachment_list_model.dart';
 import '../../visit_main/model/patient_attachment_list_model.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
 
@@ -15,28 +16,47 @@ class AllAttachmentController extends GetxController {
 
   RxString referesh = RxString("");
 
-  Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
+  Rxn<AllAttachmentListModel> allAttachmentList = Rxn();
 
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
 
-  RxMap<String, List<ResponseData>> attachmentDic = RxMap<String, List<ResponseData>>();
+  // RxMap<String, List<ResponseData>> attachmentDic = RxMap<String, List<ResponseData>>();
+
+  RxString visitId = RxString("");
 
   @override
   void onInit() {
     super.onInit();
 
-    patientAttachmentList = Get.arguments["attachmentList"];
+    visitId.value = Get.arguments["visit_id"];
+    // patientAttachmentList = Get.arguments["attachmentList"];
 
-    Map<String, List<ResponseData>> groupedAttachments = groupAttachmentsByDate(patientAttachmentList.value?.responseData ?? []);
+    getAllPatientAttachment();
+  }
 
-    attachmentDic.value = groupedAttachments;
+  Future<void> getAllPatientAttachment() async {
+    Map<String, dynamic> param = {};
 
-    groupedAttachments.forEach((date, attachments) {
-      print('Date: $date');
-      attachments.forEach((attachment) {
-        print('  - ${attachment.fileName}');
-      });
-    });
+    try {
+      allAttachmentList.value = await _visitMainRepository.getAllPatientAttachment(id: visitId.value, param: param);
+
+      // print("All attachment is :- ${patientAttachmentList.value?.responseData?.length}");
+      //
+      // Map<String, List<ResponseData>> groupedAttachments = groupAttachmentsByDate(patientAttachmentList.value?.responseData ?? []);
+      //
+      // attachmentDic.value = groupedAttachments;
+      //
+      // groupedAttachments.forEach((date, attachments) {
+      //   print('Date: $date');
+      //   attachments.forEach((attachment) {
+      //     print('  - ${attachment.fileName}');
+      //   });
+      // });
+
+      // Get.back();
+    } catch (error) {
+      // Get.back();
+    }
   }
 
   void deleteAttachments(int index, int subIndex, int id) async {
@@ -49,8 +69,8 @@ class AllAttachmentController extends GetxController {
 
       if (commonResponse.responseType == "success") {
         CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
-        attachmentDic.values.elementAt(index).removeAt(subIndex);
-        attachmentDic.refresh();
+        // attachmentDic.values.elementAt(index).removeAt(subIndex);
+        // attachmentDic.refresh();
       } else {
         CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.error);
       }
@@ -61,38 +81,38 @@ class AllAttachmentController extends GetxController {
     }
   }
 
-  Map<String, List<ResponseData>> groupAttachmentsByDate(List<ResponseData> responseData) {
-    Map<String, List<ResponseData>> groupedAttachments = {};
-
-    // Define the date format you want
-    var formatter = DateFormat('MM/dd/yyyy'); // Adjust format as necessary
-
-    for (var attachment in responseData) {
-      // Parse the createdAt field (assuming it's in ISO 8601 format)
-      DateTime createdAtDate = DateTime.parse(attachment.createdAt!);
-
-      // Format the date to MM/dd/yyyy (or whatever format you need)
-      String formattedDate = formatter.format(createdAtDate);
-
-      // If the date key does not exist, create an empty list
-      if (!groupedAttachments.containsKey(formattedDate)) {
-        groupedAttachments[formattedDate] = [];
-      }
-
-      // Add the attachment to the list for this date
-      groupedAttachments[formattedDate]?.add(attachment);
-    }
-
-    return groupedAttachments;
-  }
-
-  Future<void> launchInAppWithBrowserOptions(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.inAppBrowserView,
-      browserConfiguration: const BrowserConfiguration(showTitle: true),
-    )) {
-      throw Exception('Could not launch $url');
-    }
-  }
+  // Map<String, List<ResponseData>> groupAttachmentsByDate(List<ResponseData> responseData) {
+  //   Map<String, List<ResponseData>> groupedAttachments = {};
+  //
+  //   // Define the date format you want
+  //   var formatter = DateFormat('MM/dd/yyyy'); // Adjust format as necessary
+  //
+  //   for (var attachment in responseData) {
+  //     // Parse the createdAt field (assuming it's in ISO 8601 format)
+  //     DateTime createdAtDate = DateTime.parse(attachment.createdAt!);
+  //
+  //     // Format the date to MM/dd/yyyy (or whatever format you need)
+  //     String formattedDate = formatter.format(createdAtDate);
+  //
+  //     // If the date key does not exist, create an empty list
+  //     if (!groupedAttachments.containsKey(formattedDate)) {
+  //       groupedAttachments[formattedDate] = [];
+  //     }
+  //
+  //     // Add the attachment to the list for this date
+  //     groupedAttachments[formattedDate]?.add(attachment);
+  //   }
+  //
+  //   return groupedAttachments;
+  // }
+  //
+  // Future<void> launchInAppWithBrowserOptions(Uri url) async {
+  //   if (!await launchUrl(
+  //     url,
+  //     mode: LaunchMode.inAppBrowserView,
+  //     browserConfiguration: const BrowserConfiguration(showTitle: true),
+  //   )) {
+  //     throw Exception('Could not launch $url');
+  //   }
+  // }
 }

@@ -10,6 +10,7 @@ import '../../../models/ChangeModel.dart';
 import '../../forgot_password/models/common_respons.dart';
 import '../../forgot_password/models/send_otp_model.dart';
 import '../../patient_info/model/patient_view_list_model.dart';
+import '../model/all_attachment_list_model.dart';
 import '../model/patient_attachment_list_model.dart';
 import '../model/patient_transcript_upload_model.dart';
 import '../model/visit_recap_list_model.dart';
@@ -46,6 +47,12 @@ class VisitMainRepository {
     var response = await ApiProvider.instance.callGet("patient/attachments/$id", queryParameters: param);
     customPrint("getPatientAttachment API internal response $response");
     return PatientAttachmentListModel.fromJson(response);
+  }
+
+  Future<AllAttachmentListModel> getAllPatientAttachment({required String id, required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callGet("patient/attachments/viewAll/$id", queryParameters: param);
+    customPrint("getPatientAttachment API internal response $response");
+    return AllAttachmentListModel.fromJson(response);
   }
 
   Future<VisitMainPatientDetails> getPatientDetails({required String id}) async {

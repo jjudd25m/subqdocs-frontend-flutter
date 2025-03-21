@@ -814,7 +814,7 @@ class FullNoteView extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(horizontal: 0),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -831,7 +831,7 @@ class FullNoteView extends StatelessWidget {
                                                         SizedBox(height: 0),
                                                         Row(
                                                           children: [
-                                                            SizedBox(width: 15),
+                                                            SizedBox(width: 0),
                                                             Expanded(
                                                                 child: Html(
                                                               data: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "",
@@ -1037,7 +1037,7 @@ class FullNoteView extends StatelessWidget {
                                                                         Expanded(
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
-                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders}.",
+                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders}",
                                                                             style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),

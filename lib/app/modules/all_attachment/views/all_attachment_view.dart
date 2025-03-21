@@ -129,7 +129,8 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                             children: [
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                getFormattedDate(controller.attachmentDic.keys.elementAt(index)),
+                                                getFormattedDate(controller.allAttachmentList.value!.responseData.data.keys.elementAt(index)),
+                                                // getFormattedDate(controller.allAttachmentList.value!.responseData.data.keys.elementAt(index)),
                                                 style: AppFonts.medium(16, AppColors.textPurple),
                                               ),
                                               SizedBox(width: 10),
@@ -180,21 +181,21 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                               onTap: () {
                                                                 // customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
 
-                                                                if (controller.attachmentDic.values.elementAt(index)[subindex].fileType?.contains("image") ?? false) {
+                                                                if (controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType?.contains("image") ?? false) {
                                                                   showDialog(
                                                                     context: context,
                                                                     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                                                     builder: (BuildContext context) {
                                                                       return ViewAttchmentImage(
-                                                                        imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
+                                                                        imageUrl: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "",
                                                                         attchmentUrl: '',
                                                                       );
                                                                     },
                                                                   );
                                                                 } else {
-                                                                  Uri attchmentUri = Uri.parse(controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "");
+                                                                  Uri attchmentUri = Uri.parse(controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "");
                                                                   customPrint("attchmentUri is :- ${attchmentUri}");
-                                                                  controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                  // controller.launchInAppWithBrowserOptions(attchmentUri);
                                                                 }
                                                               },
                                                               child: ClipRRect(
@@ -205,7 +206,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                   height: 120,
                                                                   child: Center(
                                                                     child: BaseImageView(
-                                                                      imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
+                                                                      imageUrl: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "",
                                                                       width: 120,
                                                                       height: 120,
                                                                       errorWidget: Image.asset(
@@ -244,9 +245,10 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                       // return SizedBox();
                                                                       return DeleteImageDialog(
                                                                         onDelete: () {
-                                                                          controller.deleteAttachments(index, subindex, controller.attachmentDic.values.elementAt(index)[subindex].id ?? -1);
+                                                                          controller.deleteAttachments(
+                                                                              index, subindex, controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].id ?? -1);
                                                                         },
-                                                                        extension: controller.attachmentDic.values.elementAt(index)[subindex].fileType,
+                                                                        extension: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType,
                                                                       );
                                                                     },
                                                                   );
@@ -263,7 +265,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                   ),
                                                 );
                                               },
-                                              itemCount: controller.attachmentDic.values.elementAt(index).length,
+                                              itemCount: controller.allAttachmentList.value!.responseData.data.values.elementAt(index).length,
                                             ),
                                           ),
                                           SizedBox(
@@ -273,7 +275,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                       ),
                                     ),
                                   ),
-                              itemCount: controller.attachmentDic.keys.length);
+                              itemCount: controller.allAttachmentList.value!.responseData.data.keys.length);
                         })
                       ],
                     ),
