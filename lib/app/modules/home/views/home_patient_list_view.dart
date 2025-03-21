@@ -25,7 +25,7 @@ class HomePatientListView extends GetView<HomeController> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(() {
         return controller.patientList.isEmpty
-            ? Padding(
+            ?  Padding(
                 padding: const EdgeInsets.all(10),
                 child: EmptyPatientScreen(
                     onBtnPress: () async {
@@ -38,72 +38,82 @@ class HomePatientListView extends GetView<HomeController> {
                     title: "Your Patient List is Empty",
                     description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
               )
-            : CustomTable(
-                physics: AlwaysScrollableScrollPhysics(),
-                onRefresh: () async {
-                  controller.getPatientList();
-                  print("refresh patient list view");
-                },
-                rows: _getTableRows(controller.patientList),
-                columnCount: 6,
-                cellBuilder: _buildTableCell,
-                context: context,
-                onRowSelected: (rowIndex, rowData) {
-                  // Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                  //   "visitId": controller.patientList[rowIndex].visitId.toString(),
-                  //   "patientId": controller.patientList[rowIndex].id.toString(),
-                  // });
+            : Column(
+              children: [
+                // Text("total data is the ${controller.patientList.length}" , style: TextStyle( fontSize: 20),),
+                Expanded(
+                  child: CustomTable(
+                      scrollController: controller.scrollControllerPatientList,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      onRefresh: () async {
+                        controller.pagePatient = 1;
 
-                  // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-                },
-                onLoadMore: () async {
-                  controller.patientLoadMore();
-                },
-                columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10],
-                headerBuilder: (context, colIndex) {
-                  List<String> headers = ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action'];
-                  return GestureDetector(
-                    onTap: () {
-                      if (colIndex != 5) {
-                        controller.patientSorting(colIndex: colIndex, cellData: headers[colIndex]);
-                      }
-                      // customPrint(cellData);
-                    },
-                    child: Container(
-                      color: AppColors.backgroundWhite,
-                      height: 40,
-                      child: Row(
-                        mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            headers[colIndex],
-                            textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                            style: AppFonts.medium(12, AppColors.black),
-                            softWrap: true, // Allows text to wrap
-                            overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                        controller.getPatientList();
+                        print("refresh patient list view");
+                      },
+                      rows: _getTableRows(controller.patientList),
+                      columnCount: 6,
+                      cellBuilder: _buildTableCell,
+                      context: context,
+                      onRowSelected: (rowIndex, rowData) {
+                        // Get.toNamed(Routes.VISIT_MAIN, arguments: {
+                        //   "visitId": controller.patientList[rowIndex].visitId.toString(),
+                        //   "patientId": controller.patientList[rowIndex].id.toString(),
+                        // });
+
+                        // Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
+                      },
+                      onLoadMore: () async {
+                        controller.patientLoadMore();
+                      },
+                      columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10],
+                      headerBuilder: (context, colIndex) {
+                        List<String> headers = ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action'];
+                        return GestureDetector(
+                          onTap: () {
+                            if (colIndex != 5) {
+                              controller.patientSorting(colIndex: colIndex, cellData: headers[colIndex]);
+                            }
+                            // customPrint(cellData);
+                          },
+                          child: Container(
+                            color: AppColors.backgroundWhite,
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  headers[colIndex],
+                                  textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                  style: AppFonts.medium(12, AppColors.black),
+                                  softWrap: true, // Allows text to wrap
+                                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                ),
+                                colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
+                                        controller.globalController.homePatientListSortingModel.value!.isAscending &&
+                                        colIndex != 5
+                                    ? Icon(
+                                        CupertinoIcons.down_arrow,
+                                        size: 15,
+                                      )
+                                    : colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
+                                            !controller.globalController.homePatientListSortingModel.value!.isAscending &&
+                                            colIndex != 5
+                                        ? Icon(
+                                            CupertinoIcons.up_arrow,
+                                            size: 15,
+                                          )
+                                        : SizedBox()
+                              ],
+                            ),
                           ),
-                          colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
-                                  controller.globalController.homePatientListSortingModel.value!.isAscending &&
-                                  colIndex != 5
-                              ? Icon(
-                                  CupertinoIcons.down_arrow,
-                                  size: 15,
-                                )
-                              : colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
-                                      !controller.globalController.homePatientListSortingModel.value!.isAscending &&
-                                      colIndex != 5
-                                  ? Icon(
-                                      CupertinoIcons.up_arrow,
-                                      size: 15,
-                                    )
-                                  : SizedBox()
-                        ],
-                      ),
+                        );
+                      },
+                      isLoading: controller.isLoading.value,
                     ),
-                  );
-                },
-                isLoading: controller.isLoading.value,
-              );
+                ),
+              ],
+            );
       }),
     );
   }

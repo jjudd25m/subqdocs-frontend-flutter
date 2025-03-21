@@ -36,10 +36,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                 items: controller.globalController.scheduleFilterListingModel,
                 oneClearAll: () {
                   controller.globalController.removeScheduleFilter();
+                  controller.scheduleTriggeredIndexes.clear();
                   controller.getScheduleVisitList();
                 },
                 onDeleteItem: (value) {
                   controller.globalController.removeScheduleFilter(keyName: value);
+                  controller.scheduleTriggeredIndexes.clear();
                   controller.getScheduleVisitList();
                 },
               ),
@@ -47,6 +49,8 @@ class HomeScheduleListView extends GetView<HomeController> {
               SizedBox(
                 height: 15,
               ),
+
+            // Text("total data is the ${controller.scheduleVisitList.length}" , style: TextStyle( fontSize: 20),),
             controller.scheduleVisitList.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(10),
@@ -64,9 +68,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                 : Expanded(
                     child: CustomTable(
                       onRefresh: () async {
+
+
                         controller.getScheduleVisitList(isFist: true);
                         print("refresh schedule list view");
                       },
+                      scrollController: controller.scrollControllerSchedulePatientList,
                       physics: AlwaysScrollableScrollPhysics(),
                       rows: _getTableRows(controller.scheduleVisitList),
                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {

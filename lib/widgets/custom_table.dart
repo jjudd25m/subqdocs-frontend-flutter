@@ -104,6 +104,8 @@ class CustomTable extends StatelessWidget {
   final ScrollPhysics? physics;
   final List<double> columnWidths;
   final void Function(int rowIndex, List<String> rowData)? onRowSelected;
+
+  final ScrollController? scrollController;
   final Future<void> Function()? onRefresh; // Add onRefresh for pull-to-refresh
 
   CustomTable({
@@ -117,7 +119,8 @@ class CustomTable extends StatelessWidget {
     required this.isLoading, // Accept isLoading
     this.physics = const BouncingScrollPhysics(),
     required BuildContext context,
-    this.onRefresh, // Accept onRefresh function
+    this.onRefresh,
+    this.scrollController// Accept onRefresh function
   });
 
   @override
@@ -153,10 +156,13 @@ class CustomTable extends StatelessWidget {
                   return false; // Allow other notifications to propagate
                 },
                 child: ListView.builder(
+                  controller: scrollController,
                   padding: EdgeInsets.zero,
                   physics: physics,
                   itemCount: rows.length + (isLoading ? 1 : 0), // Add an extra item for loader
                   itemBuilder: (context, index) {
+
+
                     if (index == rows.length && isLoading) {
                       // Show loading spinner at the bottom when loading
                       return Center(

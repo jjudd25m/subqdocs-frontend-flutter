@@ -61,6 +61,7 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                       controller.globalController.homeScheduleListSortingModel.value?.startDate = "";
                       controller.globalController.homeScheduleListSortingModel.value?.endDate = "";
                       controller.globalController.saveHomeScheduleListData();
+                      controller.scheduleTriggeredIndexes.clear();
                       Get.back();
                       onTap();
                     },
@@ -254,6 +255,7 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                         controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
                         controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
                         controller.globalController.saveHomeScheduleListData();
+                        controller.scheduleTriggeredIndexes.clear();
                       }
                     },
                     value: selectedDate ?? [DateTime.now()],
@@ -276,6 +278,7 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
       controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
       controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
       controller.globalController.saveHomeScheduleListData();
+      controller.scheduleTriggeredIndexes.clear();
     }
   }
 }

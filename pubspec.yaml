@@ -46,6 +46,7 @@ dependencies:
   path: ^1.9.0
   dio: ^5.7.0
   shared_preferences: ^2.3.2
+  positioned_scroll_observer: ^2.2.2
   toastification: ^2.3.0
   socket_io_client: ^3.0.2
   record: ^5.1.2

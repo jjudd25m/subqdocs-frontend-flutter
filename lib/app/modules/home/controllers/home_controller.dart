@@ -11,6 +11,7 @@ import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
 import 'package:subqdocs/app/modules/home/model/Status.dart';
 import 'package:subqdocs/app/modules/home/model/statusModel.dart';
+import 'package:positioned_scroll_observer/positioned_scroll_observer.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
@@ -51,6 +52,11 @@ class HomeController extends GetxController {
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
   Rxn<ScheduleVisitListModel> pastVisitListModelOfLine = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
+  // late final ScrollObserver _observer;
+  final ScrollController scrollControllerPatientList = ScrollController();
+  final ScrollController scrollControllerPastPatientList = ScrollController();
+  final ScrollController scrollControllerSchedulePatientList = ScrollController();
+  // final ScrollController scrollControllerPatientList = ScrollController();
 
   RxList<StatusModel> statusModel = RxList();
 
@@ -92,9 +98,13 @@ class HomeController extends GetxController {
   RxInt tabIndex = RxInt(0);
 
   var pagePatient = 1;
+
+  final Set<int> triggeredIndexes = <int>{};
+  final Set<int> pastTriggeredIndexes = <int>{};
+  final Set<int> scheduleTriggeredIndexes = <int>{};
   var pageSchedule = 1;
   var pagePast = 1;
-
+  Set<int> _loadedThresholds = Set<int>();
   RxBool isLoading = RxBool(false);
   String getNextRoundedTimeHH() {
     DateTime now = DateTime.now().toUtc();
@@ -112,8 +122,82 @@ class HomeController extends GetxController {
     final DateFormat formatter = DateFormat('HH:mm:ss');
     return formatter.format(now);
   }
-
+  // void _onScroll() {
+  //
+  //
+  //   print("scolling");
+  //   //
+  //   // if (!isLoading.value) {
+  //   //   int currentLength = patientList.length;
+  //   //   if (currentLength % 50 == 0 && !_loadedThresholds.contains(currentLength)) {
+  //   //     _loadedThresholds.add(currentLength);
+  //   //
+  //   //
+  //   //     print("scroll is needed ${scrollControllerPatientList.position}");
+  //   //   }else{
+  //   //     print("scroll is  not needed.  ${scrollControllerPatientList.position}");
+  //   //   }
+  //   // }
+  // }
   @override
+
+
+  void _onScrollPatientList() {
+    if (!scrollControllerPatientList.hasClients) return;
+
+    double offset = scrollControllerPatientList.position.pixels;
+    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+
+    if ( currentIndex!=0 && currentIndex % 50 == 0 && !triggeredIndexes.contains(currentIndex)) {
+      triggeredIndexes.add(currentIndex); // Mark as triggered
+      patientLoadMore();
+
+      print("scroll is needed ${currentIndex}");
+      // onLoadMore(currentIndex);
+    }else{
+      print("scroll is  not needed.  ${currentIndex}");
+    }
+  }
+
+
+
+  void _onScrollPastPatientList() {
+    if (!scrollControllerPastPatientList.hasClients) return;
+
+    double offset = scrollControllerPastPatientList.position.pixels;
+    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+
+    if ( currentIndex!=0 && currentIndex % 50 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
+      pastTriggeredIndexes.add(currentIndex); // Mark as triggered
+      getPastVisitListFetchMore();
+
+
+      print("scroll is needed $currentIndex");
+      // onLoadMore(currentIndex);
+    }else{
+      print("scroll is  not needed.  $currentIndex");
+    }
+  }
+
+  void _onScrollSchedulePatientList() {
+    if (!scrollControllerSchedulePatientList.hasClients) return;
+
+    double offset = scrollControllerSchedulePatientList.position.pixels;
+    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+
+    if ( currentIndex!=0 && currentIndex % 50 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
+      scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
+      getScheduleVisitListFetchMore();
+
+
+      print("scroll is needed $currentIndex");
+      // onLoadMore(currentIndex);
+    }else{
+      print("scroll is  not needed.  $currentIndex");
+    }
+  }
+
+
   Future<void> onInit() async {
     super.onInit();
 
@@ -128,6 +212,26 @@ class HomeController extends GetxController {
     }
     getPatientList();
     getStatus();
+
+    scrollControllerPatientList.addListener(_onScrollPatientList);
+    scrollControllerPastPatientList.addListener(_onScrollPastPatientList);
+    scrollControllerSchedulePatientList.addListener(_onScrollSchedulePatientList);
+    //
+    // _observer = ScrollObserver.sliverMulti(itemCount: items.length);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    scrollControllerPatientList.removeListener(_onScrollPatientList);
+    scrollControllerPatientList.dispose();
+
+    scrollControllerPastPatientList.removeListener(_onScrollPastPatientList);
+    scrollControllerPastPatientList.dispose();
+
+    scrollControllerSchedulePatientList.removeListener(_onScrollSchedulePatientList);
+    scrollControllerSchedulePatientList.dispose();
   }
 
   bool? getDescValue(List<Map<String, dynamic>> sorting, String displayName, int tabIndex) {
@@ -203,6 +307,7 @@ class HomeController extends GetxController {
 
   Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
+    pagePatient=1;
 
     param['page'] = 1;
     param['limit'] = "100";
@@ -243,6 +348,9 @@ class HomeController extends GetxController {
   }
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
+
+    pageSchedule = 1;
+
     Map<String, dynamic> param = {};
     param['page'] = 1;
     param['limit'] = "100";
@@ -286,6 +394,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> getPastVisitList({String? sortingName = "", bool isFist = false}) async {
+    pagePast = 1;
+
     Map<String, dynamic> param = {};
     param['page'] = 1;
     param['limit'] = "100";
@@ -335,138 +445,228 @@ class HomeController extends GetxController {
   }
 
   Future<void> getScheduleVisitListFetchMore() async {
-    isLoading.value = true;
-    Map<String, dynamic> param = {};
-    param['page'] = ++pageSchedule;
-    param['limit'] = "100";
-    param['isPastPatient'] = 'false';
-    if (searchController.text.isNotEmpty) {
-      param['search'] = searchController.text;
-    }
 
-    // Dynamically add sorting to the param map
-    param["sorting"] = globalController.homeScheduleListSortingModel.value?.scheduleVisitSelectedSorting;
 
-    if (startDate.value != "" && endDate.value != "") {
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
-      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
-    }
+    int? totalCount = scheduleVisitListModel.value?.responseData
+        ?.totalCount ?? 0;
+    if (scheduleVisitList.length < totalCount) {
+      print("no pagination is not needed  beacuse ${pastVisitList
+          .length}  is this and $totalCount");
+      isLoading.value = true;
+      Map<String, dynamic> param = {};
+      param['page'] = ++pageSchedule;
+      param['limit'] = "100";
+      param['isPastPatient'] = 'false';
+      if (searchController.text.isNotEmpty) {
+        param['search'] = searchController.text;
+      }
 
-    globalController.saveHomeScheduleListData();
-    scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
+      // Dynamically add sorting to the param map
+      param["sorting"] = globalController.homeScheduleListSortingModel.value
+          ?.scheduleVisitSelectedSorting;
 
-    isLoading.value = false;
-    if (scheduleVisitListModel.value?.responseData?.data != null) {
-      int? totalCount = scheduleVisitListModel.value?.responseData?.totalCount ?? 0;
-      int? dataCount = scheduleVisitList.length;
+      if (startDate.value != "" && endDate.value != "") {
+        DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(
+            startDate.value);
+        String formattedStartDate = DateFormat('yyyy-MM-dd').format(
+            startDateTime);
+        DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+        String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+        param['dateRange'] =
+        '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+      }
 
-      if (scheduleVisitList.length >= totalCount!) {
+      globalController.saveHomeScheduleListData();
+      scheduleVisitListModel.value =
+      await _homeRepository.getScheduleVisit(param: param);
+
+      isLoading.value = false;
+      if (scheduleVisitListModel.value?.responseData?.data != null) {
+        int? totalCount = scheduleVisitListModel.value?.responseData
+            ?.totalCount ?? 0;
+        int? dataCount = scheduleVisitList.length;
+
+        if (scheduleVisitList.length >= totalCount!) {
+          // customPrint("no data fetch and add");
+          pageSchedule--;
+        } else {
+          // customPrint(" data fetch and add");
+          scheduleVisitList.addAll(
+              scheduleVisitListModel.value?.responseData?.data as Iterable<
+                  ScheduleVisitListData>);
+        }
+      } else {
         // customPrint("no data fetch and add");
         pageSchedule--;
-      } else {
-        // customPrint(" data fetch and add");
-        scheduleVisitList.addAll(scheduleVisitListModel.value?.responseData?.data as Iterable<ScheduleVisitListData>);
       }
-    } else {
-      // customPrint("no data fetch and add");
-      pageSchedule--;
+    }else{
+      print("no pagination is not needed  beacuse ${scheduleVisitList.length}  is this and $totalCount");
     }
   }
+
 
   Future<void> getPatientListFetchMore({int? page}) async {
-    isLoading.value = true;
-    Map<String, dynamic> param = {};
 
-    param['page'] = ++pagePatient;
-    param['limit'] = "100";
-    if (searchController.text.isNotEmpty) {
-      param['search'] = searchController.text;
-    }
+    int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
+    if (patientList.length < totalCount) {
 
-    // Dynamically add sorting to the param map
-    param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
+      print("pagination is  needed  beacuse ${patientList.length}  is this and $totalCount");
+      isLoading.value = true;
+      Map<String, dynamic> param = {};
 
-    if (startDate.value != "" && endDate.value != "") {
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
-      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
-    }
-
-    globalController.saveHomePatientListData();
-    patientListModel.value = await _homeRepository.getPatient(param: param);
-
-    isLoading.value = false;
-    if (patientListModel.value?.responseData?.data != null) {
-      int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
-      int? dataCount = patientList.length;
-
-      if (patientList.length >= totalCount!) {
-        pagePatient--;
-      } else {
-        patientList.addAll(patientListModel.value?.responseData?.data as Iterable<PatientListData>);
+      param['page'] = ++pagePatient;
+      param['limit'] = "100";
+      if (searchController.text.isNotEmpty) {
+        param['search'] = searchController.text;
       }
-    } else {
-      pagePatient--;
+
+      // Dynamically add sorting to the param map
+      param["sorting"] = globalController.homePatientListSortingModel.value
+          ?.patientListSelectedSorting;
+
+      if (startDate.value != "" && endDate.value != "") {
+        DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(
+            startDate.value);
+        String formattedStartDate = DateFormat('yyyy-MM-dd').format(
+            startDateTime);
+        DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+        String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+        param['dateRange'] =
+        '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+      }
+
+      globalController.saveHomePatientListData();
+      patientListModel.value = await _homeRepository.getPatient(param: param);
+
+      isLoading.value = false;
+      if (patientListModel.value?.responseData?.data != null) {
+        int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
+        int? dataCount = patientList.length;
+
+        if (patientList.length >= totalCount) {
+          pagePatient--;
+        } else {
+          patientList.addAll(
+              patientListModel.value?.responseData?.data as Iterable<
+                  PatientListData>);
+        }
+      } else {
+        pagePatient--;
+      }
+    }else{
+
+      print("no pagination is not needed  beacuse ${patientList.length}  is this and $totalCount");
+
     }
   }
+  // Future<void> getPatientListFetchMore({int? page}) async {
+  //   isLoading.value = true;
+  //   Map<String, dynamic> param = {};
+  //
+  //   param['page'] = ++pagePatient;
+  //   param['limit'] = "100";
+  //   if (searchController.text.isNotEmpty) {
+  //     param['search'] = searchController.text;
+  //   }
+  //
+  //   // Dynamically add sorting to the param map
+  //   param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
+  //
+  //   if (startDate.value != "" && endDate.value != "") {
+  //     DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+  //     String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+  //     DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+  //     String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+  //     param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+  //   }
+  //
+  //   globalController.saveHomePatientListData();
+  //   patientListModel.value = await _homeRepository.getPatient(param: param);
+  //
+  //   isLoading.value = false;
+  //   if (patientListModel.value?.responseData?.data != null) {
+  //     int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
+  //     int? dataCount = patientList.length;
+  //
+  //     if (patientList.length >= totalCount!) {
+  //       pagePatient--;
+  //     } else {
+  //       patientList.addAll(patientListModel.value?.responseData?.data as Iterable<PatientListData>);
+  //     }
+  //   } else {
+  //     pagePatient--;
+  //   }
+  // }
 
   Future<void> getPastVisitListFetchMore() async {
-    isLoading.value = true;
-    Map<String, dynamic> param = {};
-    param['page'] = ++pagePast;
-    param['limit'] = "100";
-    param['isPastPatient'] = 'true';
-    if (searchController.text.isNotEmpty) {
-      param['search'] = searchController.text;
-    }
+    int? totalCount = pastVisitListModel.value?.responseData?.totalCount ?? 0;
 
-    if (globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.isNotEmpty ?? false) {
-      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
-
-      // customPrint("status array is- $statusList");
-      if (statusList.length == 1) {
-        param['status[0]'] = statusList;
-      } else {
-        param['status'] = statusList;
+    if (pastVisitList.length < totalCount) {
+      print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
+      isLoading.value = true;
+      Map<String, dynamic> param = {};
+      param['page'] = ++pagePast;
+      param['limit'] = "100";
+      param['isPastPatient'] = 'true';
+      if (searchController.text.isNotEmpty) {
+        param['search'] = searchController.text;
       }
-    }
 
-    param["sorting"] = globalController.homePastPatientListSortingModel.value?.pastVisitSelectedSorting;
+      if (globalController.homePastPatientListSortingModel.value
+          ?.selectedStatusIndex?.isNotEmpty ?? false) {
+        List<String>? statusList = globalController
+            .homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
 
-    if (startDate.value != "" && endDate.value != "") {
-      DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+        // customPrint("status array is- $statusList");
+        if (statusList.length == 1) {
+          param['status[0]'] = statusList;
+        } else {
+          param['status'] = statusList;
+        }
+      }
 
-      String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+      param["sorting"] = globalController.homePastPatientListSortingModel.value
+          ?.pastVisitSelectedSorting;
 
-      DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+      if (startDate.value != "" && endDate.value != "") {
+        DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(
+            startDate.value);
 
-      String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+        String formattedStartDate = DateFormat('yyyy-MM-dd').format(
+            startDateTime);
 
-      param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
-    }
+        DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
 
-    globalController.saveHomePastPatientData();
-    pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
+        String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
 
-    isLoading.value = false;
+        param['dateRange'] =
+        '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+      }
 
-    if (pastVisitListModel.value?.responseData?.data != null) {
-      int? totalCount = pastVisitListModel.value?.responseData?.totalCount ?? 0;
-      int? dataCount = pastVisitList.length;
+      globalController.saveHomePastPatientData();
+      pastVisitListModel.value =
+      await _homeRepository.getPastVisit(param: param);
 
-      if (pastVisitList.length >= totalCount!) {
-        customPrint("no data fetch and add");
+      isLoading.value = false;
+
+      if (pastVisitListModel.value?.responseData?.data != null) {
+        int? totalCount = pastVisitListModel.value?.responseData?.totalCount ??
+            0;
+        int? dataCount = pastVisitList.length;
+
+        if (pastVisitList.length >= totalCount!) {
+          customPrint("no data fetch and add");
+          pagePast--;
+        } else {
+          pastVisitList.addAll(
+              pastVisitListModel.value?.responseData?.data as Iterable<
+                  ScheduleVisitListData>);
+        }
+      } else {
         pagePast--;
-      } else {
-        pastVisitList.addAll(pastVisitListModel.value?.responseData?.data as Iterable<ScheduleVisitListData>);
       }
-    } else {
-      pagePast--;
+    }else{
+      print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
     }
   }
 
@@ -597,7 +797,7 @@ class HomeController extends GetxController {
     statusModel.clear();
 
     statusResponseModel.responseData?.forEach(
-      (element) {
+          (element) {
         statusModel.add(StatusModel(status: element));
       },
     );
@@ -625,6 +825,8 @@ class HomeController extends GetxController {
 
     globalController.homeScheduleListSortingModel.value?.isAscending = getDescValue(globalController.sortingSchedulePatient, cellData, 1) ?? false;
     globalController.saveHomeScheduleListData();
+    scheduleTriggeredIndexes.clear();
+
   }
 
   void patientSorting({String cellData = "", int colIndex = -1}) {
@@ -639,7 +841,9 @@ class HomeController extends GetxController {
     globalController.homePatientListSortingModel.value?.colIndex = colIndex;
     globalController.homePatientListSortingModel.value?.isAscending = getDescValue(globalController.sortingPatientList, cellData, 0) ?? false;
     globalController.homePastPatientListSortingModel.refresh();
+
     globalController.saveHomePatientListData();
+    triggeredIndexes.clear();
   }
 
   void handelInternetConnection() {
@@ -708,7 +912,7 @@ class HomeController extends GetxController {
       // customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
       // customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {

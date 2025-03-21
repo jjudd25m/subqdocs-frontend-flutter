@@ -69,6 +69,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                       controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
                       controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
                       controller.globalController.saveHomePastPatientData();
+                      controller.pastTriggeredIndexes.clear();
+
                       Get.back();
                       onTap();
                     },
@@ -332,6 +334,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                         controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
                         controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
                         controller.globalController.saveHomePastPatientData();
+                        controller.pastTriggeredIndexes.clear();
                       }
                     },
                     value: selectedDate ?? [DateTime.now()],
@@ -356,6 +359,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
       controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
       controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
       controller.globalController.saveHomePastPatientData();
+      controller.pastTriggeredIndexes.clear();
     }
   }
 }

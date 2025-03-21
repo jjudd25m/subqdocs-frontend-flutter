@@ -36,10 +36,13 @@ class HomePastVisitsList extends GetView<HomeController> {
                   items: controller.globalController.pastFilterListingModel,
                   onDeleteItem: (value) {
                     controller.globalController.removePastFilter(keyName: value);
+                    controller.pastTriggeredIndexes.clear();
+
                     controller.getPastVisitList();
                   },
                   oneClearAll: () {
                     controller.globalController.removePastFilter();
+                    controller.pastTriggeredIndexes.clear();
                     controller.getPastVisitList();
                   },
                 ),
@@ -47,6 +50,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                 SizedBox(
                   height: 15,
                 ),
+
+
+              // Text("total data is the ${controller.pastVisitList.length}" , style: TextStyle( fontSize: 20),),
               controller.pastVisitList.isEmpty
                   ? Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -63,10 +69,13 @@ class HomePastVisitsList extends GetView<HomeController> {
                     )
                   : Expanded(
                       child: CustomTable(
+                        scrollController: controller.scrollControllerPastPatientList,
                         physics: AlwaysScrollableScrollPhysics(),
                         onRefresh: () async {
                           controller.getPastVisitList(isFist: true);
                           print("refresh past list view");
+                          controller.pagePast = 1;
+
                         },
                         onLoadMore: () => controller.getPastVisitListFetchMore(),
                         rows: _getTableRows(controller.pastVisitList),
@@ -399,6 +408,9 @@ class HomePastVisitsList extends GetView<HomeController> {
                                 controller.globalController.homePastPatientListSortingModel.value?.colIndex = colIndex;
                                 controller.globalController.homePastPatientListSortingModel.value?.isAscending =
                                     controller.getDescValue(controller.globalController.sortingPastPatient, headers[colIndex], 2) ?? false;
+
+                                controller.pastTriggeredIndexes.clear();
+
                                 customPrint("col index is the $colIndex");
                               }
                             },
