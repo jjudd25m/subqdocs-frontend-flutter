@@ -39,13 +39,13 @@ class HomePatientListView extends GetView<HomeController> {
                     description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
               )
             : CustomTable(
+                physics: AlwaysScrollableScrollPhysics(),
                 onRefresh: () async {
                   controller.getPatientList();
                   print("refresh patient list view");
                 },
                 rows: _getTableRows(controller.patientList),
                 columnCount: 6,
-                // Number of columns in the table (for example, 6 here)
                 cellBuilder: _buildTableCell,
                 context: context,
                 onRowSelected: (rowIndex, rowData) {
@@ -101,16 +101,8 @@ class HomePatientListView extends GetView<HomeController> {
                       ),
                     ),
                   );
-
-                  //   Text(
-                  //   headers[colIndex],
-                  //   textAlign: colIndex == 0 ? TextAlign.left : TextAlign.center,
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // );
                 },
                 isLoading: controller.isLoading.value,
-                // headerRows: ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action'],
-                // Set the column widths based on your needs
               );
       }),
     );
@@ -218,25 +210,6 @@ class HomePatientListView extends GetView<HomeController> {
                               });
 
                               print("back from response");
-
-                              // showDialog(
-                              //   context: context,
-                              //   barrierDismissible:
-                              //   true, // Allows dismissing the dialog by tapping outside
-                              //   builder: (BuildContext context) {
-                              //     return SchedulePatientDialog(
-                              //       receiveParam: (p0, p1) {
-                              //         customPrint("p0 is $p0 p1 is $p1");
-                              //         controller.patientScheduleCreate(param: {
-                              //           "patient_id":
-                              //           controller.pastVisitList[rowIndex - 1].id.toString(),
-                              //           "visit_date": p1,
-                              //           "visit_time": p0
-                              //         });
-                              //       },
-                              //     ); // Our custom dialog
-                              //   },
-                              // );
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,82 +228,6 @@ class HomePatientListView extends GetView<HomeController> {
                                 ),
                               ],
                             )),
-                      // showDialog(
-                      //   context: context,
-                      //   barrierDismissible:
-                      //   true, // Allows dismissing the dialog by tapping outside
-                      //   builder: (BuildContext context) {
-                      //     return SchedulePatientDialog(
-                      //       receiveParam: (p0, p1) {
-                      //         customPrint("p0 is $p0 p1 is $p1");
-                      //         controller.patientScheduleCreate(param: {
-                      //           "patient_id":
-                      //           controller.pastVisitList[rowIndex - 1].id.toString(),
-                      //           "visit_date": p1,
-                      //           "visit_time": p0
-                      //         });
-                      //       },
-                      //     ); // Our custom dialog
-                      //   },
-                      // );
-
-                      //--------------------------
-
-                      // },
-                      // child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // children: [
-                      // Container(
-                      // width: double.infinity,
-                      // height: 1,
-                      // color: AppColors.appbarBorder,
-                      // ),
-                      // Padding(
-                      // padding: const EdgeInsets.all(8.0),
-                      // child: Text(
-                      // "Medical record",
-                      // style: AppFonts.regular(14, AppColors.textBlack),
-                      // ),
-                      // ),
-                      // ],
-                      // )),
-
-                      // PopupMenuItem(
-                      //     padding: EdgeInsets.zero,
-                      //     onTap: () async {
-                      //       customPrint("row index is :- ${rowIndex}");
-                      //       customPrint("column index is :- ${colIndex}");
-                      //       customPrint(" patient id is  ${controller.patientList[rowIndex - 1].visits?.firstOrNull?.id.toString()} ");
-                      //
-                      //       // customPrint(" our element is $");
-                      //
-                      //       final result =
-                      //           await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientList[rowIndex - 1].id.toString(), "visitId": "", "fromSchedule": false});
-                      //       customPrint("our result is $result");
-                      //
-                      //       if (result == 1) {
-                      //         controller.getScheduleVisitList();
-                      //         controller.getPastVisitList();
-                      //         controller.getPatientList();
-                      //       }
-                      //     },
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Container(
-                      //           width: double.infinity,
-                      //           height: 1,
-                      //           color: AppColors.appbarBorder,
-                      //         ),
-                      //         Padding(
-                      //           padding: const EdgeInsets.all(8.0),
-                      //           child: Text(
-                      //             "Edit",
-                      //             style: AppFonts.regular(14, AppColors.textBlack),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     )),
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
                           // value: "",
@@ -416,43 +313,5 @@ class HomePatientListView extends GetView<HomeController> {
                 softWrap: true, // Allows text to wrap
                 overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
               );
-
-    // : rowIndex == 0
-    //     ? GestureDetector(
-    //         onTap: () {
-    //           controller.patientSorting(colIndex: colIndex, cellData: cellData);
-    //           customPrint(cellData);
-    //         },
-    //         child: Row(
-    //           mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
-    //           children: [
-    //             Text(
-    //               cellData,
-    //               textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-    //               style: AppFonts.regular(12, AppColors.black),
-    //               softWrap: true, // Allows text to wrap
-    //               overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-    //             ),
-    //             colIndex == controller.colIndexPatient.value && controller.isAsendingPatient.value && colIndex != 5
-    //                 ? Icon(
-    //                     CupertinoIcons.down_arrow,
-    //                     size: 15,
-    //                   )
-    //                 : colIndex == controller.colIndexPatient.value && !controller.isAsendingPatient.value && colIndex != 5
-    //                     ? Icon(
-    //                         CupertinoIcons.up_arrow,
-    //                         size: 15,
-    //                       )
-    //                     : SizedBox()
-    //           ],
-    //         ),
-    //       )
-    //     : Text(
-    //         cellData,
-    //         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-    //         style: AppFonts.regular(14, AppColors.textDarkGrey),
-    //         softWrap: true, // Allows text to wrap
-    //         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-    //       );
   }
 }

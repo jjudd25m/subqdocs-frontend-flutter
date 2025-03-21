@@ -186,9 +186,9 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                                                     builder: (BuildContext context) {
                                                                       return ViewAttchmentImage(
-                                                                              imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
-                                                                              attchmentUrl: '',
-                                                                            );
+                                                                        imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
+                                                                        attchmentUrl: '',
+                                                                      );
                                                                     },
                                                                   );
                                                                 } else {
@@ -196,35 +196,6 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                   customPrint("attchmentUri is :- ${attchmentUri}");
                                                                   controller.launchInAppWithBrowserOptions(attchmentUri);
                                                                 }
-
-                                                                // if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
-                                                                //   showDialog(
-                                                                //     context: context,
-                                                                //     barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                //     builder: (BuildContext context) {
-                                                                //       return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
-                                                                //           ? ViewAttchmentImage(
-                                                                //               imageUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "",
-                                                                //               attchmentUrl: '',
-                                                                //             )
-                                                                //           : ViewAttchmentImage(
-                                                                //               imageUrl: "",
-                                                                //               attchmentUrl: controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? ""); // Our custom dialog
-                                                                //     },
-                                                                //   );
-                                                                // } else {
-                                                                //   Uri attchmentUri = Uri.parse(controller.attachmentDic.values.elementAt(index)[subindex].filePath ?? "");
-                                                                //   customPrint("attchmentUri is :- ${attchmentUri}");
-                                                                //   controller.launchInAppWithBrowserOptions(attchmentUri);
-                                                                // }
-
-                                                                // if (controller.patientAttachmentList.value?.responseData?[index].fileType == "") {
-                                                                // } else {
-                                                                //   FullscreenImageViewer.open(
-                                                                //     context: context,
-                                                                //     child: CachedNetworkImage(imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""),
-                                                                //   );
-                                                                // }
                                                               },
                                                               child: ClipRRect(
                                                                 borderRadius: BorderRadius.circular(8),

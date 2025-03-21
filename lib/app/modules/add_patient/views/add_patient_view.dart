@@ -243,27 +243,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                       SizedBox(
                                         height: Dimen.margin24,
                                       ),
-                                      // TextFormFiledWidget(
-                                      //   isSuffixIconVisible: false,
-                                      //   isFirst: true,
-                                      //   prefixIcon: SvgPicture.asset(
-                                      //     ImagePath.search,
-                                      //     fit: BoxFit.cover,
-                                      //     width: 10,
-                                      //     height: 10,
-                                      //   ),
-                                      //   onTap: () {
-                                      //     controller.searchController.clear();
-                                      //   },
-                                      //   suffixIcon: Icon(
-                                      //     Icons.highlight_remove,
-                                      //     color: AppColors.textDarkGrey,
-                                      //     size: 25,
-                                      //   ),
-                                      //   controller: controller.searchController,
-                                      //   hint: "Search Patient Name, ID, Date of Birth or Email",
-                                      //   label: '',
-                                      // ),
                                       SizedBox(
                                         height: Dimen.margin16,
                                       ),

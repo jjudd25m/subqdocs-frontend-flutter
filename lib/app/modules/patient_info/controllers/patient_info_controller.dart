@@ -1006,20 +1006,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       }
     }
   }
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //
-  //   if (state == AppLifecycleState.resumed) {
-  //     // Code to run when app comes to the foreground (onResume equivalent)
-  //     print("App is in the foreground");
-  //     getAllPatientInfo();
-  //     // Run any code you need here
-  //   } else if (state == AppLifecycleState.paused) {
-  //     // Code to run when app goes to the background (onPause equivalent)
-  //
-  //     print("App is in the background");
-  //   }
-  // }
 
   Future<void> showPrompError(BuildContext context, String message) async {
     showDialog(
@@ -1054,10 +1040,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
         if (patientTranscriptUploadModel.responseData?.id != null) {
           Get.back();
-          Get.back();
+          // Get.back();
         } else {
           Get.back();
-          Get.back();
+          // Get.back();
           dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
             "visitId": visitId,
             "patientId": patientId,
@@ -1067,7 +1053,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       } else {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
         Get.back();
-        Get.back();
+        // Get.back();
       }
     } catch (e) {
       // customPrint("$e");
@@ -1078,30 +1064,31 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getTranscript() async {
     transcriptListModel.value = await _patientInfoRepository.getTranscript(id: visitId);
+    getPatientDetails();
     customPrint("transcriptListModel is :- ${transcriptListModel.value?.toJson()}");
-
-    // if (transcriptListModel.value?.responseType == null) {
-    //   showPrompError(Get.context!, "Transcript Not Found");
-    // }
   }
 
   Future<void> getPatientView() async {
     patientViewListModel.value = await _patientInfoRepository.getPatientView(id: visitId);
+    getPatientDetails();
     customPrint("getPatientView is :- ${patientViewListModel.value?.toJson()}");
   }
 
   Future<void> getPatientDoctorVisitData() async {
     patientDoctorVisitDataModel.value = await _patientInfoRepository.getDoctorVisitData(id: visitId);
+    getPatientDetails();
     customPrint("getPatientDoctorVisitData is :- ${patientDoctorVisitDataModel.value?.toJson()}");
   }
 
   Future<void> getFullNote() async {
     patientFullNoteModel.value = await _patientInfoRepository.getFullNote(id: visitId);
+    getPatientDetails();
     customPrint("getFullNote is :- ${patientFullNoteModel.value}");
   }
 
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
+    getPatientDetails();
     customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
     // customPrint("diagnos is :- ${doctorViewList.value?.responseData?.diagnosisCodesProcedures?.toJson()}");
   }

@@ -54,5 +54,19 @@ class AppColors {
 
   static const Color lightpurpule = Color(0xFFE9E9FB);
   static const Color lightpurpuleButton = Color(0xFF5B5BE126);
-  static const Color filterText= Color(0xFF5B5BE1);
+  static const Color filterText = Color(0xFF5B5BE1);
+
+  // Filter status color
+
+  static const Color filterScheduleColor = Color(0xFF816060);
+  static const Color filterLateColor = Color(0xFF0275D8);
+  static const Color filterCheckedInColor = Color(0xFF5CB85C);
+  static const Color filterInProgressColor = Color(0xFF5BC0DE);
+  static const Color filterPausedColor = Color(0xFFF0AD4E);
+  static const Color filterInsufficientInfoColor = Color(0xFFD9534F);
+  static const Color filterPendingColor = Color(0xFF6F42C1);
+  static const Color filterNotRecordedColor = Color(0xFFEC7E45);
+  static const Color filterFinalizedColor = Color(0xFF39A58C);
+  static const Color filterCancelledColor = Color(0xFFA569BD);
+  static const Color filterNoShowColor = Color(0xFFB9770E);
 }

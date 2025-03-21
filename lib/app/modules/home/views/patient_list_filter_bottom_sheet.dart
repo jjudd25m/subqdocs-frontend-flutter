@@ -134,9 +134,6 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                   ),
                   onValueChanged: (value) {
                     selectedDate = value;
-                    // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
-                    // controller.selectedValue = value;
-                    // customPrint("onchanged  ${value}");
 
                     controller.globalController.homePatientListSortingModel.value?.selectedDateValue = selectedDate;
                     List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
@@ -144,8 +141,6 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                       controller.globalController.homePatientListSortingModel.value?.startDate = dates[0];
                       controller.globalController.homePatientListSortingModel.value?.endDate = dates[1];
                       controller.globalController.saveHomePatientListData();
-                      // Get.back();
-                      // onTap();
                     } else {
                       print("date is not proper selected");
                     }
@@ -153,48 +148,6 @@ class PatientListFilterBottomSheet extends GetView<HomeController> {
                   value: controller.globalController.homePatientListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
                 ),
               ),
-              // Row(
-              //   spacing: 15,
-              //   children: [
-              //     Expanded(
-              //       child: CustomAnimatedButton(
-              //         onPressed: () {
-              //           Get.back();
-              //         },
-              //         isOutline: true,
-              //         outLineEnabledColor: AppColors.backgroundPurple,
-              //         outlineColor: AppColors.backgroundPurple,
-              //         enabledTextColor: AppColors.backgroundPurple,
-              //         enabledColor: AppColors.backgroundWhite,
-              //         text: "Cancel",
-              //         height: 45,
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: CustomAnimatedButton(
-              //         text: "Choose Date",
-              //         enabledColor: AppColors.backgroundPurple,
-              //         height: 45,
-              //         onPressed: () {
-              //           controller.globalController.homePatientListSortingModel.value?.selectedDateValue = selectedDate;
-              //           List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-              //           if (dates.length == 2) {
-              //             controller.globalController.homePatientListSortingModel.value?.startDate = dates[0];
-              //             controller.globalController.homePatientListSortingModel.value?.endDate = dates[1];
-              //             controller.globalController.saveHomePatientListData();
-              //             Get.back();
-              //             onTap();
-              //           } else {
-              //             print("date is not proper selected");
-              //           }
-              //           // controller.setDateRange();
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Add your filter options here...
-
               const SizedBox(height: 20),
             ],
           ),

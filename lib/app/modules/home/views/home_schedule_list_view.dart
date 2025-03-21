@@ -67,6 +67,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                         controller.getScheduleVisitList(isFist: true);
                         print("refresh schedule list view");
                       },
+                      physics: AlwaysScrollableScrollPhysics(),
                       rows: _getTableRows(controller.scheduleVisitList),
                       cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                         return colIndex == 0
@@ -319,7 +320,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                                                     // return SizedBox();
                                                     return DeleteScheduleVisit(
                                                       onDelete: () {
-                                                        controller.deletePatientVisit(id: controller.scheduleVisitList[rowIndex].visitId.toString());
+                                                        controller.changeStatus("Cancelled", controller.scheduleVisitList[rowIndex].visitId.toString());
+                                                        // controller.deletePatientVisit(id: controller.scheduleVisitList[rowIndex].visitId.toString());
                                                       },
                                                     );
                                                   },

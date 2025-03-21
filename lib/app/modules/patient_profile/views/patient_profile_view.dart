@@ -99,11 +99,14 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                 onTap: () {
                                                   Get.back();
                                                 },
-                                                child: SvgPicture.asset(
-                                                  ImagePath.arrowLeft,
-                                                  fit: BoxFit.cover,
-                                                  width: Dimen.margin24,
-                                                  height: Dimen.margin24,
+                                                child: Container(
+                                                  color: AppColors.white,
+                                                  padding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+                                                  child: SvgPicture.asset(
+                                                    ImagePath.logo_back,
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
                                                 ),
                                               ),
                                               SizedBox(
@@ -137,19 +140,6 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                     SizedBox(
                                                       width: 10,
                                                     ),
-                                                    // SvgPicture.asset(
-                                                    //   ImagePath.edit,
-                                                    //   width: 26,
-                                                    //   height: 26,
-                                                    //   fit: BoxFit.cover,
-                                                    // ),
-                                                    // SizedBox(
-                                                    //   width: 5,
-                                                    // ),
-                                                    // Text(
-                                                    //   "Edit Profile Image",
-                                                    //   style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                    // )
                                                   ],
                                                 ),
                                               ),
@@ -401,7 +391,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                                     onDelete: () {
                                                                                       print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
 
-                                                                                      controller.changeStatus("Canceled");
+                                                                                      controller.changeStatus("Cancelled");
 
                                                                                       // controller.deletePatientVisit(
                                                                                       //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");

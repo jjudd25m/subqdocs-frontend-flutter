@@ -153,9 +153,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               ),
                                             ),
                                           ),
-                                          // SizedBox(
-                                          //   width: 11,
-                                          // ),
                                           ClipRRect(
                                               borderRadius: BorderRadius.circular(30),
                                               child: BaseImageView(
@@ -188,33 +185,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             ],
                                           ),
                                           Spacer(),
-                                          // SvgPicture.asset(
-                                          //   ImagePath.edit,
-                                          //   height: 15,
-                                          //   width: 15,
-                                          // ),
-                                          // SizedBox(
-                                          //   width: 12,
-                                          // ),
-                                          // ContainerButton(
-
-                                          //   onPressed: () {
-                                          //     // Your onPressed function
-                                          //   },
-                                          //   text: 'Patient History',
-                                          //
-                                          //   borderColor: AppColors.appbarBorder,
-                                          //   // Custom border color
-                                          //   backgroundColor: AppColors.white,
-                                          //   // Custom background color
-                                          //   needBorder: true,
-                                          //   // Show border
-                                          //   textColor: AppColors.textDarkGrey,
-                                          //   // Custom text color
-                                          //   padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
-                                          //   // Custom padding
-                                          //   radius: 6, // Custom border radius
-                                          // ),
                                         ],
                                       ),
                                     ),
@@ -295,109 +265,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 SizedBox(
                                                   height: 6,
                                                 ),
-                                                // PopupMenuButton<String>(
-                                                //     shape: const RoundedRectangleBorder(
-                                                //         borderRadius: BorderRadius.all(Radius.circular(8))),
-                                                //     offset: const Offset(0, 5),
-                                                //     color: AppColors.white,
-                                                //     position: PopupMenuPosition.over,
-                                                //     style: const ButtonStyle(
-                                                //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                //         maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                //         visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                                //     itemBuilder: (context) => [
-                                                //           PopupMenuItem(
-                                                //               onTap: () {
-                                                //                 // controller.isSelectedAttchmentOption.value = 0;
-                                                //               },
-                                                //               // height: 30,
-                                                //               padding: const EdgeInsets.only(
-                                                //                   top: 10, bottom: 8, left: 8, right: 8),
-                                                //               child: Container(
-                                                //                 width: 200,
-                                                //                 child: Column(
-                                                //                   children: [
-                                                //                     const SizedBox(width: 5),
-                                                //                     Container(
-                                                //                       padding: EdgeInsets.symmetric(
-                                                //                           horizontal: 8, vertical: 7),
-                                                //                       decoration: BoxDecoration(
-                                                //                         border: Border.all(
-                                                //                             color: AppColors.textGrey
-                                                //                                 .withValues(alpha: 0.5)),
-                                                //                         // color: AppColors.backgroundWhite,
-                                                //                         borderRadius: BorderRadius.circular(8),
-                                                //                       ),
-                                                //                       child: Row(
-                                                //                         children: [
-                                                //                           SvgPicture.asset(
-                                                //                             ImagePath.search,
-                                                //                             height: 25,
-                                                //                             width: 25,
-                                                //                           ),
-                                                //                           SizedBox(
-
-                                                //                             width: 10,
-                                                //                           ),
-                                                //                           SizedBox(
-
-                                                //                             width: 120,
-                                                //                             child: TextField(
-                                                //                               maxLines: 1, //or null
-                                                //
-                                                //                               decoration: InputDecoration.collapsed(
-                                                //                                   hintText: "Search",
-                                                //                                   hintStyle: AppFonts.regular(
-                                                //                                       14, AppColors.textGrey)),
-                                                //                             ),
-                                                //                           ),
-                                                //                         ],
-                                                //                       ),
-                                                //                     ),
-                                                //                     const SizedBox(height: 10),
-                                                //                     ListView.builder(
-                                                //                         shrinkWrap: true,
-                                                //                         physics: NeverScrollableScrollPhysics(),
-                                                //                         itemBuilder: (context, index) => InkWell(
-                                                //                               onTap: () {},
-                                                //                               child: Padding(
-                                                //                                 padding: const EdgeInsets.symmetric(
-                                                //                                     horizontal: 10),
-                                                //                                 child: Column(
-                                                //                                   children: [
-                                                //                                     SizedBox(height: 10),
-                                                //                                     Row(
-                                                //                                       children: [
-                                                //                                         SvgPicture.asset(
-                                                //                                           ImagePath.checkbox_true,
-                                                //                                           width: 20,
-                                                //                                           height: 20,
-                                                //                                         ),
-                                                //                                         Spacer(),
-                                                //                                         Text(
-                                                //                                           textAlign: TextAlign.center,
-                                                //                                           "Missie Cooper",
-                                                //                                           style: AppFonts.regular(
-                                                //                                               15, AppColors.textPurple),
-                                                //                                         ),
-                                                //                                       ],
-                                                //                                     ),
-                                                //                                     SizedBox(height: 10),
-                                                //                                     if (index != 4) ...[
-                                                //                                       Divider(
-                                                //                                         height: 1,
-                                                //                                       )
-                                                //                                     ]
-                                                //                                   ],
-                                                //                                 ),
-                                                //                               ),
-                                                //                             ),
-                                                //                         itemCount: 5),
-                                                //                   ],
-                                                //                 ),
-                                                //               )),
-                                                //         ],
-                                                //     child: ),
                                                 Row(
                                                   children: [
                                                     Text(
@@ -465,19 +332,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                       SizedBox(
                                         height: 20,
                                       )
-                                      // ExpansionTile(
-                                      //   title: Text(
-                                      //     'Sub title',
-                                      //   ),
-                                      //   children: <Widget>[
-                                      //     // ListTile(
-                                      //     //   title: Text('data'),
-                                      //     // )
-                                      //   ],
-                                      // ),
-                                      // ListTile(
-                                      //   title: Text('data'),
-                                      // )
                                     ],
                                   ),
                                 );
@@ -921,50 +775,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                               ),
                             ),
                           ),
-                          // Expanded(
-                          //   child: GestureDetector(
-                          //     onTap: () {
-                          //       showDialog(
-                          //         context: context,
-                          //         barrierDismissible: true,
-                          //         builder: (BuildContext context) {
-                          //           return ConfirmFinalizeDialog();
-                          //         },
-                          //       );
-                          //     },
-                          //     child: Container(
-                          //       height: 81,
-                          //       decoration: BoxDecoration(
-                          //         border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                          //         color: AppColors.backgroundLightGrey,
-                          //         borderRadius: BorderRadius.circular(8),
-                          //       ),
-                          //       child: Row(
-                          //         mainAxisAlignment: MainAxisAlignment.center,
-                          //         children: [
-                          //           Column(
-                          //             mainAxisAlignment: MainAxisAlignment.center,
-                          //             children: [
-                          //               SvgPicture.asset(
-                          //                 ImagePath.finalize_time,
-                          //                 height: 30,
-                          //                 width: 30,
-                          //               ),
-                          //               SizedBox(
-                          //                 height: 10,
-                          //               ),
-                          //               Text(
-                          //                 textAlign: TextAlign.center,
-                          //                 "Finalize Later",
-                          //                 style: AppFonts.medium(16, AppColors.textBlack),
-                          //               ),
-                          //             ],
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
                           if (controller.patientData.value?.responseData?.visitStatus == "Pending") ...[
                             Expanded(
                               child: GestureDetector(
@@ -980,17 +790,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                       );
                                     },
                                   );
-
-                                  // if (controller.visitId.isNotEmpty && controller.patientTranscriptUploadModel.responseData?.id != null) {
-                                  //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                                  //     "visitId": controller.visitId,
-                                  //     "patientId": controller.patientTranscriptUploadModel.responseData?.id.toString(),
-                                  //   });
-                                  // }
-
-                                  // Get.toNamed(Routes.VISIT_MAIN);
-                                  // Get.offAndToNamed(Routes.HOME);
-                                  // controller.isSignatureDone.value = true;
                                 },
                                 child: Container(
                                   height: 81,

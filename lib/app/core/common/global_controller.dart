@@ -53,24 +53,6 @@ class GlobalController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    // homePastPatientListSortingModel.listen(
-    //   (p0) {
-    //     print("updated val:- ${p0}");
-    //   },
-    // );
-    //
-    // homePatientListSortingModel.listen(
-    //   (p0) {
-    //     print("updated val:- ${p0}");
-    //   },
-    // );
-    //
-    // homeScheduleListSortingModel.listen(
-    //   (p0) {
-    //     print("updated val:- ${p0}");
-    //   },
-    // );
-
     HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
     if (homePastPatientData != null) {
       homePastPatientListSortingModel.value = homePastPatientData;
@@ -125,20 +107,6 @@ class GlobalController extends GetxController {
 
     setPastListingModel();
     setScheduleListingModel();
-
-    // HomePastPatientListSortingModel? retrievedModel = await AppPreference.instance.getHomePastPatientListSortingModel();
-    // if (retrievedModel != null) {
-    //   homePastPatientListSortingModel.value = retrievedModel;
-    // } else {}
-    //
-    // HomePastPatientListSortingModel? retrievedModel = await AppPreference.instance.getHomePastPatientListSortingModel();
-    // if (retrievedModel != null) {
-    //   homePastPatientListSortingModel.value = retrievedModel;
-    // } else {}
-
-    // patientListSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyPatientListSelectedSorting);
-    // scheduleVisitSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyScheduleVisitSelectedSorting);
-    // pastVisitSelectedSorting = await AppPreference.instance.getListMap(AppString.prefKeyPastVisitSelectedSorting);
   }
 
   void setPastListingModel() {

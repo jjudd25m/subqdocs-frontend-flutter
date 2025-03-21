@@ -189,28 +189,6 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                                   ),
                                 ],
                               )),
-                          // PopupMenuItem(
-                          //     padding: EdgeInsets.zero,
-                          //     onTap: () {
-                          //
-                          //     },
-                          //     child: Column(
-                          //       crossAxisAlignment: CrossAxisAlignment.start,
-                          //       children: [
-                          //         Container(
-                          //           width: double.infinity,
-                          //           height: 1,
-                          //           color: AppColors.appbarBorder,
-                          //         ),
-                          //         Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: Text(
-                          //             "Custom date",
-                          //             style: AppFonts.regular(14, AppColors.textBlack),
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ))
                         ],
                     child: Container(
                         height: 45,
@@ -222,19 +200,12 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                         ),
                         child: Row(
                           children: [
-                            // controller.getCustomDateRange(selectedDate ?? [])
                             Text(
                               controller.getCustomDateRange(selectedDate ?? []).length == 2
                                   ? "${controller.getCustomDateRange(selectedDate ?? [])[0]}-${controller.getCustomDateRange(selectedDate ?? [])[1]}"
                                   : "Select",
                               style: AppFonts.regular(14, AppColors.textBlack),
                             ),
-                            // Text(
-                            //   controller.globalController.homeScheduleListSortingModel.value?.startDate != ""
-                            //       ? "${controller.globalController.homeScheduleListSortingModel.value?.startDate}-${controller.globalController.homeScheduleListSortingModel.value?.endDate}"
-                            //       : "Select",
-                            //   style: AppFonts.regular(14, AppColors.textBlack),
-                            // ),
                             Spacer(),
                             SvgPicture.asset(
                               ImagePath.down_arrow,
@@ -244,30 +215,6 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                           ],
                         )));
               }),
-              // Container(
-              //     height: 45,
-              //     padding: EdgeInsets.symmetric(horizontal: 10),
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(6),
-              //       border: Border.all(color: Colors.grey.shade300, width: 1),
-              //     ),
-              //     child: Row(
-              //       children: [
-              //         Text(
-              //           controller.globalController.homeScheduleListSortingModel.value?.startDate != ""
-              //               ? "${controller.globalController.homeScheduleListSortingModel.value?.startDate}-${controller.globalController.homeScheduleListSortingModel.value?.endDate}"
-              //               : "Select",
-              //           style: AppFonts.regular(14, AppColors.textBlack),
-              //         ),
-              //         Spacer(),
-              //         SvgPicture.asset(
-              //           ImagePath.down_arrow,
-              //           width: 25,
-              //           height: 25,
-              //         )
-              //       ],
-              //     )),
               Obx(() {
                 return SizedBox(
                   width: Get.width,
@@ -308,58 +255,12 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                         controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
                         controller.globalController.saveHomeScheduleListData();
                       }
-
-                      // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
-                      // controller.selectedValue = value;
-                      // customPrint("onchanged  ${value}");
                     },
                     value: selectedDate ?? [DateTime.now()],
                     // value: controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
                   ),
                 );
               }),
-              // Row(
-              //   spacing: 15,
-              //   children: [
-              //     Expanded(
-              //       child: CustomAnimatedButton(
-              //         onPressed: () {
-              //           Get.back();
-              //         },
-              //         isOutline: true,
-              //         outLineEnabledColor: AppColors.backgroundPurple,
-              //         outlineColor: AppColors.backgroundPurple,
-              //         enabledTextColor: AppColors.backgroundPurple,
-              //         enabledColor: AppColors.backgroundWhite,
-              //         text: "Cancel",
-              //         height: 45,
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: CustomAnimatedButton(
-              //         text: "Choose Date",
-              //         enabledColor: AppColors.backgroundPurple,
-              //         height: 45,
-              //         onPressed: () {
-              //           controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue = selectedDate;
-              //           List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-              //           if (dates.length == 2) {
-              //             controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
-              //             controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
-              //             controller.globalController.saveHomeScheduleListData();
-              //             Get.back();
-              //             onTap();
-              //           } else {
-              //             print("date is not proper selected");
-              //           }
-              //           // controller.setDateRange();
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Add your filter options here...
-
               const SizedBox(height: 20),
             ],
           ),

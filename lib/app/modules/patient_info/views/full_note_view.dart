@@ -25,21 +25,6 @@ class FullNoteView extends StatelessWidget {
     return Obx(() {
       return Column(
         children: [
-          // if (controller.patientFullNoteModel.value == null) ...[
-          //   Center(
-          //       child: Column(
-          //     children: [
-          //       SvgPicture.asset(
-          //         ImagePath.patient_no_data,
-          //         width: 300,
-          //       ),
-          //       Text("No data found!"),
-          //       SizedBox(
-          //         height: 30,
-          //       )
-          //     ],
-          //   ))
-          // ] else ...[
           if ((controller.isFullNoteLoading.value || controller.patientFullNoteModel.value?.responseData == null)) ...[
             Center(
                 child: Column(
@@ -138,26 +123,7 @@ class FullNoteView extends StatelessWidget {
                                                           ),
                                                           SizedBox(height: 0),
                                                         ],
-                                                      )
-
-                                                      // Column(
-                                                      //   children: [
-                                                      //     SizedBox(height: 2),
-                                                      //     Row(
-                                                      //       children: [
-                                                      //         SizedBox(width: 10),
-                                                      //         Expanded(
-                                                      //             child: Text(
-                                                      //           textAlign: TextAlign.left,
-                                                      //           controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistory?[index] ?? "",
-                                                      //           style: AppFonts.regular(14, AppColors.textGrey),
-                                                      //         )),
-                                                      //       ],
-                                                      //     ),
-                                                      //     SizedBox(height: 0),
-                                                      //   ],
-                                                      // ),
-                                                      ),
+                                                      )),
                                                 ),
                                             itemCount: 1)
                                         : Row(
@@ -193,7 +159,6 @@ class FullNoteView extends StatelessWidget {
                                       color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.1),
                                     ),
-                                    // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
                                       children: [
@@ -236,7 +201,7 @@ class FullNoteView extends StatelessWidget {
                                                         SizedBox(height: 2),
                                                         Row(
                                                           children: [
-                                                            SizedBox(width: 15),
+                                                            SizedBox(width: 0),
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
@@ -284,7 +249,6 @@ class FullNoteView extends StatelessWidget {
                                       color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
                                     ),
-                                    // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Column(
                                       children: [
@@ -327,7 +291,7 @@ class FullNoteView extends StatelessWidget {
                                                         SizedBox(height: 2),
                                                         Row(
                                                           children: [
-                                                            SizedBox(width: 15),
+                                                            SizedBox(width: 0),
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
@@ -422,7 +386,7 @@ class FullNoteView extends StatelessWidget {
                                                             Expanded(
                                                                 child: Text(
                                                               textAlign: TextAlign.left,
-                                                              "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].title} - ${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage} ",
+                                                              "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].title} : ${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage} ",
                                                               style: AppFonts.regular(15, AppColors.textGrey),
                                                             )),
                                                           ],
@@ -438,17 +402,6 @@ class FullNoteView extends StatelessWidget {
                                                             )),
                                                           ],
                                                         ),
-                                                        // Row(
-                                                        //   children: [
-                                                        //     SizedBox(width: 10),
-                                                        //     Expanded(
-                                                        //         child: Text(
-                                                        //       textAlign: TextAlign.left,
-                                                        //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "",
-                                                        //       style: AppFonts.regular(15, AppColors.textGrey),
-                                                        //     )),
-                                                        //   ],
-                                                        // ),
                                                         SizedBox(height: 0),
                                                       ],
                                                     ),
@@ -760,54 +713,45 @@ class FullNoteView extends StatelessWidget {
                                                                 .toString()
                                                                 .isNotEmpty ??
                                                             false) ...[
-                                                          Row(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            // mainAxisAlignment: MainAxisAlignment.start,
-                                                            children: [
-                                                              // Text(
-                                                              //   textAlign: TextAlign.center,
-                                                              //   '\u2022',
-                                                              //   style: AppFonts.regular(20, AppColors.textGrey),
-                                                              // ),
-                                                              SizedBox(width: 5),
-                                                              Expanded(
-                                                                child: Text.rich(
-                                                                  TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text:
-                                                                            "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index]}: ",
-                                                                        recognizer: TapGestureRecognizer()..onTap = () {},
-                                                                        style: AppFonts.semiBold(14, AppColors.black),
-                                                                      ),
-                                                                      TextSpan(
-                                                                        text: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] ??
-                                                                            "-",
-                                                                        recognizer: TapGestureRecognizer()..onTap = () {},
-                                                                        style: AppFonts.regular(14, AppColors.black),
-                                                                      ),
-                                                                    ],
+                                                          if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] != "-") ...[
+                                                            Row(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              // mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                // Text(
+                                                                //   textAlign: TextAlign.center,
+                                                                //   '\u2022',
+                                                                //   style: AppFonts.regular(20, AppColors.textGrey),
+                                                                // ),
+                                                                SizedBox(width: 5),
+                                                                Expanded(
+                                                                  child: Text.rich(
+                                                                    TextSpan(
+                                                                      children: [
+                                                                        if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] !=
+                                                                            "-") ...[
+                                                                          TextSpan(
+                                                                            text:
+                                                                                "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index]}: ",
+                                                                            recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                            style: AppFonts.semiBold(14, AppColors.black),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text:
+                                                                                controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] ??
+                                                                                    "-",
+                                                                            recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          )
+                                                                        ],
+                                                                      ],
+                                                                    ),
+                                                                    textAlign: TextAlign.left,
                                                                   ),
-                                                                  textAlign: TextAlign.left,
-                                                                ),
-                                                              )
-                                                              // Row(
-                                                              //   children: [
-                                                              //     Text(
-                                                              //       textAlign: TextAlign.left,
-                                                              //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().keys.toList()[index] ?? "",
-                                                              //       style: AppFonts.regular(15, AppColors.textGrey),
-                                                              //     ),
-                                                              //     Expanded(
-                                                              //         child: Text(
-                                                              //       textAlign: TextAlign.left,
-                                                              //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem!.toJson().values.toList()[index] ?? "",
-                                                              //       style: AppFonts.regular(15, AppColors.textGrey),
-                                                              //     )),
-                                                              //   ],
-                                                              // ),
-                                                            ],
-                                                          ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ]
                                                         ],
                                                         SizedBox(height: 0),
                                                       ],
@@ -892,14 +836,7 @@ class FullNoteView extends StatelessWidget {
                                                                 child: Html(
                                                               data: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "",
                                                               style: {"body": Style(margin: Margins.all(0), fontFamily: "Poppins", fontSize: FontSize(14.0))},
-                                                            )
-
-                                                                //     Text(
-                                                                //   textAlign: TextAlign.left,
-                                                                //   controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam?[index] ?? "",
-                                                                //   style: AppFonts.regular(15, AppColors.textGrey),
-                                                                // )
-                                                                ),
+                                                            )),
                                                           ],
                                                         ),
                                                         SizedBox(height: 0),
@@ -1000,7 +937,7 @@ class FullNoteView extends StatelessWidget {
                                                                       Text(
                                                                         textAlign: TextAlign.center,
                                                                         "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].number}.",
-                                                                        style: AppFonts.bold(15, AppColors.textPurple),
+                                                                        style: AppFonts.bold(14, AppColors.textPurple),
                                                                       ),
                                                                       SizedBox(width: 5),
                                                                       Expanded(
@@ -1008,7 +945,7 @@ class FullNoteView extends StatelessWidget {
                                                                         textAlign: TextAlign.left,
                                                                         "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].title} (${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].code})" ??
                                                                             "",
-                                                                        style: AppFonts.regular(15, AppColors.textPurple),
+                                                                        style: AppFonts.regular(14, AppColors.textPurple),
                                                                       )),
                                                                     ],
                                                                   ),
@@ -1035,7 +972,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.type}.",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style: AppFonts.bold(14, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1051,7 +988,7 @@ class FullNoteView extends StatelessWidget {
                                                                             child: Text(
                                                                               textAlign: TextAlign.left,
                                                                               "$details.",
-                                                                              style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                              style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                             ),
                                                                           ),
                                                                         ],
@@ -1065,7 +1002,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "Medications",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style: AppFonts.bold(14, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1076,7 +1013,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications}.",
-                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                            style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1090,7 +1027,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "Orders:",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style: AppFonts.bold(14, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1101,7 +1038,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders}.",
-                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                            style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1114,7 +1051,7 @@ class FullNoteView extends StatelessWidget {
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "Counseling and Discussion:",
-                                                                          style: AppFonts.bold(15, AppColors.textBlack),
+                                                                          style: AppFonts.bold(14, AppColors.textBlack),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -1125,7 +1062,7 @@ class FullNoteView extends StatelessWidget {
                                                                         child: Text(
                                                                           textAlign: TextAlign.left,
                                                                           "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].counselingAndDiscussion}.",
-                                                                          style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                          style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -1139,7 +1076,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "Follow up:",
-                                                                            style: AppFonts.bold(15, AppColors.textBlack),
+                                                                            style: AppFonts.bold(14, AppColors.textBlack),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1150,7 +1087,7 @@ class FullNoteView extends StatelessWidget {
                                                                           child: Text(
                                                                             textAlign: TextAlign.left,
                                                                             "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].followUp}.",
-                                                                            style: AppFonts.regular(15, AppColors.textDarkGrey),
+                                                                            style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                                           ),
                                                                         ),
                                                                       ],

@@ -21,22 +21,16 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
 
   RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
-
-  PastPatientListFilterBottomSheet({super.key, required this.onTap});
-
   RxList<String> selectedStatusIndex = RxList();
 
   PageController pageController = PageController();
-  // ScrollController pageController = ScrollController();
+  PastPatientListFilterBottomSheet({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    print("arr count:- ${controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? []}");
     selectedDate?.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? RxList([DateTime.now()]);
-
-    print("date is :- ${selectedDate!.first}");
-    pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first));
-
-    print("status list is ${controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? []}");
+    pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
     selectedStatusIndex.value = controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
     return SizedBox(
       width: double.infinity, // Ensures full width
@@ -107,12 +101,6 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           }
 
                           print("selectedStatusIndex :- ${selectedStatusIndex}");
-
-                          // if (controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.contains(index) ?? false) {
-                          //   controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.remove(index);
-                          // } else {
-                          //   controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.add(index);
-                          // }
                         },
                         child: Row(
                           children: [
@@ -174,7 +162,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           selectedDate?.value = [DateTime.now(), DateTime.now()];
                           updateSelectedDate();
                           controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
+                              duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,7 +183,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           selectedDate?.value = [DateTime.now().subtract(Duration(days: 1)), DateTime.now().subtract(Duration(days: 1))];
                           updateSelectedDate();
                           controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
+                              duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +209,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           selectedDate?.value = [DateTime.now().subtract(Duration(days: 7)), DateTime.now()];
                           updateSelectedDate();
                           controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
+                              duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,7 +237,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           updateSelectedDate();
                           controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
                           // pageController.previousPage(duration: Duration(milliseconds: 200), curve: Curves.easeIn);
-                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate!.first), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                          pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
+                              duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,28 +257,6 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                             ),
                           ],
                         )),
-                    // PopupMenuItem(
-                    //     padding: EdgeInsets.zero,
-                    //     onTap: () {
-                    //
-                    //     },
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Container(
-                    //           width: double.infinity,
-                    //           height: 1,
-                    //           color: AppColors.appbarBorder,
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: Text(
-                    //             "Custom date",
-                    //             style: AppFonts.regular(14, AppColors.textBlack),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ))
                   ],
                   child: Container(
                       height: 45,
@@ -304,12 +274,6 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                 : "Select",
                             style: AppFonts.regular(14, AppColors.textBlack),
                           ),
-                          // Text(
-                          //   controller.globalController.homePastPatientListSortingModel.value?.startDate != ""
-                          //       ? "${controller.globalController.homePastPatientListSortingModel.value?.startDate}-${controller.globalController.homePastPatientListSortingModel.value?.endDate}"
-                          //       : "Select",
-                          //   style: AppFonts.regular(14, AppColors.textBlack),
-                          // ),
                           Spacer(),
                           SvgPicture.asset(
                             ImagePath.down_arrow,
@@ -320,30 +284,6 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                       )),
                 );
               }),
-              // Container(
-              //     height: 45,
-              //     padding: EdgeInsets.symmetric(horizontal: 10),
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(6),
-              //       border: Border.all(color: Colors.grey.shade300, width: 1),
-              //     ),
-              //     child: Row(
-              //       children: [
-              //         Text(
-              //           controller.globalController.homePastPatientListSortingModel.value?.startDate != ""
-              //               ? "${controller.globalController.homePastPatientListSortingModel.value?.startDate}-${controller.globalController.homePastPatientListSortingModel.value?.endDate}"
-              //               : "Select",
-              //           style: AppFonts.regular(14, AppColors.textBlack),
-              //         ),
-              //         Spacer(),
-              //         SvgPicture.asset(
-              //           ImagePath.down_arrow,
-              //           width: 25,
-              //           height: 25,
-              //         )
-              //       ],
-              //     )),
               Obx(() {
                 return SizedBox(
                   width: Get.width,
@@ -375,7 +315,6 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                       centerAlignModePicker: true,
                       customModePickerIcon: const SizedBox(),
                       calendarViewScrollPhysics: RangeMaintainingScrollPhysics(),
-                      // calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
                       calendarType: CalendarDatePicker2Type.range,
                       firstDate: DateTime(2000, 01, 01),
                       lastDate: DateTime.now().add(Duration(days: 365)),
@@ -384,90 +323,21 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                       selectedDate?.value = value;
 
                       if (selectedStatusIndex.isNotEmpty) {
-                        // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
                         controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
                       }
 
                       controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
                       List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
                       if (dates.length == 2) {
-                        // if (dates[0] == dates[1]) {
-                        //   controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-                        //   controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-                        //   controller.globalController.saveHomePastPatientData();
-                        // } else {
                         controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
                         controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
                         controller.globalController.saveHomePastPatientData();
-                        // }
                       }
-
-                      // controller.globalController.homePatientListSortingModel.value?.selectedDateValue = value;
-                      // controller.selectedValue = value;
-                      // customPrint("onchanged  ${value}");
                     },
                     value: selectedDate ?? [DateTime.now()],
                   ),
                 );
               }),
-              // Row(
-              //   spacing: 15,
-              //   children: [
-              //     Expanded(
-              //       child: CustomAnimatedButton(
-              //         onPressed: () {
-              //           Get.back();
-              //         },
-              //         isOutline: true,
-              //         outLineEnabledColor: AppColors.backgroundPurple,
-              //         outlineColor: AppColors.backgroundPurple,
-              //         enabledTextColor: AppColors.backgroundPurple,
-              //         enabledColor: AppColors.backgroundWhite,
-              //         text: "Cancel",
-              //         height: 45,
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: CustomAnimatedButton(
-              //         text: "Choose Date",
-              //         enabledColor: AppColors.backgroundPurple,
-              //         height: 45,
-              //         onPressed: () async {
-              //           if (selectedStatusIndex.isNotEmpty) {
-              //             // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
-              //             controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
-              //           }
-              //
-              //           controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-              //           List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-              //           if (dates.length == 2) {
-              //             if (dates[0] == dates[1]) {
-              //               controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-              //               controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-              //               controller.globalController.saveHomePastPatientData();
-              //             } else {
-              //               controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
-              //               controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
-              //               controller.globalController.saveHomePastPatientData();
-              //             }
-              //
-              //             HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
-              //
-              //             print("homePastPatientData:- ${homePastPatientData?.toJson()}");
-              //
-              //             Get.back();
-              //             onTap();
-              //           } else {
-              //             print("date is not proper selected");
-              //           }
-              //           // controller.setDateRange();
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Add your filter options here...
-
               const SizedBox(height: 20),
             ],
           ),
@@ -478,30 +348,14 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
 
   Future<void> updateSelectedDate() async {
     if (selectedStatusIndex.isNotEmpty) {
-      // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
       controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
     }
-
     controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
     List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
     if (dates.length == 2) {
-      // if (dates[0] == dates[1]) {
-      //   controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-      //   controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-      //   controller.globalController.saveHomePastPatientData();
-      // } else {
       controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
       controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
       controller.globalController.saveHomePastPatientData();
-      // }
     }
-
-    // controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue = selectedDate;
-    // List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-    // if (dates.length == 2) {
-    //   controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
-    //   controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
-    //   controller.globalController.saveHomeScheduleListData();
-    // }
   }
 }

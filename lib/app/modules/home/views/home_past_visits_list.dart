@@ -63,6 +63,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                     )
                   : Expanded(
                       child: CustomTable(
+                        physics: AlwaysScrollableScrollPhysics(),
                         onRefresh: () async {
                           controller.getPastVisitList(isFist: true);
                           print("refresh past list view");
@@ -72,17 +73,21 @@ class HomePastVisitsList extends GetView<HomeController> {
                         onRowSelected: (rowIndex, rowData) async {
                           customPrint("row index is :- $rowIndex");
 
-                          Get.delete<PatientInfoController>();
+                          if (controller.pastVisitList[rowIndex].visitStatus == "In-Exam" ||
+                              controller.pastVisitList[rowIndex].visitStatus == "Pending" ||
+                              controller.pastVisitList[rowIndex].visitStatus == "Finalized") {
+                            Get.delete<PatientInfoController>();
 
-                          await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-                            "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
-                            "patientId": controller.pastVisitList[rowIndex].id.toString(),
-                            "unique_tag": DateTime.now().toString(),
-                          });
+                            await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                              "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+                              "patientId": controller.pastVisitList[rowIndex].id.toString(),
+                              "unique_tag": DateTime.now().toString(),
+                            });
 
-                          controller.getPastVisitList();
-                          controller.getScheduleVisitList();
-                          controller.getPatientList();
+                            controller.getPastVisitList();
+                            controller.getScheduleVisitList();
+                            controller.getPatientList();
+                          }
                         },
                         cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
                           return colIndex == 0
@@ -117,7 +122,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                       padding: const EdgeInsets.only(left: 5),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: cellData == "Finalized" ? AppColors.lightgreenPastVisit : AppColors.orange,
+                                          color: controller.getStatusColor(cellData).withValues(alpha: 0.2),
+                                          // color: cellData == "Finalized" ? AppColors.lightgreenPastVisit : AppColors.orange,
                                           borderRadius: BorderRadius.circular(16),
                                         ),
                                         child: Padding(
@@ -125,7 +131,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           child: Text(
                                             cellData,
                                             textAlign: TextAlign.center,
-                                            style: AppFonts.medium(13, cellData == "Finalized" ? AppColors.greenPastVisit : AppColors.orangeText),
+                                            style: AppFonts.medium(13, controller.getStatusColor(cellData)),
+                                            // style: AppFonts.medium(13, cellData == "Finalized" ? AppColors.greenPastVisit : AppColors.orangeText),
                                           ),
                                         ),
                                       ),
@@ -164,41 +171,49 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                         style: AppFonts.regular(14, AppColors.textBlack),
                                                       ),
                                                     )),
-                                                PopupMenuItem(
-                                                    padding: EdgeInsets.zero,
-                                                    value: "",
-                                                    onTap: () async {
-                                                      customPrint("row index is :- $rowIndex");
+                                                if (controller.pastVisitList[rowIndex].visitStatus == "In-Exam" ||
+                                                    controller.pastVisitList[rowIndex].visitStatus == "Pending" ||
+                                                    controller.pastVisitList[rowIndex].visitStatus == "Finalized") ...[
+                                                  PopupMenuItem(
+                                                      padding: EdgeInsets.zero,
+                                                      value: "",
+                                                      onTap: () async {
+                                                        customPrint("row index is :- $rowIndex");
 
-                                                      Get.delete<PatientInfoController>();
+                                                        if (controller.pastVisitList[rowIndex].visitStatus == "In-Exam" ||
+                                                            controller.pastVisitList[rowIndex].visitStatus == "Pending" ||
+                                                            controller.pastVisitList[rowIndex].visitStatus == "Finalized") {
+                                                          Get.delete<PatientInfoController>();
 
-                                                      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-                                                        "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
-                                                        "patientId": controller.pastVisitList[rowIndex].id.toString(),
-                                                        "unique_tag": DateTime.now().toString(),
-                                                      });
+                                                          await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+                                                            "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
+                                                            "patientId": controller.pastVisitList[rowIndex].id.toString(),
+                                                            "unique_tag": DateTime.now().toString(),
+                                                          });
 
-                                                      controller.getPastVisitList();
-                                                      controller.getScheduleVisitList();
-                                                      controller.getPatientList();
-                                                    },
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Container(
-                                                          width: double.infinity,
-                                                          height: 1,
-                                                          color: AppColors.appbarBorder,
-                                                        ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: Text(
-                                                            "view visit",
-                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          controller.getPastVisitList();
+                                                          controller.getScheduleVisitList();
+                                                          controller.getPatientList();
+                                                        }
+                                                      },
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Container(
+                                                            width: double.infinity,
+                                                            height: 1,
+                                                            color: AppColors.appbarBorder,
                                                           ),
-                                                        ),
-                                                      ],
-                                                    )),
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Text(
+                                                              "view visit",
+                                                              style: AppFonts.regular(14, AppColors.textBlack),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ))
+                                                ],
                                                 PopupMenuItem(
                                                     padding: EdgeInsets.zero,
                                                     // value: "",
@@ -382,16 +397,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                 controller.globalController.homePastPatientListSortingModel.value?.colIndex = colIndex;
                                 controller.globalController.homePastPatientListSortingModel.value?.isAscending =
                                     controller.getDescValue(controller.globalController.sortingPastPatient, headers[colIndex], 2) ?? false;
-
-                                // controller.colIndex.value = colIndex;
-
-                                // controller.isAsending.value = controller.getDescValue(controller.globalController.sortingPastPatient, headers[colIndex], 2) ?? false;
-                                // controller.colIndex.refresh();
-                                // controller.isAsending.refresh();
                                 customPrint("col index is the $colIndex");
                               }
-
-                              // customPrint(controller.getDescValue(controller.sortingPastPatient, cellData));
                             },
                             child: Container(
                               color: AppColors.backgroundWhite,
@@ -442,9 +449,6 @@ class HomePastVisitsList extends GetView<HomeController> {
   List<List<String>> _getTableRows(List<ScheduleVisitListData> patients) {
     List<List<String>> rows = [];
 
-    // Add header row first
-    // rows.add(['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"]);
-
     // Iterate over each patient and extract data for each row
     for (var patient in patients) {
       String formatedDateTime = "N/A";
@@ -455,14 +459,6 @@ class HomePastVisitsList extends GetView<HomeController> {
 
         formatedDateTime = "${DateFormat('MM/dd').format(formatdateLocal)} ${DateFormat('h:mm a').format(dateTime)}";
       }
-
-      // if (patient.appointmentTime != null) {
-      //   DateTime dateTime = DateTime.parse(patient.appointmentTime ?? "");
-      //
-      //   DateTime formatdateLocal = DateTime.parse(patient.visitDate ?? "");
-      //
-      //   formatedDateTime = "${DateFormat('MM/dd').format(formatdateLocal)} ${DateFormat('h:mm a').format(dateTime)}";
-      // }
 
       String getFirstLetter(String input) {
         return input.isNotEmpty ? input[0] : '';

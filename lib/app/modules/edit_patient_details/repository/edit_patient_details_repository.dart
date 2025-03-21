@@ -20,7 +20,6 @@ class EditPatientDetailsRepository {
     PatientDetailModel res = PatientDetailModel.fromJson(response);
     print("response is for getPatientDetails  $res");
     return res;
-    // return PatientDetailModel.fromJson(response);
   }
 
   Future<MedicalRecords> getMedicalRecords({required String id}) async {

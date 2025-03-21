@@ -35,23 +35,7 @@ class FullTranscriptView extends StatelessWidget {
                     border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                 child: Column(
                   children: [
-                    // if (controller.transcriptListModel.value?.responseData?.cleanedTranscript == null) ...[
-                    //   Center(
-                    //       child: Column(
-                    //     children: [
-                    //       SvgPicture.asset(
-                    //         ImagePath.patient_no_data,
-                    //         width: 300,
-                    //       ),
-                    //       Text("No data found!"),
-                    //       SizedBox(
-                    //         height: 30,
-                    //       )
-                    //     ],
-                    //   ))
-                    // ] else ...[
                     Container(
-                      // height: 80,
                       decoration: BoxDecoration(
                         color: AppColors.white.withValues(alpha: 0.2),
                       ),
@@ -62,11 +46,6 @@ class FullTranscriptView extends StatelessWidget {
                           SizedBox(
                             height: 10,
                           ),
-                          // Text(
-                          //   textAlign: TextAlign.center,
-                          //   "Transcribing Summary",
-                          //   style: AppFonts.medium(20, AppColors.textBlack),
-                          // ),
                           SizedBox(
                             height: 4,
                           ),
@@ -140,7 +119,6 @@ class FullTranscriptView extends StatelessWidget {
                                                       Text(
                                                         convertSecondsToMinutes(
                                                             controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end.round()),
-                                                        // "(${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].start ?? ""} - ${controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end ?? ""})",
                                                         style: AppFonts.regular(12, AppColors.textGrey),
                                                       ),
                                                     ],

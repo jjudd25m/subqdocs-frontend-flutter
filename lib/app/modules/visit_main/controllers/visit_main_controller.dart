@@ -45,7 +45,6 @@ class VisitMainController extends GetxController {
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
   Rxn<MedicalRecords> medicalRecords = Rxn();
-  // Rxn<'List<ScheduledVisits>> scheduledVisits = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
 
   RxBool isConnected = RxBool(true);
@@ -149,54 +148,6 @@ class VisitMainController extends GetxController {
     getPatientAttachment();
     Get.back();
   }
-
-  //
-  // Future<void> pickFiles(BuildContext context) async {
-  //   list.clear();
-  //
-  //   List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
-  //
-  //   customPrint("media  file is  $fileList");
-  //
-  //   fileList?.forEach(
-  //     (element) {
-  //       XFile? _pickedFile;
-  //       String? _fileName;
-  //       DateTime? _pickDate;
-  //       int? _fileSize;
-  //       if (element != null) {
-  //         _fileName = element.name; // Get the file name
-  //         _pickDate = DateTime.now(); // Get the date when the file is picked
-  //
-  //         // Get the size of the file
-  //         File file = File(element.xFile.path);
-  //         _fileSize = file.lengthSync(); // Size in bytes
-  //
-  //         String? _filesizeString = _formatFileSize(_fileSize);
-  //
-  //         String? _shortFileName;
-  //         if (p.basename(_fileName).length > 15) {
-  //           // Truncate the name to 12 characters and add ellipsis
-  //           _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
-  //         } else {
-  //           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
-  //         }
-  //         list.value.add(MediaListingModel(
-  //             file: file,
-  //             previewImage: null,
-  //             fileName: _shortFileName,
-  //             date: _formatDate(_pickDate),
-  //             Size: _filesizeString));
-  //       }
-  //
-  //       list.refresh();
-  //
-  //       if (list.isNotEmpty) {
-  //         showCustomDialog(context);
-  //       }
-  //     },
-  //   );
-  // }
 
   Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
     if (clear) {
@@ -345,19 +296,6 @@ class VisitMainController extends GetxController {
         if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
           Get.back();
         }
-
-        // if (patientTranscriptUploadModel.responseData?.id != null) {
-        //   Get.back();
-        //   Get.back();
-        // } else {
-        //   Get.back();
-        //   Get.back();
-        //   dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-        //     "visitId": visitId,
-        //     "patientId": patientId,
-        //     "unique_tag": DateTime.now().toString(),
-        //   });
-        // }
       } else {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
         // Get.back();
@@ -412,10 +350,12 @@ class VisitMainController extends GetxController {
       isLoading.value = false;
       isStartTranscript.value = false;
 
-      Get.toNamed(Routes.PATIENT_INFO, arguments: {
+      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
         "trascriptUploadData": patientTranscriptUploadModel,
         "unique_tag": DateTime.now().toString(),
       });
+
+      getPatientDetails();
     }
   }
 
@@ -507,6 +447,9 @@ class VisitMainController extends GetxController {
     }
 
     patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
+
+    print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
+
     if (isLoading) {
       Get.back();
     }

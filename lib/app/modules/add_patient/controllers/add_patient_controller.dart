@@ -119,21 +119,8 @@ class AddPatientController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
-
-    // visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
     contactNumberController.text = "+1";
-
-    // contactNumberController.addListener(() {
-    //   String currentText = contactNumberController.text;
-    //   if (currentText != '+1' && !currentText.startsWith('+1')) {
-    //     contactNumberController.text = '+1';
-    //     contactNumberController.selection = TextSelection.collapsed(offset: 3); // Keep the cursor after '+1'
-    //   }
-    // });
-
     print(getNextRoundedTime());
-
     selectedVisitTimeValue.value = getNextRoundedTime();
   }
 

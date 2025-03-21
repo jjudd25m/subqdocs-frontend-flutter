@@ -119,8 +119,8 @@ class DoctorView extends StatelessWidget {
                                     ),
                                     children: [
                                       _headerBuildTableCell('Total'),
-                                      _headerBuildTableCell("\$0"),
-                                      // _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}"),
+                                      // _headerBuildTableCell("\$0"),
+                                      _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}"),
                                       // _headerBuildTableCell("${controller.doctorViewList.value?.responseData?.totalCharges}"),
                                     ],
                                   ),
@@ -159,7 +159,6 @@ class DoctorView extends StatelessWidget {
                           color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                           border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
                         ),
-                        // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                           children: [
@@ -195,15 +194,6 @@ class DoctorView extends StatelessWidget {
                         child: ListView(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          // onReorder: (oldIndex, newIndex) {
-                          //   // setState(() {
-                          //   if (newIndex > oldIndex) {
-                          //     newIndex = newIndex - 1;
-                          //   }
-                          //   // });
-                          //   final task = controller.tasks.removeAt(oldIndex);
-                          //   controller.tasks.insert(newIndex, task);
-                          // },
                           children: [
                             for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
                               Container(
@@ -213,14 +203,6 @@ class DoctorView extends StatelessWidget {
                                   children: [
                                     Row(
                                       children: [
-                                        // SvgPicture.asset(
-                                        //   ImagePath.reorder,
-                                        //   height: 15,
-                                        //   width: 10,
-                                        // ),
-                                        // SizedBox(
-                                        //   width: 10,
-                                        // ),
                                         Text(
                                           textAlign: TextAlign.left,
                                           "${task.number}. ${task.title} (${task.code})",
@@ -339,7 +321,6 @@ class DoctorView extends StatelessWidget {
                                               ),
                                             ]
                                         ],
-
                                         if (task.procedure != null) ...[
                                           if (task.procedure?.details?.isNotEmpty ?? false) ...[
                                             if (task.procedure?.type?.isNotEmpty ?? false) ...[
@@ -476,108 +457,6 @@ class DoctorView extends StatelessWidget {
                                             ],
                                           ),
                                         ],
-                                        // if ((task.medications ?? []).isNotEmpty) ...[
-                                        //   Padding(
-                                        //     padding: const EdgeInsets.only(left: 25),
-                                        //     child: Text(
-                                        //       textAlign: TextAlign.center,
-                                        //       "Medications:",
-                                        //       style: AppFonts.bold(15, AppColors.black),
-                                        //     ),
-                                        //   ),
-                                        //   for (Map medication in task.medications ?? [])
-                                        //     Padding(
-                                        //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        //       child: Column(
-                                        //         children: [
-                                        //           Row(
-                                        //             children: [
-                                        //               SizedBox(
-                                        //                 width: 10,
-                                        //               ),
-                                        //               Expanded(
-                                        //                 child: Text(
-                                        //                   textAlign: TextAlign.center,
-                                        //                   " ${medication['name'] ?? ""} - ${medication['dosage'] ?? ""} \n",
-                                        //                   style: AppFonts.regular(14, AppColors.textGrey),
-                                        //                 ),
-                                        //               ),
-                                        //             ],
-                                        //           ),
-                                        //           SizedBox(
-                                        //             width: 10,
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        // ],
-                                        // if ((task.counselingAndDiscussion ?? []).isNotEmpty) ...[
-                                        //   Padding(
-                                        //     padding: const EdgeInsets.only(left: 25),
-                                        //     child: Text(
-                                        //       textAlign: TextAlign.center,
-                                        //       "Counseling and Discussion:",
-                                        //       style: AppFonts.bold(15, AppColors.black),
-                                        //     ),
-                                        //   ),
-                                        //   for (var counseling in task.counselingAndDiscussion ?? [])
-                                        //     Padding(
-                                        //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        //       child: Column(
-                                        //         children: [
-                                        //           Row(
-                                        //             children: [
-                                        //               SizedBox(
-                                        //                 width: 10,
-                                        //               ),
-                                        //               Expanded(
-                                        //                 child: Text(
-                                        //                   "$counseling \n",
-                                        //                   style: AppFonts.regular(14, AppColors.textGrey),
-                                        //                 ),
-                                        //               ),
-                                        //             ],
-                                        //           ),
-                                        //           SizedBox(
-                                        //             width: 10,
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        // ],
-                                        // if ((task.followUp ?? "").isNotEmpty) ...[
-                                        //   Padding(
-                                        //     padding: const EdgeInsets.only(left: 25),
-                                        //     child: Text(
-                                        //       textAlign: TextAlign.center,
-                                        //       "Follow Up:",
-                                        //       style: AppFonts.bold(15, AppColors.black),
-                                        //     ),
-                                        //   ),
-                                        //   Padding(
-                                        //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        //     child: Column(
-                                        //       children: [
-                                        //         Row(
-                                        //           children: [
-                                        //             SizedBox(
-                                        //               width: 10,
-                                        //             ),
-                                        //             Expanded(
-                                        //               child: Text(
-                                        //                 task.followUp ?? "",
-                                        //                 style: AppFonts.regular(14, AppColors.textGrey),
-                                        //               ),
-                                        //             ),
-                                        //           ],
-                                        //         ),
-                                        //         SizedBox(
-                                        //           width: 10,
-                                        //         ),
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // ]
                                       ],
                                     ),
                                     SizedBox(
@@ -642,10 +521,10 @@ class DoctorView extends StatelessWidget {
 
     print("procedure List is :- ${patients.diagnosisCodesProcedures}");
 
-    // controller.totalUnitCost.value = 0;
+    controller.totalUnitCost.value = 0;
     // Iterate over each diagnosis procedure data
     for (DiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures ?? []) {
-      // controller.totalUnitCost.value += double.parse(diagnosis.unitCharge.toString().isEmpty ? "0.0" : diagnosis.unitCharge.toString().replaceAll("\$", "").replaceAll(",", ""));
+      controller.totalUnitCost.value += double.parse(diagnosis.unitCharge.toString().isEmpty ? "0.0" : diagnosis.unitCharge.toString().replaceAll("\$", "").replaceAll(",", ""));
 
       // Ensure each row has exactly 4 children
       rows.add(

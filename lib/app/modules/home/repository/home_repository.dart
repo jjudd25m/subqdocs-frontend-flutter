@@ -3,6 +3,7 @@ import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
+import '../../../models/ChangeModel.dart';
 import '../model/deletePatientModel.dart';
 import '../model/patient_list_model.dart';
 import '../model/patient_schedule_model.dart';
@@ -57,5 +58,11 @@ class HomeRepository {
     var response = await ApiProvider.instance.callPut("patient-visit/update/$visitId", param);
     // customPrint("patientReScheduleVisit ${response}");
     return response;
+  }
+
+  Future<ChangeStatusModel> changeStatus({required String id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("patient/updateVisitStatus/$id", params);
+    customPrint("getPatientView API  internal response $response");
+    return ChangeStatusModel.fromJson(response);
   }
 }

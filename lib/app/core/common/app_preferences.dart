@@ -19,11 +19,6 @@ class AppPreference {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  // Future<void> setListMap(String key, List<Map<String, dynamic>> value) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString(key, json.encode(value)); // Store as a JSON-encoded string
-  // }
-
   Future<void> setListMap(String key, List<Map<String, dynamic>> value) async {
     final prefs = await SharedPreferences.getInstance();
     // Convert the list of maps to a JSON string
@@ -42,17 +37,6 @@ class AppPreference {
     }
     return []; // Return an empty list if the key doesn't exist
   }
-
-  // Future<List<String>> getListMap(String key) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String? jsonString = prefs.getString(key);
-  //
-  //   if (jsonString != null) {
-  //     List<dynamic> decodedList = json.decode(jsonString);
-  //     return decodedList.map((e) => e as String).toList();
-  //   }
-  //   return []; // Return empty list if not found
-  // }
 
   Future<void> setInt(String key, int value) async {
     await _prefs?.setInt(key, value);
