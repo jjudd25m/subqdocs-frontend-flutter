@@ -154,14 +154,16 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           itemBuilder: (context) => [
                                                 PopupMenuItem(
                                                     padding: EdgeInsets.zero,
-                                                    onTap: () {
+                                                    onTap: ()async  {
                                                       customPrint("visite is is ${controller.pastVisitList[rowIndex].visitId.toString()}");
 
-                                                      Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                                                      await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                         "patientData": controller.pastVisitList[rowIndex].id.toString(),
                                                         "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                                                         "fromSchedule": false
                                                       });
+
+                                                      controller.getPastVisitList();
                                                     },
                                                     value: "",
                                                     child: Padding(

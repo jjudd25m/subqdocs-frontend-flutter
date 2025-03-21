@@ -151,9 +151,11 @@ class HomePatientListView extends GetView<HomeController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async{
                       // if (rowIndex != 0) {
-                      Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
+                     await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
+
+                      controller.getPatientList();
                       // }
                     },
                     child: Text(
@@ -186,10 +188,12 @@ class HomePatientListView extends GetView<HomeController> {
                 itemBuilder: (context) => [
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
-                          onTap: () {
+                          onTap: () async{
                             customPrint(" patient id is ${controller.patientList[rowIndex].id}");
-                            Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
-                          },
+                            await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
+                              controller.getPatientList();
+
+                            },
                           // value: "",
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -208,7 +212,7 @@ class HomePatientListView extends GetView<HomeController> {
                                 "patientId": controller.patientList[rowIndex].id.toString(),
                                 "unique_tag": DateTime.now().toString(),
                               });
-
+                              controller.getPatientList();
                               print("back from response");
                             },
                             child: Column(

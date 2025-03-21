@@ -317,8 +317,10 @@ class VisitMainController extends GetxController {
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
       customPrint("internet not available ");
-      isLoading.value = true;
-      loadingMessage.value = "Uploading Audio";
+      // isLoading.value = true;
+      // loadingMessage.value = "Uploading Audio";
+      Loader().showLoadingDialogForSimpleLoader();
+
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
       AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
@@ -326,8 +328,10 @@ class VisitMainController extends GetxController {
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
       // Show a message or update UI
-      loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
-      isLoading.value = false;
+      // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
+      // isLoading.value = false;
+
+      Get.back();
 
       CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
@@ -338,16 +342,17 @@ class VisitMainController extends GetxController {
       }
     } else {
       customPrint("internet available");
-      isLoading.value = true;
-      loadingMessage.value = "Uploading Audio";
-
+      // isLoading.value = true;
+      // loadingMessage.value = "Uploading Audio";
+      Loader().showLoadingDialogForSimpleLoader();
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
           await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
-      isLoading.value = false;
+      // isLoading.value = false;
+      Get.back();
       isStartTranscript.value = false;
 
       await Get.toNamed(Routes.PATIENT_INFO, arguments: {

@@ -116,14 +116,17 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     itemBuilder: (context) => [
                                           PopupMenuItem(
                                               padding: EdgeInsets.zero,
-                                              onTap: () {
+                                              onTap: () async {
                                                 customPrint("visite is is ${controller.scheduleVisitList[rowIndex].visitId.toString()}");
 
-                                                Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
+                                                await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                   "patientData": controller.scheduleVisitList[rowIndex].id.toString(),
                                                   "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
                                                   "fromSchedule": false
                                                 });
+
+                                                controller.getScheduleVisitList();
+                                                
                                               },
                                               value: "",
                                               child: Padding(

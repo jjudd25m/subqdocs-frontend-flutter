@@ -2625,7 +2625,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                     mainAxisAlignment: MainAxisAlignment.center, // Vertically centers the Column contents
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(color: AppColors.textPurple),
+                      // CircularProgressIndicator(color: AppColors.textPurple),
                       SizedBox(
                         height: 20,
                       ),
