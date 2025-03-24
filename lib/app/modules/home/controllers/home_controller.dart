@@ -108,6 +108,8 @@ class HomeController extends GetxController {
   Set<int> _loadedThresholds = Set<int>();
   RxBool isLoading = RxBool(false);
   RxBool noMoreDataPatientList = RxBool(false);
+  RxBool noMoreDataPastPatientList = RxBool(false);
+  RxBool noMoreDataSchedulePatientList = RxBool(false);
   String getNextRoundedTimeHH() {
     DateTime now = DateTime.now().toUtc();
 
@@ -304,6 +306,7 @@ class HomeController extends GetxController {
   Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
     pagePatient = 1;
+    triggeredIndexes.clear();
 
     param['page'] = 1;
     param['limit'] = "100";
@@ -350,6 +353,8 @@ class HomeController extends GetxController {
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
     pageSchedule = 1;
+    scheduleTriggeredIndexes.clear();
+    noMoreDataSchedulePatientList.value = false;
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -388,6 +393,12 @@ class HomeController extends GetxController {
 
     if (scheduleVisitListModel.value?.responseData?.data != null) {
       scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
+
+      if(scheduleVisitList.length >=80)
+        {
+          isLoading.value = true;
+
+        }
       getLast2DaysData();
       getOfflineData();
     }
@@ -395,6 +406,9 @@ class HomeController extends GetxController {
 
   Future<void> getPastVisitList({String? sortingName = "", bool isFist = false}) async {
     pagePast = 1;
+  pastTriggeredIndexes.clear();
+  noMoreDataPatientList.value = false;
+
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -439,6 +453,13 @@ class HomeController extends GetxController {
 
     if (pastVisitListModel.value?.responseData?.data != null) {
       pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
+
+      if(pastVisitList.length >=80)
+        {
+          isLoading.value = true;
+
+
+        }
       getLast2DaysData();
       getOfflineData();
     }
@@ -449,6 +470,7 @@ class HomeController extends GetxController {
     if (scheduleVisitList.length < totalCount) {
       print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
+      noMoreDataSchedulePatientList.value = false;
       Map<String, dynamic> param = {};
       param['page'] = ++pageSchedule;
       param['limit'] = "100";
@@ -488,6 +510,7 @@ class HomeController extends GetxController {
         pageSchedule--;
       }
     } else {
+      noMoreDataSchedulePatientList.value = true;
       print("no pagination is not needed  beacuse ${scheduleVisitList.length}  is this and $totalCount");
     }
   }
@@ -585,6 +608,8 @@ class HomeController extends GetxController {
     if (pastVisitList.length < totalCount) {
       print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
+      noMoreDataPastPatientList.value = false;
+
       Map<String, dynamic> param = {};
       param['page'] = ++pagePast;
       param['limit'] = "100";
@@ -637,6 +662,7 @@ class HomeController extends GetxController {
         pagePast--;
       }
     } else {
+      noMoreDataPastPatientList.value = true;
       print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
     }
   }

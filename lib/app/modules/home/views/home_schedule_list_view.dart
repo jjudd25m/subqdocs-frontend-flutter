@@ -50,7 +50,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                 height: 15,
               ),
 
-            // Text("total data is the ${controller.scheduleVisitList.length}" , style: TextStyle( fontSize: 20),),
+            Text("total data is the ${controller.scheduleVisitList.length}" , style: TextStyle( fontSize: 20),),
             controller.scheduleVisitList.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(10),
@@ -506,6 +506,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                         );
                       },
                       isLoading: controller.isLoading.value,
+                      isNoData: controller.noMoreDataSchedulePatientList.value,
                       // headerRows: ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Previous Visits", "Action"],
                     ),
                   ),

@@ -167,7 +167,7 @@ class CustomTable extends StatelessWidget {
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("No More Data" , style: AppFonts.bold(13, AppColors.textGrey),),
+                          child: Text("No more records to load" , style: AppFonts.bold(13, AppColors.textGrey),),
                         )
                       );
 
