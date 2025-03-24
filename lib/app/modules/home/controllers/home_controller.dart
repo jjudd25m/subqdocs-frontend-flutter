@@ -147,9 +147,9 @@ class HomeController extends GetxController {
     if (!scrollControllerPatientList.hasClients) return;
 
     double offset = scrollControllerPatientList.position.pixels;
-    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+    int currentIndex = (offset / 40).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 35 == 0 && !triggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && currentIndex % 50 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
 
@@ -164,9 +164,9 @@ class HomeController extends GetxController {
     if (!scrollControllerPastPatientList.hasClients) return;
 
     double offset = scrollControllerPastPatientList.position.pixels;
-    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+    int currentIndex = (offset / 40).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 35 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && currentIndex % 50 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
       pastTriggeredIndexes.add(currentIndex); // Mark as triggered
       getPastVisitListFetchMore();
 
@@ -181,9 +181,9 @@ class HomeController extends GetxController {
     if (!scrollControllerSchedulePatientList.hasClients) return;
 
     double offset = scrollControllerSchedulePatientList.position.pixels;
-    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+    int currentIndex = (offset / 45).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 35 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && currentIndex % 50 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
       scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
       getScheduleVisitListFetchMore();
 
@@ -334,6 +334,11 @@ class HomeController extends GetxController {
 
     if (patientListModel.value?.responseData?.data != null) {
       patientList.value = patientListModel.value?.responseData?.data ?? [];
+
+      if(patientList.length > 80)
+        {
+          isLoading.value = true;
+        }
       getLast2DaysData();
       getOfflineData();
     }
@@ -763,7 +768,7 @@ class HomeController extends GetxController {
     statusModel.clear();
 
     statusResponseModel.responseData?.forEach(
-      (element) {
+          (element) {
         statusModel.add(StatusModel(status: element));
       },
     );
@@ -877,7 +882,7 @@ class HomeController extends GetxController {
       // customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
       // customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {

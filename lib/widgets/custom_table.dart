@@ -151,7 +151,7 @@ class CustomTable extends StatelessWidget {
                   }
 
                   // If user reaches the bottom and no data is being loaded
-                  if (notification.metrics.extentBefore >= notification.metrics.maxScrollExtent-100 && !isLoading) {
+                  if (notification.metrics.extentBefore >= notification.metrics.maxScrollExtent-200 && !isLoading) {
                     print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
                     onLoadMore?.call(); // Call the onLoadMore function
                   }
@@ -165,7 +165,10 @@ class CustomTable extends StatelessWidget {
                   itemBuilder: (context, index) {
                     if (index == rows.length && isNoData) {
                       return Center(
-                        child: Text("No More Data" , style: AppFonts.bold(15, AppColors.black),)
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("No More Data" , style: AppFonts.bold(13, AppColors.textGrey),),
+                        )
                       );
 
                     } else {
