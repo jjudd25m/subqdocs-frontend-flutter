@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
@@ -18,8 +19,12 @@ class AllAttachmentController extends GetxController {
 
   Rxn<AllAttachmentListModel> allAttachmentList = Rxn();
 
-  final VisitMainRepository _visitMainRepository = VisitMainRepository();
+  TextEditingController fromController = TextEditingController();
+  List<DateTime> selectedValue = [];
 
+  final VisitMainRepository _visitMainRepository = VisitMainRepository();
+  RxString startDate = RxString("");
+  RxString endDate = RxString("");
   // RxMap<String, List<ResponseData>> attachmentDic = RxMap<String, List<ResponseData>>();
 
   RxString visitId = RxString("");
@@ -42,7 +47,13 @@ class AllAttachmentController extends GetxController {
     Map<String, dynamic> param = {};
 
     try {
-
+      if (startDate.isNotEmpty && endDate.isNotEmpty) {
+        DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+        String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+        DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+        String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+        param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+      }
       allAttachmentList.value = await _visitMainRepository.getAllPatientAttachment(id: visitId.value, param: param);
 
       // print("All attachment is :- ${patientAttachmentList.value?.responseData?.length}");
@@ -63,6 +74,41 @@ class AllAttachmentController extends GetxController {
       // Get.back();
     }
   }
+
+
+
+
+  void setDateRange() {
+    // customPrint("function  is called ");
+
+    if (selectedValue.isNotEmpty) {
+      for (int i = 0; i < selectedValue.length; i++) {
+        var dateTime = selectedValue[i];
+        // Format the date to 'MM-dd-yyyy'
+        // customPrint("goint to this ");
+        if (selectedValue.length == 1) {
+          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+        } else {
+          if (i == 0) {
+            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          } else {
+            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          }
+        }
+      }
+    } else {
+      DateTime dateTime = DateTime.now();
+      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+    }
+
+    fromController.text = "${startDate} - ${endDate}";
+
+    Get.back();
+  }
+
+
 
   void deleteAttachments(int index, int subIndex, int id) async {
     if (id != 1) {

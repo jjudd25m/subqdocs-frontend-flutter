@@ -33,31 +33,117 @@ class Validation {
 
     return null;
   }
+  //
+  // static passwordValidate(value) {
+  //   if (value == null || value.isEmpty) {
+  //     return "please filed above filed";
+  //   }
+  //   final bool passwordValidate =
+  //   RegExp(
+  //       r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?]{8,20}$'
+  //   ).hasMatch(value!);
+  //
+  //   if (passwordValidate == false) {
+  //     return "Please make Password Strong";
+  //   }
+  //
+  //   return null;
+  // }
 
-  static passwordValidate(value) {
+  static String? passwordValidate(String? value) {
     if (value == null || value.isEmpty) {
-      return "please filed above filed";
+      return "Password cannot be empty.";
     }
+
+    // Check length
+    if (value.length < 8 || value.length > 20) {
+      return "Password must be between 8 and 20 characters.";
+    }
+
+    // Check for at least one letter
+    if (!RegExp(r'(?=.*[a-zA-Z])').hasMatch(value)) {
+      return "Password must contain at least one letter.";
+    }
+
+    // Check for at least one number
+    if (!RegExp(r'(?=.*\d)').hasMatch(value)) {
+      return "Password must contain at least one number.";
+    }
+
+    // Check for at least one special character
+    if (!RegExp(r'(?=.*[!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?])').hasMatch(value)) {
+      return "Password must contain at least one special character";
+    }
+
     final bool passwordValidate =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$').hasMatch(value!);
+    RegExp(
+        r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?]{8,20}$'
+    ).hasMatch(value!);
 
     if (passwordValidate == false) {
-      return "Plese make Password Strong";
+      return "Please make Password Strong";
     }
 
-    return null;
+
+    return null;  // All conditions passed
   }
 
-  static conforimpasswordValidate(value, firstvalue) {
+  // static conforimpasswordValidate(value, firstvalue) {
+  //   if (value == null || value.isEmpty) {
+  //     return "please filed above filed";
+  //   }
+  //
+  //   print(value);
+  //   print(firstvalue);
+  //   if (value != firstvalue) {
+  //     return "Password not Matched";
+  //   }
+  // }
+
+  static String? conforimpasswordValidate(value , firstValue) {
+
+
     if (value == null || value.isEmpty) {
-      return "please filed above filed";
+      return "Password cannot be empty.";
     }
 
-    print(value);
-    print(firstvalue);
-    if (value != firstvalue) {
-      return "Password not Matched";
+    // Check length
+    if (value.length < 8 || value.length > 20) {
+      return "Password must be between 8 and 20 characters.";
     }
+
+    // Check for at least one letter
+    if (!RegExp(r'(?=.*[a-zA-Z])').hasMatch(value)) {
+      return "Password must contain at least one letter.";
+    }
+
+    // Check for at least one number
+    if (!RegExp(r'(?=.*\d)').hasMatch(value)) {
+      return "Password must contain at least one number.";
+    }
+
+    // Check for at least one special character
+    if (!RegExp(r'(?=.*[!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?])').hasMatch(value)) {
+      return "Password must contain at least one special character";
+    }
+
+    final bool passwordValidate =
+    RegExp(
+        r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?]{8,20}$'
+    ).hasMatch(value!);
+
+    if (passwordValidate == false) {
+      return "Please make Password Strong";
+    }
+    if (passwordValidate == false) {
+      return "Please make Password Strong";
+    }
+
+      if (value != firstValue) {
+        return "Password not Matched";
+      }
+
+    return null;
   }
 
   static visitDateAndTimeValidation(value, anotherValue) {

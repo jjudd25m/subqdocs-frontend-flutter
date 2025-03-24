@@ -93,7 +93,7 @@ class LoginView extends GetView<LoginController> {
                           size: 25,
                         ),
                         checkValidation: (value) {
-                          return Validation.emailValidate(value);
+                          return Validation.emailValidateRequired(value);
                         }),
                   ),
                   SizedBox(
@@ -176,7 +176,11 @@ class LoginView extends GetView<LoginController> {
                       width: isSmallScreen ? Get.width - 30 : 416,
                       child: CustomAnimatedButton(
                         onPressed: () {
+
+    if (_formKey.currentState!.validate()) {
                           controller.authLoginUser();
+
+                          }
                         },
                         height: 45,
                         text: "Log in",

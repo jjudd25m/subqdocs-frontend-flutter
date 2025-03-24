@@ -52,7 +52,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                 ),
 
 
-              Text("total data is the ${controller.pastVisitList.length}" , style: TextStyle( fontSize: 20),),
+              // Text("total data is the ${controller.pastVisitList.length}" , style: TextStyle( fontSize: 20),),
               controller.pastVisitList.isEmpty
                   ? Padding(
                       padding: const EdgeInsets.all(10.0),

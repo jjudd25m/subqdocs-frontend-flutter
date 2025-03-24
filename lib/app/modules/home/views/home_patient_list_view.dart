@@ -40,7 +40,7 @@ class HomePatientListView extends GetView<HomeController> {
               )
             : Column(
               children: [
-                Text("total data is the ${controller.patientList.length}" , style: TextStyle( fontSize: 20),),
+                // Text("total data is the ${controller.patientList.length}" , style: TextStyle( fontSize: 20),),
                 Expanded(
                   child: CustomTable(
                       scrollController: controller.scrollControllerPatientList,

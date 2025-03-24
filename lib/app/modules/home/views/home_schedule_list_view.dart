@@ -50,7 +50,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                 height: 15,
               ),
 
-            Text("total data is the ${controller.scheduleVisitList.length}" , style: TextStyle( fontSize: 20),),
+            // Text("total data is the ${controller.scheduleVisitList.length}" , style: TextStyle( fontSize: 20),),
             controller.scheduleVisitList.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(10),
