@@ -1398,7 +1398,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                             onTap: () async {
                                               if (controller.isConnected.value) {
                                                 var result = await Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
-                                                  "attachmentList": controller.patientAttachmentList,
+                                                  "visit_id": controller.patientId.value,
                                                 });
 
                                                 if (result != null) {
@@ -1410,7 +1410,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                             },
                                             child: Text(
                                               textAlign: TextAlign.center,
-                                              "",
+                                              "View All Attachments",
                                               style: AppFonts.regular(15, AppColors.textPurple),
                                             ),
                                           ),

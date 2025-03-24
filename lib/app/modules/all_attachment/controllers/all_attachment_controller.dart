@@ -31,13 +31,18 @@ class AllAttachmentController extends GetxController {
     visitId.value = Get.arguments["visit_id"];
     // patientAttachmentList = Get.arguments["attachmentList"];
 
-    getAllPatientAttachment();
+    if(visitId.value.isNotEmpty)
+      {
+        getAllPatientAttachment();
+      }
+
   }
 
   Future<void> getAllPatientAttachment() async {
     Map<String, dynamic> param = {};
 
     try {
+
       allAttachmentList.value = await _visitMainRepository.getAllPatientAttachment(id: visitId.value, param: param);
 
       // print("All attachment is :- ${patientAttachmentList.value?.responseData?.length}");
@@ -69,6 +74,8 @@ class AllAttachmentController extends GetxController {
 
       if (commonResponse.responseType == "success") {
         CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
+        getAllPatientAttachment();
+
         // attachmentDic.values.elementAt(index).removeAt(subIndex);
         // attachmentDic.refresh();
       } else {

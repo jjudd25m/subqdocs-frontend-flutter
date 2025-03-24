@@ -28,8 +28,9 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
 
   String getFormattedDate(String dateStr) {
     // Parse the date string (mm/dd/yyyy) into a DateTime object
-    DateFormat format = DateFormat("MM/dd/yyyy");
+    DateFormat format = DateFormat("dd-MM-yyyy");
     DateTime inputDate = format.parse(dateStr);
+
 
     // Get today's date and yesterday's date
     DateTime today = DateTime.now();
@@ -119,6 +120,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                         highlightColor: Colors.transparent, // Remove highlight color
                                       ),
                                       child: ExpansionTile(
+                                        initiallyExpanded: true,
                                         collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                         shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                         backgroundColor: AppColors.backgroundWhite,
@@ -275,7 +277,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                       ),
                                     ),
                                   ),
-                              itemCount: controller.allAttachmentList.value!.responseData.data.keys.length);
+                              itemCount: controller.allAttachmentList.value?.responseData.data.keys.length ?? 0);
                         })
                       ],
                     ),
