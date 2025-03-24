@@ -151,7 +151,7 @@ class CustomTable extends StatelessWidget {
                   }
 
                   // If user reaches the bottom and no data is being loaded
-                  if (notification.metrics.extentBefore >= notification.metrics.maxScrollExtent-200 && !isLoading) {
+                  if (notification.metrics.extentBefore >= notification.metrics.maxScrollExtent && !isLoading) {
                     print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
                     onLoadMore?.call(); // Call the onLoadMore function
                   }
