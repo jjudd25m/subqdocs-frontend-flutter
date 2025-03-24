@@ -18,6 +18,8 @@ import '../modules/patient_profile/bindings/patient_profile_binding.dart';
 import '../modules/patient_profile/views/patient_profile_view.dart';
 import '../modules/patient_view_read_only/bindings/patient_view_read_only_binding.dart';
 import '../modules/patient_view_read_only/views/patient_view_read_only_view.dart';
+import '../modules/personal_setting/bindings/personal_setting_binding.dart';
+import '../modules/personal_setting/views/personal_setting_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/sign_up/bindings/sign_up_binding.dart';
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.SIGN_UP,
       page: () => SignUpView(),
       binding: SignUpBinding(),
+    ),
+    GetPage(
+      name: _Paths.PERSONAL_SETTING,
+      page: () => const PersonalSettingView(),
+      binding: PersonalSettingBinding(),
     ),
   ];
 }
