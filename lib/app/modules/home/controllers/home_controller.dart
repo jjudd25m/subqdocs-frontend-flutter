@@ -40,6 +40,8 @@ class HomeController extends GetxController {
   TextEditingController toController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
+
+
   RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
   Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
@@ -105,6 +107,7 @@ class HomeController extends GetxController {
   var pagePast = 1;
   Set<int> _loadedThresholds = Set<int>();
   RxBool isLoading = RxBool(false);
+  RxBool noMoreDataPatientList = RxBool(false);
   String getNextRoundedTimeHH() {
     DateTime now = DateTime.now().toUtc();
 
@@ -146,7 +149,7 @@ class HomeController extends GetxController {
     double offset = scrollControllerPatientList.position.pixels;
     int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 50 == 0 && !triggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && currentIndex % 35 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
 
@@ -163,7 +166,7 @@ class HomeController extends GetxController {
     double offset = scrollControllerPastPatientList.position.pixels;
     int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 50 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && currentIndex % 35 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
       pastTriggeredIndexes.add(currentIndex); // Mark as triggered
       getPastVisitListFetchMore();
 
@@ -180,7 +183,7 @@ class HomeController extends GetxController {
     double offset = scrollControllerSchedulePatientList.position.pixels;
     int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 50 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && currentIndex % 35 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
       scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
       getScheduleVisitListFetchMore();
 
@@ -489,6 +492,8 @@ class HomeController extends GetxController {
     if (patientList.length < totalCount) {
       print("pagination is  needed  beacuse ${patientList.length}  is this and $totalCount");
       isLoading.value = true;
+      noMoreDataPatientList.value = false;
+
       Map<String, dynamic> param = {};
 
       param['page'] = ++pagePatient;
@@ -525,6 +530,8 @@ class HomeController extends GetxController {
         pagePatient--;
       }
     } else {
+      noMoreDataPatientList.value = true;
+
       print("no pagination is not needed  beacuse ${patientList.length}  is this and $totalCount");
     }
   }

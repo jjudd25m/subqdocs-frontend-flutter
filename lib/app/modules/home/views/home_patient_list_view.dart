@@ -110,6 +110,8 @@ class HomePatientListView extends GetView<HomeController> {
                         );
                       },
                       isLoading: controller.isLoading.value,
+                    isNoData: controller.noMoreDataPatientList.value,
+
                     ),
                 ),
               ],

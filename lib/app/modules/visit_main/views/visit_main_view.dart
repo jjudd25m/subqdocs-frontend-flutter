@@ -2136,7 +2136,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   children: [
                                     Text(
                                       textAlign: TextAlign.center,
-                                      controller.isExpandRecording.value ? "Recording in Progress" : "Don Jones",
+                                      controller.isExpandRecording.value ? "Recording in Progress" :  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                       style: AppFonts.medium(14, AppColors.textWhite),
                                     ),
                                     Spacer(),
@@ -2524,7 +2524,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     children: [
                                       Text(
                                         textAlign: TextAlign.left,
-                                        "Don Jones",
+                                        "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                         style: AppFonts.regular(14, AppColors.textWhite),
                                       ),
                                       SizedBox(height: 0),
