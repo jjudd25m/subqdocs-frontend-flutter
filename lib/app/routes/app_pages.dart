@@ -104,7 +104,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PERSONAL_SETTING,
-      page: () => const PersonalSettingView(),
+      page: () => PersonalSettingView(),
       binding: PersonalSettingBinding(),
     ),
   ];

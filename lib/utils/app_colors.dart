@@ -56,6 +56,9 @@ class AppColors {
   static const Color lightpurpuleButton = Color(0xFF5B5BE126);
   static const Color filterText = Color(0xFF5B5BE1);
 
+  static const Color dropdownBorderColor = Color(0xFFF2F2F2);
+  static const Color dropdownBackgroundColor = Color(0xFFFBFBFB);
+
   // Filter status color
 
   static const Color filterScheduleColor = Color(0xFF816060);

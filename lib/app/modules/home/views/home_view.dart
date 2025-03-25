@@ -73,6 +73,8 @@ class HomeView extends GetView<HomeController> {
               controller.tabIndex.value = 0;
               controller.globalController.homeTabIndex.value = 3;
               _key.currentState!.closeDrawer();
+            } else {
+              final result = await Get.toNamed(Routes.PERSONAL_SETTING);
             }
           },
         ),
