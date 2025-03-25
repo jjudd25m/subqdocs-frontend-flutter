@@ -130,6 +130,7 @@ class AddPatientController extends GetxController {
 
 
 
+
   @override
   void onInit() {
     super.onInit();

@@ -114,7 +114,21 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                          BreadcrumbWidget(),
+                          Obx(
+                             () {
+                              return BreadcrumbWidget(
+                                breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                onBack: (breadcrumb) {
+                                  controller.globalController.popUntilRoute(breadcrumb);
+                                  // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                  while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                    Get.back();  // Pop the current screen
+                                  }
+                                },
+                              );
+                            }
+                          ),
                           Column(
                             children: <Widget>[
 

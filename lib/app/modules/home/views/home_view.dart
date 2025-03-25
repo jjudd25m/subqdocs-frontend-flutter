@@ -134,7 +134,17 @@ class HomeView extends GetView<HomeController> {
                               children: [
 
 
-                                BreadcrumbWidget(),
+                                BreadcrumbWidget(
+                                  breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                  onBack: (breadcrumb) {
+                                    controller.globalController.popUntilRoute(breadcrumb);
+                                    // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                    while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                      Get.back();  // Pop the current screen
+                                    }
+                                  },
+                                ),
                                 Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),

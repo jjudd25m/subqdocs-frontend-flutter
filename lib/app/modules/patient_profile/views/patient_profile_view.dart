@@ -89,7 +89,17 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 3),
-                                    child: BreadcrumbWidget(),
+                                    child: BreadcrumbWidget(
+                                      breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                      onBack: (breadcrumb) {
+                                        controller.globalController.popUntilRoute(breadcrumb);
+                                        // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                        while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                          Get.back();  // Pop the current screen
+                                        }
+                                      },
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 3),

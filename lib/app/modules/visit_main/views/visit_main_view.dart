@@ -155,7 +155,22 @@ class _VisitMainViewState extends State<VisitMainView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  BreadcrumbWidget(),
+                                  
+                                  BreadcrumbWidget(
+                                    breadcrumbHistory: controller
+                                        .globalController.breadcrumbHistory,
+                                    onBack: (breadcrumb) {
+                                      controller.globalController
+                                          .popUntilRoute(breadcrumb);
+                                      // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                      while (Get.currentRoute !=
+                                          controller.globalController
+                                              .getKeyByValue(breadcrumb)) {
+                                        Get.back(); // Pop the current screen
+                                      }
+                                    },
+                                  ),
                                   // Container(
                                   //   width: double.infinity,
                                   //   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),

@@ -204,7 +204,22 @@ class AddPatientView extends GetView<AddPatientController> {
                               // physics: BouncingScrollPhysics(),
                               padding: EdgeInsets.zero,
                               children: [
-                                BreadcrumbWidget(),
+                                Obx(
+                                  () {
+                                    return BreadcrumbWidget(
+
+                                      breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                      onBack: (breadcrumb) {
+                                        controller.globalController.popUntilRoute(breadcrumb);
+                                        // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                        while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                          Get.back();  // Pop the current screen
+                                        }
+                                      },
+                                    );
+                                  }
+                                ),
                                 Container(
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(Dimen.margin16),

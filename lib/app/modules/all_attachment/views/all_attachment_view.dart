@@ -77,7 +77,21 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BreadcrumbWidget(),
+                    Obx(
+                            () {
+                          return BreadcrumbWidget(
+                            breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                            onBack: (breadcrumb) {
+                              controller.globalController.popUntilRoute(breadcrumb);
+                              // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                              while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                Get.back();  // Pop the current screen
+                              }
+                            },
+                          );
+                        }
+                    ),
                     SingleChildScrollView(
                       child: Container(
                         decoration: BoxDecoration(

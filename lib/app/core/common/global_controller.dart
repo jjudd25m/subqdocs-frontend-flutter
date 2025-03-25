@@ -22,6 +22,11 @@ class GlobalController extends GetxController {
 
 
 
+  int closeFormState = 0;
+
+
+
+
   void popUntilRoute(String targetRoute) {
     int targetIndex = breadcrumbHistory.indexOf(targetRoute);
     if (targetIndex != -1) {
@@ -44,7 +49,9 @@ class GlobalController extends GetxController {
 
   }
 
-  void addRouteInit(String route) {
+  void  addRouteInit(String route) {
+    closeFormState = 1;
+
     breadcrumbHistory.add(breadcrumbs[route] ?? route);
 
   }
@@ -56,11 +63,14 @@ class GlobalController extends GetxController {
 
   // Pop the last route from the stack
   void popRoute() {
-    if (breadcrumbHistory.isNotEmpty) {
-      var poppedRoute = breadcrumbHistory.removeLast();
-      print('Popped Route: $poppedRoute');
-    } else {
-      print('Route stack is empty!');
+
+    if(closeFormState == 1) {
+      if (breadcrumbHistory.isNotEmpty) {
+        var poppedRoute = breadcrumbHistory.removeLast();
+        print('Popped Route: $poppedRoute');
+      } else {
+        print('Route stack is empty!');
+      }
     }
   }
 
