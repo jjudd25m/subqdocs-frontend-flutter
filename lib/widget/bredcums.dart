@@ -60,6 +60,7 @@ class BreadcrumbWidget extends StatelessWidget {
                     ? null // Do nothing for the last item
                     :(){
                   globalController.closeFormState = 0;
+                  globalController.breadcrumbHistory.refresh();
                   onBack(breadcrumb);
 
                 } ,

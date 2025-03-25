@@ -32,12 +32,13 @@ class GlobalController extends GetxController {
     if (targetIndex != -1) {
       // Pop screens above the target route
       breadcrumbHistory.removeRange(targetIndex + 1, breadcrumbHistory.length); // Remove all screens above the target route
-
+      breadcrumbHistory.refresh();
       print('Popped screens above: $targetRoute');
       // Optionally, navigate to the target route after popping
       // Get.toNamed(targetRoute);
     } else {
       print('Target route not found in history');
+      breadcrumbHistory.refresh();
     }
   }
   RxList<String> breadcrumbHistory = RxList([]);
