@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
@@ -18,9 +19,20 @@ class PersonalSettingController extends GetxController {
   final PersonalSettingRepository _personalSettingRepository = PersonalSettingRepository();
   // RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
+  Rxn<GetUserRolesModel> userRolesModel = Rxn<GetUserRolesModel>();
   Rxn<GetUserOrganizationListModel> getUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
   Rxn<GetOrganizationDetailModel> getOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
   Rxn<LoginModel> loginData = Rxn<LoginModel>();
+
+  TextEditingController emailAddressController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  RxBool isValid = RxBool(true);
+  RxnString selectedRoleValue = RxnString("");
+
+  List<String> adminStatus = ["Yes", "No"];
+  RxnString selectedAdminValue = RxnString("Yes");
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -31,6 +43,7 @@ class PersonalSettingController extends GetxController {
     getOrganizationDetail();
     getUserDetail();
     getUserByOrganization();
+    getUserRole();
   }
 
   Future<void> getOrganizationDetail() async {
@@ -44,6 +57,15 @@ class PersonalSettingController extends GetxController {
   Future<void> getUserDetail() async {
     try {
       getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.value?.responseData!.user!.id.toString() ?? "");
+    } catch (error) {
+      customPrint("login catch error is $error");
+    }
+  }
+
+  Future<void> getUserRole() async {
+    try {
+      userRolesModel.value = await _personalSettingRepository.getUserRole();
+      selectedRoleValue.value = userRolesModel.value?.responseData?.first;
     } catch (error) {
       customPrint("login catch error is $error");
     }

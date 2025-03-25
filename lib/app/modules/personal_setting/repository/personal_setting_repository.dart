@@ -27,4 +27,10 @@ class PersonalSettingRepository {
     customPrint("UpdateRoleAndAdminControl API  internal response $response");
     return UpdateRoleAndAdminResponseModel.fromJson(response);
   }
+
+  Future<GetUserRolesModel> getUserRole() async {
+    var response = await ApiProvider.instance.callGet("user/roles");
+    customPrint("getUserRole API  internal response $response");
+    return GetUserRolesModel.fromJson(response);
+  }
 }

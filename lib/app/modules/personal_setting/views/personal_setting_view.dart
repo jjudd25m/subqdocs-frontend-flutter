@@ -22,6 +22,7 @@ import '../../home/model/patient_list_model.dart';
 import '../../patient_profile/widgets/common_patient_data.dart';
 import '../controllers/personal_setting_controller.dart';
 import '../model/get_user_detail_model.dart';
+import 'invite_user_dialog.dart';
 
 class PersonalSettingView extends GetView<PersonalSettingController> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -626,7 +627,15 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                             width: 140,
                                             child: CustomButton(
                                               hight: 40,
-                                              navigate: () async {},
+                                              navigate: () async {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                  builder: (BuildContext context) {
+                                                    return InviteUserDialog(); // Our custom dialog
+                                                  },
+                                                );
+                                              },
                                               label: "Invite User",
                                             ),
                                           )
@@ -940,123 +949,21 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                             maximumSize: WidgetStatePropertyAll(Size.zero),
                             visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
                         itemBuilder: (context) => [
-                              PopupMenuItem(
-                                  padding: EdgeInsets.zero,
-                                  onTap: () async {
-                                    // customPrint(" patient id is ${controller.patientList[rowIndex].id}");
-                                    // await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
-                                    // controller.getPatientList();
-                                  },
-                                  // value: "",
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Patient Details",
-                                      style: AppFonts.regular(14, AppColors.textBlack),
-                                    ),
-                                  )),
-                              // if (controller.patientList[rowIndex].visitId != null)
-                              //   PopupMenuItem(
-                              //       padding: EdgeInsets.zero,
-                              //       // value: "",
-                              //       onTap: () async {
-                              //         dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-                              //           "visitId": controller.patientList[rowIndex].visitId.toString(),
-                              //           "patientId": controller.patientList[rowIndex].id.toString(),
-                              //           "unique_tag": DateTime.now().toString(),
-                              //         });
-                              //         controller.getPatientList();
-                              //         print("back from response");
-                              //       },
-                              //       child: Column(
-                              //         crossAxisAlignment: CrossAxisAlignment.start,
-                              //         children: [
-                              //           Container(
-                              //             width: double.infinity,
-                              //             height: 1,
-                              //             color: AppColors.appbarBorder,
-                              //           ),
-                              //           Padding(
-                              //             padding: const EdgeInsets.all(8.0),
-                              //             child: Text(
-                              //               "Medical record",
-                              //               style: AppFonts.regular(14, AppColors.textBlack),
-                              //             ),
-                              //           ),
-                              //         ],
-                              //       )),
-                              // PopupMenuItem(
-                              //     padding: EdgeInsets.zero,
-                              //     // value: "",
-                              //     onTap: () {
-                              //       showDialog(
-                              //         context: context,
-                              //         barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                              //         builder: (BuildContext context) {
-                              //           return SchedulePatientDialog(
-                              //             receiveParam: (p0, p1) {
-                              //               customPrint("p0 is $p0 p1 is $p1");
-                              //               controller.patientScheduleCreate(param: {"patient_id": controller.patientList[rowIndex].id.toString(), "visit_date": p1, "visit_time": p0});
-                              //             },
-                              //           ); // Our custom dialog
-                              //         },
-                              //       );
-                              //     },
-                              //     child: Column(
-                              //       crossAxisAlignment: CrossAxisAlignment.start,
-                              //       children: [
-                              //         Container(
-                              //           width: double.infinity,
-                              //           height: 1,
-                              //           color: AppColors.appbarBorder,
-                              //         ),
-                              //         Padding(
-                              //           padding: const EdgeInsets.all(8.0),
-                              //           child: Text(
-                              //             "Schedule",
-                              //             style: AppFonts.regular(14, AppColors.textBlack),
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     )),
-                              PopupMenuItem(
-                                  padding: EdgeInsets.zero,
-                                  onTap: () {
-                                    // if (rowIndex != 0) {
-                                    // showDialog(
-                                    //   context: context,
-                                    //   barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                    //   builder: (BuildContext context) {
-                                    //     return DeletePatientDialog(
-                                    //       title: "Are you sure want to delete patient",
-                                    //       onDelete: () {
-                                    //         print("delete id is :- ${controller.patientList[rowIndex].id}");
-                                    //         Get.back();
-                                    //         controller.deletePatientById(controller.patientList[rowIndex].id);
-                                    //       },
-                                    //       header: "Delete Patient",
-                                    //     ); // Our custom dialog
-                                    //   },
-                                    // );
-                                    // }
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 1,
-                                        color: AppColors.appbarBorder,
+                              for (var item in controller.userRolesModel.value?.responseData ?? [])
+                                PopupMenuItem(
+                                    padding: EdgeInsets.zero,
+                                    onTap: () async {
+                                      controller.updateRoleAndAdminControll(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "", item,
+                                          controller.getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin ?? false);
+                                    },
+                                    // value: "",
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        item,
+                                        style: AppFonts.regular(14, AppColors.textBlack),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "Delete",
-                                          style: AppFonts.regular(14, AppColors.textBlack),
-                                        ),
-                                      ),
-                                    ],
-                                  ))
+                                    )),
                             ],
                         child: Container(
                             decoration: BoxDecoration(
