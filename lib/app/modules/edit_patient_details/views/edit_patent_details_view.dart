@@ -18,6 +18,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
@@ -89,7 +90,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                     child: Padding(
                       padding: EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+                          BreadcrumbWidget(),
                           Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(Dimen.margin16),

@@ -29,6 +29,7 @@ class HomePatientListView extends GetView<HomeController> {
                 padding: const EdgeInsets.all(10),
                 child: EmptyPatientScreen(
                     onBtnPress: () async {
+                      controller.globalController.addRoute(Routes.ADD_PATIENT);
                       final result = await Get.toNamed(Routes.ADD_PATIENT);
 
                       controller.getPastVisitList(isFist: true);
@@ -165,6 +166,7 @@ class HomePatientListView extends GetView<HomeController> {
                   child: GestureDetector(
                     onTap: () async{
                       // if (rowIndex != 0) {
+                      controller.globalController.addRoute(Routes.PATIENT_PROFILE);
                      await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
 
                       controller.getPatientList();
@@ -202,6 +204,7 @@ class HomePatientListView extends GetView<HomeController> {
                           padding: EdgeInsets.zero,
                           onTap: () async{
                             customPrint(" patient id is ${controller.patientList[rowIndex].id}");
+                            controller.globalController.addRoute(Routes.PATIENT_PROFILE);
                             await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
                               controller.getPatientList();
 
@@ -219,6 +222,7 @@ class HomePatientListView extends GetView<HomeController> {
                             padding: EdgeInsets.zero,
                             // value: "",
                             onTap: () async {
+                              controller.globalController.addRoute(Routes.VISIT_MAIN);
                               dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                                 "visitId": controller.patientList[rowIndex].visitId.toString(),
                                 "patientId": controller.patientList[rowIndex].id.toString(),

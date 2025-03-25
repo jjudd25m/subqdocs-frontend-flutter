@@ -5,6 +5,8 @@ import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/global_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../forgot_password/models/common_respons.dart';
 import '../../visit_main/model/all_attachment_list_model.dart';
 import '../../visit_main/model/patient_attachment_list_model.dart';
@@ -14,7 +16,7 @@ class AllAttachmentController extends GetxController {
   //TODO: Implement AllAttachmentController
   RxBool isStartRecording = false.obs;
   final count = 0.obs;
-
+  final GlobalController globalController = Get.find();
   RxString referesh = RxString("");
 
   Rxn<AllAttachmentListModel> allAttachmentList = Rxn();
@@ -32,7 +34,7 @@ class AllAttachmentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    globalController.addRouteInit(Routes.ALL_ATTACHMENT);
     visitId.value = Get.arguments["visit_id"];
     // patientAttachmentList = Get.arguments["attachmentList"];
 
@@ -43,6 +45,14 @@ class AllAttachmentController extends GetxController {
 
   }
 
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+
+    globalController.popRoute();
+  }
   Future<void> getAllPatientAttachment() async {
     Map<String, dynamic> param = {};
 

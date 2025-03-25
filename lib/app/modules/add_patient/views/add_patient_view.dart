@@ -22,6 +22,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
@@ -203,6 +204,7 @@ class AddPatientView extends GetView<AddPatientController> {
                               // physics: BouncingScrollPhysics(),
                               padding: EdgeInsets.zero,
                               children: [
+                                BreadcrumbWidget(),
                                 Container(
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(Dimen.margin16),

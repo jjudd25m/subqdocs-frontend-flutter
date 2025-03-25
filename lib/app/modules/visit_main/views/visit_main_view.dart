@@ -20,6 +20,7 @@ import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../core/common/common_service.dart';
@@ -152,902 +153,901 @@ class _VisitMainViewState extends State<VisitMainView> {
                             onRefresh: controller.onRefresh, // Trigger the refresh
                             child: SingleChildScrollView(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(children: <Widget>[
-                                    SizedBox(height: 20.0),
-                                    Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(14),
-                                        child: Text(
-                                          "Patient Medical Record",
-                                          style: AppFonts.regular(17, AppColors.textBlack),
-                                        ),
-                                      ),
+                                  BreadcrumbWidget(),
+                                  // Container(
+                                  //   width: double.infinity,
+                                  //   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.all(14),
+                                  //     child: Text(
+                                  //       "Patient Medical Record",
+                                  //       style: AppFonts.regular(17, AppColors.textBlack),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  SizedBox(height: 0.0),
+                                  Theme(
+                                    data: ThemeData(
+                                      splashColor: Colors.transparent, // Remove splash color
+                                      highlightColor: Colors.transparent, // Remove highlight color
                                     ),
-                                    SizedBox(height: 15.0),
-                                    Theme(
-                                      data: ThemeData(
-                                        splashColor: Colors.transparent, // Remove splash color
-                                        highlightColor: Colors.transparent, // Remove highlight color
-                                      ),
-                                      child: ExpansionTile(
-                                        initiallyExpanded: true,
-                                        collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        backgroundColor: AppColors.backgroundWhite,
-                                        collapsedBackgroundColor: AppColors.backgroundWhite,
-                                        title: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 5),
-                                          child: Row(
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  Get.back();
-                                                },
-                                                child: Container(
-                                                  color: AppColors.white,
-                                                  padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
-                                                  child: SvgPicture.asset(
-                                                    ImagePath.logo_back,
-                                                    height: 20,
-                                                    width: 20,
-                                                  ),
+                                    child: ExpansionTile(
+                                      initiallyExpanded: true,
+                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      backgroundColor: AppColors.backgroundWhite,
+                                      collapsedBackgroundColor: AppColors.backgroundWhite,
+                                      title: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5),
+                                        child: Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Get.back();
+                                              },
+                                              child: Container(
+                                                color: AppColors.white,
+                                                padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
+                                                child: SvgPicture.asset(
+                                                  ImagePath.logo_back,
+                                                  height: 20,
+                                                  width: 20,
                                                 ),
                                               ),
-                                              // SizedBox(
-                                              //   width: 11,
-                                              // ),
-                                              ClipRRect(
-                                                  borderRadius: BorderRadius.circular(30),
-                                                  child: BaseImageView(
-                                                    imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
-                                                    height: 60,
-                                                    width: 60,
-                                                    nameLetters:
-                                                        "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
-                                                    fontSize: 14,
-                                                  )),
-                                              SizedBox(
-                                                width: 10,
+                                            ),
+                                            // SizedBox(
+                                            //   width: 11,
+                                            // ),
+                                            ClipRRect(
+                                                borderRadius: BorderRadius.circular(30),
+                                                child: BaseImageView(
+                                                  imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
+                                                  height: 60,
+                                                  width: 60,
+                                                  nameLetters:
+                                                      "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                                  fontSize: 14,
+                                                )),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""} ",
+                                                  style: AppFonts.medium(16, AppColors.textBlack),
+                                                ),
+                                                SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  controller.patientData.value?.responseData?.patientId ?? "",
+                                                  style: AppFonts.regular(11, AppColors.textGrey),
+                                                ),
+                                              ],
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                      ),
+                                      children: <Widget>[
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    "Age",
+                                                    style: AppFonts.regular(12, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    controller.patientData.value?.responseData?.age.toString() ?? "",
+                                                    style: AppFonts.regular(14, AppColors.textGrey),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    "Gender",
+                                                    style: AppFonts.regular(12, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    controller.patientData.value?.responseData?.gender ?? "",
+                                                    style: AppFonts.regular(14, AppColors.textGrey),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    "Visit Date & Time",
+                                                    style: AppFonts.regular(12, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Text(
+                                                    textAlign: TextAlign.center,
+                                                    formatDateTime(
+                                                        firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
+                                                        secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                                    style: AppFonts.regular(14, AppColors.textGrey),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    textAlign: TextAlign.start,
+                                                    "Medical Assistant",
+                                                    style: AppFonts.regular(12, AppColors.textBlack),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        textAlign: TextAlign.center,
+                                                        "Missie Cooper",
+                                                        style: AppFonts.regular(14, AppColors.textPurple),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.textPurple,
+                                                          borderRadius: BorderRadius.circular(12),
+                                                          border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
+                                                        ),
+                                                        padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
+                                                        child: Text(
+                                                          textAlign: TextAlign.center,
+                                                          "+2",
+                                                          style: AppFonts.bold(10, AppColors.textWhite),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        ImagePath.down_arrow,
+                                                        width: 20,
+                                                        height: 20,
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
                                               ),
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""} ",
-                                                    style: AppFonts.medium(16, AppColors.textBlack),
+                                                    "Doctor",
+                                                    style: AppFonts.regular(12, AppColors.textBlack),
                                                   ),
                                                   SizedBox(
                                                     width: 15,
                                                   ),
-                                                  Text(
-                                                    textAlign: TextAlign.center,
-                                                    controller.patientData.value?.responseData?.patientId ?? "",
-                                                    style: AppFonts.regular(11, AppColors.textGrey),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        textAlign: TextAlign.center,
+                                                        "${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
+                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        ImagePath.down_arrow,
+                                                        width: 20,
+                                                        height: 20,
+                                                      )
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                              Spacer(),
                                             ],
                                           ),
                                         ),
-                                        children: <Widget>[
-                                          Container(
-                                            width: double.infinity,
-                                            height: 1,
-                                            color: AppColors.appbarBorder,
+                                        SizedBox(
+                                          height: 20,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Theme(
+                                    data: ThemeData(
+                                      splashColor: Colors.transparent, // Remove splash color
+                                      highlightColor: Colors.transparent, // Remove highlight color
+                                    ),
+                                    child: ExpansionTile(
+                                      initiallyExpanded: true,
+                                      childrenPadding: EdgeInsets.all(0),
+                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      backgroundColor: AppColors.backgroundWhite,
+                                      collapsedBackgroundColor: AppColors.backgroundWhite,
+                                      title: Row(
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Personal Note",
+                                            style: AppFonts.regular(16, AppColors.textBlack),
                                           ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      "Age",
-                                                      style: AppFonts.regular(12, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 6,
-                                                    ),
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      controller.patientData.value?.responseData?.age.toString() ?? "",
-                                                      style: AppFonts.regular(14, AppColors.textGrey),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      "Gender",
-                                                      style: AppFonts.regular(12, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 6,
-                                                    ),
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      controller.patientData.value?.responseData?.gender ?? "",
-                                                      style: AppFonts.regular(14, AppColors.textGrey),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      "Visit Date & Time",
-                                                      style: AppFonts.regular(12, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 6,
-                                                    ),
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      formatDateTime(
-                                                          firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                                          secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
-                                                      style: AppFonts.regular(14, AppColors.textGrey),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.start,
-                                                      "Medical Assistant",
-                                                      style: AppFonts.regular(12, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 6,
-                                                    ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                // border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                                color: AppColors.backgroundWhite,
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  for (String note in controller.patientData.value?.responseData?.personalNote?.personalNote ?? [])
                                                     Row(
                                                       children: [
-                                                        Text(
-                                                          textAlign: TextAlign.center,
-                                                          "Missie Cooper",
-                                                          style: AppFonts.regular(14, AppColors.textPurple),
-                                                        ),
                                                         SizedBox(
                                                           width: 5,
                                                         ),
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                            color: AppColors.textPurple,
-                                                            borderRadius: BorderRadius.circular(12),
-                                                            border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
+                                                        if (controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1)
+                                                          Text(
+                                                            "•",
+                                                            style: AppFonts.regular(24, AppColors.textDarkGrey),
                                                           ),
-                                                          padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Expanded(
                                                           child: Text(
-                                                            textAlign: TextAlign.center,
-                                                            "+2",
-                                                            style: AppFonts.bold(10, AppColors.textWhite),
+                                                            textAlign: TextAlign.start,
+                                                            maxLines: 2,
+                                                            note,
+                                                            // "He enjoys fishing and gardening. His wife's name is Julie.",
+                                                            style: AppFonts.regular(14, AppColors.textDarkGrey),
                                                           ),
                                                         ),
-                                                        SizedBox(width: 5),
-                                                        SvgPicture.asset(
-                                                          ImagePath.down_arrow,
-                                                          width: 20,
-                                                          height: 20,
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.center,
-                                                      "Doctor",
-                                                      style: AppFonts.regular(12, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 15,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          textAlign: TextAlign.center,
-                                                          "${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
-                                                          style: AppFonts.regular(14, AppColors.textGrey),
+                                                        SizedBox(
+                                                          width: 7,
                                                         ),
-                                                        SizedBox(width: 5),
-                                                        SvgPicture.asset(
-                                                          ImagePath.down_arrow,
-                                                          width: 20,
-                                                          height: 20,
-                                                        )
+                                                        SizedBox(width: 7),
                                                       ],
                                                     ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.0),
-                                    Theme(
-                                      data: ThemeData(
-                                        splashColor: Colors.transparent, // Remove splash color
-                                        highlightColor: Colors.transparent, // Remove highlight color
-                                      ),
-                                      child: ExpansionTile(
-                                        initiallyExpanded: true,
-                                        childrenPadding: EdgeInsets.all(0),
-                                        collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        backgroundColor: AppColors.backgroundWhite,
-                                        collapsedBackgroundColor: AppColors.backgroundWhite,
-                                        title: Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Personal Note",
-                                              style: AppFonts.regular(16, AppColors.textBlack),
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ),
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                                            child: Container(
-                                                decoration: BoxDecoration(
-                                                  // border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                                  color: AppColors.backgroundWhite,
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    for (String note in controller.patientData.value?.responseData?.personalNote?.personalNote ?? [])
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          if (controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1)
-                                                            Text(
-                                                              "•",
-                                                              style: AppFonts.regular(24, AppColors.textDarkGrey),
-                                                            ),
-                                                          SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              textAlign: TextAlign.start,
-                                                              maxLines: 2,
-                                                              note,
-                                                              // "He enjoys fishing and gardening. His wife's name is Julie.",
-                                                              style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 7,
-                                                          ),
-                                                          SizedBox(width: 7),
-                                                        ],
-                                                      ),
-                                                  ],
-                                                )),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 15.0),
-                                    Theme(
-                                      data: ThemeData(
-                                        splashColor: Colors.transparent, // Remove splash color
-                                        highlightColor: Colors.transparent, // Remove highlight color
-                                      ),
-                                      child: ExpansionTile(
-                                        initiallyExpanded: true,
-                                        childrenPadding: EdgeInsets.all(0),
-                                        collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                        backgroundColor: AppColors.backgroundWhite,
-                                        collapsedBackgroundColor: AppColors.backgroundWhite,
-                                        title: Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Patient Medical History",
-                                              style: AppFonts.regular(16, AppColors.textBlack),
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ),
-                                        children: <Widget>[
-                                          Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                      width: double.infinity,
-                                                      padding: EdgeInsets.symmetric(horizontal: 0),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(6.0), topRight: Radius.circular(6)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                                                            ),
-                                                            // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      textAlign: TextAlign.center,
-                                                                      "Cancer History",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
-                                                                    ),
-                                                                    Spacer(),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                            child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory != null ?? false
-                                                                ? ListView.builder(
-                                                                    shrinkWrap: true,
-                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                    itemBuilder: (context, index) => InkWell(
-                                                                          onTap: () {},
-                                                                          child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 2),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                                    children: [
-                                                                                      SizedBox(width: 10),
-                                                                                      Text(
-                                                                                        "•",
-                                                                                        style: AppFonts.regular(24, AppColors.textGrey),
-                                                                                      ),
-                                                                                      SizedBox(width: 10),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory ?? "",
-                                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 0),
-                                                                                ],
-                                                                              )),
-                                                                        ),
-                                                                    itemCount: 1)
-                                                                : Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        textAlign: TextAlign.left,
-                                                                        "No data available",
-                                                                        style: AppFonts.medium(16, AppColors.textBlack),
-                                                                      ),
-                                                                      Spacer()
-                                                                    ],
-                                                                  ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  SizedBox(height: 10),
-                                                  Container(
-                                                      width: double.infinity,
-                                                      padding: EdgeInsets.symmetric(horizontal: 0),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                                                            ),
-                                                            // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      textAlign: TextAlign.center,
-                                                                      "Medication History",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
-                                                                    ),
-                                                                    Spacer(),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                            child: Column(
-                                                              children: [
-                                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null
-                                                                    ? Row(
-                                                                        mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                        crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                        children: [
-                                                                          SizedBox(width: 7),
-                                                                          SizedBox(
-                                                                            width: Get.width * .25,
-                                                                            child: Text(
-                                                                              "Medication Name",
-                                                                              style: AppFonts.regular(14, AppColors.black),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(width: 7),
-                                                                          SizedBox(
-                                                                            width: Get.width * .45,
-                                                                            child: Text(
-                                                                              "Purpose",
-                                                                              style: AppFonts.regular(14, AppColors.black),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(width: 7),
-                                                                          SizedBox(
-                                                                            width: Get.width * .15,
-                                                                            child: Text(
-                                                                              "Dosage",
-                                                                              style: AppFonts.regular(14, AppColors.black),
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(width: 7),
-                                                                        ],
-                                                                      )
-                                                                    : SizedBox(),
-                                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ? SizedBox(height: 10) : SizedBox(),
-                                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null
-                                                                    ? Container(
-                                                                        height: 0.5,
-                                                                        width: double.infinity,
-                                                                        color: AppColors.textGrey,
-                                                                      )
-                                                                    : SizedBox(),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 7,
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                            child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
-                                                                ? ListView.builder(
-                                                                    shrinkWrap: true,
-                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                    itemBuilder: (context, index) => InkWell(
-                                                                          onTap: () {},
-                                                                          child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 2),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                                    children: [
-                                                                                      SizedBox(width: 7),
-                                                                                      SizedBox(
-                                                                                        width: Get.width * .25,
-                                                                                        child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "") != ""
-                                                                                            ? Text(
-                                                                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "-",
-                                                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                              )
-                                                                                            : Text(
-                                                                                                "-",
-                                                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                              ),
-                                                                                      ),
-                                                                                      SizedBox(width: 7),
-                                                                                      SizedBox(
-                                                                                        width: Get.width * .45,
-                                                                                        child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "") != ""
-                                                                                            ? Text(
-                                                                                                (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "-"),
-                                                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                              )
-                                                                                            : Text(
-                                                                                                "-",
-                                                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                              ),
-                                                                                      ),
-                                                                                      SizedBox(width: 7),
-                                                                                      SizedBox(
-                                                                                        width: Get.width * .15,
-                                                                                        child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "") != ""
-                                                                                            ? Text(
-                                                                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "-",
-                                                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                              )
-                                                                                            : Text(
-                                                                                                "-",
-                                                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                              ),
-                                                                                      ),
-                                                                                      SizedBox(width: 7),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 0),
-                                                                                ],
-                                                                              )),
-                                                                        ),
-                                                                    itemCount: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?.length ?? 0)
-                                                                : Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        textAlign: TextAlign.left,
-                                                                        "No data available",
-                                                                        style: AppFonts.medium(16, AppColors.textBlack),
-                                                                      ),
-                                                                      Spacer()
-                                                                    ],
-                                                                  ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  SizedBox(height: 10),
-                                                  Container(
-                                                      width: double.infinity,
-                                                      padding: EdgeInsets.symmetric(horizontal: 0),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(6),
-                                                                topRight: Radius.circular(6),
-                                                              ),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                                                            ),
-                                                            // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      textAlign: TextAlign.center,
-                                                                      "Skin History",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
-                                                                    ),
-                                                                    Spacer(),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                            child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory != null
-                                                                ? ListView.builder(
-                                                                    shrinkWrap: true,
-                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                    itemBuilder: (context, index) => InkWell(
-                                                                          onTap: () {},
-                                                                          child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 2),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                                    children: [
-                                                                                      SizedBox(width: 10),
-                                                                                      Text(
-                                                                                        "•",
-                                                                                        style: AppFonts.regular(24, AppColors.black),
-                                                                                      ),
-                                                                                      SizedBox(width: 10),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory ?? "",
-                                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 0),
-                                                                                ],
-                                                                              )),
-                                                                        ),
-                                                                    itemCount: 1)
-                                                                : Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        textAlign: TextAlign.left,
-                                                                        "No data available",
-                                                                        style: AppFonts.medium(16, AppColors.textBlack),
-                                                                      ),
-                                                                      Spacer()
-                                                                    ],
-                                                                  ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  SizedBox(height: 10),
-                                                  Container(
-                                                      width: double.infinity,
-                                                      padding: EdgeInsets.symmetric(horizontal: 0),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(6),
-                                                                topRight: Radius.circular(6),
-                                                              ),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                                                            ),
-                                                            // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      textAlign: TextAlign.center,
-                                                                      "Social History",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
-                                                                    ),
-                                                                    Spacer(),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                            child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory != null ?? false
-                                                                ? ListView.builder(
-                                                                    shrinkWrap: true,
-                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                    itemBuilder: (context, index) => InkWell(
-                                                                          onTap: () {},
-                                                                          child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 2),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                                    children: [
-                                                                                      SizedBox(width: 10),
-                                                                                      Text(
-                                                                                        "•",
-                                                                                        style: AppFonts.regular(24, AppColors.black),
-                                                                                      ),
-                                                                                      SizedBox(width: 10),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory ?? "",
-                                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 0),
-                                                                                ],
-                                                                              )),
-                                                                        ),
-                                                                    itemCount: 1)
-                                                                : Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        textAlign: TextAlign.left,
-                                                                        "No data available",
-                                                                        style: AppFonts.medium(16, AppColors.textBlack),
-                                                                      ),
-                                                                      Spacer()
-                                                                    ],
-                                                                  ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  SizedBox(height: 10),
-                                                  Container(
-                                                      width: double.infinity,
-                                                      padding: EdgeInsets.symmetric(horizontal: 0),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                                                        color: AppColors.white,
-                                                        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(6),
-                                                                topRight: Radius.circular(6),
-                                                              ),
-                                                              color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                                                            ),
-                                                            // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      textAlign: TextAlign.center,
-                                                                      "Allergies",
-                                                                      style: AppFonts.medium(16, AppColors.textPurple),
-                                                                    ),
-                                                                    Spacer(),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                            child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies != null ?? false
-                                                                ? ListView.builder(
-                                                                    shrinkWrap: true,
-                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                    itemBuilder: (context, index) => InkWell(
-                                                                          onTap: () {},
-                                                                          child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  SizedBox(height: 2),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
-                                                                                    children: [
-                                                                                      SizedBox(width: 10),
-                                                                                      Text(
-                                                                                        "•",
-                                                                                        style: AppFonts.regular(24, AppColors.black),
-                                                                                      ),
-                                                                                      SizedBox(width: 10),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "",
-                                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: 0),
-                                                                                ],
-                                                                              )),
-                                                                        ),
-                                                                    itemCount: 1)
-                                                                : Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        textAlign: TextAlign.left,
-                                                                        "No data available",
-                                                                        style: AppFonts.medium(16, AppColors.textBlack),
-                                                                      ),
-                                                                      Spacer()
-                                                                    ],
-                                                                  ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      )),
                                                 ],
                                               )),
-                                          SizedBox(
-                                            height: 10,
-                                          )
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15.0),
+                                  Theme(
+                                    data: ThemeData(
+                                      splashColor: Colors.transparent, // Remove splash color
+                                      highlightColor: Colors.transparent, // Remove highlight color
+                                    ),
+                                    child: ExpansionTile(
+                                      initiallyExpanded: true,
+                                      childrenPadding: EdgeInsets.all(0),
+                                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                      backgroundColor: AppColors.backgroundWhite,
+                                      collapsedBackgroundColor: AppColors.backgroundWhite,
+                                      title: Row(
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            "Patient Medical History",
+                                            style: AppFonts.regular(16, AppColors.textBlack),
+                                          ),
+                                          Spacer(),
                                         ],
                                       ),
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6.0), topRight: Radius.circular(6)),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Cancer History",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory != null ?? false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(24, AppColors.textGrey),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory ?? "",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Medication History",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null
+                                                                  ? Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                      crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                      children: [
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .25,
+                                                                          child: Text(
+                                                                            "Medication Name",
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .45,
+                                                                          child: Text(
+                                                                            "Purpose",
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                        SizedBox(
+                                                                          width: Get.width * .15,
+                                                                          child: Text(
+                                                                            "Dosage",
+                                                                            style: AppFonts.regular(14, AppColors.black),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(width: 7),
+                                                                      ],
+                                                                    )
+                                                                  : SizedBox(),
+                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ? SizedBox(height: 10) : SizedBox(),
+                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null
+                                                                  ? Container(
+                                                                      height: 0.5,
+                                                                      width: double.infinity,
+                                                                      color: AppColors.textGrey,
+                                                                    )
+                                                                  : SizedBox(),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 7,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 7),
+                                                                                    SizedBox(
+                                                                                      width: Get.width * .25,
+                                                                                      child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "") != ""
+                                                                                          ? Text(
+                                                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].title ?? "-",
+                                                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                            )
+                                                                                          : Text(
+                                                                                              "-",
+                                                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                            ),
+                                                                                    ),
+                                                                                    SizedBox(width: 7),
+                                                                                    SizedBox(
+                                                                                      width: Get.width * .45,
+                                                                                      child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "") != ""
+                                                                                          ? Text(
+                                                                                              (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].purpose ?? "-"),
+                                                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                            )
+                                                                                          : Text(
+                                                                                              "-",
+                                                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                            ),
+                                                                                    ),
+                                                                                    SizedBox(width: 7),
+                                                                                    SizedBox(
+                                                                                      width: Get.width * .15,
+                                                                                      child: (controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "") != ""
+                                                                                          ? Text(
+                                                                                              controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?[index].dosage ?? "-",
+                                                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                            )
+                                                                                          : Text(
+                                                                                              "-",
+                                                                                              style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                            ),
+                                                                                    ),
+                                                                                    SizedBox(width: 7),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )),
+                                                                      ),
+                                                                  itemCount: controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications?.length ?? 0)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Skin History",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory != null
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory ?? "",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Social History",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory != null ?? false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory ?? "",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(height: 10),
+                                                Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      color: AppColors.white,
+                                                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(6),
+                                                              topRight: Radius.circular(6),
+                                                            ),
+                                                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
+                                                          ),
+                                                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    textAlign: TextAlign.center,
+                                                                    "Allergies",
+                                                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                                                  ),
+                                                                  Spacer(),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          child: controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies != null ?? false
+                                                              ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics: NeverScrollableScrollPhysics(),
+                                                                  itemBuilder: (context, index) => InkWell(
+                                                                        onTap: () {},
+                                                                        child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                                            child: Column(
+                                                                              children: [
+                                                                                SizedBox(height: 2),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start, // Align the row content to the start
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center, // Align the content vertically centered
+                                                                                  children: [
+                                                                                    SizedBox(width: 10),
+                                                                                    Text(
+                                                                                      "•",
+                                                                                      style: AppFonts.regular(24, AppColors.black),
+                                                                                    ),
+                                                                                    SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "",
+                                                                                        style: AppFonts.regular(14, AppColors.textGrey),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 0),
+                                                                              ],
+                                                                            )),
+                                                                      ),
+                                                                  itemCount: 1)
+                                                              : Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      textAlign: TextAlign.left,
+                                                                      "No data available",
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                                    ),
+                                                                    Spacer()
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    )),
+                                              ],
+                                            )),
+                                        SizedBox(
+                                          height: 10,
+                                        )
+                                      ],
                                     ),
-                                  ]),
+                                  ),
                                   SizedBox(height: 10),
                                   Theme(
                                     data: ThemeData(
@@ -1150,12 +1150,15 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     onTap: () {
                                                                       print("print");
                                                                       Get.back();
-
+                                                                      controller.globalController.addRoute(Routes.VISIT_MAIN);
                                                                       Get.toNamed(Routes.VISIT_MAIN, arguments: {
                                                                         "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString(),
                                                                         "patientId": controller.patientId.value,
                                                                         "unique_tag": DateTime.now().toString(),
                                                                       });
+
+
+
                                                                     },
                                                                     child: Text(
                                                                       maxLines: 1,
@@ -1342,12 +1345,14 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               GestureDetector(
                                                                 onTap: () {
                                                                   print("vid:- ${controller.visitRecapList.value?.responseData?[index].id} pid:- ${controller.patientId.value}");
-
+                                                                  controller.globalController.addRoute(Routes.PATIENT_INFO);
                                                                   Get.toNamed(Routes.PATIENT_INFO, arguments: {
                                                                     "visitId": controller.visitRecapList.value?.responseData?[index].id.toString(),
                                                                     "patientId": controller.patientId.value,
                                                                     "unique_tag": DateTime.now().toString(),
                                                                   });
+
+
                                                                 },
                                                                 child: Text(
                                                                   textAlign: TextAlign.center,
@@ -1397,9 +1402,12 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           GestureDetector(
                                             onTap: () async {
                                               if (controller.isConnected.value) {
+
+                                                controller.globalController.addRoute(Routes.ALL_ATTACHMENT);
                                                 var result = await Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
                                                   "visit_id": controller.patientId.value,
                                                 });
+
 
                                                 if (result != null) {
                                                   controller.getPatientAttachment();

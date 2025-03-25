@@ -3,10 +3,82 @@ import '../../modules/home/model/FilterListingModel.dart';
 import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_schedule_list_sorting_model.dart';
+import '../../routes/app_pages.dart';
 import 'app_preferences.dart';
 
 class GlobalController extends GetxController {
   RxInt homeTabIndex = RxInt(0);
+  // var breadcrumbHistory = <String>[];
+
+  Map<String, String> breadcrumbs = {
+    Routes.HOME: 'Patients & Visits',
+    Routes.ADD_PATIENT: 'Add New',
+    Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information',
+    Routes.VISIT_MAIN: 'Patient Medical Record',
+    Routes.PATIENT_INFO: 'Patient Visit Record',
+    Routes.PATIENT_PROFILE: 'Patient Profile',
+    Routes.ALL_ATTACHMENT: 'View All Attachments',
+  };
+
+
+
+  void popUntilRoute(String targetRoute) {
+    int targetIndex = breadcrumbHistory.indexOf(targetRoute);
+    if (targetIndex != -1) {
+      // Pop screens above the target route
+      breadcrumbHistory.removeRange(targetIndex + 1, breadcrumbHistory.length); // Remove all screens above the target route
+
+      print('Popped screens above: $targetRoute');
+      // Optionally, navigate to the target route after popping
+      // Get.toNamed(targetRoute);
+    } else {
+      print('Target route not found in history');
+    }
+  }
+  RxList<String> breadcrumbHistory = RxList([]);
+
+
+  // as of now dont use furher this  function
+  void addRoute(String route) {
+    // breadcrumbHistory.add(breadcrumbs[route] ?? route);
+
+  }
+
+  void addRouteInit(String route) {
+    breadcrumbHistory.add(breadcrumbs[route] ?? route);
+
+  }
+
+  String getKeyByValue(String value) {
+    // Iterate over the map and check for a match
+    return breadcrumbs.keys.firstWhere((key) => breadcrumbs[key] == value, orElse: () => 'Not Found');
+  }
+
+  // Pop the last route from the stack
+  void popRoute() {
+    if (breadcrumbHistory.isNotEmpty) {
+      var poppedRoute = breadcrumbHistory.removeLast();
+      print('Popped Route: $poppedRoute');
+    } else {
+      print('Route stack is empty!');
+    }
+  }
+
+  // Get the current route stack
+  List<String> getRouteStack() {
+    return breadcrumbHistory;
+  }
+
+  // Optionally, clear the entire stack
+  void clearStack() {
+    breadcrumbHistory.clear();
+    print('Cleared route stack');
+  }
+
+
+
+
+
 
   List<Map<String, dynamic>> sortingPastPatient = [
     {"id": "first_name", "desc": true},

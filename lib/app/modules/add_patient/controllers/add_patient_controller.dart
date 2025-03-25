@@ -18,8 +18,10 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../models/media_listing_model.dart';
+import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../model/add_patient_model.dart';
 import '../repository/add_patient_repository.dart';
@@ -28,7 +30,7 @@ class AddPatientController extends GetxController {
   //TODO: Implement AddPatientController
 
   RxBool isSaveAddAnother = RxBool(false);
-
+  final GlobalController globalController = Get.find();
   final AddPatientRepository _addPatientRepository = AddPatientRepository();
   RxBool isLoading = RxBool(false);
 
@@ -115,14 +117,30 @@ class AddPatientController extends GetxController {
     visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
   }
 
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    globalController.popRoute();
+
+
+
+  }
+
+
+
   @override
   void onInit() {
     super.onInit();
-
+    globalController.addRouteInit(Routes.ADD_PATIENT);
     contactNumberController.text = "+1";
     print(getNextRoundedTime());
     selectedVisitTimeValue.value = getNextRoundedTime();
   }
+
+
+
 
   String _formatFileSize(int bytes) {
     double sizeInKB = bytes / 1024; // Convert bytes to KB
