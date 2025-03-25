@@ -208,7 +208,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                   () {
                                     return BreadcrumbWidget(
 
-                                      breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                      breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                       onBack: (breadcrumb) {
                                         controller.globalController.popUntilRoute(breadcrumb);
                                         // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));

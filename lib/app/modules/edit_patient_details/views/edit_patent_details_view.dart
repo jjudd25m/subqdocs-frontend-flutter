@@ -92,19 +92,21 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Obx(
+                                  () {
+                                return BreadcrumbWidget(
+                                  breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                  onBack: (breadcrumb) {
+                                    controller.globalController.popUntilRoute(breadcrumb);
+                                    // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                      BreadcrumbWidget(
-
-                      breadcrumbHistory: controller.globalController.breadcrumbHistory,
-                        onBack: (breadcrumb) {
-                          controller.globalController.popUntilRoute(breadcrumb);
-                          // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
-
-                          while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                            Get.back();  // Pop the current screen
-                          }
-                        },
-                      ),
+                                    while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                      Get.back();  // Pop the current screen
+                                    }
+                                  },
+                                );
+                              }
+                          ),
                           Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(Dimen.margin16),

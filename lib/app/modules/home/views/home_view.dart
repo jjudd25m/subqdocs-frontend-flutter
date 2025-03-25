@@ -135,7 +135,7 @@ class HomeView extends GetView<HomeController> {
 
 
                                 BreadcrumbWidget(
-                                  breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                  breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                   onBack: (breadcrumb) {
                                     controller.globalController.popUntilRoute(breadcrumb);
                                     // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));

@@ -155,10 +155,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  
+
                                   BreadcrumbWidget(
                                     breadcrumbHistory: controller
-                                        .globalController.breadcrumbHistory,
+                                        .globalController.breadcrumbHistory.value,
                                     onBack: (breadcrumb) {
                                       controller.globalController
                                           .popUntilRoute(breadcrumb);

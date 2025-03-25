@@ -117,7 +117,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                           Obx(
                              () {
                               return BreadcrumbWidget(
-                                breadcrumbHistory: controller.globalController.breadcrumbHistory,
+                                breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                 onBack: (breadcrumb) {
                                   controller.globalController.popUntilRoute(breadcrumb);
                                   // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
