@@ -43,3 +43,19 @@ class CustomTextInputFormatter extends TextInputFormatter {
     );
   }
 }
+
+class PostalCodeFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    // Define a regex pattern that allows only 5 digits
+    final regex = RegExp(r'^[0-9]{0,5}$');
+
+    // If the input matches the regex pattern (i.e., it is 5 digits or less), accept the input
+    if (regex.hasMatch(newValue.text)) {
+      return newValue;
+    }
+
+    // If the input doesn't match the regex pattern, return the old value (prevent any change)
+    return oldValue;
+  }
+}

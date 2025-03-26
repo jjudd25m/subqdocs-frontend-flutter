@@ -18,6 +18,7 @@ abstract class Routes {
   static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
   static const SIGN_UP = _Paths.SIGN_UP;
   static const PERSONAL_SETTING = _Paths.PERSONAL_SETTING;
+  static const INVITED_USER_SUBMITTED = _Paths.INVITED_USER_SUBMITTED;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const FORGOT_PASSWORD = '/forgot-password';
   static const SIGN_UP = '/sign-up';
   static const PERSONAL_SETTING = '/personal-setting';
+  static const INVITED_USER_SUBMITTED = '/invited-user-submitted';
 }

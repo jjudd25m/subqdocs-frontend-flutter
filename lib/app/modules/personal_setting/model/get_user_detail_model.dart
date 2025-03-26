@@ -511,3 +511,73 @@ class GetUserRolesModel {
     return data;
   }
 }
+
+class InvitedUserResponseModel {
+  InvitedUserResponseData? responseData;
+  String? message;
+  bool? toast;
+  String? responseType;
+
+  InvitedUserResponseModel({this.responseData, this.message, this.toast, this.responseType});
+
+  InvitedUserResponseModel.fromJson(Map<String, dynamic> json) {
+    responseData = json['responseData'] != null ? new InvitedUserResponseData.fromJson(json['responseData']) : null;
+    message = json['message'];
+    toast = json['toast'];
+    responseType = json['response_type'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.responseData != null) {
+      data['responseData'] = this.responseData!.toJson();
+    }
+    data['message'] = this.message;
+    data['toast'] = this.toast;
+    data['response_type'] = this.responseType;
+    return data;
+  }
+}
+
+class InvitedUserResponseData {
+  int? id;
+  int? fromUser;
+  int? toUser;
+  bool? isAdmin;
+  String? status;
+  String? role;
+  int? organizationId;
+  String? updatedAt;
+  String? createdAt;
+  Null? deletedAt;
+
+  InvitedUserResponseData({this.id, this.fromUser, this.toUser, this.isAdmin, this.status, this.role, this.organizationId, this.updatedAt, this.createdAt, this.deletedAt});
+
+  InvitedUserResponseData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    fromUser = json['from_user'];
+    toUser = json['to_user'];
+    isAdmin = json['is_admin'];
+    status = json['status'];
+    role = json['role'];
+    organizationId = json['organization_id'];
+    updatedAt = json['updated_at'];
+    createdAt = json['created_at'];
+    deletedAt = json['deleted_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['from_user'] = this.fromUser;
+    data['to_user'] = this.toUser;
+    data['is_admin'] = this.isAdmin;
+    data['status'] = this.status;
+    data['role'] = this.role;
+    data['organization_id'] = this.organizationId;
+    data['updated_at'] = this.updatedAt;
+    data['created_at'] = this.createdAt;
+    data['deleted_at'] = this.deletedAt;
+    return data;
+  }
+}

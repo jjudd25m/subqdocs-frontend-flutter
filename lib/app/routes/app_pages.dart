@@ -10,6 +10,8 @@ import '../modules/forgot_password/bindings/forgot_password_binding.dart';
 import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/invited_user_submitted/bindings/invited_user_submitted_binding.dart';
+import '../modules/invited_user_submitted/views/invited_user_submitted_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/patient_info/bindings/patient_info_binding.dart';
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.PERSONAL_SETTING,
       page: () => PersonalSettingView(),
       binding: PersonalSettingBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVITED_USER_SUBMITTED,
+      page: () => InvitedUserSubmittedView(),
+      binding: InvitedUserSubmittedBinding(),
     ),
   ];
 }

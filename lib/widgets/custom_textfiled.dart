@@ -21,6 +21,8 @@ class TextFormFiledWidget extends StatefulWidget {
   final String? hint;
   final String? Function(String?)? checkValidation;
   final Widget? iconButton;
+  final int? maxLines;
+  final int? maxLength;
 
   bool readOnly;
 
@@ -42,6 +44,8 @@ class TextFormFiledWidget extends StatefulWidget {
       this.type = TextInputType.text,
       this.onTap,
       this.suffixIcon,
+      this.maxLines = null,
+      this.maxLength = null,
       this.prefixIcon});
 
   @override
@@ -88,6 +92,8 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
             Expanded(
               child: Container(
                 child: TextFormField(
+                  maxLength: widget.maxLength,
+                  maxLines: widget.maxLines,
                   readOnly: widget.readOnly,
                   onChanged: (value) {
                     if (widget.isFirst == true) {
@@ -111,9 +117,8 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
                             onTap: () {
                               widget.onTap?.call();
 
-                              if(widget.isFirst == true)
-                              {
-                              widget.isSuffixIconVisible = false;
+                              if (widget.isFirst == true) {
+                                widget.isSuffixIconVisible = false;
                               }
                               setState(() {});
                             },

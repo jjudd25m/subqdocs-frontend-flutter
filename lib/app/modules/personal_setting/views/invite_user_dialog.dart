@@ -12,6 +12,10 @@ import '../../../../widgets/custom_textfiled.dart';
 import '../controllers/personal_setting_controller.dart';
 
 class InviteUserDialog extends GetView<PersonalSettingController> {
+  final void Function(Map<String, dynamic>) receiveParam;
+
+  InviteUserDialog({super.key, required this.receiveParam});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -252,8 +256,18 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                             width: 100,
                             child: CustomButton(
                               navigate: () {
-                                // controller.addImage();
-                                Navigator.pop(context);
+                                if (controller.formKey.currentState!.validate()) {
+                                  Map<String, dynamic> param = Map<String, dynamic>();
+                                  param["email"] = controller.emailAddressController.text;
+                                  param["is_admin"] = controller.selectedAdminValue.value == "Yes" ? true : false;
+                                  param["first_name"] = controller.firstNameController.text;
+                                  param["last_name"] = controller.lastNameController.text;
+                                  param["role"] = controller.selectedRoleValue.value;
+
+                                  receiveParam(param);
+                                  // controller.addImage();
+                                  Navigator.pop(context);
+                                }
                               },
                               label: "Invite",
                             ),

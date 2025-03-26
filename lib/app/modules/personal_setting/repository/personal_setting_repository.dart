@@ -5,7 +5,7 @@ import '../model/get_user_detail_model.dart';
 
 class PersonalSettingRepository {
   Future<GetUserDetailModel> getUserDetail({required String userId}) async {
-    var response = await ApiProvider.instance.callGet("user/$userId");
+    var response = await ApiProvider.instance.callGet("user");
     customPrint("getUserDetail API  internal response $response");
     return GetUserDetailModel.fromJson(response);
   }
@@ -32,5 +32,23 @@ class PersonalSettingRepository {
     var response = await ApiProvider.instance.callGet("user/roles");
     customPrint("getUserRole API  internal response $response");
     return GetUserRolesModel.fromJson(response);
+  }
+
+  Future<InvitedUserResponseModel> userInvite({required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callPost("user/invite", params: param);
+    customPrint("userInvite API  internal response $response");
+    return InvitedUserResponseModel.fromJson(response);
+  }
+
+  Future<dynamic> updateUserDetail({required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callPut("user", param);
+    customPrint("updateOrganization API  internal response $response");
+    return response;
+  }
+
+  Future<dynamic> updateOrganization({required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callPut("organization", param);
+    customPrint("updateOrganization API  internal response $response");
+    return response;
   }
 }
