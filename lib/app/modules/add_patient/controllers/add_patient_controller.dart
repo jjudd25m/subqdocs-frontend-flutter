@@ -122,7 +122,14 @@ class AddPatientController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    globalController.popRoute();
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.ADD_PATIENT || globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.SCHEDULE_PATIENT )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
 
 
 
@@ -134,7 +141,16 @@ class AddPatientController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    globalController.addRouteInit(Routes.ADD_PATIENT);
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      if(Get.currentRoute == Routes.ADD_PATIENT) {
+        globalController.addRouteInit(Routes.ADD_PATIENT);
+      }else{
+        globalController.addRouteInit(Routes.SCHEDULE_PATIENT);
+      }
+    });
     contactNumberController.text = "+1";
     print(getNextRoundedTime());
     selectedVisitTimeValue.value = getNextRoundedTime();

@@ -75,6 +75,12 @@ class AppPages {
       page: () => AddPatientView(),
       binding: AddPatientBinding(),
     ),
+
+    GetPage(
+      name: _Paths.SCHEDULE_PATIENT,
+      page: () => AddPatientView(),
+      binding: AddPatientBinding(),
+    ),
     GetPage(
       name: _Paths.EDIT_PATENT_DETAILS,
       page: () => EditPatentDetailsView(),

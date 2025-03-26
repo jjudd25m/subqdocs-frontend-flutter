@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/utils/Loader.dart';
@@ -28,7 +29,15 @@ class PatientProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    globalController.addRouteInit(Routes.PATIENT_PROFILE);
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      globalController.addRouteInit(Routes.PATIENT_PROFILE);
+
+
+    });
     print("PatientProfileController init called");
     patientId = Get.arguments["patientData"];
     visitId = Get.arguments["visitId"];
@@ -45,7 +54,15 @@ class PatientProfileController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    globalController.popRoute();
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.PATIENT_PROFILE )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
+
   }
 
   Future<void> onRefresh() async {

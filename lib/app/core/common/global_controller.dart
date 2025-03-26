@@ -14,10 +14,11 @@ class GlobalController extends GetxController {
     Routes.HOME: 'Patients & Visits',
     Routes.ADD_PATIENT: 'Add New',
     Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information',
-    Routes.VISIT_MAIN: 'Patient Medical Record',
-    Routes.PATIENT_INFO: 'Patient Visit Record',
+    Routes.VISIT_MAIN: 'Visit Main',
+    Routes.PATIENT_INFO: 'Visit Documents',
     Routes.PATIENT_PROFILE: 'Patient Profile',
-    Routes.ALL_ATTACHMENT: 'View All Attachments',
+    Routes.ALL_ATTACHMENT: 'Attachments',
+    Routes.SCHEDULE_PATIENT: 'Schedule Visit',
   };
 
 
@@ -34,6 +35,7 @@ class GlobalController extends GetxController {
       breadcrumbHistory.removeRange(targetIndex + 1, breadcrumbHistory.length); // Remove all screens above the target route
       breadcrumbHistory.refresh();
       print('Popped screens above: $targetRoute');
+      // closeFormState = 0;
       // Optionally, navigate to the target route after popping
       // Get.toNamed(targetRoute);
     } else {
@@ -65,14 +67,17 @@ class GlobalController extends GetxController {
   // Pop the last route from the stack
   void popRoute() {
 
-    if(closeFormState == 1) {
+    // if(closeFormState == 1) {
       if (breadcrumbHistory.isNotEmpty) {
         var poppedRoute = breadcrumbHistory.removeLast();
         print('Popped Route: $poppedRoute');
       } else {
         print('Route stack is empty!');
       }
-    }
+    // }else{
+    //   closeFormState = 1;
+    //
+    // }
   }
 
   // Get the current route stack

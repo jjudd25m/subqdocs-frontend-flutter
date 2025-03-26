@@ -102,7 +102,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(this);
-    globalController.addRouteInit(Routes.PATIENT_INFO);
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.PATIENT_INFO);
+
+    });
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     customPrint("argument is :- ${Get.arguments}");
@@ -582,7 +587,15 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    globalController.popRoute();
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.PATIENT_INFO )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
   }
   Future<void> onRefresh() async {
     print("_onRefresh called");

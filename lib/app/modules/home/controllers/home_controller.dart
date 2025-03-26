@@ -338,10 +338,10 @@ class HomeController extends GetxController {
     if (patientListModel.value?.responseData?.data != null) {
       patientList.value = patientListModel.value?.responseData?.data ?? [];
 
-      if(patientList.length > 80)
-        {
-          isLoading.value = true;
-        }
+      // if(patientList.length > 80)
+      //   {
+      //     isLoading.value = true;
+      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -394,11 +394,11 @@ class HomeController extends GetxController {
     if (scheduleVisitListModel.value?.responseData?.data != null) {
       scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
 
-      if(scheduleVisitList.length >=80)
-        {
-          isLoading.value = true;
-
-        }
+      // if(scheduleVisitList.length >=80)
+      //   {
+      //     isLoading.value = true;
+      //
+      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -454,12 +454,12 @@ class HomeController extends GetxController {
     if (pastVisitListModel.value?.responseData?.data != null) {
       pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
 
-      if(pastVisitList.length >=80)
-        {
-          isLoading.value = true;
-
-
-        }
+      // if(pastVisitList.length >=80)
+      //   {
+      //     isLoading.value = true;
+      //
+      //
+      //   }
       getLast2DaysData();
       getOfflineData();
     }

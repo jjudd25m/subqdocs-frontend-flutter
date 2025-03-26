@@ -88,7 +88,12 @@ class EditPatentDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    globalController.addRouteInit(Routes.EDIT_PATENT_DETAILS);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.EDIT_PATENT_DETAILS);
+    });
+
+
     customPrint("edit patient list  ${Get.arguments["patientData"]}");
 
     patientId = Get.arguments["patientData"];
@@ -105,7 +110,15 @@ class EditPatentDetailsController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    globalController.popRoute();
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.EDIT_PATENT_DETAILS )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
 
 
   }

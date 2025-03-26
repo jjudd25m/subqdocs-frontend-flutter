@@ -353,8 +353,16 @@ class HomeView extends GetView<HomeController> {
                                                       hight: 40,
                                                       navigate: () async {
 
-
-                                                        final result = await Get.toNamed(Routes.ADD_PATIENT);
+                                                       var result ;
+                                                        if(controller.tabIndex.value == 0) {
+                                                         await Get
+                                                              .toNamed(Routes
+                                                              .ADD_PATIENT);
+                                                        }else{
+                                                          final result = await Get
+                                                              .toNamed(Routes
+                                                              .SCHEDULE_PATIENT);
+                                                        }
 
                                                         if (result >= 0) {
                                                           controller.tabIndex.value = result;

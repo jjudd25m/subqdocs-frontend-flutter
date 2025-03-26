@@ -29,6 +29,7 @@ import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
+import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
 import '../widgets/custom_dailog.dart';
@@ -251,7 +252,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             //   width: Dimen.margin8,
                                             // ),
                                             Text(
-                                              "Add Patient Details",
+                                              Get.currentRoute == Routes.ADD_PATIENT?"Add Patient Details" : "Schedule Visit",
                                               style: AppFonts.regular(18, AppColors.textBlack),
                                             ),
                                           ],

@@ -34,7 +34,11 @@ class AllAttachmentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    globalController.addRouteInit(Routes.ALL_ATTACHMENT);
+    // globalController.addRouteInit(Routes.ALL_ATTACHMENT);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.ALL_ATTACHMENT);
+    });
     visitId.value = Get.arguments["visit_id"];
     // patientAttachmentList = Get.arguments["attachmentList"];
 
@@ -51,7 +55,14 @@ class AllAttachmentController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    globalController.popRoute();
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.ALL_ATTACHMENT )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
   }
   Future<void> getAllPatientAttachment() async {
     Map<String, dynamic> param = {};

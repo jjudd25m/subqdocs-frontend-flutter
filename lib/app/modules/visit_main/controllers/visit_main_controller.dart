@@ -211,7 +211,15 @@ class VisitMainController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    globalController.addRouteInit(Routes.VISIT_MAIN);
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.VISIT_MAIN);
+
+
+
+    });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
 
@@ -249,7 +257,16 @@ class VisitMainController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.VISIT_MAIN )
+      {
+
+
     globalController.popRoute();
+      }
+
   }
 
   Future<void> onRefresh() async {
