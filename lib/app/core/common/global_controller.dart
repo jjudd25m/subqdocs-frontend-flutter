@@ -19,14 +19,10 @@ class GlobalController extends GetxController {
     Routes.PATIENT_PROFILE: 'Patient Profile',
     Routes.ALL_ATTACHMENT: 'Attachments',
     Routes.SCHEDULE_PATIENT: 'Schedule Visit',
+    Routes.PERSONAL_SETTING: 'Setting',
   };
 
-
-
   int closeFormState = 0;
-
-
-
 
   void popUntilRoute(String targetRoute) {
     int targetIndex = breadcrumbHistory.indexOf(targetRoute);
@@ -43,20 +39,18 @@ class GlobalController extends GetxController {
       breadcrumbHistory.refresh();
     }
   }
-  RxList<String> breadcrumbHistory = RxList([]);
 
+  RxList<String> breadcrumbHistory = RxList([]);
 
   // as of now dont use furher this  function
   void addRoute(String route) {
     // breadcrumbHistory.add(breadcrumbs[route] ?? route);
-
   }
 
-  void  addRouteInit(String route) {
+  void addRouteInit(String route) {
     closeFormState = 1;
 
     breadcrumbHistory.add(breadcrumbs[route] ?? route);
-
   }
 
   String getKeyByValue(String value) {
@@ -66,14 +60,13 @@ class GlobalController extends GetxController {
 
   // Pop the last route from the stack
   void popRoute() {
-
     // if(closeFormState == 1) {
-      if (breadcrumbHistory.isNotEmpty) {
-        var poppedRoute = breadcrumbHistory.removeLast();
-        print('Popped Route: $poppedRoute');
-      } else {
-        print('Route stack is empty!');
-      }
+    if (breadcrumbHistory.isNotEmpty) {
+      var poppedRoute = breadcrumbHistory.removeLast();
+      print('Popped Route: $poppedRoute');
+    } else {
+      print('Route stack is empty!');
+    }
     // }else{
     //   closeFormState = 1;
     //
@@ -90,11 +83,6 @@ class GlobalController extends GetxController {
     breadcrumbHistory.clear();
     print('Cleared route stack');
   }
-
-
-
-
-
 
   List<Map<String, dynamic>> sortingPastPatient = [
     {"id": "first_name", "desc": true},

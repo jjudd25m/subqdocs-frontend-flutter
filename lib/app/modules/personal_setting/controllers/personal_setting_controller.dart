@@ -1,14 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:subqdocs/app/routes/app_pages.dart';
 import 'package:subqdocs/utils/Loader.dart';
+import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../../../services/media_picker_services.dart';
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
@@ -25,6 +31,8 @@ class PersonalSettingController extends GetxController {
   Rxn<GetUserOrganizationListModel> getUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
   Rxn<GetOrganizationDetailModel> getOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
   Rxn<LoginModel> loginData = Rxn<LoginModel>();
+
+  final GlobalController globalController = Get.find();
 
   TextEditingController emailAddressController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -59,6 +67,9 @@ class PersonalSettingController extends GetxController {
   RxnString selectedAdminValue = RxnString("Yes");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  Rxn<File> userProfileImage = Rxn();
+  Rxn<File> organizationProfileImage = Rxn();
+
   @override
   void onInit() {
     super.onInit();
@@ -66,11 +77,22 @@ class PersonalSettingController extends GetxController {
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.PERSONAL_SETTING);
       getOrganizationDetail();
       getUserDetail();
       getUserByOrganization();
       getUserRole();
     });
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PERSONAL_SETTING) {
+      globalController.popRoute();
+    }
   }
 
   Future<void> getOrganizationDetail() async {
@@ -130,8 +152,17 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> updateUserDetail(Map<String, dynamic> param) async {
+    Map<String, List<File>> profileParams = {};
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+    if (userProfileImage.value != null) {
+      customPrint("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['user_image'] = [userProfileImage.value!];
+    }
+
     try {
-      dynamic response = await _personalSettingRepository.updateUserDetail(param: param);
+      dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       print("response is $response");
 
       // getOrganizationDetail();
@@ -142,8 +173,17 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> updateOrganization(Map<String, dynamic> param) async {
+    Map<String, List<File>> profileParams = {};
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+    if (userProfileImage.value != null) {
+      customPrint("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['org_image'] = [organizationProfileImage.value!];
+    }
+
     try {
-      dynamic response = await _personalSettingRepository.updateOrganization(param: param);
+      dynamic response = await _personalSettingRepository.updateOrganization(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       print("response is $response");
 
       getUserDetail();
@@ -203,5 +243,75 @@ class PersonalSettingController extends GetxController {
       Get.back();
       customPrint("login catch error is $error");
     }
+  }
+
+  Future<void> captureProfileImage(bool isUserProfile) async {
+    XFile? pickedImage = await MediaPickerServices().pickImage();
+    customPrint("picked image is  $pickedImage");
+
+    if (isUserProfile) {
+      if (pickedImage != null) {
+        userProfileImage.value = File(pickedImage.path);
+        updateUserDetail({});
+      }
+    } else {
+      if (pickedImage != null) {
+        organizationProfileImage.value = File(pickedImage.path);
+        updateOrganization({});
+      }
+    }
+  }
+
+  Future<void> pickProfileImage(bool isUserProfile) async {
+    XFile? pickedImage = await MediaPickerServices().pickImage(fromCamera: false);
+
+    if (isUserProfile) {
+      if (pickedImage != null) {
+        userProfileImage.value = File(pickedImage.path);
+        updateUserDetail({});
+      }
+    } else {
+      if (pickedImage != null) {
+        organizationProfileImage.value = File(pickedImage.path);
+        updateOrganization({});
+      }
+    }
+  }
+
+  void showImagePickerDialog(BuildContext context, bool isUserProfile) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.white,
+          title: Text('Pick an Image'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Pick from Camera'),
+                onTap: () {
+                  captureProfileImage(isUserProfile);
+                  Navigator.pop(context);
+                  // Add your camera picking logic here
+                  customPrint('Camera selected');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Pick from Gallery'),
+                onTap: () {
+                  pickProfileImage(isUserProfile);
+                  Navigator.pop(context);
+                  // Add your gallery picking logic here
+                  customPrint('Gallery selected');
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

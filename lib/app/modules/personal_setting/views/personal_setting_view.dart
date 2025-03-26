@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/widget/bredcums.dart';
 import 'package:subqdocs/widgets/custom_animated_button.dart';
 
 import '../../../../utils/app_colors.dart';
@@ -12,6 +14,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
@@ -35,6 +38,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       backgroundColor: AppColors.white,
       drawer: BackdropFilter(
         filter: ImageFilter.blur(
@@ -82,9 +86,24 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                   Expanded(
                       child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: BreadcrumbWidget(
+                            breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                            onBack: (breadcrumb) {
+                              controller.globalController.popUntilRoute(breadcrumb);
+                              // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                              while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                Get.back(); // Pop the current screen
+                              }
+                            },
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -149,15 +168,52 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                     // SizedBox(
                                                     //   width: 11,
                                                     // ),
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.circular(30),
-                                                        child: BaseImageView(
-                                                          imageUrl: "",
-                                                          height: 60,
-                                                          width: 60,
-                                                          nameLetters: "Adrian Tinajoro",
-                                                          fontSize: 14,
-                                                        )),
+
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        controller.showImagePickerDialog(context, true);
+                                                      },
+                                                      child: Obx(() {
+                                                        return ClipRRect(
+                                                          borderRadius: BorderRadius.circular(100),
+                                                          child: controller.getUserDetailModel.value?.responseData?.profileImage != null
+                                                              ? CachedNetworkImage(
+                                                                  imageUrl: controller.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                                                  width: 60,
+                                                                  height: 60,
+                                                                  fit: BoxFit.cover,
+                                                                )
+                                                              : controller.userProfileImage.value?.path != null
+                                                                  ? RoundedImageFileWidget(
+                                                                      size: 60,
+                                                                      imagePath: controller.userProfileImage.value,
+                                                                    )
+                                                                  : BaseImageView(
+                                                                      imageUrl: "",
+                                                                      width: 60,
+                                                                      height: 60,
+                                                                      fontSize: 14,
+                                                                      nameLetters:
+                                                                          "${controller.getUserDetailModel.value?.responseData?.firstName} ${controller.getUserDetailModel.value?.responseData?.lastName}",
+                                                                    ),
+                                                        );
+                                                      }),
+                                                    ),
+
+                                                    // ClipRRect(
+                                                    //     borderRadius: BorderRadius.circular(30),
+                                                    //     child: GestureDetector(
+                                                    //       onTap: () {
+                                                    //         controller.showImagePickerDialog(context);
+                                                    //       },
+                                                    //       child: BaseImageView(
+                                                    //         imageUrl: "",
+                                                    //         height: 60,
+                                                    //         width: 60,
+                                                    //         nameLetters: "Adrian Tinajoro",
+                                                    //         fontSize: 14,
+                                                    //       ),
+                                                    //     )),
                                                     SizedBox(
                                                       width: 10,
                                                     ),
@@ -407,15 +463,44 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.circular(30),
-                                                        child: BaseImageView(
-                                                          imageUrl: "",
-                                                          height: 60,
-                                                          width: 60,
-                                                          nameLetters: "Adrian Tinajoro",
-                                                          fontSize: 14,
-                                                        )),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        controller.showImagePickerDialog(context, false);
+                                                      },
+                                                      child: Obx(() {
+                                                        return ClipRRect(
+                                                          borderRadius: BorderRadius.circular(100),
+                                                          child: controller.getOrganizationDetailModel.value?.responseData?.profileImage != null
+                                                              ? CachedNetworkImage(
+                                                                  imageUrl: controller.getOrganizationDetailModel.value?.responseData?.profileImage ?? "",
+                                                                  width: 60,
+                                                                  height: 60,
+                                                                  fit: BoxFit.cover,
+                                                                )
+                                                              : controller.organizationProfileImage.value?.path != null
+                                                                  ? RoundedImageFileWidget(
+                                                                      size: 60,
+                                                                      imagePath: controller.organizationProfileImage.value,
+                                                                    )
+                                                                  : BaseImageView(
+                                                                      imageUrl: "",
+                                                                      width: 60,
+                                                                      height: 60,
+                                                                      fontSize: 14,
+                                                                      nameLetters: "${controller.getOrganizationDetailModel.value?.responseData?.name}",
+                                                                    ),
+                                                        );
+                                                      }),
+                                                    ),
+                                                    // ClipRRect(
+                                                    //     borderRadius: BorderRadius.circular(30),
+                                                    //     child: BaseImageView(
+                                                    //       imageUrl: "",
+                                                    //       height: 60,
+                                                    //       width: 60,
+                                                    //       nameLetters: "Adrian Tinajoro",
+                                                    //       fontSize: 14,
+                                                    //     )),
                                                     SizedBox(
                                                       width: 10,
                                                     ),

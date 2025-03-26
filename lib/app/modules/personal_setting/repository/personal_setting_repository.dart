@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
@@ -40,14 +42,14 @@ class PersonalSettingRepository {
     return InvitedUserResponseModel.fromJson(response);
   }
 
-  Future<dynamic> updateUserDetail({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callPut("user", param);
+  Future<dynamic> updateUserDetail({required Map<String, dynamic> param, required Map<String, List<File>> files, required String token}) async {
+    var response = await ApiProvider.instance.callPutMultiPartDioListOfFiles(url: 'user', params: param, files: files, token: token);
     customPrint("updateOrganization API  internal response $response");
     return response;
   }
 
-  Future<dynamic> updateOrganization({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callPut("organization", param);
+  Future<dynamic> updateOrganization({required Map<String, dynamic> param, required Map<String, List<File>> files, required String token}) async {
+    var response = await ApiProvider.instance.callPutMultiPartDioListOfFiles(url: "organization", params: param, files: files, token: token);
     customPrint("updateOrganization API  internal response $response");
     return response;
   }

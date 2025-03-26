@@ -184,6 +184,7 @@ class GetOrganizationDetailModel {
 class GetOrganizationDetailResponseData {
   int? id;
   String? organizationId;
+  String? profileImage;
   String? name;
   String? email;
   String? contactNo;
@@ -202,6 +203,7 @@ class GetOrganizationDetailResponseData {
   GetOrganizationDetailResponseData(
       {this.id,
       this.organizationId,
+      this.profileImage,
       this.name,
       this.email,
       this.contactNo,
@@ -221,6 +223,7 @@ class GetOrganizationDetailResponseData {
     id = json['id'];
     organizationId = json['organization_id'];
     name = json['name'];
+    profileImage = json['profile_image'];
     email = json['email'];
     contactNo = json['contact_no'];
     country = json['country'];
@@ -241,6 +244,7 @@ class GetOrganizationDetailResponseData {
     data['id'] = id;
     data['organization_id'] = organizationId;
     data['name'] = name;
+    data['profile_image'] = profileImage;
     data['email'] = email;
     data['contact_no'] = contactNo;
     data['country'] = country;
