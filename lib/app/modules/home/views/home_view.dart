@@ -16,6 +16,7 @@ import 'package:subqdocs/widgets/ContainerButton.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widgets/custom_animated_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../core/common/common_service.dart';
@@ -53,7 +54,10 @@ class HomeView extends GetView<HomeController> {
         child: CustomDrawerView(
           onItemSelected: (index) async {
             if (index == 0) {
+
+
               final result = await Get.toNamed(Routes.ADD_PATIENT);
+
 
               if (result == 1) {
                 controller.getPastVisitList(isFist: true);
@@ -85,35 +89,39 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             children: [
               CustomAppBar(drawerkey: _key),
+
+
               Expanded(
                   child: Container(
                 width: double.infinity,
                 color: AppColors.ScreenBackGround,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14),
-                          child: Text(
-                            "Scheduling view",
-                            style: AppFonts.regular(17, AppColors.textBlack),
-                          ),
-                        ),
-                      ),
-                    ),
+
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 15, right: 15),
+                    //   child: Container(
+                    //     width: double.infinity,
+                    //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(14),
+                    //       child: Text(
+                    //         "Scheduling view",
+                    //         style: AppFonts.regular(17, AppColors.textBlack),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     // SizedBox(
                     //   height: 16,
                     // ),
-                    SizedBox(
-                      width: 20,
-                    ),
+                    // SizedBox(
+                    //   width: 20,
+                    // ),
                     Obx(() {
                       return Expanded(
                         child: Padding(
@@ -124,7 +132,21 @@ class HomeView extends GetView<HomeController> {
                               color: Colors.transparent,
                             ),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+
+
+                                BreadcrumbWidget(
+                                  breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                  onBack: (breadcrumb) {
+                                    controller.globalController.popUntilRoute(breadcrumb);
+                                    // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                    while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                      Get.back();  // Pop the current screen
+                                    }
+                                  },
+                                ),
                                 Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
@@ -332,7 +354,17 @@ class HomeView extends GetView<HomeController> {
                                                     child: CustomButton(
                                                       hight: 40,
                                                       navigate: () async {
-                                                        final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+                                                       var result ;
+                                                        if(controller.tabIndex.value == 0) {
+                                                         await Get
+                                                              .toNamed(Routes
+                                                              .ADD_PATIENT);
+                                                        }else{
+                                                          final result = await Get
+                                                              .toNamed(Routes
+                                                              .SCHEDULE_PATIENT);
+                                                        }
 
                                                         if (result >= 0) {
                                                           controller.tabIndex.value = result;

@@ -56,6 +56,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                     padding: const EdgeInsets.all(10),
                     child: EmptyPatientScreen(
                         onBtnPress: () async {
+                          controller.globalController.addRoute(Routes.ADD_PATIENT);
                           final result = await Get.toNamed(Routes.ADD_PATIENT);
 
                           controller.getPastVisitList();
@@ -125,7 +126,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               onTap: () async {
                                                 customPrint("visite is is ${controller.scheduleVisitList[rowIndex].visitId.toString()}");
-
+                                                controller.globalController.addRoute(Routes.PATIENT_PROFILE);
                                                 await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                   "patientData": controller.scheduleVisitList[rowIndex].id.toString(),
                                                   "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
@@ -147,6 +148,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                                               padding: EdgeInsets.zero,
                                               value: "",
                                               onTap: () async {
+                                                controller.globalController.addRoute(Routes.VISIT_MAIN);
                                                 dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                                                   "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
                                                   "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
@@ -440,7 +442,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                         customPrint("row index is :- $rowIndex");
 
                         // Get.delete<VisitMainController>();
-
+                        controller.globalController.addRoute(Routes.VISIT_MAIN);
                         dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
                           "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
                           "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
@@ -506,6 +508,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                         );
                       },
                       isLoading: controller.isLoading.value,
+                      isNoData: controller.noMoreDataSchedulePatientList.value,
                       // headerRows: ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Previous Visits", "Action"],
                     ),
                   ),

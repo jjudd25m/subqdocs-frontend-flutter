@@ -16,6 +16,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../core/common/common_service.dart';
@@ -71,6 +72,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             if (index == 0) {
               final result = await Get.toNamed(Routes.ADD_PATIENT);
 
+
+
               _key.currentState!.closeDrawer();
             } else if (index == 1) {
               Get.toNamed(Routes.HOME, arguments: {
@@ -107,10 +110,28 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                     child: SingleChildScrollView(
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
+
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+                          Obx(
+                             () {
+                              return BreadcrumbWidget(
+                                breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                onBack: (breadcrumb) {
+                                  controller.globalController.popUntilRoute(breadcrumb);
+                                  // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                  while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                    Get.back();  // Pop the current screen
+                                  }
+                                },
+                              );
+                            }
+                          ),
                           Column(
                             children: <Widget>[
-                              SizedBox(height: 20.0),
+
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),

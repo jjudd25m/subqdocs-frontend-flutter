@@ -18,6 +18,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
@@ -89,7 +90,23 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                     child: Padding(
                       padding: EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Obx(
+                                  () {
+                                return BreadcrumbWidget(
+                                  breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                  onBack: (breadcrumb) {
+                                    controller.globalController.popUntilRoute(breadcrumb);
+                                    // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                    while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                      Get.back();  // Pop the current screen
+                                    }
+                                  },
+                                );
+                              }
+                          ),
                           Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(Dimen.margin16),

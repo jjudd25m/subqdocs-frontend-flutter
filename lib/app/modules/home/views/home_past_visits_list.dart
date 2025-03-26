@@ -58,6 +58,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                       padding: const EdgeInsets.all(10.0),
                       child: EmptyPatientScreen(
                           onBtnPress: () async {
+                            controller.globalController.addRoute(Routes.ADD_PATIENT);
                             final result = await Get.toNamed(Routes.ADD_PATIENT);
 
                             controller.getPastVisitList();
@@ -86,7 +87,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                               controller.pastVisitList[rowIndex].visitStatus == "Pending" ||
                               controller.pastVisitList[rowIndex].visitStatus == "Finalized") {
                             Get.delete<PatientInfoController>();
-
+                            controller.globalController.addRoute(Routes.PATIENT_INFO);
                             await Get.toNamed(Routes.PATIENT_INFO, arguments: {
                               "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                               "patientId": controller.pastVisitList[rowIndex].id.toString(),
@@ -165,7 +166,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                     padding: EdgeInsets.zero,
                                                     onTap: ()async  {
                                                       customPrint("visite is is ${controller.pastVisitList[rowIndex].visitId.toString()}");
-
+                                                      controller.globalController.addRoute(Routes.PATIENT_PROFILE);
                                                       await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {
                                                         "patientData": controller.pastVisitList[rowIndex].id.toString(),
                                                         "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
@@ -195,7 +196,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                                             controller.pastVisitList[rowIndex].visitStatus == "Pending" ||
                                                             controller.pastVisitList[rowIndex].visitStatus == "Finalized") {
                                                           Get.delete<PatientInfoController>();
-
+                                                          controller.globalController.addRoute(Routes.PATIENT_INFO);
                                                           await Get.toNamed(Routes.PATIENT_INFO, arguments: {
                                                             "visitId": controller.pastVisitList[rowIndex].visitId.toString(),
                                                             "patientId": controller.pastVisitList[rowIndex].id.toString(),
@@ -450,6 +451,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                           );
                         },
                         isLoading: controller.isLoading.value,
+                        isNoData: controller.noMoreDataPastPatientList.value,
                         // headerRows: ['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"],
                       ),
                     ),

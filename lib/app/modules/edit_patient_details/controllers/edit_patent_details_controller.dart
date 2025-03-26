@@ -14,7 +14,9 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
+import '../../../routes/app_pages.dart';
 import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/patient_detail_model.dart';
@@ -24,7 +26,7 @@ class EditPatentDetailsController extends GetxController {
   //TODO: Implement EditPatentDetailsController
 
   Rxn<DateTime> selectedDOBDate = Rxn<DateTime>();
-
+  final GlobalController globalController = Get.find();
   PatientDetailModel patientDetailModel = PatientDetailModel();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   TextEditingController firstNameController = TextEditingController();
@@ -87,6 +89,11 @@ class EditPatentDetailsController extends GetxController {
   void onInit() {
     super.onInit();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.EDIT_PATENT_DETAILS);
+    });
+
+
     customPrint("edit patient list  ${Get.arguments["patientData"]}");
 
     patientId = Get.arguments["patientData"];
@@ -97,6 +104,23 @@ class EditPatentDetailsController extends GetxController {
     contactNumberController.text = "+1";
 
     getPatient(patientId, visitId);
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.EDIT_PATENT_DETAILS )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
+
+
   }
 
   Future<void> getPatient(String id, String visitId) async {

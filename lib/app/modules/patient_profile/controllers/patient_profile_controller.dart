@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../home/model/patient_schedule_model.dart';
@@ -13,7 +16,7 @@ import '../../home/repository/home_repository.dart';
 
 class PatientProfileController extends GetxController {
   //TODO: Implement PatientProfileController
-
+  final GlobalController globalController = Get.find();
   final HomeRepository _homeRepository = HomeRepository();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
@@ -27,6 +30,14 @@ class PatientProfileController extends GetxController {
   void onInit() {
     super.onInit();
 
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      globalController.addRouteInit(Routes.PATIENT_PROFILE);
+
+
+    });
     print("PatientProfileController init called");
     patientId = Get.arguments["patientData"];
     visitId = Get.arguments["visitId"];
@@ -43,6 +54,15 @@ class PatientProfileController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.PATIENT_PROFILE )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
+
   }
 
   Future<void> onRefresh() async {

@@ -19,6 +19,7 @@ import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
@@ -68,7 +69,7 @@ class VisitMainController extends GetxController {
 
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   RecorderService recorderService = RecorderService();
-
+  final GlobalController globalController = Get.find();
   TextEditingController searchController = TextEditingController();
 
   RxBool isExpandRecording = true.obs;
@@ -211,6 +212,14 @@ class VisitMainController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.VISIT_MAIN);
+
+
+
+    });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
 
@@ -248,6 +257,16 @@ class VisitMainController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.VISIT_MAIN )
+      {
+
+
+    globalController.popRoute();
+      }
+
   }
 
   Future<void> onRefresh() async {

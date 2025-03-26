@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/global_controller.dart';
+import '../../../routes/app_pages.dart';
 import '../../forgot_password/models/common_respons.dart';
 import '../../visit_main/model/all_attachment_list_model.dart';
 import '../../visit_main/model/patient_attachment_list_model.dart';
@@ -13,13 +16,17 @@ class AllAttachmentController extends GetxController {
   //TODO: Implement AllAttachmentController
   RxBool isStartRecording = false.obs;
   final count = 0.obs;
-
+  final GlobalController globalController = Get.find();
   RxString referesh = RxString("");
 
   Rxn<AllAttachmentListModel> allAttachmentList = Rxn();
 
-  final VisitMainRepository _visitMainRepository = VisitMainRepository();
+  TextEditingController fromController = TextEditingController();
+  List<DateTime> selectedValue = [];
 
+  final VisitMainRepository _visitMainRepository = VisitMainRepository();
+  RxString startDate = RxString("");
+  RxString endDate = RxString("");
   // RxMap<String, List<ResponseData>> attachmentDic = RxMap<String, List<ResponseData>>();
 
   RxString visitId = RxString("");
@@ -27,17 +34,47 @@ class AllAttachmentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // globalController.addRouteInit(Routes.ALL_ATTACHMENT);
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.ALL_ATTACHMENT);
+    });
     visitId.value = Get.arguments["visit_id"];
     // patientAttachmentList = Get.arguments["attachmentList"];
 
-    getAllPatientAttachment();
+    if(visitId.value.isNotEmpty)
+      {
+        getAllPatientAttachment();
+      }
+
   }
 
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.ALL_ATTACHMENT )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
+  }
   Future<void> getAllPatientAttachment() async {
     Map<String, dynamic> param = {};
 
     try {
+      if (startDate.isNotEmpty && endDate.isNotEmpty) {
+        DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
+        String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+        DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
+        String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+        param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+      }
       allAttachmentList.value = await _visitMainRepository.getAllPatientAttachment(id: visitId.value, param: param);
 
       // print("All attachment is :- ${patientAttachmentList.value?.responseData?.length}");
@@ -59,6 +96,41 @@ class AllAttachmentController extends GetxController {
     }
   }
 
+
+
+
+  void setDateRange() {
+    // customPrint("function  is called ");
+
+    if (selectedValue.isNotEmpty) {
+      for (int i = 0; i < selectedValue.length; i++) {
+        var dateTime = selectedValue[i];
+        // Format the date to 'MM-dd-yyyy'
+        // customPrint("goint to this ");
+        if (selectedValue.length == 1) {
+          startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+        } else {
+          if (i == 0) {
+            startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          } else {
+            endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+          }
+        }
+      }
+    } else {
+      DateTime dateTime = DateTime.now();
+      startDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+      endDate.value = '${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}/${dateTime.year}';
+    }
+
+    fromController.text = "${startDate} - ${endDate}";
+
+    Get.back();
+  }
+
+
+
   void deleteAttachments(int index, int subIndex, int id) async {
     if (id != 1) {
       Map<String, List<int>> params = {};
@@ -69,6 +141,8 @@ class AllAttachmentController extends GetxController {
 
       if (commonResponse.responseType == "success") {
         CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
+        getAllPatientAttachment();
+
         // attachmentDic.values.elementAt(index).removeAt(subIndex);
         // attachmentDic.refresh();
       } else {

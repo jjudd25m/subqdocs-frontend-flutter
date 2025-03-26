@@ -40,6 +40,8 @@ class HomeController extends GetxController {
   TextEditingController toController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
+
+
   RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
   Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
@@ -105,6 +107,9 @@ class HomeController extends GetxController {
   var pagePast = 1;
   Set<int> _loadedThresholds = Set<int>();
   RxBool isLoading = RxBool(false);
+  RxBool noMoreDataPatientList = RxBool(false);
+  RxBool noMoreDataPastPatientList = RxBool(false);
+  RxBool noMoreDataSchedulePatientList = RxBool(false);
   String getNextRoundedTimeHH() {
     DateTime now = DateTime.now().toUtc();
 
@@ -144,9 +149,9 @@ class HomeController extends GetxController {
     if (!scrollControllerPatientList.hasClients) return;
 
     double offset = scrollControllerPatientList.position.pixels;
-    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+    int currentIndex = (offset / 40).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 50 == 0 && !triggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && (currentIndex -50 ) % 100 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
 
@@ -161,9 +166,9 @@ class HomeController extends GetxController {
     if (!scrollControllerPastPatientList.hasClients) return;
 
     double offset = scrollControllerPastPatientList.position.pixels;
-    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+    int currentIndex = (offset / 40).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 50 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && (currentIndex -50 ) % 100 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
       pastTriggeredIndexes.add(currentIndex); // Mark as triggered
       getPastVisitListFetchMore();
 
@@ -178,9 +183,9 @@ class HomeController extends GetxController {
     if (!scrollControllerSchedulePatientList.hasClients) return;
 
     double offset = scrollControllerSchedulePatientList.position.pixels;
-    int currentIndex = (offset / 50).toInt(); // Calculate the nearest multiple of 50
+    int currentIndex = (offset / 45).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && currentIndex % 50 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && (currentIndex -50 ) % 100 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
       scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
       getScheduleVisitListFetchMore();
 
@@ -301,6 +306,7 @@ class HomeController extends GetxController {
   Future<void> getPatientList({String? sortingName = ""}) async {
     Map<String, dynamic> param = {};
     pagePatient = 1;
+    triggeredIndexes.clear();
 
     param['page'] = 1;
     param['limit'] = "100";
@@ -331,6 +337,11 @@ class HomeController extends GetxController {
 
     if (patientListModel.value?.responseData?.data != null) {
       patientList.value = patientListModel.value?.responseData?.data ?? [];
+
+      // if(patientList.length > 80)
+      //   {
+      //     isLoading.value = true;
+      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -342,6 +353,8 @@ class HomeController extends GetxController {
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
     pageSchedule = 1;
+    scheduleTriggeredIndexes.clear();
+    noMoreDataSchedulePatientList.value = false;
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -380,6 +393,12 @@ class HomeController extends GetxController {
 
     if (scheduleVisitListModel.value?.responseData?.data != null) {
       scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
+
+      // if(scheduleVisitList.length >=80)
+      //   {
+      //     isLoading.value = true;
+      //
+      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -387,6 +406,9 @@ class HomeController extends GetxController {
 
   Future<void> getPastVisitList({String? sortingName = "", bool isFist = false}) async {
     pagePast = 1;
+  pastTriggeredIndexes.clear();
+  noMoreDataPatientList.value = false;
+
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -431,6 +453,13 @@ class HomeController extends GetxController {
 
     if (pastVisitListModel.value?.responseData?.data != null) {
       pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
+
+      // if(pastVisitList.length >=80)
+      //   {
+      //     isLoading.value = true;
+      //
+      //
+      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -441,6 +470,7 @@ class HomeController extends GetxController {
     if (scheduleVisitList.length < totalCount) {
       print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
+      noMoreDataSchedulePatientList.value = false;
       Map<String, dynamic> param = {};
       param['page'] = ++pageSchedule;
       param['limit'] = "100";
@@ -480,6 +510,7 @@ class HomeController extends GetxController {
         pageSchedule--;
       }
     } else {
+      noMoreDataSchedulePatientList.value = true;
       print("no pagination is not needed  beacuse ${scheduleVisitList.length}  is this and $totalCount");
     }
   }
@@ -489,6 +520,8 @@ class HomeController extends GetxController {
     if (patientList.length < totalCount) {
       print("pagination is  needed  beacuse ${patientList.length}  is this and $totalCount");
       isLoading.value = true;
+      noMoreDataPatientList.value = false;
+
       Map<String, dynamic> param = {};
 
       param['page'] = ++pagePatient;
@@ -525,6 +558,8 @@ class HomeController extends GetxController {
         pagePatient--;
       }
     } else {
+      noMoreDataPatientList.value = true;
+
       print("no pagination is not needed  beacuse ${patientList.length}  is this and $totalCount");
     }
   }
@@ -573,6 +608,8 @@ class HomeController extends GetxController {
     if (pastVisitList.length < totalCount) {
       print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
+      noMoreDataPastPatientList.value = false;
+
       Map<String, dynamic> param = {};
       param['page'] = ++pagePast;
       param['limit'] = "100";
@@ -625,6 +662,7 @@ class HomeController extends GetxController {
         pagePast--;
       }
     } else {
+      noMoreDataPastPatientList.value = true;
       print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
     }
   }
@@ -756,7 +794,7 @@ class HomeController extends GetxController {
     statusModel.clear();
 
     statusResponseModel.responseData?.forEach(
-      (element) {
+          (element) {
         statusModel.add(StatusModel(status: element));
       },
     );
@@ -870,7 +908,7 @@ class HomeController extends GetxController {
       // customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
       // customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {

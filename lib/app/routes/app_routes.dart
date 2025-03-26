@@ -11,6 +11,7 @@ abstract class Routes {
   static const ALL_ATTACHMENT = _Paths.ALL_ATTACHMENT;
   static const PATIENT_VIEW_READ_ONLY = _Paths.PATIENT_VIEW_READ_ONLY;
   static const ADD_PATIENT = _Paths.ADD_PATIENT;
+  static const SCHEDULE_PATIENT = _Paths.SCHEDULE_PATIENT;
   static const CUSTOM_DRAWER = _Paths.CUSTOM_DRAWER;
   static const EDIT_PATENT_DETAILS = _Paths.EDIT_PATENT_DETAILS;
   static const PATIENT_PROFILE = _Paths.PATIENT_PROFILE;
@@ -31,6 +32,7 @@ abstract class _Paths {
   static const ALL_ATTACHMENT = '/all-attachment';
   static const PATIENT_VIEW_READ_ONLY = '/patient-view-read-only';
   static const ADD_PATIENT = '/add-patient';
+  static const SCHEDULE_PATIENT = '/schedule-patient';
   static const CUSTOM_DRAWER = '/custom-drawer';
   static const EDIT_PATENT_DETAILS = '/edit-patent-details';
   static const PATIENT_PROFILE = '/patient-profile';

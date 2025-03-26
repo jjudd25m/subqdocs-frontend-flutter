@@ -22,12 +22,14 @@ import '../../../../utils/imagepath.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
+import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
 import '../widgets/custom_dailog.dart';
@@ -203,6 +205,22 @@ class AddPatientView extends GetView<AddPatientController> {
                               // physics: BouncingScrollPhysics(),
                               padding: EdgeInsets.zero,
                               children: [
+                                Obx(
+                                  () {
+                                    return BreadcrumbWidget(
+
+                                      breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                      onBack: (breadcrumb) {
+                                        controller.globalController.popUntilRoute(breadcrumb);
+                                        // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                        while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                          Get.back();  // Pop the current screen
+                                        }
+                                      },
+                                    );
+                                  }
+                                ),
                                 Container(
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(Dimen.margin16),
@@ -234,7 +252,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             //   width: Dimen.margin8,
                                             // ),
                                             Text(
-                                              "Add Patient Details",
+                                              Get.currentRoute == Routes.ADD_PATIENT?"Add Patient Details" : "Schedule Visit",
                                               style: AppFonts.regular(18, AppColors.textBlack),
                                             ),
                                           ],

@@ -9,6 +9,7 @@ import 'package:toastification/toastification.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
@@ -27,7 +28,7 @@ import '../views/confirm_finalize_dialog.dart';
 
 class PatientInfoController extends GetxController with WidgetsBindingObserver {
   //TODO: Implement PatientInfoController
-
+  final GlobalController globalController = Get.find();
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();
   SocketService socketService = SocketService();
 
@@ -101,6 +102,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(this);
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.PATIENT_INFO);
+
+    });
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     customPrint("argument is :- ${Get.arguments}");
@@ -575,6 +582,21 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+
+
+    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.PATIENT_INFO )
+    {
+
+
+      globalController.popRoute();
+    }
+    // globalController.popRoute();
+  }
   Future<void> onRefresh() async {
     print("_onRefresh called");
 

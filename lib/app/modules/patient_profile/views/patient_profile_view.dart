@@ -13,6 +13,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../core/common/common_service.dart';
@@ -84,15 +85,31 @@ class PatientProfileView extends GetView<PatientProfileController> {
                           child: SingleChildScrollView(
                             child: Obx(() {
                               return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(16),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 3),
+                                    child: BreadcrumbWidget(
+                                      breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                      onBack: (breadcrumb) {
+                                        controller.globalController.popUntilRoute(breadcrumb);
+                                        // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
+                                        while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                          Get.back();  // Pop the current screen
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 3),
                                     child: Container(
                                       padding: EdgeInsets.all(Dimen.margin16),
                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
+
                                           Row(
                                             children: [
                                               GestureDetector(
@@ -152,7 +169,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                       onTap: () async {
                                                         final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
                                                             arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true});
-
+                                                        controller.globalController.addRoute(Routes.EDIT_PATENT_DETAILS);
                                                         controller.onReady();
                                                       },
                                                       child: SvgPicture.asset(
@@ -343,7 +360,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                       "patientId": controller.patientId,
                                                                       "unique_tag": DateTime.now().toString(),
                                                                     });
-
+                                                                    controller.globalController.addRoute(Routes.VISIT_MAIN);
                                                                     customPrint("row index is :- $rowIndex");
                                                                   },
                                                                   child: Text(
@@ -582,6 +599,8 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                                 "patientId": controller.patientId,
                                                                                 "unique_tag": DateTime.now().toString(),
                                                                               });
+
+                                                                              controller.globalController.addRoute(Routes.PATIENT_INFO);
                                                                             },
                                                                             child: Text(
                                                                               textAlign: TextAlign.center,

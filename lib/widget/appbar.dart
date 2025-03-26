@@ -91,6 +91,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Get.toNamed(Routes.HOME, arguments: {
                         "tabIndex": globalController.homeTabIndex.value,
                       });
+
                     }
                   },
                   child: Image.asset(

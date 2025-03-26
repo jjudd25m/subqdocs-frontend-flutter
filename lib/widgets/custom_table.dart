@@ -101,6 +101,7 @@ class CustomTable extends StatelessWidget {
   final int columnCount;
   final Future<void> Function()? onLoadMore;
   final bool isLoading; // Add isLoading to track loading state
+  final bool isNoData; // Add isLoading to track loading state
   final ScrollPhysics? physics;
   final List<double> columnWidths;
   final void Function(int rowIndex, List<String> rowData)? onRowSelected;
@@ -115,6 +116,7 @@ class CustomTable extends StatelessWidget {
     required this.columnCount,
     required this.columnWidths,
     this.onRowSelected,
+    this.isNoData = false,
     this.onLoadMore,
     required this.isLoading, // Accept isLoading
     this.physics = const BouncingScrollPhysics(),
@@ -159,20 +161,30 @@ class CustomTable extends StatelessWidget {
                   controller: scrollController,
                   padding: EdgeInsets.zero,
                   physics: physics,
-                  itemCount: rows.length + (isLoading ? 1 : 0), // Add an extra item for loader
+                  itemCount: rows.length + ( isNoData?1: isLoading ? 1 : 0), // Add an extra item for loader
                   itemBuilder: (context, index) {
-
-
-                    if (index == rows.length && isLoading) {
-                      // Show loading spinner at the bottom when loading
+                    if (index == rows.length && isNoData) {
                       return Center(
-                        child: CircularProgressIndicator(color: AppColors.buttonBackgroundGrey),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("No more records to load" , style: AppFonts.bold(13, AppColors.textGrey),),
+                        )
                       );
+
                     } else {
-                      // Build and return the actual table row
-                      return _buildTableRow(context, index, screenWidth);
+                      if (index == rows.length && isLoading) {
+                        // Show loading spinner at the bottom when loading
+                        return Center(
+                          child: CircularProgressIndicator(
+                              color: AppColors.buttonBackgroundGrey),
+                        );
+                      } else {
+                        // Build and return the actual table row
+                        return _buildTableRow(context, index, screenWidth);
+                      }
                     }
-                  },
+
+                  }
                 ),
               ),
             ),
