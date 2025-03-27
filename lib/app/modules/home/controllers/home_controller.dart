@@ -39,17 +39,12 @@ class HomeController extends GetxController {
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-
-
-
   RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
   Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
-
   Rxn<ScheduleVisitListModel> scheduleVisitListModel = Rxn<ScheduleVisitListModel>();
   Rxn<ScheduleVisitListModel> scheduleVisitListModelOffline = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> scheduleVisitList = RxList<ScheduleVisitListData>();
-
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
   Rxn<ScheduleVisitListModel> pastVisitListModelOfLine = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
@@ -60,7 +55,6 @@ class HomeController extends GetxController {
   // final ScrollController scrollControllerPatientList = ScrollController();
 
   RxList<StatusModel> statusModel = RxList();
-
   String getNextRoundedTime() {
     DateTime now = DateTime.now();
 
@@ -80,9 +74,7 @@ class HomeController extends GetxController {
 
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
-
   List<DateTime> selectedValue = [];
-
   Map<String, String> nameToIdMap = {
     "Patient Name": "first_name",
     "Visit Date": "appointmentTime",
@@ -94,7 +86,6 @@ class HomeController extends GetxController {
     "Previous Visits": "previousVisitCount",
     "Status": "status",
   };
-
   RxBool isInternetConnected = RxBool(true);
   RxInt tabIndex = RxInt(0);
 
@@ -151,7 +142,7 @@ class HomeController extends GetxController {
     double offset = scrollControllerPatientList.position.pixels;
     int currentIndex = (offset / 40).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && (currentIndex -50 ) % 100 == 0 && !triggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && (currentIndex - 50) % 100 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
 
@@ -168,7 +159,7 @@ class HomeController extends GetxController {
     double offset = scrollControllerPastPatientList.position.pixels;
     int currentIndex = (offset / 40).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && (currentIndex -50 ) % 100 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && (currentIndex - 50) % 100 == 0 && !pastTriggeredIndexes.contains(currentIndex)) {
       pastTriggeredIndexes.add(currentIndex); // Mark as triggered
       getPastVisitListFetchMore();
 
@@ -185,7 +176,7 @@ class HomeController extends GetxController {
     double offset = scrollControllerSchedulePatientList.position.pixels;
     int currentIndex = (offset / 45).toInt(); // Calculate the nearest multiple of 50
 
-    if (currentIndex != 0 && (currentIndex -50 ) % 100 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
+    if (currentIndex != 0 && (currentIndex - 50) % 100 == 0 && !scheduleTriggeredIndexes.contains(currentIndex)) {
       scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
       getScheduleVisitListFetchMore();
 
@@ -406,9 +397,8 @@ class HomeController extends GetxController {
 
   Future<void> getPastVisitList({String? sortingName = "", bool isFist = false}) async {
     pagePast = 1;
-  pastTriggeredIndexes.clear();
-  noMoreDataPatientList.value = false;
-
+    pastTriggeredIndexes.clear();
+    noMoreDataPatientList.value = false;
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -794,7 +784,7 @@ class HomeController extends GetxController {
     statusModel.clear();
 
     statusResponseModel.responseData?.forEach(
-          (element) {
+      (element) {
         statusModel.add(StatusModel(status: element));
       },
     );
@@ -908,7 +898,7 @@ class HomeController extends GetxController {
       // customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-      await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
       // customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {

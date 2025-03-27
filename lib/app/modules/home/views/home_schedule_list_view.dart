@@ -69,8 +69,6 @@ class HomeScheduleListView extends GetView<HomeController> {
                 : Expanded(
                     child: CustomTable(
                       onRefresh: () async {
-
-
                         controller.getScheduleVisitList(isFist: true);
                         print("refresh schedule list view");
                       },
@@ -134,7 +132,6 @@ class HomeScheduleListView extends GetView<HomeController> {
                                                 });
 
                                                 controller.getScheduleVisitList();
-                                                
                                               },
                                               value: "",
                                               child: Padding(
