@@ -44,7 +44,7 @@ class TextFormFiledWidget extends StatefulWidget {
       this.type = TextInputType.text,
       this.onTap,
       this.suffixIcon,
-      this.maxLines = null,
+      this.maxLines = 1,
       this.maxLength = null,
       this.prefixIcon});
 

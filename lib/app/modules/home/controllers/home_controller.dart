@@ -19,6 +19,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
@@ -189,6 +190,11 @@ class HomeController extends GetxController {
 
   Future<void> onInit() async {
     super.onInit();
+    Get.put(GlobalController());
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   globalController.addRouteInit(Routes.HOME);
+    // });
 
     HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
 

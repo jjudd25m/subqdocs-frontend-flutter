@@ -33,12 +33,10 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            shrinkWrap: true,
+          child: Column(
             children: [
               Container(
-                width: 360,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: AppColors.backgroundPurple,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
@@ -76,355 +74,366 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 360,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    spacing: 10,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "Name",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationNameController,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationNameController.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+              Expanded(
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  children: [
+                    SizedBox(
+                      width: 360,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          spacing: 10,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        format: [
+                                          CustomTextInputFormatter(),
+                                        ],
+                                        label: "Name",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationNameController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationNameController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormFiledWidget(
-                                format: [NoSpaceLowercaseTextFormatter()],
-                                label: "Email Address",
-                                controller: controller.organizationEmailController,
-                                isValid: controller.isValid.value,
-                                isSuffixIconVisible: false,
-                                isFirst: true,
-                                hint: "",
-                                onTap: () {
-                                  controller.organizationEmailController.clear();
-                                },
-                                suffixIcon: Icon(
-                                  Icons.highlight_remove,
-                                  color: AppColors.textDarkGrey,
-                                  size: 25,
                                 ),
-                                checkValidation: (value) {
-                                  return Validation.emailValidateRequired(value);
-                                }),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormFiledWidget(
-                                format: [PlusTextFormatter()],
-                                label: "Contact Number",
-                                controller: controller.organizationPhoneNumberController,
-                                isValid: true,
-                                isSuffixIconVisible: false,
-                                isFirst: true,
-                                type: TextInputType.number,
-                                hint: "123456789",
-                                onTap: () {
-                                  controller.organizationPhoneNumberController.clear();
-                                },
-                                suffixIcon: Icon(
-                                  Icons.highlight_remove,
-                                  color: AppColors.textDarkGrey,
-                                  size: 25,
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [NoSpaceLowercaseTextFormatter()],
+                                      label: "Email Address",
+                                      controller: controller.organizationEmailController,
+                                      isValid: controller.isValid.value,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationEmailController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.emailValidateRequired(value);
+                                      }),
                                 ),
-                                checkValidation: (value) {
-                                  return Validation.phoneValidate(value);
-                                }),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "address1",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationAddress1Controller,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationAddress1Controller.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [PlusTextFormatter()],
+                                      label: "Contact Number",
+                                      controller: controller.organizationPhoneNumberController,
+                                      isValid: true,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      type: TextInputType.number,
+                                      hint: "123456789",
+                                      onTap: () {
+                                        controller.organizationPhoneNumberController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.phoneValidate(value);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        // format: [
+                                        //   CustomTextInputFormatter(),
+                                        // ],
+                                        maxLines: 3,
+                                        label: "address1",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationAddress1Controller,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationAddress1Controller.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "address2",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationAddress2Controller,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationAddress2Controller.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        maxLines: 3,
+                                        // format: [
+                                        //   CustomTextInputFormatter(),
+                                        // ],
+                                        label: "address2",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationAddress2Controller,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationAddress2Controller.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "Street name",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationStreetNameController,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationStreetNameController.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        label: "Street name",
+                                        maxLines: 3,
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationStreetNameController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationStreetNameController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "City",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationCityController,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationCityController.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        format: [
+                                          CustomTextInputFormatter(),
+                                        ],
+                                        label: "City",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationCityController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationCityController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "State",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationStateController,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationStateController.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        format: [
+                                          CustomTextInputFormatter(),
+                                        ],
+                                        label: "State",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationStateController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationStateController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    PostalCodeFormatter(),
-                                  ],
-                                  maxLength: 5,
-                                  label: "Postal code",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationPostalCodeController,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationPostalCodeController.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        format: [
+                                          PostalCodeFormatter(),
+                                        ],
+                                        maxLength: 5,
+                                        label: "Postal code",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationPostalCodeController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationPostalCodeController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Expanded(
-                              child: TextFormFiledWidget(
-                                  format: [
-                                    CustomTextInputFormatter(),
-                                  ],
-                                  label: "Country",
-                                  isValid: controller.isValid.value,
-                                  // isImportant: true,
-                                  controller: controller.organizationCountryController,
-                                  isSuffixIconVisible: false,
-                                  isFirst: true,
-                                  hint: "",
-                                  onTap: () {
-                                    controller.organizationCountryController.clear();
-                                  },
-                                  suffixIcon: Icon(
-                                    Icons.highlight_remove,
-                                    color: AppColors.textDarkGrey,
-                                    size: 25,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        format: [
+                                          CustomTextInputFormatter(),
+                                        ],
+                                        label: "Country",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.organizationCountryController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.organizationCountryController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
                                   ),
-                                  checkValidation: (value) {
-                                    return Validation.requiredFiled(value);
-                                  }),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 20),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: CustomButton(
-                              navigate: () {
-                                Navigator.pop(context);
-                                // controller.list.clear();
-                              },
-                              label: "Cancel",
-                              backGround: Colors.white,
-                              isTrue: false,
-                              textColor: AppColors.backgroundPurple,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          SizedBox(
-                            width: 100,
-                            child: CustomButton(
-                              navigate: () {
-                                if (controller.formKey.currentState!.validate()) {
-                                  Map<String, dynamic> param = Map<String, dynamic>();
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: CustomButton(
+                        navigate: () {
+                          Navigator.pop(context);
+                          // controller.list.clear();
+                        },
+                        label: "Cancel",
+                        backGround: Colors.white,
+                        isTrue: false,
+                        textColor: AppColors.backgroundPurple,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    SizedBox(
+                      width: 100,
+                      child: CustomButton(
+                        navigate: () {
+                          if (controller.formKey.currentState!.validate()) {
+                            Map<String, dynamic> param = Map<String, dynamic>();
 
-                                  param["name"] = controller.organizationNameController.text;
-                                  param["email"] = controller.organizationEmailController.text;
-                                  param["state"] = controller.organizationStateController.text;
-                                  param["city"] = controller.organizationCityController.text;
-                                  param["contact_no"] = controller.organizationPhoneNumberController.text;
-                                  param["country"] = controller.organizationCountryController.text;
-                                  param["street_name"] = controller.organizationStreetNameController.text;
-                                  param["postal_code"] = controller.organizationPostalCodeController.text;
-                                  param["address1"] = controller.organizationAddress1Controller.text;
-                                  param["address2"] = controller.organizationAddress2Controller.text;
+                            param["name"] = controller.organizationNameController.text;
+                            param["email"] = controller.organizationEmailController.text;
+                            param["state"] = controller.organizationStateController.text;
+                            param["city"] = controller.organizationCityController.text;
+                            param["contact_no"] = controller.organizationPhoneNumberController.text;
+                            param["country"] = controller.organizationCountryController.text;
+                            param["street_name"] = controller.organizationStreetNameController.text;
+                            param["postal_code"] = controller.organizationPostalCodeController.text;
+                            param["address1"] = controller.organizationAddress1Controller.text;
+                            param["address2"] = controller.organizationAddress2Controller.text;
 
-                                  receiveParam(param);
-                                  // controller.addImage();
-                                  Navigator.pop(context);
-                                }
-                              },
-                              label: "Update",
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                            receiveParam(param);
+                            // controller.addImage();
+                            Navigator.pop(context);
+                          }
+                        },
+                        label: "Update",
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],

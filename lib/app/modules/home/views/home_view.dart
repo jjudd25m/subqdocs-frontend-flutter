@@ -54,10 +54,7 @@ class HomeView extends GetView<HomeController> {
         child: CustomDrawerView(
           onItemSelected: (index) async {
             if (index == 0) {
-
-
               final result = await Get.toNamed(Routes.ADD_PATIENT);
-
 
               if (result == 1) {
                 controller.getPastVisitList(isFist: true);
@@ -79,6 +76,7 @@ class HomeView extends GetView<HomeController> {
               _key.currentState!.closeDrawer();
             } else {
               final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+              _key.currentState!.closeDrawer();
             }
           },
         ),
@@ -89,8 +87,6 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             children: [
               CustomAppBar(drawerkey: _key),
-
-
               Expanded(
                   child: Container(
                 width: double.infinity,
@@ -98,7 +94,6 @@ class HomeView extends GetView<HomeController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     // SizedBox(
                     //   height: 5,
                     // ),
@@ -134,8 +129,6 @@ class HomeView extends GetView<HomeController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-
-
                                 BreadcrumbWidget(
                                   breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                   onBack: (breadcrumb) {
@@ -143,7 +136,7 @@ class HomeView extends GetView<HomeController> {
                                     // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
                                     while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                      Get.back();  // Pop the current screen
+                                      Get.back(); // Pop the current screen
                                     }
                                   },
                                 ),
@@ -354,16 +347,11 @@ class HomeView extends GetView<HomeController> {
                                                     child: CustomButton(
                                                       hight: 40,
                                                       navigate: () async {
-
-                                                       var result ;
-                                                        if(controller.tabIndex.value == 0) {
-                                                         await Get
-                                                              .toNamed(Routes
-                                                              .ADD_PATIENT);
-                                                        }else{
-                                                          final result = await Get
-                                                              .toNamed(Routes
-                                                              .SCHEDULE_PATIENT);
+                                                        var result;
+                                                        if (controller.tabIndex.value == 0) {
+                                                          await Get.toNamed(Routes.ADD_PATIENT);
+                                                        } else {
+                                                          final result = await Get.toNamed(Routes.SCHEDULE_PATIENT);
                                                         }
 
                                                         if (result >= 0) {

@@ -117,37 +117,26 @@ class AddPatientController extends GetxController {
     visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
   }
 
-
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
 
-    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.ADD_PATIENT || globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.SCHEDULE_PATIENT )
-    {
-
-
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT ||
+        globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
       globalController.popRoute();
     }
     // globalController.popRoute();
-
-
-
   }
-
-
-
 
   @override
   void onInit() {
     super.onInit();
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
-      if(Get.currentRoute == Routes.ADD_PATIENT) {
+      if (Get.currentRoute == Routes.ADD_PATIENT) {
         globalController.addRouteInit(Routes.ADD_PATIENT);
-      }else{
+      } else {
         globalController.addRouteInit(Routes.SCHEDULE_PATIENT);
       }
     });
@@ -155,9 +144,6 @@ class AddPatientController extends GetxController {
     print(getNextRoundedTime());
     selectedVisitTimeValue.value = getNextRoundedTime();
   }
-
-
-
 
   String _formatFileSize(int bytes) {
     double sizeInKB = bytes / 1024; // Convert bytes to KB

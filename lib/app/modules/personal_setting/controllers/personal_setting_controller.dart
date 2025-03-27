@@ -143,9 +143,14 @@ class PersonalSettingController extends GetxController {
       InvitedUserResponseModel response = await _personalSettingRepository.userInvite(param: param);
       print("response is $response");
 
-      Get.toNamed(Routes.INVITED_USER_SUBMITTED, arguments: {
-        "invited_user_data": param,
-      });
+      // await Get.toNamed(Routes.INVITED_USER_SUBMITTED, arguments: {
+      //   "invited_user_data": param,
+      // });
+
+      getOrganizationDetail();
+      getUserDetail();
+      getUserByOrganization();
+      getUserRole();
     } catch (error) {
       customPrint("userInvite catch error is $error");
     }

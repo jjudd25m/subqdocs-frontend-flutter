@@ -150,6 +150,7 @@ class SignUpView extends GetView<SignUpController> {
                       width: isSmallScreen ? Get.width - 30 : 416,
                       child: TextFormFiledWidget(
                           label: AppString.password,
+                          maxLines: 1,
                           format: [NoSpaceTextFormatter()],
                           hint: "Enter Password",
                           visibility: controller.passwordVisible.value,
@@ -189,6 +190,7 @@ class SignUpView extends GetView<SignUpController> {
                           label: "Confirm Password",
                           format: [NoSpaceTextFormatter()],
                           hint: "Enter confirm Password",
+                          maxLines: 1,
                           visibility: controller.confirmPasswordVisible.value,
                           controller: controller.confirmPasswordController,
                           suffixIcon: controller.confirmPasswordVisible.value

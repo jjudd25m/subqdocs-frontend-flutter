@@ -48,28 +48,21 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
         child: CustomDrawerView(
           onItemSelected: (index) async {
             if (index == 0) {
-              // final result = await Get.toNamed(Routes.ADD_PATIENT);
-              //
-              // if (result == 1) {
-              //   controller.getPastVisitList(isFist: true);
-              //   controller.getScheduleVisitList(isFist: true);
-              //   controller.getPatientList();
-              // }
-              // _key.currentState!.closeDrawer();
+              controller.globalController.popRoute();
+              _key.currentState!.closeDrawer();
+              Get.back();
+              final result = await Get.toNamed(Routes.ADD_PATIENT);
             } else if (index == 1) {
-              // controller.tabIndex.value = 1;
-              // controller.globalController.homeTabIndex.value = 1;
-              // _key.currentState!.closeDrawer();
+              _key.currentState!.closeDrawer();
+              Get.back(result: 1);
             } else if (index == 2) {
-              // controller.tabIndex.value = 2;
-              // controller.globalController.homeTabIndex.value = 2;
-              // _key.currentState!.closeDrawer();
+              _key.currentState!.closeDrawer();
+              Get.back(result: 2);
             } else if (index == 3) {
-              // controller.tabIndex.value = 0;
-              // controller.globalController.homeTabIndex.value = 3;
-              // _key.currentState!.closeDrawer();
-            } else {
-              final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+              _key.currentState!.closeDrawer();
+              Get.back(result: 0);
+            } else if (index == 4) {
+              _key.currentState!.closeDrawer();
             }
           },
         ),
@@ -770,7 +763,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                 navigate: () async {
                                                   showDialog(
                                                     context: context,
-                                                    barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                    barrierDismissible: false, // Allows dismissing the dialog by tapping outside
                                                     builder: (BuildContext context) {
                                                       return InviteUserDialog(
                                                         receiveParam: (p0) {
