@@ -304,22 +304,23 @@ class VisitMainController extends GetxController {
 
       param['status'] = status;
 
-      ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
-      if (changeStatusModel.responseType == "success") {
-        // Get.back();
-        // Get.back();
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
-
-        patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
-
-        if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
-          Get.back();
-        }
-      } else {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
-        // Get.back();
-        // Get.back();
-      }
+      // ChangeStatusModel changeStatusModel =
+      await visitMainRepository.changeStatus(id: visitId.value, params: param);
+      // if (changeStatusModel.responseType == "success") {
+      //   // Get.back();
+      //   // Get.back();
+      //   CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+      //
+      //   patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+      //
+      //   if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+      //     Get.back();
+      //   }
+      // } else {
+      //   CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+      //   // Get.back();
+      //   // Get.back();
+      // }
     } catch (e) {
       // customPrint("$e");
       CustomToastification().showToast("$e", type: ToastificationType.error);

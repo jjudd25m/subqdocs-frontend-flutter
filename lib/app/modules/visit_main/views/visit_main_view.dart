@@ -2610,7 +2610,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       File? audioFile = await controller.recorderService.stopRecording();
                                       customPrint("audio file url is :- ${audioFile?.absolute}");
 
-                                      controller.changeStatus("In-Exam");
+                                      // controller.changeStatus("In-Exam");
 
                                       if (audioFile != null) {
                                         controller.submitAudio(audioFile!);
