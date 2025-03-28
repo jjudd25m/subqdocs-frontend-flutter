@@ -18,14 +18,21 @@ import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../widget/globle_attchmnets.dart';
 import '../../data/service/database_helper.dart';
 import '../../data/service/recorder_service.dart';
 import '../../models/ChangeModel.dart';
+import '../../models/media_listing_model.dart';
 import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
+import '../../modules/home/model/FilterListingModel.dart';
+import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
+import '../../modules/home/model/home_patient_list_sorting_model.dart';
+import '../../modules/home/model/home_schedule_list_sorting_model.dart';
 import '../../modules/login/model/login_model.dart';
 import '../../modules/visit_main/controllers/visit_main_controller.dart';
 import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
 import '../../modules/visit_main/repository/visit_main_repository.dart';
+import '../../modules/visit_main/views/attachmentDailog.dart';
 import '../../routes/app_pages.dart';
 import 'app_preferences.dart';
 import 'logger.dart';
@@ -52,15 +59,29 @@ class GlobalController extends GetxController {
 //all variable for the model recording
 //   --------------------------------------------------------------------------------------------------------------------------------------------------
   RxBool isStartTranscript = RxBool(false);
+
+  RxBool isStartRecording = false.obs;
   RxBool isExpandRecording = true.obs;
   RecorderService recorderService = RecorderService();
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   RxString visitId = RxString("");
   RxString patientId = RxString("");
+  RxList<MediaListingModel> list = RxList();
 
   // below  all the function is for the recording model
  // ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return GlobleAttchmnets(); // Our custom dialog
+      },
+    );
+  }
+
 
   Future<void> changeStatus(String status) async {
     try {
@@ -79,7 +100,7 @@ class GlobalController extends GetxController {
 
         if (Get.isRegistered<VisitMainController>()) {
           // If NotificationController is available, notify it
-          Get.find<VisitMainController>().getPatientDetails();
+          Get.find<VisitMainController>().updateData();
 
 
         } else {
@@ -100,7 +121,6 @@ class GlobalController extends GetxController {
       // Get.back();
     }
   }
-
   Future<void> submitAudio(File audioFile) async {
     if (audioFile.path.isEmpty) {
       return;
@@ -164,8 +184,124 @@ class GlobalController extends GetxController {
       }
     }
   }
+  Future<void> uploadAttachments() async {
+    Loader().showLoadingDialogForSimpleLoader();
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
+    Map<String, List<File>> profileParams = {};
+    if (list.isNotEmpty) {
+      customPrint("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+    } else {
+      customPrint("profile is not  available");
+    }
+    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    list.clear();
+    Get.back();
 
+    if (Get.isRegistered<VisitMainController>()) {
+      // If NotificationController is available, notify it
+      Get.find<VisitMainController>().getPatientAttachment();
+    } else {
+      // Optionally, handle the case when NotificationController is not available
+      print("NotificationController is not available");
+    }
+
+  }
+  String _formatFileSize(int bytes) {
+    double sizeInKB = bytes / 1024; // Convert bytes to KB
+    double sizeInMB = sizeInKB / 1024; // Convert KB to MB
+    return "${sizeInMB.toStringAsFixed(2)} MB";
+  }
+  String _formatDate(DateTime date) {
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+    return dateFormat.format(date); // Format date to dd/MM/yyyy
+  }
+  Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
+    if (clear) {
+      list.clear();
+    }
+
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
+
+    customPrint("media  file is  $fileList");
+
+    fileList?.forEach(
+          (element) {
+        XFile? _pickedFile;
+        String? _fileName;
+        DateTime? _pickDate;
+        int? _fileSize;
+        if (element != null) {
+          _fileName = element.name; // Get the file name
+          _pickDate = DateTime.now(); // Get the date when the file is picked
+
+          // Get the size of the file
+          File file = File(element.xFile.path);
+          _fileSize = file.lengthSync(); // Size in bytes
+
+          String? _filesizeString = _formatFileSize(_fileSize);
+
+          String? _shortFileName;
+          if (p.basename(_fileName).length > 15) {
+            // Truncate the name to 12 characters and add ellipsis
+            _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+          } else {
+            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          }
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+        }
+      },
+    );
+    list.refresh();
+    if (clear) {
+      if (list.isNotEmpty) {
+        showCustomDialog(context);
+      }
+    }
+  }
+
+  Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
+    if (clear) {
+      list.clear();
+    }
+
+    XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
+
+    customPrint("media  file is  $image");
+
+    XFile? _pickedFile;
+    String? _fileName;
+    DateTime? _pickDate;
+    int? _fileSize;
+    if (image != null) {
+      _fileName = image.name; // Get the file name
+      _pickDate = DateTime.now(); // Get the date when the file is picked
+
+      // Get the size of the file
+      File file = File(image.path);
+      _fileSize = file.lengthSync(); // Size in bytes
+
+      String? _filesizeString = _formatFileSize(_fileSize);
+      String? _shortFileName;
+      if (p.basename(_fileName).length > 15) {
+        // Truncate the name to 12 characters and add ellipsis
+        _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+      } else {
+        _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+      }
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+    }
+
+    list.refresh();
+
+    if (clear) {
+      if (list.isNotEmpty) {
+        showCustomDialog(context);
+      }
+    }
+  }
 
   // ---------------------------------------------------------------------------------------------------------------------------------------------------
 

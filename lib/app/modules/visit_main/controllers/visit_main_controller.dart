@@ -74,7 +74,7 @@ class VisitMainController extends GetxController {
 
 
   final count = 0.obs;
-  RxBool isStartRecording = false.obs;
+
   RxInt isSelectedAttchmentOption = RxInt(-1);
   List<String> patientType = ["New Patient", "Old Patient"];
   RxnString selectedMedicalAssistant = RxnString();
@@ -141,8 +141,14 @@ class VisitMainController extends GetxController {
       }
     }
   }
-  
 
+  Future<void> updateData() async {
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+      Get.back();
+    }
+  }
 
   void clearFilter() {
     isSelectedAttchmentOption.value = -1;
@@ -210,6 +216,55 @@ class VisitMainController extends GetxController {
     );
   }
 
+  String getFileExtension(String filePath) {
+    // Define image extensions
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+
+    // Get the file extension
+    String extension = p.extension(filePath);
+
+    // Check if the extension is an image type
+    if (imageExtensions.contains(extension.toLowerCase())) {
+      return 'image'; // Return "image" if it's an image extension
+    } else {
+      return extension.replaceFirst('.', ''); // Return extension without dot
+    }
+  }
+
+  String formatDateTime({required String firstDate, required String secondDate}) {
+    if (firstDate != "" && secondDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+      DateTime secondDateTime = DateTime.parse(secondDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Format the second time (for hours and minutes with am/pm)
+      String formattedTime = DateFormat('h:mm a').format(secondDateTime.toLocal());
+
+      // Return the formatted string in the desired format
+      return '$formattedDate $formattedTime';
+    } else {
+      return "";
+    }
+  }
+
+  String visitRecapformatDate({required String firstDate}) {
+    if (firstDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Return the formatted string in the desired format
+      return formattedDate;
+    } else {
+      return "";
+    }
+  }
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -224,6 +279,13 @@ class VisitMainController extends GetxController {
     });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
+
+    globalController.visitId = visitId;
+    globalController.patientId = patientId;
+
+
+
+
 
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
