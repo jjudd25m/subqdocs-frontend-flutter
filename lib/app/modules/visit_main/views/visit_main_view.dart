@@ -155,18 +155,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   BreadcrumbWidget(
-                                    breadcrumbHistory: controller
-                                        .globalController.breadcrumbHistory.value,
+                                    breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                     onBack: (breadcrumb) {
-                                      controller.globalController
-                                          .popUntilRoute(breadcrumb);
+                                      controller.globalController.popUntilRoute(breadcrumb);
                                       // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                                      while (Get.currentRoute !=
-                                          controller.globalController
-                                              .getKeyByValue(breadcrumb)) {
+                                      while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
                                         Get.back(); // Pop the current screen
                                       }
                                     },
@@ -247,6 +242,22 @@ class _VisitMainViewState extends State<VisitMainView> {
                                               ],
                                             ),
                                             Spacer(),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS,
+                                                    arguments: {"patientData": controller.patientId.value, "visitId": controller.visitId.value, "fromSchedule": false});
+                                                controller.getPatientDetails();
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: SvgPicture.asset(
+                                                  ImagePath.edit,
+                                                  width: 26,
+                                                  height: 26,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -502,8 +513,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                       color: AppColors.white,
                                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
                                                     ),
@@ -596,8 +607,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                       color: AppColors.white,
                                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
                                                     ),
@@ -769,8 +780,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                       color: AppColors.white,
                                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
                                                     ),
@@ -866,8 +877,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                       color: AppColors.white,
                                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
                                                     ),
@@ -963,8 +974,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     width: double.infinity,
                                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                      borderRadius:
+                                                          BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                       color: AppColors.white,
                                                       border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
                                                     ),
@@ -1171,9 +1182,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                         "patientId": controller.patientId.value,
                                                                         "unique_tag": DateTime.now().toString(),
                                                                       });
-
-
-
                                                                     },
                                                                     child: Text(
                                                                       maxLines: 1,
@@ -1366,8 +1374,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     "patientId": controller.patientId.value,
                                                                     "unique_tag": DateTime.now().toString(),
                                                                   });
-
-
                                                                 },
                                                                 child: Text(
                                                                   textAlign: TextAlign.center,
@@ -1417,12 +1423,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           GestureDetector(
                                             onTap: () async {
                                               if (controller.isConnected.value) {
-
                                                 controller.globalController.addRoute(Routes.ALL_ATTACHMENT);
                                                 var result = await Get.toNamed(Routes.ALL_ATTACHMENT, arguments: {
                                                   "visit_id": controller.patientId.value,
                                                 });
-
 
                                                 if (result != null) {
                                                   controller.getPatientAttachment();
@@ -2159,7 +2163,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   children: [
                                     Text(
                                       textAlign: TextAlign.center,
-                                      controller.isExpandRecording.value ? "Recording in Progress" :  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                      controller.isExpandRecording.value
+                                          ? "Recording in Progress"
+                                          : "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                       style: AppFonts.medium(14, AppColors.textWhite),
                                     ),
                                     Spacer(),

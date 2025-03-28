@@ -170,10 +170,10 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                     child: Container(
                                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            child: controller.tabIndex.value == 0
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            controller.tabIndex.value == 0
                                                 ? Theme(
                                                     data: ThemeData(
                                                       splashColor: Colors.transparent, // Remove splash color
@@ -798,6 +798,69 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                           child: TextFormField(
                                                                             // controller: controller.searchController,
                                                                             onChanged: (value) {
+                                                                              print("$value");
+
+//                                                                               if (value.isNotEmpty) {
+//                                                                                 var filteredData = controller.getUserOrganizationListModel.value?.responseData
+//                                                                                     ?.where((element) =>
+//                                                                                         (element.name?.toLowerCase().contains(value.toLowerCase()) ?? false) ||
+//                                                                                         (element.email?.toLowerCase().contains(value.toLowerCase()) ?? false))
+//                                                                                     .toList();
+//
+//                                                                                 print("filteredData ${filteredData?.length}");
+//                                                                                 print("getUserOrganizationListModel ${controller.getUserOrganizationListModel.value?.responseData?.length}");
+// // Ensure we don't set it to null or an empty list if there is no data
+//                                                                                 controller.filterGetUserOrganizationListModel.value?.responseData = filteredData;
+//
+//                                                                                 controller.filterGetUserOrganizationListModel.refresh();
+//                                                                               } else {
+//                                                                                 print("getUserOrganizationListModel ${controller.getUserOrganizationListModel.value?.responseData?.length}");
+//                                                                                 controller.filterGetUserOrganizationListModel.value = controller.getUserOrganizationListModel.value;
+//                                                                                 controller.filterGetUserOrganizationListModel.refresh();
+//                                                                               }
+
+                                                                              if (value.isNotEmpty) {
+                                                                                // Create a copy of the responseData to ensure we're not modifying the original list
+
+                                                                                controller.filterGetUserOrganizationListModel.value?.responseData =
+                                                                                    controller.getUserOrganizationListModel.value?.responseData?.where((element) {
+                                                                                  String userName = (element.name?.trim().toLowerCase() ?? "").trim().toLowerCase();
+                                                                                  String userEmail = (element.email?.trim().toLowerCase() ?? "").trim().toLowerCase();
+
+                                                                                  return (userName.contains(value) || userEmail.contains(value));
+                                                                                }).toList();
+
+                                                                                controller.filterGetUserOrganizationListModel.refresh();
+                                                                                // List<GetUserOrganizationListResponseData>? filteredData = controller.getUserOrganizationListModel.value?.responseData
+                                                                                //     ?.where((element) =>
+                                                                                //         (element.name?.toLowerCase().contains(value.toLowerCase()) ?? false) ||
+                                                                                //         (element.email?.toLowerCase().contains(value.toLowerCase()) ?? false))
+                                                                                //     .toList();
+                                                                                //
+                                                                                print("filteredData ${controller.filterGetUserOrganizationListModel.value?.responseData?.length}");
+                                                                                print("getUserOrganizationListModel ${controller.getUserOrganizationListModel.value?.responseData?.length}");
+                                                                                //
+                                                                                // // Update filter model with filtered data
+                                                                                // controller.filterGetUserOrganizationListModel.value?.responseData = filteredData;
+                                                                                //
+                                                                                // // Refresh if there are filtered results
+                                                                                // if (filteredData != null && filteredData.isNotEmpty) {
+                                                                                //   controller.filterGetUserOrganizationListModel.refresh();
+                                                                                // }
+                                                                              } else {
+                                                                                print("getUserOrganizationListModel ${controller.getUserOrganizationListModel.value?.responseData?.length}");
+
+                                                                                // When no filter value, reset to the original data (no filter applied)
+                                                                                controller.filterGetUserOrganizationListModel.value?.responseData =
+                                                                                    List.from(controller.getUserOrganizationListModel.value?.responseData ?? []);
+
+                                                                                // Refresh if the data has changed
+                                                                                if (controller.filterGetUserOrganizationListModel.value?.responseData !=
+                                                                                    controller.getUserOrganizationListModel.value?.responseData) {
+                                                                                  controller.filterGetUserOrganizationListModel.refresh();
+                                                                                }
+                                                                              }
+
                                                                               // controller.tabIndex.value == 0
                                                                               //     ? controller.getPatientList()
                                                                               //     : controller.tabIndex.value == 1
@@ -841,10 +904,10 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                             Padding(
                                                               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                               child: SizedBox(
-                                                                height: ((controller.getUserOrganizationListModel.value?.responseData?.length ?? 0) + 1) * 68,
+                                                                height: ((controller.filterGetUserOrganizationListModel.value?.responseData?.length ?? 0) + 1) * 68,
                                                                 child: Column(
                                                                   children: [
-                                                                    controller.getUserOrganizationListModel.value?.responseData!.isEmpty ?? false
+                                                                    controller.filterGetUserOrganizationListModel.value?.responseData!.isEmpty ?? false
                                                                         ? Padding(
                                                                             padding: const EdgeInsets.all(10),
                                                                             child: EmptyPatientScreen(onBtnPress: () async {}, title: "No data found", description: ""),
@@ -855,7 +918,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                 // scrollController: controller.scrollControllerPatientList,
                                                                                 physics: NeverScrollableScrollPhysics(),
                                                                                 onRefresh: () async {},
-                                                                                rows: _getTableRows(controller.getUserOrganizationListModel.value?.responseData ?? []),
+                                                                                rows: _getTableRows(controller.filterGetUserOrganizationListModel.value?.responseData ?? []),
                                                                                 columnCount: 6,
                                                                                 cellBuilder: _buildTableCell,
                                                                                 context: context,
@@ -918,11 +981,11 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                           ],
                                                         ),
                                                       ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
+                                            SizedBox(
+                                              height: 10,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )

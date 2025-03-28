@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:subqdocs/utils/app_colors.dart';
+import 'package:subqdocs/utils/imagepath.dart';
 
 import '../controllers/splash_controller.dart';
 
@@ -17,8 +18,13 @@ class SplashView extends GetView<SplashController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: Image.asset("assets/images/img.png"),
-            ),
+                child: SvgPicture.asset(
+              ImagePath.subqdocs_white,
+              width: MediaQuery.of(context).size.width * 0.55,
+            )
+
+                // Image.asset("assets/images/img.png"),
+                ),
           ],
         ));
   }

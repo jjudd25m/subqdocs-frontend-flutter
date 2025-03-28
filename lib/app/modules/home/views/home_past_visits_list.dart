@@ -51,7 +51,6 @@ class HomePastVisitsList extends GetView<HomeController> {
                   height: 15,
                 ),
 
-
               // Text("total data is the ${controller.pastVisitList.length}" , style: TextStyle( fontSize: 20),),
               controller.pastVisitList.isEmpty
                   ? Padding(
@@ -76,7 +75,6 @@ class HomePastVisitsList extends GetView<HomeController> {
                           controller.getPastVisitList(isFist: true);
                           print("refresh past list view");
                           controller.pagePast = 1;
-
                         },
                         onLoadMore: () => controller.getPastVisitListFetchMore(),
                         rows: _getTableRows(controller.pastVisitList),
@@ -140,6 +138,8 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 6),
                                           child: Text(
                                             cellData,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.visible,
                                             textAlign: TextAlign.center,
                                             style: AppFonts.medium(13, controller.getStatusColor(cellData)),
                                             // style: AppFonts.medium(13, cellData == "Finalized" ? AppColors.greenPastVisit : AppColors.orangeText),
@@ -164,7 +164,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           itemBuilder: (context) => [
                                                 PopupMenuItem(
                                                     padding: EdgeInsets.zero,
-                                                    onTap: ()async  {
+                                                    onTap: () async {
                                                       customPrint("visite is is ${controller.pastVisitList[rowIndex].visitId.toString()}");
                                                       controller.globalController.addRoute(Routes.PATIENT_PROFILE);
                                                       await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {

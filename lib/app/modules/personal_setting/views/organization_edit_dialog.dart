@@ -51,7 +51,7 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         child: Text(
-                          "Organization Edit",
+                          "Organization Management",
                           style: AppFonts.medium(14, Colors.white),
                         ),
                       ),
@@ -80,7 +80,7 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                   shrinkWrap: true,
                   children: [
                     SizedBox(
-                      width: 360,
+                      width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -88,34 +88,80 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                           children: [
                             Row(
                               children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Organization Management",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                ),
+                                Spacer()
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              spacing: 15,
+                              children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
-                                        ],
-                                        label: "Name",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.organizationNameController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.organizationNameController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        CustomTextInputFormatter(),
+                                      ],
+                                      label: "Name",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.organizationNameController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationNameController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      // format: [
+                                      //   CustomTextInputFormatter(),
+                                      // ],
+                                      label: "No. of Providers",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.organizationNoOfProvidersController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationNoOfProvidersController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
                                 ),
                               ],
                             ),
+                            SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Contact",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                ),
+                                Spacer()
+                              ],
+                            ),
+                            SizedBox(height: 5),
                             Row(
                               children: [
                                 Expanded(
@@ -146,7 +192,7 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                 Expanded(
                                   child: TextFormFiledWidget(
                                       format: [PlusTextFormatter()],
-                                      label: "Contact Number",
+                                      label: "Phone Number",
                                       controller: controller.organizationPhoneNumberController,
                                       isValid: true,
                                       isSuffixIconVisible: false,
@@ -167,6 +213,18 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Address",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                ),
+                                Spacer()
+                              ],
+                            ),
+                            SizedBox(height: 5),
                             Row(
                               children: [
                                 Expanded(
@@ -258,126 +316,119 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                               ],
                             ),
                             Row(
+                              spacing: 15,
                               children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
-                                        ],
-                                        label: "City",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.organizationCityController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.organizationCityController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        CustomTextInputFormatter(),
+                                      ],
+                                      label: "City",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.organizationCityController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationCityController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        CustomTextInputFormatter(),
+                                      ],
+                                      label: "State",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.organizationStateController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationStateController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
                                 ),
                               ],
                             ),
                             Row(
+                              spacing: 15,
                               children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
-                                        ],
-                                        label: "State",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.organizationStateController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.organizationStateController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        PostalCodeFormatter(),
+                                      ],
+                                      label: "Postal code",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.organizationPostalCodeController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationPostalCodeController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        CustomTextInputFormatter(),
+                                      ],
+                                      label: "Country",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.organizationCountryController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.organizationCountryController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          PostalCodeFormatter(),
-                                        ],
-                                        maxLength: 5,
-                                        label: "Postal code",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.organizationPostalCodeController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.organizationPostalCodeController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
-                                        ],
-                                        label: "Country",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.organizationCountryController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.organizationCountryController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Expanded(
+                            //       child:
+                            //
+                            //     ),
+                            //   ],
+                            // ),
                             SizedBox(height: 20),
                           ],
                         ),

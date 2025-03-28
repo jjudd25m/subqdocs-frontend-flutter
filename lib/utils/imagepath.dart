@@ -7,6 +7,7 @@ class ImagePath {
   static const String rightCheck = 'assets/images/right_ok.svg';
   static const String drawer = 'assets/images/logo_drawer.svg';
   static const String subqdocs_text_logo = 'assets/images/subqdocs_text_logo.png';
+  static const String subqdocs_text_logo_svg = 'assets/images/subqdocs_text_logo.svg';
   static const String logo_signout = 'assets/images/logo_signout.svg';
   static const String avatar = 'assets/images/Avatar.svg';
   static const String logo_back = 'assets/images/logo_back.svg';
@@ -102,4 +103,5 @@ class ImagePath {
   static const String subqdocs_icon = 'assets/images/subqdocs_icon.png';
   static const String textfield_clear = 'assets/images/textfield_clear.svg';
   static const String textfield_clear_png = 'assets/images/textfield_clear.png';
+  static const String subqdocs_white = 'assets/images/subqdocs_white.svg';
 }

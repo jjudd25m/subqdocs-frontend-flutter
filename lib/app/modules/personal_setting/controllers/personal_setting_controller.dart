@@ -29,6 +29,7 @@ class PersonalSettingController extends GetxController {
   // RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
   Rxn<GetUserRolesModel> userRolesModel = Rxn<GetUserRolesModel>();
+  Rxn<GetUserOrganizationListModel> filterGetUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
   Rxn<GetUserOrganizationListModel> getUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
   Rxn<GetOrganizationDetailModel> getOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
   Rxn<LoginModel> loginData = Rxn<LoginModel>();
@@ -39,6 +40,7 @@ class PersonalSettingController extends GetxController {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
 
+  TextEditingController organizationNoOfProvidersController = TextEditingController();
   TextEditingController organizationNameController = TextEditingController();
   TextEditingController organizationEmailController = TextEditingController();
   TextEditingController organizationPhoneNumberController = TextEditingController();
@@ -217,6 +219,8 @@ class PersonalSettingController extends GetxController {
 
     try {
       getUserOrganizationListModel.value = await _personalSettingRepository.getUserByOrganization();
+      filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
+
       Get.back();
     } catch (error) {
       customPrint("login catch error is $error");

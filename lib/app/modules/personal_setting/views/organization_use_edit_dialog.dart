@@ -49,7 +49,7 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         child: Text(
-                          "Organization User edit",
+                          "Personal Setting",
                           style: AppFonts.medium(14, Colors.white),
                         ),
                       ),
@@ -78,13 +78,25 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                   shrinkWrap: true,
                   children: [
                     SizedBox(
-                      width: 360,
+                      width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           spacing: 10,
                           children: [
                             Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Personal Information",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                ),
+                                Spacer()
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              spacing: 15,
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
@@ -110,10 +122,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                         return Validation.requiredFiled(value);
                                       }),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
                                       format: [
@@ -140,6 +148,40 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 ),
                               ],
                             ),
+                            Row(
+                              spacing: 15,
+                              children: [
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        CustomTextInputFormatter(),
+                                      ],
+                                      label: "Organization",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.userOrganizationNameNameController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "SubQDocs",
+                                      onTap: () {
+                                        controller.userOrganizationNameNameController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            // Row(
+                            //   children: [
+                            //
+                            //   ],
+                            // ),
                             // Row(
                             //   children: [
                             //     Expanded(
@@ -194,12 +236,50 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                             //     ),
                             //   ],
                             // ),
+                            SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Contact",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                ),
+                                Spacer()
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [NoSpaceLowercaseTextFormatter()],
+                                      label: "Email Address",
+                                      controller: controller.userEmailController,
+                                      isValid: controller.isValid.value,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.userEmailController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.emailValidateRequired(value);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 5),
                             Row(
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
                                       format: [PlusTextFormatter()],
-                                      label: "Contact Number",
+                                      label: "Phone Number",
                                       controller: controller.userPhoneNumberController,
                                       isValid: true,
                                       isSuffixIconVisible: false,
@@ -220,37 +300,20 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 5),
                             Row(
                               children: [
-                                Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        // format: [
-                                        //   CustomTextInputFormatter(),
-                                        // ],
-                                        label: "Street name",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.userStreetNameController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.userStreetNameController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Address",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
                                 ),
+                                Spacer()
                               ],
                             ),
+                            SizedBox(height: 5),
                             Row(
+                              spacing: 15,
                               children: [
                                 Expanded(
                                   child: Expanded(
@@ -258,15 +321,15 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                         format: [
                                           CustomTextInputFormatter(),
                                         ],
-                                        label: "City",
+                                        label: "Country",
                                         isValid: controller.isValid.value,
                                         // isImportant: true,
-                                        controller: controller.userCityController,
+                                        controller: controller.userCountryController,
                                         isSuffixIconVisible: false,
                                         isFirst: true,
                                         hint: "",
                                         onTap: () {
-                                          controller.userCityController.clear();
+                                          controller.userCountryController.clear();
                                         },
                                         suffixIcon: Icon(
                                           Icons.highlight_remove,
@@ -278,10 +341,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                         }),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
                                 Expanded(
                                   child: Expanded(
                                     child: TextFormFiledWidget(
@@ -311,33 +370,55 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               ],
                             ),
                             Row(
+                              spacing: 15,
                               children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          PostalCodeFormatter(),
-                                        ],
-                                        label: "Postal code",
-                                        maxLength: 5,
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.userPostalCodeController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.userPostalCodeController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
-                                  ),
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        CustomTextInputFormatter(),
+                                      ],
+                                      label: "City",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.userCityController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.userCityController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      format: [
+                                        PostalCodeFormatter(),
+                                      ],
+                                      label: "Postal code",
+                                      // maxLength: 5,
+                                      isValid: controller.isValid.value,
+                                      controller: controller.userPostalCodeController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.userPostalCodeController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
                                 ),
                               ],
                             ),
@@ -346,18 +427,18 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 Expanded(
                                   child: Expanded(
                                     child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
-                                        ],
-                                        label: "Country",
+                                        // format: [
+                                        //   CustomTextInputFormatter(),
+                                        // ],
+                                        label: "Street name",
                                         isValid: controller.isValid.value,
                                         // isImportant: true,
-                                        controller: controller.userCountryController,
+                                        controller: controller.userStreetNameController,
                                         isSuffixIconVisible: false,
                                         isFirst: true,
                                         hint: "",
                                         onTap: () {
-                                          controller.userCountryController.clear();
+                                          controller.userStreetNameController.clear();
                                         },
                                         suffixIcon: Icon(
                                           Icons.highlight_remove,
@@ -422,7 +503,7 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                             Navigator.pop(context);
                           }
                         },
-                        label: "Update",
+                        label: "Submit",
                       ),
                     ),
                   ],
