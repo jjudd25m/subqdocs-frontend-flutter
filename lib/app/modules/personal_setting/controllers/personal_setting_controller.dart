@@ -24,6 +24,7 @@ import '../repository/personal_setting_repository.dart';
 class PersonalSettingController extends GetxController {
   //TODO: Implement PersonalSettingController
 
+  RxInt tabIndex = RxInt(0);
   final PersonalSettingRepository _personalSettingRepository = PersonalSettingRepository();
   // RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();

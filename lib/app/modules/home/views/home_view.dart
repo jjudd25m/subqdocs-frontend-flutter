@@ -94,29 +94,6 @@ class HomeView extends GetView<HomeController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 15, right: 15),
-                    //   child: Container(
-                    //     width: double.infinity,
-                    //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(14),
-                    //       child: Text(
-                    //         "Scheduling view",
-                    //         style: AppFonts.regular(17, AppColors.textBlack),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 16,
-                    // ),
-                    // SizedBox(
-                    //   width: 20,
-                    // ),
                     Obx(() {
                       return Expanded(
                         child: Padding(
