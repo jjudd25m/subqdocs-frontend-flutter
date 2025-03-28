@@ -54,7 +54,7 @@ class VisitMainController extends GetxController {
 
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
-  RxBool isStartTranscript = RxBool(false);
+
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
 
@@ -68,11 +68,11 @@ class VisitMainController extends GetxController {
   String fullNoteOfLastVisit = "fullNoteOfLastVisit";
 
   final VisitMainRepository visitMainRepository = VisitMainRepository();
-  RecorderService recorderService = RecorderService();
+
   final GlobalController globalController = Get.find();
   TextEditingController searchController = TextEditingController();
 
-  RxBool isExpandRecording = true.obs;
+
   final count = 0.obs;
   RxBool isStartRecording = false.obs;
   RxInt isSelectedAttchmentOption = RxInt(-1);
@@ -296,92 +296,7 @@ class VisitMainController extends GetxController {
     }
   }
 
-  Future<void> changeStatus(String status) async {
-    try {
-      // Loader().showLoadingDialogForSimpleLoader();
 
-      Map<String, dynamic> param = {};
-
-      param['status'] = status;
-
-      ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
-      if (changeStatusModel.responseType == "success") {
-        // Get.back();
-        // Get.back();
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
-
-        patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
-
-        if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
-          Get.back();
-        }
-      } else {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
-        // Get.back();
-        // Get.back();
-      }
-    } catch (e) {
-      // customPrint("$e");
-      CustomToastification().showToast("$e", type: ToastificationType.error);
-      // Get.back();
-    }
-  }
-
-  Future<void> submitAudio(File audioFile) async {
-    if (audioFile.path.isEmpty) {
-      return;
-    }
-
-    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
-
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      customPrint("internet not available ");
-      // isLoading.value = true;
-      // loadingMessage.value = "Uploading Audio";
-      Loader().showLoadingDialogForSimpleLoader();
-
-      Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
-
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
-
-      await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-
-      // Show a message or update UI
-      // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
-      // isLoading.value = false;
-
-      Get.back();
-
-      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
-
-      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
-
-      for (var file in audio) {
-        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
-      }
-    } else {
-      customPrint("internet available");
-      // isLoading.value = true;
-      // loadingMessage.value = "Uploading Audio";
-      Loader().showLoadingDialogForSimpleLoader();
-      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
-      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
-
-      // isLoading.value = false;
-      Get.back();
-      isStartTranscript.value = false;
-
-      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-        "trascriptUploadData": patientTranscriptUploadModel,
-        "unique_tag": DateTime.now().toString(),
-      });
-
-      getPatientDetails();
-    }
-  }
 
   Future<void> deleteAttachments(int id) async {
     Loader().showLoadingDialogForSimpleLoader();

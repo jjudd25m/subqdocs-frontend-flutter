@@ -2111,7 +2111,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                     })
                   ],
                 ),
-                if (controller.isStartTranscript.value) ...[
+                if (controller.globalController.isStartTranscript.value) ...[
                   Positioned(
                     bottom: 120,
                     right: 30,
@@ -2129,15 +2129,15 @@ class _VisitMainViewState extends State<VisitMainView> {
                             ),
                           ],
                           borderRadius: BorderRadius.circular(12),
-                          color: controller.isExpandRecording.value ? AppColors.backgroundWhite : AppColors.black,
+                          color: controller.globalController.isExpandRecording.value ? AppColors.backgroundWhite : AppColors.black,
                         ),
-                        padding: controller.isExpandRecording.value ? EdgeInsets.symmetric(horizontal: 0, vertical: 0) : EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: controller.globalController.isExpandRecording.value ? EdgeInsets.symmetric(horizontal: 0, vertical: 0) : EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         curve: Curves.easeInOut,
                         child: Column(
                           children: [
                             // Header Row (expand/collapse button)
 
-                            if (controller.isExpandRecording.value) ...[
+                            if (controller.globalController.isExpandRecording.value) ...[
                               Container(
                                 height: 50,
                                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -2159,16 +2159,16 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   children: [
                                     Text(
                                       textAlign: TextAlign.center,
-                                      controller.isExpandRecording.value ? "Recording in Progress" :  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                      controller.globalController.isExpandRecording.value ? "Recording in Progress" :  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                       style: AppFonts.medium(14, AppColors.textWhite),
                                     ),
                                     Spacer(),
                                     GestureDetector(
                                       onTap: () {
-                                        controller.isExpandRecording.value = !controller.isExpandRecording.value;
+                                        controller.globalController.isExpandRecording.value = !controller.globalController.isExpandRecording.value;
                                       },
                                       child: SvgPicture.asset(
-                                        controller.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording,
+                                        controller.globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording,
                                         height: 30,
                                         width: 30,
                                       ),
@@ -2195,30 +2195,30 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 children: [
                                   GestureDetector(
                                     onTap: () async {
-                                      if (controller.recorderService.recordingStatus.value == 0) {
+                                      if (controller.globalController.recorderService.recordingStatus.value == 0) {
                                         controller.changeStatus("In-Room");
                                         // If not recording, start the recording
-                                        await controller.recorderService.startRecording(context);
-                                      } else if (controller.recorderService.recordingStatus.value == 1) {
+                                        await controller.globalController.recorderService.startRecording(context);
+                                      } else if (controller.globalController.recorderService.recordingStatus.value == 1) {
                                         // If recording, pause it
-                                        await controller.recorderService.pauseRecording();
-                                      } else if (controller.recorderService.recordingStatus.value == 2) {
+                                        await controller.globalController.recorderService.pauseRecording();
+                                      } else if (controller.globalController.recorderService.recordingStatus.value == 2) {
                                         // If paused, resume the recording
-                                        await controller.recorderService.resumeRecording();
+                                        await controller.globalController.recorderService.resumeRecording();
                                       }
                                     },
                                     child: Column(
                                       children: [
                                         // Display different icons and text based on the recording status
                                         Obx(() {
-                                          if (controller.recorderService.recordingStatus.value == 0) {
+                                          if (controller.globalController.recorderService.recordingStatus.value == 0) {
                                             // If recording is stopped, show start button
                                             return SvgPicture.asset(
                                               ImagePath.start_recording,
                                               height: 50,
                                               width: 50,
                                             );
-                                          } else if (controller.recorderService.recordingStatus.value == 1) {
+                                          } else if (controller.globalController.recorderService.recordingStatus.value == 1) {
                                             // If recording, show pause button
                                             return SvgPicture.asset(
                                               ImagePath.pause_recording, // Replace with the actual pause icon
@@ -2237,13 +2237,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         SizedBox(height: 10),
                                         // Display corresponding text based on the status
                                         Obx(() {
-                                          if (controller.recorderService.recordingStatus.value == 0) {
+                                          if (controller.globalController.recorderService.recordingStatus.value == 0) {
                                             return Text(
                                               textAlign: TextAlign.center,
                                               "Start",
                                               style: AppFonts.medium(17, AppColors.textGrey),
                                             );
-                                          } else if (controller.recorderService.recordingStatus.value == 1) {
+                                          } else if (controller.globalController.recorderService.recordingStatus.value == 1) {
                                             return Text(
                                               textAlign: TextAlign.center,
                                               "Pause",
@@ -2263,8 +2263,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () async {
-                                      controller.changeStatus("In-Exam");
-                                      File? audioFile = await controller.recorderService.stopRecording();
+
+                                      File? audioFile = await controller.globalController.recorderService.stopRecording();
                                       customPrint("audio file url is :- ${audioFile?.absolute}");
                                       if (audioFile != null) {
                                         controller.submitAudio(audioFile!);
@@ -2292,7 +2292,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                               Obx(() {
                                 return Text(
                                   textAlign: TextAlign.center,
-                                  controller.recorderService.formattedRecordingTime,
+                                  controller.globalController.recorderService.formattedRecordingTime,
                                   style: AppFonts.regular(14, AppColors.textBlack),
                                 );
                               }),
@@ -2324,7 +2324,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           controller.changeStatus("In-Room");
                                           customPrint("audio is:- ${result?.files.first.xFile.path}");
                                           controller.submitAudio(File(result?.files.first.path ?? ""));
-                                          controller.changeStatus("In-Exam");
+
                                         },
                                         child: Container(
                                           height: 50,
@@ -2642,20 +2642,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                     }),
                   ),
                 ],
-                if (controller.isLoading.value) ...[
-                  Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // Vertically centers the Column contents
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // CircularProgressIndicator(color: AppColors.textPurple),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(controller.loadingMessage.value)
-                    ],
-                  )),
-                ]
+
               ],
             );
           }),

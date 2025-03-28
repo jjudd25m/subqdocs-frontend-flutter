@@ -1,10 +1,33 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:path/path.dart' as p;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../modules/home/model/FilterListingModel.dart';
-import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
-import '../../modules/home/model/home_patient_list_sorting_model.dart';
-import '../../modules/home/model/home_schedule_list_sorting_model.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../services/media_picker_services.dart';
+import '../../../../utils/Loader.dart';
+import '../../../../utils/app_string.dart';
+import '../../../../widgets/custom_toastification.dart';
+import '../../data/service/database_helper.dart';
+import '../../data/service/recorder_service.dart';
+import '../../models/ChangeModel.dart';
+import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
+import '../../modules/login/model/login_model.dart';
+import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
+import '../../modules/visit_main/repository/visit_main_repository.dart';
 import '../../routes/app_pages.dart';
-import 'app_preferences.dart';
+import 'logger.dart';
+
 
 class GlobalController extends GetxController {
   RxInt homeTabIndex = RxInt(0);
@@ -23,6 +46,121 @@ class GlobalController extends GetxController {
   };
 
   int closeFormState = 0;
+
+//all variable for the model recording
+//   --------------------------------------------------------------------------------------------------------------------------------------------------
+  RxBool isStartTranscript = RxBool(false);
+  RxBool isExpandRecording = true.obs;
+  RecorderService recorderService = RecorderService();
+  final VisitMainRepository visitMainRepository = VisitMainRepository();
+  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
+  RxString visitId = RxString("");
+  RxString patientId = RxString("");
+
+  // below  all the function is for the recording model
+ // ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+  Future<void> changeStatus(String status) async {
+    try {
+      // Loader().showLoadingDialogForSimpleLoader();
+
+      Map<String, dynamic> param = {};
+
+      param['status'] = status;
+
+      ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
+      if (changeStatusModel.responseType == "success") {
+        // Get.back();
+        // Get.back();
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+
+        patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+        if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+          Get.back();
+        }
+      } else {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+        // Get.back();
+        // Get.back();
+      }
+    } catch (e) {
+      // customPrint("$e");
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+      // Get.back();
+    }
+  }
+
+  Future<void> submitAudio(File audioFile) async {
+    if (audioFile.path.isEmpty) {
+      return;
+    }
+
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      customPrint("internet not available ");
+      // isLoading.value = true;
+      // loadingMessage.value = "Uploading Audio";
+      Loader().showLoadingDialogForSimpleLoader();
+
+      Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
+
+      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+
+      await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+
+      // Show a message or update UI
+      // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
+      // isLoading.value = false;
+
+      Get.back();
+
+      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+
+      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+
+      for (var file in audio) {
+        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
+      }
+    } else {
+      customPrint("internet available");
+      // isLoading.value = true;
+      // loadingMessage.value = "Uploading Audio";
+      Loader().showLoadingDialogForSimpleLoader();
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+      PatientTranscriptUploadModel patientTranscriptUploadModel =
+      await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+
+      // isLoading.value = false;
+      Get.back();
+  isStartTranscript.value = false;
+
+      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+        "trascriptUploadData": patientTranscriptUploadModel,
+        "unique_tag": DateTime.now().toString(),
+      });
+
+      getPatientDetails();
+    }
+  }
+
+
+
+  // ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
   void popUntilRoute(String targetRoute) {
     int targetIndex = breadcrumbHistory.indexOf(targetRoute);
