@@ -72,24 +72,24 @@ class BaseScreen extends StatelessWidget {
         child: SafeArea(
           child: Obx(() {
             return Stack(
+              // clipBehavior: Clip.none,
               children: [
                 body,
 
                 if (globalController.isStartTranscript.value) ...[
-                  DraggableFloatWidget(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    height: 100,
-                    config: DraggableFloatWidgetBaseConfig(
-                      isFullScreen: false,
-                      initPositionYInTop: false,
-                      initPositionYMarginBorder: 50,
-                      // borderBottom: navigatorBarHeight + defaultBorderWidth,
-                    ),
-                    child: Positioned(
-                      bottom: 120,
-                      right: 30,
-                      child: Obx(() {
-                        return AnimatedContainer(
+                  Positioned(
+                    bottom: 120,
+                    right: 30,
+                    child: Obx(() {
+                      return DraggableFloatWidget(
+                       config:   DraggableFloatWidgetBaseConfig(
+                          isFullScreen: false,
+                          initPositionYInTop: false,
+                          initPositionYMarginBorder: 50,
+
+                        ),
+
+                        child: AnimatedContainer(
                           duration: Duration(milliseconds: 500),
                           // Set the duration for smooth animation
                           width: MediaQuery.of(context).size.width * 0.45,
@@ -613,9 +613,9 @@ class BaseScreen extends StatelessWidget {
                               ],
                             ],
                           ),
-                        );
-                      }),
-                    ),
+                        ),
+                      );
+                    }),
                   ),
                 ],
 
