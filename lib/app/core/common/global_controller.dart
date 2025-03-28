@@ -23,9 +23,11 @@ import '../../data/service/recorder_service.dart';
 import '../../models/ChangeModel.dart';
 import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../modules/login/model/login_model.dart';
+import '../../modules/visit_main/controllers/visit_main_controller.dart';
 import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
 import '../../modules/visit_main/repository/visit_main_repository.dart';
 import '../../routes/app_pages.dart';
+import 'app_preferences.dart';
 import 'logger.dart';
 
 
@@ -74,11 +76,19 @@ class GlobalController extends GetxController {
         // Get.back();
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
 
-        patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
 
-        if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
-          Get.back();
+        if (Get.isRegistered<VisitMainController>()) {
+          // If NotificationController is available, notify it
+          Get.find<VisitMainController>().getPatientDetails();
+
+
+        } else {
+          // Optionally, handle the case when NotificationController is not available
+          print("NotificationController is not available");
         }
+
+
+
       } else {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
         // Get.back();
@@ -143,7 +153,15 @@ class GlobalController extends GetxController {
         "unique_tag": DateTime.now().toString(),
       });
 
-      getPatientDetails();
+
+
+      if (Get.isRegistered<VisitMainController>()) {
+        // If NotificationController is available, notify it
+        Get.find<VisitMainController>().getPatientDetails();
+      } else {
+        // Optionally, handle the case when NotificationController is not available
+        print("NotificationController is not available");
+      }
     }
   }
 

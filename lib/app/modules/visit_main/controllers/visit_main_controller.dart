@@ -141,6 +141,8 @@ class VisitMainController extends GetxController {
       }
     }
   }
+  
+
 
   void clearFilter() {
     isSelectedAttchmentOption.value = -1;
