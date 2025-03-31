@@ -18,6 +18,7 @@ class AppColors {
   static const Color textOrangle = Color(0xFFFF8000);
   static const Color drawerText = Color(0xFF555A63);
 
+
   // Background color
   static const Color backgroundWhite = Color(0xFFFFFFFF);
   static const Color backgroundBlack = Color(0xFF000000);

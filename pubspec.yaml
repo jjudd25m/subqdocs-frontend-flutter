@@ -67,6 +67,7 @@ dependencies:
   sentry_flutter: ^8.13.2
   flutter_html:
   wakelock_plus: ^1.2.10
+  draggable_float_widget: ^0.1.0
 #  pull_to_refresh_flutter3: ^2.0.2
   modal_bottom_sheet: ^3.0.0
 

@@ -11,13 +11,12 @@ import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 
 import '../../../../services/media_picker_services.dart';
+import '../app/core/common/global_controller.dart';
 
-class attachmentDailog extends StatelessWidget {
+class GlobleAttchmnets extends StatelessWidget {
 
 
-
-  VisitMainController controller ;
-  attachmentDailog(this.controller);
+  final GlobalController controller = Get.find();
 
 
 

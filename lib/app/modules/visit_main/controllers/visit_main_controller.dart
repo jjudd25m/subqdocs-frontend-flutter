@@ -54,7 +54,7 @@ class VisitMainController extends GetxController {
 
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
-  RxBool isStartTranscript = RxBool(false);
+
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
 
@@ -68,13 +68,13 @@ class VisitMainController extends GetxController {
   String fullNoteOfLastVisit = "fullNoteOfLastVisit";
 
   final VisitMainRepository visitMainRepository = VisitMainRepository();
-  RecorderService recorderService = RecorderService();
+
   final GlobalController globalController = Get.find();
   TextEditingController searchController = TextEditingController();
 
-  RxBool isExpandRecording = true.obs;
+
   final count = 0.obs;
-  RxBool isStartRecording = false.obs;
+
   RxInt isSelectedAttchmentOption = RxInt(-1);
   List<String> patientType = ["New Patient", "Old Patient"];
   RxnString selectedMedicalAssistant = RxnString();
@@ -82,6 +82,57 @@ class VisitMainController extends GetxController {
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
   Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
   Rxn<VisitMainPatientDetails> patientData = Rxn();
+
+
+
+  RxString visitId = RxString("");
+  RxString patientId = RxString("");
+  RxList<MediaListingModel> list = RxList();
+
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+
+
+    // this is for the bread cum
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.VISIT_MAIN);
+    });
+    visitId.value = Get.arguments["visitId"];
+    patientId.value = Get.arguments["patientId"];
+
+
+
+    if(globalController.visitId.isEmpty && globalController.patientId.isEmpty)
+    {
+      globalController.visitId = visitId;
+      globalController.patientId = patientId;
+    }
+
+
+    if (visitId.value.isNotEmpty) {
+      customPrint("visit id is :- $visitId");
+      //it  will check the internet  connection and handel   offline and online mode
+
+      var status = await InternetConnection().internetStatus;
+      onLine();
+
+      isConnected.value = status == InternetStatus.disconnected ? false : true;
+
+      if (status == InternetStatus.disconnected) {
+        print("you net is now Disconnected");
+
+        offLine();
+      } else {
+        onLine(isLoading: true);
+      }
+
+      handelInternetConnection();
+
+      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      customPrint("local audio is :- $pendingFiles");
+    }
+  }
 
   Future<void> captureProfileImage() async {
     XFile? pickedImage = await MediaPickerServices().pickImage();
@@ -142,6 +193,14 @@ class VisitMainController extends GetxController {
     }
   }
 
+  Future<void> updateData() async {
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+      Get.back();
+    }
+  }
+
   void clearFilter() {
     isSelectedAttchmentOption.value = -1;
     isDocument.value = false;
@@ -194,9 +253,6 @@ class VisitMainController extends GetxController {
     }
   }
 
-  RxString visitId = RxString("");
-  RxString patientId = RxString("");
-  RxList<MediaListingModel> list = RxList();
 
   void showCustomDialog(BuildContext context) {
     showDialog(
@@ -208,44 +264,55 @@ class VisitMainController extends GetxController {
     );
   }
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
+  String getFileExtension(String filePath) {
+    // Define image extensions
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
 
+    // Get the file extension
+    String extension = p.extension(filePath);
 
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      globalController.addRouteInit(Routes.VISIT_MAIN);
-
-
-
-    });
-    visitId.value = Get.arguments["visitId"];
-    patientId.value = Get.arguments["patientId"];
-
-    if (visitId.value.isNotEmpty) {
-      customPrint("visit id is :- $visitId");
-      //it  will check the internet  connection and handel   offline and online mode
-
-      var status = await InternetConnection().internetStatus;
-      onLine();
-
-      isConnected.value = status == InternetStatus.disconnected ? false : true;
-
-      if (status == InternetStatus.disconnected) {
-        print("you net is now Disconnected");
-
-        offLine();
-      } else {
-        onLine(isLoading: true);
-      }
-
-      handelInternetConnection();
-
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
-      customPrint("local audio is :- $pendingFiles");
+    // Check if the extension is an image type
+    if (imageExtensions.contains(extension.toLowerCase())) {
+      return 'image'; // Return "image" if it's an image extension
+    } else {
+      return extension.replaceFirst('.', ''); // Return extension without dot
     }
   }
+
+  String formatDateTime({required String firstDate, required String secondDate}) {
+    if (firstDate != "" && secondDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+      DateTime secondDateTime = DateTime.parse(secondDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Format the second time (for hours and minutes with am/pm)
+      String formattedTime = DateFormat('h:mm a').format(secondDateTime.toLocal());
+
+      // Return the formatted string in the desired format
+      return '$formattedDate $formattedTime';
+    } else {
+      return "";
+    }
+  }
+
+  String visitRecapformatDate({required String firstDate}) {
+    if (firstDate != "") {
+      // Parse the first and second arguments to DateTime objects
+      DateTime firstDateTime = DateTime.parse(firstDate);
+
+      // Format the first date (for month/day/year format)
+      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+
+      // Return the formatted string in the desired format
+      return formattedDate;
+    } else {
+      return "";
+    }
+  }
+
 
   @override
   void onReady() {
@@ -293,93 +360,6 @@ class VisitMainController extends GetxController {
 
       List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
       customPrint("local audio is :- $pendingFiles");
-    }
-  }
-
-  Future<void> changeStatus(String status) async {
-    try {
-      // Loader().showLoadingDialogForSimpleLoader();
-
-      Map<String, dynamic> param = {};
-
-      param['status'] = status;
-
-      ChangeStatusModel changeStatusModel =await visitMainRepository.changeStatus(id: visitId.value, params: param);
-      if (changeStatusModel.responseType == "success") {
-        // Get.back();
-        // Get.back();
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
-
-        patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
-
-        if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
-          Get.back();
-        }
-      } else {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
-        // Get.back();
-        // Get.back();
-      }
-    } catch (e) {
-      // customPrint("$e");
-      CustomToastification().showToast("$e", type: ToastificationType.error);
-      // Get.back();
-    }
-  }
-
-  Future<void> submitAudio(File audioFile) async {
-    if (audioFile.path.isEmpty) {
-      return;
-    }
-
-    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
-
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      customPrint("internet not available ");
-      // isLoading.value = true;
-      // loadingMessage.value = "Uploading Audio";
-      Loader().showLoadingDialogForSimpleLoader();
-
-      Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
-
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
-
-      await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-
-      // Show a message or update UI
-      // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
-      // isLoading.value = false;
-
-      Get.back();
-
-      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
-
-      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
-
-      for (var file in audio) {
-        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
-      }
-    } else {
-      customPrint("internet available");
-      // isLoading.value = true;
-      // loadingMessage.value = "Uploading Audio";
-      Loader().showLoadingDialogForSimpleLoader();
-      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
-      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
-
-      // isLoading.value = false;
-      Get.back();
-      isStartTranscript.value = false;
-
-      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-        "trascriptUploadData": patientTranscriptUploadModel,
-        "unique_tag": DateTime.now().toString(),
-      });
-
-      getPatientDetails();
     }
   }
 
@@ -471,6 +451,15 @@ class VisitMainController extends GetxController {
     }
 
     patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
+
+
+    if(globalController.patientFirstName.isEmpty && globalController.patientLsatName.isEmpty)
+    {
+      globalController.patientFirstName.value = patientData.value?.responseData?.patientFirstName ?? "";
+      globalController.patientLsatName.value = patientData.value?.responseData?.patientLastName ?? "";
+
+    }
+
 
     print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
 
