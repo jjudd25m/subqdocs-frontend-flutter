@@ -64,9 +64,13 @@ class GlobalController extends GetxController {
   RxBool isExpandRecording = true.obs;
   RecorderService recorderService = RecorderService();
   final VisitMainRepository visitMainRepository = VisitMainRepository();
-  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
+
   RxString visitId = RxString("");
   RxString patientId = RxString("");
+  RxString patientFirstName = RxString("");
+  RxString patientLsatName = RxString("");
+
+
   RxList<MediaListingModel> list = RxList();
 
   // below  all the function is for the recording model
@@ -82,7 +86,13 @@ class GlobalController extends GetxController {
     );
   }
 
-
+void wipeData()
+{
+  patientId.value = "";
+  visitId.value = "" ;
+  patientFirstName.value = "";
+  patientLsatName.value = "";
+}
   Future<void> changeStatus(String status) async {
     try {
       // Loader().showLoadingDialogForSimpleLoader();
@@ -162,6 +172,8 @@ class GlobalController extends GetxController {
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
       await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      wipeData();
+
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       // isLoading.value = false;

@@ -83,6 +83,57 @@ class VisitMainController extends GetxController {
   Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
   Rxn<VisitMainPatientDetails> patientData = Rxn();
 
+
+
+  RxString visitId = RxString("");
+  RxString patientId = RxString("");
+  RxList<MediaListingModel> list = RxList();
+
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+
+
+    // this is for the bread cum
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.VISIT_MAIN);
+    });
+    visitId.value = Get.arguments["visitId"];
+    patientId.value = Get.arguments["patientId"];
+
+
+
+    if(globalController.visitId.isEmpty && globalController.patientId.isEmpty)
+    {
+      globalController.visitId = visitId;
+      globalController.patientId = patientId;
+    }
+
+
+    if (visitId.value.isNotEmpty) {
+      customPrint("visit id is :- $visitId");
+      //it  will check the internet  connection and handel   offline and online mode
+
+      var status = await InternetConnection().internetStatus;
+      onLine();
+
+      isConnected.value = status == InternetStatus.disconnected ? false : true;
+
+      if (status == InternetStatus.disconnected) {
+        print("you net is now Disconnected");
+
+        offLine();
+      } else {
+        onLine(isLoading: true);
+      }
+
+      handelInternetConnection();
+
+      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      customPrint("local audio is :- $pendingFiles");
+    }
+  }
+
   Future<void> captureProfileImage() async {
     XFile? pickedImage = await MediaPickerServices().pickImage();
     customPrint("picked image is  $pickedImage");
@@ -202,9 +253,6 @@ class VisitMainController extends GetxController {
     }
   }
 
-  RxString visitId = RxString("");
-  RxString patientId = RxString("");
-  RxList<MediaListingModel> list = RxList();
 
   void showCustomDialog(BuildContext context) {
     showDialog(
@@ -265,51 +313,6 @@ class VisitMainController extends GetxController {
     }
   }
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-
-
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      globalController.addRouteInit(Routes.VISIT_MAIN);
-
-
-
-    });
-    visitId.value = Get.arguments["visitId"];
-    patientId.value = Get.arguments["patientId"];
-
-    globalController.visitId = visitId;
-    globalController.patientId = patientId;
-
-
-
-
-
-    if (visitId.value.isNotEmpty) {
-      customPrint("visit id is :- $visitId");
-      //it  will check the internet  connection and handel   offline and online mode
-
-      var status = await InternetConnection().internetStatus;
-      onLine();
-
-      isConnected.value = status == InternetStatus.disconnected ? false : true;
-
-      if (status == InternetStatus.disconnected) {
-        print("you net is now Disconnected");
-
-        offLine();
-      } else {
-        onLine(isLoading: true);
-      }
-
-      handelInternetConnection();
-
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
-      customPrint("local audio is :- $pendingFiles");
-    }
-  }
 
   @override
   void onReady() {
@@ -359,8 +362,6 @@ class VisitMainController extends GetxController {
       customPrint("local audio is :- $pendingFiles");
     }
   }
-
-
 
   Future<void> deleteAttachments(int id) async {
     Loader().showLoadingDialogForSimpleLoader();
@@ -450,6 +451,15 @@ class VisitMainController extends GetxController {
     }
 
     patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
+
+
+    if(globalController.patientFirstName.isEmpty && globalController.patientLsatName.isEmpty)
+    {
+      globalController.patientFirstName.value = patientData.value?.responseData?.patientFirstName ?? "";
+      globalController.patientLsatName.value = patientData.value?.responseData?.patientLastName ?? "";
+
+    }
+
 
     print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
 

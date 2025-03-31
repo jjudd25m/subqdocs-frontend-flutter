@@ -1905,7 +1905,14 @@ class _VisitMainViewState extends State<VisitMainView> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  controller.globalController.isStartTranscript.value = true;
+
+                                  if(controller.globalController.visitId == controller.visitId ) {
+                                    controller.globalController
+                                        .isStartTranscript.value = true;
+                                  }
+                                  else{
+                                    CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
+                                  }
                                   // controller.isStartRecording.value = true;
                                 },
                                 child: Container(
