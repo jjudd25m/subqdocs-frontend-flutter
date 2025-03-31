@@ -172,14 +172,14 @@ void wipeData()
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
       await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
-      wipeData();
+
 
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       // isLoading.value = false;
       Get.back();
   isStartTranscript.value = false;
-
+      wipeData();
       await Get.toNamed(Routes.PATIENT_INFO, arguments: {
         "trascriptUploadData": patientTranscriptUploadModel,
         "unique_tag": DateTime.now().toString(),
@@ -194,6 +194,7 @@ void wipeData()
         // Optionally, handle the case when NotificationController is not available
         print("NotificationController is not available");
       }
+
     }
   }
   Future<void> uploadAttachments() async {

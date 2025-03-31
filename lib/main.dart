@@ -39,16 +39,16 @@ Future<void> main() async {
 
   Get.put(GlobalController());
 
-  runApp(
-    ToastificationWrapper(
-      child: GetMaterialApp(
-        title: "Application",
-        debugShowCheckedModeBanner: false,
-        initialRoute: AppPages.INITIAL,
-        getPages: AppPages.routes,
+    runApp(
+      ToastificationWrapper(
+        child: GetMaterialApp(
+          title: "Application",
+          debugShowCheckedModeBanner: false,
+          initialRoute: AppPages.INITIAL,
+          getPages: AppPages.routes,
+        ),
       ),
-    ),
-  );
+    );
   // await SentryFlutter.init(
   //   (options) {
   //     options.dsn = 'https://51d562a8649b2d66ba8553d8b09ae40d@o4508879490646016.ingest.us.sentry.io/4508879495954432';

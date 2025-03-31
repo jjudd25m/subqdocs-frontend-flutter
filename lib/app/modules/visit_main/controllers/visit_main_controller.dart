@@ -103,12 +103,6 @@ class VisitMainController extends GetxController {
 
 
 
-    if(globalController.visitId.isEmpty && globalController.patientId.isEmpty)
-    {
-      globalController.visitId = visitId;
-      globalController.patientId = patientId;
-    }
-
 
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
@@ -453,12 +447,7 @@ class VisitMainController extends GetxController {
     patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
 
 
-    if(globalController.patientFirstName.isEmpty && globalController.patientLsatName.isEmpty)
-    {
-      globalController.patientFirstName.value = patientData.value?.responseData?.patientFirstName ?? "";
-      globalController.patientLsatName.value = patientData.value?.responseData?.patientLastName ?? "";
 
-    }
 
 
     print("visit status is :- ${patientData.value?.responseData?.visitStatus}");

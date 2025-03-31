@@ -1906,9 +1906,21 @@ class _VisitMainViewState extends State<VisitMainView> {
                               child: GestureDetector(
                                 onTap: () {
 
-                                  if(controller.globalController.visitId == controller.visitId ) {
+                                  if(controller.globalController.visitId.isEmpty) {
                                     controller.globalController
                                         .isStartTranscript.value = true;
+
+
+                                    if(controller.globalController.visitId.isEmpty && controller.globalController.patientId.isEmpty)
+                                    {
+                                      controller.globalController.visitId = controller.visitId;
+                                      controller.globalController.patientId =  controller.patientId;
+                                      controller.globalController.patientFirstName.value = controller.patientData.value?.responseData?.patientFirstName ?? "";
+                                      controller.globalController.patientLsatName.value = controller.patientData.value?.responseData?.patientLastName ?? "";
+                                    }
+
+
+
                                   }
                                   else{
                                     CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
