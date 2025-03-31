@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
@@ -32,6 +33,8 @@ import '../repository/home_repository.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
+
+  final rightController = SideMenuController();
 
   final GlobalController globalController = Get.find();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
