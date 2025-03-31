@@ -21,14 +21,13 @@ import '../widget/appbar.dart';
 import '../widget/bredcums.dart';
 
 class BaseScreen extends StatelessWidget {
-   BaseScreen({super.key , required this.body, required this.globalKey});
+  BaseScreen({super.key, required this.body, required this.globalKey});
 
-  Widget body ;
+  Widget body;
 
-   final GlobalKey<ScaffoldState> globalKey ;
+  final GlobalKey<ScaffoldState> globalKey;
 
-
-   final GlobalController globalController = Get.find();
+  final GlobalController globalController = Get.find();
   @override
   Widget build(BuildContext context) {
     bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
@@ -62,6 +61,9 @@ class BaseScreen extends StatelessWidget {
                 "tabIndex": 0,
               });
               globalKey.currentState!.closeDrawer();
+            } else {
+              Get.toNamed(Routes.PERSONAL_SETTING);
+              globalKey.currentState!.closeDrawer();
             }
           },
         ),
@@ -75,20 +77,17 @@ class BaseScreen extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 body,
-
                 if (globalController.isStartTranscript.value) ...[
                   Obx(() {
                     return DraggableFloatWidget(
                       width: MediaQuery.of(context).size.width * 0.45,
                       height: !globalController.isExpandRecording.value ? 85 : 520,
-                     config:   DraggableFloatWidgetBaseConfig(
-                       initPositionXInLeft: false,
-                       isFullScreen: false,
-                       initPositionYInTop: false,
-                       initPositionYMarginBorder: 1,
-
+                      config: DraggableFloatWidgetBaseConfig(
+                        initPositionXInLeft: false,
+                        isFullScreen: false,
+                        initPositionYInTop: false,
+                        initPositionYMarginBorder: 1,
                       ),
-
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 0),
                         // Set the duration for smooth animation
@@ -132,8 +131,7 @@ class BaseScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       textAlign: TextAlign.center,
-
-                                   globalController.isExpandRecording.value ? "Recording in Progress" :  "${globalController.patientFirstName} ${globalController.patientLsatName}",
+                                      globalController.isExpandRecording.value ? "Recording in Progress" : "${globalController.patientFirstName} ${globalController.patientLsatName}",
                                       style: AppFonts.medium(14, AppColors.textWhite),
                                     ),
                                     Spacer(),
@@ -142,7 +140,7 @@ class BaseScreen extends StatelessWidget {
                                         globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
                                       },
                                       child: SvgPicture.asset(
-                                  globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording,
+                                        globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording,
                                         height: 30,
                                         width: 30,
                                       ),
@@ -237,7 +235,6 @@ class BaseScreen extends StatelessWidget {
                                   SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () async {
-
                                       File? audioFile = await globalController.recorderService.stopRecording();
                                       customPrint("audio file url is :- ${audioFile?.absolute}");
                                       if (audioFile != null) {
@@ -266,7 +263,7 @@ class BaseScreen extends StatelessWidget {
                               Obx(() {
                                 return Text(
                                   textAlign: TextAlign.center,
-                               globalController.recorderService.formattedRecordingTime,
+                                  globalController.recorderService.formattedRecordingTime,
                                   style: AppFonts.regular(14, AppColors.textBlack),
                                 );
                               }),
@@ -298,7 +295,6 @@ class BaseScreen extends StatelessWidget {
                                           globalController.changeStatus("In-Room");
                                           customPrint("audio is:- ${result?.files.first.xFile.path}");
                                           globalController.submitAudio(File(result?.files.first.path ?? ""));
-
                                         },
                                         child: Container(
                                           height: 50,
@@ -346,8 +342,8 @@ class BaseScreen extends StatelessWidget {
                                                 padding: EdgeInsets.zero,
                                                 onTap: () {
                                                   // controller.pickProfileImage();
-                                               globalController.captureImage(context);
-                                        
+                                                  globalController.captureImage(context);
+
                                                   // customPrint(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                                                 },
                                                 // value: "",
@@ -370,12 +366,12 @@ class BaseScreen extends StatelessWidget {
                                                   ),
                                                 )),
                                             PopupMenuItem(
-                                              // value: "",
+                                                // value: "",
                                                 padding: EdgeInsets.zero,
                                                 onTap: () async {
                                                   // controller.captureProfileImage();
-                                        
-                                              globalController.captureImage(context, fromCamera: false);
+
+                                                  globalController.captureImage(context, fromCamera: false);
                                                 },
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,7 +402,7 @@ class BaseScreen extends StatelessWidget {
                                                   ],
                                                 )),
                                             PopupMenuItem(
-                                              // value: "",
+                                                // value: "",
                                                 padding: EdgeInsets.zero,
                                                 onTap: () async {
                                                   // controller.captureProfileImage();
@@ -440,11 +436,11 @@ class BaseScreen extends StatelessWidget {
                                                   ],
                                                 )),
                                             PopupMenuItem(
-                                              // value: "",
+                                                // value: "",
                                                 padding: EdgeInsets.zero,
                                                 onTap: () async {
                                                   // controller.captureProfileImage();
-                                        
+
                                                   globalController.pickFiles(context);
                                                 },
                                                 child: Column(
@@ -523,14 +519,14 @@ class BaseScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         textAlign: TextAlign.left,
-                    "${globalController.patientFirstName} ${globalController.patientLsatName}",
-                                       style: AppFonts.regular(14, AppColors.textWhite),
+                                        "${globalController.patientFirstName} ${globalController.patientLsatName}",
+                                        style: AppFonts.regular(14, AppColors.textWhite),
                                       ),
                                       SizedBox(height: 0),
                                       Obx(() {
                                         return Text(
                                           textAlign: TextAlign.left,
-                                         globalController.recorderService.formattedRecordingTime,
+                                          globalController.recorderService.formattedRecordingTime,
                                           style: AppFonts.regular(14, AppColors.textGrey),
                                         );
                                       }),
@@ -574,12 +570,12 @@ class BaseScreen extends StatelessWidget {
                                       );
                                     }
                                   })
-                                    // SvgPicture.asset(
-                                    //   ImagePath.pause_white,
-                                    //   height: 45,
-                                    //   width: 45,
-                                    // ),
-                                  ),
+                                      // SvgPicture.asset(
+                                      //   ImagePath.pause_white,
+                                      //   height: 45,
+                                      //   width: 45,
+                                      // ),
+                                      ),
                                   SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () async {
@@ -601,7 +597,7 @@ class BaseScreen extends StatelessWidget {
                                   SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () {
-                                     globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
+                                      globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
                                     },
                                     child: SvgPicture.asset(
                                       ImagePath.expand_recording,
@@ -618,7 +614,6 @@ class BaseScreen extends StatelessWidget {
                     );
                   }),
                 ],
-
               ],
             );
           }),
