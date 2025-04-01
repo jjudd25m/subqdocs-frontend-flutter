@@ -71,6 +71,7 @@ dependencies:
 #  pull_to_refresh_flutter3: ^2.0.2
   modal_bottom_sheet: ^3.0.0
   flutter_side_menu: ^0.5.41
+  awesome_side_sheet: ^0.0.3
 
 
 dev_dependencies:

@@ -752,13 +752,26 @@ class DoctorViewResponseData {
   dynamic totalCharges;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
+  String? message;
 
   DoctorViewResponseData(
-      {this.id, this.patientId, this.visitId, this.status, this.visitDate, this.diagnosisCodesProcedures, this.impressionsAndPlan, this.totalCharges, this.createdAt, this.updatedAt, this.deletedAt});
+      {this.id,
+      this.patientId,
+      this.visitId,
+      this.status,
+      this.visitDate,
+      this.diagnosisCodesProcedures,
+      this.impressionsAndPlan,
+      this.totalCharges,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.message});
 
   DoctorViewResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    message = json['message'];
     patientId = json['patient_id'];
     visitId = json['visit_id'];
     status = json['status'];
@@ -784,6 +797,7 @@ class DoctorViewResponseData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['message'] = message;
     data['patient_id'] = patientId;
     data['visit_id'] = visitId;
     data['status'] = status;

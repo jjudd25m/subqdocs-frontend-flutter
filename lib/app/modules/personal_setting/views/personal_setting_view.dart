@@ -17,6 +17,7 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
+import '../../../../widgets/custom_textfiled.dart';
 import '../../../../widgets/empty_patient_screen.dart';
 import '../../../core/common/common_service.dart';
 import '../../../routes/app_pages.dart';
@@ -473,6 +474,64 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                     ],
                                                                   ),
                                                                   SizedBox(height: 20),
+                                                                  // -- Practitioner Details
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        textAlign: TextAlign.center,
+                                                                        "Practitioner Details",
+                                                                        style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                                                      ),
+                                                                      Spacer()
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 20),
+                                                                  Row(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                                                      Expanded(
+                                                                          child: CommonPatientData(
+                                                                        label: "Title",
+                                                                        data: controller.getUserDetailModel.value?.responseData?.title ?? "-",
+                                                                      )),
+                                                                      Expanded(
+                                                                          child: CommonPatientData(
+                                                                        label: "Medical License Number",
+                                                                        data: controller.getUserDetailModel.value?.responseData?.medicalLicenseNumber ?? "-",
+                                                                      )),
+                                                                      Expanded(
+                                                                          child: CommonPatientData(
+                                                                        label: "License Expiry Date",
+                                                                        data: controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "-",
+                                                                      )),
+                                                                      Expanded(child: SizedBox()),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 20),
+                                                                  Row(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                                                      Expanded(
+                                                                          child: CommonPatientData(
+                                                                        label: "National Provider Identifier",
+                                                                        data: controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString() ?? "-",
+                                                                      )),
+                                                                      Expanded(
+                                                                          child: CommonPatientData(
+                                                                        label: "Taxonomy Code",
+                                                                        data: controller.getUserDetailModel.value?.responseData?.taxonomyCode ?? "-",
+                                                                      )),
+                                                                      Expanded(
+                                                                          child: CommonPatientData(
+                                                                        label: "Specialization",
+                                                                        data: controller.getUserDetailModel.value?.responseData?.specialization ?? "-",
+                                                                      )),
+                                                                      Expanded(child: SizedBox()),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 20),
                                                                 ],
                                                               )),
                                                         ),
@@ -904,13 +963,33 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                             Padding(
                                                               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                               child: SizedBox(
-                                                                height: ((controller.filterGetUserOrganizationListModel.value?.responseData?.length ?? 0) + 1) * 68,
+                                                                height: (controller.filterGetUserOrganizationListModel.value?.responseData!.isEmpty ?? false)
+                                                                    ? 300
+                                                                    : ((controller.filterGetUserOrganizationListModel.value?.responseData?.length ?? 0) + 1) * 68,
                                                                 child: Column(
                                                                   children: [
                                                                     controller.filterGetUserOrganizationListModel.value?.responseData!.isEmpty ?? false
                                                                         ? Padding(
                                                                             padding: const EdgeInsets.all(10),
-                                                                            child: EmptyPatientScreen(onBtnPress: () async {}, title: "No data found", description: ""),
+                                                                            child: Center(
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  SvgPicture.asset(
+                                                                                    ImagePath.patient_no_data,
+                                                                                    width: 260,
+                                                                                  ),
+                                                                                  const SizedBox(height: 10),
+                                                                                  Text(
+                                                                                    textAlign: TextAlign.center,
+                                                                                    "No data found",
+                                                                                    style: AppFonts.medium(20, AppColors.textDarkGrey),
+                                                                                  ),
+                                                                                  const SizedBox(height: 20),
+                                                                                ],
+                                                                              ),
+                                                                            ),
                                                                           )
                                                                         : Obx(() {
                                                                             return Expanded(

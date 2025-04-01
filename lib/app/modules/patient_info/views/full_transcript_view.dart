@@ -68,6 +68,13 @@ class FullTranscriptView extends StatelessWidget {
                     ),
                     Stack(
                       children: [
+                        if (controller.transcriptListModel.value?.responseData?.status == "Failure") ...[
+                          Center(
+                              child: Text(
+                            controller.transcriptListModel.value?.responseData?.message ?? "",
+                            textAlign: TextAlign.center,
+                          ))
+                        ],
                         Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: ListView.builder(

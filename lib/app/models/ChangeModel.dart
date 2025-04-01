@@ -4,13 +4,10 @@ class ChangeStatusModel {
   bool? toast;
   String? responseType;
 
-  ChangeStatusModel(
-      {this.responseData, this.message, this.toast, this.responseType});
+  ChangeStatusModel({this.responseData, this.message, this.toast, this.responseType});
 
   ChangeStatusModel.fromJson(Map<String, dynamic> json) {
-    responseData = json['responseData'] != null
-        ? new ResponseData.fromJson(json['responseData'])
-        : null;
+    responseData = json['responseData'] != null ? new ResponseData.fromJson(json['responseData']) : null;
     message = json['message'];
     toast = json['toast'];
     responseType = json['response_type'];
@@ -34,27 +31,16 @@ class ResponseData {
   String? visitStatus;
   String? visitDate;
   String? visitTime;
-  Null? visitType;
-  Null? visitNotes;
+  dynamic visitType;
+  dynamic visitNotes;
   String? status;
-  Null? visitDetails;
+  dynamic visitDetails;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   ResponseData(
-      {this.id,
-        this.patientId,
-        this.visitStatus,
-        this.visitDate,
-        this.visitTime,
-        this.visitType,
-        this.visitNotes,
-        this.status,
-        this.visitDetails,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+      {this.id, this.patientId, this.visitStatus, this.visitDate, this.visitTime, this.visitType, this.visitNotes, this.status, this.visitDetails, this.createdAt, this.updatedAt, this.deletedAt});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

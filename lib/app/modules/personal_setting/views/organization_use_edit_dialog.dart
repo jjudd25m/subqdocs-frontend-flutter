@@ -453,6 +453,220 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               ],
                             ),
                             SizedBox(height: 20),
+                            // Practitioner Details
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Practitioner Details",
+                                  style: AppFonts.medium(16, AppColors.backgroundPurple),
+                                ),
+                                Spacer()
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              spacing: 15,
+                              children: [
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        format: [
+                                          CustomTextInputFormatter(),
+                                        ],
+                                        label: "Title",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.userPractitionerController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.userPractitionerController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Expanded(
+                                    child: TextFormFiledWidget(
+                                        // format: [
+                                        //   CustomTextInputFormatter(),
+                                        // ],
+                                        label: "Medical License Number",
+                                        isValid: controller.isValid.value,
+                                        // isImportant: true,
+                                        controller: controller.userMedicalLicenseNumberController,
+                                        isSuffixIconVisible: false,
+                                        isFirst: true,
+                                        hint: "",
+                                        onTap: () {
+                                          controller.userMedicalLicenseNumberController.clear();
+                                        },
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        checkValidation: (value) {
+                                          return Validation.requiredFiled(value);
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              spacing: 15,
+                              children: [
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                    //format: [NoSpaceTextFormatter()],
+                                    suffixIcon: Icon(Icons.calendar_month),
+                                    label: "License Expiry Date",
+                                    readOnly: true,
+                                    // isImportant: true,
+                                    controller: controller.userLicenseExpiryDateController,
+                                    onTap: () async {
+                                      final picked = await showDatePicker(
+                                        context: context,
+
+                                        // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime.now().add(Duration(days: 1000)),
+                                        builder: (context, child) {
+                                          return Theme(
+                                            data: ThemeData.light().copyWith(
+                                              cardColor: AppColors.white,
+                                              primaryColor: AppColors.backgroundPurple,
+                                              hintColor: AppColors.backgroundPurple,
+                                              colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                            ),
+                                            child: child!,
+                                          );
+                                        },
+                                      );
+                                      if (picked != null) {
+                                        String inputText;
+                                        String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                        inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                        controller.userLicenseExpiryDateController.text = inputText;
+                                      }
+                                    },
+                                    hint: "mm/dd/yyyy",
+                                  ),
+                                ),
+                                // Expanded(
+                                //   child: TextFormFiledWidget(
+                                //       format: [
+                                //         CustomTextInputFormatter(),
+                                //       ],
+                                //       label: "License Expiry Date",
+                                //       isValid: controller.isValid.value,
+                                //       // isImportant: true,
+                                //       controller: controller.userLicenseExpiryDateController,
+                                //       isSuffixIconVisible: false,
+                                //       isFirst: true,
+                                //       hint: "",
+                                //       onTap: () {
+                                //         controller.userLicenseExpiryDateController.clear();
+                                //       },
+                                //       suffixIcon: Icon(
+                                //         Icons.highlight_remove,
+                                //         color: AppColors.textDarkGrey,
+                                //         size: 25,
+                                //       ),
+                                //       checkValidation: (value) {
+                                //         return Validation.requiredFiled(value);
+                                //       }),
+                                // ),
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      // format: [
+                                      //   PostalCodeFormatter(),
+                                      // ],
+                                      label: "National Provider Identifier",
+                                      // maxLength: 5,
+                                      isValid: controller.isValid.value,
+                                      controller: controller.userNationalProviderIdentifierController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.userNationalProviderIdentifierController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              spacing: 15,
+                              children: [
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      // format: [
+                                      //   CustomTextInputFormatter(),
+                                      // ],
+                                      label: "Taxonomy Code",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.userTaxonomyCodeController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.userTaxonomyCodeController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                                Expanded(
+                                  child: TextFormFiledWidget(
+                                      // format: [
+                                      //   CustomTextInputFormatter(),
+                                      // ],
+                                      label: "Specialization",
+                                      isValid: controller.isValid.value,
+                                      // isImportant: true,
+                                      controller: controller.userSpecializationController,
+                                      isSuffixIconVisible: false,
+                                      isFirst: true,
+                                      hint: "",
+                                      onTap: () {
+                                        controller.userSpecializationController.clear();
+                                      },
+                                      suffixIcon: Icon(
+                                        Icons.highlight_remove,
+                                        color: AppColors.textDarkGrey,
+                                        size: 25,
+                                      ),
+                                      checkValidation: (value) {
+                                        return Validation.requiredFiled(value);
+                                      }),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -489,13 +703,19 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                             Map<String, dynamic> param = {
                               'first_name': controller.userFirstNameController.text,
                               'last_name': controller.userLastNameController.text,
-                              // 'email': controller.userEmailController.text,
+                              'email': controller.userEmailController.text,
                               'contact_no': controller.userPhoneNumberController.text,
                               'country': controller.userCountryController.text,
                               'state': controller.userStateController.text,
                               'city': controller.userCityController.text,
                               'street_name': controller.userStreetNameController.text,
                               'postal_code': controller.userPostalCodeController.text,
+                              'title': controller.userPractitionerController.text,
+                              'medical_license_number': controller.userMedicalLicenseNumberController.text,
+                              'license_expiry_date': controller.userLicenseExpiryDateController.text,
+                              'national_provider_identifier': controller.userNationalProviderIdentifierController.text,
+                              'taxonomy_code': controller.userTaxonomyCodeController.text,
+                              'specialization': controller.userSpecializationController.text
                             };
 
                             receiveParam(param);

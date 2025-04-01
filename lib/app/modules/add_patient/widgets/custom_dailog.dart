@@ -7,6 +7,8 @@ import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 
+import '../../../../widgets/custom_toastification.dart';
+
 class CustomDialogAttachment extends GetView<AddPatientController> {
   @override
   Widget build(BuildContext context) {
@@ -167,6 +169,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                                     GestureDetector(
                                       onTap: () {
                                         controller.removeItem(index);
+                                        controller.calculateTotalFileSize();
                                       },
                                       child: SvgPicture.asset(
                                         "assets/images/logo_cross.svg",
@@ -192,6 +195,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                             navigate: () {
                               Navigator.pop(context);
                               controller.list.clear();
+                              controller.calculateTotalFileSize();
                             },
                             label: "Cancel",
                             backGround: Colors.white,

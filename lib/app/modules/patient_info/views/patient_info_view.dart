@@ -59,8 +59,9 @@ class _PatientInfoViewState extends State<PatientInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(body:  SafeArea(
-        child: Column(
+    return BaseScreen(
+        body: SafeArea(
+            child: Column(
           children: [
             CustomAppBar(drawerkey: _key),
             Expanded(
@@ -72,28 +73,23 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                   child: SingleChildScrollView(
                     physics: AlwaysScrollableScrollPhysics(),
                     child: Column(
-
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Obx(() {
+                          return BreadcrumbWidget(
+                            breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                            onBack: (breadcrumb) {
+                              controller.globalController.popUntilRoute(breadcrumb);
+                              // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                        Obx(
-                                () {
-                              return BreadcrumbWidget(
-                                breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
-                                onBack: (breadcrumb) {
-                                  controller.globalController.popUntilRoute(breadcrumb);
-                                  // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
-
-                                  while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                    Get.back();  // Pop the current screen
-                                  }
-                                },
-                              );
-                            }
-                        ),
+                              while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                Get.back(); // Pop the current screen
+                              }
+                            },
+                          );
+                        }),
                         Column(
                           children: <Widget>[
-
                             Container(
                               width: double.infinity,
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
@@ -142,8 +138,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
                                               height: 60,
                                               width: 60,
-                                              nameLetters:
-                                              "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                              nameLetters: "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                               fontSize: 14,
                                             )),
                                         SizedBox(
@@ -296,7 +291,9 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
+                                                    (controller.patientData.value?.responseData?.doctorName!.trim().isEmpty ?? false)
+                                                        ? "-"
+                                                        : "${controller.patientData.value?.responseData?.doctorName}",
                                                     style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                   SizedBox(width: 5),
@@ -324,7 +321,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                               width: double.infinity,
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Obx(
-                                    () {
+                                () {
                                   return Container(
                                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
@@ -352,46 +349,46 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             ),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
-                                                  onPressed: () {
-                                                    controller.tabIndex.value = 3;
-                                                  },
-                                                  text: " Full Note ",
-                                                  isOutline: true,
-                                                  paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                  fontSize: 14,
-                                                  enabledTextColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                  enabledColor: controller.tabIndex.value == 3 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                  outLineEnabledColor: AppColors.textGrey,
-                                                  outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
-                                                )),
+                                              onPressed: () {
+                                                controller.tabIndex.value = 3;
+                                              },
+                                              text: " Full Note ",
+                                              isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                              fontSize: 14,
+                                              enabledTextColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 3 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
+                                            )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
-                                                  onPressed: () {
-                                                    controller.tabIndex.value = 2;
-                                                  },
-                                                  text: " Patient Note ",
-                                                  isOutline: true,
-                                                  paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                  fontSize: 14,
-                                                  enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                  enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                  outLineEnabledColor: AppColors.textGrey,
-                                                  outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                )),
+                                              onPressed: () {
+                                                controller.tabIndex.value = 2;
+                                              },
+                                              text: " Patient Note ",
+                                              isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                              fontSize: 14,
+                                              enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                            )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
-                                                  onPressed: () {
-                                                    controller.tabIndex.value = 1;
-                                                  },
-                                                  text: " Full Transcript ",
-                                                  isOutline: true,
-                                                  paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                  fontSize: 14,
-                                                  enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                  enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                  outLineEnabledColor: AppColors.textGrey,
-                                                  outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                )),
+                                              onPressed: () {
+                                                controller.tabIndex.value = 1;
+                                              },
+                                              text: " Full Transcript ",
+                                              isOutline: true,
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                              fontSize: 14,
+                                              enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                            )),
 
                                             // IntrinsicWidth(
                                             //     child: CustomAnimatedButton(
@@ -815,6 +812,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
               ),
             )
           ],
-        )), globalKey: _key);
+        )),
+        globalKey: _key);
   }
 }

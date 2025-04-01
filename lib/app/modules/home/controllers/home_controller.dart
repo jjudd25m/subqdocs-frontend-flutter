@@ -22,6 +22,7 @@ import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
+import '../../personal_setting/model/filter_past_visit_status.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
 import '../model/deletePatientModel.dart';
@@ -34,6 +35,7 @@ import '../repository/home_repository.dart';
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
+  List<FilterPastVisitStatusCategoryModel> filterPastVisitStatusCategoryData = [];
   final rightController = SideMenuController();
 
   final GlobalController globalController = Get.find();
@@ -58,7 +60,7 @@ class HomeController extends GetxController {
   final ScrollController scrollControllerSchedulePatientList = ScrollController();
   // final ScrollController scrollControllerPatientList = ScrollController();
 
-  RxList<StatusModel> statusModel = RxList();
+  // RxList<StatusModel> statusModel = RxList();
   String getNextRoundedTime() {
     DateTime now = DateTime.now();
 
@@ -194,6 +196,11 @@ class HomeController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     Get.put(GlobalController());
+
+    filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "SCHEDULED", subcategories: ["Scheduled", "Late"]));
+    filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "IN PROGRESS", subcategories: ["Checked In", "In Progress", "Paused"]));
+    filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "PAST", subcategories: ["Pending", "Finalized", "Insufficient Information", "Not Recorded"]));
+    filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "CANCELLED/NO SHOW", subcategories: ["Cancelled", "No Show"]));
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   globalController.addRouteInit(Routes.HOME);
@@ -790,13 +797,13 @@ class HomeController extends GetxController {
   Future<void> getStatus() async {
     StatusResponseModel statusResponseModel = await _homeRepository.getStatus();
 
-    statusModel.clear();
+    // statusModel.clear();
 
-    statusResponseModel.responseData?.forEach(
-      (element) {
-        statusModel.add(StatusModel(status: element));
-      },
-    );
+    // statusResponseModel.responseData?.forEach(
+    //   (element) {
+    //     statusModel.add(StatusModel(status: element));
+    //   },
+    // );
   }
 
   void patientLoadMore() async {
@@ -1011,6 +1018,12 @@ class HomeController extends GetxController {
         return AppColors.filterFinalizedColor;
       case "Checked-in":
         return AppColors.filterCheckedInColor;
+      case "Checked-In":
+        return AppColors.filterCheckedInColor;
+      case "In-Progress":
+        return AppColors.filterInProgressColor;
+      case "Paused":
+        return AppColors.filterPausedColor;
       case "Scheduled":
         return AppColors.filterScheduleColor;
       case "In-Room":
@@ -1021,6 +1034,12 @@ class HomeController extends GetxController {
         return AppColors.filterLateColor;
       case "Checked-out":
         return AppColors.filterCancelledColor;
+      case "Cancelled":
+        return AppColors.filterCanceledColor;
+      case "No-Show":
+        return AppColors.filterNoShowColor;
+      case "Not-Recorded":
+        return AppColors.filterNotRecordedColor;
       default:
         return AppColors.filterInsufficientInfoColor; // Default if status is unknown
     }

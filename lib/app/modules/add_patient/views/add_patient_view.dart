@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/rounded_image_widget.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/Formetors.dart';
 import 'package:path/path.dart' as p;
@@ -28,6 +29,7 @@ import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
@@ -158,18 +160,19 @@ class AddPatientView extends GetView<AddPatientController> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(body: GestureDetector(
-      onTap: removeFocus,
-      child: SafeArea(
-        child: Container(
-          color: AppColors.ScreenBackGround,
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              children: [
-                CustomAppBar(drawerkey: _key),
-                Expanded(
-                    child: SingleChildScrollView(
+    return BaseScreen(
+        body: GestureDetector(
+          onTap: removeFocus,
+          child: SafeArea(
+            child: Container(
+              color: AppColors.ScreenBackGround,
+              child: Form(
+                key: controller.formKey,
+                child: Column(
+                  children: [
+                    CustomAppBar(drawerkey: _key),
+                    Expanded(
+                        child: SingleChildScrollView(
                       child: Container(
                           color: AppColors.ScreenBackGround,
                           child: Padding(
@@ -180,22 +183,19 @@ class AddPatientView extends GetView<AddPatientController> {
                               // physics: BouncingScrollPhysics(),
                               padding: EdgeInsets.zero,
                               children: [
-                                Obx(
-                                        () {
-                                      return BreadcrumbWidget(
+                                Obx(() {
+                                  return BreadcrumbWidget(
+                                    breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                    onBack: (breadcrumb) {
+                                      controller.globalController.popUntilRoute(breadcrumb);
+                                      // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                                        breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
-                                        onBack: (breadcrumb) {
-                                          controller.globalController.popUntilRoute(breadcrumb);
-                                          // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
-
-                                          while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                            Get.back();  // Pop the current screen
-                                          }
-                                        },
-                                      );
-                                    }
-                                ),
+                                      while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                        Get.back(); // Pop the current screen
+                                      }
+                                    },
+                                  );
+                                }),
                                 Container(
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(Dimen.margin16),
@@ -227,7 +227,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             //   width: Dimen.margin8,
                                             // ),
                                             Text(
-                                              Get.currentRoute == Routes.ADD_PATIENT?"Add Patient Details" : "Schedule Visit",
+                                              Get.currentRoute == Routes.ADD_PATIENT ? "Add Patient Details" : "Schedule Visit",
                                               style: AppFonts.regular(18, AppColors.textBlack),
                                             ),
                                           ],
@@ -240,20 +240,20 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Obx(
-                                            () {
+                                        () {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                             child: Row(
                                               children: [
                                                 controller.profileImage.value?.path != null
                                                     ? RoundedImageFileWidget(
-                                                  imagePath: controller.profileImage.value,
-                                                )
+                                                        imagePath: controller.profileImage.value,
+                                                      )
                                                     : BaseImageView(
-                                                  imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                                  width: 50,
-                                                  height: 50,
-                                                ),
+                                                        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                        width: 50,
+                                                        height: 50,
+                                                      ),
                                                 PopupMenuButton<String>(
                                                   offset: const Offset(0, 8),
                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -295,7 +295,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                           ),
                                                         )),
                                                     PopupMenuItem(
-                                                      // value: "",
+                                                        // value: "",
                                                         padding: EdgeInsets.zero,
                                                         onTap: () async {
                                                           controller.captureProfileImage();
@@ -722,146 +722,146 @@ class AddPatientView extends GetView<AddPatientController> {
                                                         color: Colors.white,
                                                         child: controller.selectedList.isNotEmpty
                                                             ? Padding(
-                                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                            child: SizedBox(
-                                                                height: 200,
-                                                                width: double.infinity,
-                                                                child: Obx(
+                                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                                child: SizedBox(
+                                                                    height: 200,
+                                                                    width: double.infinity,
+                                                                    child: Obx(
                                                                       () {
-                                                                    return ListView.separated(
-                                                                      scrollDirection: Axis.horizontal,
-                                                                      padding: EdgeInsets.only(top: 20),
-                                                                      itemBuilder: (context, index) {
-                                                                        return Container(
-                                                                          height: 200,
-                                                                          width: 140,
-                                                                          child: Column(
-                                                                            children: [
-                                                                              SizedBox(height: 10),
-                                                                              Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                mainAxisSize: MainAxisSize.min,
+                                                                        return ListView.separated(
+                                                                          scrollDirection: Axis.horizontal,
+                                                                          padding: EdgeInsets.only(top: 20),
+                                                                          itemBuilder: (context, index) {
+                                                                            return Container(
+                                                                              height: 200,
+                                                                              width: 140,
+                                                                              child: Column(
                                                                                 children: [
-                                                                                  Stack(
-                                                                                    clipBehavior: Clip.none,
-                                                                                    alignment: Alignment.topRight,
+                                                                                  SizedBox(height: 10),
+                                                                                  Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    mainAxisSize: MainAxisSize.min,
                                                                                     children: [
-                                                                                      Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: AppColors.appbarBorder,
-                                                                                          borderRadius: BorderRadius.circular(10),
-                                                                                        ),
-                                                                                        width: 120,
-                                                                                        height: 120,
-                                                                                        child: GestureDetector(
-                                                                                          onTap: () {
-                                                                                            // FullscreenImageViewer.open(
-                                                                                            //   context: context,
-                                                                                            //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
-                                                                                            // );
-                                                                                          },
-                                                                                          child: GestureDetector(
-                                                                                            onTap: () {
-                                                                                              if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
-                                                                                                customPrint("1");
-                                                                                                FullscreenImageViewer.open(
-                                                                                                  context: context,
-                                                                                                  child: Image.file(controller.selectedList[index].file ?? File("")),
-                                                                                                );
-                                                                                              } else {
-                                                                                                customPrint("2");
-                                                                                                controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
-                                                                                              }
-                                                                                            },
-                                                                                            child: ClipRRect(
-                                                                                              borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                                              child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
-                                                                                                  ? Image.file(
-                                                                                                controller.selectedList[index].file!,
-                                                                                                fit: BoxFit.cover,
-                                                                                              )
-                                                                                                  : Image.asset(
-                                                                                                ImagePath.file_placeHolder,
-                                                                                              ), // Display a placeholder if the file is not an image
+                                                                                      Stack(
+                                                                                        clipBehavior: Clip.none,
+                                                                                        alignment: Alignment.topRight,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            decoration: BoxDecoration(
+                                                                                              color: AppColors.appbarBorder,
+                                                                                              borderRadius: BorderRadius.circular(10),
+                                                                                            ),
+                                                                                            width: 120,
+                                                                                            height: 120,
+                                                                                            child: GestureDetector(
+                                                                                              onTap: () {
+                                                                                                // FullscreenImageViewer.open(
+                                                                                                //   context: context,
+                                                                                                //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
+                                                                                                // );
+                                                                                              },
+                                                                                              child: GestureDetector(
+                                                                                                onTap: () {
+                                                                                                  if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
+                                                                                                    customPrint("1");
+                                                                                                    FullscreenImageViewer.open(
+                                                                                                      context: context,
+                                                                                                      child: Image.file(controller.selectedList[index].file ?? File("")),
+                                                                                                    );
+                                                                                                  } else {
+                                                                                                    customPrint("2");
+                                                                                                    controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
+                                                                                                  }
+                                                                                                },
+                                                                                                child: ClipRRect(
+                                                                                                  borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                                                  child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
+                                                                                                      ? Image.file(
+                                                                                                          controller.selectedList[index].file!,
+                                                                                                          fit: BoxFit.cover,
+                                                                                                        )
+                                                                                                      : Image.asset(
+                                                                                                          ImagePath.file_placeHolder,
+                                                                                                        ), // Display a placeholder if the file is not an image
+                                                                                                ),
+                                                                                              ),
                                                                                             ),
                                                                                           ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Positioned(
-                                                                                        top: -10,
-                                                                                        // Align at the top of the first container
-                                                                                        right: -10,
-                                                                                        child: Container(
-                                                                                          width: 40,
-                                                                                          height: 40,
-                                                                                          decoration: BoxDecoration(
-                                                                                            shape: BoxShape.circle,
-                                                                                            color: Colors.white,
-                                                                                            boxShadow: [
-                                                                                              BoxShadow(
-                                                                                                color: Colors.black.withOpacity(0.2),
-                                                                                                blurRadius: 2.2,
-                                                                                                offset: Offset(0.2, 0),
+                                                                                          Positioned(
+                                                                                            top: -10,
+                                                                                            // Align at the top of the first container
+                                                                                            right: -10,
+                                                                                            child: Container(
+                                                                                              width: 40,
+                                                                                              height: 40,
+                                                                                              decoration: BoxDecoration(
+                                                                                                shape: BoxShape.circle,
+                                                                                                color: Colors.white,
+                                                                                                boxShadow: [
+                                                                                                  BoxShadow(
+                                                                                                    color: Colors.black.withOpacity(0.2),
+                                                                                                    blurRadius: 2.2,
+                                                                                                    offset: Offset(0.2, 0),
+                                                                                                  ),
+                                                                                                ],
                                                                                               ),
-                                                                                            ],
-                                                                                          ),
-                                                                                          child: GestureDetector(
-                                                                                            onTap: () {
-                                                                                              showDialog(
-                                                                                                context: context,
-                                                                                                barrierDismissible: true,
-                                                                                                builder: (BuildContext context) {
-                                                                                                  // return SizedBox();
-                                                                                                  return DeleteImageDialog(
-                                                                                                    onDelete: () {
-                                                                                                      controller.deleteAttachments(index);
+                                                                                              child: GestureDetector(
+                                                                                                onTap: () {
+                                                                                                  showDialog(
+                                                                                                    context: context,
+                                                                                                    barrierDismissible: true,
+                                                                                                    builder: (BuildContext context) {
+                                                                                                      // return SizedBox();
+                                                                                                      return DeleteImageDialog(
+                                                                                                        onDelete: () {
+                                                                                                          controller.deleteAttachments(index);
+                                                                                                        },
+                                                                                                        extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
+                                                                                                      );
                                                                                                     },
-                                                                                                    extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
                                                                                                   );
                                                                                                 },
-                                                                                              );
-                                                                                            },
-                                                                                            child: SvgPicture.asset(
-                                                                                              ImagePath.delete_black,
+                                                                                                child: SvgPicture.asset(
+                                                                                                  ImagePath.delete_black,
+                                                                                                ),
+                                                                                              ),
                                                                                             ),
                                                                                           ),
-                                                                                        ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 6,
+                                                                                      ),
+                                                                                      Text(
+                                                                                        controller.selectedList[index].fileName ?? "",
+                                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 6,
+                                                                                      ),
+                                                                                      Text(
+                                                                                        controller.selectedList[index].date ?? "",
+                                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
                                                                                       ),
                                                                                     ],
                                                                                   ),
-                                                                                  SizedBox(
-                                                                                    height: 6,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    controller.selectedList[index].fileName ?? "",
-                                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 6,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    controller.selectedList[index].date ?? "",
-                                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                                  ),
                                                                                 ],
                                                                               ),
-                                                                            ],
-                                                                          ),
+                                                                            );
+                                                                          },
+                                                                          separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                                          itemCount: controller.selectedList.length,
                                                                         );
                                                                       },
-                                                                      separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                                                      itemCount: controller.selectedList.length,
-                                                                    );
-                                                                  },
-                                                                )))
+                                                                    )))
                                                             : Padding(
-                                                          padding: EdgeInsets.symmetric(vertical: 20),
-                                                          child: Container(
-                                                            width: double.infinity,
-                                                            height: 200,
-                                                            child: Center(child: Text("Attachments Not available")),
-                                                          ),
-                                                        ));
+                                                                padding: EdgeInsets.symmetric(vertical: 20),
+                                                                child: Container(
+                                                                  width: double.infinity,
+                                                                  height: 200,
+                                                                  child: Center(child: Text("Attachments Not available")),
+                                                                ),
+                                                              ));
                                                   }),
                                                 ],
                                               ),
@@ -959,6 +959,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
+                                                if (controller.totalFileSize > 100) {
+                                                  CustomToastification().showToast("File size exceeded 100 MB", type: ToastificationType.error);
+                                                  return;
+                                                }
+
                                                 controller.isSaveAddAnother.value = false;
 
                                                 if (controller.formKey.currentState!.validate()) {
@@ -998,12 +1003,13 @@ class AddPatientView extends GetView<AddPatientController> {
                             ),
                           )),
                     )),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
-    ), globalKey: _key);
+        globalKey: _key);
   }
 }
 //

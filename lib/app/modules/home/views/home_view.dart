@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:awesome_side_sheet/Enums/sheet_position.dart';
+import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
@@ -44,14 +46,15 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(body: GestureDetector(
-      onTap: removeFocus,
-      child: SafeArea(
-        child: Column(
-          children: [
-            CustomAppBar(drawerkey: _key),
-            Expanded(
-                child: Container(
+    return BaseScreen(
+        body: GestureDetector(
+          onTap: removeFocus,
+          child: SafeArea(
+            child: Column(
+              children: [
+                CustomAppBar(drawerkey: _key),
+                Expanded(
+                    child: Container(
                   width: double.infinity,
                   color: AppColors.ScreenBackGround,
                   child: Column(
@@ -107,7 +110,7 @@ class HomeView extends GetView<HomeController> {
                                     width: double.infinity,
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                                     child: Obx(
-                                          () {
+                                      () {
                                         return Container(
                                             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
@@ -139,41 +142,41 @@ class HomeView extends GetView<HomeController> {
                                                   ),
                                                   IntrinsicWidth(
                                                       child: CustomAnimatedButton(
-                                                        onPressed: () {
-                                                          controller.tabIndex.value = 1;
-                                                          controller.globalController.homeTabIndex.value = 1;
+                                                    onPressed: () {
+                                                      controller.tabIndex.value = 1;
+                                                      controller.globalController.homeTabIndex.value = 1;
 
-                                                          controller.clearFilter(isRefresh: false);
-                                                          controller.getScheduleVisitList(isFist: true);
-                                                        },
-                                                        text: "Scheduled Visits",
-                                                        isOutline: true,
-                                                        paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                        fontSize: 14,
-                                                        enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                        enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                        outLineEnabledColor: AppColors.textGrey,
-                                                        outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      )),
+                                                      controller.clearFilter(isRefresh: false);
+                                                      controller.getScheduleVisitList(isFist: true);
+                                                    },
+                                                    text: "Scheduled Visits",
+                                                    isOutline: true,
+                                                    paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                    fontSize: 14,
+                                                    enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                    enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                                    outLineEnabledColor: AppColors.textGrey,
+                                                    outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                                  )),
                                                   IntrinsicWidth(
                                                       child: CustomAnimatedButton(
-                                                        onPressed: () {
-                                                          controller.tabIndex.value = 2;
-                                                          controller.globalController.homeTabIndex.value = 2;
+                                                    onPressed: () {
+                                                      controller.tabIndex.value = 2;
+                                                      controller.globalController.homeTabIndex.value = 2;
 
-                                                          // controller.scheduleSorting(cellData: "Visit Date", colIndex: 1);
-                                                          controller.clearFilter(isRefresh: false);
-                                                          controller.getPastVisitList(isFist: true);
-                                                        },
-                                                        text: "Past Visits",
-                                                        isOutline: true,
-                                                        paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                        fontSize: 14,
-                                                        enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                        enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                        outLineEnabledColor: AppColors.textGrey,
-                                                        outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      )),
+                                                      // controller.scheduleSorting(cellData: "Visit Date", colIndex: 1);
+                                                      controller.clearFilter(isRefresh: false);
+                                                      controller.getPastVisitList(isFist: true);
+                                                    },
+                                                    text: "Past Visits",
+                                                    isOutline: true,
+                                                    paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                    fontSize: 14,
+                                                    enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                    enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                                    outLineEnabledColor: AppColors.textGrey,
+                                                    outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                                  )),
                                                 ],
                                               ),
                                             ));
@@ -188,7 +191,7 @@ class HomeView extends GetView<HomeController> {
                                       child: Column(
                                         children: [
                                           Obx(
-                                                () {
+                                            () {
                                               return Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                                 child: Row(
@@ -206,38 +209,81 @@ class HomeView extends GetView<HomeController> {
                                                       GestureDetector(
                                                         onTap: () {
                                                           if (controller.tabIndex.value == 1) {
-                                                            showMaterialModalBottomSheet(
+                                                            aweSideSheet(
+                                                              header: SizedBox(),
+                                                              footer: SizedBox(),
+                                                              showActions: false,
+                                                              backgroundColor: AppColors.white,
+                                                              barrierDismissible: true,
+                                                              showCloseButton: false,
+                                                              showBackButton: true,
                                                               context: context,
-                                                              builder: (context) {
-                                                                return ScheduleListFilterBottomSheet(
-                                                                  onTap: () {
-                                                                    controller.getScheduleVisitList();
-                                                                  },
-                                                                );
-                                                              },
+                                                              body: ScheduleListFilterBottomSheet(
+                                                                onTap: () {
+                                                                  controller.getScheduleVisitList();
+                                                                },
+                                                              ),
+                                                              sheetPosition: SheetPosition.right,
                                                             ).then(
-                                                                  (value) {
+                                                              (value) {
                                                                 controller.getScheduleVisitList();
                                                                 print("value");
                                                               },
                                                             );
+
+                                                            // showMaterialModalBottomSheet(
+                                                            //   context: context,
+                                                            //   builder: (context) {
+                                                            //     return ScheduleListFilterBottomSheet(
+                                                            //       onTap: () {
+                                                            //         controller.getScheduleVisitList();
+                                                            //       },
+                                                            //     );
+                                                            //   },
+                                                            // ).then(
+                                                            //       (value) {
+                                                            //     controller.getScheduleVisitList();
+                                                            //     print("value");
+                                                            //   },
+                                                            // );
                                                           } else if (controller.tabIndex.value == 2) {
-                                                            showMaterialModalBottomSheet(
+                                                            aweSideSheet(
+                                                              header: SizedBox(),
+                                                              footer: SizedBox(),
+                                                              showActions: false,
+                                                              backgroundColor: AppColors.white,
+                                                              barrierDismissible: true,
+                                                              showCloseButton: false,
+                                                              showBackButton: true,
                                                               context: context,
-                                                              builder: (context) {
-                                                                return PastPatientListFilterBottomSheet(
-                                                                  onTap: () {
-                                                                    controller.getPastVisitList(isFist: true);
-                                                                  },
-                                                                );
-                                                              },
+                                                              body: PastPatientListFilterBottomSheet(
+                                                                onTap: () {
+                                                                  controller.getPastVisitList(isFist: true);
+                                                                },
+                                                              ),
+                                                              sheetPosition: SheetPosition.right,
                                                             ).then(
-                                                                  (value) {
+                                                              (value) {
                                                                 controller.getPastVisitList(isFist: true);
                                                                 print("value");
                                                               },
                                                             );
-                                                            ;
+
+                                                            // showMaterialModalBottomSheet(
+                                                            //   context: context,
+                                                            //   builder: (context) {
+                                                            //     return PastPatientListFilterBottomSheet(
+                                                            //       onTap: () {
+                                                            //         controller.getPastVisitList(isFist: true);
+                                                            //       },
+                                                            //     );
+                                                            //   },
+                                                            // ).then(
+                                                            //   (value) {
+                                                            //     controller.getPastVisitList(isFist: true);
+                                                            //     print("value");
+                                                            //   },
+                                                            // );
                                                           }
                                                         },
                                                         child: Container(
@@ -291,8 +337,8 @@ class HomeView extends GetView<HomeController> {
                                                                 controller.tabIndex.value == 0
                                                                     ? controller.getPatientList()
                                                                     : controller.tabIndex.value == 1
-                                                                    ? controller.getScheduleVisitList()
-                                                                    : controller.getPastVisitList();
+                                                                        ? controller.getScheduleVisitList()
+                                                                        : controller.getPastVisitList();
                                                               },
                                                               maxLines: 1, //or null
 
@@ -338,8 +384,8 @@ class HomeView extends GetView<HomeController> {
                                             child: controller.tabIndex.value == 0
                                                 ? HomePatientListView()
                                                 : controller.tabIndex.value == 1
-                                                ? HomeScheduleListView()
-                                                : HomePastVisitsList(),
+                                                    ? HomeScheduleListView()
+                                                    : HomePastVisitsList(),
                                           ),
                                           SizedBox(
                                             height: 10,
@@ -357,10 +403,11 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                 ))
-          ],
+              ],
+            ),
+          ),
         ),
-      ),
-    ), globalKey: _key);
+        globalKey: _key);
   }
 
   Future<void> _onRefresh() async {

@@ -49,12 +49,13 @@ class ResponseData {
   String? title;
   String? medicalLicenseNumber;
   String? licenseExpiryDate;
-  String? nationalProviderIdentifier;
+  int? nationalProviderIdentifier;
   String? taxonomyCode;
   String? specialization;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  String? organizationName;
 
   ResponseData(
       {this.id,
@@ -85,7 +86,8 @@ class ResponseData {
       this.specialization,
       this.createdAt,
       this.updatedAt,
-      this.deletedAt});
+      this.deletedAt,
+      this.organizationName});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -117,6 +119,7 @@ class ResponseData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    organizationName = json['organization_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -150,6 +153,7 @@ class ResponseData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['organization_name'] = organizationName;
     return data;
   }
 }

@@ -45,11 +45,12 @@ class MediaPickerServices {
     return image;
   }
 
-  Future<List<PlatformFile>?> pickAllFiles() async {
+  Future<List<PlatformFile>?> pickAllFiles({FileType fileType = FileType.any}) async {
     // Pick multiple files, setting type as FileType.any to allow all types of files
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true, // Allows multiple files to be selected
-      type: FileType.any, // Accepts any type of file
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+      type: fileType, // Accepts any type of file
     );
 
     // Check if the user picked any files

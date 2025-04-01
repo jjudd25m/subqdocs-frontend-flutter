@@ -32,323 +32,289 @@ class DoctorView extends StatelessWidget {
               ],
             ))
           ] else ...[
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                    color: AppColors.white,
-                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                        ),
-                        // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "Diagnosis codes / Procedures",
-                                  style: AppFonts.medium(16, AppColors.textPurple),
-                                ),
-                                Spacer(),
-                                SvgPicture.asset(
-                                  ImagePath.edit_outline,
-                                  height: 28,
-                                  width: 28,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.zero,
+            if (controller.doctorViewList.value?.responseData?.status == "Failure") ...[
+              Center(
+                  child: Text(
+                controller.doctorViewList.value?.responseData?.message ?? "",
+                textAlign: TextAlign.center,
+              ))
+            ] else ...[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
+                          ),
+                          // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             children: [
-                              Table(
-                                border: TableBorder.all(
-                                  color: AppColors.buttonBackgroundGrey, // Table border color
-                                  width: 1, // Border width
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
-                                ),
-                                columnWidths: {
-                                  0: FractionColumnWidth(0.33), // Fixed width for "Procedure" column
-                                  1: FractionColumnWidth(0.33), // Fixed width for "Diagnosis" column
-                                  2: FractionColumnWidth(0.15), // Flexible width for "Unit" column (20% of screen)
-                                  3: FractionColumnWidth(0.19), // Flexible width for "Unit charges" column (40% of screen)
-                                },
-                                children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
+                              SizedBox(
+                                height: 5,
                               ),
-                              Table(
-                                border: TableBorder.all(
-                                  color: AppColors.buttonBackgroundGrey, // Table border color
-                                  width: 1, // Border width
-                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
-                                ),
-                                columnWidths: {
-                                  0: FractionColumnWidth(0.81), // Fixed width for "Procedure" column
-                                  1: FractionColumnWidth(0.19), // Fixed width for "Diagnosis" column
-                                },
+                              Row(
                                 children: [
-                                  TableRow(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white, // Header row background color
-                                    ),
-                                    children: [
-                                      _headerBuildTableCell('Total'),
-                                      // _headerBuildTableCell("\$0"),
-                                      _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}"),
-                                      // _headerBuildTableCell("${controller.doctorViewList.value?.responseData?.totalCharges}"),
-                                    ],
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    "Diagnosis codes / Procedures",
+                                    style: AppFonts.medium(16, AppColors.textPurple),
                                   ),
-                                  // Add more rows if needed
+                                  Spacer(),
+                                  SvgPicture.asset(
+                                    ImagePath.edit_outline,
+                                    height: 28,
+                                    width: 28,
+                                  ),
                                 ],
+                              ),
+                              SizedBox(
+                                height: 5,
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  )),
-            ),
-            //after table
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                    color: AppColors.white,
-                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                        SizedBox(
+                          height: 20,
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SingleChildScrollView(
+                            padding: EdgeInsets.zero,
+                            child: Column(
                               children: [
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "Impressions and Plan",
-                                  style: AppFonts.medium(16, AppColors.textPurple),
+                                Table(
+                                  border: TableBorder.all(
+                                    color: AppColors.buttonBackgroundGrey, // Table border color
+                                    width: 1, // Border width
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
+                                  ),
+                                  columnWidths: {
+                                    0: FractionColumnWidth(0.33), // Fixed width for "Procedure" column
+                                    1: FractionColumnWidth(0.33), // Fixed width for "Diagnosis" column
+                                    2: FractionColumnWidth(0.15), // Flexible width for "Unit" column (20% of screen)
+                                    3: FractionColumnWidth(0.19), // Flexible width for "Unit charges" column (40% of screen)
+                                  },
+                                  children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
                                 ),
-                                Spacer(),
-                                SvgPicture.asset(
-                                  ImagePath.edit_outline,
-                                  height: 28,
-                                  width: 28,
+                                Table(
+                                  border: TableBorder.all(
+                                    color: AppColors.buttonBackgroundGrey, // Table border color
+                                    width: 1, // Border width
+                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
+                                  ),
+                                  columnWidths: {
+                                    0: FractionColumnWidth(0.81), // Fixed width for "Procedure" column
+                                    1: FractionColumnWidth(0.19), // Fixed width for "Diagnosis" column
+                                  },
+                                  children: [
+                                    TableRow(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white, // Header row background color
+                                      ),
+                                      children: [
+                                        _headerBuildTableCell('Total'),
+                                        // _headerBuildTableCell("\$0"),
+                                        _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}"),
+                                        // _headerBuildTableCell("${controller.doctorViewList.value?.responseData?.totalCharges}"),
+                                      ],
+                                    ),
+                                    // Add more rows if needed
+                                  ],
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
-                              Container(
-                                key: ValueKey(task),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          textAlign: TextAlign.left,
-                                          "${task.number}. ${task.title} (${task.code})",
-                                          style: AppFonts.medium(14, AppColors.textPurple),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 25),
-                                      child: Text(
-                                        textAlign: TextAlign.left,
-                                        task.description ?? "",
-                                        style: AppFonts.regular(14, AppColors.black),
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        if ((task.treatments ?? []).isNotEmpty) ...[
-                                          SizedBox(height: 10),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.center,
-                                              "Treatments:",
-                                              style: AppFonts.bold(15, AppColors.textBlack),
-                                            ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    )),
+              ),
+              //after table
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    textAlign: TextAlign.center,
+                                    "Impressions and Plan",
+                                    style: AppFonts.medium(16, AppColors.textPurple),
+                                  ),
+                                  Spacer(),
+                                  SvgPicture.asset(
+                                    ImagePath.edit_outline,
+                                    height: 28,
+                                    width: 28,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ListView(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: [
+                              for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
+                                Container(
+                                  key: ValueKey(task),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.left,
+                                            "${task.number}. ${task.title} (${task.code})",
+                                            style: AppFonts.medium(14, AppColors.textPurple),
                                           ),
-                                          for (Treatments treatments in task.treatments ?? [])
-                                            if (treatments.type?.isNotEmpty ?? false) ...[
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                      child: Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              " ${treatments.type} ${treatments.name} \n",
-                                                              style: AppFonts.regular(14, AppColors.textBlack),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        for (Specifications specifications in treatments.specifications ?? [])
-                                                          Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 20,
-                                                              ),
-                                                              Expanded(
-                                                                child: Text(
-                                                                  textAlign: TextAlign.start,
-                                                                  "• ${specifications.parameter}: ${specifications.value}",
-                                                                  style: AppFonts.regular(14, AppColors.black),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        SizedBox(height: 5),
-                                                        for (String note in treatments.notes ?? [])
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                            child: Column(
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      width: 20,
-                                                                    ),
-                                                                    Text(
-                                                                      textAlign: TextAlign.left,
-                                                                      "•",
-                                                                      style: AppFonts.regular(14, AppColors.black),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 5,
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                        maxLines: 2,
-                                                                        textAlign: TextAlign.left,
-                                                                        " $note ",
-                                                                        style: AppFonts.regular(14, AppColors.black),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ]
                                         ],
-                                        if (task.procedure != null) ...[
-                                          if (task.procedure?.details?.isNotEmpty ?? false) ...[
-                                            if (task.procedure?.type?.isNotEmpty ?? false) ...[
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 25),
-                                                child: Text(
-                                                  textAlign: TextAlign.left,
-                                                  task.procedure?.type != null ? "${task.procedure?.type}:" : "",
-                                                  style: AppFonts.bold(16, AppColors.black),
-                                                ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 25),
+                                        child: Text(
+                                          textAlign: TextAlign.left,
+                                          task.description ?? "",
+                                          style: AppFonts.regular(14, AppColors.black),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          if ((task.treatments ?? []).isNotEmpty) ...[
+                                            SizedBox(height: 10),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Text(
+                                                textAlign: TextAlign.center,
+                                                "Treatments:",
+                                                style: AppFonts.bold(15, AppColors.textBlack),
                                               ),
-                                              for (var details in task.procedure?.details ?? [])
+                                            ),
+                                            for (Treatments treatments in task.treatments ?? [])
+                                              if (treatments.type?.isNotEmpty ?? false) ...[
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10),
                                                   child: Column(
                                                     children: [
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width: 0,
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              textAlign: TextAlign.left,
-                                                              " $details",
-                                                              style: AppFonts.regular(14, AppColors.black),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                        child: Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 10,
                                                             ),
-                                                          ),
+                                                            Expanded(
+                                                              child: Text(
+                                                                " ${treatments.type} ${treatments.name} \n",
+                                                                style: AppFonts.regular(14, AppColors.textBlack),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          for (Specifications specifications in treatments.specifications ?? [])
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 20,
+                                                                ),
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    textAlign: TextAlign.start,
+                                                                    "• ${specifications.parameter}: ${specifications.value}",
+                                                                    style: AppFonts.regular(14, AppColors.black),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          SizedBox(height: 5),
+                                                          for (String note in treatments.notes ?? [])
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                              child: Column(
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width: 20,
+                                                                      ),
+                                                                      Text(
+                                                                        textAlign: TextAlign.left,
+                                                                        "•",
+                                                                        style: AppFonts.regular(14, AppColors.black),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: 5,
+                                                                      ),
+                                                                      Expanded(
+                                                                        child: Text(
+                                                                          maxLines: 2,
+                                                                          textAlign: TextAlign.left,
+                                                                          " $note ",
+                                                                          style: AppFonts.regular(14, AppColors.black),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
                                                         ],
                                                       ),
                                                       SizedBox(
@@ -357,123 +323,165 @@ class DoctorView extends StatelessWidget {
                                                     ],
                                                   ),
                                                 ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ]
+                                          ],
+                                          if (task.procedure != null) ...[
+                                            if (task.procedure?.details?.isNotEmpty ?? false) ...[
+                                              if (task.procedure?.type?.isNotEmpty ?? false) ...[
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 25),
+                                                  child: Text(
+                                                    textAlign: TextAlign.left,
+                                                    task.procedure?.type != null ? "${task.procedure?.type}:" : "",
+                                                    style: AppFonts.bold(16, AppColors.black),
+                                                  ),
+                                                ),
+                                                for (var details in task.procedure?.details ?? [])
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 0,
+                                                            ),
+                                                            Expanded(
+                                                              child: Text(
+                                                                textAlign: TextAlign.left,
+                                                                " $details",
+                                                                style: AppFonts.regular(14, AppColors.black),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                              ]
                                             ]
-                                          ]
-                                        ],
-                                        SizedBox(height: 10),
-                                        if (task.medications != "-" && task.medications != "") ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.left,
-                                              "Medications:",
-                                              style: AppFonts.bold(15, AppColors.black),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 25,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  textAlign: TextAlign.left,
-                                                  "${task.medications}",
-                                                  style: AppFonts.regular(14, AppColors.textBlack),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                          ],
                                           SizedBox(height: 10),
-                                        ],
-                                        if (task.orders != "-" && task.orders != "") ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.left,
-                                              "Orders:",
-                                              style: AppFonts.bold(15, AppColors.black),
+                                          if (task.medications != "-" && task.medications != "") ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                "Medications:",
+                                                style: AppFonts.bold(15, AppColors.black),
+                                              ),
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 25,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  "${task.orders}",
-                                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 25,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                        SizedBox(height: 10),
-                                        if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "") ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.left,
-                                              "Counseling and Discussion:",
-                                              style: AppFonts.bold(15, AppColors.black),
+                                                Expanded(
+                                                  child: Text(
+                                                    textAlign: TextAlign.left,
+                                                    "${task.medications}",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 25,
+                                            SizedBox(height: 10),
+                                          ],
+                                          if (task.orders != "-" && task.orders != "") ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                "Orders:",
+                                                style: AppFonts.bold(15, AppColors.black),
                                               ),
-                                              Expanded(
-                                                child: Text(
-                                                  "${task.counselingAndDiscussion}",
-                                                  style: AppFonts.regular(14, AppColors.textBlack),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                        SizedBox(height: 10),
-                                        if (task.followUp != "-" && task.followUp != "") ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(
-                                              textAlign: TextAlign.left,
-                                              "Follow Up:",
-                                              style: AppFonts.bold(15, AppColors.black),
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 25,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  "${task.followUp}",
-                                                  style: AppFonts.regular(14, AppColors.textBlack),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 25,
                                                 ),
+                                                Expanded(
+                                                  child: Text(
+                                                    "${task.orders}",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                          SizedBox(height: 10),
+                                          if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "") ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                "Counseling and Discussion:",
+                                                style: AppFonts.bold(15, AppColors.black),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 25,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    "${task.counselingAndDiscussion}",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                          SizedBox(height: 10),
+                                          if (task.followUp != "-" && task.followUp != "") ...[
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Text(
+                                                textAlign: TextAlign.left,
+                                                "Follow Up:",
+                                                style: AppFonts.bold(15, AppColors.black),
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 25,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    "${task.followUp}",
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ],
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 13,
-                                    ),
-                                  ],
-                                ),
-                              )
-                          ],
+                                      ),
+                                      SizedBox(
+                                        height: 13,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  )),
-            ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    )),
+              ),
+            ],
           ]
         ],
       );
