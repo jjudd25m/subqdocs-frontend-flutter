@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'dart:ui';
 
+import 'dart:ui';
 import 'package:draggable_float_widget/draggable_float_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../app/core/common/common_service.dart';
 import '../app/core/common/global_controller.dart';
 import '../app/core/common/logger.dart';
@@ -17,15 +15,21 @@ import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
-import '../widget/appbar.dart';
-import '../widget/bredcums.dart';
 
 class BaseScreen extends StatelessWidget {
-  BaseScreen({super.key, required this.body, required this.globalKey});
+  BaseScreen(
+      {super.key,
+      required this.body,
+      required this.globalKey,
+      this.isVisibleModel = false,
+      this.onPlayCallBack});
 
   Widget body;
 
+  final bool isVisibleModel;
+
   final GlobalKey<ScaffoldState> globalKey;
+  final VoidCallback? onPlayCallBack;
 
   final GlobalController globalController = Get.find();
   @override
@@ -78,10 +82,11 @@ class BaseScreen extends StatelessWidget {
                 // clipBehavior: Clip.none,
                 children: [
                   body,
-                  if (globalController.isStartTranscript.value) ...[
+                  if (globalController.visitId.value.isNotEmpty ||
+                      (globalController.isStartTranscript.value &&
+                          isVisibleModel)) ...[
                     DraggableFloatWidget(
-                      key: ValueKey(Offset(globalController.valueOfx.value,
-                          globalController.valueOfy.value)),
+                      key: UniqueKey(),
                       receiveParam: (x, y) {
                         globalController.valueOfx.value = x;
                         globalController.valueOfy.value = y;
@@ -206,9 +211,13 @@ class BaseScreen extends StatelessWidget {
                                         if (globalController.recorderService
                                                 .recordingStatus.value ==
                                             0) {
+                                          if (onPlayCallBack != null) {
+                                            onPlayCallBack?.call();
+                                          }
                                           globalController
                                               .changeStatus("In-Room");
                                           // If not recording, start the recording
+
                                           await globalController.recorderService
                                               .startRecording(context);
                                         } else if (globalController
@@ -717,8 +726,13 @@ class BaseScreen extends StatelessWidget {
                                               .recordingStatus.value ==
                                           0) {
                                         // If not recording, start the recording
+
+                                        if (onPlayCallBack != null) {
+                                          onPlayCallBack?.call();
+                                        }
                                         globalController
                                             .changeStatus("In-Room");
+
                                         await globalController.recorderService
                                             .startRecording(context);
                                       } else if (globalController

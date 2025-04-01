@@ -197,8 +197,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                                                               .toString(),
                                                     });
 
-                                                controller
-                                                    .globalController.valueOfx
+                                                controller.globalController
+                                                    .isStartTranscript
                                                     .refresh();
 
                                                 print("back from response");
@@ -557,6 +557,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                           "unique_tag": DateTime.now().toString(),
                         });
                         controller.globalController.valueOfx.refresh();
+
+                        controller.globalController.isStartTranscript.refresh();
                         print("back from response");
 
                         controller.getPastVisitList();

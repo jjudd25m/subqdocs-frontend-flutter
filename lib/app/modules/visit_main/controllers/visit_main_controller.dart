@@ -52,8 +52,8 @@ class VisitMainController extends GetxController {
 
   final HomeRepository _homeRepository = HomeRepository();
 
-  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
-
+  final EditPatientDetailsRepository _editPatientDetailsRepository =
+      EditPatientDetailsRepository();
 
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
@@ -72,7 +72,6 @@ class VisitMainController extends GetxController {
   final GlobalController globalController = Get.find();
   TextEditingController searchController = TextEditingController();
 
-
   final count = 0.obs;
 
   RxInt isSelectedAttchmentOption = RxInt(-1);
@@ -83,8 +82,6 @@ class VisitMainController extends GetxController {
   Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
   Rxn<VisitMainPatientDetails> patientData = Rxn();
 
-
-
   RxString visitId = RxString("");
   RxString patientId = RxString("");
   RxList<MediaListingModel> list = RxList();
@@ -93,16 +90,12 @@ class VisitMainController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-
     // this is for the bread cum
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globalController.addRouteInit(Routes.VISIT_MAIN);
     });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
-
-
-
 
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
@@ -123,7 +116,8 @@ class VisitMainController extends GetxController {
 
       handelInternetConnection();
 
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      List<AudioFile> pendingFiles =
+          await DatabaseHelper.instance.getPendingAudioFiles();
       customPrint("local audio is :- $pendingFiles");
     }
   }
@@ -146,12 +140,14 @@ class VisitMainController extends GetxController {
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
 
-  Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
+  Future<void> captureImage(BuildContext context,
+      {bool fromCamera = true, bool clear = true}) async {
     if (clear) {
       list.clear();
     }
 
-    XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
+    XFile? image =
+        await MediaPickerServices().pickImage(fromCamera: fromCamera);
 
     customPrint("media  file is  $image");
 
@@ -173,9 +169,15 @@ class VisitMainController extends GetxController {
         // Truncate the name to 12 characters and add ellipsis
         _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
       } else {
-        _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+        _shortFileName =
+            p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString));
     }
 
     list.refresh();
@@ -188,11 +190,11 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> updateData() async {
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
 
-    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
-      Get.back();
-    }
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ??
+        false) {}
   }
 
   void clearFilter() {
@@ -233,9 +235,15 @@ class VisitMainController extends GetxController {
             // Truncate the name to 12 characters and add ellipsis
             _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
           } else {
-            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+            _shortFileName = p
+                .basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString));
         }
       },
     );
@@ -247,11 +255,11 @@ class VisitMainController extends GetxController {
     }
   }
 
-
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+      barrierDismissible:
+          true, // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return attachmentDailog(this); // Our custom dialog
       },
@@ -273,7 +281,8 @@ class VisitMainController extends GetxController {
     }
   }
 
-  String formatDateTime({required String firstDate, required String secondDate}) {
+  String formatDateTime(
+      {required String firstDate, required String secondDate}) {
     if (firstDate != "" && secondDate != "") {
       // Parse the first and second arguments to DateTime objects
       DateTime firstDateTime = DateTime.parse(firstDate);
@@ -283,7 +292,8 @@ class VisitMainController extends GetxController {
       String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
 
       // Format the second time (for hours and minutes with am/pm)
-      String formattedTime = DateFormat('h:mm a').format(secondDateTime.toLocal());
+      String formattedTime =
+          DateFormat('h:mm a').format(secondDateTime.toLocal());
 
       // Return the formatted string in the desired format
       return '$formattedDate $formattedTime';
@@ -307,7 +317,6 @@ class VisitMainController extends GetxController {
     }
   }
 
-
   @override
   void onReady() {
     super.onReady();
@@ -319,15 +328,11 @@ class VisitMainController extends GetxController {
   void onClose() {
     super.onClose();
 
-
-
-    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.VISIT_MAIN )
-      {
-
-
-    globalController.popRoute();
-      }
-
+    if (globalController
+            .getKeyByValue(globalController.breadcrumbHistory.last) ==
+        Routes.VISIT_MAIN) {
+      globalController.popRoute();
+    }
   }
 
   Future<void> onRefresh() async {
@@ -352,7 +357,8 @@ class VisitMainController extends GetxController {
 
       handelInternetConnection();
 
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      List<AudioFile> pendingFiles =
+          await DatabaseHelper.instance.getPendingAudioFiles();
       customPrint("local audio is :- $pendingFiles");
     }
   }
@@ -363,11 +369,14 @@ class VisitMainController extends GetxController {
     params["attachments"] = [id];
 
     customPrint("attch :- $params");
-    CommonResponse commonResponse = await visitMainRepository.deleteAttachments(params: params);
+    CommonResponse commonResponse =
+        await visitMainRepository.deleteAttachments(params: params);
     if (commonResponse.responseType == "success") {
-      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
+      CustomToastification().showToast(commonResponse.message ?? "",
+          type: ToastificationType.success);
     } else {
-      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.error);
+      CustomToastification().showToast(commonResponse.message ?? "",
+          type: ToastificationType.error);
     }
     Get.back();
     Get.back();
@@ -375,7 +384,9 @@ class VisitMainController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final listener = InternetConnection()
+        .onStatusChange
+        .listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           onLine();
@@ -393,17 +404,22 @@ class VisitMainController extends GetxController {
 
   Future<void> uploadAttachments() async {
     Loader().showLoadingDialogForSimpleLoader();
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    var loginData = LoginModel.fromJson(jsonDecode(
+        AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     Map<String, List<File>> profileParams = {};
     if (list.isNotEmpty) {
       customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
-      profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+      profileParams['attachments'] =
+          list.map((model) => model.file).toList().whereType<File>().toList();
     } else {
       customPrint("profile is not  available");
     }
-    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+    await visitMainRepository.uploadAttachments(
+        files: profileParams,
+        token: loginData.responseData?.token ?? "",
+        patientVisitId: patientId.value);
     list.clear();
     Get.back();
     getPatientAttachment();
@@ -411,7 +427,8 @@ class VisitMainController extends GetxController {
 
   Future<void> getVisitRecap() async {
     customPrint("patientID is :- ${patientId.value}");
-    visitRecapList.value = await visitMainRepository.getVisitRecap(id: patientId.value);
+    visitRecapList.value =
+        await visitMainRepository.getVisitRecap(id: patientId.value);
   }
 
   Future<void> getPatientAttachment() async {
@@ -430,13 +447,15 @@ class VisitMainController extends GetxController {
     }
 
     try {
-      patientAttachmentList.value = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+      patientAttachmentList.value = await visitMainRepository
+          .getPatientAttachment(id: patientId.value, param: param);
       // Get.back();
     } catch (error) {
       // Get.back();
     }
 
-    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+    customPrint(
+        "patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
   Future<void> getPatientDetails({bool isLoading = false}) async {
@@ -444,11 +463,8 @@ class VisitMainController extends GetxController {
       Loader().showLoadingDialogForSimpleLoader();
     }
 
-    patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
-
-
-
-
+    patientData.value =
+        await visitMainRepository.getPatientDetails(id: visitId.value);
 
     print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
 
@@ -456,7 +472,8 @@ class VisitMainController extends GetxController {
       Get.back();
     }
 
-    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+    customPrint(
+        "patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
@@ -507,29 +524,38 @@ class VisitMainController extends GetxController {
     }
   }
 
-  Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
+  Future<void> patientReScheduleCreate(
+      {required Map<String, dynamic> param, required String visitId}) async {
     customPrint("visit id :- $visitId");
-    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+    dynamic response = await _homeRepository.patientReScheduleVisit(
+        param: param, visitId: visitId);
     customPrint("patientReScheduleCreate API  internal response $response");
-    CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    CustomToastification().showToast("Visit reschedule successfully",
+        type: ToastificationType.success);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
     getPatientDetails();
   }
 
   Future<void> deletePatientVisit({required String id}) async {
-    var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
+    var response = await ApiProvider.instance
+        .callDelete(url: "patient/visit/delete/$id", data: {});
     customPrint(response);
-    CustomToastification().showToast("Visit delete successfully", type: ToastificationType.success);
+    CustomToastification().showToast("Visit delete successfully",
+        type: ToastificationType.success);
 
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
 
-    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ??
+        false) {
       Get.back();
     }
   }
 
   Future<void> getMedicalRecords({required String id}) async {
-    medicalRecords.value = await _editPatientDetailsRepository.getMedicalRecords(id: patientId.value);
+    medicalRecords.value = await _editPatientDetailsRepository
+        .getMedicalRecords(id: patientId.value);
 
     medicalRecords.refresh();
   }
@@ -547,31 +573,55 @@ class VisitMainController extends GetxController {
       getPatientDetails(isLoading: isLoading);
     }
 
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
     // CustomToastification().showToast(" Internet Connected", type: ToastificationType.info);
   }
 
   void offLine() async {
-    var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
+    var responseData =
+        jsonDecode(AppPreference.instance.getString(AppString.offLineData));
 
-    var visitRecapListResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitRecaps, visitId: visitId.value, responseData: responseData);
+    var visitRecapListResponse = fetchVisitDetails(
+        type: scheduleVisitsList,
+        modelType: visitRecaps,
+        visitId: visitId.value,
+        responseData: responseData);
 
-    var patientDetailsResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitMainData, visitId: visitId.value, responseData: responseData);
+    var patientDetailsResponse = fetchVisitDetails(
+        type: scheduleVisitsList,
+        modelType: visitMainData,
+        visitId: visitId.value,
+        responseData: responseData);
 
-    var scheduleVisitResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
+    var scheduleVisitResponse = fetchVisitDetails(
+        type: scheduleVisitsList,
+        modelType: scheduledVisits,
+        visitId: visitId.value,
+        responseData: responseData);
 
-    var medicalRecords1 = fetchVisitDetails(type: scheduleVisitsList, modelType: fullNoteOfLastVisit, visitId: visitId.value, responseData: responseData);
+    var medicalRecords1 = fetchVisitDetails(
+        type: scheduleVisitsList,
+        modelType: fullNoteOfLastVisit,
+        visitId: visitId.value,
+        responseData: responseData);
 
-    patientDetailModel.value = PatientDetailModel.fromJson(scheduleVisitResponse);
+    patientDetailModel.value =
+        PatientDetailModel.fromJson(scheduleVisitResponse);
 
     visitRecapList.value = VisitRecapListModel.fromJson(visitRecapListResponse);
 
-    patientData.value = VisitMainPatientDetails.fromJson(patientDetailsResponse);
+    patientData.value =
+        VisitMainPatientDetails.fromJson(patientDetailsResponse);
 
     medicalRecords.value = MedicalRecords.fromJson(medicalRecords1);
   }
 
-  Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {
+  Map<String, dynamic> fetchVisitDetails(
+      {required Map<String, dynamic> responseData,
+      required String type,
+      required String visitId,
+      required String modelType}) {
     // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
     List<dynamic> visitList = responseData['responseData'][type];
 
@@ -586,8 +636,10 @@ class VisitMainController extends GetxController {
         var visitDetails = visit[visitKey];
 
         // Check for the value of the key that we need (e.g., scheduledVisits)
-        if (visitDetails['$modelType'] != null && visitDetails['$modelType'].isNotEmpty) {
-          responseDataResult = visitDetails['$modelType']; // Set the value to return
+        if (visitDetails['$modelType'] != null &&
+            visitDetails['$modelType'].isNotEmpty) {
+          responseDataResult =
+              visitDetails['$modelType']; // Set the value to return
         }
         break;
       }
@@ -603,7 +655,12 @@ class VisitMainController extends GetxController {
         "response_type": "success"
       };
     } else {
-      return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
+      return {
+        "responseData": responseDataResult,
+        "message": " Details Fetched Successfully",
+        "toast": true,
+        "response_type": "success"
+      };
     }
   }
 }
