@@ -14,6 +14,7 @@ import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/rounded_image_widget.dart';
 
+import '../../../../utils/FileOpener.dart';
 import '../../../../utils/Formetors.dart';
 import 'package:path/path.dart' as p;
 import '../../../../utils/app_colors.dart';
@@ -987,16 +988,17 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                               },
                                                                                               child: GestureDetector(
                                                                                                 onTap: () {
-                                                                                                  if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
-                                                                                                    customPrint("1");
-                                                                                                    FullscreenImageViewer.open(
-                                                                                                      context: context,
-                                                                                                      child: Image.file(controller.selectedList[index].file ?? File("")),
-                                                                                                    );
-                                                                                                  } else {
-                                                                                                    customPrint("2");
-                                                                                                    controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
-                                                                                                  }
+                                                                                                  FileOpener.openDocument(controller.selectedList[index].file?.path ?? "");
+                                                                                                  // if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
+                                                                                                  //   customPrint("1");
+                                                                                                  //   FullscreenImageViewer.open(
+                                                                                                  //     context: context,
+                                                                                                  //     child: Image.file(controller.selectedList[index].file ?? File("")),
+                                                                                                  //   );
+                                                                                                  // } else {
+                                                                                                  //   customPrint("2");
+                                                                                                  //   controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
+                                                                                                  // }
                                                                                                 },
                                                                                                 child: ClipRRect(
                                                                                                   borderRadius: BorderRadius.circular(10), // Set the radius here

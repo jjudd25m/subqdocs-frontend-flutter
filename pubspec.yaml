@@ -72,7 +72,8 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   draggable_float_widget:
     path: ./draggable_float_widget
-  universal_file_viewer: ^0.0.1
+  open_file_plus: ^3.4.1+1
+#  universal_file_viewer: ^0.1.1
 
 
 dev_dependencies:
