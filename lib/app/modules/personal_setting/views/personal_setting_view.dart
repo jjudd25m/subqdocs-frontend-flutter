@@ -503,7 +503,9 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                       Expanded(
                                                                           child: CommonPatientData(
                                                                         label: "License Expiry Date",
-                                                                        data: controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "-",
+                                                                        data: (controller.getUserDetailModel.value?.responseData?.licenseExpiryDate?.isNotEmpty ?? false)
+                                                                            ? "${DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""))}"
+                                                                            : "",
                                                                       )),
                                                                       Expanded(child: SizedBox()),
                                                                     ],

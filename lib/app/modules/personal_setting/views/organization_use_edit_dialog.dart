@@ -7,6 +7,7 @@ import 'package:subqdocs/widgets/custom_button.dart';
 import '../../../../utils/Formetors.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
+import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../controllers/personal_setting_controller.dart';
 
@@ -316,55 +317,124 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               spacing: 15,
                               children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Country",
+                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                          ),
+                                          Text(
+                                            "*",
+                                            style: AppFonts.regular(14, AppColors.redText),
+                                          ),
                                         ],
-                                        label: "Country",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.userCountryController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.userCountryController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Obx(() {
+                                        return BaseDropdown<String>(
+                                          valueAsString: (value) => value ?? "",
+                                          items: controller.countryOption,
+                                          selectedValue: controller.selectedCountryValue.value,
+                                          onChanged: (value) {
+                                            controller.selectedCountryValue.value = value;
+                                          },
+                                          selectText: "United States",
+                                        );
+                                      })
+                                    ],
                                   ),
                                 ),
+                                // Expanded(
+                                //   child: Expanded(
+                                //     child: TextFormFiledWidget(
+                                //         format: [
+                                //           CustomTextInputFormatter(),
+                                //         ],
+                                //         label: "Country",
+                                //         isValid: controller.isValid.value,
+                                //         // isImportant: true,
+                                //         controller: controller.userCountryController,
+                                //         isSuffixIconVisible: false,
+                                //         isFirst: true,
+                                //         hint: "",
+                                //         onTap: () {
+                                //           controller.userCountryController.clear();
+                                //         },
+                                //         suffixIcon: Icon(
+                                //           Icons.highlight_remove,
+                                //           color: AppColors.textDarkGrey,
+                                //           size: 25,
+                                //         ),
+                                //         checkValidation: (value) {
+                                //           return Validation.requiredFiled(value);
+                                //         }),
+                                //   ),
+                                // ),
+                                // Expanded(
+                                //   child: Expanded(
+                                //     child: TextFormFiledWidget(
+                                //         format: [
+                                //           CustomTextInputFormatter(),
+                                //         ],
+                                //         label: "State",
+                                //         isValid: controller.isValid.value,
+                                //         // isImportant: true,
+                                //         controller: controller.userStateController,
+                                //         isSuffixIconVisible: false,
+                                //         isFirst: true,
+                                //         hint: "",
+                                //         onTap: () {
+                                //           controller.userStateController.clear();
+                                //         },
+                                //         suffixIcon: Icon(
+                                //           Icons.highlight_remove,
+                                //           color: AppColors.textDarkGrey,
+                                //           size: 25,
+                                //         ),
+                                //         checkValidation: (value) {
+                                //           return Validation.requiredFiled(value);
+                                //         }),
+                                //   ),
+                                // ),
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                        format: [
-                                          CustomTextInputFormatter(),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "State",
+                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                          ),
+                                          Text(
+                                            "*",
+                                            style: AppFonts.regular(14, AppColors.redText),
+                                          ),
                                         ],
-                                        label: "State",
-                                        isValid: controller.isValid.value,
-                                        // isImportant: true,
-                                        controller: controller.userStateController,
-                                        isSuffixIconVisible: false,
-                                        isFirst: true,
-                                        hint: "",
-                                        onTap: () {
-                                          controller.userStateController.clear();
-                                        },
-                                        suffixIcon: Icon(
-                                          Icons.highlight_remove,
-                                          color: AppColors.textDarkGrey,
-                                          size: 25,
-                                        ),
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        }),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Obx(() {
+                                        return BaseDropdown<String>(
+                                          valueAsString: (value) => value ?? "",
+                                          items: controller.userStateOption,
+                                          selectedValue: controller.userSelectedStateValue.value,
+                                          onChanged: (value) {
+                                            controller.userSelectedStateValue.value = value;
+
+                                            controller.userCityOption = controller.statesCities.firstWhere((element) => element.state == value).cities;
+                                            controller.userSelectedCityValue.value = controller.userCityOption.first;
+                                          },
+                                          // selectText: "United States",
+                                        );
+                                      })
+                                    ],
                                   ),
                                 ),
                               ],
@@ -372,29 +442,62 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                             Row(
                               spacing: 15,
                               children: [
+                                // Expanded(
+                                //   child: TextFormFiledWidget(
+                                //       format: [
+                                //         CustomTextInputFormatter(),
+                                //       ],
+                                //       label: "City",
+                                //       isValid: controller.isValid.value,
+                                //       // isImportant: true,
+                                //       controller: controller.userCityController,
+                                //       isSuffixIconVisible: false,
+                                //       isFirst: true,
+                                //       hint: "",
+                                //       onTap: () {
+                                //         controller.userCityController.clear();
+                                //       },
+                                //       suffixIcon: Icon(
+                                //         Icons.highlight_remove,
+                                //         color: AppColors.textDarkGrey,
+                                //         size: 25,
+                                //       ),
+                                //       checkValidation: (value) {
+                                //         return Validation.requiredFiled(value);
+                                //       }),
+                                // ),
                                 Expanded(
-                                  child: TextFormFiledWidget(
-                                      format: [
-                                        CustomTextInputFormatter(),
-                                      ],
-                                      label: "City",
-                                      isValid: controller.isValid.value,
-                                      // isImportant: true,
-                                      controller: controller.userCityController,
-                                      isSuffixIconVisible: false,
-                                      isFirst: true,
-                                      hint: "",
-                                      onTap: () {
-                                        controller.userCityController.clear();
-                                      },
-                                      suffixIcon: Icon(
-                                        Icons.highlight_remove,
-                                        color: AppColors.textDarkGrey,
-                                        size: 25,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "City",
+                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                          ),
+                                          Text(
+                                            "*",
+                                            style: AppFonts.regular(14, AppColors.redText),
+                                          ),
+                                        ],
                                       ),
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      }),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Obx(() {
+                                        return BaseDropdown<String>(
+                                          valueAsString: (value) => value ?? "",
+                                          items: controller.userCityOption,
+                                          selectedValue: controller.userSelectedCityValue.value,
+                                          onChanged: (value) {
+                                            controller.userSelectedCityValue.value = value;
+                                          },
+                                          // selectText: "United States",
+                                        );
+                                      })
+                                    ],
+                                  ),
                                 ),
                                 Expanded(
                                   child: TextFormFiledWidget(
@@ -497,9 +600,9 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 Expanded(
                                   child: Expanded(
                                     child: TextFormFiledWidget(
-                                        // format: [
-                                        //   CustomTextInputFormatter(),
-                                        // ],
+                                        format: [
+                                          MedicalLicenseNumberFormatter(),
+                                        ],
                                         label: "Medical License Number",
                                         isValid: controller.isValid.value,
                                         // isImportant: true,
@@ -590,9 +693,9 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 // ),
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                      // format: [
-                                      //   PostalCodeFormatter(),
-                                      // ],
+                                      format: [
+                                        NpiFormatter(),
+                                      ],
                                       label: "National Provider Identifier",
                                       // maxLength: 5,
                                       isValid: controller.isValid.value,
@@ -619,9 +722,9 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                      // format: [
-                                      //   CustomTextInputFormatter(),
-                                      // ],
+                                      format: [
+                                        TaxonomyCodeFormatter(),
+                                      ],
                                       label: "Taxonomy Code",
                                       isValid: controller.isValid.value,
                                       // isImportant: true,
@@ -705,9 +808,9 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               'last_name': controller.userLastNameController.text,
                               'email': controller.userEmailController.text,
                               'contact_no': controller.userPhoneNumberController.text,
-                              'country': controller.userCountryController.text,
-                              'state': controller.userStateController.text,
-                              'city': controller.userCityController.text,
+                              'country': controller.selectedCountryValue.value,
+                              'state': controller.userSelectedStateValue.value,
+                              'city': controller.userSelectedCityValue.value,
                               'street_name': controller.userStreetNameController.text,
                               'postal_code': controller.userPostalCodeController.text,
                               'title': controller.userPractitionerController.text,
@@ -717,6 +820,8 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               'taxonomy_code': controller.userTaxonomyCodeController.text,
                               'specialization': controller.userSpecializationController.text
                             };
+
+                            print("user edit param is :- ${param}");
 
                             receiveParam(param);
                             // controller.addImage();

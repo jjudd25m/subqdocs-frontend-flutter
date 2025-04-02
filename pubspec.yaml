@@ -99,6 +99,7 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+    - assets/states_cities.json
 
   fonts:
     - family: 'Poppins'

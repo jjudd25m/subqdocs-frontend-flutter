@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:subqdocs/app/routes/app_pages.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -19,6 +21,7 @@ import '../../../core/common/logger.dart';
 import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/get_user_detail_model.dart';
+import '../model/us_state_city_model.dart';
 import '../repository/personal_setting_repository.dart';
 
 class PersonalSettingController extends GetxController {
@@ -80,6 +83,23 @@ class PersonalSettingController extends GetxController {
   Rxn<File> userProfileImage = Rxn();
   Rxn<File> organizationProfileImage = Rxn();
 
+  List<String> countryOption = ["United States"];
+  RxnString selectedCountryValue = RxnString("United States");
+
+  List<String> userStateOption = [];
+  RxnString userSelectedStateValue = RxnString("");
+
+  List<String> userCityOption = [];
+  RxnString userSelectedCityValue = RxnString("");
+
+  List<String> organizationStateOption = [];
+  RxnString organizationSelectedStateValue = RxnString("");
+
+  List<String> organizationCityOption = [];
+  RxnString organizationSelectedCityValue = RxnString("");
+
+  RxList<StateCityModel> statesCities = RxList();
+
   @override
   void onInit() {
     super.onInit();
@@ -88,6 +108,16 @@ class PersonalSettingController extends GetxController {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globalController.addRouteInit(Routes.PERSONAL_SETTING);
+
+      loadStateCityData().then((data) {
+        statesCities.value = data;
+        userStateOption = statesCities.map((state) => state.state).toList();
+        userSelectedStateValue.value = userStateOption.first;
+
+        organizationStateOption = statesCities.map((state) => state.state).toList();
+        organizationSelectedStateValue.value = organizationStateOption.first;
+      });
+
       getOrganizationDetail();
       getUserDetail();
       getUserByOrganization();
@@ -103,6 +133,17 @@ class PersonalSettingController extends GetxController {
     if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PERSONAL_SETTING) {
       globalController.popRoute();
     }
+  }
+
+  Future<List<StateCityModel>> loadStateCityData() async {
+    // Load the JSON file from assets
+    String jsonString = await rootBundle.loadString('assets/states_cities.json');
+
+    // Decode the JSON data
+    Map<String, dynamic> jsonData = json.decode(jsonString);
+
+    // Parse the JSON data into a list of StateCityModel objects
+    return StateCityModel.fromJson(jsonData);
   }
 
   Future<void> getOrganizationDetail() async {
@@ -180,7 +221,7 @@ class PersonalSettingController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     if (userProfileImage.value != null) {
-      customPrint("profile is   available");
+      // customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
       profileParams['user_image'] = [userProfileImage.value!];
     }
@@ -192,7 +233,7 @@ class PersonalSettingController extends GetxController {
       // getOrganizationDetail();
       getUserDetail();
     } catch (error) {
-      customPrint("userInvite catch error is $error");
+      // customPrint("userInvite catch error is $error");
     }
   }
 
