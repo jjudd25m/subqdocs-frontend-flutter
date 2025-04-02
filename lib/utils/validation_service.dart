@@ -192,9 +192,16 @@ class Validation {
 
     // First, check if the phone number matches the required format
     if (value == null) {
-      return "Please enter a valid contact number";
+      return null;
     }
 
+    if (value.trim().length == 2) {
+      return null;
+    }
+
+    if (value.length != 17) {
+      return "Please enter a valid contact number";
+    }
     // Extract the area code from the phone number
     final String areaCode = value.substring(4, 7);
     print(areaCode);
@@ -207,9 +214,6 @@ class Validation {
     }
 
     // Check if the phone number length is correct (the length check is done by regex)
-    if (value.length != 17) {
-      return "Please enter a valid contact number";
-    }
 
     return null; // Return null if all checks pass
   }

@@ -33,6 +33,7 @@ class AddPatientController extends GetxController {
   final GlobalController globalController = Get.find();
   final AddPatientRepository _addPatientRepository = AddPatientRepository();
   RxBool isLoading = RxBool(false);
+  RxBool isAddPatient = RxBool(false);
 
   TextEditingController firstNameController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
@@ -139,8 +140,11 @@ class AddPatientController extends GetxController {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Get.currentRoute == Routes.ADD_PATIENT) {
+        isAddPatient.value = true;
+
         globalController.addRouteInit(Routes.ADD_PATIENT);
       } else {
+        isAddPatient.value = false;
         globalController.addRouteInit(Routes.SCHEDULE_PATIENT);
       }
     });
@@ -283,7 +287,9 @@ class AddPatientController extends GetxController {
       customPrint("profile is not  available");
     }
 
-    param['patient_id'] = patientId.text;
+    if (patientId.text != "") {
+      param['patient_id'] = patientId.text;
+    }
 
     if (middleNameController.text != "") {
       param['middle_name'] = middleNameController.text;
@@ -292,9 +298,13 @@ class AddPatientController extends GetxController {
       param['contact_no'] = extractDigits(contactNumberController.text.trim());
     }
     param['last_name'] = lastNameController.text;
-    param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+
+    if (dobController.text != "") {
+      param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+    }
 
     param['gender'] = selectedSexValue.value;
+
     if (emailAddressController.text != "") {
       param['email'] = emailAddressController.text;
     }

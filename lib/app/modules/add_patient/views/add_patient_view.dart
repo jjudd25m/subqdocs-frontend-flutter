@@ -547,154 +547,162 @@ class AddPatientView extends GetView<AddPatientController> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                  format: [NoSpaceLowercaseTextFormatter()],
-                                                  label: "Email Address",
-                                                  controller: controller.emailAddressController,
-                                                  isValid: !controller.isValid.value,
-                                                  isSuffixIconVisible: false,
-                                                  isFirst: true,
-                                                  hint: "donjones@example.com",
-                                                  onTap: () {
-                                                    controller.emailAddressController.clear();
-                                                  },
-                                                  suffixIcon: Icon(
-                                                    Icons.highlight_remove,
-                                                    color: AppColors.textDarkGrey,
-                                                    size: 25,
-                                                  ),
-                                                  checkValidation: (value) {
-                                                    return Validation.emailValidate(value);
-                                                  }),
-                                            ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                  format: [
-                                                    MaskTextInputFormatter(mask: "+1 (###) ###-####"),
-                                                    // FilteringTextInputFormatter.allow(RegExp(r'[0-9,+]')),
-                                                    // const NationalPhoneNumberTextInputFormatter(
-                                                    //   prefix: '+',
-                                                    //   countryCode: '1',
-                                                    //   groups: [
-                                                    //     (length: 3, leading: ' (', trailing: ') '),
-                                                    //     (length: 3, leading: '', trailing: '-'),
-                                                    //     (length: 4, leading: '', trailing: ' '),
-                                                    //   ],
-                                                    // ),
-                                                  ],
-                                                  label: "Contact Number",
-                                                  controller: controller.contactNumberController,
-                                                  // isValid: true,
-                                                  isSuffixIconVisible: false,
-                                                  // prefixIcon: Icon(Icons.flag),
-                                                  isFirst: true,
-                                                  type: TextInputType.number,
-                                                  hint: "123456789",
-                                                  onTap: () {
-                                                    controller.emailAddressController.clear();
-                                                  },
-                                                  suffixIcon: Icon(
-                                                    Icons.highlight_remove,
-                                                    color: AppColors.textDarkGrey,
-                                                    size: 25,
-                                                  ),
-                                                  checkValidation: (value) {
-                                                    return Validation.phoneValidate(value);
-                                                  }),
-                                            ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                //format: [NoSpaceTextFormatter()],
-                                                suffixIcon: Icon(Icons.calendar_month),
-                                                label: "Visit Date",
-                                                readOnly: true,
-                                                // isImportant: true,
-                                                controller: controller.visitDateController,
-                                                onTap: () async {
-                                                  final picked = await showDatePicker(
-                                                    context: context,
-
-                                                    // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
-                                                    initialDate: DateTime.now(),
-                                                    firstDate: DateTime.now(),
-                                                    lastDate: DateTime.now().add(Duration(days: 1000)),
-                                                    builder: (context, child) {
-                                                      return Theme(
-                                                        data: ThemeData.light().copyWith(
-                                                          cardColor: AppColors.white,
-                                                          primaryColor: AppColors.backgroundPurple,
-                                                          hintColor: AppColors.backgroundPurple,
-                                                          colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                          buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                                                        ),
-                                                        child: child!,
-                                                      );
+                                        child: Obx(() {
+                                          return Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                    format: [NoSpaceLowercaseTextFormatter()],
+                                                    label: "Email Address",
+                                                    controller: controller.emailAddressController,
+                                                    isValid: !controller.isValid.value,
+                                                    isSuffixIconVisible: false,
+                                                    isFirst: true,
+                                                    hint: "donjones@example.com",
+                                                    onTap: () {
+                                                      controller.emailAddressController.clear();
                                                     },
-                                                  );
-                                                  if (picked != null) {
-                                                    String inputText;
-                                                    String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                    controller.visitDateController.text = inputText;
-                                                  }
-                                                },
-                                                hint: "mm/dd/yyyy",
+                                                    suffixIcon: Icon(
+                                                      Icons.highlight_remove,
+                                                      color: AppColors.textDarkGrey,
+                                                      size: 25,
+                                                    ),
+                                                    checkValidation: (value) {
+                                                      return Validation.emailValidate(value);
+                                                    }),
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                    format: [
+                                                      MaskTextInputFormatter(mask: "+1 (###) ###-####"),
+                                                      // FilteringTextInputFormatter.allow(RegExp(r'[0-9,+]')),
+                                                      // const NationalPhoneNumberTextInputFormatter(
+                                                      //   prefix: '+',
+                                                      //   countryCode: '1',
+                                                      //   groups: [
+                                                      //     (length: 3, leading: ' (', trailing: ') '),
+                                                      //     (length: 3, leading: '', trailing: '-'),
+                                                      //     (length: 4, leading: '', trailing: ' '),
+                                                      //   ],
+                                                      // ),
+                                                    ],
+                                                    label: "Contact Number",
+                                                    controller: controller.contactNumberController,
+                                                    // isValid: true,
+                                                    isSuffixIconVisible: false,
+                                                    // prefixIcon: Icon(Icons.flag),
+                                                    isFirst: true,
+                                                    type: TextInputType.number,
+                                                    hint: "123456789",
+                                                    onTap: () {
+                                                      controller.emailAddressController.clear();
+                                                    },
+                                                    suffixIcon: Icon(
+                                                      Icons.highlight_remove,
+                                                      color: AppColors.textDarkGrey,
+                                                      size: 25,
+                                                    ),
+                                                    checkValidation: (value) {
+                                                      return Validation.phoneValidate(value);
+                                                    }),
+                                              ),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              !controller.isAddPatient.value
+                                                  ? Expanded(
+                                                      child: TextFormFiledWidget(
+                                                        //format: [NoSpaceTextFormatter()],
+                                                        suffixIcon: Icon(Icons.calendar_month),
+                                                        label: "Visit Date",
+                                                        readOnly: true,
+                                                        // isImportant: true,
+                                                        controller: controller.visitDateController,
+                                                        onTap: () async {
+                                                          final picked = await showDatePicker(
+                                                            context: context,
+
+                                                            // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
+                                                            initialDate: DateTime.now(),
+                                                            firstDate: DateTime.now(),
+                                                            lastDate: DateTime.now().add(Duration(days: 1000)),
+                                                            builder: (context, child) {
+                                                              return Theme(
+                                                                data: ThemeData.light().copyWith(
+                                                                  cardColor: AppColors.white,
+                                                                  primaryColor: AppColors.backgroundPurple,
+                                                                  hintColor: AppColors.backgroundPurple,
+                                                                  colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                                ),
+                                                                child: child!,
+                                                              );
+                                                            },
+                                                          );
+                                                          if (picked != null) {
+                                                            String inputText;
+                                                            String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                            inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                            controller.visitDateController.text = inputText;
+                                                          }
+                                                        },
+                                                        hint: "mm/dd/yyyy",
+                                                      ),
+                                                    )
+                                                  : Spacer(),
+                                            ],
+                                          );
+                                        }),
                                       ),
                                       SizedBox(
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Visit Time",
-                                                    style: AppFonts.regular(14, AppColors.textBlack),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Obx(() {
-                                                    return BaseDropdown<String>(
-                                                      valueAsString: (value) => value ?? "",
-                                                      items: controller.visitTime,
-                                                      selectedValue: controller.selectedVisitTimeValue.value,
-                                                      onChanged: (value) {
-                                                        controller.selectedVisitTimeValue.value = value;
-                                                      },
-                                                      selectText: "11 PM",
-                                                    );
-                                                  })
-                                                ],
+                                        child: Obx(() {
+                                          return Row(
+                                            children: [
+                                              !controller.isAddPatient.value
+                                                  ? Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "Visit Time",
+                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          Obx(() {
+                                                            return BaseDropdown<String>(
+                                                              valueAsString: (value) => value ?? "",
+                                                              items: controller.visitTime,
+                                                              selectedValue: controller.selectedVisitTimeValue.value,
+                                                              onChanged: (value) {
+                                                                controller.selectedVisitTimeValue.value = value;
+                                                              },
+                                                              selectText: "11 PM",
+                                                            );
+                                                          })
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Spacer(),
+                                              SizedBox(
+                                                width: Dimen.margin10,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Spacer(),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ),
+                                              Spacer(),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          );
+                                        }),
                                       ),
                                       SizedBox(
                                         height: Dimen.margin16,
