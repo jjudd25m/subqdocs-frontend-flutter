@@ -86,13 +86,27 @@ class EditPatentDetailsController extends GetxController {
 
   final count = 0.obs;
   @override
+  String formatPhoneNumber(String rawNumber) {
+    // Ensure the number is exactly 10 digits (US phone number format)
+    if (rawNumber.length == 11) {
+      return '+1 (${rawNumber.substring(1, 4)}) ${rawNumber.substring(4, 7)}-${rawNumber.substring(7)}';
+    } else {
+      // Handle invalid number length (you can customize this behavior)
+      return '+1 ';
+    }
+  }
+
+  String extractDigits(String input) {
+    // Use a regular expression to extract digits only
+    return input.replaceAll(RegExp(r'\D'), '');
+  }
+
   void onInit() {
     super.onInit();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globalController.addRouteInit(Routes.EDIT_PATENT_DETAILS);
     });
-
 
     customPrint("edit patient list  ${Get.arguments["patientData"]}");
 
@@ -111,16 +125,10 @@ class EditPatentDetailsController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-
-    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.EDIT_PATENT_DETAILS )
-    {
-
-
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.EDIT_PATENT_DETAILS) {
       globalController.popRoute();
     }
     // globalController.popRoute();
-
-
   }
 
   Future<void> getPatient(String id, String visitId) async {
@@ -153,7 +161,7 @@ class EditPatentDetailsController extends GetxController {
     customPrint("dob is :- $formattedDate");
 
     emailAddressController.text = patientDetailModel.responseData?.email ?? "";
-    contactNumberController.text = patientDetailModel.responseData?.contactNumber ?? "+1";
+    contactNumberController.text = formatPhoneNumber(patientDetailModel.responseData?.contactNumber ?? "");
 
     customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
 
@@ -327,7 +335,7 @@ class EditPatentDetailsController extends GetxController {
       param['email'] = emailAddressController.text;
     }
     if (contactNumberController.text != "") {
-      param['contact_no'] = contactNumberController.text.trim();
+      param['contact_no'] = extractDigits(contactNumberController.text.trim());
     }
 
     if (visitDateController.text != "") {

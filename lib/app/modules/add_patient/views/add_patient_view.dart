@@ -10,10 +10,14 @@ import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:phone_number_text_input_formatter/phone_number_text_input_formatter.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/rounded_image_widget.dart';
 
+import '../../../../utils/FileOpener.dart';
 import '../../../../utils/Formetors.dart';
 import 'package:path/path.dart' as p;
 import '../../../../utils/app_colors.dart';
@@ -158,18 +162,19 @@ class AddPatientView extends GetView<AddPatientController> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(body: GestureDetector(
-      onTap: removeFocus,
-      child: SafeArea(
-        child: Container(
-          color: AppColors.ScreenBackGround,
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              children: [
-                CustomAppBar(drawerkey: _key),
-                Expanded(
-                    child: SingleChildScrollView(
+    return BaseScreen(
+        body: GestureDetector(
+          onTap: removeFocus,
+          child: SafeArea(
+            child: Container(
+              color: AppColors.ScreenBackGround,
+              child: Form(
+                key: controller.formKey,
+                child: Column(
+                  children: [
+                    CustomAppBar(drawerkey: _key),
+                    Expanded(
+                        child: SingleChildScrollView(
                       child: Container(
                           color: AppColors.ScreenBackGround,
                           child: Padding(
@@ -180,22 +185,19 @@ class AddPatientView extends GetView<AddPatientController> {
                               // physics: BouncingScrollPhysics(),
                               padding: EdgeInsets.zero,
                               children: [
-                                Obx(
-                                        () {
-                                      return BreadcrumbWidget(
+                                Obx(() {
+                                  return BreadcrumbWidget(
+                                    breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                    onBack: (breadcrumb) {
+                                      controller.globalController.popUntilRoute(breadcrumb);
+                                      // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                                        breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
-                                        onBack: (breadcrumb) {
-                                          controller.globalController.popUntilRoute(breadcrumb);
-                                          // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
-
-                                          while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                            Get.back();  // Pop the current screen
-                                          }
-                                        },
-                                      );
-                                    }
-                                ),
+                                      while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                        Get.back(); // Pop the current screen
+                                      }
+                                    },
+                                  );
+                                }),
                                 Container(
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(Dimen.margin16),
@@ -227,7 +229,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             //   width: Dimen.margin8,
                                             // ),
                                             Text(
-                                              Get.currentRoute == Routes.ADD_PATIENT?"Add Patient Details" : "Schedule Visit",
+                                              Get.currentRoute == Routes.ADD_PATIENT ? "Add Patient Details" : "Schedule Visit",
                                               style: AppFonts.regular(18, AppColors.textBlack),
                                             ),
                                           ],
@@ -240,20 +242,20 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Obx(
-                                            () {
+                                        () {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                             child: Row(
                                               children: [
                                                 controller.profileImage.value?.path != null
                                                     ? RoundedImageFileWidget(
-                                                  imagePath: controller.profileImage.value,
-                                                )
+                                                        imagePath: controller.profileImage.value,
+                                                      )
                                                     : BaseImageView(
-                                                  imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                                                  width: 50,
-                                                  height: 50,
-                                                ),
+                                                        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                        width: 50,
+                                                        height: 50,
+                                                      ),
                                                 PopupMenuButton<String>(
                                                   offset: const Offset(0, 8),
                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -295,7 +297,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                           ),
                                                         )),
                                                     PopupMenuItem(
-                                                      // value: "",
+                                                        // value: "",
                                                         padding: EdgeInsets.zero,
                                                         onTap: () async {
                                                           controller.captureProfileImage();
@@ -348,28 +350,29 @@ class AddPatientView extends GetView<AddPatientController> {
                                           children: [
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                  label: "Patient Id ",
+                                                label: "Patient Id ",
 
-                                                  // isImportant: true,
+                                                // isImportant: true,
 
-                                                  isSuffixIconVisible: false,
-                                                  isFirst: true,
-                                                  format: [
-                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
-                                                  ],
-                                                  controller: controller.patientId,
-                                                  hint: "123",
-                                                  onTap: () {
-                                                    controller.patientId.clear();
-                                                  },
-                                                  suffixIcon: Icon(
-                                                    Icons.highlight_remove,
-                                                    color: AppColors.textDarkGrey,
-                                                    size: 25,
-                                                  ),
-                                                  checkValidation: (value) {
-                                                    return Validation.requiredFiled(value);
-                                                  }),
+                                                isSuffixIconVisible: false,
+                                                isFirst: true,
+                                                format: [
+                                                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                                                ],
+                                                controller: controller.patientId,
+                                                hint: "123",
+                                                onTap: () {
+                                                  controller.patientId.clear();
+                                                },
+                                                suffixIcon: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                                // checkValidation: (value) {
+                                                //   return Validation.requiredFiled(value);
+                                                // }
+                                              ),
                                             ),
                                             SizedBox(
                                               width: Dimen.margin10,
@@ -461,43 +464,44 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                  suffixIcon: Icon(Icons.calendar_month),
-                                                  format: [NoSpaceTextFormatter()],
-                                                  label: "Date of birth",
-                                                  isValid: true,
-                                                  readOnly: true,
-                                                  // isImportant: true,
-                                                  controller: controller.dobController,
-                                                  onTap: () async {
-                                                    final picked = await showDatePicker(
-                                                      context: context,
-                                                      initialDate: DateTime.now().subtract(Duration(days: 400)),
-                                                      firstDate: DateTime.now().subtract(Duration(days: 36700)),
-                                                      lastDate: DateTime.now().subtract(Duration(days: 400)),
-                                                      builder: (context, child) {
-                                                        return Theme(
-                                                          data: ThemeData.light().copyWith(
-                                                            cardColor: AppColors.white,
-                                                            primaryColor: AppColors.backgroundPurple,
-                                                            hintColor: AppColors.backgroundPurple,
-                                                            colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                                                          ),
-                                                          child: child!,
-                                                        );
-                                                      },
-                                                    );
-                                                    if (picked != null) {
-                                                      String inputText;
-                                                      String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                      inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                      controller.dobController.text = inputText;
-                                                    }
-                                                  },
-                                                  hint: "mm/dd/yyyy",
-                                                  checkValidation: (value) {
-                                                    return Validation.requiredFiled(value);
-                                                  }),
+                                                suffixIcon: Icon(Icons.calendar_month),
+                                                format: [NoSpaceTextFormatter()],
+                                                label: "Date of birth",
+
+                                                readOnly: true,
+                                                // isImportant: true,
+                                                controller: controller.dobController,
+                                                onTap: () async {
+                                                  final picked = await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now().subtract(Duration(days: 400)),
+                                                    firstDate: DateTime.now().subtract(Duration(days: 36700)),
+                                                    lastDate: DateTime.now().subtract(Duration(days: 400)),
+                                                    builder: (context, child) {
+                                                      return Theme(
+                                                        data: ThemeData.light().copyWith(
+                                                          cardColor: AppColors.white,
+                                                          primaryColor: AppColors.backgroundPurple,
+                                                          hintColor: AppColors.backgroundPurple,
+                                                          colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                          buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                        ),
+                                                        child: child!,
+                                                      );
+                                                    },
+                                                  );
+                                                  if (picked != null) {
+                                                    String inputText;
+                                                    String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                    controller.dobController.text = inputText;
+                                                  }
+                                                },
+                                                hint: "mm/dd/yyyy",
+                                                // checkValidation: (value) {
+                                                //   return Validation.requiredFiled(value);
+                                                // }
+                                              ),
                                             ),
                                             SizedBox(
                                               width: Dimen.margin10,
@@ -512,10 +516,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                                         "Sex",
                                                         style: AppFonts.regular(14, AppColors.textBlack),
                                                       ),
-                                                      Text(
-                                                        "*",
-                                                        style: AppFonts.regular(14, AppColors.redText),
-                                                      ),
+                                                      // Text(
+                                                      //   "*",
+                                                      //   style: AppFonts.regular(14, AppColors.redText),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(
@@ -543,141 +547,162 @@ class AddPatientView extends GetView<AddPatientController> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                  format: [NoSpaceLowercaseTextFormatter()],
-                                                  label: "Email Address",
-                                                  controller: controller.emailAddressController,
-                                                  isValid: controller.isValid.value,
-                                                  isSuffixIconVisible: false,
-                                                  isFirst: true,
-                                                  hint: "donjones@example.com",
-                                                  onTap: () {
-                                                    controller.emailAddressController.clear();
-                                                  },
-                                                  suffixIcon: Icon(
-                                                    Icons.highlight_remove,
-                                                    color: AppColors.textDarkGrey,
-                                                    size: 25,
-                                                  ),
-                                                  checkValidation: (value) {
-                                                    return Validation.emailValidateRequired(value);
-                                                  }),
-                                            ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                  format: [PlusTextFormatter()],
-                                                  label: "Contact Number",
-                                                  controller: controller.contactNumberController,
-                                                  isValid: true,
-                                                  isSuffixIconVisible: false,
-                                                  isFirst: true,
-                                                  type: TextInputType.number,
-                                                  hint: "123456789",
-                                                  onTap: () {
-                                                    controller.emailAddressController.clear();
-                                                  },
-                                                  suffixIcon: Icon(
-                                                    Icons.highlight_remove,
-                                                    color: AppColors.textDarkGrey,
-                                                    size: 25,
-                                                  ),
-                                                  checkValidation: (value) {
-                                                    return Validation.phoneValidate(value);
-                                                  }),
-                                            ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                //format: [NoSpaceTextFormatter()],
-                                                suffixIcon: Icon(Icons.calendar_month),
-                                                label: "Visit Date",
-                                                readOnly: true,
-                                                // isImportant: true,
-                                                controller: controller.visitDateController,
-                                                onTap: () async {
-                                                  final picked = await showDatePicker(
-                                                    context: context,
-
-                                                    // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
-                                                    initialDate: DateTime.now(),
-                                                    firstDate: DateTime.now(),
-                                                    lastDate: DateTime.now().add(Duration(days: 1000)),
-                                                    builder: (context, child) {
-                                                      return Theme(
-                                                        data: ThemeData.light().copyWith(
-                                                          cardColor: AppColors.white,
-                                                          primaryColor: AppColors.backgroundPurple,
-                                                          hintColor: AppColors.backgroundPurple,
-                                                          colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                          buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                                                        ),
-                                                        child: child!,
-                                                      );
+                                        child: Obx(() {
+                                          return Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                    format: [NoSpaceLowercaseTextFormatter()],
+                                                    label: "Email Address",
+                                                    controller: controller.emailAddressController,
+                                                    isValid: !controller.isValid.value,
+                                                    isSuffixIconVisible: false,
+                                                    isFirst: true,
+                                                    hint: "donjones@example.com",
+                                                    onTap: () {
+                                                      controller.emailAddressController.clear();
                                                     },
-                                                  );
-                                                  if (picked != null) {
-                                                    String inputText;
-                                                    String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                    controller.visitDateController.text = inputText;
-                                                  }
-                                                },
-                                                hint: "mm/dd/yyyy",
+                                                    suffixIcon: Icon(
+                                                      Icons.highlight_remove,
+                                                      color: AppColors.textDarkGrey,
+                                                      size: 25,
+                                                    ),
+                                                    checkValidation: (value) {
+                                                      return Validation.emailValidate(value);
+                                                    }),
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                    format: [
+                                                      MaskTextInputFormatter(mask: "+1 (###) ###-####"),
+                                                      // FilteringTextInputFormatter.allow(RegExp(r'[0-9,+]')),
+                                                      // const NationalPhoneNumberTextInputFormatter(
+                                                      //   prefix: '+',
+                                                      //   countryCode: '1',
+                                                      //   groups: [
+                                                      //     (length: 3, leading: ' (', trailing: ') '),
+                                                      //     (length: 3, leading: '', trailing: '-'),
+                                                      //     (length: 4, leading: '', trailing: ' '),
+                                                      //   ],
+                                                      // ),
+                                                    ],
+                                                    label: "Contact Number",
+                                                    controller: controller.contactNumberController,
+                                                    // isValid: true,
+                                                    isSuffixIconVisible: false,
+                                                    // prefixIcon: Icon(Icons.flag),
+                                                    isFirst: true,
+                                                    type: TextInputType.number,
+                                                    hint: "123456789",
+                                                    onTap: () {
+                                                      controller.emailAddressController.clear();
+                                                    },
+                                                    suffixIcon: Icon(
+                                                      Icons.highlight_remove,
+                                                      color: AppColors.textDarkGrey,
+                                                      size: 25,
+                                                    ),
+                                                    checkValidation: (value) {
+                                                      return Validation.phoneValidate(value);
+                                                    }),
+                                              ),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              !controller.isAddPatient.value
+                                                  ? Expanded(
+                                                      child: TextFormFiledWidget(
+                                                        //format: [NoSpaceTextFormatter()],
+                                                        suffixIcon: Icon(Icons.calendar_month),
+                                                        label: "Visit Date",
+                                                        readOnly: true,
+                                                        // isImportant: true,
+                                                        controller: controller.visitDateController,
+                                                        onTap: () async {
+                                                          final picked = await showDatePicker(
+                                                            context: context,
+
+                                                            // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
+                                                            initialDate: DateTime.now(),
+                                                            firstDate: DateTime.now(),
+                                                            lastDate: DateTime.now().add(Duration(days: 1000)),
+                                                            builder: (context, child) {
+                                                              return Theme(
+                                                                data: ThemeData.light().copyWith(
+                                                                  cardColor: AppColors.white,
+                                                                  primaryColor: AppColors.backgroundPurple,
+                                                                  hintColor: AppColors.backgroundPurple,
+                                                                  colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                                ),
+                                                                child: child!,
+                                                              );
+                                                            },
+                                                          );
+                                                          if (picked != null) {
+                                                            String inputText;
+                                                            String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                            inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                            controller.visitDateController.text = inputText;
+                                                          }
+                                                        },
+                                                        hint: "mm/dd/yyyy",
+                                                      ),
+                                                    )
+                                                  : Spacer(),
+                                            ],
+                                          );
+                                        }),
                                       ),
                                       SizedBox(
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Visit Time",
-                                                    style: AppFonts.regular(14, AppColors.textBlack),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Obx(() {
-                                                    return BaseDropdown<String>(
-                                                      valueAsString: (value) => value ?? "",
-                                                      items: controller.visitTime,
-                                                      selectedValue: controller.selectedVisitTimeValue.value,
-                                                      onChanged: (value) {
-                                                        controller.selectedVisitTimeValue.value = value;
-                                                      },
-                                                      selectText: "11 PM",
-                                                    );
-                                                  })
-                                                ],
+                                        child: Obx(() {
+                                          return Row(
+                                            children: [
+                                              !controller.isAddPatient.value
+                                                  ? Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "Visit Time",
+                                                            style: AppFonts.regular(14, AppColors.textBlack),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          Obx(() {
+                                                            return BaseDropdown<String>(
+                                                              valueAsString: (value) => value ?? "",
+                                                              items: controller.visitTime,
+                                                              selectedValue: controller.selectedVisitTimeValue.value,
+                                                              onChanged: (value) {
+                                                                controller.selectedVisitTimeValue.value = value;
+                                                              },
+                                                              selectText: "11 PM",
+                                                            );
+                                                          })
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Spacer(),
+                                              SizedBox(
+                                                width: Dimen.margin10,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Spacer(),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ),
+                                              Spacer(),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          );
+                                        }),
                                       ),
                                       SizedBox(
                                         height: Dimen.margin16,
@@ -722,146 +747,147 @@ class AddPatientView extends GetView<AddPatientController> {
                                                         color: Colors.white,
                                                         child: controller.selectedList.isNotEmpty
                                                             ? Padding(
-                                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                            child: SizedBox(
-                                                                height: 200,
-                                                                width: double.infinity,
-                                                                child: Obx(
+                                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                                child: SizedBox(
+                                                                    height: 200,
+                                                                    width: double.infinity,
+                                                                    child: Obx(
                                                                       () {
-                                                                    return ListView.separated(
-                                                                      scrollDirection: Axis.horizontal,
-                                                                      padding: EdgeInsets.only(top: 20),
-                                                                      itemBuilder: (context, index) {
-                                                                        return Container(
-                                                                          height: 200,
-                                                                          width: 140,
-                                                                          child: Column(
-                                                                            children: [
-                                                                              SizedBox(height: 10),
-                                                                              Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                mainAxisSize: MainAxisSize.min,
+                                                                        return ListView.separated(
+                                                                          scrollDirection: Axis.horizontal,
+                                                                          padding: EdgeInsets.only(top: 20),
+                                                                          itemBuilder: (context, index) {
+                                                                            return Container(
+                                                                              height: 200,
+                                                                              width: 140,
+                                                                              child: Column(
                                                                                 children: [
-                                                                                  Stack(
-                                                                                    clipBehavior: Clip.none,
-                                                                                    alignment: Alignment.topRight,
+                                                                                  SizedBox(height: 10),
+                                                                                  Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    mainAxisSize: MainAxisSize.min,
                                                                                     children: [
-                                                                                      Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: AppColors.appbarBorder,
-                                                                                          borderRadius: BorderRadius.circular(10),
-                                                                                        ),
-                                                                                        width: 120,
-                                                                                        height: 120,
-                                                                                        child: GestureDetector(
-                                                                                          onTap: () {
-                                                                                            // FullscreenImageViewer.open(
-                                                                                            //   context: context,
-                                                                                            //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
-                                                                                            // );
-                                                                                          },
-                                                                                          child: GestureDetector(
-                                                                                            onTap: () {
-                                                                                              if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
-                                                                                                customPrint("1");
-                                                                                                FullscreenImageViewer.open(
-                                                                                                  context: context,
-                                                                                                  child: Image.file(controller.selectedList[index].file ?? File("")),
-                                                                                                );
-                                                                                              } else {
-                                                                                                customPrint("2");
-                                                                                                controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
-                                                                                              }
-                                                                                            },
-                                                                                            child: ClipRRect(
-                                                                                              borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                                              child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
-                                                                                                  ? Image.file(
-                                                                                                controller.selectedList[index].file!,
-                                                                                                fit: BoxFit.cover,
-                                                                                              )
-                                                                                                  : Image.asset(
-                                                                                                ImagePath.file_placeHolder,
-                                                                                              ), // Display a placeholder if the file is not an image
+                                                                                      Stack(
+                                                                                        clipBehavior: Clip.none,
+                                                                                        alignment: Alignment.topRight,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            decoration: BoxDecoration(
+                                                                                              color: AppColors.appbarBorder,
+                                                                                              borderRadius: BorderRadius.circular(10),
+                                                                                            ),
+                                                                                            width: 120,
+                                                                                            height: 120,
+                                                                                            child: GestureDetector(
+                                                                                              onTap: () {
+                                                                                                // FullscreenImageViewer.open(
+                                                                                                //   context: context,
+                                                                                                //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
+                                                                                                // );
+                                                                                              },
+                                                                                              child: GestureDetector(
+                                                                                                onTap: () {
+                                                                                                  FileOpener.openDocument(controller.selectedList[index].file?.path ?? "");
+                                                                                                  // if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
+                                                                                                  //   customPrint("1");
+                                                                                                  //   FullscreenImageViewer.open(
+                                                                                                  //     context: context,
+                                                                                                  //     child: Image.file(controller.selectedList[index].file ?? File("")),
+                                                                                                  //   );
+                                                                                                  // } else {
+                                                                                                  //   customPrint("2");
+                                                                                                  //   controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
+                                                                                                  // }
+                                                                                                },
+                                                                                                child: ClipRRect(
+                                                                                                  borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                                                  child: getFileExtension(controller.selectedList[index].file?.path ?? "") == "image"
+                                                                                                      ? Image.file(
+                                                                                                          controller.selectedList[index].file!,
+                                                                                                          fit: BoxFit.cover,
+                                                                                                        )
+                                                                                                      : Image.asset(
+                                                                                                          ImagePath.file_placeHolder,
+                                                                                                        ), // Display a placeholder if the file is not an image
+                                                                                                ),
+                                                                                              ),
                                                                                             ),
                                                                                           ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Positioned(
-                                                                                        top: -10,
-                                                                                        // Align at the top of the first container
-                                                                                        right: -10,
-                                                                                        child: Container(
-                                                                                          width: 40,
-                                                                                          height: 40,
-                                                                                          decoration: BoxDecoration(
-                                                                                            shape: BoxShape.circle,
-                                                                                            color: Colors.white,
-                                                                                            boxShadow: [
-                                                                                              BoxShadow(
-                                                                                                color: Colors.black.withOpacity(0.2),
-                                                                                                blurRadius: 2.2,
-                                                                                                offset: Offset(0.2, 0),
+                                                                                          Positioned(
+                                                                                            top: -10,
+                                                                                            // Align at the top of the first container
+                                                                                            right: -10,
+                                                                                            child: Container(
+                                                                                              width: 40,
+                                                                                              height: 40,
+                                                                                              decoration: BoxDecoration(
+                                                                                                shape: BoxShape.circle,
+                                                                                                color: Colors.white,
+                                                                                                boxShadow: [
+                                                                                                  BoxShadow(
+                                                                                                    color: Colors.black.withOpacity(0.2),
+                                                                                                    blurRadius: 2.2,
+                                                                                                    offset: Offset(0.2, 0),
+                                                                                                  ),
+                                                                                                ],
                                                                                               ),
-                                                                                            ],
-                                                                                          ),
-                                                                                          child: GestureDetector(
-                                                                                            onTap: () {
-                                                                                              showDialog(
-                                                                                                context: context,
-                                                                                                barrierDismissible: true,
-                                                                                                builder: (BuildContext context) {
-                                                                                                  // return SizedBox();
-                                                                                                  return DeleteImageDialog(
-                                                                                                    onDelete: () {
-                                                                                                      controller.deleteAttachments(index);
+                                                                                              child: GestureDetector(
+                                                                                                onTap: () {
+                                                                                                  showDialog(
+                                                                                                    context: context,
+                                                                                                    barrierDismissible: true,
+                                                                                                    builder: (BuildContext context) {
+                                                                                                      // return SizedBox();
+                                                                                                      return DeleteImageDialog(
+                                                                                                        onDelete: () {
+                                                                                                          controller.deleteAttachments(index);
+                                                                                                        },
+                                                                                                        extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
+                                                                                                      );
                                                                                                     },
-                                                                                                    extension: getFileExtension(controller.selectedList[index].file?.path ?? ""),
                                                                                                   );
                                                                                                 },
-                                                                                              );
-                                                                                            },
-                                                                                            child: SvgPicture.asset(
-                                                                                              ImagePath.delete_black,
+                                                                                                child: SvgPicture.asset(
+                                                                                                  ImagePath.delete_black,
+                                                                                                ),
+                                                                                              ),
                                                                                             ),
                                                                                           ),
-                                                                                        ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 6,
+                                                                                      ),
+                                                                                      Text(
+                                                                                        controller.selectedList[index].fileName ?? "",
+                                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 6,
+                                                                                      ),
+                                                                                      Text(
+                                                                                        controller.selectedList[index].date ?? "",
+                                                                                        style: AppFonts.regular(12, AppColors.textDarkGrey),
                                                                                       ),
                                                                                     ],
                                                                                   ),
-                                                                                  SizedBox(
-                                                                                    height: 6,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    controller.selectedList[index].fileName ?? "",
-                                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 6,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    controller.selectedList[index].date ?? "",
-                                                                                    style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                                                  ),
                                                                                 ],
                                                                               ),
-                                                                            ],
-                                                                          ),
+                                                                            );
+                                                                          },
+                                                                          separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                                          itemCount: controller.selectedList.length,
                                                                         );
                                                                       },
-                                                                      separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                                                      itemCount: controller.selectedList.length,
-                                                                    );
-                                                                  },
-                                                                )))
+                                                                    )))
                                                             : Padding(
-                                                          padding: EdgeInsets.symmetric(vertical: 20),
-                                                          child: Container(
-                                                            width: double.infinity,
-                                                            height: 200,
-                                                            child: Center(child: Text("Attachments Not available")),
-                                                          ),
-                                                        ));
+                                                                padding: EdgeInsets.symmetric(vertical: 20),
+                                                                child: Container(
+                                                                  width: double.infinity,
+                                                                  height: 200,
+                                                                  child: Center(child: Text("Attachments Not available")),
+                                                                ),
+                                                              ));
                                                   }),
                                                 ],
                                               ),
@@ -998,12 +1024,13 @@ class AddPatientView extends GetView<AddPatientController> {
                             ),
                           )),
                     )),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
-    ), globalKey: _key);
+        globalKey: _key);
   }
 }
 //

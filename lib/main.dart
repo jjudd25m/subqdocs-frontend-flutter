@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+
 import 'package:subqdocs/app/data/service/socket_service.dart';
 import 'package:toastification/toastification.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
