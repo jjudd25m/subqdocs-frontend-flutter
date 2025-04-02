@@ -10,6 +10,9 @@ import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:phone_number_text_input_formatter/phone_number_text_input_formatter.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/rounded_image_widget.dart';
@@ -46,8 +49,7 @@ class AddPatientView extends GetView<AddPatientController> {
   void _showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible:
-          true, // Allows dismissing the dialog by tapping outside
+      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return CustomDialogAttachment(); // Our custom dialog
       },
@@ -58,8 +60,7 @@ class AddPatientView extends GetView<AddPatientController> {
     final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
 
     customPrint("file extension is :- ${getFileExtension(file.path)}");
-    final fileExtension =
-        file.uri.pathSegments.last.split('.').last.toLowerCase();
+    final fileExtension = file.uri.pathSegments.last.split('.').last.toLowerCase();
     return imageExtensions.contains(fileExtension);
   }
 
@@ -117,8 +118,7 @@ class AddPatientView extends GetView<AddPatientController> {
     );
   }
 
-  void _showCupertinoDatePicker(
-      BuildContext context, TextEditingController control) {
+  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -178,10 +178,7 @@ class AddPatientView extends GetView<AddPatientController> {
                       child: Container(
                           color: AppColors.ScreenBackGround,
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: Dimen.margin20,
-                                right: Dimen.margin16,
-                                left: Dimen.margin16),
+                            padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                             child: ListView(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -190,18 +187,12 @@ class AddPatientView extends GetView<AddPatientController> {
                               children: [
                                 Obx(() {
                                   return BreadcrumbWidget(
-                                    breadcrumbHistory: controller
-                                        .globalController
-                                        .breadcrumbHistory
-                                        .value,
+                                    breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                     onBack: (breadcrumb) {
-                                      controller.globalController
-                                          .popUntilRoute(breadcrumb);
+                                      controller.globalController.popUntilRoute(breadcrumb);
                                       // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                                      while (Get.currentRoute !=
-                                          controller.globalController
-                                              .getKeyByValue(breadcrumb)) {
+                                      while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
                                         Get.back(); // Pop the current screen
                                       }
                                     },
@@ -210,9 +201,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                 Container(
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(Dimen.margin16),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: AppColors.white),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -226,9 +215,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 Get.back(result: -1);
                                               },
                                               child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 10),
+                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                                 color: AppColors.clear,
                                                 child: SvgPicture.asset(
                                                   ImagePath.arrowLeft,
@@ -242,12 +229,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                             //   width: Dimen.margin8,
                                             // ),
                                             Text(
-                                              Get.currentRoute ==
-                                                      Routes.ADD_PATIENT
-                                                  ? "Add Patient Details"
-                                                  : "Schedule Visit",
-                                              style: AppFonts.regular(
-                                                  18, AppColors.textBlack),
+                                              Get.currentRoute == Routes.ADD_PATIENT ? "Add Patient Details" : "Schedule Visit",
+                                              style: AppFonts.regular(18, AppColors.textBlack),
                                             ),
                                           ],
                                         ),
@@ -261,136 +244,83 @@ class AddPatientView extends GetView<AddPatientController> {
                                       Obx(
                                         () {
                                           return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: Dimen.margin16),
+                                            padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                             child: Row(
                                               children: [
-                                                controller.profileImage.value
-                                                            ?.path !=
-                                                        null
+                                                controller.profileImage.value?.path != null
                                                     ? RoundedImageFileWidget(
-                                                        imagePath: controller
-                                                            .profileImage.value,
+                                                        imagePath: controller.profileImage.value,
                                                       )
                                                     : BaseImageView(
-                                                        imageUrl:
-                                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
+                                                        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
                                                         width: 50,
                                                         height: 50,
                                                       ),
                                                 PopupMenuButton<String>(
                                                   offset: const Offset(0, 8),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6)),
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                                   color: AppColors.white,
-                                                  position:
-                                                      PopupMenuPosition.under,
-                                                  padding: EdgeInsetsDirectional
-                                                      .zero,
-                                                  menuPadding:
-                                                      EdgeInsetsDirectional
-                                                          .zero,
+                                                  position: PopupMenuPosition.under,
+                                                  padding: EdgeInsetsDirectional.zero,
+                                                  menuPadding: EdgeInsetsDirectional.zero,
                                                   onSelected: (value) {},
                                                   style: const ButtonStyle(
-                                                      padding:
-                                                          WidgetStatePropertyAll(
-                                                              EdgeInsetsDirectional
-                                                                  .zero),
-                                                      tapTargetSize:
-                                                          MaterialTapTargetSize
-                                                              .shrinkWrap,
-                                                      maximumSize:
-                                                          WidgetStatePropertyAll(
-                                                              Size.zero),
-                                                      visualDensity:
-                                                          VisualDensity(
-                                                              horizontal: 0,
-                                                              vertical: 0)),
+                                                      padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                      maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                      visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
                                                   itemBuilder: (context) => [
                                                     PopupMenuItem(
-                                                        padding:
-                                                            EdgeInsets.zero,
+                                                        padding: EdgeInsets.zero,
                                                         onTap: () {
-                                                          controller
-                                                              .pickProfileImage();
+                                                          controller.pickProfileImage();
 
                                                           // customPrint(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
                                                         },
                                                         // value: "",
                                                         child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 10,
-                                                                  right: 20,
-                                                                  top: 10,
-                                                                  bottom: 10),
+                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
                                                             children: [
                                                               Icon(
-                                                                Icons
-                                                                    .file_copy_sharp,
-                                                                color: AppColors
-                                                                    .textDarkGrey,
+                                                                Icons.file_copy_sharp,
+                                                                color: AppColors.textDarkGrey,
                                                               ),
                                                               SizedBox(
                                                                 width: 10,
                                                               ),
                                                               Text(
                                                                 "Pick From Files",
-                                                                style: AppFonts
-                                                                    .regular(
-                                                                        16,
-                                                                        AppColors
-                                                                            .textBlack),
+                                                                style: AppFonts.regular(16, AppColors.textBlack),
                                                               ),
                                                             ],
                                                           ),
                                                         )),
                                                     PopupMenuItem(
                                                         // value: "",
-                                                        padding:
-                                                            EdgeInsets.zero,
+                                                        padding: EdgeInsets.zero,
                                                         onTap: () async {
-                                                          controller
-                                                              .captureProfileImage();
+                                                          controller.captureProfileImage();
                                                         },
                                                         child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             Container(
-                                                              width: double
-                                                                  .infinity,
+                                                              width: double.infinity,
                                                               height: 1,
-                                                              color: AppColors
-                                                                  .appbarBorder,
+                                                              color: AppColors.appbarBorder,
                                                             ),
                                                             Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      left: 10,
-                                                                      right: 20,
-                                                                      top: 10,
-                                                                      bottom:
-                                                                          10),
+                                                              padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                               child: Row(
                                                                 children: [
-                                                                  Icon(CupertinoIcons
-                                                                      .camera),
+                                                                  Icon(CupertinoIcons.camera),
                                                                   SizedBox(
                                                                     width: 10,
                                                                   ),
                                                                   Text(
                                                                     "Take A Photo",
-                                                                    style: AppFonts.regular(
-                                                                        16,
-                                                                        AppColors
-                                                                            .textBlack),
+                                                                    style: AppFonts.regular(16, AppColors.textBlack),
                                                                   ),
                                                                 ],
                                                               ),
@@ -400,8 +330,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   ],
                                                   child: Text(
                                                     "   + Add Profile Image",
-                                                    style: AppFonts.regular(
-                                                        14, AppColors.textGrey),
+                                                    style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                 )
                                               ],
@@ -416,40 +345,34 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimen.margin16),
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                         child: Row(
                                           children: [
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                  label: "Patient Id ",
+                                                label: "Patient Id ",
 
-                                                  // isImportant: true,
+                                                // isImportant: true,
 
-                                                  isSuffixIconVisible: false,
-                                                  isFirst: true,
-                                                  format: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(RegExp(
-                                                            r'[a-zA-Z0-9]')),
-                                                  ],
-                                                  controller:
-                                                      controller.patientId,
-                                                  hint: "123",
-                                                  onTap: () {
-                                                    controller.patientId
-                                                        .clear();
-                                                  },
-                                                  suffixIcon: Icon(
-                                                    Icons.highlight_remove,
-                                                    color:
-                                                        AppColors.textDarkGrey,
-                                                    size: 25,
-                                                  ),
-                                                  checkValidation: (value) {
-                                                    return Validation
-                                                        .requiredFiled(value);
-                                                  }),
+                                                isSuffixIconVisible: false,
+                                                isFirst: true,
+                                                format: [
+                                                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                                                ],
+                                                controller: controller.patientId,
+                                                hint: "123",
+                                                onTap: () {
+                                                  controller.patientId.clear();
+                                                },
+                                                suffixIcon: Icon(
+                                                  Icons.highlight_remove,
+                                                  color: AppColors.textDarkGrey,
+                                                  size: 25,
+                                                ),
+                                                // checkValidation: (value) {
+                                                //   return Validation.requiredFiled(value);
+                                                // }
+                                              ),
                                             ),
                                             SizedBox(
                                               width: Dimen.margin10,
@@ -458,30 +381,24 @@ class AddPatientView extends GetView<AddPatientController> {
                                               child: TextFormFiledWidget(
                                                   label: "First Name",
                                                   // isImportant: true,
-                                                  isValid:
-                                                      controller.isValid.value,
+                                                  isValid: controller.isValid.value,
                                                   format: [
                                                     CustomTextInputFormatter(),
                                                   ],
-                                                  controller: controller
-                                                      .firstNameController,
+                                                  controller: controller.firstNameController,
                                                   hint: "Don",
                                                   isSuffixIconVisible: false,
                                                   isFirst: true,
                                                   onTap: () {
-                                                    controller
-                                                        .firstNameController
-                                                        .clear();
+                                                    controller.firstNameController.clear();
                                                   },
                                                   suffixIcon: Icon(
                                                     Icons.highlight_remove,
-                                                    color:
-                                                        AppColors.textDarkGrey,
+                                                    color: AppColors.textDarkGrey,
                                                     size: 25,
                                                   ),
                                                   checkValidation: (value) {
-                                                    return Validation
-                                                        .requiredFiled(value);
+                                                    return Validation.requiredFiled(value);
                                                   }),
                                             ),
                                             SizedBox(
@@ -489,21 +406,17 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                isValid:
-                                                    !controller.isValid.value,
+                                                isValid: !controller.isValid.value,
                                                 isSuffixIconVisible: false,
                                                 isFirst: true,
                                                 format: [
                                                   CustomTextInputFormatter(),
                                                 ],
                                                 label: "Middle Name",
-                                                controller: controller
-                                                    .middleNameController,
+                                                controller: controller.middleNameController,
                                                 hint: "Joseph",
                                                 onTap: () {
-                                                  controller
-                                                      .middleNameController
-                                                      .clear();
+                                                  controller.middleNameController.clear();
                                                 },
                                                 suffixIcon: Icon(
                                                   Icons.highlight_remove,
@@ -519,8 +432,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimen.margin16),
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                         child: Row(
                                           children: [
                                             Expanded(
@@ -529,28 +441,22 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     CustomTextInputFormatter(),
                                                   ],
                                                   label: "Last Name",
-                                                  isValid:
-                                                      controller.isValid.value,
+                                                  isValid: controller.isValid.value,
                                                   // isImportant: true,
-                                                  controller: controller
-                                                      .lastNameController,
+                                                  controller: controller.lastNameController,
                                                   isSuffixIconVisible: false,
                                                   isFirst: true,
                                                   hint: "Jones",
                                                   onTap: () {
-                                                    controller
-                                                        .lastNameController
-                                                        .clear();
+                                                    controller.lastNameController.clear();
                                                   },
                                                   suffixIcon: Icon(
                                                     Icons.highlight_remove,
-                                                    color:
-                                                        AppColors.textDarkGrey,
+                                                    color: AppColors.textDarkGrey,
                                                     size: 25,
                                                   ),
                                                   checkValidation: (value) {
-                                                    return Validation
-                                                        .requiredFiled(value);
+                                                    return Validation.requiredFiled(value);
                                                   }),
                                             ),
                                             SizedBox(
@@ -558,102 +464,62 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                  suffixIcon: Icon(
-                                                      Icons.calendar_month),
-                                                  format: [
-                                                    NoSpaceTextFormatter()
-                                                  ],
-                                                  label: "Date of birth",
-                                                  isValid: true,
-                                                  readOnly: true,
-                                                  // isImportant: true,
-                                                  controller:
-                                                      controller.dobController,
-                                                  onTap: () async {
-                                                    final picked =
-                                                        await showDatePicker(
-                                                      context: context,
-                                                      initialDate:
-                                                          DateTime.now()
-                                                              .subtract(
-                                                                  Duration(
-                                                                      days:
-                                                                          400)),
-                                                      firstDate: DateTime.now()
-                                                          .subtract(Duration(
-                                                              days: 36700)),
-                                                      lastDate: DateTime.now()
-                                                          .subtract(Duration(
-                                                              days: 400)),
-                                                      builder:
-                                                          (context, child) {
-                                                        return Theme(
-                                                          data:
-                                                              ThemeData.light()
-                                                                  .copyWith(
-                                                            cardColor:
-                                                                AppColors.white,
-                                                            primaryColor: AppColors
-                                                                .backgroundPurple,
-                                                            hintColor: AppColors
-                                                                .backgroundPurple,
-                                                            colorScheme:
-                                                                ColorScheme.light(
-                                                                    primary:
-                                                                        AppColors
-                                                                            .backgroundPurple),
-                                                            buttonTheme:
-                                                                ButtonThemeData(
-                                                                    textTheme:
-                                                                        ButtonTextTheme
-                                                                            .primary),
-                                                          ),
-                                                          child: child!,
-                                                        );
-                                                      },
-                                                    );
-                                                    if (picked != null) {
-                                                      String inputText;
-                                                      String padDayMonth(
-                                                              int value) =>
-                                                          value
-                                                              .toString()
-                                                              .padLeft(2, '0');
-                                                      inputText =
-                                                          '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                      controller.dobController
-                                                          .text = inputText;
-                                                    }
-                                                  },
-                                                  hint: "mm/dd/yyyy",
-                                                  checkValidation: (value) {
-                                                    return Validation
-                                                        .requiredFiled(value);
-                                                  }),
+                                                suffixIcon: Icon(Icons.calendar_month),
+                                                format: [NoSpaceTextFormatter()],
+                                                label: "Date of birth",
+
+                                                readOnly: true,
+                                                // isImportant: true,
+                                                controller: controller.dobController,
+                                                onTap: () async {
+                                                  final picked = await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now().subtract(Duration(days: 400)),
+                                                    firstDate: DateTime.now().subtract(Duration(days: 36700)),
+                                                    lastDate: DateTime.now().subtract(Duration(days: 400)),
+                                                    builder: (context, child) {
+                                                      return Theme(
+                                                        data: ThemeData.light().copyWith(
+                                                          cardColor: AppColors.white,
+                                                          primaryColor: AppColors.backgroundPurple,
+                                                          hintColor: AppColors.backgroundPurple,
+                                                          colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                          buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                        ),
+                                                        child: child!,
+                                                      );
+                                                    },
+                                                  );
+                                                  if (picked != null) {
+                                                    String inputText;
+                                                    String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                    controller.dobController.text = inputText;
+                                                  }
+                                                },
+                                                hint: "mm/dd/yyyy",
+                                                // checkValidation: (value) {
+                                                //   return Validation.requiredFiled(value);
+                                                // }
+                                              ),
                                             ),
                                             SizedBox(
                                               width: Dimen.margin10,
                                             ),
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Row(
                                                     children: [
                                                       Text(
                                                         "Sex",
-                                                        style: AppFonts.regular(
-                                                            14,
-                                                            AppColors
-                                                                .textBlack),
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
                                                       ),
-                                                      Text(
-                                                        "*",
-                                                        style: AppFonts.regular(
-                                                            14,
-                                                            AppColors.redText),
-                                                      ),
+                                                      // Text(
+                                                      //   "*",
+                                                      //   style: AppFonts.regular(14, AppColors.redText),
+                                                      // ),
                                                     ],
                                                   ),
                                                   SizedBox(
@@ -661,16 +527,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   ),
                                                   Obx(() {
                                                     return BaseDropdown<String>(
-                                                      valueAsString: (value) =>
-                                                          value ?? "",
+                                                      valueAsString: (value) => value ?? "",
                                                       items: controller.sex,
-                                                      selectedValue: controller
-                                                          .selectedSexValue
-                                                          .value,
+                                                      selectedValue: controller.selectedSexValue.value,
                                                       onChanged: (value) {
-                                                        controller
-                                                            .selectedSexValue
-                                                            .value = value;
+                                                        controller.selectedSexValue.value = value;
                                                       },
                                                       selectText: "Male",
                                                     );
@@ -685,38 +546,28 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimen.margin16),
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                         child: Row(
                                           children: [
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                  format: [
-                                                    NoSpaceLowercaseTextFormatter()
-                                                  ],
+                                                  format: [NoSpaceLowercaseTextFormatter()],
                                                   label: "Email Address",
-                                                  controller: controller
-                                                      .emailAddressController,
-                                                  isValid:
-                                                      controller.isValid.value,
+                                                  controller: controller.emailAddressController,
+                                                  isValid: !controller.isValid.value,
                                                   isSuffixIconVisible: false,
                                                   isFirst: true,
                                                   hint: "donjones@example.com",
                                                   onTap: () {
-                                                    controller
-                                                        .emailAddressController
-                                                        .clear();
+                                                    controller.emailAddressController.clear();
                                                   },
                                                   suffixIcon: Icon(
                                                     Icons.highlight_remove,
-                                                    color:
-                                                        AppColors.textDarkGrey,
+                                                    color: AppColors.textDarkGrey,
                                                     size: 25,
                                                   ),
                                                   checkValidation: (value) {
-                                                    return Validation
-                                                        .emailValidateRequired(
-                                                            value);
+                                                    return Validation.emailValidate(value);
                                                   }),
                                             ),
                                             SizedBox(
@@ -724,29 +575,37 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                  format: [PlusTextFormatter()],
+                                                  format: [
+                                                    MaskTextInputFormatter(mask: "+1 (###) ###-####"),
+                                                    // FilteringTextInputFormatter.allow(RegExp(r'[0-9,+]')),
+                                                    // const NationalPhoneNumberTextInputFormatter(
+                                                    //   prefix: '+',
+                                                    //   countryCode: '1',
+                                                    //   groups: [
+                                                    //     (length: 3, leading: ' (', trailing: ') '),
+                                                    //     (length: 3, leading: '', trailing: '-'),
+                                                    //     (length: 4, leading: '', trailing: ' '),
+                                                    //   ],
+                                                    // ),
+                                                  ],
                                                   label: "Contact Number",
-                                                  controller: controller
-                                                      .contactNumberController,
-                                                  isValid: true,
+                                                  controller: controller.contactNumberController,
+                                                  // isValid: true,
                                                   isSuffixIconVisible: false,
+                                                  // prefixIcon: Icon(Icons.flag),
                                                   isFirst: true,
                                                   type: TextInputType.number,
                                                   hint: "123456789",
                                                   onTap: () {
-                                                    controller
-                                                        .emailAddressController
-                                                        .clear();
+                                                    controller.emailAddressController.clear();
                                                   },
                                                   suffixIcon: Icon(
                                                     Icons.highlight_remove,
-                                                    color:
-                                                        AppColors.textDarkGrey,
+                                                    color: AppColors.textDarkGrey,
                                                     size: 25,
                                                   ),
                                                   checkValidation: (value) {
-                                                    return Validation
-                                                        .phoneValidate(value);
+                                                    return Validation.phoneValidate(value);
                                                   }),
                                             ),
                                             SizedBox(
@@ -755,42 +614,27 @@ class AddPatientView extends GetView<AddPatientController> {
                                             Expanded(
                                               child: TextFormFiledWidget(
                                                 //format: [NoSpaceTextFormatter()],
-                                                suffixIcon:
-                                                    Icon(Icons.calendar_month),
+                                                suffixIcon: Icon(Icons.calendar_month),
                                                 label: "Visit Date",
                                                 readOnly: true,
                                                 // isImportant: true,
-                                                controller: controller
-                                                    .visitDateController,
+                                                controller: controller.visitDateController,
                                                 onTap: () async {
-                                                  final picked =
-                                                      await showDatePicker(
+                                                  final picked = await showDatePicker(
                                                     context: context,
 
                                                     // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
                                                     initialDate: DateTime.now(),
                                                     firstDate: DateTime.now(),
-                                                    lastDate: DateTime.now()
-                                                        .add(Duration(
-                                                            days: 1000)),
+                                                    lastDate: DateTime.now().add(Duration(days: 1000)),
                                                     builder: (context, child) {
                                                       return Theme(
-                                                        data: ThemeData.light()
-                                                            .copyWith(
-                                                          cardColor:
-                                                              AppColors.white,
-                                                          primaryColor: AppColors
-                                                              .backgroundPurple,
-                                                          hintColor: AppColors
-                                                              .backgroundPurple,
-                                                          colorScheme:
-                                                              ColorScheme.light(
-                                                                  primary: AppColors
-                                                                      .backgroundPurple),
-                                                          buttonTheme: ButtonThemeData(
-                                                              textTheme:
-                                                                  ButtonTextTheme
-                                                                      .primary),
+                                                        data: ThemeData.light().copyWith(
+                                                          cardColor: AppColors.white,
+                                                          primaryColor: AppColors.backgroundPurple,
+                                                          hintColor: AppColors.backgroundPurple,
+                                                          colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                          buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
                                                         ),
                                                         child: child!,
                                                       );
@@ -798,16 +642,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   );
                                                   if (picked != null) {
                                                     String inputText;
-                                                    String padDayMonth(
-                                                            int value) =>
-                                                        value
-                                                            .toString()
-                                                            .padLeft(2, '0');
-                                                    inputText =
-                                                        '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                    controller
-                                                        .visitDateController
-                                                        .text = inputText;
+                                                    String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                    controller.visitDateController.text = inputText;
                                                   }
                                                 },
                                                 hint: "mm/dd/yyyy",
@@ -820,36 +657,27 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimen.margin16),
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                         child: Row(
                                           children: [
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     "Visit Time",
-                                                    style: AppFonts.regular(14,
-                                                        AppColors.textBlack),
+                                                    style: AppFonts.regular(14, AppColors.textBlack),
                                                   ),
                                                   SizedBox(
                                                     height: 8,
                                                   ),
                                                   Obx(() {
                                                     return BaseDropdown<String>(
-                                                      valueAsString: (value) =>
-                                                          value ?? "",
-                                                      items:
-                                                          controller.visitTime,
-                                                      selectedValue: controller
-                                                          .selectedVisitTimeValue
-                                                          .value,
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.visitTime,
+                                                      selectedValue: controller.selectedVisitTimeValue.value,
                                                       onChanged: (value) {
-                                                        controller
-                                                            .selectedVisitTimeValue
-                                                            .value = value;
+                                                        controller.selectedVisitTimeValue.value = value;
                                                       },
                                                       selectText: "11 PM",
                                                     );
@@ -872,46 +700,25 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin16,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimen.margin16),
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                                width: 0.5,
-                                                color: AppColors.appbarBorder),
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(width: 0.5, color: AppColors.appbarBorder),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 0),
+                                            padding: const EdgeInsets.only(bottom: 0),
                                             child: Theme(
                                               data: ThemeData(
-                                                splashColor: Colors
-                                                    .transparent, // Remove splash color
-                                                highlightColor: Colors
-                                                    .transparent, // Remove highlight color
+                                                splashColor: Colors.transparent, // Remove splash color
+                                                highlightColor: Colors.transparent, // Remove highlight color
                                               ),
                                               child: ExpansionTile(
                                                 initiallyExpanded: true,
-                                                shape: OutlineInputBorder(
-                                                    borderSide: BorderSide.none,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                backgroundColor: AppColors
-                                                    .backgroundPurple
-                                                    .withValues(alpha: 0.2),
-                                                collapsedShape:
-                                                    OutlineInputBorder(
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8)),
-                                                collapsedBackgroundColor:
-                                                    AppColors.backgroundPurple
-                                                        .withValues(alpha: 0.2),
+                                                shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                                backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                                collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                 title: Container(
                                                   child: Row(
                                                     children: [
@@ -919,13 +726,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                                         width: 10,
                                                       ),
                                                       Text(
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                        textAlign: TextAlign.center,
                                                         "Attachments",
-                                                        style: AppFonts.medium(
-                                                            16,
-                                                            AppColors
-                                                                .textBlack),
+                                                        style: AppFonts.medium(16, AppColors.textBlack),
                                                       ),
                                                     ],
                                                   ),
@@ -934,30 +737,18 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   Obx(() {
                                                     return Container(
                                                         color: Colors.white,
-                                                        child: controller
-                                                                .selectedList
-                                                                .isNotEmpty
+                                                        child: controller.selectedList.isNotEmpty
                                                             ? Padding(
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            20,
-                                                                        vertical:
-                                                                            10),
+                                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                                                 child: SizedBox(
                                                                     height: 200,
-                                                                    width: double
-                                                                        .infinity,
+                                                                    width: double.infinity,
                                                                     child: Obx(
                                                                       () {
-                                                                        return ListView
-                                                                            .separated(
-                                                                          scrollDirection:
-                                                                              Axis.horizontal,
-                                                                          padding:
-                                                                              EdgeInsets.only(top: 20),
-                                                                          itemBuilder:
-                                                                              (context, index) {
+                                                                        return ListView.separated(
+                                                                          scrollDirection: Axis.horizontal,
+                                                                          padding: EdgeInsets.only(top: 20),
+                                                                          itemBuilder: (context, index) {
                                                                             return Container(
                                                                               height: 200,
                                                                               width: 140,
@@ -1076,27 +867,17 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                               ),
                                                                             );
                                                                           },
-                                                                          separatorBuilder: (context, index) =>
-                                                                              const SizedBox(width: Dimen.margin15),
-                                                                          itemCount: controller
-                                                                              .selectedList
-                                                                              .length,
+                                                                          separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                                          itemCount: controller.selectedList.length,
                                                                         );
                                                                       },
                                                                     )))
                                                             : Padding(
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        vertical:
-                                                                            20),
-                                                                child:
-                                                                    Container(
-                                                                  width: double
-                                                                      .infinity,
+                                                                padding: EdgeInsets.symmetric(vertical: 20),
+                                                                child: Container(
+                                                                  width: double.infinity,
                                                                   height: 200,
-                                                                  child: Center(
-                                                                      child: Text(
-                                                                          "Attachments Not available")),
+                                                                  child: Center(child: Text("Attachments Not available")),
                                                                 ),
                                                               ));
                                                   }),
@@ -1110,8 +891,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                         height: Dimen.margin20,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimen.margin16),
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                         child: Row(
                                           children: [
                                             ContainerButton(
@@ -1120,18 +900,15 @@ class AddPatientView extends GetView<AddPatientController> {
                                               },
                                               text: 'Add Attachments',
 
-                                              borderColor:
-                                                  AppColors.backgroundPurple,
+                                              borderColor: AppColors.backgroundPurple,
                                               // Custom border color
                                               backgroundColor: Colors.white,
                                               // Custom background color
                                               needBorder: true,
                                               // Show border
-                                              textColor:
-                                                  AppColors.backgroundPurple,
+                                              textColor: AppColors.backgroundPurple,
                                               // Custom text color
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 12),
+                                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                               // Custom padding
                                               radius: 6, // Custom border radius
                                             ),
@@ -1142,8 +919,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               },
                                               child: Text(
                                                 "Clear Form",
-                                                style: AppFonts.medium(
-                                                    14, AppColors.textDarkGrey),
+                                                style: AppFonts.medium(14, AppColors.textDarkGrey),
                                               ),
                                             ),
                                             SizedBox(
@@ -1157,18 +933,15 @@ class AddPatientView extends GetView<AddPatientController> {
                                               },
                                               text: ' Cancel ',
 
-                                              borderColor:
-                                                  AppColors.backgroundPurple,
+                                              borderColor: AppColors.backgroundPurple,
                                               // Custom border color
                                               backgroundColor: Colors.white,
                                               // Custom background color
                                               needBorder: true,
                                               // Show border
-                                              textColor:
-                                                  AppColors.backgroundPurple,
+                                              textColor: AppColors.backgroundPurple,
                                               // Custom text color
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 12),
+                                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                               // Custom padding
                                               radius: 6, // Custom border radius
                                             ),
@@ -1179,29 +952,23 @@ class AddPatientView extends GetView<AddPatientController> {
                                               onPressed: () {
                                                 // Your onPressed function
 
-                                                controller.isSaveAddAnother
-                                                    .value = true;
+                                                controller.isSaveAddAnother.value = true;
 
-                                                if (controller
-                                                    .formKey.currentState!
-                                                    .validate()) {
+                                                if (controller.formKey.currentState!.validate()) {
                                                   controller.addPatient();
                                                 }
                                               },
                                               text: ' Save and Add Another ',
 
-                                              borderColor:
-                                                  AppColors.backgroundPurple,
+                                              borderColor: AppColors.backgroundPurple,
                                               // Custom border color
-                                              backgroundColor:
-                                                  AppColors.backgroundPurple,
+                                              backgroundColor: AppColors.backgroundPurple,
                                               // Custom background color
                                               needBorder: false,
                                               // Show border
                                               textColor: AppColors.white,
                                               // Custom text color
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 11, horizontal: 12),
+                                              padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
                                               // Custom padding
                                               radius: 6, // Custom border radius
                                             ),
@@ -1210,40 +977,25 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                controller.isSaveAddAnother
-                                                    .value = false;
+                                                controller.isSaveAddAnother.value = false;
 
-                                                if (controller
-                                                    .formKey.currentState!
-                                                    .validate()) {
+                                                if (controller.formKey.currentState!.validate()) {
                                                   controller.addPatient();
                                                 }
                                               },
                                               child: Container(
-                                                decoration: BoxDecoration(
-                                                    color: AppColors
-                                                        .backgroundPurple,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6)),
+                                                decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(6)),
                                                 // width: 70,
                                                 height: 40,
                                                 child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 8),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8),
                                                   child: Row(
                                                     children: [
                                                       Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 10),
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10),
                                                         child: Text(
                                                           "Save",
-                                                          style:
-                                                              AppFonts.medium(
-                                                                  14,
-                                                                  Colors.white),
+                                                          style: AppFonts.medium(14, Colors.white),
                                                         ),
                                                       ),
                                                     ],

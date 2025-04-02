@@ -122,11 +122,15 @@ class AddPatientController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT ||
-        globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT || globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
       globalController.popRoute();
     }
     // globalController.popRoute();
+  }
+
+  String extractDigits(String input) {
+    // Use a regular expression to extract digits only
+    return input.replaceAll(RegExp(r'\D'), '');
   }
 
   @override
@@ -140,7 +144,7 @@ class AddPatientController extends GetxController {
         globalController.addRouteInit(Routes.SCHEDULE_PATIENT);
       }
     });
-    contactNumberController.text = "+1";
+    contactNumberController.text = "+1 ";
     print(getNextRoundedTime());
     selectedVisitTimeValue.value = getNextRoundedTime();
   }
@@ -285,7 +289,7 @@ class AddPatientController extends GetxController {
       param['middle_name'] = middleNameController.text;
     }
     if (contactNumberController.text != "") {
-      param['contact_no'] = contactNumberController.text.trim();
+      param['contact_no'] = extractDigits(contactNumberController.text.trim());
     }
     param['last_name'] = lastNameController.text;
     param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
