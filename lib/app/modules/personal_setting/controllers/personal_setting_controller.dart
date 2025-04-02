@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:subqdocs/app/routes/app_pages.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -19,6 +21,8 @@ import '../../../core/common/logger.dart';
 import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/get_user_detail_model.dart';
+import '../model/update_user_response_model.dart';
+import '../model/us_state_city_model.dart';
 import '../repository/personal_setting_repository.dart';
 
 class PersonalSettingController extends GetxController {
@@ -63,6 +67,13 @@ class PersonalSettingController extends GetxController {
   TextEditingController userPostalCodeController = TextEditingController();
   TextEditingController userCountryController = TextEditingController();
 
+  TextEditingController userPractitionerController = TextEditingController();
+  TextEditingController userMedicalLicenseNumberController = TextEditingController();
+  TextEditingController userLicenseExpiryDateController = TextEditingController();
+  TextEditingController userNationalProviderIdentifierController = TextEditingController();
+  TextEditingController userTaxonomyCodeController = TextEditingController();
+  TextEditingController userSpecializationController = TextEditingController();
+
   RxBool isValid = RxBool(true);
   RxnString selectedRoleValue = RxnString("");
 
@@ -73,6 +84,23 @@ class PersonalSettingController extends GetxController {
   Rxn<File> userProfileImage = Rxn();
   Rxn<File> organizationProfileImage = Rxn();
 
+  List<String> countryOption = ["United States"];
+  RxnString selectedCountryValue = RxnString("United States");
+
+  List<String> userStateOption = [];
+  RxnString userSelectedStateValue = RxnString("");
+
+  List<String> userCityOption = [];
+  RxnString userSelectedCityValue = RxnString("");
+
+  List<String> organizationStateOption = [];
+  RxnString organizationSelectedStateValue = RxnString("");
+
+  List<String> organizationCityOption = [];
+  RxnString organizationSelectedCityValue = RxnString("");
+
+  RxList<StateCityModel> statesCities = RxList();
+
   @override
   void onInit() {
     super.onInit();
@@ -81,6 +109,16 @@ class PersonalSettingController extends GetxController {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globalController.addRouteInit(Routes.PERSONAL_SETTING);
+
+      loadStateCityData().then((data) {
+        statesCities.value = data;
+        userStateOption = statesCities.map((state) => state.state).toList();
+        userSelectedStateValue.value = userStateOption.first;
+
+        organizationStateOption = statesCities.map((state) => state.state).toList();
+        organizationSelectedStateValue.value = organizationStateOption.first;
+      });
+
       getOrganizationDetail();
       getUserDetail();
       getUserByOrganization();
@@ -98,13 +136,24 @@ class PersonalSettingController extends GetxController {
     }
   }
 
+  Future<List<StateCityModel>> loadStateCityData() async {
+    // Load the JSON file from assets
+    String jsonString = await rootBundle.loadString('assets/states_cities.json');
+
+    // Decode the JSON data
+    Map<String, dynamic> jsonData = json.decode(jsonString);
+
+    // Parse the JSON data into a list of StateCityModel objects
+    return StateCityModel.fromJson(jsonData);
+  }
+
   Future<void> getOrganizationDetail() async {
-    try {
-      getOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
-      setOrganizationData();
-    } catch (error) {
-      customPrint("login catch error is $error");
-    }
+    // try {
+    getOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
+    setOrganizationData();
+    // } catch (error) {
+    //   customPrint("login catch error is $error");
+    // }
   }
 
   Future<void> setOrganizationData() async {
@@ -121,15 +170,17 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> getUserDetail() async {
-    try {
-      getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.value?.responseData!.user!.id.toString() ?? "");
-      setUserDetail();
-    } catch (error) {
-      customPrint("login catch error is $error");
-    }
+    // try {
+    getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.value?.responseData!.user!.id.toString() ?? "");
+    print("getUserDetailModel :- ${getUserDetailModel.value?.toJson()}");
+    setUserDetail();
+    // } catch (error) {
+    //   customPrint("login catch error is $error");
+    // }
   }
 
   Future<void> setUserDetail() async {
+    userOrganizationNameNameController.text = getUserDetailModel.value?.responseData?.organizationName ?? "";
     userFirstNameController.text = getUserDetailModel.value?.responseData?.firstName ?? "";
     userLastNameController.text = getUserDetailModel.value?.responseData?.lastName ?? "";
     userEmailController.text = getUserDetailModel.value?.responseData?.email ?? "";
@@ -139,6 +190,13 @@ class PersonalSettingController extends GetxController {
     userStateController.text = getUserDetailModel.value?.responseData?.state ?? "";
     userPostalCodeController.text = getUserDetailModel.value?.responseData?.postalCode ?? "";
     userCountryController.text = getUserDetailModel.value?.responseData?.country ?? "";
+
+    userPractitionerController.text = getUserDetailModel.value?.responseData?.title ?? "";
+    userMedicalLicenseNumberController.text = getUserDetailModel.value?.responseData?.medicalLicenseNumber ?? "";
+    userLicenseExpiryDateController.text = getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "";
+    userNationalProviderIdentifierController.text = getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString() ?? "";
+    userTaxonomyCodeController.text = getUserDetailModel.value?.responseData?.taxonomyCode ?? "";
+    userSpecializationController.text = getUserDetailModel.value?.responseData?.specialization ?? "";
   }
 
   Future<void> userInvite(Map<String, dynamic> param) async {
@@ -164,19 +222,33 @@ class PersonalSettingController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     if (userProfileImage.value != null) {
-      customPrint("profile is   available");
+      // customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
       profileParams['user_image'] = [userProfileImage.value!];
     }
 
     try {
       dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-      print("response is $response");
+      print("updateUserDetail is $response");
+
+      UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
+
+      if (updateUserResponseModel.responseData?.token != null) {
+        String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
+        if (loginKey.isNotEmpty) {
+          LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginKey));
+          loginModel.responseData?.token = updateUserResponseModel.responseData?.token;
+
+          AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
+          await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
+          // token = loginModel.responseData?.token ?? "";
+        }
+      }
 
       // getOrganizationDetail();
       getUserDetail();
     } catch (error) {
-      customPrint("userInvite catch error is $error");
+      // customPrint("userInvite catch error is $error");
     }
   }
 
@@ -206,25 +278,25 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> getUserRole() async {
-    try {
-      userRolesModel.value = await _personalSettingRepository.getUserRole();
-      selectedRoleValue.value = userRolesModel.value?.responseData?.first;
-    } catch (error) {
-      customPrint("login catch error is $error");
-    }
+    // try {
+    userRolesModel.value = await _personalSettingRepository.getUserRole();
+    selectedRoleValue.value = userRolesModel.value?.responseData?.first;
+    // } catch (error) {
+    //   customPrint("login catch error is $error");
+    // }
   }
 
   Future<void> getUserByOrganization() async {
     Loader().showLoadingDialogForSimpleLoader();
 
-    try {
-      getUserOrganizationListModel.value = await _personalSettingRepository.getUserByOrganization();
-      filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
+    // try {
+    getUserOrganizationListModel.value = await _personalSettingRepository.getUserByOrganization();
+    filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
 
-      Get.back();
-    } catch (error) {
-      customPrint("login catch error is $error");
-    }
+    Get.back();
+    // } catch (error) {
+    //   customPrint("login catch error is $error");
+    // }
   }
 
   Future<void> updateRoleAndAdminControll(String userId, String role, bool isAdmin, int rowIndex) async {
@@ -234,25 +306,25 @@ class PersonalSettingController extends GetxController {
     param["is_admin"] = isAdmin;
 
     Loader().showLoadingDialogForSimpleLoader();
-    try {
-      UpdateRoleAndAdminResponseModel updateRoleAndAdminResponseData = await _personalSettingRepository.updateRoleAndAdminControl(param: param);
+    // try {
+    UpdateRoleAndAdminResponseModel updateRoleAndAdminResponseData = await _personalSettingRepository.updateRoleAndAdminControl(param: param);
 
-      print("UpdateRoleAndAdminResponseModel response:- ${updateRoleAndAdminResponseData.toJson()}");
+    print("UpdateRoleAndAdminResponseModel response:- ${updateRoleAndAdminResponseData.toJson()}");
 
-      if (updateRoleAndAdminResponseData.responseType?.toLowerCase() == "success") {
-        getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin = isAdmin;
-        getUserOrganizationListModel.value?.responseData?[rowIndex].role = role;
-        getUserOrganizationListModel.refresh();
-        CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
-      } else {
-        CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
-      }
-      Get.back();
-      // getUserByOrganization();
-    } catch (error) {
-      Get.back();
-      customPrint("login catch error is $error");
+    if (updateRoleAndAdminResponseData.responseType?.toLowerCase() == "success") {
+      getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin = isAdmin;
+      getUserOrganizationListModel.value?.responseData?[rowIndex].role = role;
+      getUserOrganizationListModel.refresh();
+      CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
+    } else {
+      CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
     }
+    Get.back();
+    // getUserByOrganization();
+    // } catch (error) {
+    //   Get.back();
+    //   customPrint("login catch error is $error");
+    // }
   }
 
   Future<void> captureProfileImage(bool isUserProfile) async {

@@ -20,7 +20,7 @@ class SplashView extends GetView<SplashController> {
             Center(
                 child: SvgPicture.asset(
               ImagePath.subqdocs_white,
-              width: MediaQuery.of(context).size.width * 0.55,
+              width: MediaQuery.of(context).size.width * 0.45,
             )
 
                 // Image.asset("assets/images/img.png"),

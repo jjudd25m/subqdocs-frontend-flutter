@@ -38,15 +38,15 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
-                width: 80,
-                height: 5,
-                margin: const EdgeInsets.only(top: 15),
-                decoration: BoxDecoration(
-                  color: AppColors.textDarkGrey.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+              // Container(
+              //   width: 80,
+              //   height: 5,
+              //   margin: const EdgeInsets.only(top: 15),
+              //   decoration: BoxDecoration(
+              //     color: AppColors.textDarkGrey.withOpacity(0.4),
+              //     borderRadius: BorderRadius.circular(8),
+              //   ),
+              // ),
               const SizedBox(height: 20),
               Row(
                 children: [
@@ -216,50 +216,58 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                           ],
                         )));
               }),
+              SizedBox(height: 20),
               Obx(() {
                 return SizedBox(
                   width: Get.width,
-                  child: CalendarDatePicker2(
-                    config: CalendarDatePicker2Config(
-                      weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                      weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
-                      daySplashColor: AppColors.clear,
-                      calendarViewMode: CalendarDatePicker2Mode.day,
-                      selectedDayHighlightColor: AppColors.backgroundPurple,
-                      dayMaxWidth: 30,
-                      allowSameValueSelection: true,
-                      firstDayOfWeek: 6,
-                      dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
-                      disableMonthPicker: true,
-                      dayBorderRadius: BorderRadius.all(Radius.circular(6)),
-                      scrollViewTopHeaderTextStyle: const TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controlsTextStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      centerAlignModePicker: true,
-                      customModePickerIcon: const SizedBox(),
-                      calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
-                      calendarType: CalendarDatePicker2Type.range,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: Colors.grey.shade300, width: 1),
                     ),
-                    onValueChanged: (value) {
-                      selectedDate?.value = value;
+                    child: CalendarDatePicker2(
+                      config: CalendarDatePicker2Config(
+                        weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                        weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                        daySplashColor: AppColors.clear,
+                        calendarViewMode: CalendarDatePicker2Mode.day,
+                        selectedDayHighlightColor: AppColors.backgroundPurple,
+                        dayMaxWidth: 30,
+                        allowSameValueSelection: true,
+                        firstDayOfWeek: 6,
+                        dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
+                        disableMonthPicker: true,
+                        dayBorderRadius: BorderRadius.all(Radius.circular(6)),
+                        scrollViewTopHeaderTextStyle: const TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        controlsTextStyle: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        centerAlignModePicker: true,
+                        customModePickerIcon: const SizedBox(),
+                        calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
+                        calendarType: CalendarDatePicker2Type.range,
+                      ),
+                      onValueChanged: (value) {
+                        selectedDate?.value = value;
 
-                      controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue = selectedDate;
-                      List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-                      if (dates.length == 2) {
-                        controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
-                        controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
-                        controller.globalController.saveHomeScheduleListData();
-                        controller.scheduleTriggeredIndexes.clear();
-                      }
-                    },
-                    value: selectedDate ?? [DateTime.now()],
-                    // value: controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
+                        controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue = selectedDate;
+                        List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+                        if (dates.length == 2) {
+                          controller.globalController.homeScheduleListSortingModel.value?.startDate = dates[0];
+                          controller.globalController.homeScheduleListSortingModel.value?.endDate = dates[1];
+                          controller.globalController.saveHomeScheduleListData();
+                          controller.scheduleTriggeredIndexes.clear();
+                        }
+                      },
+                      value: selectedDate ?? [DateTime.now()],
+                      // value: controller.globalController.homeScheduleListSortingModel.value?.selectedDateValue ?? [DateTime.now()],
+                    ),
                   ),
                 );
               }),

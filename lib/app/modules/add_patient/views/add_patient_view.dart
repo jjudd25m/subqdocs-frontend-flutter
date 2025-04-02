@@ -16,6 +16,7 @@ import 'package:phone_number_text_input_formatter/phone_number_text_input_format
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/rounded_image_widget.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/FileOpener.dart';
 import '../../../../utils/Formetors.dart';
@@ -32,6 +33,7 @@ import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/base_image_view.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
@@ -163,6 +165,30 @@ class AddPatientView extends GetView<AddPatientController> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+        onItemSelected: (index) async {
+          if (index == 0) {
+            _key.currentState!.closeDrawer();
+          } else if (index == 1) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 1,
+            });
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 2) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 2,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 3) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 0,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 4) {
+            _key.currentState!.closeDrawer();
+            final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          }
+        },
         body: GestureDetector(
           onTap: removeFocus,
           child: SafeArea(
@@ -985,6 +1011,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
+                                                if (controller.totalFileSize > 100) {
+                                                  CustomToastification().showToast("File size exceeded 100 MB", type: ToastificationType.error);
+                                                  return;
+                                                }
+
                                                 controller.isSaveAddAnother.value = false;
 
                                                 if (controller.formKey.currentState!.validate()) {

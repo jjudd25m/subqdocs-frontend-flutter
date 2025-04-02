@@ -135,7 +135,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                                           borderRadius: BorderRadius.circular(16),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 6),
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                           child: Text(
                                             cellData,
                                             maxLines: 2,

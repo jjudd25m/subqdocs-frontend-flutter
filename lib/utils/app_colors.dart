@@ -18,7 +18,6 @@ class AppColors {
   static const Color textOrangle = Color(0xFFFF8000);
   static const Color drawerText = Color(0xFF555A63);
 
-
   // Background color
   static const Color backgroundWhite = Color(0xFFFFFFFF);
   static const Color backgroundBlack = Color(0xFF000000);
@@ -62,15 +61,16 @@ class AppColors {
 
   // Filter status color
 
-  static const Color filterScheduleColor = Color(0xFF816060);
-  static const Color filterLateColor = Color(0xFF0275D8);
+  static const Color filterScheduleColor = Color(0xFF4A4ADE);
+  static const Color filterLateColor = Color(0xFFB9770E);
   static const Color filterCheckedInColor = Color(0xFF5CB85C);
-  static const Color filterInProgressColor = Color(0xFF5BC0DE);
-  static const Color filterPausedColor = Color(0xFFF0AD4E);
+  static const Color filterInProgressColor = Color(0xFF397F94);
+  static const Color filterPausedColor = Color(0xFFFDA324);
   static const Color filterInsufficientInfoColor = Color(0xFFD9534F);
   static const Color filterPendingColor = Color(0xFF6F42C1);
-  static const Color filterNotRecordedColor = Color(0xFFEC7E45);
+  static const Color filterNotRecordedColor = Color(0xFFBC7575);
   static const Color filterFinalizedColor = Color(0xFF39A58C);
   static const Color filterCancelledColor = Color(0xFFA569BD);
-  static const Color filterNoShowColor = Color(0xFFB9770E);
+  static const Color filterCanceledColor = Color(0xFFEC7E45);
+  static const Color filterNoShowColor = Color(0xFF0275D8);
 }

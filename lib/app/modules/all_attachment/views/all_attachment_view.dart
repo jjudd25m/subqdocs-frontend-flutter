@@ -41,16 +41,12 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
     DateTime yesterday = today.subtract(Duration(days: 1));
 
     // Check if the input date is today
-    if (inputDate.year == today.year &&
-        inputDate.month == today.month &&
-        inputDate.day == today.day) {
+    if (inputDate.year == today.year && inputDate.month == today.month && inputDate.day == today.day) {
       return "Today";
     }
 
     // Check if the input date is yesterday
-    if (inputDate.year == yesterday.year &&
-        inputDate.month == yesterday.month &&
-        inputDate.day == yesterday.day) {
+    if (inputDate.year == yesterday.year && inputDate.month == yesterday.month && inputDate.day == yesterday.day) {
       return "Yesterday";
     }
 
@@ -60,13 +56,39 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(body: GestureDetector(
-      onTap: removeFocus,
-      child: SafeArea(
-          child: Column(
+    return BaseScreen(
+        onItemSelected: (index) async {
+          if (index == 0) {
+            final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 1) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 1,
+            });
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 2) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 2,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 3) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 0,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 4) {
+            _key.currentState!.closeDrawer();
+            final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          }
+        },
+        body: GestureDetector(
+          onTap: removeFocus,
+          child: SafeArea(
+              child: Column(
             children: [
               CustomAppBar(drawerkey: _key),
-
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -75,21 +97,19 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Obx(
-                              () {
-                            return BreadcrumbWidget(
-                              breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
-                              onBack: (breadcrumb) {
-                                controller.globalController.popUntilRoute(breadcrumb);
-                                // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+                      Obx(() {
+                        return BreadcrumbWidget(
+                          breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                          onBack: (breadcrumb) {
+                            controller.globalController.popUntilRoute(breadcrumb);
+                            // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                                while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                  Get.back();  // Pop the current screen
-                                }
-                              },
-                            );
-                          }
-                      ),
+                            while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                              Get.back(); // Pop the current screen
+                            }
+                          },
+                        );
+                      }),
                       SingleChildScrollView(
                         child: Container(
                           decoration: BoxDecoration(
@@ -99,8 +119,6 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                           child: Column(
                             children: [
-
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 20),
                                 child: Row(
@@ -130,27 +148,21 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                         if (value == "1") {
                                           // Do custom logic for Item 1
                                           // Example: close the popup programmatically
-                                          customPrint(
-                                              'Closing popup manually for Item 1');
+                                          customPrint('Closing popup manually for Item 1');
                                         }
                                       },
                                       onCanceled: () {
                                         customPrint("dailog is cancelled");
                                       },
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(6)),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                       color: AppColors.white,
                                       position: PopupMenuPosition.under,
                                       padding: EdgeInsetsDirectional.zero,
-                                      menuPadding:
-                                      EdgeInsetsDirectional.only(bottom: 0),
+                                      menuPadding: EdgeInsetsDirectional.only(bottom: 0),
                                       style: const ButtonStyle(
-                                        padding: WidgetStatePropertyAll(
-                                            EdgeInsetsDirectional.zero),
-                                        tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                        visualDensity:
-                                        VisualDensity(horizontal: 0, vertical: 2),
+                                        padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        visualDensity: VisualDensity(horizontal: 0, vertical: 2),
                                       ),
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
@@ -161,8 +173,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                             child: Container(
                                               width: 300,
                                               child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
                                                     padding: const EdgeInsets.all(16),
@@ -170,8 +181,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                       children: [
                                                         Text(
                                                           "Filters",
-                                                          style: AppFonts.medium(
-                                                              16, AppColors.textBlack),
+                                                          style: AppFonts.medium(16, AppColors.textBlack),
                                                         ),
                                                         SizedBox(
                                                           width: 160,
@@ -183,20 +193,15 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                             controller.startDate.value = "";
                                                             controller.endDate.value = "";
 
-
                                                             controller.fromController.clear();
 
-                                                            controller
-                                                                .getAllPatientAttachment();
+                                                            controller.getAllPatientAttachment();
 
                                                             // controller.clearFilter();
                                                           },
                                                           child: Text(
                                                             "Clear",
-                                                            style: AppFonts.medium(
-                                                                14,
-                                                                AppColors
-                                                                    .backgroundPurple),
+                                                            style: AppFonts.medium(14, AppColors.backgroundPurple),
                                                           ),
                                                         ),
                                                       ],
@@ -213,13 +218,8 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                             child: Container(
                                               width: 500,
                                               child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 16,
-                                                    left: 16,
-                                                    bottom: 16,
-                                                    top: 10),
+                                                padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
                                                 child: TextFormFiledWidget(
-
                                                   readOnly: true,
                                                   label: "Visit Date",
                                                   controller: controller.fromController,
@@ -230,13 +230,10 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                       useSafeArea: true,
                                                       builder: (context) {
                                                         return AlertDialog(
-                                                          backgroundColor:
-                                                          AppColors.backgroundWhite,
+                                                          backgroundColor: AppColors.backgroundWhite,
                                                           titlePadding: EdgeInsets.zero,
                                                           shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
+                                                            borderRadius: BorderRadius.circular(10),
                                                           ),
                                                           title: Column(
                                                             children: [
@@ -244,79 +241,37 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                               SizedBox(
                                                                 width: 305,
                                                                 height: 290,
-                                                                child: GetBuilder<
-                                                                    AllAttachmentController>(
-                                                                  builder:
-                                                                      (controller) {
+                                                                child: GetBuilder<AllAttachmentController>(
+                                                                  builder: (controller) {
                                                                     return CalendarDatePicker2(
-                                                                      config:
-                                                                      CalendarDatePicker2Config(
-                                                                        weekdayLabelTextStyle:
-                                                                        AppFonts.regular(
-                                                                            14,
-                                                                            AppColors
-                                                                                .textGrey),
-                                                                        weekdayLabels: [
-                                                                          "Mo",
-                                                                          "Tu",
-                                                                          "We",
-                                                                          "Th",
-                                                                          "Fr",
-                                                                          "Sa",
-                                                                          "su"
-                                                                        ],
-                                                                        daySplashColor:
-                                                                        AppColors
-                                                                            .clear,
-                                                                        calendarViewMode:
-                                                                        CalendarDatePicker2Mode
-                                                                            .day,
-                                                                        selectedDayHighlightColor:
-                                                                        AppColors
-                                                                            .backgroundPurple,
+                                                                      config: CalendarDatePicker2Config(
+                                                                        weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                                                        weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                                                        daySplashColor: AppColors.clear,
+                                                                        calendarViewMode: CalendarDatePicker2Mode.day,
+                                                                        selectedDayHighlightColor: AppColors.backgroundPurple,
                                                                         dayMaxWidth: 60,
-                                                                        allowSameValueSelection:
-                                                                        true,
-                                                                        firstDayOfWeek:
-                                                                        6,
-                                                                        disableMonthPicker:
-                                                                        true,
-                                                                        scrollViewTopHeaderTextStyle:
-                                                                        const TextStyle(
-                                                                          color: Colors
-                                                                              .black87,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
+                                                                        allowSameValueSelection: true,
+                                                                        firstDayOfWeek: 6,
+                                                                        disableMonthPicker: true,
+                                                                        scrollViewTopHeaderTextStyle: const TextStyle(
+                                                                          color: Colors.black87,
+                                                                          fontWeight: FontWeight.bold,
                                                                         ),
-                                                                        controlsTextStyle:
-                                                                        const TextStyle(
-                                                                          color: Colors
-                                                                              .black,
+                                                                        controlsTextStyle: const TextStyle(
+                                                                          color: Colors.black,
                                                                           fontSize: 15,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
+                                                                          fontWeight: FontWeight.bold,
                                                                         ),
-                                                                        centerAlignModePicker:
-                                                                        true,
-                                                                        customModePickerIcon:
-                                                                        const SizedBox(),
-                                                                        calendarViewScrollPhysics:
-                                                                        const NeverScrollableScrollPhysics(),
-                                                                        calendarType:
-                                                                        CalendarDatePicker2Type
-                                                                            .range,
+                                                                        centerAlignModePicker: true,
+                                                                        customModePickerIcon: const SizedBox(),
+                                                                        calendarViewScrollPhysics: const NeverScrollableScrollPhysics(),
+                                                                        calendarType: CalendarDatePicker2Type.range,
                                                                       ),
-                                                                      onValueChanged:
-                                                                          (value) {
-                                                                        controller
-                                                                            .selectedValue =
-                                                                            value;
+                                                                      onValueChanged: (value) {
+                                                                        controller.selectedValue = value;
                                                                       },
-                                                                      value: [
-                                                                        DateTime.now()
-                                                                      ],
+                                                                      value: [DateTime.now()],
                                                                     );
                                                                   },
                                                                 ),
@@ -327,24 +282,15 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                     width: 5,
                                                                   ),
                                                                   Expanded(
-                                                                    child:
-                                                                    ContainerButton(
-                                                                      padding: EdgeInsets
-                                                                          .only(
-                                                                          top: 10,
-                                                                          bottom:
-                                                                          10),
+                                                                    child: ContainerButton(
+                                                                      padding: EdgeInsets.only(top: 10, bottom: 10),
                                                                       onPressed: () {
-                                                                        Navigator.pop(
-                                                                            context);
+                                                                        Navigator.pop(context);
                                                                       },
-                                                                      backgroundColor:
-                                                                      Colors.white,
+                                                                      backgroundColor: Colors.white,
                                                                       needBorder: true,
-                                                                      borderColor: AppColors
-                                                                          .backgroundPurple,
-                                                                      textColor: AppColors
-                                                                          .backgroundPurple,
+                                                                      borderColor: AppColors.backgroundPurple,
+                                                                      textColor: AppColors.backgroundPurple,
                                                                       text: "Cancel",
                                                                     ),
                                                                   ),
@@ -352,24 +298,14 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                     width: 5,
                                                                   ),
                                                                   Expanded(
-                                                                    child:
-                                                                    ContainerButton(
-                                                                      padding: EdgeInsets
-                                                                          .only(
-                                                                          top: 10,
-                                                                          bottom:
-                                                                          10),
+                                                                    child: ContainerButton(
+                                                                      padding: EdgeInsets.only(top: 10, bottom: 10),
                                                                       onPressed: () {
-                                                                        controller
-                                                                            .setDateRange();
+                                                                        controller.setDateRange();
                                                                         controller.getAllPatientAttachment();
-
                                                                       },
-                                                                      text:
-                                                                      "Choose Date",
-                                                                      backgroundColor:
-                                                                      AppColors
-                                                                          .backgroundPurple,
+                                                                      text: "Choose Date",
+                                                                      backgroundColor: AppColors.backgroundPurple,
                                                                     ),
                                                                   ),
                                                                   SizedBox(
@@ -384,14 +320,11 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                       },
                                                     );
                                                   },
-                                                  suffixIcon: SvgPicture.asset(
-                                                      ImagePath.down_arrow),
-                                                  hint:
-                                                  " MM/DD/YYYY - MM/DD/YYYY",
+                                                  suffixIcon: SvgPicture.asset(ImagePath.down_arrow),
+                                                  hint: " MM/DD/YYYY - MM/DD/YYYY",
                                                 ),
                                               ),
-                                            )
-                                        )
+                                            ))
                                       ],
                                       child: Container(
                                         height: 40,
@@ -404,8 +337,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                             width: 0.5,
                                           ),
 
-                                          borderRadius: BorderRadius.circular(
-                                              10), // Optional: to make the corners rounded
+                                          borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(10),
@@ -424,304 +356,178 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                 return ListView.builder(
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) => InkWell(
-                                      onTap: () {},
-                                      child: Theme(
-                                        data: ThemeData(
-                                          splashColor: Colors.transparent,
-                                          // Remove splash color
-                                          highlightColor: Colors
-                                              .transparent, // Remove highlight color
-                                        ),
-                                        child: ExpansionTile(
-                                          initiallyExpanded: true,
-                                          collapsedShape: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                              BorderRadius.circular(8)),
-                                          shape: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                              BorderRadius.circular(8)),
-                                          backgroundColor:
-                                          AppColors.backgroundWhite,
-                                          collapsedBackgroundColor:
-                                          AppColors.backgroundWhite,
-                                          title: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  textAlign: TextAlign.center,
-                                                  getFormattedDate(controller
-                                                      .allAttachmentList
-                                                      .value!
-                                                      .responseData
-                                                      .data
-                                                      .keys
-                                                      .elementAt(index)),
-                                                  // getFormattedDate(controller.allAttachmentList.value!.responseData.data.keys.elementAt(index)),
-                                                  style: AppFonts.medium(
-                                                      16, AppColors.textPurple),
-                                                ),
-                                                SizedBox(width: 10),
-                                                Expanded(
-                                                  child: Divider(
-                                                    color: AppColors
-                                                        .buttonBackgroundGrey,
-                                                    height: 1,
-                                                    thickness: 1,
-                                                  ),
-                                                )
-                                              ],
+                                          onTap: () {},
+                                          child: Theme(
+                                            data: ThemeData(
+                                              splashColor: Colors.transparent,
+                                              // Remove splash color
+                                              highlightColor: Colors.transparent, // Remove highlight color
                                             ),
-                                          ),
-                                          children: <Widget>[
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20),
-                                              // height: 300,
-                                              child: GridView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                NeverScrollableScrollPhysics(),
-                                                gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount:
-                                                  (MediaQuery.of(context)
-                                                      .size
-                                                      .width
-                                                      .toInt() /
-                                                      140)
-                                                      .toInt(),
-                                                  // Number of columns
-                                                  crossAxisSpacing:
-                                                  Dimen.margin15,
-                                                  // Horizontal space between items
-                                                  mainAxisSpacing: Dimen.margin15,
-                                                  // Vertical space between items
-                                                  childAspectRatio:
-                                                  0.9, // Adjust the height-to-width ratio of the grid items
+                                            child: ExpansionTile(
+                                              initiallyExpanded: true,
+                                              collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                              shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                              backgroundColor: AppColors.backgroundWhite,
+                                              collapsedBackgroundColor: AppColors.backgroundWhite,
+                                              title: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      textAlign: TextAlign.center,
+                                                      getFormattedDate(controller.allAttachmentList.value!.responseData.data.keys.elementAt(index)),
+                                                      // getFormattedDate(controller.allAttachmentList.value!.responseData.data.keys.elementAt(index)),
+                                                      style: AppFonts.medium(16, AppColors.textPurple),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    Expanded(
+                                                      child: Divider(
+                                                        color: AppColors.buttonBackgroundGrey,
+                                                        height: 1,
+                                                        thickness: 1,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                                padding: EdgeInsets.only(top: 20),
-                                                itemBuilder: (context, subindex) {
-                                                  return Container(
-                                                    height: 200,
-                                                    width: 140,
-                                                    child: Column(
-                                                      children: [
-                                                        SizedBox(height: 10),
-                                                        Stack(
-                                                          clipBehavior: Clip.none,
-                                                          alignment:
-                                                          Alignment.topRight,
+                                              ),
+                                              children: <Widget>[
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                                  // height: 300,
+                                                  child: GridView.builder(
+                                                    shrinkWrap: true,
+                                                    physics: NeverScrollableScrollPhysics(),
+                                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: (MediaQuery.of(context).size.width.toInt() / 140).toInt(),
+                                                      // Number of columns
+                                                      crossAxisSpacing: Dimen.margin15,
+                                                      // Horizontal space between items
+                                                      mainAxisSpacing: Dimen.margin15,
+                                                      // Vertical space between items
+                                                      childAspectRatio: 0.9, // Adjust the height-to-width ratio of the grid items
+                                                    ),
+                                                    padding: EdgeInsets.only(top: 20),
+                                                    itemBuilder: (context, subindex) {
+                                                      return Container(
+                                                        height: 200,
+                                                        width: 140,
+                                                        child: Column(
                                                           children: [
-                                                            Container(
-                                                              height: 120,
-                                                              width: 120,
-                                                              decoration:
-                                                              BoxDecoration(
-                                                                border: Border.all(
-                                                                    color: AppColors
-                                                                        .buttonBackgroundGrey
-                                                                        .withValues(
-                                                                        alpha:
-                                                                        0.8)),
-                                                                borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                    8),
-                                                              ),
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  bottom: Dimen
-                                                                      .margin2),
-                                                              child:
-                                                              GestureDetector(
-                                                                onTap: () {
-                                                                  // customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
+                                                            SizedBox(height: 10),
+                                                            Stack(
+                                                              clipBehavior: Clip.none,
+                                                              alignment: Alignment.topRight,
+                                                              children: [
+                                                                Container(
+                                                                  height: 120,
+                                                                  width: 120,
+                                                                  decoration: BoxDecoration(
+                                                                    border: Border.all(color: AppColors.buttonBackgroundGrey.withValues(alpha: 0.8)),
+                                                                    borderRadius: BorderRadius.circular(8),
+                                                                  ),
+                                                                  padding: const EdgeInsets.only(bottom: Dimen.margin2),
+                                                                  child: GestureDetector(
+                                                                    onTap: () {
+                                                                      // customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
 
-                                                                  if (controller
-                                                                      .allAttachmentList
-                                                                      .value!
-                                                                      .responseData
-                                                                      .data
-                                                                      .values
-                                                                      .elementAt(index)[
-                                                                  subindex]
-                                                                      .fileType
-                                                                      ?.contains(
-                                                                      "image") ??
-                                                                      false) {
-                                                                    showDialog(
-                                                                      context:
-                                                                      context,
-                                                                      barrierDismissible:
-                                                                      true,
-                                                                      // Allows dismissing the dialog by tapping outside
-                                                                      builder:
-                                                                          (BuildContext
-                                                                      context) {
-                                                                        return ViewAttchmentImage(
-                                                                          imageUrl:
-                                                                          controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ??
-                                                                              "",
-                                                                          attchmentUrl:
-                                                                          '',
+                                                                      if (controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType?.contains("image") ??
+                                                                          false) {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          barrierDismissible: true,
+                                                                          // Allows dismissing the dialog by tapping outside
+                                                                          builder: (BuildContext context) {
+                                                                            return ViewAttchmentImage(
+                                                                              imageUrl: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "",
+                                                                              attchmentUrl: '',
+                                                                            );
+                                                                          },
                                                                         );
-                                                                      },
-                                                                    );
-                                                                  } else {
-                                                                    Uri attchmentUri = Uri.parse(controller
-                                                                        .allAttachmentList
-                                                                        .value!
-                                                                        .responseData
-                                                                        .data
-                                                                        .values
-                                                                        .elementAt(
-                                                                        index)[subindex]
-                                                                        .filePath ??
-                                                                        "");
-                                                                    customPrint(
-                                                                        "attchmentUri is :- ${attchmentUri}");
-                                                                    // controller.launchInAppWithBrowserOptions(attchmentUri);
-                                                                  }
-                                                                },
-                                                                child: ClipRRect(
-                                                                  borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                      8),
-                                                                  child:
-                                                                  Container(
-                                                                    color: AppColors
-                                                                        .backgroundPdfAttchment,
-                                                                    width: 120,
-                                                                    height: 120,
-                                                                    child: Center(
-                                                                      child:
-                                                                      BaseImageView(
-                                                                        imageUrl: controller
-                                                                            .allAttachmentList
-                                                                            .value!
-                                                                            .responseData
-                                                                            .data
-                                                                            .values
-                                                                            .elementAt(index)[subindex]
-                                                                            .filePath ??
-                                                                            "",
-                                                                        width:
-                                                                        120,
-                                                                        height:
-                                                                        120,
-                                                                        errorWidget:
-                                                                        Image
-                                                                            .asset(
-                                                                          ImagePath
-                                                                              .file_placeHolder,
+                                                                      } else {
+                                                                        Uri attchmentUri =
+                                                                            Uri.parse(controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "");
+                                                                        customPrint("attchmentUri is :- ${attchmentUri}");
+                                                                        // controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                      }
+                                                                    },
+                                                                    child: ClipRRect(
+                                                                      borderRadius: BorderRadius.circular(8),
+                                                                      child: Container(
+                                                                        color: AppColors.backgroundPdfAttchment,
+                                                                        width: 120,
+                                                                        height: 120,
+                                                                        child: Center(
+                                                                          child: BaseImageView(
+                                                                            imageUrl: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "",
+                                                                            width: 120,
+                                                                            height: 120,
+                                                                            errorWidget: Image.asset(
+                                                                              ImagePath.file_placeHolder,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                            Positioned(
-                                                              top: -10,
-                                                              // Align at the top of the first container
-                                                              right: -10,
-                                                              child: Container(
-                                                                width: 40,
-                                                                height: 40,
-                                                                decoration:
-                                                                BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: Colors
-                                                                          .black
-                                                                          .withOpacity(
-                                                                          0.2),
-                                                                      blurRadius:
-                                                                      2.2,
-                                                                      offset:
-                                                                      Offset(
-                                                                          0.2,
-                                                                          0),
+                                                                Positioned(
+                                                                  top: -10,
+                                                                  // Align at the top of the first container
+                                                                  right: -10,
+                                                                  child: Container(
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                    decoration: BoxDecoration(
+                                                                      shape: BoxShape.circle,
+                                                                      color: Colors.white,
+                                                                      boxShadow: [
+                                                                        BoxShadow(
+                                                                          color: Colors.black.withOpacity(0.2),
+                                                                          blurRadius: 2.2,
+                                                                          offset: Offset(0.2, 0),
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                                child:
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    showDialog(
-                                                                      context:
-                                                                      context,
-                                                                      barrierDismissible:
-                                                                      true,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                      context) {
-                                                                        // return SizedBox();
-                                                                        return DeleteImageDialog(
-                                                                          onDelete:
-                                                                              () {
-                                                                            controller.deleteAttachments(
-                                                                                index,
-                                                                                subindex,
-                                                                                controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].id ?? -1);
+                                                                    child: GestureDetector(
+                                                                      onTap: () {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          barrierDismissible: true,
+                                                                          builder: (BuildContext context) {
+                                                                            // return SizedBox();
+                                                                            return DeleteImageDialog(
+                                                                              onDelete: () {
+                                                                                controller.deleteAttachments(
+                                                                                    index, subindex, controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].id ?? -1);
+                                                                              },
+                                                                              extension: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType,
+                                                                            );
                                                                           },
-                                                                          extension: controller
-                                                                              .allAttachmentList
-                                                                              .value!
-                                                                              .responseData
-                                                                              .data
-                                                                              .values
-                                                                              .elementAt(index)[subindex]
-                                                                              .fileType,
                                                                         );
                                                                       },
-                                                                    );
-                                                                  },
-                                                                  child:
-                                                                  SvgPicture
-                                                                      .asset(
-                                                                    ImagePath
-                                                                        .delete_black,
+                                                                      child: SvgPicture.asset(
+                                                                        ImagePath.delete_black,
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
+                                                              ],
                                                             ),
                                                           ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                                itemCount: controller
-                                                    .allAttachmentList
-                                                    .value!
-                                                    .responseData
-                                                    .data
-                                                    .values
-                                                    .elementAt(index)
-                                                    .length,
-                                              ),
+                                                      );
+                                                    },
+                                                    itemCount: controller.allAttachmentList.value!.responseData.data.values.elementAt(index).length,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                )
+                                              ],
                                             ),
-                                            SizedBox(
-                                              height: 20,
-                                            )
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    itemCount: controller.allAttachmentList.value
-                                        ?.responseData.data.keys.length ??
-                                        0);
+                                    itemCount: controller.allAttachmentList.value?.responseData.data.keys.length ?? 0);
                               })
                             ],
                           ),
@@ -734,13 +540,10 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
               Obx(() {
                 return Container(
                   color: AppColors.backgroundLightBlue,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Container(
                     // color: AppColors.backgroundWhite,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: AppColors.backgroundWhite),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Row(
                       spacing: 15,
@@ -763,9 +566,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                             child: Container(
                               height: 100,
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.textGrey
-                                        .withValues(alpha: 0.5)),
+                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                 color: AppColors.backgroundLightGrey,
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -786,8 +587,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                       Text(
                                         textAlign: TextAlign.center,
                                         "Add a Photo",
-                                        style: AppFonts.medium(
-                                            16, AppColors.textBlack),
+                                        style: AppFonts.medium(16, AppColors.textBlack),
                                       ),
                                     ],
                                   ),
@@ -805,8 +605,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                               child: Container(
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.backgroundPurple),
+                                  border: Border.all(color: AppColors.backgroundPurple),
                                   color: AppColors.backgroundPurple,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -827,8 +626,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Start Transcribing",
-                                          style: AppFonts.medium(
-                                              16, AppColors.textWhite),
+                                          style: AppFonts.medium(16, AppColors.textWhite),
                                         ),
                                       ],
                                     ),
@@ -847,8 +645,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                               child: Container(
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.buttonBackgroundGreen),
+                                  border: Border.all(color: AppColors.buttonBackgroundGreen),
                                   color: AppColors.buttonBackgroundGreen,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -869,8 +666,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Pause",
-                                          style: AppFonts.medium(
-                                              16, AppColors.textWhite),
+                                          style: AppFonts.medium(16, AppColors.textWhite),
                                         ),
                                       ],
                                     ),
@@ -887,8 +683,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                               child: Container(
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.buttonBackgroundred),
+                                  border: Border.all(color: AppColors.buttonBackgroundred),
                                   color: AppColors.buttonBackgroundred,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -909,8 +704,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Stop Transcribing",
-                                          style: AppFonts.medium(
-                                              16, AppColors.textWhite),
+                                          style: AppFonts.medium(16, AppColors.textWhite),
                                         ),
                                       ],
                                     ),
@@ -927,6 +721,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
               })
             ],
           )),
-    ), globalKey: _key);
+        ),
+        globalKey: _key);
   }
 }

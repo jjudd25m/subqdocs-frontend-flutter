@@ -10,6 +10,8 @@ import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
+import '../../custom_drawer/controllers/custom_drawer_controller.dart';
+import '../../home/controllers/home_controller.dart';
 import '../model/login_model.dart';
 import '../repository/login_repository.dart';
 
@@ -47,8 +49,6 @@ class LoginController extends GetxController {
   }
 
   Future<void> authLoginUser() async {
-    Get.put(GlobalController());
-
     if (isRememberMe.value) {
       AppPreference.instance.setBool(AppString.prefKeyRememberMe, true);
       AppPreference.instance.setString(AppString.prefKeyRememberEmail, emailController.text);
@@ -72,7 +72,9 @@ class LoginController extends GetxController {
       await AppPreference.instance.removeKey(AppString.schedulePatientList);
       AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
       CustomToastification().showToast("User logged in successfully", type: ToastificationType.success);
-      Get.offAllNamed(Routes.HOME);
+      // Get.replace(Routes.HOME);
+      Get.offNamed(Routes.HOME);
+      Get.put(GlobalController());
     } catch (error) {
       isLoading.value = false;
       customPrint("login catch error is $error");

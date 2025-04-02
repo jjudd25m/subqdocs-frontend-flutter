@@ -103,10 +103,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(this);
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globalController.addRouteInit(Routes.PATIENT_INFO);
-
     });
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
@@ -582,21 +580,17 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
 
-
-    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.PATIENT_INFO )
-    {
-
-
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
       globalController.popRoute();
     }
     // globalController.popRoute();
   }
+
   Future<void> onRefresh() async {
     print("_onRefresh called");
 
@@ -1048,40 +1042,40 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> changeStatus() async {
-    try {
-      Loader().showLoadingDialogForSimpleLoader();
+    // try {
+    Loader().showLoadingDialogForSimpleLoader();
 
-      Map<String, dynamic> param = {};
+    Map<String, dynamic> param = {};
 
-      param['status'] = "Finalized";
+    param['status'] = "Finalized";
 
-      ChangeStatusModel changeStatusModel = await _patientInfoRepository.changeStatus(id: visitId, params: param);
-      if (changeStatusModel.responseType == "success") {
-        Get.back();
-        Get.back();
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
-        if (patientTranscriptUploadModel.responseData?.id != null) {
-          Get.back();
-          // Get.back();
-        } else {
-          Get.back();
-          // Get.back();
-          dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
-            "visitId": visitId,
-            "patientId": patientId,
-            "unique_tag": DateTime.now().toString(),
-          });
-        }
-      } else {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+    ChangeStatusModel changeStatusModel = await _patientInfoRepository.changeStatus(id: visitId, params: param);
+    if (changeStatusModel.responseType == "success") {
+      Get.back();
+      Get.back();
+      CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+      if (patientTranscriptUploadModel.responseData?.id != null) {
         Get.back();
         // Get.back();
+      } else {
+        Get.back();
+        // Get.back();
+        dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {
+          "visitId": visitId,
+          "patientId": patientId,
+          "unique_tag": DateTime.now().toString(),
+        });
       }
-    } catch (e) {
-      // customPrint("$e");
-      CustomToastification().showToast("$e", type: ToastificationType.error);
+    } else {
+      CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+      Get.back();
       // Get.back();
     }
+    // } catch (e) {
+    //   // customPrint("$e");
+    //   Get.back();
+    //   CustomToastification().showToast("$e", type: ToastificationType.error);
+    // }
   }
 
   Future<void> getTranscript() async {

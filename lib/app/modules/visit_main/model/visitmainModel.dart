@@ -26,6 +26,7 @@ class VisitMainPatientDetails {
 }
 
 class ResponseData {
+  String? doctorName;
   String? doctorFirstName;
   String? doctorLastName;
   int? visitId;
@@ -62,6 +63,7 @@ class ResponseData {
       this.personalNote});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
+    doctorName = json['doctorName'];
     doctorFirstName = json['doctor_first_name'];
     doctorLastName = json['doctor_last_name'];
     visitId = json['visit_id'];
@@ -86,6 +88,7 @@ class ResponseData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['doctorName'] = doctorName;
     data['doctor_first_name'] = doctorFirstName;
     data['doctor_last_name'] = doctorLastName;
     data['visit_id'] = visitId;

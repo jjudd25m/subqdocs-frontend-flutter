@@ -45,6 +45,32 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+        onItemSelected: (index) async {
+          if (index == 0) {
+            final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 1) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 1,
+            });
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 2) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 2,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 3) {
+            Get.toNamed(Routes.HOME, arguments: {
+              "tabIndex": 0,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 4) {
+            _key.currentState!.closeDrawer();
+            final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          }
+        },
         body: GestureDetector(
           onTap: removeFocus,
           child: SafeArea(

@@ -369,18 +369,21 @@ class ResponseData {
   int? id;
   String? status;
   FullNoteDetails? fullNoteDetails;
+  String? message;
 
-  ResponseData({this.id, this.status, this.fullNoteDetails});
+  ResponseData({this.id, this.status, this.fullNoteDetails, this.message});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
+    message = json['message'];
     fullNoteDetails = json['full_note_details'] != null ? FullNoteDetails.fromJson(json['full_note_details']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['message'] = message;
     data['status'] = status;
     if (fullNoteDetails != null) {
       data['full_note_details'] = fullNoteDetails!.toJson();

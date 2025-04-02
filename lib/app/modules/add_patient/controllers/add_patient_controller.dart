@@ -94,6 +94,8 @@ class AddPatientController extends GetxController {
   RxList<MediaListingModel> list = RxList();
   RxList<MediaListingModel> selectedList = RxList();
 
+  double totalFileSize = 0.0;
+
   String getNextRoundedTime() {
     DateTime now = DateTime.now();
 
@@ -123,7 +125,8 @@ class AddPatientController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT || globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT ||
+        globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
       globalController.popRoute();
     }
     // globalController.popRoute();
@@ -164,6 +167,13 @@ class AddPatientController extends GetxController {
     return dateFormat.format(date); // Format date to dd/MM/yyyy
   }
 
+  void calculateTotalFileSize() {
+    totalFileSize = 0.0;
+    for (var item in list) {
+      totalFileSize += (item.file?.lengthSync() ?? 0) / (1024 * 1024); // Convert bytes to MB
+    }
+  }
+
   void addImage() {
     selectedList.addAll(list);
     list.clear();
@@ -175,9 +185,11 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> pickFiles() async {
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
 
     customPrint("media  file is  ${fileList}");
+
+    // double totalFileSize = 0.0;
 
     fileList?.forEach(
       (element) {
@@ -185,6 +197,7 @@ class AddPatientController extends GetxController {
         String? _fileName;
         DateTime? _pickDate;
         int? _fileSize;
+
         if (element != null) {
           _fileName = element.name; // Get the file name
           _pickDate = DateTime.now(); // Get the date when the file is picked
@@ -192,6 +205,8 @@ class AddPatientController extends GetxController {
           // Get the size of the file
           File file = File(element.xFile.path);
           _fileSize = file.lengthSync(); // Size in bytes
+
+          // totalFileSize += _fileSize / (1024 * 1024);
 
           String? _filesizeString = _formatFileSize(_fileSize);
 
@@ -208,6 +223,10 @@ class AddPatientController extends GetxController {
         list.refresh();
       },
     );
+
+    calculateTotalFileSize();
+
+    print("total file size is $totalFileSize");
   }
 
   Future<void> captureProfileImage() async {
@@ -282,7 +301,7 @@ class AddPatientController extends GetxController {
     if (selectedList.isNotEmpty) {
       customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
-      profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
+      // profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
     } else {
       customPrint("profile is not  available");
     }
@@ -335,8 +354,9 @@ class AddPatientController extends GetxController {
 
     try {
       AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-      isLoading.value = false;
       customPrint("_addPatientRepository response is ${addPatientModel.toJson()} ");
+      await uploadAttachments(addPatientModel.responseData?.id.toString() ?? "");
+      isLoading.value = false;
       CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
 
       if (isSaveAddAnother.value == false) {
@@ -356,6 +376,27 @@ class AddPatientController extends GetxController {
       customPrint("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
     }
+  }
+
+  Future<bool> uploadAttachments(String patientId) async {
+    Loader().showLoadingDialogForSimpleLoader();
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+    Map<String, List<File>> profileParams = {};
+    if (selectedList.isNotEmpty) {
+      customPrint("profile is   available");
+      // param['profile_image'] = profileImage.value;
+      profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
+      // profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+    } else {
+      customPrint("profile is not  available");
+    }
+    await _addPatientRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId);
+    selectedList.clear();
+    Get.back();
+
+    return true;
+    // getPatientAttachment();
   }
 
   Future<void> clearForm() async {

@@ -78,6 +78,7 @@ dependencies:
   phone_number_text_input_formatter: ^0.0.2
   mask_text_input_formatter: ^2.9.0
 #  universal_file_viewer: ^0.1.1
+  awesome_side_sheet: ^0.0.3
 
 
 dev_dependencies:
@@ -105,6 +106,7 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+    - assets/states_cities.json
 
   fonts:
     - family: 'Poppins'

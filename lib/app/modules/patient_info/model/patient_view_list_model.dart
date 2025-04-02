@@ -67,18 +67,16 @@ class ResponseData {
   int id;
   String status;
   VisitNoteDetails visitNoteDetails;
+  String? message;
 
-  ResponseData({
-    required this.id,
-    required this.status,
-    required this.visitNoteDetails,
-  });
+  ResponseData({required this.id, required this.status, required this.visitNoteDetails, this.message});
 
   // fromJson method
   factory ResponseData.fromJson(Map<String, dynamic> json) {
     return ResponseData(
       id: json['id'] ?? 0,
       status: json['status'] ?? '',
+      message: json['message'],
       visitNoteDetails: VisitNoteDetails.fromJson(json['visit_note_details'] ?? {}),
     );
   }
@@ -87,6 +85,7 @@ class ResponseData {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'message': message,
       'status': status,
       'visit_note_details': visitNoteDetails.toJson(),
     };

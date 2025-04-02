@@ -59,3 +59,56 @@ class PostalCodeFormatter extends TextInputFormatter {
     return oldValue;
   }
 }
+
+class MedicalLicenseNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only alphanumeric characters (A-Z, a-z, 0-9) and restrict to a maximum of 9 characters.
+    String filtered = newValue.text.replaceAll(RegExp('[^a-zA-Z0-9]'), '');
+
+    if (filtered.length > 9) {
+      filtered = filtered.substring(0, 9); // Limit to 9 characters.
+    }
+
+    return TextEditingValue(
+      text: filtered,
+      selection: TextSelection.collapsed(offset: filtered.length),
+    );
+  }
+}
+
+class NpiFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only digits (0-9) and restrict to a maximum of 10 digits
+    String filtered = newValue.text.replaceAll(RegExp('[^0-9]'), '');
+
+    // Limit the length to 10 digits
+    if (filtered.length > 10) {
+      filtered = filtered.substring(0, 10);
+    }
+
+    return TextEditingValue(
+      text: filtered,
+      selection: TextSelection.collapsed(offset: filtered.length),
+    );
+  }
+}
+
+class TaxonomyCodeFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only alphanumeric characters (0-9, A-Z, a-z)
+    String filtered = newValue.text.replaceAll(RegExp('[^a-zA-Z0-9]'), '');
+
+    // Limit the length to exactly 7 characters (if more, truncate)
+    if (filtered.length > 7) {
+      filtered = filtered.substring(0, 7);
+    }
+
+    return TextEditingValue(
+      text: filtered,
+      selection: TextSelection.collapsed(offset: filtered.length),
+    );
+  }
+}

@@ -8,6 +8,8 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'app/core/common/app_preferences.dart';
 import 'app/core/common/global_controller.dart';
+import 'app/modules/custom_drawer/controllers/custom_drawer_controller.dart';
+import 'app/modules/home/controllers/home_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -37,7 +39,7 @@ Future<void> main() async {
     },
   );
 
-  Get.put(GlobalController());
+  Get.put(GlobalController(), permanent: true);
 
   runApp(
     ToastificationWrapper(

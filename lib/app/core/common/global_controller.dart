@@ -38,9 +38,8 @@ import 'app_preferences.dart';
 import 'logger.dart';
 
 class GlobalController extends GetxController {
-  RxInt homeTabIndex = RxInt(0);
   // var breadcrumbHistory = <String>[];
-
+  RxInt tabIndex = RxInt(0);
   Map<String, String> breadcrumbs = {
     Routes.HOME: 'Patients & Visits',
     Routes.ADD_PATIENT: 'Add New',
@@ -80,8 +79,7 @@ class GlobalController extends GetxController {
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible:
-          true, // Allows dismissing the dialog by tapping outside
+      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return GlobleAttchmnets(); // Our custom dialog
       },
@@ -105,21 +103,17 @@ class GlobalController extends GetxController {
 
       param['status'] = status;
 
-      ChangeStatusModel changeStatusModel = await visitMainRepository
-          .changeStatus(id: visitId.value, params: param);
+      ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
       if (changeStatusModel.responseType == "success") {
         // Get.back();
         // Get.back();
-        CustomToastification().showToast("${changeStatusModel.message}",
-            type: ToastificationType.success);
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
 
         if (Get.currentRoute == Routes.VISIT_MAIN) {
-          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"])
-              .updateData();
+          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).updateData();
         }
       } else {
-        CustomToastification().showToast("${changeStatusModel.message}",
-            type: ToastificationType.error);
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
         // Get.back();
         // Get.back();
       }
@@ -135,8 +129,7 @@ class GlobalController extends GetxController {
       return;
     }
 
-    final List<ConnectivityResult> connectivityResult =
-        await (Connectivity().checkConnectivity());
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
       customPrint("internet not available ");
@@ -144,14 +137,9 @@ class GlobalController extends GetxController {
       // loadingMessage.value = "Uploading Audio";
       Loader().showLoadingDialogForSimpleLoader();
 
-      Uint8List audioBytes =
-          await audioFile.readAsBytes(); // Read audio file as bytes
+      Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(
-          audioData: audioBytes,
-          fileName: audioFile.path,
-          status: 'pending',
-          visitId: visitId.value);
+      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
 
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
@@ -161,33 +149,24 @@ class GlobalController extends GetxController {
 
       Get.back();
 
-      CustomToastification().showToast(
-          "Audio saved locally. Will upload when internet is available.",
-          type: ToastificationType.success);
+      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
-      List<AudioFile> audio =
-          await DatabaseHelper.instance.getPendingAudioFiles();
+      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
 
       for (var file in audio) {
-        customPrint(
-            "audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
+        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
       }
     } else {
       customPrint("internet available");
       // isLoading.value = true;
       // loadingMessage.value = "Uploading Audio";
       Loader().showLoadingDialogForSimpleLoader();
-      var loginData = LoginModel.fromJson(jsonDecode(
-          AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await visitMainRepository.uploadAudio(
-              audioFile: audioFile,
-              token: loginData.responseData?.token ?? "",
-              patientVisitId: visitId.value);
+          await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
 
-      customPrint(
-          "audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       // isLoading.value = false;
       Get.back();
@@ -200,38 +179,31 @@ class GlobalController extends GetxController {
 
       if (Get.currentRoute == Routes.VISIT_MAIN) {
         // Get.find<VisitMainController>().getPatientDetails();
-        Get.find<VisitMainController>(tag: Get.arguments["unique_tag"])
-            .getPatientDetails();
+        Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
       }
     }
   }
 
   Future<void> uploadAttachments() async {
     Loader().showLoadingDialogForSimpleLoader();
-    var loginData = LoginModel.fromJson(jsonDecode(
-        AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     Map<String, List<File>> profileParams = {};
     if (list.isNotEmpty) {
       customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;
-      profileParams['attachments'] =
-          list.map((model) => model.file).toList().whereType<File>().toList();
+      profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
     } else {
       customPrint("profile is not  available");
     }
-    await visitMainRepository.uploadAttachments(
-        files: profileParams,
-        token: loginData.responseData?.token ?? "",
-        patientVisitId: patientId.value);
+    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
     list.clear();
     Get.back();
 
     if (Get.currentRoute == Routes.VISIT_MAIN) {
       // Get.find<VisitMainController>().getPatientAttachment();
 
-      Get.find<VisitMainController>(tag: Get.arguments["unique_tag"])
-          .getPatientAttachment();
+      Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientAttachment();
     }
   }
 
@@ -276,15 +248,9 @@ class GlobalController extends GetxController {
             // Truncate the name to 12 characters and add ellipsis
             _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
           } else {
-            _shortFileName = p
-                .basename(_fileName); // Use the full name if it's already short
+            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(
-              file: file,
-              previewImage: null,
-              fileName: _shortFileName,
-              date: _formatDate(_pickDate),
-              Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
         }
       },
     );
@@ -296,14 +262,12 @@ class GlobalController extends GetxController {
     }
   }
 
-  Future<void> captureImage(BuildContext context,
-      {bool fromCamera = true, bool clear = true}) async {
+  Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
     if (clear) {
       list.clear();
     }
 
-    XFile? image =
-        await MediaPickerServices().pickImage(fromCamera: fromCamera);
+    XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
 
     customPrint("media  file is  $image");
 
@@ -325,15 +289,9 @@ class GlobalController extends GetxController {
         // Truncate the name to 12 characters and add ellipsis
         _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
       } else {
-        _shortFileName =
-            p.basename(_fileName); // Use the full name if it's already short
+        _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file,
-          previewImage: null,
-          fileName: _shortFileName,
-          date: _formatDate(_pickDate),
-          Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
     }
 
     list.refresh();
@@ -351,10 +309,7 @@ class GlobalController extends GetxController {
     int targetIndex = breadcrumbHistory.indexOf(targetRoute);
     if (targetIndex != -1) {
       // Pop screens above the target route
-      breadcrumbHistory.removeRange(
-          targetIndex + 1,
-          breadcrumbHistory
-              .length); // Remove all screens above the target route
+      breadcrumbHistory.removeRange(targetIndex + 1, breadcrumbHistory.length); // Remove all screens above the target route
       breadcrumbHistory.refresh();
       print('Popped screens above: $targetRoute');
       // closeFormState = 0;
@@ -381,8 +336,7 @@ class GlobalController extends GetxController {
 
   String getKeyByValue(String value) {
     // Iterate over the map and check for a match
-    return breadcrumbs.keys.firstWhere((key) => breadcrumbs[key] == value,
-        orElse: () => 'Not Found');
+    return breadcrumbs.keys.firstWhere((key) => breadcrumbs[key] == value, orElse: () => 'Not Found');
   }
 
   // Pop the last route from the stack
@@ -456,12 +410,10 @@ class GlobalController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    HomePastPatientListSortingModel? homePastPatientData =
-        await AppPreference.instance.getHomePastPatientListSortingModel();
+    HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
     if (homePastPatientData != null) {
       homePastPatientListSortingModel.value = homePastPatientData;
-      print(
-          "existing HomePastPatientListSortingModel:- ${homePastPatientData.toJson()}");
+      print("existing HomePastPatientListSortingModel:- ${homePastPatientData.toJson()}");
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['sortingPastPatient'] = sortingPastPatient;
@@ -472,17 +424,14 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homePastPatientListSortingModel.value =
-          HomePastPatientListSortingModel.fromJson(json);
+      homePastPatientListSortingModel.value = HomePastPatientListSortingModel.fromJson(json);
       print("first initialize homePastPatientListSortingModel :- $json");
     }
 
-    HomePatientListSortingModel? homePatientListData =
-        await AppPreference.instance.getHomePatientListSortingModel();
+    HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
     if (homePatientListData != null) {
       homePatientListSortingModel.value = homePatientListData;
-      print(
-          "existing HomePatientListSortingModel:- ${homePatientListData.toJson()}");
+      print("existing HomePatientListSortingModel:- ${homePatientListData.toJson()}");
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['sortingPatientList'] = sortingPatientList;
@@ -492,17 +441,14 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homePatientListSortingModel.value =
-          HomePatientListSortingModel.fromJson(json);
+      homePatientListSortingModel.value = HomePatientListSortingModel.fromJson(json);
       print("first initialize homePatientListSortingModel :- $json");
     }
 
-    HomeScheduleListSortingModel? homeScheduleListData =
-        await AppPreference.instance.getHomeScheduleListSortingModel();
+    HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
     if (homeScheduleListData != null) {
       homeScheduleListSortingModel.value = homeScheduleListData;
-      print(
-          "existing HomeScheduleListSortingModel:- ${homeScheduleListData.toJson()}");
+      print("existing HomeScheduleListSortingModel:- ${homeScheduleListData.toJson()}");
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['scheduleVisitSelectedSorting'] = scheduleVisitSelectedSorting;
@@ -512,8 +458,7 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homeScheduleListSortingModel.value =
-          HomeScheduleListSortingModel.fromJson(json);
+      homeScheduleListSortingModel.value = HomeScheduleListSortingModel.fromJson(json);
       print("first initialize homeScheduleListSortingModel :- $json");
     }
 
@@ -524,33 +469,20 @@ class GlobalController extends GetxController {
   void setPastListingModel() {
     pastFilterListingModel.clear();
 
-    if ((homePastPatientListSortingModel.value?.selectedStatusIndex ?? [])
-        .isNotEmpty) {
-      pastFilterListingModel.add(FilterListingModel(
-          filterName: "Status",
-          filterValue: homePastPatientListSortingModel
-              .value!.selectedStatusIndex!
-              .join(",")));
+    if ((homePastPatientListSortingModel.value?.selectedStatusIndex ?? []).isNotEmpty) {
+      pastFilterListingModel.add(FilterListingModel(filterName: "Status", filterValue: homePastPatientListSortingModel.value!.selectedStatusIndex!.join(",")));
     }
 
-    if ((homePastPatientListSortingModel.value?.startDate ?? "").isNotEmpty &&
-        (homePastPatientListSortingModel.value?.endDate ?? "").isNotEmpty) {
-      pastFilterListingModel.add(FilterListingModel(
-          filterName: "Visit Date",
-          filterValue:
-              "${homePastPatientListSortingModel.value?.startDate} - ${homePastPatientListSortingModel.value?.endDate} "));
+    if ((homePastPatientListSortingModel.value?.startDate ?? "").isNotEmpty && (homePastPatientListSortingModel.value?.endDate ?? "").isNotEmpty) {
+      pastFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homePastPatientListSortingModel.value?.startDate} - ${homePastPatientListSortingModel.value?.endDate} "));
     }
   }
 
   void setScheduleListingModel() {
     scheduleFilterListingModel.clear();
 
-    if ((homeScheduleListSortingModel.value?.startDate ?? "").isNotEmpty &&
-        (homeScheduleListSortingModel.value?.endDate ?? "").isNotEmpty) {
-      scheduleFilterListingModel.add(FilterListingModel(
-          filterName: "Visit Date",
-          filterValue:
-              "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} "));
+    if ((homeScheduleListSortingModel.value?.startDate ?? "").isNotEmpty && (homeScheduleListSortingModel.value?.endDate ?? "").isNotEmpty) {
+      scheduleFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} "));
     }
   }
 
@@ -595,19 +527,16 @@ class GlobalController extends GetxController {
 
   Future<void> saveHomePastPatientData() async {
     setPastListingModel();
-    AppPreference.instance.setHomePastPatientListSortingModel(
-        homePastPatientListSortingModel.value!);
+    AppPreference.instance.setHomePastPatientListSortingModel(homePastPatientListSortingModel.value!);
   }
 
   Future<void> saveHomePatientListData() async {
-    AppPreference.instance
-        .setHomePatientListSortingModel(homePatientListSortingModel.value!);
+    AppPreference.instance.setHomePatientListSortingModel(homePatientListSortingModel.value!);
   }
 
   Future<void> saveHomeScheduleListData() async {
     setScheduleListingModel();
 
-    AppPreference.instance
-        .setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
+    AppPreference.instance.setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
   }
 }

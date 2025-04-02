@@ -34,13 +34,11 @@ class PatientInfoView extends StatefulWidget {
 }
 
 class _PatientInfoViewState extends State<PatientInfoView> {
-  PatientInfoController controller =
-      Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
+  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  String formatDateTime(
-      {required String firstDate, required String secondDate}) {
+  String formatDateTime({required String firstDate, required String secondDate}) {
     if (firstDate != "" && secondDate != "") {
       // Parse the first and second arguments to DateTime objects
       DateTime firstDateTime = DateTime.parse(firstDate);
@@ -50,8 +48,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
 
       // Format the second time (for hours and minutes with am/pm)
-      String formattedTime =
-          DateFormat('h:mm a').format(secondDateTime.toLocal());
+      String formattedTime = DateFormat('h:mm a').format(secondDateTime.toLocal());
 
       // Return the formatted string in the desired format
       return '$formattedDate $formattedTime';
@@ -63,6 +60,36 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+        onItemSelected: (index) async {
+          if (index == 0) {
+            final result = await Get.toNamed(Routes.ADD_PATIENT);
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 1) {
+            Get.offNamed(Routes.HOME, arguments: {
+              "tabIndex": 1,
+            });
+
+            // Get.toNamed(Routes.HOME, arguments: {
+            //   "tabIndex": 1,
+            // });
+
+            _key.currentState!.closeDrawer();
+          } else if (index == 2) {
+            Get.offNamed(Routes.HOME, arguments: {
+              "tabIndex": 2,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 3) {
+            Get.offNamed(Routes.HOME, arguments: {
+              "tabIndex": 0,
+            });
+            _key.currentState!.closeDrawer();
+          } else if (index == 4) {
+            _key.currentState!.closeDrawer();
+            final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          }
+        },
         body: SafeArea(
             child: Column(
           children: [
@@ -80,16 +107,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                       children: [
                         Obx(() {
                           return BreadcrumbWidget(
-                            breadcrumbHistory: controller
-                                .globalController.breadcrumbHistory.value,
+                            breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                             onBack: (breadcrumb) {
-                              controller.globalController
-                                  .popUntilRoute(breadcrumb);
+                              controller.globalController.popUntilRoute(breadcrumb);
                               // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                              while (Get.currentRoute !=
-                                  controller.globalController
-                                      .getKeyByValue(breadcrumb)) {
+                              while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
                                 Get.back(); // Pop the current screen
                               }
                             },
@@ -99,15 +122,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                           children: <Widget>[
                             Container(
                               width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                 padding: const EdgeInsets.all(14),
                                 child: Text(
                                   "Patient Visit Record",
-                                  style:
-                                      AppFonts.regular(17, AppColors.textBlack),
+                                  style: AppFonts.regular(17, AppColors.textBlack),
                                 ),
                               ),
                             ),
@@ -115,25 +135,17 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             Obx(() {
                               return Theme(
                                 data: ThemeData(
-                                  splashColor:
-                                      Colors.transparent, // Remove splash color
-                                  highlightColor: Colors
-                                      .transparent, // Remove highlight color
+                                  splashColor: Colors.transparent, // Remove splash color
+                                  highlightColor: Colors.transparent, // Remove highlight color
                                 ),
                                 child: ExpansionTile(
                                   initiallyExpanded: true,
-                                  collapsedShape: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(8)),
+                                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                   backgroundColor: AppColors.backgroundWhite,
-                                  collapsedBackgroundColor:
-                                      AppColors.backgroundWhite,
+                                  collapsedBackgroundColor: AppColors.backgroundWhite,
                                   title: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -142,11 +154,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           },
                                           child: Container(
                                             color: AppColors.white,
-                                            padding: EdgeInsets.only(
-                                                left: 10.0,
-                                                top: 20.0,
-                                                bottom: 20.0,
-                                                right: 20.0),
+                                            padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
                                             child: SvgPicture.asset(
                                               ImagePath.logo_back,
                                               height: 20,
@@ -155,47 +163,32 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           ),
                                         ),
                                         ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
+                                            borderRadius: BorderRadius.circular(30),
                                             child: BaseImageView(
-                                              imageUrl: controller
-                                                      .patientData
-                                                      .value
-                                                      ?.responseData
-                                                      ?.profileImage ??
-                                                  "",
+                                              imageUrl: controller.patientData.value?.responseData?.profileImage ?? "",
                                               height: 60,
                                               width: 60,
-                                              nameLetters:
-                                                  "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
+                                              nameLetters: "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""}",
                                               fontSize: 14,
                                             )),
                                         SizedBox(
                                           width: 10,
                                         ),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               textAlign: TextAlign.center,
                                               "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""} ",
-                                              style: AppFonts.medium(
-                                                  16, AppColors.textBlack),
+                                              style: AppFonts.medium(16, AppColors.textBlack),
                                             ),
                                             SizedBox(
                                               width: 15,
                                             ),
                                             Text(
                                               textAlign: TextAlign.center,
-                                              controller
-                                                      .patientData
-                                                      .value
-                                                      ?.responseData
-                                                      ?.patientId ??
-                                                  "",
-                                              style: AppFonts.regular(
-                                                  11, AppColors.textGrey),
+                                              controller.patientData.value?.responseData?.patientId ?? "",
+                                              style: AppFonts.regular(11, AppColors.textGrey),
                                             ),
                                           ],
                                         ),
@@ -213,31 +206,24 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                       height: 10,
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Column(
                                             children: [
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 "Age",
-                                                style: AppFonts.regular(
-                                                    12, AppColors.textBlack),
+                                                style: AppFonts.regular(12, AppColors.textBlack),
                                               ),
                                               SizedBox(
                                                 height: 6,
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                controller.patientData.value
-                                                        ?.responseData?.age
-                                                        .toString() ??
-                                                    "",
-                                                style: AppFonts.regular(
-                                                    14, AppColors.textGrey),
+                                                controller.patientData.value?.responseData?.age.toString() ?? "",
+                                                style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
                                           ),
@@ -246,22 +232,15 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 "Gender",
-                                                style: AppFonts.regular(
-                                                    12, AppColors.textBlack),
+                                                style: AppFonts.regular(12, AppColors.textBlack),
                                               ),
                                               SizedBox(
                                                 height: 6,
                                               ),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                controller
-                                                        .patientData
-                                                        .value
-                                                        ?.responseData
-                                                        ?.gender ??
-                                                    "",
-                                                style: AppFonts.regular(
-                                                    14, AppColors.textGrey),
+                                                controller.patientData.value?.responseData?.gender ?? "",
+                                                style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
                                           ),
@@ -270,8 +249,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 "Visit Date & Time",
-                                                style: AppFonts.regular(
-                                                    12, AppColors.textBlack),
+                                                style: AppFonts.regular(12, AppColors.textBlack),
                                               ),
                                               SizedBox(
                                                 height: 6,
@@ -279,32 +257,18 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 formatDateTime(
-                                                    firstDate: controller
-                                                            .patientData
-                                                            .value
-                                                            ?.responseData
-                                                            ?.visitDate ??
-                                                        "-",
-                                                    secondDate: controller
-                                                            .patientData
-                                                            .value
-                                                            ?.responseData
-                                                            ?.visitTime ??
-                                                        ""),
-                                                style: AppFonts.regular(
-                                                    14, AppColors.textGrey),
+                                                    firstDate: controller.patientData.value?.responseData?.visitDate ?? "-", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                                style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
                                           ),
                                           Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 textAlign: TextAlign.start,
                                                 "Medical Assistant",
-                                                style: AppFonts.regular(
-                                                    12, AppColors.textBlack),
+                                                style: AppFonts.regular(12, AppColors.textBlack),
                                               ),
                                               SizedBox(
                                                 height: 6,
@@ -314,34 +278,22 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     "Missie Cooper",
-                                                    style: AppFonts.regular(14,
-                                                        AppColors.textPurple),
+                                                    style: AppFonts.regular(14, AppColors.textPurple),
                                                   ),
                                                   SizedBox(
                                                     width: 5,
                                                   ),
                                                   Container(
                                                     decoration: BoxDecoration(
-                                                      color:
-                                                          AppColors.textPurple,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      border: Border.all(
-                                                          width: 0.8,
-                                                          color: AppColors
-                                                              .textDarkGrey),
+                                                      color: AppColors.textPurple,
+                                                      borderRadius: BorderRadius.circular(12),
+                                                      border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
                                                     ),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 7.5,
-                                                            vertical: 2),
+                                                    padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
                                                     child: Text(
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      textAlign: TextAlign.center,
                                                       "+2",
-                                                      style: AppFonts.bold(10,
-                                                          AppColors.textWhite),
+                                                      style: AppFonts.bold(10, AppColors.textWhite),
                                                     ),
                                                   ),
                                                   SizedBox(width: 5),
@@ -355,14 +307,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             ],
                                           ),
                                           Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 textAlign: TextAlign.center,
                                                 "Doctor",
-                                                style: AppFonts.regular(
-                                                    12, AppColors.textBlack),
+                                                style: AppFonts.regular(12, AppColors.textBlack),
                                               ),
                                               SizedBox(
                                                 width: 15,
@@ -371,9 +321,10 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 children: [
                                                   Text(
                                                     textAlign: TextAlign.center,
-                                                    "${controller.patientData.value?.responseData?.doctorFirstName ?? "-"} ${controller.patientData.value?.responseData?.doctorLastName ?? ""}",
-                                                    style: AppFonts.regular(
-                                                        14, AppColors.textGrey),
+                                                    (controller.patientData.value?.responseData?.doctorName!.trim().isEmpty ?? false)
+                                                        ? "-"
+                                                        : "${controller.patientData.value?.responseData?.doctorName}",
+                                                    style: AppFonts.regular(14, AppColors.textGrey),
                                                   ),
                                                   SizedBox(width: 5),
                                                   // SvgPicture.asset(
@@ -398,18 +349,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             SizedBox(height: 10),
                             Container(
                               width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: AppColors.backgroundWhite),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Obx(
                                 () {
                                   return Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 6),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          color: AppColors.white),
+                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                       height: 45,
                                       child: SingleChildScrollView(
                                         physics: BouncingScrollPhysics(),
@@ -424,29 +369,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 isDoctorView: true,
                                                 text: " Power View ",
                                                 isOutline: true,
-                                                paddingText:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 16,
-                                                        vertical: 6),
+                                                paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
-                                                enabledTextColor: controller
-                                                            .tabIndex.value ==
-                                                        0
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.textGrey,
-                                                enabledColor:
-                                                    controller.tabIndex.value ==
-                                                            0
-                                                        ? AppColors
-                                                            .buttonPurpleLight
-                                                        : AppColors.clear,
-                                                outLineEnabledColor:
-                                                    AppColors.textGrey,
-                                                outlineColor: controller
-                                                            .tabIndex.value ==
-                                                        0
-                                                    ? AppColors.backgroundPurple
-                                                    : AppColors.clear,
+                                                enabledTextColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                enabledColor: controller.tabIndex.value == 0 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                                outLineEnabledColor: AppColors.textGrey,
+                                                outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
                                               ),
                                             ),
                                             IntrinsicWidth(
@@ -456,26 +384,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               },
                                               text: " Full Note ",
                                               isOutline: true,
-                                              paddingText: EdgeInsets.symmetric(
-                                                  horizontal: 16, vertical: 6),
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor:
-                                                  controller.tabIndex.value == 3
-                                                      ? AppColors
-                                                          .backgroundPurple
-                                                      : AppColors.textGrey,
-                                              enabledColor:
-                                                  controller.tabIndex.value == 3
-                                                      ? AppColors
-                                                          .buttonPurpleLight
-                                                      : AppColors.clear,
-                                              outLineEnabledColor:
-                                                  AppColors.textGrey,
-                                              outlineColor:
-                                                  controller.tabIndex.value == 3
-                                                      ? AppColors
-                                                          .backgroundPurple
-                                                      : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 3 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.clear,
                                             )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
@@ -484,26 +398,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               },
                                               text: " Patient Note ",
                                               isOutline: true,
-                                              paddingText: EdgeInsets.symmetric(
-                                                  horizontal: 16, vertical: 6),
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor:
-                                                  controller.tabIndex.value == 2
-                                                      ? AppColors
-                                                          .backgroundPurple
-                                                      : AppColors.textGrey,
-                                              enabledColor:
-                                                  controller.tabIndex.value == 2
-                                                      ? AppColors
-                                                          .buttonPurpleLight
-                                                      : AppColors.clear,
-                                              outLineEnabledColor:
-                                                  AppColors.textGrey,
-                                              outlineColor:
-                                                  controller.tabIndex.value == 2
-                                                      ? AppColors
-                                                          .backgroundPurple
-                                                      : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
                                             )),
                                             IntrinsicWidth(
                                                 child: CustomAnimatedButton(
@@ -512,26 +412,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               },
                                               text: " Full Transcript ",
                                               isOutline: true,
-                                              paddingText: EdgeInsets.symmetric(
-                                                  horizontal: 16, vertical: 6),
+                                              paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                               fontSize: 14,
-                                              enabledTextColor:
-                                                  controller.tabIndex.value == 1
-                                                      ? AppColors
-                                                          .backgroundPurple
-                                                      : AppColors.textGrey,
-                                              enabledColor:
-                                                  controller.tabIndex.value == 1
-                                                      ? AppColors
-                                                          .buttonPurpleLight
-                                                      : AppColors.clear,
-                                              outLineEnabledColor:
-                                                  AppColors.textGrey,
-                                              outlineColor:
-                                                  controller.tabIndex.value == 1
-                                                      ? AppColors
-                                                          .backgroundPurple
-                                                      : AppColors.clear,
+                                              enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                              enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                              outLineEnabledColor: AppColors.textGrey,
+                                              outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
                                             )),
 
                                             // IntrinsicWidth(
@@ -584,9 +470,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             ),
                             SizedBox(height: 10),
                             Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: AppColors.backgroundWhite),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                               child: Obx(() {
                                 return Column(
                                   children: [
@@ -777,21 +661,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                     //     : SizedBox(
                                     //         height: 10,
                                     //       ),
-                                    if (controller.tabIndex.value == 0) ...[
-                                      DoctorView()
-                                    ],
-                                    if (controller.tabIndex.value == 1) ...[
-                                      FullTranscriptView()
-                                    ],
-                                    if (controller.tabIndex.value == 2) ...[
-                                      PatientView()
-                                    ],
-                                    if (controller.tabIndex.value == 3) ...[
-                                      FullNoteView()
-                                    ],
-                                    if (controller.tabIndex.value == 6) ...[
-                                      VisitDataView()
-                                    ],
+                                    if (controller.tabIndex.value == 0) ...[DoctorView()],
+                                    if (controller.tabIndex.value == 1) ...[FullTranscriptView()],
+                                    if (controller.tabIndex.value == 2) ...[PatientView()],
+                                    if (controller.tabIndex.value == 3) ...[FullNoteView()],
+                                    if (controller.tabIndex.value == 6) ...[VisitDataView()],
                                     SizedBox(height: 20),
                                   ],
                                 );
@@ -811,9 +685,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Container(
                 // color: AppColors.backgroundWhite,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: AppColors.backgroundWhite),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Obx(() {
                   return Row(
@@ -831,8 +703,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                 Container(
                                   height: 95,
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColors.backgroundPurple),
+                                    border: Border.all(color: AppColors.backgroundPurple),
                                     color: AppColors.backgroundPurple,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -840,8 +711,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           SvgPicture.asset(
                                             ImagePath.signature,
@@ -854,26 +724,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           Text(
                                             textAlign: TextAlign.center,
                                             "Digitally Signed by ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
-                                            style: AppFonts.medium(
-                                                16, AppColors.textWhite),
+                                            style: AppFonts.medium(16, AppColors.textWhite),
                                           ),
                                           Text(
                                             textAlign: TextAlign.center,
                                             formatDateTime(
-                                                firstDate: controller
-                                                        .patientData
-                                                        .value
-                                                        ?.responseData
-                                                        ?.visitDate ??
-                                                    "",
-                                                secondDate: controller
-                                                        .patientData
-                                                        .value
-                                                        ?.responseData
-                                                        ?.visitTime ??
-                                                    ""),
-                                            style: AppFonts.medium(
-                                                16, AppColors.textWhite),
+                                                firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                            style: AppFonts.medium(16, AppColors.textWhite),
                                           ),
                                         ],
                                       ),
@@ -884,9 +741,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                 Text(
                                   textAlign: TextAlign.center,
                                   "Amend Note",
-                                  style: AppFonts.medium(15, AppColors.textGrey)
-                                      .copyWith(
-                                          decoration: TextDecoration.underline),
+                                  style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline),
                                 ),
                               ],
                             ),
@@ -900,9 +755,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             child: Container(
                               height: 81,
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.textGrey
-                                        .withValues(alpha: 0.5)),
+                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
                                 color: AppColors.backgroundLightGrey,
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -923,8 +776,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                       Text(
                                         textAlign: TextAlign.center,
                                         "Add Photo or Document",
-                                        style: AppFonts.medium(
-                                            16, AppColors.textBlack),
+                                        style: AppFonts.medium(16, AppColors.textBlack),
                                       ),
                                     ],
                                   ),
@@ -933,9 +785,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             ),
                           ),
                         ),
-                        if (controller
-                                .patientData.value?.responseData?.visitStatus ==
-                            "Pending") ...[
+                        if (controller.patientData.value?.responseData?.visitStatus == "Pending") ...[
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
@@ -954,8 +804,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                               child: Container(
                                 height: 81,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.backgroundPurple),
+                                  border: Border.all(color: AppColors.backgroundPurple),
                                   color: AppColors.backgroundPurple,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -963,8 +812,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         SvgPicture.asset(
                                           ImagePath.signature,
@@ -977,8 +825,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                         Text(
                                           textAlign: TextAlign.center,
                                           "Sign and Finalize",
-                                          style: AppFonts.medium(
-                                              16, AppColors.textWhite),
+                                          style: AppFonts.medium(16, AppColors.textWhite),
                                         ),
                                       ],
                                     ),
