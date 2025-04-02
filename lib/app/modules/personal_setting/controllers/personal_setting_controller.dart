@@ -21,6 +21,7 @@ import '../../../core/common/logger.dart';
 import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/get_user_detail_model.dart';
+import '../model/update_user_response_model.dart';
 import '../model/us_state_city_model.dart';
 import '../repository/personal_setting_repository.dart';
 
@@ -229,6 +230,20 @@ class PersonalSettingController extends GetxController {
     try {
       dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       print("updateUserDetail is $response");
+
+      UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
+
+      if (updateUserResponseModel.responseData?.token != null) {
+        String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
+        if (loginKey.isNotEmpty) {
+          LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginKey));
+          loginModel.responseData?.token = updateUserResponseModel.responseData?.token;
+
+          AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
+          await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
+          // token = loginModel.responseData?.token ?? "";
+        }
+      }
 
       // getOrganizationDetail();
       getUserDetail();
