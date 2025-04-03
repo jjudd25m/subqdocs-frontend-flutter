@@ -169,13 +169,28 @@ class GlobalController extends GetxController {
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
       // isLoading.value = false;
-      Get.back();
+
       isStartTranscript.value = false;
       wipeData();
-      await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-        "trascriptUploadData": patientTranscriptUploadModel,
-        "unique_tag": DateTime.now().toString(),
-      });
+
+      if (Get.currentRoute == Routes.PATIENT_INFO) {
+        Get.until((route) => Get.currentRoute == Routes.HOME);
+
+        // Get.until(Routes.HOME, (route) => false);
+        breadcrumbHistory.clear();
+        addRoute(Routes.HOME);
+        // addRoute(Routes.PATIENT_INFO);
+
+        await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+          "trascriptUploadData": patientTranscriptUploadModel,
+          "unique_tag": DateTime.now().toString(),
+        });
+      } else {
+        await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+          "trascriptUploadData": patientTranscriptUploadModel,
+          "unique_tag": DateTime.now().toString(),
+        });
+      }
 
       if (Get.currentRoute == Routes.VISIT_MAIN) {
         // Get.find<VisitMainController>().getPatientDetails();

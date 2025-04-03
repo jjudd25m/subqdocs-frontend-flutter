@@ -196,8 +196,13 @@ class PrompErrorDialog extends StatelessWidget {
                       Expanded(
                         child: CustomAnimatedButton(
                           onPressed: () {
-                            Get.put(GlobalController());
-                            Get.offAllNamed(Routes.HOME);
+                            // Get.put(GlobalController());
+                            // Get.until(Routes.HOME);
+
+                            Get.until((route) => Get.currentRoute == Routes.HOME);
+                            final GlobalController globalController = Get.find();
+                            globalController.breadcrumbHistory.clear();
+                            globalController.addRoute(Routes.HOME);
                           },
                           text: " Okay ",
                           isOutline: true,

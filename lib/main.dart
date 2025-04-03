@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import 'package:subqdocs/app/data/service/socket_service.dart';
 import 'package:toastification/toastification.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-
 import 'app/core/common/app_preferences.dart';
 import 'app/core/common/global_controller.dart';
-import 'app/modules/custom_drawer/controllers/custom_drawer_controller.dart';
-import 'app/modules/home/controllers/home_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -39,7 +34,7 @@ Future<void> main() async {
     },
   );
 
-  Get.put(GlobalController(), permanent: true);
+  Get.put(GlobalController());
 
   runApp(
     ToastificationWrapper(
@@ -51,27 +46,4 @@ Future<void> main() async {
       ),
     ),
   );
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn = 'https://51d562a8649b2d66ba8553d8b09ae40d@o4508879490646016.ingest.us.sentry.io/4508879495954432';
-  //     // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
-  //     // We recommend adjusting this value in production.
-  //     options.tracesSampleRate = 1.0;
-  //     // The sampling rate for profiling is relative to tracesSampleRate
-  //     // Setting to 1.0 will profile 100% of sampled transactions:
-  //     options.profilesSampleRate = 1.0;
-  //   },
-  //   appRunner: () => runApp(
-  //     SentryWidget(
-  //       child: ToastificationWrapper(
-  //         child: GetMaterialApp(
-  //           title: "Application",
-  //           debugShowCheckedModeBanner: false,
-  //           initialRoute: AppPages.INITIAL,
-  //           getPages: AppPages.routes,
-  //         ),
-  //       ),
-  //     ),
-  //   ),
-  // );
 }

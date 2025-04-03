@@ -103,9 +103,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(this);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      globalController.addRouteInit(Routes.PATIENT_INFO);
-    });
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     customPrint("argument is :- ${Get.arguments}");
@@ -578,6 +575,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         );
       }
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.PATIENT_INFO);
+    });
   }
 
   @override

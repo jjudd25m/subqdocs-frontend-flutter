@@ -202,6 +202,7 @@ class GetOrganizationDetailResponseData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  String? organization_name;
   int? employeesCount;
 
   GetOrganizationDetailResponseData(
@@ -221,6 +222,7 @@ class GetOrganizationDetailResponseData {
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
+      this.organization_name,
       this.employeesCount});
 
   GetOrganizationDetailResponseData.fromJson(Map<String, dynamic> json) {
@@ -240,6 +242,7 @@ class GetOrganizationDetailResponseData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    organization_name = json['organization_name'];
     employeesCount = json['employeesCount'];
   }
 
@@ -261,6 +264,7 @@ class GetOrganizationDetailResponseData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['organization_name'] = organization_name;
     data['employeesCount'] = employeesCount;
     return data;
   }

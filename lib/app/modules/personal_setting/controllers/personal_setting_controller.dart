@@ -156,10 +156,27 @@ class PersonalSettingController extends GetxController {
     // }
   }
 
+  String formatPhoneNumber(String rawNumber) {
+    // Ensure the number is exactly 10 digits (US phone number format)
+    if (rawNumber.length == 11) {
+      return '+1 (${rawNumber.substring(1, 4)}) ${rawNumber.substring(4, 7)}-${rawNumber.substring(7)}';
+    } else {
+      // Handle invalid number length (you can customize this behavior)
+      return '+1 ';
+    }
+  }
+
+  String extractDigits(String input) {
+    // Use a regular expression to extract digits only
+    return input.replaceAll(RegExp(r'\D'), '');
+  }
+
   Future<void> setOrganizationData() async {
     organizationNameController.text = getOrganizationDetailModel.value?.responseData?.name ?? "";
     organizationEmailController.text = getOrganizationDetailModel.value?.responseData?.email ?? "";
-    organizationPhoneNumberController.text = getOrganizationDetailModel.value?.responseData?.contactNo ?? "";
+
+    organizationPhoneNumberController.text = formatPhoneNumber(getOrganizationDetailModel.value?.responseData?.contactNo ?? "");
+
     organizationAddress1Controller.text = getOrganizationDetailModel.value?.responseData?.address1 ?? "";
     organizationAddress2Controller.text = getOrganizationDetailModel.value?.responseData?.address2 ?? "";
     organizationStreetNameController.text = getOrganizationDetailModel.value?.responseData?.streetName ?? "";
@@ -180,11 +197,12 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> setUserDetail() async {
+    print("user data:- ${getUserDetailModel.value?.responseData?.toJson()}");
     userOrganizationNameNameController.text = getUserDetailModel.value?.responseData?.organizationName ?? "";
     userFirstNameController.text = getUserDetailModel.value?.responseData?.firstName ?? "";
     userLastNameController.text = getUserDetailModel.value?.responseData?.lastName ?? "";
     userEmailController.text = getUserDetailModel.value?.responseData?.email ?? "";
-    userPhoneNumberController.text = getUserDetailModel.value?.responseData?.contactNo ?? "";
+    userPhoneNumberController.text = formatPhoneNumber(getUserDetailModel.value?.responseData?.contactNo ?? "");
     userStreetNameController.text = getUserDetailModel.value?.responseData?.streetName ?? "";
     userCityController.text = getUserDetailModel.value?.responseData?.city ?? "";
     userStateController.text = getUserDetailModel.value?.responseData?.state ?? "";
@@ -194,7 +212,7 @@ class PersonalSettingController extends GetxController {
     userPractitionerController.text = getUserDetailModel.value?.responseData?.title ?? "";
     userMedicalLicenseNumberController.text = getUserDetailModel.value?.responseData?.medicalLicenseNumber ?? "";
     userLicenseExpiryDateController.text = getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "";
-    userNationalProviderIdentifierController.text = getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString() ?? "";
+    userNationalProviderIdentifierController.text = getUserDetailModel.value?.responseData?.nationalProviderIdentifier?.toString() ?? "";
     userTaxonomyCodeController.text = getUserDetailModel.value?.responseData?.taxonomyCode ?? "";
     userSpecializationController.text = getUserDetailModel.value?.responseData?.specialization ?? "";
   }
@@ -227,29 +245,32 @@ class PersonalSettingController extends GetxController {
       profileParams['user_image'] = [userProfileImage.value!];
     }
 
-    try {
-      dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-      print("updateUserDetail is $response");
+    // try {
+    dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+    print("updateUserDetail is $response");
 
-      UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
+    UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
 
-      if (updateUserResponseModel.responseData?.token != null) {
-        String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
-        if (loginKey.isNotEmpty) {
-          LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginKey));
-          loginModel.responseData?.token = updateUserResponseModel.responseData?.token;
+    CustomToastification().showToast(updateUserResponseModel.message ?? "", type: ToastificationType.success);
 
-          AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
-          await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
-          // token = loginModel.responseData?.token ?? "";
-        }
+    getUserDetail();
+
+    if (updateUserResponseModel.responseData?.token != null) {
+      String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
+      if (loginKey.isNotEmpty) {
+        LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginKey));
+        loginModel.responseData?.token = updateUserResponseModel.responseData?.token;
+
+        AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
+        await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
+        // token = loginModel.responseData?.token ?? "";
       }
-
-      // getOrganizationDetail();
-      getUserDetail();
-    } catch (error) {
-      // customPrint("userInvite catch error is $error");
     }
+
+    // getOrganizationDetail();
+    // } catch (error) {
+    //   // customPrint("userInvite catch error is $error");
+    // }
   }
 
   Future<void> updateOrganization(Map<String, dynamic> param) async {
@@ -262,17 +283,20 @@ class PersonalSettingController extends GetxController {
       profileParams['org_image'] = [organizationProfileImage.value!];
     }
 
+    Loader().showLoadingDialogForSimpleLoader();
+
     try {
       dynamic response = await _personalSettingRepository.updateOrganization(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-      print("response is $response");
+      print("updateOrganization is $response");
 
       getUserDetail();
       getOrganizationDetail();
-
+      Get.back();
       // Get.toNamed(Routes.INVITED_USER_SUBMITTED, arguments: {
       //   "invited_user_data": param,
       // });
     } catch (error) {
+      Get.back();
       customPrint("userInvite catch error is $error");
     }
   }
@@ -305,10 +329,10 @@ class PersonalSettingController extends GetxController {
     param["role"] = role;
     param["is_admin"] = isAdmin;
 
-    Loader().showLoadingDialogForSimpleLoader();
+    // Loader().showLoadingDialogForSimpleLoader();
     // try {
     UpdateRoleAndAdminResponseModel updateRoleAndAdminResponseData = await _personalSettingRepository.updateRoleAndAdminControl(param: param);
-
+    // Get.back();
     print("UpdateRoleAndAdminResponseModel response:- ${updateRoleAndAdminResponseData.toJson()}");
 
     if (updateRoleAndAdminResponseData.responseType?.toLowerCase() == "success") {
@@ -317,9 +341,9 @@ class PersonalSettingController extends GetxController {
       getUserOrganizationListModel.refresh();
       CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
     } else {
-      CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
+      CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.error);
     }
-    Get.back();
+
     // getUserByOrganization();
     // } catch (error) {
     //   Get.back();

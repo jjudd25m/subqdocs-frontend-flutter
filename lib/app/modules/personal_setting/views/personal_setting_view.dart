@@ -379,7 +379,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         Expanded(
                                                                           child: CommonPatientData(
                                                                             label: "Organization",
-                                                                            data: controller.getOrganizationDetailModel.value?.responseData?.name ?? "-",
+                                                                            data: controller.getUserDetailModel.value?.responseData?.organizationName ?? "-",
                                                                           ),
                                                                         ),
                                                                         Expanded(child: SizedBox()),
@@ -706,11 +706,12 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                               label: "Name",
                                                                               data: controller.getOrganizationDetailModel.value?.responseData?.name ?? "-",
                                                                             )),
-                                                                            Expanded(
-                                                                                child: CommonPatientData(
-                                                                              label: "No. of Providers",
-                                                                              data: controller.getOrganizationDetailModel.value?.responseData?.employeesCount.toString() ?? "-",
-                                                                            )),
+                                                                            Expanded(child: SizedBox()),
+                                                                            // Expanded(
+                                                                            //     child: CommonPatientData(
+                                                                            //   label: "No. of Providers",
+                                                                            //   data: controller.getOrganizationDetailModel.value?.responseData?.employeesCount.toString() ?? "-",
+                                                                            // )),
                                                                             Expanded(child: SizedBox()),
                                                                             Expanded(child: SizedBox()),
                                                                           ],
@@ -1239,44 +1240,44 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                       //         ),
                       //       ],
                       //     )),
-                      PopupMenuItem(
-                          padding: EdgeInsets.zero,
-                          onTap: () {
-                            // if (rowIndex != 0) {
-                            // showDialog(
-                            //   context: context,
-                            //   barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                            //   builder: (BuildContext context) {
-                            //     return DeletePatientDialog(
-                            //       title: "Are you sure want to delete patient",
-                            //       onDelete: () {
-                            //         print("delete id is :- ${controller.patientList[rowIndex].id}");
-                            //         Get.back();
-                            //         controller.deletePatientById(controller.patientList[rowIndex].id);
-                            //       },
-                            //       header: "Delete Patient",
-                            //     ); // Our custom dialog
-                            //   },
-                            // );
-                            // }
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 1,
-                                color: AppColors.appbarBorder,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Delete",
-                                  style: AppFonts.regular(14, AppColors.textBlack),
-                                ),
-                              ),
-                            ],
-                          ))
+                      // PopupMenuItem(
+                      //     padding: EdgeInsets.zero,
+                      //     onTap: () {
+                      //       // if (rowIndex != 0) {
+                      //       // showDialog(
+                      //       //   context: context,
+                      //       //   barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                      //       //   builder: (BuildContext context) {
+                      //       //     return DeletePatientDialog(
+                      //       //       title: "Are you sure want to delete patient",
+                      //       //       onDelete: () {
+                      //       //         print("delete id is :- ${controller.patientList[rowIndex].id}");
+                      //       //         Get.back();
+                      //       //         controller.deletePatientById(controller.patientList[rowIndex].id);
+                      //       //       },
+                      //       //       header: "Delete Patient",
+                      //       //     ); // Our custom dialog
+                      //       //   },
+                      //       // );
+                      //       // }
+                      //     },
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Container(
+                      //           width: double.infinity,
+                      //           height: 1,
+                      //           color: AppColors.appbarBorder,
+                      //         ),
+                      //         Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: Text(
+                      //             "Delete",
+                      //             style: AppFonts.regular(14, AppColors.textBlack),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ))
                     ],
                 child: SvgPicture.asset(
                   "assets/images/logo_threedots.svg",

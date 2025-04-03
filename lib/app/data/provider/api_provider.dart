@@ -93,7 +93,27 @@ class ApiProvider {
     }
     try {
       var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
+      print("put response := $response");
       return getResponse(response.data);
+    } on TimeoutException {
+      throw ValidationString.validationRequestTimeout;
+    } on SocketException {
+      throw ValidationString.validationNoInternetFound;
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> callPutWithoutError(String url, Map<String, dynamic> params) async {
+    if (kDebugMode) {
+      customPrint(UrlProvider.baseUrl + url);
+    }
+    try {
+      var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
+      print("put response := $response");
+      return response.data;
     } on TimeoutException {
       throw ValidationString.validationRequestTimeout;
     } on SocketException {

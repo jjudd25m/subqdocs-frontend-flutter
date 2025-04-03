@@ -31,6 +31,7 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       key: globalKey,
       backgroundColor: AppColors.white,
       drawer: BackdropFilter(
@@ -383,7 +384,7 @@ class BaseScreen extends StatelessWidget {
                                             if (onPlayCallBack != null) {
                                               onPlayCallBack?.call();
                                             }
-                                            globalController.changeStatus("In-Room");
+                                            // globalController.changeStatus("In-Room");
 
                                             customPrint("audio is:- ${result?.files.first.xFile.path}");
                                             globalController.submitAudio(File(result?.files.first.path ?? ""));

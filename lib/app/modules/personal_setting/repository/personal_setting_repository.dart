@@ -25,7 +25,7 @@ class PersonalSettingRepository {
   }
 
   Future<UpdateRoleAndAdminResponseModel> updateRoleAndAdminControl({required Map<String, dynamic> param}) async {
-    var response = await ApiProvider.instance.callPut("user/updateRoleAndAdminControll", param);
+    var response = await ApiProvider.instance.callPutWithoutError("user/updateRoleAndAdminControll", param);
     customPrint("UpdateRoleAndAdminControl API  internal response $response");
     return UpdateRoleAndAdminResponseModel.fromJson(response);
   }

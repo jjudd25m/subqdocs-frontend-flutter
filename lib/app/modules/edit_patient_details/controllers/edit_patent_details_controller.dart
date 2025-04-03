@@ -144,26 +144,30 @@ class EditPatentDetailsController extends GetxController {
     lastNameController.text = patientDetailModel.responseData?.lastName ?? "";
     selectedSexValue.value = patientDetailModel.responseData?.gender;
     profileImageUrl.value = patientDetailModel.responseData?.profileImage;
-    patientIdController.text = patientDetailModel.responseData?.patientId.toString() ?? "";
+    patientIdController.text = patientDetailModel.responseData?.patientId ?? "";
+    emailAddressController.text = patientDetailModel.responseData?.email ?? "";
+    contactNumberController.text = formatPhoneNumber(patientDetailModel.responseData?.contactNumber ?? "");
+
+    print("patientid:- ${patientDetailModel.responseData?.patientId}");
 
     customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
 
     // Parse the date string to a DateTime object
-    DateTime dateTime = DateTime.parse(patientDetailModel.responseData?.dateOfBirth ?? "").toLocal();
 
-    // Create a DateFormat to format the date
-    DateFormat dateFormat = DateFormat('MM/dd/yyyy');
+    if (patientDetailModel.responseData?.dateOfBirth != null) {
+      DateTime dateTime = DateTime.parse(patientDetailModel.responseData?.dateOfBirth ?? "").toLocal();
 
-    // Format the DateTime object to the desired format
-    String formattedDate = dateFormat.format(dateTime);
+      // Create a DateFormat to format the date
+      DateFormat dateFormat = DateFormat('MM/dd/yyyy');
 
-    dobController.text = formattedDate;
-    customPrint("dob is :- $formattedDate");
+      // Format the DateTime object to the desired format
+      String formattedDate = dateFormat.format(dateTime);
 
-    emailAddressController.text = patientDetailModel.responseData?.email ?? "";
-    contactNumberController.text = formatPhoneNumber(patientDetailModel.responseData?.contactNumber ?? "");
+      dobController.text = formattedDate;
+      customPrint("dob is :- $formattedDate");
 
-    customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
+      customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
+    }
 
     // Parse the date string to a DateTime object
 

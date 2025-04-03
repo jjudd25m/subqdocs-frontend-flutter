@@ -174,9 +174,10 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                 print(homePatientListData);
                 print(homeScheduleListData);
                 print(homePastPatientData);
-
                 Get.delete<GlobalController>();
-
+                // Get.until((route) {
+                //   return false;
+                // });
                 Get.offAllNamed(Routes.LOGIN);
               },
               child: Row(

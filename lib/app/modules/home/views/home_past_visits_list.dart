@@ -483,7 +483,7 @@ class HomePastVisitsList extends GetView<HomeController> {
       rows.add([
         "${patient.firstName} ${patient.lastName}", // Patient Name
         formatedDateTime, // Last Visit Date
-        patient.age.toString(), // Age
+        patient.age != null ? patient.age.toString() : "N/A", // Age
         patient.gender.toString()[0], // Gender
         patient.previousVisitCount.toString(), // Last Visit Date
         patient.visitStatus ?? "0", // Previous Visits

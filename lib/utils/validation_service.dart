@@ -34,7 +34,7 @@ class Validation {
   //   return null;
   // }
 
-  static String? phoneValidate(String? value) {
+  static String? phoneValidate(String? value, {bool isRequired = false}) {
     // Define the list of valid US area codes
     List<String> usAreaCodes = [
       // Alabama
@@ -191,6 +191,12 @@ class Validation {
     final RegExp phoneRegExp = RegExp(r'^\+1\(\d{3}\)\d{3}-\d{4}$');
 
     // First, check if the phone number matches the required format
+
+    if (isRequired) {
+      if (value == null || value.length != 17) {
+        return "Please enter a valid contact number";
+      }
+    }
     if (value == null) {
       return null;
     }
@@ -336,6 +342,19 @@ class Validation {
   static requiredFiled(value) {
     if (value == null || value.isEmpty) {
       return "please filed above field";
+    }
+
+    return null;
+  }
+
+  static String? medicalRequiredFiled(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please fill the above field";
+    }
+
+    // Check if value contains only alphanumeric characters
+    if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+      return "The field must contain only alphanumeric characters";
     }
 
     return null;

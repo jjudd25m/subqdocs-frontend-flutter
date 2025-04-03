@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../utils/Formetors.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_textfiled.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../controllers/personal_setting_controller.dart';
 
 class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
@@ -279,7 +282,9 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                      format: [PlusTextFormatter()],
+                                      format: [
+                                        MaskTextInputFormatter(mask: "+1 (###) ###-####"),
+                                      ],
                                       label: "Phone Number",
                                       controller: controller.userPhoneNumberController,
                                       isValid: true,
@@ -296,7 +301,7 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                         size: 25,
                                       ),
                                       checkValidation: (value) {
-                                        return Validation.phoneValidate(value);
+                                        return Validation.phoneValidate(value, isRequired: true);
                                       }),
                                 ),
                               ],
@@ -619,7 +624,8 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                           size: 25,
                                         ),
                                         checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
+                                          return Validation.medicalRequiredFiled(value);
+                                          // return Validation.requiredFiled(value);
                                         }),
                                   ),
                                 ),
@@ -741,7 +747,8 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                         size: 25,
                                       ),
                                       checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
+                                        return Validation.medicalRequiredFiled(value);
+                                        // return Validation.requiredFiled(value);
                                       }),
                                 ),
                                 Expanded(
@@ -803,29 +810,34 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                       child: CustomButton(
                         navigate: () {
                           if (controller.formKey.currentState!.validate()) {
-                            Map<String, dynamic> param = {
-                              'first_name': controller.userFirstNameController.text,
-                              'last_name': controller.userLastNameController.text,
-                              'email': controller.userEmailController.text,
-                              'contact_no': controller.userPhoneNumberController.text,
-                              'country': controller.selectedCountryValue.value,
-                              'state': controller.userSelectedStateValue.value,
-                              'city': controller.userSelectedCityValue.value,
-                              'street_name': controller.userStreetNameController.text,
-                              'postal_code': controller.userPostalCodeController.text,
-                              'title': controller.userPractitionerController.text,
-                              'medical_license_number': controller.userMedicalLicenseNumberController.text,
-                              'license_expiry_date': controller.userLicenseExpiryDateController.text,
-                              'national_provider_identifier': controller.userNationalProviderIdentifierController.text,
-                              'taxonomy_code': controller.userTaxonomyCodeController.text,
-                              'specialization': controller.userSpecializationController.text
-                            };
+                            if (controller.userSelectedCityValue.value?.isNotEmpty ?? true) {
+                              Map<String, dynamic> param = {
+                                'first_name': controller.userFirstNameController.text,
+                                'last_name': controller.userLastNameController.text,
+                                'organization_name': controller.userOrganizationNameNameController.text,
+                                'email': controller.userEmailController.text,
+                                'contact_no': controller.extractDigits(controller.userPhoneNumberController.text),
+                                'country': controller.selectedCountryValue.value,
+                                'state': controller.userSelectedStateValue.value,
+                                'city': controller.userSelectedCityValue.value,
+                                'street_name': controller.userStreetNameController.text,
+                                'postal_code': controller.userPostalCodeController.text,
+                                'title': controller.userPractitionerController.text,
+                                'medical_license_number': controller.userMedicalLicenseNumberController.text,
+                                'license_expiry_date': controller.userLicenseExpiryDateController.text,
+                                'national_provider_identifier': controller.userNationalProviderIdentifierController.text,
+                                'taxonomy_code': controller.userTaxonomyCodeController.text,
+                                'specialization': controller.userSpecializationController.text
+                              };
 
-                            print("user edit param is :- ${param}");
+                              print("user edit param is :- ${param}");
 
-                            receiveParam(param);
-                            // controller.addImage();
-                            Navigator.pop(context);
+                              receiveParam(param);
+                              // controller.addImage();
+                              Navigator.pop(context);
+                            } else {
+                              CustomToastification().showToast("Please select city", type: ToastificationType.error);
+                            }
                           }
                         },
                         label: "Submit",

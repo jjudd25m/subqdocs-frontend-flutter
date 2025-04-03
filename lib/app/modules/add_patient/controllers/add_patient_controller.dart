@@ -117,7 +117,10 @@ class AddPatientController extends GetxController {
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
+
+    if (Get.currentRoute == Routes.SCHEDULE_PATIENT) {
+      visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
+    }
   }
 
   @override
@@ -134,6 +137,10 @@ class AddPatientController extends GetxController {
 
   String extractDigits(String input) {
     // Use a regular expression to extract digits only
+
+    if (input.trim() == "+1") {
+      return "";
+    }
     return input.replaceAll(RegExp(r'\D'), '');
   }
 
@@ -149,11 +156,11 @@ class AddPatientController extends GetxController {
       } else {
         isAddPatient.value = false;
         globalController.addRouteInit(Routes.SCHEDULE_PATIENT);
+        selectedVisitTimeValue.value = getNextRoundedTime();
       }
     });
     contactNumberController.text = "+1 ";
     print(getNextRoundedTime());
-    selectedVisitTimeValue.value = getNextRoundedTime();
   }
 
   String _formatFileSize(int bytes) {
@@ -314,7 +321,9 @@ class AddPatientController extends GetxController {
       param['middle_name'] = middleNameController.text;
     }
     if (contactNumberController.text != "") {
-      param['contact_no'] = extractDigits(contactNumberController.text.trim());
+      if (extractDigits(contactNumberController.text.trim()) != "") {
+        param['contact_no'] = extractDigits(contactNumberController.text.trim());
+      }
     }
     param['last_name'] = lastNameController.text;
 

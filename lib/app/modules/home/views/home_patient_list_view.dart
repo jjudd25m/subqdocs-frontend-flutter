@@ -25,7 +25,7 @@ class HomePatientListView extends GetView<HomeController> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(() {
         return controller.patientList.isEmpty
-            ?  Padding(
+            ? Padding(
                 padding: const EdgeInsets.all(10),
                 child: EmptyPatientScreen(
                     onBtnPress: () async {
@@ -40,10 +40,10 @@ class HomePatientListView extends GetView<HomeController> {
                     description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place"),
               )
             : Column(
-              children: [
-                // Text("total data is the ${controller.patientList.length}" , style: TextStyle( fontSize: 20),),
-                Expanded(
-                  child: CustomTable(
+                children: [
+                  // Text("total data is the ${controller.patientList.length}" , style: TextStyle( fontSize: 20),),
+                  Expanded(
+                    child: CustomTable(
                       scrollController: controller.scrollControllerPatientList,
                       physics: AlwaysScrollableScrollPhysics(),
                       onRefresh: () async {
@@ -111,12 +111,11 @@ class HomePatientListView extends GetView<HomeController> {
                         );
                       },
                       isLoading: controller.isLoading.value,
-                    isNoData: controller.noMoreDataPatientList.value,
-
+                      isNoData: controller.noMoreDataPatientList.value,
                     ),
-                ),
-              ],
-            );
+                  ),
+                ],
+              );
       }),
     );
   }
@@ -132,7 +131,7 @@ class HomePatientListView extends GetView<HomeController> {
     for (var patient in patients) {
       rows.add([
         "${patient.firstName} ${patient.lastName}", // Patient Name
-        patient.age.toString(), // Age
+        patient.age != null ? patient.age.toString() : "N/A", // Age
         patient.gender.toString()[0], // Gender
         patient.lastVisitDate ?? "N/A", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
@@ -164,10 +163,10 @@ class HomePatientListView extends GetView<HomeController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       // if (rowIndex != 0) {
                       controller.globalController.addRoute(Routes.PATIENT_PROFILE);
-                     await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
+                      await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
 
                       controller.getPatientList();
                       // }
@@ -202,13 +201,12 @@ class HomePatientListView extends GetView<HomeController> {
                 itemBuilder: (context) => [
                       PopupMenuItem(
                           padding: EdgeInsets.zero,
-                          onTap: () async{
+                          onTap: () async {
                             customPrint(" patient id is ${controller.patientList[rowIndex].id}");
                             controller.globalController.addRoute(Routes.PATIENT_PROFILE);
                             await Get.toNamed(Routes.PATIENT_PROFILE, arguments: {"patientData": controller.patientList[rowIndex].id.toString(), "visitId": "", "fromSchedule": false});
-                              controller.getPatientList();
-
-                            },
+                            controller.getPatientList();
+                          },
                           // value: "",
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

@@ -2,14 +2,17 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../utils/Formetors.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_textfiled.dart';
+import '../../../../widgets/custom_toastification.dart';
 import '../controllers/personal_setting_controller.dart';
 
 class OrganizationEditDialog extends GetView<PersonalSettingController> {
@@ -124,30 +127,30 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                         return Validation.requiredFiled(value);
                                       }),
                                 ),
-                                Expanded(
-                                  child: TextFormFiledWidget(
-                                      // format: [
-                                      //   CustomTextInputFormatter(),
-                                      // ],
-                                      label: "No. of Providers",
-                                      isValid: controller.isValid.value,
-                                      // isImportant: true,
-                                      controller: controller.organizationNoOfProvidersController,
-                                      isSuffixIconVisible: false,
-                                      isFirst: true,
-                                      hint: "",
-                                      onTap: () {
-                                        controller.organizationNoOfProvidersController.clear();
-                                      },
-                                      suffixIcon: Icon(
-                                        Icons.highlight_remove,
-                                        color: AppColors.textDarkGrey,
-                                        size: 25,
-                                      ),
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      }),
-                                ),
+                                // Expanded(
+                                //   child: TextFormFiledWidget(
+                                //       // format: [
+                                //       //   CustomTextInputFormatter(),
+                                //       // ],
+                                //       label: "No. of Providers",
+                                //       isValid: controller.isValid.value,
+                                //       // isImportant: true,
+                                //       controller: controller.organizationNoOfProvidersController,
+                                //       isSuffixIconVisible: false,
+                                //       isFirst: true,
+                                //       hint: "",
+                                //       onTap: () {
+                                //         controller.organizationNoOfProvidersController.clear();
+                                //       },
+                                //       suffixIcon: Icon(
+                                //         Icons.highlight_remove,
+                                //         color: AppColors.textDarkGrey,
+                                //         size: 25,
+                                //       ),
+                                //       checkValidation: (value) {
+                                //         return Validation.requiredFiled(value);
+                                //       }),
+                                // ),
                               ],
                             ),
                             SizedBox(height: 5),
@@ -191,7 +194,9 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                      format: [PlusTextFormatter()],
+                                      format: [
+                                        MaskTextInputFormatter(mask: "+1 (###) ###-####"),
+                                      ],
                                       label: "Phone Number",
                                       controller: controller.organizationPhoneNumberController,
                                       isValid: true,
@@ -208,7 +213,7 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                         size: 25,
                                       ),
                                       checkValidation: (value) {
-                                        return Validation.phoneValidate(value);
+                                        return Validation.phoneValidate(value, isRequired: true);
                                       }),
                                 ),
                               ],
@@ -565,22 +570,26 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                       child: CustomButton(
                         navigate: () {
                           if (controller.formKey.currentState!.validate()) {
-                            Map<String, dynamic> param = Map<String, dynamic>();
+                            if (controller.organizationSelectedCityValue.value?.isNotEmpty ?? true) {
+                              Map<String, dynamic> param = Map<String, dynamic>();
 
-                            param["name"] = controller.organizationNameController.text;
-                            param["email"] = controller.organizationEmailController.text;
-                            param["state"] = controller.organizationSelectedStateValue.value;
-                            param["city"] = controller.organizationSelectedCityValue.value;
-                            param["contact_no"] = controller.organizationPhoneNumberController.text;
-                            param["country"] = controller.selectedCountryValue.value;
-                            param["street_name"] = controller.organizationStreetNameController.text;
-                            param["postal_code"] = controller.organizationPostalCodeController.text;
-                            param["address1"] = controller.organizationAddress1Controller.text;
-                            param["address2"] = controller.organizationAddress2Controller.text;
+                              param["name"] = controller.organizationNameController.text;
+                              param["email"] = controller.organizationEmailController.text;
+                              param["state"] = controller.organizationSelectedStateValue.value;
+                              param["city"] = controller.organizationSelectedCityValue.value;
+                              param["contact_no"] = controller.extractDigits(controller.organizationPhoneNumberController.text);
+                              param["country"] = controller.selectedCountryValue.value;
+                              param["street_name"] = controller.organizationStreetNameController.text;
+                              param["postal_code"] = controller.organizationPostalCodeController.text;
+                              param["address1"] = controller.organizationAddress1Controller.text;
+                              param["address2"] = controller.organizationAddress2Controller.text;
 
-                            receiveParam(param);
-                            // controller.addImage();
-                            Navigator.pop(context);
+                              receiveParam(param);
+                              // controller.addImage();
+                              Navigator.pop(context);
+                            } else {
+                              CustomToastification().showToast("Please select city", type: ToastificationType.error);
+                            }
                           }
                         },
                         label: "Update",

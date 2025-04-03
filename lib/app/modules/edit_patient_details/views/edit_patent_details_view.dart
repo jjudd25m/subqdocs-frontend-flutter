@@ -84,8 +84,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                     color: AppColors.ScreenBackGround,
                     child: Padding(
                       padding: EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Obx(() {
                             return BreadcrumbWidget(
@@ -530,7 +532,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                       size: 25,
                                                     ),
                                                     checkValidation: (value) {
-                                                      return Validation.phoneValidate(value);
+                                                      return Validation.phoneValidate(value, isRequired: true);
                                                     }),
                                               ),
                                               SizedBox(
