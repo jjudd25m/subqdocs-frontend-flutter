@@ -40,7 +40,6 @@ class HomeController extends GetxController {
 
   final GlobalController globalController = Get.find();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
-
   final HomeRepository _homeRepository = HomeRepository();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -430,8 +428,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                     onTap: () {
                                                                       // customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
 
-                                                                      if (controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType?.contains("image") ??
-                                                                          false) {
+                                                                      if (controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType?.contains("image") ?? false) {
                                                                         showDialog(
                                                                           context: context,
                                                                           barrierDismissible: true,
@@ -444,8 +441,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                           },
                                                                         );
                                                                       } else {
-                                                                        Uri attchmentUri =
-                                                                            Uri.parse(controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "");
+                                                                        Uri attchmentUri = Uri.parse(controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].filePath ?? "");
                                                                         customPrint("attchmentUri is :- ${attchmentUri}");
                                                                         // controller.launchInAppWithBrowserOptions(attchmentUri);
                                                                       }
@@ -497,8 +493,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                                             // return SizedBox();
                                                                             return DeleteImageDialog(
                                                                               onDelete: () {
-                                                                                controller.deleteAttachments(
-                                                                                    index, subindex, controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].id ?? -1);
+                                                                                controller.deleteAttachments(index, subindex, controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].id ?? -1);
                                                                               },
                                                                               extension: controller.allAttachmentList.value!.responseData.data.values.elementAt(index)[subindex].fileType,
                                                                             );

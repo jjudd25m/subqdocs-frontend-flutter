@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fl_pip/fl_pip.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,6 +18,7 @@ import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../../../main.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
@@ -37,6 +39,9 @@ import '../model/patient_attachment_list_model.dart';
 import 'delete_image_dialog.dart';
 import 'delete_schedule_visit.dart';
 
+const videoPath = 'assets/landscape.mp4';
+const closeIconPath = 'assets/close.png';
+
 class VisitMainView extends StatefulWidget {
   const VisitMainView({super.key});
 
@@ -48,6 +53,57 @@ class _VisitMainViewState extends State<VisitMainView> {
   VisitMainController controller = Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  Widget builderEnabled(PiPStatusInfo? statusInfo) => Column(children: [
+        const Text('PiPStatus enabled'),
+        Text('isCreateNewEngine: ${statusInfo!.isCreateNewEngine}', style: const TextStyle(fontSize: 10)),
+        Text('isEnabledWhenBackground: ${statusInfo.isEnabledWhenBackground}', style: const TextStyle(fontSize: 10)),
+        Filled(text: 'disable', onPressed: FlPiP().disable),
+      ]);
+
+  Widget get builderDisabled => Column(mainAxisSize: MainAxisSize.min, children: [
+        Text('Currently using picture in picture mode'),
+        Filled(
+            onPressed: () async {
+              await FlPiP().enable(ios: const FlPiPiOSConfig(videoPath: videoPath, packageName: null), android: const FlPiPAndroidConfig(aspectRatio: Rational.maxLandscape()));
+              Future.delayed(const Duration(seconds: 10), () {
+                FlPiP().disable();
+              });
+            },
+            text: 'Enable PiP'),
+        Text('The picture in picture mode will only be activated when the app enters the background'),
+        Filled(
+            onPressed: () {
+              FlPiP().enable(ios: const FlPiPiOSConfig(enabledWhenBackground: true, videoPath: videoPath, packageName: null), android: const FlPiPAndroidConfig(enabledWhenBackground: true, aspectRatio: Rational.maxLandscape()));
+            },
+            text: 'Enabled when background'),
+        Divider(),
+        Text(
+            'This still uses picture in picture mode in iOS and has created a new FlutterEngine that cannot be shared with the current main，But in Android, the picture in picture mode is not used, and WindowManager is used, similar to a system pop-up window'),
+        Filled(
+            onPressed: () {
+              FlPiP().enable(android: const FlPiPAndroidConfig(createNewEngine: true, closeIconPath: closeIconPath), ios: const FlPiPiOSConfig(createNewEngine: true, videoPath: videoPath, packageName: null));
+            },
+            text: 'Create new engine'),
+        Text('Start when the app enters the background'),
+        Filled(
+            onPressed: () {
+              FlPiP().enable(
+                  android: const FlPiPAndroidConfig(closeIconPath: closeIconPath, enabledWhenBackground: true, createNewEngine: true),
+                  ios: const FlPiPiOSConfig(enabledWhenBackground: true, createNewEngine: true, videoPath: videoPath, packageName: null));
+            },
+            text: 'Create new engine and enabled when background'),
+      ]);
+
+  Widget buildUnavailable(BuildContext context) => Filled(
+      text: 'PiP unavailable',
+      onPressed: () async {
+        final state = await FlPiP().isAvailable;
+        if (!context.mounted) return;
+        if (!state) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('PiP unavailable')));
+        }
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +147,39 @@ class _VisitMainViewState extends State<VisitMainView> {
         return Column(
           children: [
             CustomAppBar(drawerkey: _key),
+            Column(mainAxisSize: MainAxisSize.min, children: [
+              SizedBox(width: double.infinity, height: 20),
+              Timer(),
+              Container(
+                  margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Theme.of(context).dividerColor)),
+                  child: PiPBuilder(builder: (PiPStatusInfo? statusInfo) {
+                    switch (statusInfo?.status) {
+                      case PiPStatus.enabled:
+                        return builderEnabled(statusInfo);
+                      case PiPStatus.disabled:
+                        return builderDisabled;
+                      case PiPStatus.unavailable:
+                        return buildUnavailable(context);
+                      case null:
+                        return builderDisabled;
+                    }
+                  })),
+              Filled(
+                  text: 'PiPStatus isAvailable',
+                  onPressed: () async {
+                    final state = await FlPiP().isAvailable;
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: state ? const Text('PiP available') : const Text('PiP unavailable')));
+                    }
+                  }),
+              Filled(
+                  text: 'toggle',
+                  onPressed: () {
+                    FlPiP().toggle(AppState.background);
+                  }),
+            ]),
             Expanded(
               child: Container(
                 color: AppColors.ScreenBackGround1,
@@ -250,8 +339,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          controller.formatDateTime(
-                                              firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                          controller.formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                           style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
@@ -1128,8 +1216,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                           customPrint("row index is :- ${index}");
                                                                           customPrint("visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString()}");
                                                                           controller.patientReScheduleCreate(
-                                                                              param: {"visit_date": p1, "visit_time": p0},
-                                                                              visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
+                                                                              param: {"visit_date": p1, "visit_time": p0}, visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
                                                                         },
                                                                       ); // Our custom dialog
                                                                     },
@@ -1371,8 +1458,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     offset: const Offset(0, 5),
                                     color: AppColors.white,
                                     position: PopupMenuPosition.over,
-                                    style: const ButtonStyle(
-                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                    style: const ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
                                     itemBuilder: (context) => [
                                           PopupMenuItem(
                                               enabled: false,
@@ -1420,8 +1506,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     ImagePath.document_attchment,
                                                     width: 30,
                                                     height: 30,
-                                                    colorFilter:
-                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                    colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
@@ -1448,10 +1533,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 children: [
                                                   const SizedBox(width: 5),
                                                   SvgPicture.asset(ImagePath.image_attchment,
-                                                      width: 30,
-                                                      height: 30,
-                                                      colorFilter:
-                                                          ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                                      width: 30, height: 30, colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
                                                   const SizedBox(width: 8),
                                                   Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                                   const SizedBox(width: 5),
@@ -1477,8 +1559,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     ImagePath.date_attchment,
                                                     width: 30,
                                                     height: 30,
-                                                    colorFilter:
-                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                    colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),

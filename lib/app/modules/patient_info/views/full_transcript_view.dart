@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,10 +27,7 @@ class FullTranscriptView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Container(
                 width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-                    color: AppColors.white,
-                    border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)), color: AppColors.white, border: Border.all(color: AppColors.backgroundLightGrey, width: 1)),
                 child: Column(
                   children: [
                     Container(
@@ -91,8 +86,7 @@ class FullTranscriptView extends StatelessWidget {
                                           children: [
                                             Container(
                                               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.white, border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.3), width: 1)),
                                               child: Column(
                                                 children: [
                                                   SizedBox(height: 6),
@@ -124,8 +118,7 @@ class FullTranscriptView extends StatelessWidget {
                                                       ),
                                                       SizedBox(width: 20),
                                                       Text(
-                                                        convertSecondsToMinutes(
-                                                            controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end.round()),
+                                                        convertSecondsToMinutes(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].end.round()),
                                                         style: AppFonts.regular(12, AppColors.textGrey),
                                                       ),
                                                     ],
