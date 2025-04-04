@@ -20,6 +20,10 @@ abstract class Routes {
   static const SIGN_UP = _Paths.SIGN_UP;
   static const PERSONAL_SETTING = _Paths.PERSONAL_SETTING;
   static const INVITED_USER_SUBMITTED = _Paths.INVITED_USER_SUBMITTED;
+  static const SIGN_UP_SET_PASSWORD = _Paths.SIGN_UP_SET_PASSWORD;
+  static const SIGN_UP_SET_ORGANIZATION_INFO =
+      _Paths.SIGN_UP_SET_ORGANIZATION_INFO;
+  static const SIGN_UP_PROFILE_COMPLETE = _Paths.SIGN_UP_PROFILE_COMPLETE;
 }
 
 abstract class _Paths {
@@ -41,4 +45,7 @@ abstract class _Paths {
   static const SIGN_UP = '/sign-up';
   static const PERSONAL_SETTING = '/personal-setting';
   static const INVITED_USER_SUBMITTED = '/invited-user-submitted';
+  static const SIGN_UP_SET_PASSWORD = '/sign-up-set-password';
+  static const SIGN_UP_SET_ORGANIZATION_INFO = '/sign-up-set-organization-info';
+  static const SIGN_UP_PROFILE_COMPLETE = '/sign-up-profile-complete';
 }

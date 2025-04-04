@@ -26,6 +26,12 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/sign_up/bindings/sign_up_binding.dart';
 import '../modules/sign_up/views/sign_up_view.dart';
+import '../modules/sign_up_profile_complete/bindings/sign_up_profile_complete_binding.dart';
+import '../modules/sign_up_profile_complete/views/sign_up_profile_complete_view.dart';
+import '../modules/sign_up_set_organization_info/bindings/sign_up_set_organization_info_binding.dart';
+import '../modules/sign_up_set_organization_info/views/sign_up_set_organization_info_view.dart';
+import '../modules/sign_up_set_password/bindings/sign_up_set_password_binding.dart';
+import '../modules/sign_up_set_password/views/sign_up_set_password_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/visit_main/bindings/visit_main_binding.dart';
@@ -79,7 +85,6 @@ class AppPages {
       page: () => AddPatientView(),
       binding: AddPatientBinding(),
     ),
-
     GetPage(
       name: _Paths.SCHEDULE_PATIENT,
       page: () => AddPatientView(),
@@ -119,6 +124,21 @@ class AppPages {
       name: _Paths.INVITED_USER_SUBMITTED,
       page: () => InvitedUserSubmittedView(),
       binding: InvitedUserSubmittedBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGN_UP_SET_PASSWORD,
+      page: () => SignUpSetPasswordView(),
+      binding: SignUpSetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGN_UP_SET_ORGANIZATION_INFO,
+      page: () => SignUpSetOrganizationInfoView(),
+      binding: SignUpSetOrganizationInfoBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGN_UP_PROFILE_COMPLETE,
+      page: () => const SignUpProfileCompleteView(),
+      binding: SignUpProfileCompleteBinding(),
     ),
   ];
 }

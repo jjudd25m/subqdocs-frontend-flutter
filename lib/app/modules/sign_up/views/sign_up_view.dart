@@ -62,61 +62,64 @@ class SignUpView extends GetView<SignUpController> {
                     height: isPortrait ? null : 30,
                   ),
                   Text(
-                    "Sign Up",
+                    "Lets Get Started",
                     style: AppFonts.medium(24, AppColors.backgroundPurple),
                   ),
                   SizedBox(
                     height: 24,
                   ),
                   Text(
-                    "Welcome",
+                    "Sign Up",
                     style: AppFonts.medium(20, AppColors.textBlack),
                   ),
                   SizedBox(
                     height: 24,
                   ),
+
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
-                    child: TextFormFiledWidget(
-                        isSuffixIconVisible: false,
-                        isFirst: true,
-                        label: "First Name",
-                        controller: controller.firstNameController,
-                        hint: "Enter First Name",
-                        onTap: () {
-                          controller.firstNameController.clear();
-                        },
-                        suffixIcon: Icon(
-                          Icons.highlight_remove,
-                          color: AppColors.textDarkGrey,
-                          size: 25,
+                    child: Row(
+                      spacing: 15,
+                      children: [
+                        Expanded(
+                          child: TextFormFiledWidget(
+                              isSuffixIconVisible: false,
+                              isFirst: true,
+                              label: "First Name",
+                              controller: controller.firstNameController,
+                              hint: "Enter First Name",
+                              onTap: () {
+                                controller.firstNameController.clear();
+                              },
+                              suffixIcon: Icon(
+                                Icons.highlight_remove,
+                                color: AppColors.textDarkGrey,
+                                size: 25,
+                              ),
+                              checkValidation: (value) {
+                                return Validation.requiredFiled(value);
+                              }),
                         ),
-                        checkValidation: (value) {
-                          return Validation.requiredFiled(value);
-                        }),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
-                    child: TextFormFiledWidget(
-                        isSuffixIconVisible: false,
-                        isFirst: true,
-                        label: "Last Name",
-                        controller: controller.lastNameController,
-                        hint: "Enter Last Name",
-                        onTap: () {
-                          controller.lastNameController.clear();
-                        },
-                        suffixIcon: Icon(
-                          Icons.highlight_remove,
-                          color: AppColors.textDarkGrey,
-                          size: 25,
-                        ),
-                        checkValidation: (value) {
-                          return Validation.requiredFiled(value);
-                        }),
+                        Expanded(
+                            child: TextFormFiledWidget(
+                                isSuffixIconVisible: false,
+                                isFirst: true,
+                                label: "Last Name",
+                                controller: controller.lastNameController,
+                                hint: "Enter Last Name",
+                                onTap: () {
+                                  controller.lastNameController.clear();
+                                },
+                                suffixIcon: Icon(
+                                  Icons.highlight_remove,
+                                  color: AppColors.textDarkGrey,
+                                  size: 25,
+                                ),
+                                checkValidation: (value) {
+                                  return Validation.requiredFiled(value);
+                                }))
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 20,
@@ -145,79 +148,131 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     height: 20,
                   ),
-                  Obx(() {
-                    return SizedBox(
-                      width: isSmallScreen ? Get.width - 30 : 416,
-                      child: TextFormFiledWidget(
-                          label: AppString.password,
-                          maxLines: 1,
-                          format: [NoSpaceTextFormatter()],
-                          hint: "Enter Password",
-                          visibility: controller.passwordVisible.value,
-                          controller: controller.passwordController,
-                          suffixIcon: controller.passwordVisible.value
-                              ? GestureDetector(
-                                  onTap: () {
-                                    controller.changePasswordVisible();
-                                  },
-                                  child: SvgPicture.asset(
-                                    ImagePath.eyeLogoOpen,
-                                    height: 5,
-                                    width: 5,
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    controller.changePasswordVisible();
-                                  },
-                                  child: Icon(
-                                    CupertinoIcons.eye_slash_fill,
-                                    color: AppColors.textDarkGrey,
-                                  ),
-                                ),
-                          checkValidation: (value) {
-                            return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
-                          }),
-                    );
-                  }),
                   SizedBox(
-                    height: 20,
+                    width: isSmallScreen ? Get.width - 30 : 416,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(() {
+                          return Checkbox(
+                            visualDensity: VisualDensity.compact,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            activeColor: AppColors.backgroundPurple,
+                            value: controller.isTermsCondition.value,
+                            onChanged: (value) => {controller.isTermsCondition.value = value!},
+                          );
+                        }),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "I agree to the ",
+                              style: AppFonts.medium(14, AppColors.textDarkGrey),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.SIGN_UP);
+                              },
+                              child: Text(
+                                "Terms & Conditions",
+                                style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline),
+                              ),
+                            ),
+                            Text(
+                              " and ",
+                              style: AppFonts.medium(14, AppColors.textDarkGrey),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.SIGN_UP);
+                              },
+                              child: Text(
+                                "Privacy Policy",
+                                style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                      ],
+                    ),
                   ),
-                  Obx(() {
-                    return SizedBox(
-                      width: isSmallScreen ? Get.width - 30 : 416,
-                      child: TextFormFiledWidget(
-                          label: "Confirm Password",
-                          format: [NoSpaceTextFormatter()],
-                          hint: "Enter confirm Password",
-                          maxLines: 1,
-                          visibility: controller.confirmPasswordVisible.value,
-                          controller: controller.confirmPasswordController,
-                          suffixIcon: controller.confirmPasswordVisible.value
-                              ? GestureDetector(
-                                  onTap: () {
-                                    controller.changeConfirmPasswordVisible();
-                                  },
-                                  child: SvgPicture.asset(
-                                    ImagePath.eyeLogoOpen,
-                                    height: 5,
-                                    width: 5,
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    controller.changeConfirmPasswordVisible();
-                                  },
-                                  child: Icon(
-                                    CupertinoIcons.eye_slash_fill,
-                                    color: AppColors.textDarkGrey,
-                                  ),
-                                ),
-                          checkValidation: (value) {
-                            return Validation.conforimpasswordValidate(value, controller.passwordController.text);
-                          }),
-                    );
-                  }),
+                  SizedBox(
+                    height: 0,
+                  ),
+                  // Obx(() {
+                  //   return SizedBox(
+                  //     width: isSmallScreen ? Get.width - 30 : 416,
+                  //     child: TextFormFiledWidget(
+                  //         label: AppString.password,
+                  //         maxLines: 1,
+                  //         format: [NoSpaceTextFormatter()],
+                  //         hint: "Enter Password",
+                  //         visibility: controller.passwordVisible.value,
+                  //         controller: controller.passwordController,
+                  //         suffixIcon: controller.passwordVisible.value
+                  //             ? GestureDetector(
+                  //                 onTap: () {
+                  //                   controller.changePasswordVisible();
+                  //                 },
+                  //                 child: SvgPicture.asset(
+                  //                   ImagePath.eyeLogoOpen,
+                  //                   height: 5,
+                  //                   width: 5,
+                  //                 ),
+                  //               )
+                  //             : GestureDetector(
+                  //                 onTap: () {
+                  //                   controller.changePasswordVisible();
+                  //                 },
+                  //                 child: Icon(
+                  //                   CupertinoIcons.eye_slash_fill,
+                  //                   color: AppColors.textDarkGrey,
+                  //                 ),
+                  //               ),
+                  //         checkValidation: (value) {
+                  //           return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
+                  //         }),
+                  //   );
+                  // }),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // Obx(() {
+                  //   return SizedBox(
+                  //     width: isSmallScreen ? Get.width - 30 : 416,
+                  //     child: TextFormFiledWidget(
+                  //         label: "Confirm Password",
+                  //         format: [NoSpaceTextFormatter()],
+                  //         hint: "Enter confirm Password",
+                  //         maxLines: 1,
+                  //         visibility: controller.confirmPasswordVisible.value,
+                  //         controller: controller.confirmPasswordController,
+                  //         suffixIcon: controller.confirmPasswordVisible.value
+                  //             ? GestureDetector(
+                  //                 onTap: () {
+                  //                   controller.changeConfirmPasswordVisible();
+                  //                 },
+                  //                 child: SvgPicture.asset(
+                  //                   ImagePath.eyeLogoOpen,
+                  //                   height: 5,
+                  //                   width: 5,
+                  //                 ),
+                  //               )
+                  //             : GestureDetector(
+                  //                 onTap: () {
+                  //                   controller.changeConfirmPasswordVisible();
+                  //                 },
+                  //                 child: Icon(
+                  //                   CupertinoIcons.eye_slash_fill,
+                  //                   color: AppColors.textDarkGrey,
+                  //                 ),
+                  //               ),
+                  //         checkValidation: (value) {
+                  //           return Validation.conforimpasswordValidate(value, controller.passwordController.text);
+                  //         }),
+                  //   );
+                  // }),
                   SizedBox(
                     height: 42,
                   ),
@@ -226,12 +281,13 @@ class SignUpView extends GetView<SignUpController> {
                       width: isSmallScreen ? Get.width - 30 : 416,
                       child: CustomAnimatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            controller.registerUser();
-                          }
+                          Get.toNamed(Routes.SIGN_UP_SET_PASSWORD);
+                          // if (_formKey.currentState!.validate()) {
+                          //   controller.registerUser();
+                          // }
                         },
                         height: 45,
-                        text: "Sign up",
+                        text: "Continue",
                         isLoading: controller.isLoading.value,
                         enabledTextColor: AppColors.white,
                         enabledColor: AppColors.backgroundPurple,
@@ -241,14 +297,23 @@ class SignUpView extends GetView<SignUpController> {
                   SizedBox(
                     height: 30,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Text(
-                      "Back to Login",
-                      style: AppFonts.medium(14, AppColors.backgroundPurple),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have an account? ",
+                        style: AppFonts.medium(14, AppColors.textDarkGrey),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Text(
+                          "Sign in",
+                          style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )

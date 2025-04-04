@@ -259,6 +259,7 @@ class ApiProvider {
     try {
       customPrint("-------------------------------");
       customPrint("queryParameters: $queryParameters");
+      customPrint("header is ${getApiHeader()}");
       customPrint("url is : $url");
       customPrint("-------------------------------");
       var response = await dio.get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
