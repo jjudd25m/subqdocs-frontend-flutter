@@ -272,10 +272,9 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: CustomAnimatedButton(
                       onPressed: () {
-                        Get.toNamed(Routes.SIGN_UP_SET_ORGANIZATION_INFO);
-                        // if (_formKey.currentState!.validate()) {
-                        //   controller.registerUser();
-                        // }
+                        if (_formKey.currentState!.validate()) {
+                          controller.registerUser();
+                        }
                       },
                       height: 45,
                       text: "Continue",

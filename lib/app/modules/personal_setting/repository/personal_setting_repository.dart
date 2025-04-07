@@ -53,4 +53,10 @@ class PersonalSettingRepository {
     customPrint("updateOrganization API  internal response $response");
     return response;
   }
+
+  Future<dynamic> organizationUpdate({required Map<String, dynamic> param, required String organizationId}) async {
+    var response = await ApiProvider.instance.callPut("organization/update/$organizationId", param);
+    customPrint("organizationUpdate API  internal response $response");
+    return response;
+  }
 }

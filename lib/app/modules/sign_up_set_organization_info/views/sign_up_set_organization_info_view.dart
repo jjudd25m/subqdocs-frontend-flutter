@@ -106,6 +106,7 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                     child: TextFormFiledWidget(
                         isSuffixIconVisible: false,
                         isFirst: true,
+                        type: TextInputType.number,
                         label: "How many providers are in your practice?",
                         // format: [NoSpaceLowercaseTextFormatter()],
                         controller: controller.noOfProviderController,
@@ -168,9 +169,19 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: CustomAnimatedButton(
                       onPressed: () {
-                        // if (_formKey.currentState!.validate()) {
-                        //   controller.registerUser();
-                        // }
+                        if (_formKey.currentState!.validate()) {
+                          print("org name:- ${controller.organizationNameController.text}");
+                          print("provider:- ${controller.noOfProviderController.text}");
+                          print("org type:- ${controller.selectedRoleValue.value}");
+
+                          Map<String, dynamic> param = {};
+                          param['name'] = controller.organizationNameController.text;
+                          param['providers_count'] = controller.noOfProviderController.text;
+                          param['role'] = controller.selectedRoleValue.value;
+                          param['userId'] = controller.signupdata.responseData?.id.toString();
+
+                          controller.organizationUpdate(param);
+                        }
                       },
                       height: 45,
                       text: "Continue",

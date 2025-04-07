@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/Formetors.dart';
 import '../../../../utils/app_colors.dart';
@@ -281,10 +283,21 @@ class SignUpView extends GetView<SignUpController> {
                       width: isSmallScreen ? Get.width - 30 : 416,
                       child: CustomAnimatedButton(
                         onPressed: () {
-                          Get.toNamed(Routes.SIGN_UP_SET_PASSWORD);
-                          // if (_formKey.currentState!.validate()) {
-                          //   controller.registerUser();
-                          // }
+                          if (_formKey.currentState!.validate()) {
+                            if (!controller.isTermsCondition.value) {
+                              CustomToastification().showToast("Please accept terms and conditions", type: ToastificationType.error);
+                            } else {
+                              Get.toNamed(
+                                Routes.SIGN_UP_SET_PASSWORD,
+                                arguments: {
+                                  'first_name': controller.firstNameController.text,
+                                  'last_name': controller.lastNameController.text,
+                                  'email': controller.emailController.text,
+                                },
+                              );
+                            }
+                            // controller.registerUser();
+                          }
                         },
                         height: 45,
                         text: "Continue",

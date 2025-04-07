@@ -1,5 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
+
+import '../../../../widgets/custom_toastification.dart';
+import '../../../routes/app_pages.dart';
+import '../../sign_up/models/sign_up_models.dart';
+import '../../sign_up/repository/signup_repository.dart';
 
 class SignUpSetPasswordController extends GetxController {
   //TODO: Implement SignUpSetPasswordController
@@ -10,6 +16,8 @@ class SignUpSetPasswordController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  final SignupRepository _signupRepository = SignupRepository();
+
   var passwordValidation = {
     'length': false,
     'number': false,
@@ -17,9 +25,18 @@ class SignUpSetPasswordController extends GetxController {
     'special': false,
   }.obs;
 
+  String firstName = '';
+  String lastName = '';
+  String email = '';
+
   @override
   void onInit() {
     super.onInit();
+
+    var arguments = Get.arguments;
+    firstName = arguments['first_name'];
+    lastName = arguments['last_name'];
+    email = arguments['email'];
   }
 
   void changePasswordVisible() {
@@ -55,5 +72,38 @@ class SignUpSetPasswordController extends GetxController {
     passwordValidation['number'] = validateNumber(password);
     passwordValidation['letter'] = validateLetter(password);
     passwordValidation['special'] = validateSpecial(password);
+  }
+
+  Future<void> registerUser() async {
+    Map<String, dynamic> param = {};
+
+    param["first_name"] = firstName.trim();
+    param["last_name"] = lastName.trim();
+    param["email"] = email.trim();
+    param["password"] = confirmPasswordController.text.trim();
+
+    try {
+      SignUpModel signUpModel = await _signupRepository.registerUser(param: param);
+
+      print("response is :- ${signUpModel.toJson()}");
+
+      if (signUpModel.responseType == "success") {
+        Get.toNamed(
+          Routes.SIGN_UP_SET_ORGANIZATION_INFO,
+          arguments: {
+            'signupdata': signUpModel
+            // 'first_name': firstName,
+            // 'last_name': lastName,
+            // 'email': email,
+            // 'password': passwordController.text,
+          },
+        );
+      } else {
+        CustomToastification().showToast(signUpModel.message ?? "", type: ToastificationType.error);
+      }
+    } catch (error) {
+      print("login catch error is $error");
+      CustomToastification().showToast("$error", type: ToastificationType.error);
+    }
   }
 }

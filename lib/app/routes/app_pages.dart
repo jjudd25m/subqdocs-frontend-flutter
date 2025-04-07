@@ -137,7 +137,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SIGN_UP_PROFILE_COMPLETE,
-      page: () => const SignUpProfileCompleteView(),
+      page: () => SignUpProfileCompleteView(),
       binding: SignUpProfileCompleteBinding(),
     ),
   ];
