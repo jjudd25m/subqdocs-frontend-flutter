@@ -4,6 +4,7 @@ import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../models/MedicalDoctorModel.dart';
 import '../model/deletePatientModel.dart';
 import '../model/patient_list_model.dart';
 import '../model/patient_schedule_model.dart';
@@ -27,6 +28,12 @@ class HomeRepository {
     var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     // customPrint("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
+  }
+
+  Future<MedicalDoctorModel> getDoctorsAndMedicalAssistant({required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callGet("getUsersByRole", queryParameters: param);
+    customPrint("getDoctorsAndMedicalAssistant API  internal response $response");
+    return MedicalDoctorModel.fromJson(response);
   }
 
   Future<ScheduleVisitListModel> getPastVisit({required Map<String, dynamic> param}) async {
