@@ -15,6 +15,7 @@ import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
+import '../utils/notification_controller.dart';
 
 class BaseScreen extends StatelessWidget {
   BaseScreen({super.key, required this.body, required this.globalKey, this.isVisibleModel = false, this.onItemSelected, this.onPlayCallBack});
@@ -256,6 +257,9 @@ class BaseScreen extends StatelessWidget {
                                           if (onPlayCallBack != null) {
                                             onPlayCallBack?.call();
                                           }
+
+                                          NotificationController.createNewNotification();
+
                                           globalController.changeStatus("In-Room");
                                           // If not recording, start the recording
 

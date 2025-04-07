@@ -52,6 +52,9 @@ class GlobalController extends GetxController {
     Routes.PERSONAL_SETTING: 'Setting',
   };
 
+
+
+
   int closeFormState = 0;
 
 //all variable for the model recording
@@ -75,6 +78,8 @@ class GlobalController extends GetxController {
 
   // below  all the function is for the recording model
   // ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
   void showCustomDialog(BuildContext context) {
     showDialog(
