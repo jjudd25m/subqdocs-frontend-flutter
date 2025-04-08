@@ -219,7 +219,11 @@ class AddPatientController extends GetxController {
       if (checkSingleSize()) {
         CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
       } else {
+        selectedList.clear();
+
         selectedList.addAll(list);
+        Get.back();
+
       }
     } else {
       CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
@@ -445,9 +449,17 @@ class AddPatientController extends GetxController {
     } else {
       customPrint("profile is not  available");
     }
-    await _addPatientRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId);
-    selectedList.clear();
-    Get.back();
+
+    try{
+      await _addPatientRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId);
+      selectedList.clear();
+      Get.back();
+    }catch(e){
+      selectedList.clear();
+      Get.back();
+    }
+
+
 
     return true;
     // getPatientAttachment();

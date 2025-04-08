@@ -888,6 +888,12 @@ class AddPatientView extends GetView<AddPatientController> {
                                           children: [
                                             ContainerButton(
                                               onPressed: () {
+
+
+                                                controller.list.clear();
+                                                controller.list.addAll(controller.selectedList);
+
+
                                                 _showCustomDialog(context);
                                               },
                                               text: 'Add Attachments',

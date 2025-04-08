@@ -215,7 +215,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                           child: CustomButton(
                             navigate: () {
                               controller.addImage();
-                              Navigator.pop(context);
+
                             },
                             label: "Add",
                           ),
