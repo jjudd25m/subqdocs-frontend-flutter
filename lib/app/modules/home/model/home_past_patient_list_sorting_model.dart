@@ -6,6 +6,10 @@ class HomePastPatientListSortingModel {
   int colIndex = -1;
   bool isAscending = true;
   List<String>? selectedStatusIndex = [];
+  List<int>? selectedDoctorId = [];
+  List<String>? selectedDoctorNames = [];
+  List<int>? selectedMedicationId = [];
+  List<String>? selectedMedicationNames = [];
   List<DateTime>? selectedDateValue = [DateTime.now()];
   String? startDate;
   String? endDate;
@@ -17,6 +21,10 @@ class HomePastPatientListSortingModel {
     this.colIndex = -1,
     this.isAscending = true,
     this.selectedStatusIndex,
+    this.selectedDoctorNames,
+    this.selectedMedicationNames,
+    this.selectedDoctorId,
+    this.selectedMedicationId,
     this.selectedDateValue,
     this.startDate,
     this.endDate,
@@ -30,6 +38,10 @@ class HomePastPatientListSortingModel {
       colIndex: json['colIndex'] ?? -1,
       isAscending: json['isAscending'] ?? true,
       selectedStatusIndex: json['selectedStatusIndex'] != null ? List<String>.from(json['selectedStatusIndex']) : [], // Default to empty List<int>
+      selectedDoctorNames: json['selectedDoctorNames'] != null ? List<String>.from(json['selectedDoctorNames']) : [], // Default to empty List<int>
+      selectedMedicationNames: json['selectedMedicationNames'] != null ? List<String>.from(json['selectedMedicationNames']) : [], // Default to empty List<int>
+      selectedDoctorId: json['selectedDoctorId'] != null ? List<int>.from(json['selectedDoctorId']) : [], // Default to empty List<int>
+      selectedMedicationId: json['selectedMedicationId'] != null ? List<int>.from(json['selectedMedicationId']) : [], // Default to empty List<int>
       selectedDateValue: json['selectedDateValue'] != null ? (json['selectedDateValue'] as List).map((e) => DateTime.parse(e)).toList() : [DateTime.now()], // Default to the current date
       startDate: json['startDate'],
       endDate: json['endDate'],
@@ -44,6 +56,10 @@ class HomePastPatientListSortingModel {
       'colIndex': colIndex,
       'isAscending': isAscending,
       'selectedStatusIndex': selectedStatusIndex,
+      'selectedMedicationNames': selectedMedicationNames,
+      'selectedDoctorNames': selectedDoctorNames,
+      'selectedMedicationId': selectedMedicationId,
+      'selectedDoctorId': selectedDoctorId,
       'selectedDateValue': selectedDateValue?.map((e) => e.toIso8601String()).toList(),
       'startDate': startDate,
       'endDate': endDate,

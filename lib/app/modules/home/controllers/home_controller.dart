@@ -21,6 +21,7 @@ import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalDoctorModel.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../../personal_setting/model/filter_past_visit_status.dart';
@@ -50,6 +51,8 @@ class HomeController extends GetxController {
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
   Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
   Rxn<MedicalDoctorModel> doctorListModel = Rxn<MedicalDoctorModel>();
+  RxList<SelectedDoctorModel> selectedDoctorModel = RxList<SelectedDoctorModel>();
+  RxList<SelectedDoctorModel> selectedMedicalModel = RxList<SelectedDoctorModel>();
   Rxn<MedicalDoctorModel> medicalListModel = Rxn<MedicalDoctorModel>();
 
   Rxn<ScheduleVisitListModel> scheduleVisitListModel = Rxn<ScheduleVisitListModel>();
@@ -696,7 +699,15 @@ class HomeController extends GetxController {
 
       param['role'] = ROLE_MEDICAL_ASSISTANT;
       medicalListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
-      if (medicalListModel.value?.responseType == "success") {}
+      selectedMedicalModel.clear();
+
+      if (medicalListModel.value?.responseType == "success") {
+        medicalListModel.value?.responseData?.forEach(
+          (element) {
+            selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+          },
+        );
+      }
     } catch (e) {
       print("$e");
     }
@@ -708,7 +719,15 @@ class HomeController extends GetxController {
 
       param['role'] = ROLE_DOCTOR;
       doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
-      if (doctorListModel.value?.responseType == "success") {}
+      selectedDoctorModel.clear();
+
+      if (doctorListModel.value?.responseType == "success") {
+        doctorListModel.value?.responseData?.forEach(
+          (element) {
+            selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+          },
+        );
+      }
     } catch (e) {
       print("$e");
     }

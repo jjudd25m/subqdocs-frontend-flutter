@@ -8,14 +8,16 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../models/MedicalDoctorModel.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 
 class DropDownWithSearch extends StatelessWidget {
-  DropDownWithSearch({super.key, this.list, required this.receiveParam, required this.selectedId});
+  DropDownWithSearch({super.key, this.list, required this.receiveParam, required this.selectedId, required this.onChanged});
 
   int selectedId;
 
-  final void Function(int id) receiveParam;
-  MedicalDoctorModel? list;
+  final void Function(int) receiveParam;
+  final void Function(bool, int, int) onChanged;
+  List<SelectedDoctorModel>? list;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +27,7 @@ class DropDownWithSearch extends StatelessWidget {
           border: Border.all(width: 1, color: AppColors.textfieldBorder),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: list != null && list?.responseData != null && list?.responseData?.length != 0
+        child: list != null && list != null && list?.length != 0
             ? Column(
                 children: [
                   Padding(
@@ -69,44 +71,49 @@ class DropDownWithSearch extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12.5),
-                                      child: selectedId != list?.responseData?[index].id
-                                          ? SvgPicture.asset(
-                                              ImagePath.unCheckedBox,
-                                              width: 14,
-                                              height: 14,
-                                            )
-                                          : SvgPicture.asset(
-                                              ImagePath.checkedBox,
-                                              width: 14,
-                                              height: 14,
-                                            )),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(14),
-                                    child: BaseImageView(
-                                      height: 32,
-                                      width: 32,
-                                      nameLetters: list?.responseData?[index].name ?? "",
-                                      fontSize: 12,
-                                      imageUrl: list?.responseData?[index].profileImage ?? "",
+                              GestureDetector(
+                                onTap: () {
+                                  onChanged(list?[index].isSelected ?? false, index, list?[index].id ?? -1);
+                                },
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12.5),
+                                        child: list?[index].isSelected == false
+                                            ? SvgPicture.asset(
+                                                ImagePath.unCheckedBox,
+                                                width: 14,
+                                                height: 14,
+                                              )
+                                            : SvgPicture.asset(
+                                                ImagePath.checkedBox,
+                                                width: 14,
+                                                height: 14,
+                                              )),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(14),
+                                      child: BaseImageView(
+                                        height: 32,
+                                        width: 32,
+                                        nameLetters: list?[index].name ?? "",
+                                        fontSize: 12,
+                                        imageUrl: list?[index].profileImage ?? "",
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    list?.responseData?[index].name ?? "",
-                                    style: AppFonts.medium(14, AppColors.black),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      list?[index].name ?? "",
+                                      style: AppFonts.medium(14, AppColors.black),
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 height: 10,
                               ),
-                              if (list?.responseData?.length != index + 1)
+                              if (list?.length != index + 1)
                                 Container(
                                   color: AppColors.textfieldBorder,
                                   height: 1,
@@ -115,7 +122,7 @@ class DropDownWithSearch extends StatelessWidget {
                           ),
                         );
                       },
-                      itemCount: list?.responseData?.length ?? 0,
+                      itemCount: list?.length ?? 0,
                     ),
                   )
                 ],

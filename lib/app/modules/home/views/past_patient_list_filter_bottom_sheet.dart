@@ -22,6 +22,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
 
   RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
   RxList<String> selectedStatusIndex = RxList();
+  RxList<int> selectedDoctorId = RxList();
 
   RxBool isExpandedDoctor = RxBool(false);
   RxBool isExpandedMedicalAssistant = RxBool(false);
@@ -36,6 +37,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
     selectedDate?.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? RxList([DateTime.now()]);
     pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
     selectedStatusIndex.value = controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
+    selectedDoctorId.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorId ?? [];
     return SizedBox(
       width: double.infinity, // Ensures full width
       child: Container(
@@ -71,6 +73,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                     GestureDetector(
                       onTap: () {
                         selectedStatusIndex.clear();
+                        selectedDoctorId.clear();
                         controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue?.clear();
                         controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
                         controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
@@ -422,8 +425,15 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedDoctor.value
                               ? DropDownWithSearch(
+                                  onChanged: (value, index, selectedId) {
+                                    controller.selectedDoctorModel[index].isSelected = !value;
+                                    controller.selectedDoctorModel.refresh();
+
+                                    controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorId?.add(selectedId);
+                                    controller.globalController.saveHomePastPatientData();
+                                  },
                                   receiveParam: (id) {},
-                                  list: controller.doctorListModel.value,
+                                  list: controller.selectedDoctorModel.value,
                                   selectedId: 1,
                                 )
                               : SizedBox(),
@@ -458,7 +468,13 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedMedicalAssistant.value
                               ? DropDownWithSearch(
-                                  list: controller.medicalListModel.value,
+                                  onChanged: (value, index, selectedId) {
+                                    controller.selectedMedicalModel[index].isSelected = !value;
+
+                                    controller.globalController.homePastPatientListSortingModel.value?.selectedMedicationId?.add(selectedId);
+                                    controller.globalController.saveHomePastPatientData();
+                                  },
+                                  list: controller.selectedMedicalModel.value,
                                   receiveParam: (int id) {},
                                   selectedId: 1,
                                 )

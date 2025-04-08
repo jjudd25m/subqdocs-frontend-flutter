@@ -435,6 +435,8 @@ class GlobalController extends GetxController {
       json['colIndex'] = 1;
       json['isAscending'] = true;
       json['selectedStatusIndex'] = ["Pending"];
+      json['selectedMedicationId'] = [];
+      json['selectedDoctorId'] = [];
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
