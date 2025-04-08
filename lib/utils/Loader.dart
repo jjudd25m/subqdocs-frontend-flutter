@@ -32,4 +32,8 @@ class Loader {
       barrierDismissible: false, // Prevent dismissing the dialog by tapping outside
     );
   }
+
+  void stopLoader() {
+    Get.back();
+  }
 }
