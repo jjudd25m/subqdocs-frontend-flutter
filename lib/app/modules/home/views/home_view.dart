@@ -377,9 +377,10 @@ class HomeView extends GetView<HomeController> {
                                                       var result;
                                                       if (controller.globalController.tabIndex.value == 0) {
                                                         await Get.toNamed(Routes.ADD_PATIENT);
+                                                        controller.patientList.clear();
+                                                        controller.getPatientList(isLoading: true);
                                                         controller.getPastVisitList(isFist: true);
                                                         controller.getScheduleVisitList(isFist: true);
-                                                        controller.getPatientList();
                                                       } else {
                                                         final result = await Get.toNamed(Routes.SCHEDULE_PATIENT);
                                                       }
@@ -390,9 +391,9 @@ class HomeView extends GetView<HomeController> {
                                                       }
 
                                                       print("----- called before Add_patient back");
+                                                      controller.getPatientList();
                                                       controller.getPastVisitList(isFist: true);
                                                       controller.getScheduleVisitList(isFist: true);
-                                                      controller.getPatientList();
                                                     },
                                                     label: controller.globalController.tabIndex.value == 0 ? "Add Patient" : "Schedule Visit",
                                                   ),

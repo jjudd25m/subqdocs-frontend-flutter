@@ -308,10 +308,14 @@ class HomeController extends GetxController {
     return sorting.where((map) => map['id'] == key).toList();
   }
 
-  Future<void> getPatientList({String? sortingName = ""}) async {
+  Future<void> getPatientList({String? sortingName = "", bool isLoading = false}) async {
     Map<String, dynamic> param = {};
     pagePatient = 1;
     triggeredIndexes.clear();
+
+    if (isLoading) {
+      Loader().showLoadingDialogForSimpleLoader();
+    }
 
     param['page'] = 1;
     param['limit'] = "100";
@@ -339,6 +343,10 @@ class HomeController extends GetxController {
     print("param:- $param");
     globalController.saveHomePatientListData();
     patientListModel.value = await _homeRepository.getPatient(param: param);
+
+    if (isLoading) {
+      Loader().stopLoader();
+    }
 
     if (patientListModel.value?.responseData?.data != null) {
       patientList.value = patientListModel.value?.responseData?.data ?? [];
