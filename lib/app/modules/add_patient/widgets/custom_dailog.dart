@@ -52,7 +52,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
-                        controller.list.clear();
+                        // controller.list.clear();
                       },
                       child: Container(
                         padding: EdgeInsets.all(15),
@@ -163,13 +163,18 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                                       children: [
                                         Text(controller.list.value[index].fileName ?? ""),
                                         Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                        if (controller.list.value[index].isGraterThan10 ?? false)
+                                          Text(
+                                            "File Size must not exceed 10 MB",
+                                            style: AppFonts.medium(15, Colors.red),
+                                          )
                                       ],
                                     ),
                                     Spacer(),
                                     GestureDetector(
                                       onTap: () {
                                         controller.removeItem(index);
-                                        controller.calculateTotalFileSize();
+                                        // controller.calculateTotalFileSize();
                                       },
                                       child: SvgPicture.asset(
                                         "assets/images/logo_cross.svg",
@@ -194,8 +199,8 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                           child: CustomButton(
                             navigate: () {
                               Navigator.pop(context);
-                              controller.list.clear();
-                              controller.calculateTotalFileSize();
+                              // controller.list.clear();
+                              // controller.calculateTotalFileSize();
                             },
                             label: "Cancel",
                             backGround: Colors.white,

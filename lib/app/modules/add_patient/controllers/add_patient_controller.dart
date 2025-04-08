@@ -94,8 +94,6 @@ class AddPatientController extends GetxController {
   RxList<MediaListingModel> list = RxList();
   RxList<MediaListingModel> selectedList = RxList();
 
-  double totalFileSize = 0.0;
-
   String getNextRoundedTime() {
     DateTime now = DateTime.now();
 
@@ -128,8 +126,7 @@ class AddPatientController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT ||
-        globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT || globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
       globalController.popRoute();
     }
     // globalController.popRoute();
@@ -169,21 +166,64 @@ class AddPatientController extends GetxController {
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
 
+  double _formatFileSizeDouble(int bytes) {
+    double sizeInKB = bytes / 1024; // Convert bytes to KB
+    double sizeInMB = sizeInKB / 1024; // Convert KB to MB
+    return (sizeInMB * 100).roundToDouble() / 100;
+  }
+
   String _formatDate(DateTime date) {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return dateFormat.format(date); // Format date to dd/MM/yyyy
   }
+  //
+  // void calculateTotalFileSize() {
+  //   totalFileSize = 0.0;
+  //   for (var item in list) {
+  //     totalFileSize += (item.file?.lengthSync() ?? 0) / (1024 * 1024); // Convert bytes to MB
+  //   }
+  // }
 
-  void calculateTotalFileSize() {
-    totalFileSize = 0.0;
-    for (var item in list) {
-      totalFileSize += (item.file?.lengthSync() ?? 0) / (1024 * 1024); // Convert bytes to MB
+  bool checkTotalSize() {
+    double totalSize = 0.0;
+
+    list.value.forEach(
+      (element) {
+        totalSize += element.calculateSize ?? 0;
+      },
+    );
+
+    if (totalSize < 100) {
+      return true;
+    } else {
+      return false;
     }
   }
 
+  bool checkSingleSize() {
+    bool isGraterThan10 = false;
+
+    list.value.forEach(
+      (element) {
+        if (element.isGraterThan10 ?? false) {
+          isGraterThan10 = true;
+        }
+      },
+    );
+
+    return isGraterThan10;
+  }
+
   void addImage() {
-    selectedList.addAll(list);
-    list.clear();
+    if (checkTotalSize()) {
+      if (checkSingleSize()) {
+        CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
+      } else {
+        selectedList.addAll(list);
+      }
+    } else {
+      CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
+    }
   }
 
   void deleteAttachments(int index) {
@@ -216,6 +256,7 @@ class AddPatientController extends GetxController {
           // totalFileSize += _fileSize / (1024 * 1024);
 
           String? _filesizeString = _formatFileSize(_fileSize);
+          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
 
           String? _shortFileName;
           if (p.basename(_fileName).length > 15) {
@@ -224,16 +265,15 @@ class AddPatientController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
         }
 
         list.refresh();
       },
     );
 
-    calculateTotalFileSize();
-
-    print("total file size is $totalFileSize");
+    // calculateTotalFileSize();
   }
 
   Future<void> captureProfileImage() async {
@@ -272,13 +312,17 @@ class AddPatientController extends GetxController {
 
       String? _filesizeString = _formatFileSize(_fileSize);
       String? _shortFileName;
+
+      double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+
       if (p.basename(_fileName).length > 15) {
         // Truncate the name to 12 characters and add ellipsis
         _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
     }
 
     list.refresh();
@@ -297,6 +341,7 @@ class AddPatientController extends GetxController {
     Map<String, List<File>> profileParams = {};
 
     param['first_name'] = firstNameController.text;
+
     if (profileImage.value != null) {
       customPrint("profile is   available");
       // param['profile_image'] = profileImage.value;

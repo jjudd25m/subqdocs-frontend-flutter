@@ -120,48 +120,6 @@ class AddPatientView extends GetView<AddPatientController> {
     );
   }
 
-  void _showCupertinoDatePicker(BuildContext context, TextEditingController control) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoActionSheet(
-          title: Text(
-            "Pick a Date",
-            style: AppFonts.medium(16, AppColors.black),
-          ),
-          actions: <Widget>[
-            Container(
-              height: 400,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                maximumDate: DateTime.now().subtract(Duration(days: 370)),
-                initialDateTime: DateTime.now().subtract(Duration(days: 371)),
-                onDateTimeChanged: (DateTime newDate) {
-                  fromDate = newDate;
-
-                  // Update the TextField with selected date
-                },
-              ),
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            child: Text('Done'),
-            onPressed: () {
-              String formattedDate = DateFormat('MM/dd/yyyy').format(fromDate);
-
-              // String formattedDate = DateFormat('MM-dd-yyyy').format(DateTime.now());
-              control.text = formattedDate;
-
-              // customPrint('${_selectedDate.toLocal()}'.split(' ')[0]);
-
-              Navigator.of(context).pop();
-            },
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -1011,10 +969,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                if (controller.totalFileSize > 100) {
-                                                  CustomToastification().showToast("File size exceeded 100 MB", type: ToastificationType.error);
-                                                  return;
-                                                }
+                                                // if (controller.totalFileSize > 100) {
+                                                //   CustomToastification().showToast("File size exceeded 100 MB", type: ToastificationType.error);
+                                                //   return;
+                                                // }
 
                                                 controller.isSaveAddAnother.value = false;
 
