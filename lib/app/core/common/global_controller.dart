@@ -163,8 +163,7 @@ class GlobalController extends GetxController {
       Loader().showLoadingDialogForSimpleLoader();
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
 
       customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 

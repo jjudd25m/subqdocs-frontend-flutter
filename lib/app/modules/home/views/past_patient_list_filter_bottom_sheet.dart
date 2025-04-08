@@ -424,6 +424,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                               ? DropDownWithSearch(
                                   receiveParam: (id) {},
                                   list: controller.doctorListModel.value,
+                                  selectedId: 1,
                                 )
                               : SizedBox(),
                         );
@@ -458,6 +459,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           child: isExpandedMedicalAssistant.value
                               ? DropDownWithSearch(
                                   list: controller.medicalListModel.value,
+                                  receiveParam: (int id) {},
+                                  selectedId: 1,
                                 )
                               : SizedBox(),
                         );
