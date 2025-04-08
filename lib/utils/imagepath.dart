@@ -104,4 +104,7 @@ class ImagePath {
   static const String textfield_clear = 'assets/images/textfield_clear.svg';
   static const String textfield_clear_png = 'assets/images/textfield_clear.png';
   static const String subqdocs_white = 'assets/images/subqdocs_white.svg';
+
+  static const String passwordValidationTrue = 'assets/images/password_validation_true.svg';
+  static const String passwordValidationFalse = 'assets/images/password_validation_error.svg';
 }

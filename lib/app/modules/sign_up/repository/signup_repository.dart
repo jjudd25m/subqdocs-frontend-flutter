@@ -7,7 +7,7 @@ class SignupRepository {
   Future<SignUpModel> registerUser({required Map<String, dynamic> param}) async {
     var response = await ApiProvider.instance.callPostWithoutHeader("auth/register", params: param);
 
-    print("getPatient API  internal response $response");
+    print("registerUser API  internal response $response");
 
     return SignUpModel.fromJson(response);
   }

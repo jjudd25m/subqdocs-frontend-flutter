@@ -9,6 +9,7 @@ import '../../../../widgets/custom_toastification.dart';
 class SignUpController extends GetxController {
   //TODO: Implement SignUpController
 
+  RxBool isTermsCondition = RxBool(true);
   RxBool passwordVisible = RxBool(true);
   RxBool confirmPasswordVisible = RxBool(true);
   RxBool isLoading = RxBool(false);

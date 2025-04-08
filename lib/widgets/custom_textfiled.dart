@@ -13,6 +13,7 @@ class TextFormFiledWidget extends StatefulWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final void Function()? onTap;
+  final void Function(String?)? onChanged;
   final bool isValid;
   bool isSuffixIconVisible;
 
@@ -45,6 +46,7 @@ class TextFormFiledWidget extends StatefulWidget {
       this.onTap,
       this.suffixIcon,
       this.maxLines = 1,
+      this.onChanged,
       this.maxLength = null,
       this.prefixIcon});
 
@@ -96,6 +98,8 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
                   maxLines: widget.maxLines,
                   readOnly: widget.readOnly,
                   onChanged: (value) {
+                    widget.onChanged!(value);
+
                     if (widget.isFirst == true) {
                       value.isEmpty ? widget.isSuffixIconVisible = false : widget.isSuffixIconVisible = true;
 
