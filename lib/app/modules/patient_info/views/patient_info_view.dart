@@ -25,6 +25,7 @@ import '../../../core/common/common_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../home/views/container_dropdown_view.dart';
+import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../controllers/patient_info_controller.dart';
@@ -308,11 +309,16 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                             width: 160,
                                                             child: DropDownWithSearchPopup(
                                                               onChanged: (value, index, selectedId, name) {
+                                                                print("hello");
+
+                                                                controller.medicationValue.value = name;
+                                                                controller.updateMedicalView(selectedId);
+
                                                                 // controller.globalController.selectedDoctorModel[index].isSelected = !value;
                                                                 // controller.globalController.selectedMedicalModel.refresh();
                                                                 // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
                                                               },
-                                                              list: controller.globalController.selectedDoctorModel.value,
+                                                              list: controller.globalController.selectedMedicalModel.value,
                                                               receiveParam: (int id) {},
                                                               selectedId: 1,
                                                             ),
@@ -320,11 +326,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 ],
                                                 child: SizedBox(
                                                   width: 170,
-                                                  child: ContainerDropdownView(
+                                                  child: ContainerDropdownViewPopUp(
                                                     receiveParam: (isExpand) {
                                                       // isExpandedMedicalAssistant.value = isExpand;
                                                     },
-                                                    name: "mihir thakkkar",
+                                                    name: controller.medicationValue.value,
                                                   ),
                                                 ),
                                               ),
@@ -368,6 +374,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                             width: 160,
                                                             child: DropDownWithSearchPopup(
                                                               onChanged: (value, index, selectedId, name) {
+                                                                print("print the doctor view ");
+
+                                                                controller.doctorValue.value = name;
+
+                                                                controller.updateDoctorView(selectedId);
+
                                                                 // controller.globalController.selectedDoctorModel[index].isSelected = !value;
                                                                 // controller.globalController.selectedMedicalModel.refresh();
                                                                 // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
@@ -380,11 +392,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 ],
                                                 child: SizedBox(
                                                   width: 170,
-                                                  child: ContainerDropdownView(
+                                                  child: ContainerDropdownViewPopUp(
                                                     receiveParam: (isExpand) {
                                                       // isExpandedMedicalAssistant.value = isExpand;
                                                     },
-                                                    name: "mihir thakkkar",
+                                                    name: controller.doctorValue.value,
                                                   ),
                                                 ),
                                               ),

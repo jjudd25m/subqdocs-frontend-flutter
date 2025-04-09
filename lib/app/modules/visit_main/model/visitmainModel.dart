@@ -34,6 +34,8 @@ class ResponseData {
   String? visitTime;
   String? visitStatus;
   int? id;
+  int? medicalAssistantId;
+  int? doctorId;
   String? patientId;
   String? patientFirstName;
   String? patientMiddleName;
@@ -52,6 +54,8 @@ class ResponseData {
       this.visitTime,
       this.visitStatus,
       this.id,
+      this.medicalAssistantId,
+      this.doctorId,
       this.patientId,
       this.patientFirstName,
       this.patientMiddleName,
@@ -71,6 +75,8 @@ class ResponseData {
     visitTime = json['visit_time'];
     visitStatus = json['visit_status'];
     id = json['id'];
+    doctorId = json['doctor_id'];
+    medicalAssistantId = json['medical_assistant_id'];
     patientId = json['patient_id'];
     patientFirstName = json['patient_first_name'];
     patientMiddleName = json['patient_middle_name'];
@@ -96,6 +102,8 @@ class ResponseData {
     data['visit_time'] = visitTime;
     data['visit_status'] = visitStatus;
     data['id'] = id;
+    data['doctor_id'] = doctorId;
+    data['medical_assistant_id'] = medicalAssistantId;
     data['patient_id'] = patientId;
     data['patient_first_name'] = patientFirstName;
     data['patient_middle_name'] = patientMiddleName;

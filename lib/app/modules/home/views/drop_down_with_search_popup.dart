@@ -17,6 +17,7 @@ class DropDownWithSearchPopup extends StatelessWidget {
 
   final void Function(int) receiveParam;
   final void Function(bool, int, int, String) onChanged;
+
   List<SelectedDoctorModel>? list;
   @override
   Widget build(BuildContext context) {

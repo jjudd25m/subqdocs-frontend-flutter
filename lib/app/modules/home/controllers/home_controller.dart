@@ -452,6 +452,26 @@ class HomeController extends GetxController {
       }
     }
 
+    if (globalController.homePastPatientListSortingModel.value?.selectedDoctorNames?.isNotEmpty ?? false) {
+      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedDoctorNames ?? [];
+
+      if (statusList.length == 1) {
+        param['doctorsName[0]'] = statusList;
+      } else {
+        param['doctorsName'] = statusList;
+      }
+    }
+
+    if (globalController.homePastPatientListSortingModel.value?.selectedMedicationNames?.isNotEmpty ?? false) {
+      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedMedicationNames ?? [];
+
+      if (statusList.length == 1) {
+        param['medicalAssistantsName[0]'] = statusList;
+      } else {
+        param['medicalAssistantsName'] = statusList;
+      }
+    }
+
     if (globalController.homePastPatientListSortingModel.value?.startDate != "" && globalController.homePastPatientListSortingModel.value?.endDate != "") {
       DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePastPatientListSortingModel.value?.startDate ?? "");
 

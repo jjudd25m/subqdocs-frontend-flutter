@@ -7,26 +7,26 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/imagepath.dart';
 
-class ContainerDropdownView extends StatefulWidget {
+class ContainerDropdownViewPopUp extends StatefulWidget {
   final String name;
   final void Function(bool) receiveParam;
-  const ContainerDropdownView({super.key, required this.name, required this.receiveParam});
+  const ContainerDropdownViewPopUp({super.key, required this.name, required this.receiveParam});
 
   @override
-  State<ContainerDropdownView> createState() => _ContainerDropdownViewState();
+  State<ContainerDropdownViewPopUp> createState() => _ContainerDropdownViewState();
 }
 
-class _ContainerDropdownViewState extends State<ContainerDropdownView> {
+class _ContainerDropdownViewState extends State<ContainerDropdownViewPopUp> {
   bool isExpand = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        isExpand = !isExpand;
-        widget.receiveParam(isExpand);
-        setState(() {});
-      },
+      // onTap: () {
+      //   isExpand = !isExpand;
+      //   widget.receiveParam(isExpand);
+      //   setState(() {});
+      // },
       child: Container(
         height: 40,
         decoration: BoxDecoration(

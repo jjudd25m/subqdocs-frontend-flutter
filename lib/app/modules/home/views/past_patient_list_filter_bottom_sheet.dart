@@ -434,6 +434,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                     } else {
                                       controller.globalController.removeDoctorFilter(selectedId: selectedId, name: name);
                                     }
+
+                                    controller.getPastVisitList();
                                   },
                                   receiveParam: (id) {},
                                   list: controller.globalController.selectedDoctorModel.value,
