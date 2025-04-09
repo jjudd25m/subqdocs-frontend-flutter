@@ -425,15 +425,18 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedDoctor.value
                               ? DropDownWithSearch(
-                                  onChanged: (value, index, selectedId) {
-                                    controller.selectedDoctorModel[index].isSelected = !value;
-                                    controller.selectedDoctorModel.refresh();
+                                  onChanged: (value, index, selectedId, name) {
+                                    controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                                    controller.globalController.selectedDoctorModel.refresh();
 
-                                    controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorId?.add(selectedId);
-                                    controller.globalController.saveHomePastPatientData();
+                                    if (!value) {
+                                      controller.globalController.saveDoctorFilter(selectedId: selectedId, name: name);
+                                    } else {
+                                      controller.globalController.removeDoctorFilter(selectedId: selectedId, name: name);
+                                    }
                                   },
                                   receiveParam: (id) {},
-                                  list: controller.selectedDoctorModel.value,
+                                  list: controller.globalController.selectedDoctorModel.value,
                                   selectedId: 1,
                                 )
                               : SizedBox(),
@@ -468,13 +471,12 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedMedicalAssistant.value
                               ? DropDownWithSearch(
-                                  onChanged: (value, index, selectedId) {
-                                    controller.selectedMedicalModel[index].isSelected = !value;
-
-                                    controller.globalController.homePastPatientListSortingModel.value?.selectedMedicationId?.add(selectedId);
-                                    controller.globalController.saveHomePastPatientData();
+                                  onChanged: (value, index, selectedId, name) {
+                                    controller.globalController.selectedMedicalModel[index].isSelected = !value;
+                                    controller.globalController.selectedMedicalModel.refresh();
+                                    controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
                                   },
-                                  list: controller.selectedMedicalModel.value,
+                                  list: controller.globalController.selectedMedicalModel.value,
                                   receiveParam: (int id) {},
                                   selectedId: 1,
                                 )

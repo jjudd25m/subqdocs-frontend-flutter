@@ -51,8 +51,7 @@ class HomeController extends GetxController {
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
   Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
   Rxn<MedicalDoctorModel> doctorListModel = Rxn<MedicalDoctorModel>();
-  RxList<SelectedDoctorModel> selectedDoctorModel = RxList<SelectedDoctorModel>();
-  RxList<SelectedDoctorModel> selectedMedicalModel = RxList<SelectedDoctorModel>();
+
   Rxn<MedicalDoctorModel> medicalListModel = Rxn<MedicalDoctorModel>();
 
   Rxn<ScheduleVisitListModel> scheduleVisitListModel = Rxn<ScheduleVisitListModel>();
@@ -699,12 +698,14 @@ class HomeController extends GetxController {
 
       param['role'] = ROLE_MEDICAL_ASSISTANT;
       medicalListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
-      selectedMedicalModel.clear();
+      globalController.selectedMedicalModel.clear();
 
       if (medicalListModel.value?.responseType == "success") {
         medicalListModel.value?.responseData?.forEach(
           (element) {
-            selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+            globalController.selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+
+            globalController.setMedicalModel();
           },
         );
       }
@@ -719,12 +720,14 @@ class HomeController extends GetxController {
 
       param['role'] = ROLE_DOCTOR;
       doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
-      selectedDoctorModel.clear();
+      globalController.selectedDoctorModel.clear();
 
       if (doctorListModel.value?.responseType == "success") {
         doctorListModel.value?.responseData?.forEach(
           (element) {
-            selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+            globalController.selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+
+            globalController.setDoctorModel();
           },
         );
       }

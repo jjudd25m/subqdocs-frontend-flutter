@@ -539,40 +539,36 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                 width: Dimen.margin10,
                                               ),
                                               Expanded(
-                                                child: TextFormFiledWidget(
-                                                  suffixIcon: Icon(Icons.calendar_month),
-                                                  label: "Visit Date",
-                                                  format: [NoSpaceTextFormatter()],
-                                                  readOnly: true,
-                                                  // isImportant: true,
-                                                  controller: controller.visitDateController,
-                                                  onTap: () async {
-                                                    final picked = await showDatePicker(
-                                                      context: context,
-                                                      initialDate: DateTime.now(),
-                                                      firstDate: DateTime.now(),
-                                                      lastDate: DateTime.now().add(Duration(days: 1000)),
-                                                      builder: (context, child) {
-                                                        return Theme(
-                                                          data: ThemeData.light().copyWith(
-                                                            cardColor: AppColors.white,
-                                                            primaryColor: AppColors.backgroundPurple,
-                                                            hintColor: AppColors.backgroundPurple,
-                                                            colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                                                          ),
-                                                          child: child!,
-                                                        );
-                                                      },
-                                                    );
-                                                    if (picked != null) {
-                                                      String inputText;
-                                                      String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                      inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                      controller.visitDateController.text = inputText;
-                                                    }
-                                                  },
-                                                  hint: "mm/dd/yyyy",
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Doctor Name",
+                                                          style: AppFonts.regular(14, AppColors.textBlack),
+                                                        ),
+                                                        // Text(
+                                                        //   "*",
+                                                        //   style: AppFonts.regular(14, AppColors.redText),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Obx(() {
+                                                      return BaseDropdown<String>(
+                                                        valueAsString: (value) => value ?? "",
+                                                        items: controller.globalController.selectedDoctorModel.map((model) => model.name).toList(),
+                                                        selectedValue: controller.selectedDoctorValue.value,
+                                                        onChanged: (value) {
+                                                          controller.selectedDoctorValue.value = value;
+                                                        },
+                                                        selectText: "select Doctor..",
+                                                      );
+                                                    })
+                                                  ],
                                                 ),
                                               ),
                                             ],
@@ -642,6 +638,82 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "Medical Assistant",
+                                                        style: AppFonts.regular(14, AppColors.textBlack),
+                                                      ),
+                                                      // Text(
+                                                      //   "*",
+                                                      //   style: AppFonts.regular(14, AppColors.redText),
+                                                      // ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Obx(() {
+                                                    return BaseDropdown<String>(
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.globalController.selectedMedicalModel.map((model) => model.name).toList(),
+                                                      selectedValue: controller.selectedMedicalValue.value,
+                                                      onChanged: (value) {
+                                                        controller.selectedMedicalValue.value = value;
+                                                      },
+                                                      selectText: "select Medical..",
+                                                    );
+                                                  })
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: Dimen.margin10,
+                                            ),
+                                            Expanded(
+                                              child: TextFormFiledWidget(
+                                                suffixIcon: Icon(Icons.calendar_month),
+                                                label: "Visit Date",
+                                                format: [NoSpaceTextFormatter()],
+                                                readOnly: true,
+                                                // isImportant: true,
+                                                controller: controller.visitDateController,
+                                                onTap: () async {
+                                                  final picked = await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime.now(),
+                                                    lastDate: DateTime.now().add(Duration(days: 1000)),
+                                                    builder: (context, child) {
+                                                      return Theme(
+                                                        data: ThemeData.light().copyWith(
+                                                          cardColor: AppColors.white,
+                                                          primaryColor: AppColors.backgroundPurple,
+                                                          hintColor: AppColors.backgroundPurple,
+                                                          colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                          buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                        ),
+                                                        child: child!,
+                                                      );
+                                                    },
+                                                  );
+                                                  if (picked != null) {
+                                                    String inputText;
+                                                    String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                    inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                    controller.visitDateController.text = inputText;
+                                                  }
+                                                },
+                                                hint: "mm/dd/yyyy",
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: Dimen.margin10,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
                                                   Text(
                                                     "Visit Time",
                                                     style: AppFonts.regular(14, AppColors.textBlack),
@@ -663,14 +735,6 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Spacer(),
-                                            SizedBox(
-                                              width: Dimen.margin10,
-                                            ),
-                                            Spacer(),
                                           ],
                                         )
                                       : SizedBox();

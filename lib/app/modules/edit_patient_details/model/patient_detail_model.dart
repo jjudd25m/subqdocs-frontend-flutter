@@ -28,6 +28,8 @@ class PatientDetailModel {
 class ResponseData {
   int? id;
   String? patientId;
+  int? doctorId;
+  int? medicalAssistantId;
   String? firstName;
   String? lastName;
   String? contactNumber;
@@ -44,11 +46,13 @@ class ResponseData {
 
   ResponseData(
       {this.id,
+      this.doctorId,
+      this.medicalAssistantId,
       this.patientId,
       this.firstName,
       this.lastName,
       this.middleName,
-        this.contactNumber,
+      this.contactNumber,
       this.dateOfBirth,
       this.age,
       this.email,
@@ -61,6 +65,8 @@ class ResponseData {
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    doctorId = json['doctor_id'];
+    medicalAssistantId = json['medical_assistant_id'];
     patientId = json['patient_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
@@ -90,6 +96,8 @@ class ResponseData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['doctor_id'] = doctorId;
+    data['medical_assistant_id'] = medicalAssistantId;
     data['patient_id'] = patientId;
     data['first_name'] = firstName;
     data['contact_no'] = contactNumber;

@@ -16,7 +16,7 @@ class DropDownWithSearch extends StatelessWidget {
   int selectedId;
 
   final void Function(int) receiveParam;
-  final void Function(bool, int, int) onChanged;
+  final void Function(bool, int, int, String) onChanged;
   List<SelectedDoctorModel>? list;
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class DropDownWithSearch extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  onChanged(list?[index].isSelected ?? false, index, list?[index].id ?? -1);
+                                  onChanged(list?[index].isSelected ?? false, index, list?[index].id ?? -1, list?[index].name ?? "");
                                 },
                                 child: Row(
                                   children: [

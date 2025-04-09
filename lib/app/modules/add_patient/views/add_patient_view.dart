@@ -638,6 +638,87 @@ class AddPatientView extends GetView<AddPatientController> {
                                               SizedBox(
                                                 width: Dimen.margin10,
                                               ),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Doctor Name",
+                                                          style: AppFonts.regular(14, AppColors.textBlack),
+                                                        ),
+                                                        // Text(
+                                                        //   "*",
+                                                        //   style: AppFonts.regular(14, AppColors.redText),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Obx(() {
+                                                      return BaseDropdown<String>(
+                                                        valueAsString: (value) => value ?? "",
+                                                        items: controller.globalController.selectedDoctorModel.map((model) => model.name).toList(),
+                                                        selectedValue: controller.selectedDoctorValue.value,
+                                                        onChanged: (value) {
+                                                          controller.selectedDoctorValue.value = value;
+                                                        },
+                                                        selectText: "select Doctor..",
+                                                      );
+                                                    })
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      ),
+                                      SizedBox(
+                                        height: Dimen.margin16,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
+                                        child: Obx(() {
+                                          return Row(
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Medical Assistant",
+                                                          style: AppFonts.regular(14, AppColors.textBlack),
+                                                        ),
+                                                        // Text(
+                                                        //   "*",
+                                                        //   style: AppFonts.regular(14, AppColors.redText),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Obx(() {
+                                                      return BaseDropdown<String>(
+                                                        valueAsString: (value) => value ?? "",
+                                                        items: controller.globalController.selectedMedicalModel.map((model) => model.name).toList(),
+                                                        selectedValue: controller.selectedMedicalValue.value,
+                                                        onChanged: (value) {
+                                                          controller.selectedMedicalValue.value = value;
+                                                        },
+                                                        selectText: "select Medical..",
+                                                      );
+                                                    })
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
                                               !controller.isAddPatient.value
                                                   ? Expanded(
                                                       child: TextFormFiledWidget(
@@ -679,18 +760,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       ),
                                                     )
                                                   : Spacer(),
-                                            ],
-                                          );
-                                        }),
-                                      ),
-                                      SizedBox(
-                                        height: Dimen.margin16,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                        child: Obx(() {
-                                          return Row(
-                                            children: [
+                                              SizedBox(
+                                                width: Dimen.margin10,
+                                              ),
                                               !controller.isAddPatient.value
                                                   ? Expanded(
                                                       child: Column(
@@ -718,14 +790,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       ),
                                                     )
                                                   : Spacer(),
-                                              SizedBox(
-                                                width: Dimen.margin10,
-                                              ),
-                                              Spacer(),
-                                              SizedBox(
-                                                width: Dimen.margin10,
-                                              ),
-                                              Spacer(),
                                             ],
                                           );
                                         }),

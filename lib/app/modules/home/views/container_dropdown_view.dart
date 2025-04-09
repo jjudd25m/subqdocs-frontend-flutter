@@ -22,11 +22,11 @@ class _ContainerDropdownViewState extends State<ContainerDropdownView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        isExpand = !isExpand;
-        widget.receiveParam(isExpand);
-        setState(() {});
-      },
+      // onTap: () {
+      //   isExpand = !isExpand;
+      //   widget.receiveParam(isExpand);
+      //   setState(() {});
+      // },
       child: Container(
         height: 40,
         decoration: BoxDecoration(

@@ -71,6 +71,8 @@ class VisitMainController extends GetxController {
   final GlobalController globalController = Get.find();
   TextEditingController searchController = TextEditingController();
 
+  TextEditingController searchDoctorController = TextEditingController();
+
   final count = 0.obs;
 
   RxInt isSelectedAttchmentOption = RxInt(-1);
