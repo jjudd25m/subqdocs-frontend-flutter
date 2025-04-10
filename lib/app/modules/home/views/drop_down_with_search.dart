@@ -19,7 +19,7 @@ class DropDownWithSearch extends StatefulWidget {
   final void Function(bool, int, int, String) onChanged;
   List<SelectedDoctorModel>? list;
 
-  late List<SelectedDoctorModel> filteredList;
+  List<SelectedDoctorModel> filteredList = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -30,9 +30,9 @@ class DropDownWithSearch extends StatefulWidget {
 class _DropDownWithSearchState extends State<DropDownWithSearch> {
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     widget.filteredList = List.from(widget.list ?? []);
+
+    super.initState();
   }
 
   // Update the filteredList when search value changes

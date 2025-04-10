@@ -18,7 +18,7 @@ class DropDownWithSearchPopup extends StatefulWidget {
   final void Function(String) receiveParam;
   final void Function(bool, int, int, String) onChanged;
 
-  late List<SelectedDoctorModel> filteredList;
+  List<SelectedDoctorModel> filteredList = [];
 
   List<SelectedDoctorModel>? list;
 
@@ -99,6 +99,7 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                               GestureDetector(
                                 onTap: () {
                                   widget.onChanged(widget.list?[index].isSelected ?? false, index, widget.list?[index].id ?? -1, widget.list?[index].name ?? "");
+                                  setState(() {});
                                 },
                                 child: Row(
                                   children: [

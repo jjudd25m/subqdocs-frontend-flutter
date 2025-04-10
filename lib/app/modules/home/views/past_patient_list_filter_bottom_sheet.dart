@@ -421,10 +421,12 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                       ),
                       SizedBox(height: 10),
                       Obx(() {
+                        print(controller.globalController.selectedDoctorModel.value);
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedDoctor.value
                               ? DropDownWithSearch(
+                                  key: UniqueKey(),
                                   onChanged: (value, index, selectedId, name) {
                                     controller.globalController.selectedDoctorModel[index].isSelected = !value;
                                     controller.globalController.selectedDoctorModel.refresh();
@@ -473,6 +475,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedMedicalAssistant.value
                               ? DropDownWithSearch(
+                                  key: UniqueKey(),
                                   onChanged: (value, index, selectedId, name) {
                                     controller.globalController.selectedMedicalModel[index].isSelected = !value;
                                     controller.globalController.selectedMedicalModel.refresh();

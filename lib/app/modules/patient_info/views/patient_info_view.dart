@@ -308,10 +308,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                           child: SizedBox(
                                                             width: 160,
                                                             child: DropDownWithSearchPopup(
+                                                              key: UniqueKey(),
                                                               onChanged: (value, index, selectedId, name) {
                                                                 print("hello");
 
                                                                 controller.medicationValue.value = name;
+                                                                Get.back();
+
                                                                 controller.updateMedicalView(selectedId);
 
                                                                 // controller.globalController.selectedDoctorModel[index].isSelected = !value;
@@ -373,11 +376,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                           child: SizedBox(
                                                             width: 160,
                                                             child: DropDownWithSearchPopup(
+                                                              key: UniqueKey(),
                                                               onChanged: (value, index, selectedId, name) {
                                                                 print("print the doctor view ");
 
                                                                 controller.doctorValue.value = name;
-
+                                                                Get.back();
                                                                 controller.updateDoctorView(selectedId);
 
                                                                 // controller.globalController.selectedDoctorModel[index].isSelected = !value;

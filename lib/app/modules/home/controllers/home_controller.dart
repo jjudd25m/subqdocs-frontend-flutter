@@ -453,7 +453,7 @@ class HomeController extends GetxController {
     }
 
     if (globalController.homePastPatientListSortingModel.value?.selectedDoctorNames?.isNotEmpty ?? false) {
-      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedDoctorNames ?? [];
+      List<int>? statusList = globalController.homePastPatientListSortingModel.value?.selectedDoctorId ?? [];
 
       if (statusList.length == 1) {
         param['doctorsName[0]'] = statusList;
@@ -463,7 +463,7 @@ class HomeController extends GetxController {
     }
 
     if (globalController.homePastPatientListSortingModel.value?.selectedMedicationNames?.isNotEmpty ?? false) {
-      List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedMedicationNames ?? [];
+      List<int>? statusList = globalController.homePastPatientListSortingModel.value?.selectedMedicationId ?? [];
 
       if (statusList.length == 1) {
         param['medicalAssistantsName[0]'] = statusList;
