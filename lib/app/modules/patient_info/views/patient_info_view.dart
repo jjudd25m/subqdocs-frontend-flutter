@@ -319,7 +319,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                                 // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
                                                               },
                                                               list: controller.globalController.selectedMedicalModel.value,
-                                                              receiveParam: (int id) {},
+                                                              receiveParam: (String value) {},
                                                               selectedId: 1,
                                                             ),
                                                           ))),
@@ -385,7 +385,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                                 // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
                                                               },
                                                               list: controller.globalController.selectedDoctorModel.value,
-                                                              receiveParam: (int id) {},
+                                                              receiveParam: (String value) {},
                                                               selectedId: 1,
                                                             ),
                                                           ))),

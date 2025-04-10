@@ -10,7 +10,7 @@ import '../../../../widget/base_image_view.dart';
 import '../../../models/MedicalDoctorModel.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 
-class DropDownWithSearch extends StatelessWidget {
+class DropDownWithSearch extends StatefulWidget {
   DropDownWithSearch({super.key, this.list, required this.receiveParam, required this.selectedId, required this.onChanged});
 
   int selectedId;
@@ -18,6 +18,34 @@ class DropDownWithSearch extends StatelessWidget {
   final void Function(int) receiveParam;
   final void Function(bool, int, int, String) onChanged;
   List<SelectedDoctorModel>? list;
+
+  late List<SelectedDoctorModel> filteredList;
+
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  State<DropDownWithSearch> createState() => _DropDownWithSearchState();
+}
+
+class _DropDownWithSearchState extends State<DropDownWithSearch> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.filteredList = List.from(widget.list ?? []);
+  }
+
+  // Update the filteredList when search value changes
+  void filterList(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        widget.filteredList = List.from(widget.list ?? []);
+      } else {
+        widget.filteredList = (widget.list ?? []).where((item) => item.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,42 +55,43 @@ class DropDownWithSearch extends StatelessWidget {
           border: Border.all(width: 1, color: AppColors.textfieldBorder),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: list != null && list != null && list?.length != 0
-            ? Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        border: Border.all(width: 1, color: AppColors.textfieldBorder),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            ImagePath.search,
-                            height: 25,
-                            width: 25,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          SizedBox(
-                            width: 130,
-                            child: TextFormField(
-                              onChanged: (value) {},
-                              maxLines: 1, //or null
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(width: 1, color: AppColors.textfieldBorder),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      ImagePath.search,
+                      height: 25,
+                      width: 25,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: 130,
+                      child: TextFormField(
+                        controller: widget.searchController,
+                        onChanged: filterList,
+                        maxLines: 1, //or null
 
-                              decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
-                            ),
-                          ),
-                        ],
+                        decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
                       ),
                     ),
-                  ),
-                  Container(
+                  ],
+                ),
+              ),
+            ),
+            widget.filteredList.isNotEmpty
+                ? Container(
                     constraints: BoxConstraints(maxHeight: 250),
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -73,13 +102,18 @@ class DropDownWithSearch extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  onChanged(list?[index].isSelected ?? false, index, list?[index].id ?? -1, list?[index].name ?? "");
+                                  widget.onChanged(
+                                    widget.filteredList[index].isSelected ?? false,
+                                    index,
+                                    widget.filteredList[index].id ?? -1,
+                                    widget.filteredList[index].name ?? "",
+                                  );
                                 },
                                 child: Row(
                                   children: [
                                     Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 12.5),
-                                        child: list?[index].isSelected == false
+                                        child: widget.filteredList?[index].isSelected == false
                                             ? SvgPicture.asset(
                                                 ImagePath.unCheckedBox,
                                                 width: 14,
@@ -95,16 +129,16 @@ class DropDownWithSearch extends StatelessWidget {
                                       child: BaseImageView(
                                         height: 32,
                                         width: 32,
-                                        nameLetters: list?[index].name ?? "",
+                                        nameLetters: widget.filteredList?[index].name ?? "",
                                         fontSize: 12,
-                                        imageUrl: list?[index].profileImage ?? "",
+                                        imageUrl: widget.filteredList?[index].profileImage ?? "",
                                       ),
                                     ),
                                     SizedBox(
                                       width: 10,
                                     ),
                                     Text(
-                                      list?[index].name ?? "",
+                                      widget.filteredList?[index].name ?? "",
                                       style: AppFonts.medium(14, AppColors.black),
                                     ),
                                   ],
@@ -113,7 +147,7 @@ class DropDownWithSearch extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
-                              if (list?.length != index + 1)
+                              if (widget.filteredList?.length != index + 1)
                                 Container(
                                   color: AppColors.textfieldBorder,
                                   height: 1,
@@ -122,15 +156,15 @@ class DropDownWithSearch extends StatelessWidget {
                           ),
                         );
                       },
-                      itemCount: list?.length ?? 0,
+                      itemCount: widget.filteredList?.length ?? 0,
                     ),
                   )
-                ],
-              )
-            : Center(
-                child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("No Data Found"),
-              )));
+                : Center(
+                    child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("No Options"),
+                  ))
+          ],
+        ));
   }
 }

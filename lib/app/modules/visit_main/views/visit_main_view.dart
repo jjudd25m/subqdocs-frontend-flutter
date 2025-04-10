@@ -32,6 +32,8 @@ import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
+import '../../home/views/container_view_dropdown.dart';
+import '../../home/views/drop_down_with_search_popup.dart';
 import '../../home/views/in_search_drop_down.dart';
 import '../../home/views/reschedule_patient_dialog.dart';
 import '../../home/views/schedule_patient_dialog.dart';
@@ -224,7 +226,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 30,
+                                      width: 38,
                                     ),
                                     Column(
                                       children: [
@@ -244,7 +246,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 30,
+                                      width: 38,
                                     ),
                                     Column(
                                       children: [
@@ -264,7 +266,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 33,
+                                      width: 41,
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,62 +279,59 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         SizedBox(
                                           height: 6,
                                         ),
-                                        // Row(
-                                        //   children: [
-                                        //     Text(
-                                        //       textAlign: TextAlign.center,
-                                        //       "Missie Cooper",
-                                        //       style: AppFonts.regular(14, AppColors.textPurple),
-                                        //     ),
-                                        //     SizedBox(
-                                        //       width: 5,
-                                        //     ),
-                                        //     Container(
-                                        //       decoration: BoxDecoration(
-                                        //         color: AppColors.textPurple,
-                                        //         borderRadius: BorderRadius.circular(12),
-                                        //         border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
-                                        //       ),
-                                        //       padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
-                                        //       child: Text(
-                                        //         textAlign: TextAlign.center,
-                                        //         "+2",
-                                        //         style: AppFonts.bold(10, AppColors.textWhite),
-                                        //       ),
-                                        //     ),
-                                        //     SizedBox(width: 5),
-                                        //     SvgPicture.asset(
-                                        //       ImagePath.down_arrow,
-                                        //       width: 20,
-                                        //       height: 20,
-                                        //     )
-                                        //   ],
-                                        // )
-                                        SearchDropDown(
-                                          onSearchCallBack: (value) {
-                                            if (value.isEmpty) {
-                                              return controller.globalController.selectedDoctorModel.map((model) => model.name).toList();
-                                            } else {
-                                              return controller.globalController.selectedDoctorModel
-                                                  .where((model) {
-                                                    // Ensure name is not null and contains the search query (case-insensitive)
+                                        PopupMenuButton<String>(
+                                          offset: const Offset(0, 8),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                          color: AppColors.white,
+                                          position: PopupMenuPosition.under,
+                                          padding: EdgeInsetsDirectional.zero,
+                                          menuPadding: EdgeInsetsDirectional.zero,
+                                          onSelected: (value) {},
+                                          style: const ButtonStyle(
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                                padding: EdgeInsets.zero,
+                                                onTap: () async {},
+                                                value: "",
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(0),
+                                                    child: SizedBox(
+                                                      width: 160,
+                                                      child: DropDownWithSearchPopup(
+                                                        onChanged: (value, index, selectedId, name) {
+                                                          print("hello");
 
-                                                    print("${model.name != null && model.name!.toLowerCase().contains(value.toLowerCase())}");
+                                                          controller.medicationValue.value = name;
+                                                          controller.updateMedicalView(selectedId);
 
-                                                    return model.name != null && model.name!.toLowerCase().contains(value.toLowerCase());
-                                                  })
-                                                  .map((model) => model.name!)
-                                                  .toList();
-                                              return [];
-                                            }
-                                          },
+                                                          // controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                                                          // controller.globalController.selectedMedicalModel.refresh();
+                                                          // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                                                        },
+                                                        list: controller.globalController.selectedMedicalModel.value,
+                                                        receiveParam: (String value) {},
+                                                        selectedId: 1,
+                                                      ),
+                                                    ))),
+                                          ],
+                                          child: SizedBox(
+                                            width: 170,
+                                            child: ContainerDropdownViewPopUp(
+                                              receiveParam: (isExpand) {
+                                                // isExpandedMedicalAssistant.value = isExpand;
+                                              },
+                                              name: controller.medicationValue.value,
+                                            ),
+                                          ),
                                         ),
-                                        // SearchableDropdown()
-                                        // }),
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 15,
+                                      width: 30,
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,13 +342,58 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           style: AppFonts.regular(12, AppColors.textBlack),
                                         ),
                                         SizedBox(
-                                          width: 6,
+                                          width: 15,
                                         ),
-                                        SearchDropDown(
-                                          onSearchCallBack: (value) {
-                                            return controller.globalController.selectedDoctorModel.map((model) => model.name).toList();
-                                          },
-                                        )
+                                        PopupMenuButton<String>(
+                                          offset: const Offset(0, 8),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                          color: AppColors.white,
+                                          position: PopupMenuPosition.under,
+                                          padding: EdgeInsetsDirectional.zero,
+                                          menuPadding: EdgeInsetsDirectional.zero,
+                                          onSelected: (value) {},
+                                          style: const ButtonStyle(
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                                padding: EdgeInsets.zero,
+                                                onTap: () async {},
+                                                value: "",
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(0),
+                                                    child: SizedBox(
+                                                      width: 160,
+                                                      child: DropDownWithSearchPopup(
+                                                        onChanged: (value, index, selectedId, name) {
+                                                          print("print the doctor view ");
+
+                                                          controller.doctorValue.value = name;
+
+                                                          controller.updateDoctorView(selectedId);
+
+                                                          // controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                                                          // controller.globalController.selectedMedicalModel.refresh();
+                                                          // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                                                        },
+                                                        list: controller.globalController.selectedDoctorModel.value,
+                                                        receiveParam: (String value) {},
+                                                        selectedId: 1,
+                                                      ),
+                                                    ))),
+                                          ],
+                                          child: SizedBox(
+                                            width: 170,
+                                            child: ContainerDropdownViewPopUp(
+                                              receiveParam: (isExpand) {
+                                                // isExpandedMedicalAssistant.value = isExpand;
+                                              },
+                                              name: controller.doctorValue.value,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ],
