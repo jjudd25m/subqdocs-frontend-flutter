@@ -211,7 +211,12 @@ class PersonalSettingController extends GetxController {
 
     userPractitionerController.text = getUserDetailModel.value?.responseData?.title ?? "";
     userMedicalLicenseNumberController.text = getUserDetailModel.value?.responseData?.medicalLicenseNumber ?? "";
-    userLicenseExpiryDateController.text = getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "";
+
+    if (getUserDetailModel.value?.responseData?.licenseExpiryDate != null) {
+      // userLicenseExpiryDateController.text = getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "";
+      userLicenseExpiryDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.parse(getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""));
+    }
+
     userNationalProviderIdentifierController.text = getUserDetailModel.value?.responseData?.nationalProviderIdentifier?.toString() ?? "";
     userTaxonomyCodeController.text = getUserDetailModel.value?.responseData?.taxonomyCode ?? "";
     userSpecializationController.text = getUserDetailModel.value?.responseData?.specialization ?? "";

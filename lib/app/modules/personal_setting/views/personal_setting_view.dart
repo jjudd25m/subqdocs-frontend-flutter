@@ -504,8 +504,9 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             child: CommonPatientData(
                                                                           label: "License Expiry Date",
                                                                           data: (controller.getUserDetailModel.value?.responseData?.licenseExpiryDate?.isNotEmpty ?? false)
-                                                                              ? "${DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""))}"
-                                                                              : "",
+                                                                              ? DateFormat('MM/dd/yyyy')
+                                                                                  .format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""))
+                                                                              : "-",
                                                                         )),
                                                                         Expanded(child: SizedBox()),
                                                                       ],
@@ -518,7 +519,9 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         Expanded(
                                                                             child: CommonPatientData(
                                                                           label: "National Provider Identifier",
-                                                                          data: controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString() ?? "-",
+                                                                          data: controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier != null
+                                                                              ? controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString()
+                                                                              : "-",
                                                                         )),
                                                                         Expanded(
                                                                             child: CommonPatientData(
