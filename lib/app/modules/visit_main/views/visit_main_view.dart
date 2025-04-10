@@ -6,10 +6,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/utils/utils.dart';
+import 'package:subqdocs/app/modules/home/views/search_drop_down.dart';
 import 'package:subqdocs/app/modules/visit_main/views/table_custom.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -30,6 +32,9 @@ import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
+import '../../home/views/container_view_dropdown.dart';
+import '../../home/views/drop_down_with_search_popup.dart';
+import '../../home/views/in_search_drop_down.dart';
 import '../../home/views/reschedule_patient_dialog.dart';
 import '../../home/views/schedule_patient_dialog.dart';
 import '../controllers/visit_main_controller.dart';
@@ -202,7 +207,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 20),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
                                       children: [
@@ -221,6 +225,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(
+                                      width: 38,
+                                    ),
                                     Column(
                                       children: [
                                         Text(
@@ -238,6 +245,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(
+                                      width: 38,
+                                    ),
                                     Column(
                                       children: [
                                         Text(
@@ -250,11 +260,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          controller.formatDateTime(
-                                              firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                          controller.formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                           style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
+                                    ),
+                                    SizedBox(
+                                      width: 41,
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,38 +279,61 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         SizedBox(
                                           height: 6,
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Missie Cooper",
-                                              style: AppFonts.regular(14, AppColors.textPurple),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: AppColors.textPurple,
-                                                borderRadius: BorderRadius.circular(12),
-                                                border: Border.all(width: 0.8, color: AppColors.textDarkGrey),
-                                              ),
-                                              padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 2),
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                "+2",
-                                                style: AppFonts.bold(10, AppColors.textWhite),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            SvgPicture.asset(
-                                              ImagePath.down_arrow,
-                                              width: 20,
-                                              height: 20,
-                                            )
+                                        PopupMenuButton<String>(
+                                          offset: const Offset(0, 8),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                          color: AppColors.white,
+                                          position: PopupMenuPosition.under,
+                                          padding: EdgeInsetsDirectional.zero,
+                                          menuPadding: EdgeInsetsDirectional.zero,
+                                          onSelected: (value) {},
+                                          style: const ButtonStyle(
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                                padding: EdgeInsets.zero,
+                                                onTap: () async {},
+                                                value: "",
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(0),
+                                                    child: SizedBox(
+                                                      width: 160,
+                                                      child: DropDownWithSearchPopup(
+                                                        key: UniqueKey(),
+                                                        onChanged: (value, index, selectedId, name) {
+                                                          print("hello");
+
+                                                          controller.medicationValue.value = name;
+                                                          Get.back();
+                                                          controller.updateMedicalView(selectedId);
+
+                                                          // controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                                                          // controller.globalController.selectedMedicalModel.refresh();
+                                                          // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                                                        },
+                                                        list: controller.globalController.selectedMedicalModel.value,
+                                                        receiveParam: (String value) {},
+                                                        selectedId: 1,
+                                                      ),
+                                                    ))),
                                           ],
-                                        )
+                                          child: SizedBox(
+                                            width: 170,
+                                            child: ContainerDropdownViewPopUp(
+                                              receiveParam: (isExpand) {
+                                                // isExpandedMedicalAssistant.value = isExpand;
+                                              },
+                                              name: controller.medicationValue.value,
+                                            ),
+                                          ),
+                                        ),
                                       ],
+                                    ),
+                                    SizedBox(
+                                      width: 30,
                                     ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,20 +346,56 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         SizedBox(
                                           width: 15,
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
-                                              style: AppFonts.regular(14, AppColors.textGrey),
-                                            ),
-                                            SizedBox(width: 5),
-                                            SvgPicture.asset(
-                                              ImagePath.down_arrow,
-                                              width: 20,
-                                              height: 20,
-                                            )
+                                        PopupMenuButton<String>(
+                                          offset: const Offset(0, 8),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                          color: AppColors.white,
+                                          position: PopupMenuPosition.under,
+                                          padding: EdgeInsetsDirectional.zero,
+                                          menuPadding: EdgeInsetsDirectional.zero,
+                                          onSelected: (value) {},
+                                          style: const ButtonStyle(
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                                padding: EdgeInsets.zero,
+                                                onTap: () async {},
+                                                value: "",
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(0),
+                                                    child: SizedBox(
+                                                      width: 160,
+                                                      child: DropDownWithSearchPopup(
+                                                        key: UniqueKey(),
+                                                        onChanged: (value, index, selectedId, name) {
+                                                          print("print the doctor view ");
+
+                                                          controller.doctorValue.value = name;
+                                                          Get.back();
+                                                          controller.updateDoctorView(selectedId);
+
+                                                          // controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                                                          // controller.globalController.selectedMedicalModel.refresh();
+                                                          // controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                                                        },
+                                                        list: controller.globalController.selectedDoctorModel.value,
+                                                        receiveParam: (String value) {},
+                                                        selectedId: 1,
+                                                      ),
+                                                    ))),
                                           ],
+                                          child: SizedBox(
+                                            width: 170,
+                                            child: ContainerDropdownViewPopUp(
+                                              receiveParam: (isExpand) {
+                                                // isExpandedMedicalAssistant.value = isExpand;
+                                              },
+                                              name: controller.doctorValue.value,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -1128,8 +1199,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                           customPrint("row index is :- ${index}");
                                                                           customPrint("visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString()}");
                                                                           controller.patientReScheduleCreate(
-                                                                              param: {"visit_date": p1, "visit_time": p0},
-                                                                              visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
+                                                                              param: {"visit_date": p1, "visit_time": p0}, visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
                                                                         },
                                                                       ); // Our custom dialog
                                                                     },
@@ -1371,8 +1441,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     offset: const Offset(0, 5),
                                     color: AppColors.white,
                                     position: PopupMenuPosition.over,
-                                    style: const ButtonStyle(
-                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                    style: const ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
                                     itemBuilder: (context) => [
                                           PopupMenuItem(
                                               enabled: false,
@@ -1420,8 +1489,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     ImagePath.document_attchment,
                                                     width: 30,
                                                     height: 30,
-                                                    colorFilter:
-                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                    colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
@@ -1448,10 +1516,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 children: [
                                                   const SizedBox(width: 5),
                                                   SvgPicture.asset(ImagePath.image_attchment,
-                                                      width: 30,
-                                                      height: 30,
-                                                      colorFilter:
-                                                          ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                                      width: 30, height: 30, colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
                                                   const SizedBox(width: 8),
                                                   Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                                   const SizedBox(width: 5),
@@ -1477,8 +1542,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     ImagePath.date_attchment,
                                                     width: 30,
                                                     height: 30,
-                                                    colorFilter:
-                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                    colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),

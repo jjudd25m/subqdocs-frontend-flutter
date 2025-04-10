@@ -71,6 +71,11 @@ class VisitMainController extends GetxController {
   final GlobalController globalController = Get.find();
   TextEditingController searchController = TextEditingController();
 
+  TextEditingController searchDoctorController = TextEditingController();
+
+  RxString doctorValue = RxString("select...");
+  RxString medicationValue = RxString("select...");
+
   final count = 0.obs;
 
   RxInt isSelectedAttchmentOption = RxInt(-1);
@@ -421,20 +426,77 @@ class VisitMainController extends GetxController {
     customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
+  void updateDoctorView(int id) async {
+    Map<String, dynamic> param = {};
+    Map<String, List<File>> profileParams = {};
+    if (id != -1) {
+      param['doctor_id'] = id;
+    }
+
+    if (patientId != "") {
+      param['patient_id'] = patientId;
+    }
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    try {
+      // AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+
+      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId.value, param: param, token: loginData.responseData?.token ?? "");
+
+      CustomToastification().showToast("Update Doctor Successfully", type: ToastificationType.success);
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+    }
+  }
+
+  void updateMedicalView(int id) async {
+    Map<String, dynamic> param = {};
+    Map<String, List<File>> profileParams = {};
+    if (id != -1) {
+      param['medical_assistant_id'] = id;
+    }
+
+    if (patientId != "") {
+      param['patient_id'] = patientId;
+    }
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    try {
+      // AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+
+      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId.value, param: param, token: loginData.responseData?.token ?? "");
+
+      CustomToastification().showToast("Update Medical Assistant Successfully", type: ToastificationType.success);
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+    }
+  }
+
   Future<void> getPatientDetails({bool isLoading = false}) async {
     if (isLoading) {
       Loader().showLoadingDialogForSimpleLoader();
     }
 
-    patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
+    try {
+      patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
 
-    print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
+      if (patientData.value?.responseData?.doctorId != null) {
+        doctorValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.doctorId ?? -1) ?? "";
+      }
 
-    if (isLoading) {
-      Get.back();
+      if (patientData.value?.responseData?.medicalAssistantId != null) {
+        medicationValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
+      }
+
+      print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
+
+      customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+      if (isLoading) {
+        Get.back();
+      }
+    } catch (e) {
+      if (isLoading) {
+        Get.back();
+      }
     }
-
-    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
@@ -526,6 +588,7 @@ class VisitMainController extends GetxController {
     }
 
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
     // CustomToastification().showToast(" Internet Connected", type: ToastificationType.info);
   }
 

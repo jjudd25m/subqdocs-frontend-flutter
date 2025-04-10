@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,9 @@ import '../../../core/common/logger.dart';
 import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../routes/app_pages.dart';
+import '../../add_patient/model/add_patient_model.dart';
+import '../../add_patient/repository/add_patient_repository.dart';
+import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../login/model/login_model.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -50,6 +54,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   RxBool isDoctorViewLoading = RxBool(false);
   RxString isDoctorViewLoadText = RxString("Waiting for response!");
 
+  // final AddPatientRepository _addPatientRepository = AddPatientRepository();
+
   RxBool isFullNoteLoading = RxBool(false);
   RxString isFullNoteLoadText = RxString("Waiting for response!");
 
@@ -65,13 +71,26 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   String visitId = "";
   String patientId = "";
 
+  RxString doctorValue = RxString("select...");
+  RxString medicationValue = RxString("select...");
+
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
 
   Rxn<LoginModel> loginData = Rxn();
 
+  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
+
   Future<void> getPatientDetails() async {
     patientData.value = await _visitMainRepository.getPatientDetails(id: visitId);
+
+    if (patientData.value?.responseData?.doctorId != null) {
+      doctorValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.doctorId ?? -1) ?? "";
+    }
+
+    if (patientData.value?.responseData?.medicalAssistantId != null) {
+      medicationValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
+    }
 
     if (patientData.value?.responseData?.visitStatus == "Finalized") {
       isSignatureDone.value = true;
@@ -1020,6 +1039,50 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
           },
         );
       }
+    }
+  }
+
+  void updateDoctorView(int id) async {
+    Map<String, dynamic> param = {};
+    Map<String, List<File>> profileParams = {};
+    if (id != -1) {
+      param['doctor_id'] = id;
+    }
+
+    if (patientId != "") {
+      param['patient_id'] = patientId;
+    }
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    try {
+      // AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+
+      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
+
+      CustomToastification().showToast("Update Doctor Successfully", type: ToastificationType.success);
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+    }
+  }
+
+  void updateMedicalView(int id) async {
+    Map<String, dynamic> param = {};
+    Map<String, List<File>> profileParams = {};
+    if (id != -1) {
+      param['medical_assistant_id'] = id;
+    }
+
+    if (patientId != "") {
+      param['patient_id'] = patientId;
+    }
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    try {
+      // AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+
+      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId, param: param, token: loginData.responseData?.token ?? "");
+
+      CustomToastification().showToast("Update Medical Assistant Successfully", type: ToastificationType.success);
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
     }
   }
 

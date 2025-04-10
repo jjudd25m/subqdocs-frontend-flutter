@@ -12,15 +12,23 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widget/base_image_view.dart';
 import '../controllers/home_controller.dart';
+import 'container_dropdown_view.dart';
+import 'drop_down_with_search.dart';
 
 class PastPatientListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
 
   RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
   RxList<String> selectedStatusIndex = RxList();
+  RxList<int> selectedDoctorId = RxList();
+
+  RxBool isExpandedDoctor = RxBool(false);
+  RxBool isExpandedMedicalAssistant = RxBool(false);
 
   PageController pageController = PageController();
+
   PastPatientListFilterBottomSheet({super.key, required this.onTap});
 
   @override
@@ -29,6 +37,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
     selectedDate?.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? RxList([DateTime.now()]);
     pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
     selectedStatusIndex.value = controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
+    selectedDoctorId.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorId ?? [];
     return SizedBox(
       width: double.infinity, // Ensures full width
       child: Container(
@@ -64,6 +73,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                     GestureDetector(
                       onTap: () {
                         selectedStatusIndex.clear();
+                        selectedDoctorId.clear();
                         controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue?.clear();
                         controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
                         controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
@@ -86,90 +96,6 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-                      Obx(() {
-                        return Column(
-                            children: List.generate(controller.filterPastVisitStatusCategoryData.length, (index) {
-                          return Column(
-                            children: [
-                              if (index != 0) ...[
-                                Divider(),
-                              ],
-                              SizedBox(height: 5),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      controller.filterPastVisitStatusCategoryData[index].category,
-                                      style: AppFonts.medium(14, AppColors.textDarkGrey),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
-                                child: Column(
-                                    children: List.generate(controller.filterPastVisitStatusCategoryData[index].subcategories.length, (subIndex) {
-                                  return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          if (selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])) {
-                                            print("contain val");
-                                            selectedStatusIndex.remove(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
-                                          } else {
-                                            print("add val");
-                                            selectedStatusIndex.add(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
-                                          }
-
-                                          if (selectedStatusIndex.isNotEmpty) {
-                                            // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
-                                            controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
-                                          }
-
-                                          print("selectedStatusIndex :- ${selectedStatusIndex}");
-                                        },
-                                        child: Row(
-                                          children: [
-                                            selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])
-                                                ? SvgPicture.asset(
-                                                    ImagePath.checkedBox,
-                                                    width: 25,
-                                                    height: 25,
-                                                  )
-                                                : SvgPicture.asset(
-                                                    ImagePath.unCheckedBox,
-                                                    width: 25,
-                                                    height: 25,
-                                                  ),
-                                            SizedBox(
-                                              width: 9,
-                                            ),
-                                            ClipRRect(
-                                                borderRadius: BorderRadius.circular(10),
-                                                child: Container(
-                                                    width: 20,
-                                                    height: 20,
-                                                    color: controller.getStatusColor(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex].replaceAll(" ", "-")))),
-                                            SizedBox(width: 8),
-                                            Expanded(
-                                              child: Text(
-                                                controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex],
-                                                style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                              ),
-                                            ),
-                                            Spacer()
-                                          ],
-                                        ),
-                                      ));
-                                })),
-                              )
-                            ],
-                          );
-                        }));
-                      }),
-                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                         child: Row(
@@ -182,7 +108,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                         child: Obx(() {
@@ -206,8 +132,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                     selectedDate?.value = [DateTime.now(), DateTime.now()];
                                     updateSelectedDate();
                                     controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
-                                        duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                                   },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,8 +152,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                     selectedDate?.value = [DateTime.now().subtract(Duration(days: 1)), DateTime.now().subtract(Duration(days: 1))];
                                     updateSelectedDate();
                                     controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
-                                        duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                                   },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,8 +177,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                     selectedDate?.value = [DateTime.now().subtract(Duration(days: 7)), DateTime.now()];
                                     updateSelectedDate();
                                     controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
-                                        duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                                   },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -281,8 +204,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                     updateSelectedDate();
                                     controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
                                     // pageController.previousPage(duration: Duration(milliseconds: 200), curve: Curves.easeIn);
-                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()),
-                                        duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                                    pageController.animateToPage(DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.first ?? DateTime.now()), duration: Duration(milliseconds: 200), curve: Curves.easeIn);
                                   },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,9 +235,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      controller.getCustomDateRange(selectedDate ?? []).length == 2
-                                          ? "${controller.getCustomDateRange(selectedDate ?? [])[0]}-${controller.getCustomDateRange(selectedDate ?? [])[1]}"
-                                          : "Select",
+                                      controller.getCustomDateRange(selectedDate ?? []).length == 2 ? "${controller.getCustomDateRange(selectedDate ?? [])[0]}-${controller.getCustomDateRange(selectedDate ?? [])[1]}" : "Select",
                                       style: AppFonts.regular(14, AppColors.textBlack),
                                     ),
                                     Spacer(),
@@ -395,7 +315,180 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           );
                         }),
                       ),
+                      const SizedBox(height: 10),
+                      Obx(() {
+                        return Column(
+                            children: List.generate(controller.filterPastVisitStatusCategoryData.length, (index) {
+                          return Column(
+                            children: [
+                              if (index != 0) ...[
+                                Divider(),
+                              ],
+                              SizedBox(height: 5),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      controller.filterPastVisitStatusCategoryData[index].category,
+                                      style: AppFonts.medium(14, AppColors.textDarkGrey),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                                child: Column(
+                                    children: List.generate(controller.filterPastVisitStatusCategoryData[index].subcategories.length, (subIndex) {
+                                  return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])) {
+                                            print("contain val");
+                                            selectedStatusIndex.remove(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
+                                          } else {
+                                            print("add val");
+                                            selectedStatusIndex.add(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
+                                          }
+
+                                          if (selectedStatusIndex.isNotEmpty) {
+                                            // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+                                            controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+                                          }
+
+                                          print("selectedStatusIndex :- ${selectedStatusIndex}");
+                                        },
+                                        child: Row(
+                                          children: [
+                                            selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])
+                                                ? SvgPicture.asset(
+                                                    ImagePath.checkedBox,
+                                                    width: 25,
+                                                    height: 25,
+                                                  )
+                                                : SvgPicture.asset(
+                                                    ImagePath.unCheckedBox,
+                                                    width: 25,
+                                                    height: 25,
+                                                  ),
+                                            SizedBox(
+                                              width: 9,
+                                            ),
+                                            ClipRRect(
+                                                borderRadius: BorderRadius.circular(10),
+                                                child: Container(width: 20, height: 20, color: controller.getStatusColor(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex].replaceAll(" ", "-")))),
+                                            SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex],
+                                                style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                              ),
+                                            ),
+                                            Spacer()
+                                          ],
+                                        ),
+                                      ));
+                                })),
+                              )
+                            ],
+                          );
+                        }));
+                      }),
                       const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Doctor",
+                              style: AppFonts.regular(14, AppColors.textBlack),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 17.5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                        child: ContainerDropdownView(
+                          receiveParam: (isExpand) {
+                            isExpandedDoctor.value = isExpand;
+                          },
+                          name: "Select Doctor",
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(() {
+                        print(controller.globalController.selectedDoctorModel.value);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                          child: isExpandedDoctor.value
+                              ? DropDownWithSearch(
+                                  key: UniqueKey(),
+                                  onChanged: (value, index, selectedId, name) {
+                                    controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                                    controller.globalController.selectedDoctorModel.refresh();
+
+                                    if (!value) {
+                                      controller.globalController.saveDoctorFilter(selectedId: selectedId, name: name);
+                                    } else {
+                                      controller.globalController.removeDoctorFilter(selectedId: selectedId, name: name);
+                                    }
+
+                                    controller.getPastVisitList();
+                                  },
+                                  receiveParam: (id) {},
+                                  list: controller.globalController.selectedDoctorModel.value,
+                                  selectedId: 1,
+                                )
+                              : SizedBox(),
+                        );
+                      }),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Medical Assistant",
+                              style: AppFonts.regular(14, AppColors.textBlack),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 17.5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                        child: ContainerDropdownView(
+                          receiveParam: (isExpand) {
+                            isExpandedMedicalAssistant.value = isExpand;
+                          },
+                          name: "Select Medical Assistant",
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                          child: isExpandedMedicalAssistant.value
+                              ? DropDownWithSearch(
+                                  key: UniqueKey(),
+                                  onChanged: (value, index, selectedId, name) {
+                                    controller.globalController.selectedMedicalModel[index].isSelected = !value;
+                                    controller.globalController.selectedMedicalModel.refresh();
+                                    controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                                  },
+                                  list: controller.globalController.selectedMedicalModel.value,
+                                  receiveParam: (int id) {},
+                                  selectedId: 1,
+                                )
+                              : SizedBox(),
+                        );
+                      }),
+                      SizedBox(height: 30),
                     ],
                   ),
                 ),

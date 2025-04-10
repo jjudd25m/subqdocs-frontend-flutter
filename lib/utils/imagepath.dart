@@ -93,6 +93,8 @@ class ImagePath {
   // static const String pdf = 'assets/images/pdf.svg';
   static const String crossWithContainer = 'assets/images/cross_container.svg';
   static const String downArrow = 'assets/images/down_arrow.svg';
+  static const String upArrowDropDown = 'assets/images/up_arrow_dropdwon.svg';
+  static const String downArrowDropDown = 'assets/images/down_arrow_dropdown.svg';
   static const String nameFilter = 'assets/images/name_filter.svg';
   // static const String edit = 'assets/images/edit_icon_light.svg';
 

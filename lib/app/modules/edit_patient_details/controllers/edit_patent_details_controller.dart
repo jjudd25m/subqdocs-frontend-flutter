@@ -42,6 +42,8 @@ class EditPatentDetailsController extends GetxController {
   RxnString profileImageUrl = RxnString();
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();
+  RxnString selectedDoctorValue = RxnString();
+  RxnString selectedMedicalValue = RxnString();
 
   Rxn<File> profileImage = Rxn();
   List<String> visitTime = [
@@ -147,6 +149,14 @@ class EditPatentDetailsController extends GetxController {
     patientIdController.text = patientDetailModel.responseData?.patientId ?? "";
     emailAddressController.text = patientDetailModel.responseData?.email ?? "";
     contactNumberController.text = formatPhoneNumber(patientDetailModel.responseData?.contactNumber ?? "");
+
+    if (patientDetailModel.responseData?.doctorId != null) {
+      selectedDoctorValue.value = globalController.getDoctorNameById(patientDetailModel.responseData?.doctorId ?? -1);
+    }
+
+    if (patientDetailModel.responseData?.medicalAssistantId != null) {
+      selectedMedicalValue.value = globalController.getDoctorNameById(patientDetailModel.responseData?.medicalAssistantId ?? -1);
+    }
 
     print("patientid:- ${patientDetailModel.responseData?.patientId}");
 
@@ -344,6 +354,18 @@ class EditPatentDetailsController extends GetxController {
 
     if (visitDateController.text != "") {
       param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    }
+
+    if (selectedDoctorValue.value != null && selectedDoctorValue.value != "") {
+      if (globalController.getDoctorIdByName(selectedDoctorValue.value) != -1) {
+        param['doctor_id'] = globalController.getDoctorIdByName(selectedDoctorValue.value);
+      }
+    }
+
+    if (selectedMedicalValue.value != null && selectedMedicalValue.value != "") {
+      if (globalController.getMedicalIdByName(selectedMedicalValue.value) != -1) {
+        param['medical_assistant_id'] = globalController.getMedicalIdByName(selectedMedicalValue.value);
+      }
     }
 
     String date = visitDateController.text;

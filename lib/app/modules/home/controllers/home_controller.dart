@@ -20,6 +20,8 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../models/MedicalDoctorModel.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../../personal_setting/model/filter_past_visit_status.dart';
@@ -48,16 +50,25 @@ class HomeController extends GetxController {
   RxList<PatientListData> patientList = RxList<PatientListData>();
   Rxn<PatientListModel> patientListModel = Rxn<PatientListModel>();
   Rxn<PatientListModel> patientListModelOOffLine = Rxn<PatientListModel>();
+  Rxn<MedicalDoctorModel> doctorListModel = Rxn<MedicalDoctorModel>();
+
+  Rxn<MedicalDoctorModel> medicalListModel = Rxn<MedicalDoctorModel>();
+
   Rxn<ScheduleVisitListModel> scheduleVisitListModel = Rxn<ScheduleVisitListModel>();
   Rxn<ScheduleVisitListModel> scheduleVisitListModelOffline = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> scheduleVisitList = RxList<ScheduleVisitListData>();
   Rxn<ScheduleVisitListModel> pastVisitListModel = Rxn<ScheduleVisitListModel>();
   Rxn<ScheduleVisitListModel> pastVisitListModelOfLine = Rxn<ScheduleVisitListModel>();
   RxList<ScheduleVisitListData> pastVisitList = RxList<ScheduleVisitListData>();
+
   // late final ScrollObserver _observer;
   final ScrollController scrollControllerPatientList = ScrollController();
   final ScrollController scrollControllerPastPatientList = ScrollController();
   final ScrollController scrollControllerSchedulePatientList = ScrollController();
+
+  static const ROLE_DOCTOR = "Doctor";
+  static const ROLE_MEDICAL_ASSISTANT = "Medical Assistant";
+
   // final ScrollController scrollControllerPatientList = ScrollController();
 
   // RxList<StatusModel> statusModel = RxList();
@@ -215,6 +226,8 @@ class HomeController extends GetxController {
     }
     getPatientList();
     getStatus();
+    getDoctorsFilter();
+    getMedicalAssistance();
 
     scrollControllerPatientList.addListener(_onScrollPatientList);
     scrollControllerPastPatientList.addListener(_onScrollPastPatientList);
@@ -436,6 +449,26 @@ class HomeController extends GetxController {
         param['status[0]'] = statusList;
       } else {
         param['status'] = statusList;
+      }
+    }
+
+    if (globalController.homePastPatientListSortingModel.value?.selectedDoctorNames?.isNotEmpty ?? false) {
+      List<int>? statusList = globalController.homePastPatientListSortingModel.value?.selectedDoctorId ?? [];
+
+      if (statusList.length == 1) {
+        param['doctorsName[0]'] = statusList;
+      } else {
+        param['doctorsName'] = statusList;
+      }
+    }
+
+    if (globalController.homePastPatientListSortingModel.value?.selectedMedicationNames?.isNotEmpty ?? false) {
+      List<int>? statusList = globalController.homePastPatientListSortingModel.value?.selectedMedicationId ?? [];
+
+      if (statusList.length == 1) {
+        param['medicalAssistantsName[0]'] = statusList;
+      } else {
+        param['medicalAssistantsName'] = statusList;
       }
     }
 
@@ -676,6 +709,50 @@ class HomeController extends GetxController {
 
     if (response["response_type"] == "success") {
       await AppPreference.instance.setString(AppString.offLineData, json.encode(response));
+    }
+  }
+
+  Future<void> getMedicalAssistance() async {
+    try {
+      Map<String, dynamic> param = {};
+
+      param['role'] = ROLE_MEDICAL_ASSISTANT;
+      medicalListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
+      globalController.selectedMedicalModel.clear();
+
+      if (medicalListModel.value?.responseType == "success") {
+        medicalListModel.value?.responseData?.forEach(
+          (element) {
+            globalController.selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+
+            globalController.setMedicalModel();
+          },
+        );
+      }
+    } catch (e) {
+      print("$e");
+    }
+  }
+
+  Future<void> getDoctorsFilter() async {
+    try {
+      Map<String, dynamic> param = {};
+
+      param['role'] = ROLE_DOCTOR;
+      doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
+      globalController.selectedDoctorModel.clear();
+
+      if (doctorListModel.value?.responseType == "success") {
+        doctorListModel.value?.responseData?.forEach(
+          (element) {
+            globalController.selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+
+            globalController.setDoctorModel();
+          },
+        );
+      }
+    } catch (e) {
+      print("$e");
     }
   }
 

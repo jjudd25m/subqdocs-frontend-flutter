@@ -53,6 +53,8 @@ class AddPatientController extends GetxController {
   RxBool isValid = RxBool(true);
   Rxn<File> profileImage = Rxn();
   RxnString selectedSexValue = RxnString("Male");
+  RxnString selectedDoctorValue = RxnString();
+  RxnString selectedMedicalValue = RxnString();
   RxnString selectedPatientValue = RxnString();
   RxnString selectedVisitTimeValue = RxnString();
 
@@ -388,6 +390,18 @@ class AddPatientController extends GetxController {
 
     if (visitDateController.text != "") {
       param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+    }
+
+    if (selectedDoctorValue.value != null && selectedDoctorValue.value != "") {
+      if (globalController.getDoctorIdByName(selectedDoctorValue.value) != -1) {
+        param['doctor_id'] = globalController.getDoctorIdByName(selectedDoctorValue.value);
+      }
+    }
+
+    if (selectedMedicalValue.value != null && selectedMedicalValue.value != "") {
+      if (globalController.getMedicalIdByName(selectedMedicalValue.value) != -1) {
+        param['medical_assistant_id'] = globalController.getMedicalIdByName(selectedMedicalValue.value);
+      }
     }
 
     String date = visitDateController.text;

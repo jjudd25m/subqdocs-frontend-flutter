@@ -15,17 +15,7 @@ class BaseDropdown<T> extends StatelessWidget {
   final String? selectText;
   final double? fontSize;
 
-  const BaseDropdown(
-      {super.key,
-      this.onChanged,
-      this.selectText,
-      this.decoration,
-      required this.valueAsString,
-      this.selectedValue,
-      this.textLabel,
-      this.isRequired = false,
-      required this.items,
-      this.fontSize = 14});
+  const BaseDropdown({super.key, this.onChanged, this.selectText, this.decoration, required this.valueAsString, this.selectedValue, this.textLabel, this.isRequired = false, required this.items, this.fontSize = 14});
 
   @override
   Widget build(BuildContext context) {
