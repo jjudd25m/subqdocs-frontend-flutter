@@ -3,6 +3,7 @@ import 'dart:io';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
+import '../../sign_up_set_organization_info/models/SignUpOrganizationModel.dart';
 import '../model/get_user_detail_model.dart';
 
 class PersonalSettingRepository {
@@ -54,9 +55,9 @@ class PersonalSettingRepository {
     return response;
   }
 
-  Future<dynamic> organizationUpdate({required Map<String, dynamic> param, required String organizationId}) async {
+  Future<SignUpOrganizationModel> organizationUpdate({required Map<String, dynamic> param, required String organizationId}) async {
     var response = await ApiProvider.instance.callPut("organization/update/$organizationId", param);
     customPrint("organizationUpdate API  internal response $response");
-    return response;
+    return SignUpOrganizationModel.fromJson(response);
   }
 }

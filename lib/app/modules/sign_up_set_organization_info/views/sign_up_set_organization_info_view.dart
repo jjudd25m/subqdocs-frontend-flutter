@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
@@ -34,6 +35,7 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
         child: Form(
           key: _formKey,
           child: ListView(
+            shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
@@ -107,6 +109,9 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                         isSuffixIconVisible: false,
                         isFirst: true,
                         type: TextInputType.number,
+                        format: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                        ],
                         label: "How many providers are in your practice?",
                         // format: [NoSpaceLowercaseTextFormatter()],
                         controller: controller.noOfProviderController,
@@ -128,38 +133,36 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                   ),
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
-                    child: Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "What is your role within the organization?",
-                                style: AppFonts.regular(14, AppColors.textBlack),
-                              ),
-                              // Text(
-                              //   "*",
-                              //   style: AppFonts.regular(14, AppColors.redText),
-                              // ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Obx(() {
-                            return BaseDropdown<String>(
-                              valueAsString: (value) => value ?? "",
-                              items: controller.userRolesModel.value?.responseData ?? [],
-                              selectedValue: controller.selectedRoleValue.value,
-                              onChanged: (value) {
-                                controller.selectedRoleValue.value = value;
-                              },
-                              selectText: controller.selectedRoleValue.value,
-                            );
-                          })
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "What is your role within the organization?",
+                              style: AppFonts.regular(14, AppColors.textBlack),
+                            ),
+                            // Text(
+                            //   "*",
+                            //   style: AppFonts.regular(14, AppColors.redText),
+                            // ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Obx(() {
+                          return BaseDropdown<String>(
+                            valueAsString: (value) => value ?? "",
+                            items: controller.userRolesModel.value?.responseData ?? [],
+                            selectedValue: controller.selectedRoleValue.value,
+                            onChanged: (value) {
+                              controller.selectedRoleValue.value = value;
+                            },
+                            selectText: controller.selectedRoleValue.value,
+                          );
+                        })
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -174,13 +177,9 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                           print("provider:- ${controller.noOfProviderController.text}");
                           print("org type:- ${controller.selectedRoleValue.value}");
 
-                          Map<String, dynamic> param = {};
-                          param['name'] = controller.organizationNameController.text;
-                          param['providers_count'] = controller.noOfProviderController.text;
-                          param['role'] = controller.selectedRoleValue.value;
-                          param['userId'] = controller.signupdata.responseData?.id.toString();
 
-                          controller.organizationUpdate(param);
+
+                          controller.organizationUpdate();
                         }
                       },
                       height: 45,

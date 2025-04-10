@@ -79,7 +79,7 @@ class SignUpView extends GetView<SignUpController> {
                   ),
 
                   SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
+                    width: isSmallScreen ? Get.width - 30 : 460,
                     child: Row(
                       spacing: 15,
                       children: [
@@ -133,7 +133,7 @@ class SignUpView extends GetView<SignUpController> {
                     height: 20,
                   ),
                   SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
+                    width: isSmallScreen ? Get.width - 30 : 460,
                     child: TextFormFiledWidget(
                         isSuffixIconVisible: false,
                         isFirst: true,
@@ -157,7 +157,7 @@ class SignUpView extends GetView<SignUpController> {
                     height: 20,
                   ),
                   SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
+                    width: isSmallScreen ? Get.width - 30 : 460,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -286,7 +286,7 @@ class SignUpView extends GetView<SignUpController> {
                   ),
                   Obx(() {
                     return SizedBox(
-                      width: isSmallScreen ? Get.width - 30 : 416,
+                      width: isSmallScreen ? Get.width - 30 : 460,
                       child: CustomAnimatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
