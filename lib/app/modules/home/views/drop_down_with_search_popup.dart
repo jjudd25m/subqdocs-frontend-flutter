@@ -61,28 +61,35 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
               padding: const EdgeInsets.all(10),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                decoration: BoxDecoration(),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      ImagePath.search,
-                      height: 25,
-                      width: 25,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    SizedBox(
-                      width: 90,
-                      child: TextFormField(
-                        controller: searchController,
-                        onChanged: filterList,
-                        maxLines: 1, //or null
-
-                        decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(width: 1, color: AppColors.textfieldBorder),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        ImagePath.search,
+                        height: 25,
+                        width: 25,
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 85,
+                        child: TextFormField(
+                          controller: searchController,
+                          onChanged: filterList,
+                          maxLines: 1, //or null
+
+                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

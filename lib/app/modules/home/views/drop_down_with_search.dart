@@ -80,6 +80,7 @@ class _DropDownWithSearchState extends State<DropDownWithSearch> {
                       width: 130,
                       child: TextFormField(
                         controller: widget.searchController,
+
                         onChanged: filterList,
                         maxLines: 1, //or null
 
