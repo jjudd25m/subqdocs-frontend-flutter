@@ -268,20 +268,23 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                   SizedBox(
                     height: 42,
                   ),
-                  SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
-                    child: CustomAnimatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          controller.registerUser();
-                        }
-                      },
-                      height: 45,
-                      text: "Continue",
-                      enabledTextColor: AppColors.white,
-                      enabledColor: AppColors.backgroundPurple,
-                    ),
-                  ),
+                  Obx(() {
+                    return SizedBox(
+                      width: isSmallScreen ? Get.width - 30 : 416,
+                      child: CustomAnimatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            controller.registerUser();
+                          }
+                        },
+                        height: 45,
+                        text: "Continue",
+                        enabledTextColor: AppColors.white,
+                        enabledColor: AppColors.backgroundPurple,
+                        isLoading: controller.isLoading.value,
+                      ),
+                    );
+                  }),
                   SizedBox(
                     height: 30,
                   ),

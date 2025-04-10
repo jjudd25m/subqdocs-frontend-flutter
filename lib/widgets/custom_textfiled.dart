@@ -98,8 +98,9 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
                   maxLines: widget.maxLines,
                   readOnly: widget.readOnly,
                   onChanged: (value) {
-                    widget.onChanged!(value);
-
+                    if (widget.onChanged != null) {
+                      widget.onChanged!(value);
+                    }
                     if (widget.isFirst == true) {
                       value.isEmpty ? widget.isSuffixIconVisible = false : widget.isSuffixIconVisible = true;
 

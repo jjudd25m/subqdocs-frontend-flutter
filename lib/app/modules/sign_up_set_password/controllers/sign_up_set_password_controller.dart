@@ -13,6 +13,8 @@ class SignUpSetPasswordController extends GetxController {
   RxBool passwordVisible = RxBool(true);
   RxBool confirmPasswordVisible = RxBool(true);
 
+  RxBool isLoading = RxBool(false);
+
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
@@ -75,6 +77,8 @@ class SignUpSetPasswordController extends GetxController {
   }
 
   Future<void> registerUser() async {
+    isLoading.value = true;
+
     Map<String, dynamic> param = {};
 
     param["first_name"] = firstName.trim();
@@ -86,7 +90,7 @@ class SignUpSetPasswordController extends GetxController {
       SignUpModel signUpModel = await _signupRepository.registerUser(param: param);
 
       print("response is :- ${signUpModel.toJson()}");
-
+      isLoading.value = false;
       if (signUpModel.responseType == "success") {
         Get.toNamed(
           Routes.SIGN_UP_SET_ORGANIZATION_INFO,
@@ -99,9 +103,14 @@ class SignUpSetPasswordController extends GetxController {
           },
         );
       } else {
+        isLoading.value = false;
+        Get.back();
+
         CustomToastification().showToast(signUpModel.message ?? "", type: ToastificationType.error);
       }
     } catch (error) {
+      Get.back();
+      isLoading.value = false;
       print("login catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
     }
