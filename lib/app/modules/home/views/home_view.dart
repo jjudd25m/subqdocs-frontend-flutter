@@ -376,12 +376,11 @@ class HomeView extends GetView<HomeController> {
                                                     navigate: () async {
                                                       var result;
                                                       if (controller.globalController.tabIndex.value == 0) {
-                                                        controller.patientList.clear();
-
                                                         await Get.toNamed(Routes.ADD_PATIENT);
+                                                        controller.patientList.clear();
+                                                        controller.getPatientList(isLoading: true);
                                                         controller.getPastVisitList(isFist: true);
                                                         controller.getScheduleVisitList(isFist: true);
-                                                        controller.getPatientList();
                                                       } else {
                                                         final result = await Get.toNamed(Routes.SCHEDULE_PATIENT);
                                                       }

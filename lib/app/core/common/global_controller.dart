@@ -167,37 +167,41 @@ class GlobalController extends GetxController {
       Loader().showLoadingDialogForSimpleLoader();
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+      try {
+        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+        Loader().stopLoader();
+        customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
-      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+        // isLoading.value = false;
 
-      // isLoading.value = false;
+        isStartTranscript.value = false;
+        wipeData();
 
-      isStartTranscript.value = false;
-      wipeData();
+        if (Get.currentRoute == Routes.PATIENT_INFO) {
+          Get.until((route) => Get.currentRoute == Routes.HOME);
 
-      if (Get.currentRoute == Routes.PATIENT_INFO) {
-        Get.until((route) => Get.currentRoute == Routes.HOME);
+          // Get.until(Routes.HOME, (route) => false);
+          breadcrumbHistory.clear();
+          addRoute(Routes.HOME);
+          // addRoute(Routes.PATIENT_INFO);
 
-        // Get.until(Routes.HOME, (route) => false);
-        breadcrumbHistory.clear();
-        addRoute(Routes.HOME);
-        // addRoute(Routes.PATIENT_INFO);
+          await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+            "trascriptUploadData": patientTranscriptUploadModel,
+            "unique_tag": DateTime.now().toString(),
+          });
+        } else {
+          await Get.toNamed(Routes.PATIENT_INFO, arguments: {
+            "trascriptUploadData": patientTranscriptUploadModel,
+            "unique_tag": DateTime.now().toString(),
+          });
+        }
 
-        await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-          "trascriptUploadData": patientTranscriptUploadModel,
-          "unique_tag": DateTime.now().toString(),
-        });
-      } else {
-        await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-          "trascriptUploadData": patientTranscriptUploadModel,
-          "unique_tag": DateTime.now().toString(),
-        });
-      }
-
-      if (Get.currentRoute == Routes.VISIT_MAIN) {
-        // Get.find<VisitMainController>().getPatientDetails();
-        Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+        if (Get.currentRoute == Routes.VISIT_MAIN) {
+          // Get.find<VisitMainController>().getPatientDetails();
+          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+        }
+      } catch (e) {
+        Loader().stopLoader();
       }
     }
   }

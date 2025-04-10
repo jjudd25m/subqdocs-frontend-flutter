@@ -321,10 +321,14 @@ class HomeController extends GetxController {
     return sorting.where((map) => map['id'] == key).toList();
   }
 
-  Future<void> getPatientList({String? sortingName = ""}) async {
+  Future<void> getPatientList({String? sortingName = "", bool isLoading = false}) async {
     Map<String, dynamic> param = {};
     pagePatient = 1;
     triggeredIndexes.clear();
+
+    if (isLoading) {
+      Loader().showLoadingDialogForSimpleLoader();
+    }
 
     param['page'] = 1;
     param['limit'] = "100";
@@ -353,6 +357,10 @@ class HomeController extends GetxController {
     globalController.saveHomePatientListData();
     patientListModel.value = await _homeRepository.getPatient(param: param);
 
+    if (isLoading) {
+      Loader().stopLoader();
+    }
+
     if (patientListModel.value?.responseData?.data != null) {
       patientList.value = patientListModel.value?.responseData?.data ?? [];
 
@@ -368,6 +376,60 @@ class HomeController extends GetxController {
       // print("element is ${element.toJson()}");
     }
   }
+
+  // Future<void> getPatientList({String? sortingName = "", bool isLoader = false}) async {
+  //   if (isLoader) {
+  //     Loader().showLoadingDialogForSimpleLoader();
+  //   }
+  //   Map<String, dynamic> param = {};
+  //   pagePatient = 1;
+  //   triggeredIndexes.clear();
+  //
+  //   param['page'] = 1;
+  //   param['limit'] = "100";
+  //   if (searchController.text.isNotEmpty) {
+  //     param['search'] = searchController.text;
+  //   }
+  //
+  //   // Dynamically add sorting to the param map
+  //
+  //   if (sortingName!.isNotEmpty) {
+  //     globalController.homePatientListSortingModel.value?.patientListSelectedSorting = toggleSortDesc(globalController.sortingPatientList, sortingName, 0);
+  //     param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
+  //   } else {
+  //     param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
+  //   }
+  //
+  //   if (globalController.homePatientListSortingModel.value?.startDate != "" && globalController.homePatientListSortingModel.value?.endDate != "") {
+  //     DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.startDate ?? "");
+  //     String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
+  //     DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.endDate ?? "");
+  //     String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
+  //     param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
+  //   }
+  //
+  //   print("param:- $param");
+  //   globalController.saveHomePatientListData();
+  //   patientListModel.value = await _homeRepository.getPatient(param: param);
+  //   if (isLoader) {
+  //     Loader().stopLoader();
+  //   }
+  //
+  //   if (patientListModel.value?.responseData?.data != null) {
+  //     patientList.value = patientListModel.value?.responseData?.data ?? [];
+  //
+  //     // if(patientList.length > 80)
+  //     //   {
+  //     //     isLoading.value = true;
+  //     //   }
+  //     getLast2DaysData();
+  //     getOfflineData();
+  //   }
+  //
+  //   for (var element in patientList) {
+  //     // print("element is ${element.toJson()}");
+  //   }
+  // }
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
     pageSchedule = 1;

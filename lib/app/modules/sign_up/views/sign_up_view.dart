@@ -87,6 +87,9 @@ class SignUpView extends GetView<SignUpController> {
                           child: TextFormFiledWidget(
                               isSuffixIconVisible: false,
                               isFirst: true,
+                              format: [
+                                CustomTextInputFormatter(),
+                              ],
                               label: "First Name",
                               controller: controller.firstNameController,
                               hint: "Enter First Name",
@@ -107,6 +110,9 @@ class SignUpView extends GetView<SignUpController> {
                                 isSuffixIconVisible: false,
                                 isFirst: true,
                                 label: "Last Name",
+                                format: [
+                                  CustomTextInputFormatter(),
+                                ],
                                 controller: controller.lastNameController,
                                 hint: "Enter Last Name",
                                 onTap: () {
