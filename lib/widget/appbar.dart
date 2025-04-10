@@ -80,18 +80,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (Get.currentRoute == Routes.HOME) {
-                      print("It's home screen");
-                    } else {
-                      print("current route is :- ${Get.currentRoute}");
-                      // Get.offAllNamed(Routes.HOME);
+                    final GlobalController globalController = Get.find();
+                    globalController.startAudioWidget();
 
-                      final GlobalController globalController = Get.find();
-
-                      Get.toNamed(Routes.HOME, arguments: {
-                        "tabIndex": globalController.tabIndex.value,
-                      });
-                    }
+                    // if (Get.currentRoute == Routes.HOME) {
+                    //   print("It's home screen");
+                    // } else {
+                    //   print("current route is :- ${Get.currentRoute}");
+                    //   // Get.offAllNamed(Routes.HOME);
+                    //
+                    //   final GlobalController globalController = Get.find();
+                    //
+                    //   Get.toNamed(Routes.HOME, arguments: {
+                    //     "tabIndex": globalController.tabIndex.value,
+                    //   });
+                    // }
                   },
                   child: Image.asset(
                     ImagePath.subqdocs_text_logo,

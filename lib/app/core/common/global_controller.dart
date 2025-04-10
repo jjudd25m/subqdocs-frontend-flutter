@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,11 +7,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:live_activities/live_activities.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/utils/imagepath.dart';
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,6 +22,7 @@ import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../football_game_live_activity_model.dart';
 import '../../../widget/globle_attchmnets.dart';
 import '../../data/service/database_helper.dart';
 import '../../data/service/recorder_service.dart';
@@ -553,5 +558,67 @@ class GlobalController extends GetxController {
     setScheduleListingModel();
 
     AppPreference.instance.setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
+  }
+
+  Future<void> startAudioWidget() async {
+    final _liveActivitiesPlugin = LiveActivities();
+    String? latestActivityId;
+    StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
+    FootballGameLiveActivityModel? _footballGameLiveActivityModel;
+
+    _liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
+
+    _liveActivitiesPlugin.areActivitiesEnabled();
+
+    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      print('Activity update: $event');
+    });
+
+    urlSchemeSubscription = _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
+      print("schemedata is :- ${schemeData}");
+    });
+
+    _footballGameLiveActivityModel = FootballGameLiveActivityModel(
+      teamAName: 'PSG',
+      // teamALogo: LiveActivityFileFromAsset.image(
+      //   "assets/images/subqdocs_icon.png",
+      // ),
+    );
+
+    print("_footballGameLiveActivityModel:- ${_footballGameLiveActivityModel.teamAName}");
+
+    final activityId = await _liveActivitiesPlugin.createActivity(
+      _footballGameLiveActivityModel.toMap(),
+    );
+
+    print("activity id is :- ${activityId}");
+
+    // NativeAudioControl().startAudio('My Favorite Song');
+  }
+}
+
+class NativeAudioControl {
+  static const platform = MethodChannel('com.yourapp/audio');
+
+  // Method to trigger widget update when audio starts
+  Future<void> startAudio(String audioName) async {
+    try {
+      await platform.invokeMethod('startAudio', {
+        'audioName': audioName,
+        'isRecording': true, // Set it to true when audio starts
+        'recordingTime': '00:00' // Initial recording time
+      });
+    } on PlatformException catch (e) {
+      print("Failed to start audio: ${e.message}");
+    }
+  }
+
+  // Method to stop or pause the audio
+  Future<void> stopAudio() async {
+    try {
+      await platform.invokeMethod('stopAudio');
+    } on PlatformException catch (e) {
+      print("Failed to stop audio: ${e.message}");
+    }
   }
 }

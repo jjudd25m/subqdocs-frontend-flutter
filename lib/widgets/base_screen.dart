@@ -259,6 +259,7 @@ class BaseScreen extends StatelessWidget {
                                           globalController.changeStatus("In-Room");
                                           // If not recording, start the recording
 
+                                          globalController.startAudioWidget();
                                           await globalController.recorderService.startRecording(context);
                                         } else if (globalController.recorderService.recordingStatus.value == 1) {
                                           // If recording, pause it
@@ -639,6 +640,7 @@ class BaseScreen extends StatelessWidget {
                                         }
                                         globalController.changeStatus("In-Room");
 
+                                        globalController.startAudioWidget();
                                         await globalController.recorderService.startRecording(context);
                                       } else if (globalController.recorderService.recordingStatus.value == 1) {
                                         // If recording, pause it
