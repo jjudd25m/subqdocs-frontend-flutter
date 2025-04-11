@@ -214,6 +214,11 @@ class HomeView extends GetView<HomeController> {
                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                             child: Row(
                                               children: [
+                                                // GestureDetector(
+                                                //     onTap: () {
+                                                //       controller.checkWidget();
+                                                //     },
+                                                //     child: Text("demo")),
                                                 Expanded(
                                                   child: Text(
                                                     controller.globalController.tabIndex.value != 1 ? "" : "",

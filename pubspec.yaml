@@ -108,6 +108,9 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/states_cities.json
+    - assets/images/psg.png
+    - assets/images/chelsea.png
+    - assets/files/rules.txt
 
   fonts:
     - family: 'Poppins'

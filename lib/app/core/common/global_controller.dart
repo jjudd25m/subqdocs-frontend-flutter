@@ -78,6 +78,11 @@ class GlobalController extends GetxController {
 
   RxList<MediaListingModel> list = RxList();
 
+  final liveActivitiesPlugin = LiveActivities();
+  String? latestActivityId;
+  StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
+  FootballGameLiveActivityModel? footballGameLiveActivityModel;
+
   // below  all the function is for the recording model
   // ----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -129,6 +134,31 @@ class GlobalController extends GetxController {
     }
   }
 
+  Future<void> startAudioWidget() async {
+    print("audio time is :- ${recorderService.formattedRecordingTime}");
+
+    footballGameLiveActivityModel = FootballGameLiveActivityModel(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: recorderService.formattedRecordingTime);
+
+    print("footballGameLiveActivityModel is :- ${footballGameLiveActivityModel?.toMap()}");
+    final activityId = await liveActivitiesPlugin.createActivity(
+      footballGameLiveActivityModel?.toMap() ?? {},
+    );
+
+    recorderService.updatedRecordingTime.listen(
+      (p0) {
+        final data = footballGameLiveActivityModel!.copyWith(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: p0);
+        liveActivitiesPlugin.updateActivity(
+          latestActivityId!,
+          data.toMap(),
+        );
+      },
+    );
+
+    // String = updatedRecordingTime;
+
+    latestActivityId = activityId;
+  }
+
   Future<void> submitAudio(File audioFile) async {
     if (audioFile.path.isEmpty) {
       return;
@@ -140,7 +170,7 @@ class GlobalController extends GetxController {
       customPrint("internet not available ");
       // isLoading.value = true;
       // loadingMessage.value = "Uploading Audio";
-      Loader().showLoadingDialogForSimpleLoader();
+      // Loader().showLoadingDialogForSimpleLoader();
 
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
@@ -152,7 +182,7 @@ class GlobalController extends GetxController {
       // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
       // isLoading.value = false;
 
-      Get.back();
+      // Get.back();
 
       CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
 
@@ -560,41 +590,105 @@ class GlobalController extends GetxController {
     AppPreference.instance.setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
   }
 
-  Future<void> startAudioWidget() async {
-    final _liveActivitiesPlugin = LiveActivities();
-    String? latestActivityId;
-    StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
-    FootballGameLiveActivityModel? _footballGameLiveActivityModel;
+  // Future<void> startAudioWidget() async {
+  //   final _liveActivitiesPlugin = LiveActivities();
+  //   String? latestActivityId;
+  //
+  //   // Initialize plugin
+  //   await _liveActivitiesPlugin.init(
+  //     appGroupId: 'group.subqdocs.liveactivities',
+  //     urlScheme: 'la',
+  //   );
+  //
+  //   // Check if Live Activities are enabled
+  //   final areEnabled = await _liveActivitiesPlugin.areActivitiesEnabled();
+  //   print('Live Activities enabled: $areEnabled');
+  //   if (!areEnabled) {
+  //     print('Live Activities are not supported or disabled');
+  //     return;
+  //   }
+  //
+  //   // Listen for activity updates
+  //   _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+  //     print('Activity update: $event');
+  //   });
+  //
+  //   // Listen for URL scheme
+  //   _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
+  //     print('URL scheme data: $schemeData');
+  //   });
+  //
+  //   // Create activity data
+  //   final activityData = {
+  //     'teamAName': 'PSG',
+  //   };
+  //
+  //   try {
+  //     // Create Live Activity
+  //     latestActivityId = await _liveActivitiesPlugin.createActivity(activityData);
+  //     print('Created activity with ID: $latestActivityId');
+  //
+  //     // Optionally, write to UserDefaults directly if plugin doesn't handle it
+  //     // await writeToUserDefaults(activityData);
+  //   } catch (e) {
+  //     print('Error creating activity: $e');
+  //   }
+  // }
 
-    _liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
-
-    _liveActivitiesPlugin.areActivitiesEnabled();
-
-    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
-      print('Activity update: $event');
-    });
-
-    urlSchemeSubscription = _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
-      print("schemedata is :- ${schemeData}");
-    });
-
-    _footballGameLiveActivityModel = FootballGameLiveActivityModel(
-      teamAName: 'PSG',
-      // teamALogo: LiveActivityFileFromAsset.image(
-      //   "assets/images/subqdocs_icon.png",
-      // ),
-    );
-
-    print("_footballGameLiveActivityModel:- ${_footballGameLiveActivityModel.teamAName}");
-
-    final activityId = await _liveActivitiesPlugin.createActivity(
-      _footballGameLiveActivityModel.toMap(),
-    );
-
-    print("activity id is :- ${activityId}");
-
-    // NativeAudioControl().startAudio('My Favorite Song');
+// Optional: Custom method to write to UserDefaults
+  Future<void> writeToUserDefaults(Map<String, dynamic> data) async {
+    const platform = MethodChannel('com.example/user_defaults');
+    try {
+      await platform.invokeMethod('writeToUserDefaults', {
+        'appGroup': 'group.subqdocs.liveactivities',
+        'key': 'UUID_teamAName', // Replace with actual key
+        'value': data['teamAName'],
+      });
+    } catch (e) {
+      print('Error writing to UserDefaults: $e');
+    }
   }
+
+  // Future<void> startAudioWidget() async {
+  //   final _liveActivitiesPlugin = LiveActivities();
+  //   String? latestActivityId;
+  //   StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
+  //   FootballGameLiveActivityModel? _footballGameLiveActivityModel;
+  //
+  //   _liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
+  //
+  //   _liveActivitiesPlugin.areActivitiesEnabled();
+  //
+  //   _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+  //     print('Activity update: $event');
+  //   });
+  //
+  //   urlSchemeSubscription = _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
+  //     print("schemedata is :- ${schemeData}");
+  //   });
+  //
+  //   _footballGameLiveActivityModel = FootballGameLiveActivityModel(
+  //     teamAName: 'PSG',
+  //     // teamALogo: LiveActivityFileFromAsset.image(
+  //     //   "assets/images/subqdocs_icon.png",
+  //     // ),
+  //   );
+  //
+  //   print("_footballGameLiveActivityModel:- ${_footballGameLiveActivityModel.teamAName}");
+  //
+  //   // final activityId = await _liveActivitiesPlugin.createActivity(
+  //   //   _footballGameLiveActivityModel.toMap(),
+  //   // );
+  //
+  //   final activityId = await _liveActivitiesPlugin.createActivity(
+  //     {'teamAName': "Testing"},
+  //   );
+  //
+  //   // teamAName
+  //   print("activity id is :- ${activityId}");
+  //
+  //   // NativeAudioControl().startAudio('My Favorite Song');
+  // }
 }
 
 class NativeAudioControl {

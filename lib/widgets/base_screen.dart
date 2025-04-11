@@ -259,7 +259,13 @@ class BaseScreen extends StatelessWidget {
                                           globalController.changeStatus("In-Room");
                                           // If not recording, start the recording
 
+                                          // if (onPlayCallBack != null) {
+                                          //   globalController.startAudioWidget();
+                                          // }
+
                                           globalController.startAudioWidget();
+
+                                          // globalController.startAudioWidget();
                                           await globalController.recorderService.startRecording(context);
                                         } else if (globalController.recorderService.recordingStatus.value == 1) {
                                           // If recording, pause it

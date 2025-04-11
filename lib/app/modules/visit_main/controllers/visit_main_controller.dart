@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../football_game_live_activity_model.dart';
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
@@ -137,6 +138,15 @@ class VisitMainController extends GetxController {
     double sizeInMB = sizeInKB / 1024; // Convert KB to MB
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
+
+  // Future<void> checkWidget() async {
+  //   globalController.footballGameLiveActivityModel = FootballGameLiveActivityModel(userName: 'Johnny Depp', recordingTime: "03:25");
+  //
+  //   final activityId = await globalController.liveActivitiesPlugin.createActivity(
+  //     globalController.footballGameLiveActivityModel!.toMap(),
+  //   );
+  //   globalController.latestActivityId = activityId;
+  // }
 
   Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
     if (clear) {

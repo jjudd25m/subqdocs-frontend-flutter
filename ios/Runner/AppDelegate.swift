@@ -7,10 +7,10 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    
     GeneratedPluginRegistrant.register(with: self)
+
+    let sharedDefault = UserDefaults(suiteName: "group.subqdocs.liveactivities")!
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-
-
 }

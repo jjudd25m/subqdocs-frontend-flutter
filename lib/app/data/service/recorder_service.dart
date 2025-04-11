@@ -19,7 +19,7 @@ class RecorderService {
   // Track recording time in seconds (using GetX Rx for reactivity)
   Rx<int> recordingTime = 0.obs;
   Rx<int> recordingStatus = 0.obs; // 0: Stopped, 1: Recording, 2: Paused
-
+  RxString updatedRecordingTime = RxString("00:00");
   Timer? _timer;
 
   /// Start Recording
@@ -116,6 +116,7 @@ class RecorderService {
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       recordingTime.value++;
+      updatedRecordingTime.value = formattedRecordingTime;
     });
   }
 

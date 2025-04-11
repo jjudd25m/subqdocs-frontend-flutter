@@ -2,10 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:live_activities/live_activities.dart';
+import 'package:live_activities/models/live_activity_file.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
+import 'package:path/path.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
@@ -13,6 +18,7 @@ import 'package:toastification/toastification.dart';
 import 'package:subqdocs/app/modules/home/model/Status.dart';
 import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
+import '../../../../football_game_live_activity_model.dart';
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
@@ -192,9 +198,49 @@ class HomeController extends GetxController {
     }
   }
 
+  int teamAScore = 0;
+  int teamBScore = 0;
+
+  String teamAName = 'PSG';
+  String teamBName = 'Chelsea';
+
   Future<void> onInit() async {
     super.onInit();
     Get.put(GlobalController());
+
+    globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
+
+    globalController.liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      print('Activity update: $event');
+    });
+
+    globalController.urlSchemeSubscription = globalController.liveActivitiesPlugin.urlSchemeStream().listen((schemeData) async {
+      if (schemeData.path == '/stop') {
+        File? audioFile = await globalController.recorderService.stopRecording();
+        customPrint("audio file url is :- ${audioFile?.absolute}");
+        if (audioFile != null) {
+          globalController.submitAudio(audioFile!);
+        }
+
+        // showDialog(
+        //   context: Get.context!,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: const Text('Alert!'),
+        //       content: Text(
+        //         'Audio recording is stopped now',
+        //       ),
+        //       actions: [
+        //         TextButton(
+        //           onPressed: () => Navigator.of(context).pop(),
+        //           child: const Text('Close'),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+      }
+    });
 
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "SCHEDULED", subcategories: ["Scheduled", "Late"]));
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "IN PROGRESS", subcategories: ["Checked In", "In Progress", "Paused"]));
@@ -221,6 +267,15 @@ class HomeController extends GetxController {
     scrollControllerSchedulePatientList.addListener(_onScrollSchedulePatientList);
     //
     // _observer = ScrollObserver.sliverMulti(itemCount: items.length);
+  }
+
+  Future<void> checkWidget() async {
+    globalController.footballGameLiveActivityModel = FootballGameLiveActivityModel(userName: 'Johnny Depp', recordingTime: "03:25");
+
+    final activityId = await globalController.liveActivitiesPlugin.createActivity(
+      globalController.footballGameLiveActivityModel!.toMap(),
+    );
+    globalController.latestActivityId = activityId;
   }
 
   @override
