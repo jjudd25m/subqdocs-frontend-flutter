@@ -271,7 +271,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                   selectedDayHighlightColor: AppColors.backgroundPurple,
                                   dayMaxWidth: 30,
                                   allowSameValueSelection: true,
-                                  firstDayOfWeek: 6,
+                                  firstDayOfWeek: 7,
                                   rangeBidirectional: true,
                                   animateToDisplayedMonthDate: true,
                                   dayTextStyle: AppFonts.regular(14, AppColors.textBlack),

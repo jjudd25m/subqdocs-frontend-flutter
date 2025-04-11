@@ -239,13 +239,17 @@ class GlobalController extends GetxController {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return dateFormat.format(date); // Format date to dd/MM/yyyy
   }
-
+  double _formatFileSizeDouble(int bytes) {
+    double sizeInKB = bytes / 1024; // Convert bytes to KB
+    double sizeInMB = sizeInKB / 1024; // Convert KB to MB
+    return (sizeInMB * 100).roundToDouble() / 100;
+  }
   Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
     if (clear) {
       list.clear();
     }
 
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
 
     customPrint("media  file is  $fileList");
 
@@ -265,6 +269,8 @@ class GlobalController extends GetxController {
 
           String? _filesizeString = _formatFileSize(_fileSize);
 
+          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+
           String? _shortFileName;
           if (p.basename(_fileName).length > 15) {
             // Truncate the name to 12 characters and add ellipsis
@@ -272,7 +278,7 @@ class GlobalController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString , calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true ));
         }
       },
     );

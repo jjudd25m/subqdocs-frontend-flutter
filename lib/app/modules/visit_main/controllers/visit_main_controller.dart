@@ -210,7 +210,7 @@ class VisitMainController extends GetxController {
       list.clear();
     }
 
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles();
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
 
     customPrint("media  file is  $fileList");
 
