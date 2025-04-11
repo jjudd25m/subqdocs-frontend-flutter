@@ -13,13 +13,8 @@ import 'package:subqdocs/widgets/custom_button.dart';
 import '../../../../services/media_picker_services.dart';
 
 class attachmentDailog extends StatelessWidget {
-
-
-
-  VisitMainController controller ;
+  VisitMainController controller;
   attachmentDailog(this.controller);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +173,13 @@ class attachmentDailog extends StatelessWidget {
                                             Text(controller.list.value[index].fileName ?? ""),
                                             //
                                             Text(controller.visitId.value),
-                                            Text(
-                                                "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                            Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+
+                                            if (controller.list.value[index].isGraterThan10 ?? false)
+                                              Text(
+                                                "File Size must not exceed 10 MB",
+                                                style: AppFonts.medium(15, Colors.red),
+                                              )
                                           ],
                                         ),
                                         Spacer(),

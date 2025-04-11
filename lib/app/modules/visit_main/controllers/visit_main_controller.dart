@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:path/path.dart' as p;
@@ -23,19 +22,18 @@ import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
-import '../../../data/service/recorder_service.dart';
-import '../../../models/ChangeModel.dart';
+
 import '../../../models/MedicalRecords.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../forgot_password/models/common_respons.dart';
-import '../../forgot_password/models/send_otp_model.dart';
+
 import '../../home/repository/home_repository.dart';
 import '../../login/model/login_model.dart';
 import '../model/patient_attachment_list_model.dart';
-import '../model/patient_transcript_upload_model.dart';
+
 import '../model/visit_recap_list_model.dart';
 import '../model/visitmainModel.dart';
 import '../repository/visit_main_repository.dart';
@@ -165,6 +163,8 @@ class VisitMainController extends GetxController {
       _fileSize = file.lengthSync(); // Size in bytes
 
       String? _filesizeString = _formatFileSize(_fileSize);
+
+      double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
       String? _shortFileName;
       if (p.basename(_fileName).length > 15) {
         // Truncate the name to 12 characters and add ellipsis
@@ -172,7 +172,8 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(
+          file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
     }
 
     list.refresh();
@@ -188,6 +189,12 @@ class VisitMainController extends GetxController {
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
 
     if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {}
+  }
+
+  double _formatFileSizeDouble(int bytes) {
+    double sizeInKB = bytes / 1024; // Convert bytes to KB
+    double sizeInMB = sizeInKB / 1024; // Convert KB to MB
+    return (sizeInMB * 100).roundToDouble() / 100;
   }
 
   void clearFilter() {
@@ -223,6 +230,8 @@ class VisitMainController extends GetxController {
 
           String? _filesizeString = _formatFileSize(_fileSize);
 
+          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+
           String? _shortFileName;
           if (p.basename(_fileName).length > 15) {
             // Truncate the name to 12 characters and add ellipsis
@@ -230,7 +239,8 @@ class VisitMainController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+          list.value.add(MediaListingModel(
+              file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
         }
       },
     );
@@ -378,22 +388,60 @@ class VisitMainController extends GetxController {
     });
   }
 
-  Future<void> uploadAttachments() async {
-    Loader().showLoadingDialogForSimpleLoader();
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  bool checkTotalSize() {
+    double totalSize = 0.0;
 
-    Map<String, List<File>> profileParams = {};
-    if (list.isNotEmpty) {
-      customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
-      profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+    list.value.forEach(
+      (element) {
+        totalSize += element.calculateSize ?? 0;
+      },
+    );
+
+    if (totalSize < 100) {
+      return true;
     } else {
-      customPrint("profile is not  available");
+      return false;
     }
-    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
-    list.clear();
-    Get.back();
-    getPatientAttachment();
+  }
+
+  bool checkSingleSize() {
+    bool isGraterThan10 = false;
+
+    list.value.forEach(
+      (element) {
+        if (element.isGraterThan10 ?? false) {
+          isGraterThan10 = true;
+        }
+      },
+    );
+
+    return isGraterThan10;
+  }
+
+  Future<void> uploadAttachments() async {
+    if (checkTotalSize()) {
+      if (checkSingleSize()) {
+        CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
+      } else {
+        Loader().showLoadingDialogForSimpleLoader();
+        var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+        Map<String, List<File>> profileParams = {};
+        if (list.isNotEmpty) {
+          customPrint("profile is   available");
+          // param['profile_image'] = profileImage.value;
+          profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+        } else {
+          customPrint("profile is not  available");
+        }
+        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+        list.clear();
+        Get.back();
+        getPatientAttachment();
+      }
+    } else {
+      CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
+    }
   }
 
   Future<void> getVisitRecap() async {
