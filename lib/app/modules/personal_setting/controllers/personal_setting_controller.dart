@@ -188,8 +188,10 @@ class PersonalSettingController extends GetxController {
 
   Future<void> getUserDetail() async {
     // try {
-    getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.value?.responseData!.user!.id.toString() ?? "");
-    print("getUserDetailModel :- ${getUserDetailModel.value?.toJson()}");
+    getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.value?.responseData?.user?.id.toString() ?? "");
+
+    // getUserDetailModel.value?.responseData?.isAdmin = true;
+
     setUserDetail();
     // } catch (error) {
     //   customPrint("login catch error is $error");

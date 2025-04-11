@@ -582,7 +582,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     type: TextInputType.number,
                                                     hint: "123456789",
                                                     onTap: () {
-                                                      controller.emailAddressController.clear();
+                                                      controller.contactNumberController.clear();
                                                     },
                                                     suffixIcon: Icon(
                                                       Icons.highlight_remove,
@@ -590,7 +590,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       size: 25,
                                                     ),
                                                     checkValidation: (value) {
-                                                      return Validation.phoneValidate(value);
+                                                      return Validation.phoneValidate(value, isRequired: false);
                                                     }),
                                               ),
                                               SizedBox(
@@ -952,11 +952,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                           children: [
                                             ContainerButton(
                                               onPressed: () {
-
-
                                                 controller.list.clear();
                                                 controller.list.addAll(controller.selectedList);
-
 
                                                 _showCustomDialog(context);
                                               },

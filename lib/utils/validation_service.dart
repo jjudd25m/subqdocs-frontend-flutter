@@ -200,7 +200,9 @@ class Validation {
     if (value == null) {
       return null;
     }
-
+    if (value.isEmpty ?? false) {
+      return null;
+    }
     if (value.trim().length == 2) {
       return null;
     }

@@ -24,10 +24,11 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
   RxList<String> selectedStatusIndex = RxList();
   RxList<int> selectedDoctorId = RxList();
 
+  PageController pageController = PageController();
+
   RxBool isExpandedDoctor = RxBool(false);
   RxBool isExpandedMedicalAssistant = RxBool(false);
-
-  PageController pageController = PageController();
+  RxBool isExpandedStatus = RxBool(false);
 
   PastPatientListFilterBottomSheet({super.key, required this.onTap});
 
@@ -265,13 +266,13 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                 config: CalendarDatePicker2Config(
                                   dayViewController: pageController,
                                   weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                                  weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                  weekdayLabels: ["sun", "Mon", "Tu", "We", "Th", "Fri", "Sat"],
                                   daySplashColor: AppColors.clear,
                                   calendarViewMode: CalendarDatePicker2Mode.day,
                                   selectedDayHighlightColor: AppColors.backgroundPurple,
-                                  dayMaxWidth: 30,
+                                  dayMaxWidth: 31,
                                   allowSameValueSelection: true,
-                                  firstDayOfWeek: 7,
+                                  firstDayOfWeek: 0,
                                   rangeBidirectional: true,
                                   animateToDisplayedMonthDate: true,
                                   dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
@@ -315,86 +316,137 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                           );
                         }),
                       ),
+                      SizedBox(height: 17.5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Status",
+                              style: AppFonts.regular(14, AppColors.textBlack),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 17.5),
+                      Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                          child: ContainerDropdownView(
+                            key: UniqueKey(),
+                            onRemove: (name, index) {
+                              controller.globalController.removeStatusFilterByIndex(index: index);
+                              controller.getPastVisitList();
+
+                              // controller.globalController.setDoctorModel();
+                            },
+                            selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [],
+                            receiveParam: (isExpand) {
+                              isExpandedStatus.value = isExpand;
+                            },
+                            name: "select status",
+                          ),
+                        );
+                      }),
                       const SizedBox(height: 10),
                       Obx(() {
-                        return Column(
-                            children: List.generate(controller.filterPastVisitStatusCategoryData.length, (index) {
-                          return Column(
-                            children: [
-                              if (index != 0) ...[
-                                Divider(),
-                              ],
-                              SizedBox(height: 5),
-                              Padding(
+                        return isExpandedStatus.value
+                            ? Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      controller.filterPastVisitStatusCategoryData[index].category,
-                                      style: AppFonts.medium(14, AppColors.textDarkGrey),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
-                                child: Column(
-                                    children: List.generate(controller.filterPastVisitStatusCategoryData[index].subcategories.length, (subIndex) {
-                                  return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          if (selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])) {
-                                            print("contain val");
-                                            selectedStatusIndex.remove(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
-                                          } else {
-                                            print("add val");
-                                            selectedStatusIndex.add(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
-                                          }
-
-                                          if (selectedStatusIndex.isNotEmpty) {
-                                            // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
-                                            controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
-                                          }
-
-                                          print("selectedStatusIndex :- ${selectedStatusIndex}");
-                                        },
-                                        child: Row(
-                                          children: [
-                                            selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])
-                                                ? SvgPicture.asset(
-                                                    ImagePath.checkedBox,
-                                                    width: 25,
-                                                    height: 25,
-                                                  )
-                                                : SvgPicture.asset(
-                                                    ImagePath.unCheckedBox,
-                                                    width: 25,
-                                                    height: 25,
-                                                  ),
-                                            SizedBox(
-                                              width: 9,
-                                            ),
-                                            ClipRRect(
-                                                borderRadius: BorderRadius.circular(10),
-                                                child: Container(width: 20, height: 20, color: controller.getStatusColor(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex].replaceAll(" ", "-")))),
-                                            SizedBox(width: 8),
-                                            Expanded(
-                                              child: Text(
-                                                controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex],
-                                                style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                              ),
-                                            ),
-                                            Spacer()
-                                          ],
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    border: Border.all(width: 1, color: AppColors.textfieldBorder),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Column(
+                                      children: List.generate(controller.filterPastVisitStatusCategoryData.length, (index) {
+                                    return Column(
+                                      children: [
+                                        if (index != 0) ...[
+                                          Divider(),
+                                        ],
+                                        SizedBox(height: 5),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                controller.filterPastVisitStatusCategoryData[index].category,
+                                                style: AppFonts.medium(14, AppColors.textDarkGrey),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                      ));
-                                })),
+                                        SizedBox(height: 5),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                                          child: Column(
+                                              children: List.generate(controller.filterPastVisitStatusCategoryData[index].subcategories.length, (subIndex) {
+                                            return Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    if (selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])) {
+                                                      print("contain val");
+                                                      selectedStatusIndex.remove(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
+                                                    } else {
+                                                      print("add val");
+                                                      selectedStatusIndex.add(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex]);
+                                                    }
+
+                                                    if (selectedStatusIndex.isNotEmpty) {
+                                                      // List<String>? statusList = selectedStatusIndex!.map((e) => controller.statusModel[e].status.toString()).toList();
+                                                      controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+                                                    }
+                                                    controller.globalController.saveHomePastPatientData();
+                                                    controller.globalController.homePastPatientListSortingModel.refresh();
+
+                                                    controller.getPastVisitList(isFist: true);
+
+                                                    print("selectedStatusIndex :- ${selectedStatusIndex}");
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])
+                                                          ? SvgPicture.asset(
+                                                              ImagePath.checkedBox,
+                                                              width: 14,
+                                                              height: 14,
+                                                            )
+                                                          : SvgPicture.asset(
+                                                              ImagePath.unCheckedBox,
+                                                              width: 14,
+                                                              height: 14,
+                                                            ),
+                                                      SizedBox(
+                                                        width: 9,
+                                                      ),
+                                                      ClipRRect(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          child:
+                                                              Container(width: 20, height: 20, color: controller.getStatusColor(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex].replaceAll(" ", "-")))),
+                                                      SizedBox(width: 8),
+                                                      Expanded(
+                                                        child: Text(
+                                                          controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex],
+                                                          style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                        ),
+                                                      ),
+                                                      Spacer()
+                                                    ],
+                                                  ),
+                                                ));
+                                          })),
+                                        )
+                                      ],
+                                    );
+                                  })),
+                                ),
                               )
-                            ],
-                          );
-                        }));
+                            : SizedBox();
                       }),
                       const SizedBox(height: 20),
                       Padding(
@@ -410,18 +462,25 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                         ),
                       ),
                       SizedBox(height: 17.5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
-                        child: ContainerDropdownView(
-                          receiveParam: (isExpand) {
-                            isExpandedDoctor.value = isExpand;
-                          },
-                          name: "Select Doctor",
-                        ),
-                      ),
+                      Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                          child: ContainerDropdownView(
+                            key: UniqueKey(),
+                            onRemove: (name, index) {
+                              controller.globalController.removeDoctorFilterByIndex(index: index);
+                              controller.globalController.setDoctorModel();
+                            },
+                            selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorNames ?? [],
+                            receiveParam: (isExpand) {
+                              isExpandedDoctor.value = isExpand;
+                            },
+                            name: "Select Doctor",
+                          ),
+                        );
+                      }),
                       SizedBox(height: 10),
                       Obx(() {
-                        print(controller.globalController.selectedDoctorModel.value);
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                           child: isExpandedDoctor.value
@@ -436,6 +495,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                     } else {
                                       controller.globalController.removeDoctorFilter(selectedId: selectedId, name: name);
                                     }
+                                    controller.globalController.homePastPatientListSortingModel.refresh();
 
                                     controller.getPastVisitList();
                                   },
@@ -460,15 +520,23 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                         ),
                       ),
                       SizedBox(height: 17.5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
-                        child: ContainerDropdownView(
-                          receiveParam: (isExpand) {
-                            isExpandedMedicalAssistant.value = isExpand;
-                          },
-                          name: "Select Medical Assistant",
-                        ),
-                      ),
+                      Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
+                          child: ContainerDropdownView(
+                            onRemove: (name, index) {
+                              controller.globalController.removeMedicalFilterByIndex(index: index);
+
+                              controller.globalController.setMedicalModel();
+                            },
+                            selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedMedicationNames ?? [],
+                            receiveParam: (isExpand) {
+                              isExpandedMedicalAssistant.value = isExpand;
+                            },
+                            name: "Select Medical Assistant",
+                          ),
+                        );
+                      }),
                       SizedBox(height: 10),
                       Obx(() {
                         return Padding(
@@ -479,7 +547,15 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                   onChanged: (value, index, selectedId, name) {
                                     controller.globalController.selectedMedicalModel[index].isSelected = !value;
                                     controller.globalController.selectedMedicalModel.refresh();
-                                    controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+
+                                    if (!value) {
+                                      controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                                    } else {
+                                      controller.globalController.removeMedicalFilter(selectedId: selectedId, name: name);
+                                    }
+                                    controller.globalController.homePastPatientListSortingModel.refresh();
+
+                                    controller.getPastVisitList();
                                   },
                                   list: controller.globalController.selectedMedicalModel.value,
                                   receiveParam: (int id) {},

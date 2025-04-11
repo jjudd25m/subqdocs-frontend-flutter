@@ -221,7 +221,6 @@ class attachmentDailog extends StatelessWidget {
                           Expanded(
                             child: CustomButton(
                               navigate: () {
-                                Get.back();
                                 controller.uploadAttachments();
                               },
                               label: "Add",

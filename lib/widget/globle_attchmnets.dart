@@ -14,11 +14,7 @@ import '../../../../services/media_picker_services.dart';
 import '../app/core/common/global_controller.dart';
 
 class GlobleAttchmnets extends StatelessWidget {
-
-
   final GlobalController controller = Get.find();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -177,8 +173,12 @@ class GlobleAttchmnets extends StatelessWidget {
                                             Text(controller.list.value[index].fileName ?? ""),
                                             //
                                             Text(controller.visitId.value),
-                                            Text(
-                                                "${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                            Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                            if (controller.list.value[index].isGraterThan10 ?? false)
+                                              Text(
+                                                "File Size must not exceed 10 MB",
+                                                style: AppFonts.medium(15, Colors.red),
+                                              )
                                           ],
                                         ),
                                         Spacer(),
@@ -220,7 +220,6 @@ class GlobleAttchmnets extends StatelessWidget {
                           Expanded(
                             child: CustomButton(
                               navigate: () {
-                                Get.back();
                                 controller.uploadAttachments();
                               },
                               label: "Add",

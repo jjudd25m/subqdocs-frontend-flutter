@@ -423,6 +423,7 @@ class VisitMainController extends GetxController {
       if (checkSingleSize()) {
         CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
       } else {
+        Get.back();
         Loader().showLoadingDialogForSimpleLoader();
         var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
@@ -531,7 +532,7 @@ class VisitMainController extends GetxController {
       }
 
       if (patientData.value?.responseData?.medicalAssistantId != null) {
-        medicationValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
+        medicationValue.value = globalController.getMedicalNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
       }
 
       print("visit status is :- ${patientData.value?.responseData?.visitStatus}");

@@ -220,14 +220,12 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          controller.patientData.value?.responseData?.age.toString() ?? "",
+                                          (controller.patientData.value?.responseData?.age.toString() ?? "") == "null" ? "N/A" : "",
                                           style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      width: 38,
-                                    ),
+                                    Spacer(),
                                     Column(
                                       children: [
                                         Text(
@@ -245,9 +243,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      width: 38,
-                                    ),
+                                    Spacer(),
                                     Column(
                                       children: [
                                         Text(
@@ -265,9 +261,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      width: 41,
-                                    ),
+                                    Spacer(),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [

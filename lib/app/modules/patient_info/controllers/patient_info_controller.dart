@@ -89,7 +89,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
 
     if (patientData.value?.responseData?.medicalAssistantId != null) {
-      medicationValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
+      medicationValue.value = globalController.getMedicalNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
     }
 
     if (patientData.value?.responseData?.visitStatus == "Finalized") {

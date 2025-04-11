@@ -133,34 +133,36 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                           outlineColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.clear,
                                                         ),
                                                       ),
-                                                      IntrinsicWidth(
-                                                          child: CustomAnimatedButton(
-                                                        onPressed: () {
-                                                          controller.tabIndex.value = 1;
-                                                        },
-                                                        text: "Organization Management",
-                                                        isOutline: true,
-                                                        paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                        fontSize: 14,
-                                                        enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                        enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                        outLineEnabledColor: AppColors.textGrey,
-                                                        outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      )),
-                                                      IntrinsicWidth(
-                                                          child: CustomAnimatedButton(
-                                                        onPressed: () {
-                                                          controller.tabIndex.value = 2;
-                                                        },
-                                                        text: "User Management",
-                                                        isOutline: true,
-                                                        paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                                                        fontSize: 14,
-                                                        enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
-                                                        enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
-                                                        outLineEnabledColor: AppColors.textGrey,
-                                                        outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
-                                                      )),
+                                                      if (controller.getUserDetailModel.value?.responseData?.isAdmin ?? false)
+                                                        IntrinsicWidth(
+                                                            child: CustomAnimatedButton(
+                                                          onPressed: () {
+                                                            controller.tabIndex.value = 1;
+                                                          },
+                                                          text: "Organization Management",
+                                                          isOutline: true,
+                                                          paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                          fontSize: 14,
+                                                          enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                          enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                                          outLineEnabledColor: AppColors.textGrey,
+                                                          outlineColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.clear,
+                                                        )),
+                                                      if (controller.getUserDetailModel.value?.responseData?.isAdmin ?? false)
+                                                        IntrinsicWidth(
+                                                            child: CustomAnimatedButton(
+                                                          onPressed: () {
+                                                            controller.tabIndex.value = 2;
+                                                          },
+                                                          text: "User Management",
+                                                          isOutline: true,
+                                                          paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                          fontSize: 14,
+                                                          enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
+                                                          enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
+                                                          outLineEnabledColor: AppColors.textGrey,
+                                                          outlineColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.clear,
+                                                        )),
                                                     ],
                                                   )));
                                         },
@@ -504,8 +506,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             child: CommonPatientData(
                                                                           label: "License Expiry Date",
                                                                           data: (controller.getUserDetailModel.value?.responseData?.licenseExpiryDate?.isNotEmpty ?? false)
-                                                                              ? DateFormat('MM/dd/yyyy')
-                                                                                  .format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""))
+                                                                              ? DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""))
                                                                               : "-",
                                                                         )),
                                                                         Expanded(child: SizedBox()),
@@ -887,8 +888,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                 if (value.isNotEmpty) {
                                                                                   // Create a copy of the responseData to ensure we're not modifying the original list
 
-                                                                                  controller.filterGetUserOrganizationListModel.value?.responseData =
-                                                                                      controller.getUserOrganizationListModel.value?.responseData?.where((element) {
+                                                                                  controller.filterGetUserOrganizationListModel.value?.responseData = controller.getUserOrganizationListModel.value?.responseData?.where((element) {
                                                                                     String userName = (element.name?.trim().toLowerCase() ?? "").trim().toLowerCase();
                                                                                     String userEmail = (element.email?.trim().toLowerCase() ?? "").trim().toLowerCase();
 
@@ -916,12 +916,10 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                   print("getUserOrganizationListModel ${controller.getUserOrganizationListModel.value?.responseData?.length}");
 
                                                                                   // When no filter value, reset to the original data (no filter applied)
-                                                                                  controller.filterGetUserOrganizationListModel.value?.responseData =
-                                                                                      List.from(controller.getUserOrganizationListModel.value?.responseData ?? []);
+                                                                                  controller.filterGetUserOrganizationListModel.value?.responseData = List.from(controller.getUserOrganizationListModel.value?.responseData ?? []);
 
                                                                                   // Refresh if the data has changed
-                                                                                  if (controller.filterGetUserOrganizationListModel.value?.responseData !=
-                                                                                      controller.getUserOrganizationListModel.value?.responseData) {
+                                                                                  if (controller.filterGetUserOrganizationListModel.value?.responseData != controller.getUserOrganizationListModel.value?.responseData) {
                                                                                     controller.filterGetUserOrganizationListModel.refresh();
                                                                                   }
                                                                                 }
@@ -969,12 +967,12 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                               Padding(
                                                                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                                 child: SizedBox(
-                                                                  height: (controller.filterGetUserOrganizationListModel.value?.responseData!.isEmpty ?? false)
+                                                                  height: (controller.filterGetUserOrganizationListModel.value?.responseData?.isEmpty ?? false)
                                                                       ? 300
                                                                       : ((controller.filterGetUserOrganizationListModel.value?.responseData?.length ?? 0) + 1) * 68,
                                                                   child: Column(
                                                                     children: [
-                                                                      controller.filterGetUserOrganizationListModel.value?.responseData!.isEmpty ?? false
+                                                                      controller.filterGetUserOrganizationListModel.value?.responseData?.isEmpty ?? false
                                                                           ? Padding(
                                                                               padding: const EdgeInsets.all(10),
                                                                               child: Center(
@@ -1300,8 +1298,8 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                         value: cellData == "Yes" ? true : false,
                         activeColor: AppColors.backgroundPurple,
                         onChanged: (bool value) {
-                          controller.updateRoleAndAdminControll(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "",
-                              controller.getUserOrganizationListModel.value?.responseData?[rowIndex].role ?? "", value, rowIndex);
+                          controller.updateRoleAndAdminControll(
+                              controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "", controller.getUserOrganizationListModel.value?.responseData?[rowIndex].role ?? "", value, rowIndex);
 
                           // This is called when the user toggles the switch.
                           // setState(() {

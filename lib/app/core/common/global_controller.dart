@@ -206,26 +206,65 @@ class GlobalController extends GetxController {
     }
   }
 
-  Future<void> uploadAttachments() async {
-    Loader().showLoadingDialogForSimpleLoader();
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  bool checkTotalSize() {
+    double totalSize = 0.0;
 
-    Map<String, List<File>> profileParams = {};
-    if (list.isNotEmpty) {
-      customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
-      profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+    list.value.forEach(
+      (element) {
+        totalSize += element.calculateSize ?? 0;
+      },
+    );
+
+    if (totalSize < 100) {
+      return true;
     } else {
-      customPrint("profile is not  available");
+      return false;
     }
-    await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
-    list.clear();
-    Get.back();
+  }
 
-    if (Get.currentRoute == Routes.VISIT_MAIN) {
-      // Get.find<VisitMainController>().getPatientAttachment();
+  bool checkSingleSize() {
+    bool isGraterThan10 = false;
 
-      Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientAttachment();
+    list.value.forEach(
+      (element) {
+        if (element.isGraterThan10 ?? false) {
+          isGraterThan10 = true;
+        }
+      },
+    );
+
+    return isGraterThan10;
+  }
+
+  Future<void> uploadAttachments() async {
+    if (checkTotalSize()) {
+      if (checkSingleSize()) {
+        CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
+      } else {
+        Get.back();
+        Loader().showLoadingDialogForSimpleLoader();
+        var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+        Map<String, List<File>> profileParams = {};
+        if (list.isNotEmpty) {
+          customPrint("profile is   available");
+          // param['profile_image'] = profileImage.value;
+          profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+        } else {
+          customPrint("profile is not  available");
+        }
+        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+        list.clear();
+        Get.back();
+
+        if (Get.currentRoute == Routes.VISIT_MAIN) {
+          // Get.find<VisitMainController>().getPatientAttachment();
+
+          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientAttachment();
+        }
+      }
+    } else {
+      CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
     }
   }
 
@@ -239,11 +278,13 @@ class GlobalController extends GetxController {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return dateFormat.format(date); // Format date to dd/MM/yyyy
   }
+
   double _formatFileSizeDouble(int bytes) {
     double sizeInKB = bytes / 1024; // Convert bytes to KB
     double sizeInMB = sizeInKB / 1024; // Convert KB to MB
     return (sizeInMB * 100).roundToDouble() / 100;
   }
+
   Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
     if (clear) {
       list.clear();
@@ -278,7 +319,8 @@ class GlobalController extends GetxController {
           } else {
             _shortFileName = p.basename(_fileName); // Use the full name if it's already short
           }
-          list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString , calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true ));
+          list.value.add(MediaListingModel(
+              file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
         }
       },
     );
@@ -580,6 +622,31 @@ class GlobalController extends GetxController {
     saveHomePastPatientData();
   }
 
+  void removeMedicalFilterByIndex({required int index}) {
+    homePastPatientListSortingModel.value?.selectedMedicationId?.removeAt(index);
+    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeAt(index);
+
+    selectedMedicalModel.refresh();
+    homePastPatientListSortingModel.refresh();
+    saveHomePastPatientData();
+  }
+
+  void removeDoctorFilterByIndex({required int index}) {
+    homePastPatientListSortingModel.value?.selectedDoctorNames?.removeAt(index);
+    homePastPatientListSortingModel.value?.selectedDoctorId?.removeAt(index);
+    selectedDoctorModel.refresh();
+    homePastPatientListSortingModel.refresh();
+    saveHomePastPatientData();
+  }
+
+  void removeStatusFilterByIndex({required int index}) {
+    homePastPatientListSortingModel.value?.selectedStatusIndex?.removeAt(index);
+
+    homePastPatientListSortingModel.refresh();
+
+    saveHomePastPatientData();
+  }
+
   void saveDoctorFilter({required int selectedId, required String name}) {
     homePastPatientListSortingModel.value?.selectedDoctorId?.add(selectedId);
     homePastPatientListSortingModel.value?.selectedDoctorNames?.add(name);
@@ -593,6 +660,20 @@ class GlobalController extends GetxController {
       },
     );
     homePastPatientListSortingModel.value?.selectedDoctorNames?.removeWhere(
+      (element) {
+        return element == name;
+      },
+    );
+    saveHomePastPatientData();
+  }
+
+  void removeMedicalFilter({required int selectedId, required String name}) {
+    homePastPatientListSortingModel.value?.selectedMedicationId?.removeWhere(
+      (element) {
+        return element == selectedId;
+      },
+    );
+    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeWhere(
       (element) {
         return element == name;
       },

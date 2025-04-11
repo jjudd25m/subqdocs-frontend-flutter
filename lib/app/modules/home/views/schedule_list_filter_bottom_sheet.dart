@@ -14,6 +14,8 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../controllers/home_controller.dart';
+import 'container_dropdown_view.dart';
+import 'drop_down_with_search.dart';
 
 class ScheduleListFilterBottomSheet extends GetView<HomeController> {
   final VoidCallback onTap;
@@ -21,6 +23,9 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
   RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
 
   ScheduleListFilterBottomSheet({super.key, required this.onTap});
+
+  RxBool isExpandedDoctor = RxBool(false);
+  RxBool isExpandedMedicalAssistant = RxBool(false);
 
   @override
   Widget build(BuildContext context) {
@@ -202,9 +207,7 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                         child: Row(
                           children: [
                             Text(
-                              controller.getCustomDateRange(selectedDate ?? []).length == 2
-                                  ? "${controller.getCustomDateRange(selectedDate ?? [])[0]}-${controller.getCustomDateRange(selectedDate ?? [])[1]}"
-                                  : "Select",
+                              controller.getCustomDateRange(selectedDate ?? []).length == 2 ? "${controller.getCustomDateRange(selectedDate ?? [])[0]}-${controller.getCustomDateRange(selectedDate ?? [])[1]}" : "Select",
                               style: AppFonts.regular(14, AppColors.textBlack),
                             ),
                             Spacer(),
@@ -229,13 +232,13 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                     child: CalendarDatePicker2(
                       config: CalendarDatePicker2Config(
                         weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                        weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                        weekdayLabels: ["sun", "Mon", "Tu", "We", "Th", "Fri", "Sat"],
                         daySplashColor: AppColors.clear,
                         calendarViewMode: CalendarDatePicker2Mode.day,
                         selectedDayHighlightColor: AppColors.backgroundPurple,
                         dayMaxWidth: 30,
                         allowSameValueSelection: true,
-                        firstDayOfWeek: 6,
+                        firstDayOfWeek: 0,
                         dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
                         disableMonthPicker: true,
                         dayBorderRadius: BorderRadius.all(Radius.circular(6)),
@@ -272,6 +275,105 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                 );
               }),
               const SizedBox(height: 20),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    "Doctor",
+                    style: AppFonts.regular(14, AppColors.textBlack),
+                  ),
+                  Spacer(),
+                ],
+              ),
+              SizedBox(height: 17.5),
+              Obx(() {
+                return ContainerDropdownView(
+                  key: UniqueKey(),
+                  onRemove: (name, index) {
+                    controller.globalController.removeDoctorFilterByIndex(index: index);
+                    controller.globalController.setDoctorModel();
+                  },
+                  selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorNames ?? [],
+                  receiveParam: (isExpand) {
+                    isExpandedDoctor.value = isExpand;
+                  },
+                  name: "Select Doctor",
+                );
+              }),
+              SizedBox(height: 10),
+              Obx(() {
+                return isExpandedDoctor.value
+                    ? DropDownWithSearch(
+                        key: UniqueKey(),
+                        onChanged: (value, index, selectedId, name) {
+                          controller.globalController.selectedDoctorModel[index].isSelected = !value;
+                          controller.globalController.selectedDoctorModel.refresh();
+
+                          if (!value) {
+                            controller.globalController.saveDoctorFilter(selectedId: selectedId, name: name);
+                          } else {
+                            controller.globalController.removeDoctorFilter(selectedId: selectedId, name: name);
+                          }
+                          controller.globalController.homePastPatientListSortingModel.refresh();
+
+                          controller.getPastVisitList();
+                        },
+                        receiveParam: (id) {},
+                        list: controller.globalController.selectedDoctorModel.value,
+                        selectedId: 1,
+                      )
+                    : SizedBox();
+              }),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    "Medical Assistant",
+                    style: AppFonts.regular(14, AppColors.textBlack),
+                  ),
+                  Spacer(),
+                ],
+              ),
+              SizedBox(height: 17.5),
+              Obx(() {
+                return ContainerDropdownView(
+                  onRemove: (name, index) {
+                    controller.globalController.removeMedicalFilterByIndex(index: index);
+
+                    controller.globalController.setMedicalModel();
+                  },
+                  selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedMedicationNames ?? [],
+                  receiveParam: (isExpand) {
+                    isExpandedMedicalAssistant.value = isExpand;
+                  },
+                  name: "Select Medical Assistant",
+                );
+              }),
+              SizedBox(height: 10),
+              Obx(() {
+                return isExpandedMedicalAssistant.value
+                    ? DropDownWithSearch(
+                        key: UniqueKey(),
+                        onChanged: (value, index, selectedId, name) {
+                          controller.globalController.selectedMedicalModel[index].isSelected = !value;
+                          controller.globalController.selectedMedicalModel.refresh();
+
+                          if (!value) {
+                            controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                          } else {
+                            controller.globalController.removeMedicalFilter(selectedId: selectedId, name: name);
+                          }
+                          controller.globalController.homePastPatientListSortingModel.refresh();
+
+                          controller.getPastVisitList();
+                        },
+                        list: controller.globalController.selectedMedicalModel.value,
+                        receiveParam: (int id) {},
+                        selectedId: 1,
+                      )
+                    : SizedBox();
+              }),
+              SizedBox(height: 30),
             ],
           ),
         ),
