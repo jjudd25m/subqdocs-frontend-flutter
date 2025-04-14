@@ -345,7 +345,14 @@ class PersonalSettingController extends GetxController {
     if (updateRoleAndAdminResponseData.responseType?.toLowerCase() == "success") {
       getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin = isAdmin;
       getUserOrganizationListModel.value?.responseData?[rowIndex].role = role;
+
+      filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
+      filterGetUserOrganizationListModel.refresh();
+
       getUserOrganizationListModel.refresh();
+      globalController.getDoctorsFilter();
+      globalController.getMedicalAssistance();
+
       CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
     } else {
       CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.error);

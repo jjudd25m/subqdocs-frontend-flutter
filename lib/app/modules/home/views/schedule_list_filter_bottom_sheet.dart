@@ -290,10 +290,10 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                 return ContainerDropdownView(
                   key: UniqueKey(),
                   onRemove: (name, index) {
-                    controller.globalController.removeDoctorFilterByIndex(index: index);
-                    controller.globalController.setDoctorModel();
+                    controller.globalController.removeDoctorFilterByIndexSchedule(index: index);
+                    controller.globalController.setDoctorModelSchedule();
                   },
-                  selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorNames ?? [],
+                  selectedItem: controller.globalController.homeScheduleListSortingModel.value?.selectedDoctorNames ?? [],
                   receiveParam: (isExpand) {
                     isExpandedDoctor.value = isExpand;
                   },
@@ -306,20 +306,20 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                     ? DropDownWithSearch(
                         key: UniqueKey(),
                         onChanged: (value, index, selectedId, name) {
-                          controller.globalController.selectedDoctorModel[index].isSelected = !value;
-                          controller.globalController.selectedDoctorModel.refresh();
+                          controller.globalController.selectedDoctorModelSchedule[index].isSelected = !value;
+                          controller.globalController.selectedDoctorModelSchedule.refresh();
 
                           if (!value) {
-                            controller.globalController.saveDoctorFilter(selectedId: selectedId, name: name);
+                            controller.globalController.saveDoctorFilterSchedule(selectedId: selectedId, name: name);
                           } else {
-                            controller.globalController.removeDoctorFilter(selectedId: selectedId, name: name);
+                            controller.globalController.removeDoctorFilterSchedule(selectedId: selectedId, name: name);
                           }
-                          controller.globalController.homePastPatientListSortingModel.refresh();
+                          controller.globalController.homeScheduleListSortingModel.refresh();
 
-                          controller.getPastVisitList();
+                          controller.getScheduleVisitList();
                         },
                         receiveParam: (id) {},
-                        list: controller.globalController.selectedDoctorModel.value,
+                        list: controller.globalController.selectedDoctorModelSchedule.value,
                         selectedId: 1,
                       )
                     : SizedBox();
@@ -338,11 +338,11 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
               Obx(() {
                 return ContainerDropdownView(
                   onRemove: (name, index) {
-                    controller.globalController.removeMedicalFilterByIndex(index: index);
+                    controller.globalController.removeMedicalFilterByIndexSchedule(index: index);
 
-                    controller.globalController.setMedicalModel();
+                    controller.globalController.setMedicalModelSchedule();
                   },
-                  selectedItem: controller.globalController.homePastPatientListSortingModel.value?.selectedMedicationNames ?? [],
+                  selectedItem: controller.globalController.homeScheduleListSortingModel.value?.selectedMedicationNames ?? [],
                   receiveParam: (isExpand) {
                     isExpandedMedicalAssistant.value = isExpand;
                   },
@@ -355,19 +355,19 @@ class ScheduleListFilterBottomSheet extends GetView<HomeController> {
                     ? DropDownWithSearch(
                         key: UniqueKey(),
                         onChanged: (value, index, selectedId, name) {
-                          controller.globalController.selectedMedicalModel[index].isSelected = !value;
-                          controller.globalController.selectedMedicalModel.refresh();
+                          controller.globalController.selectedMedicalModelSchedule[index].isSelected = !value;
+                          controller.globalController.selectedMedicalModelSchedule.refresh();
 
                           if (!value) {
-                            controller.globalController.saveMedicalFilter(selectedId: selectedId, name: name);
+                            controller.globalController.saveMedicalFilterSchedule(selectedId: selectedId, name: name);
                           } else {
-                            controller.globalController.removeMedicalFilter(selectedId: selectedId, name: name);
+                            controller.globalController.removeMedicalFilterSchedule(selectedId: selectedId, name: name);
                           }
-                          controller.globalController.homePastPatientListSortingModel.refresh();
+                          controller.globalController.homeScheduleListSortingModel.refresh();
 
-                          controller.getPastVisitList();
+                          controller.getScheduleVisitList();
                         },
-                        list: controller.globalController.selectedMedicalModel.value,
+                        list: controller.globalController.selectedMedicalModelSchedule.value,
                         receiveParam: (int id) {},
                         selectedId: 1,
                       )

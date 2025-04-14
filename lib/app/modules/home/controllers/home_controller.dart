@@ -226,8 +226,8 @@ class HomeController extends GetxController {
     }
     getPatientList();
     getStatus();
-    getDoctorsFilter();
-    getMedicalAssistance();
+    globalController.getDoctorsFilter();
+    globalController.getMedicalAssistance();
 
     scrollControllerPatientList.addListener(_onScrollPatientList);
     scrollControllerPastPatientList.addListener(_onScrollPastPatientList);
@@ -455,6 +455,26 @@ class HomeController extends GetxController {
     // }
     if (searchController.text.isNotEmpty) {
       param['search'] = searchController.text;
+    }
+
+    if (globalController.homeScheduleListSortingModel.value?.selectedDoctorNames?.isNotEmpty ?? false) {
+      List<int>? statusList = globalController.homeScheduleListSortingModel.value?.selectedDoctorId ?? [];
+
+      if (statusList.length == 1) {
+        param['doctorsName[0]'] = statusList;
+      } else {
+        param['doctorsName'] = statusList;
+      }
+    }
+
+    if (globalController.homeScheduleListSortingModel.value?.selectedMedicationNames?.isNotEmpty ?? false) {
+      List<int>? statusList = globalController.homeScheduleListSortingModel.value?.selectedMedicationId ?? [];
+
+      if (statusList.length == 1) {
+        param['medicalAssistantsName[0]'] = statusList;
+      } else {
+        param['medicalAssistantsName'] = statusList;
+      }
     }
 
     if (globalController.homeScheduleListSortingModel.value?.startDate != "" && globalController.homeScheduleListSortingModel.value?.endDate != "") {
@@ -771,50 +791,6 @@ class HomeController extends GetxController {
 
     if (response["response_type"] == "success") {
       await AppPreference.instance.setString(AppString.offLineData, json.encode(response));
-    }
-  }
-
-  Future<void> getMedicalAssistance() async {
-    try {
-      Map<String, dynamic> param = {};
-
-      param['role'] = ROLE_MEDICAL_ASSISTANT;
-      medicalListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
-      globalController.selectedMedicalModel.clear();
-
-      if (medicalListModel.value?.responseType == "success") {
-        medicalListModel.value?.responseData?.forEach(
-          (element) {
-            globalController.selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
-
-            globalController.setMedicalModel();
-          },
-        );
-      }
-    } catch (e) {
-      print("$e");
-    }
-  }
-
-  Future<void> getDoctorsFilter() async {
-    try {
-      Map<String, dynamic> param = {};
-
-      param['role'] = ROLE_DOCTOR;
-      doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
-      globalController.selectedDoctorModel.clear();
-
-      if (doctorListModel.value?.responseType == "success") {
-        doctorListModel.value?.responseData?.forEach(
-          (element) {
-            globalController.selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
-
-            globalController.setDoctorModel();
-          },
-        );
-      }
-    } catch (e) {
-      print("$e");
     }
   }
 

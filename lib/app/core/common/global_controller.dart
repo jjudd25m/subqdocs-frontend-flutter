@@ -22,6 +22,7 @@ import '../../../widget/globle_attchmnets.dart';
 import '../../data/service/database_helper.dart';
 import '../../data/service/recorder_service.dart';
 import '../../models/ChangeModel.dart';
+import '../../models/MedicalDoctorModel.dart';
 import '../../models/SelectedDoctorMedicationModel.dart';
 import '../../models/media_listing_model.dart';
 import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
@@ -29,6 +30,7 @@ import '../../modules/home/model/FilterListingModel.dart';
 import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_schedule_list_sorting_model.dart';
+import '../../modules/home/repository/home_repository.dart';
 import '../../modules/login/model/login_model.dart';
 import '../../modules/visit_main/controllers/visit_main_controller.dart';
 import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
@@ -58,11 +60,16 @@ class GlobalController extends GetxController {
 //all variable for the model recording
 //   --------------------------------------------------------------------------------------------------------------------------------------------------
   RxBool isStartTranscript = RxBool(false);
+  Rxn<MedicalDoctorModel> doctorListModel = Rxn<MedicalDoctorModel>();
 
+  Rxn<MedicalDoctorModel> medicalListModel = Rxn<MedicalDoctorModel>();
   RxBool isStartRecording = false.obs;
   RxBool isExpandRecording = true.obs;
   RecorderService recorderService = RecorderService();
   final VisitMainRepository visitMainRepository = VisitMainRepository();
+  final HomeRepository _homeRepository = HomeRepository();
+  static const ROLE_DOCTOR = "Doctor";
+  static const ROLE_MEDICAL_ASSISTANT = "Medical Assistant";
 
   RxDouble valueOfx = RxDouble(0);
   RxDouble valueOfy = RxDouble(0);
@@ -76,6 +83,9 @@ class GlobalController extends GetxController {
 
   RxList<SelectedDoctorModel> selectedDoctorModel = RxList<SelectedDoctorModel>();
   RxList<SelectedDoctorModel> selectedMedicalModel = RxList<SelectedDoctorModel>();
+
+  RxList<SelectedDoctorModel> selectedDoctorModelSchedule = RxList<SelectedDoctorModel>();
+  RxList<SelectedDoctorModel> selectedMedicalModelSchedule = RxList<SelectedDoctorModel>();
 
   // below  all the function is for the recording model
   // ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -97,6 +107,56 @@ class GlobalController extends GetxController {
     patientLsatName.value = "";
     valueOfx.value = 0;
     valueOfy.value = 0;
+  }
+
+  Future<void> getMedicalAssistance() async {
+    try {
+      Map<String, dynamic> param = {};
+
+      param['role'] = ROLE_MEDICAL_ASSISTANT;
+      medicalListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
+
+      if (medicalListModel.value?.responseType == "success") {
+        selectedMedicalModel.clear();
+        selectedMedicalModelSchedule.clear();
+        medicalListModel.value?.responseData?.forEach(
+          (element) {
+            selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+            selectedMedicalModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+
+            setMedicalModel();
+            setMedicalModelSchedule();
+          },
+        );
+      }
+    } catch (e) {
+      print("$e");
+    }
+  }
+
+  Future<void> getDoctorsFilter() async {
+    try {
+      Map<String, dynamic> param = {};
+
+      param['role'] = ROLE_DOCTOR;
+      doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
+
+      if (doctorListModel.value?.responseType == "success") {
+        selectedDoctorModel.clear();
+        selectedDoctorModelSchedule.clear();
+        doctorListModel.value?.responseData?.forEach(
+          (element) {
+            selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+            selectedDoctorModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+
+            setDoctorModel();
+            setDoctorModelSchedule();
+          },
+        );
+      }
+    } catch (e) {
+      print("$e");
+    }
   }
 
   Future<void> changeStatus(String status) async {
@@ -401,9 +461,29 @@ class GlobalController extends GetxController {
     return doctor?.id ?? -1;
   }
 
+  int getDoctorIdByNameSchedule(String? name) {
+    final doctor = selectedDoctorModelSchedule.firstWhereOrNull(
+      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      // Return null if no match is found
+    );
+
+    // Return the id if doctor is found, otherwise return null
+    return doctor?.id ?? -1;
+  }
+
   String? getDoctorNameById(int id) {
     // Find the first doctor where the id matches
     final doctor = selectedDoctorModel.firstWhereOrNull(
+      (doctor) => doctor.id == id, // Compare the id
+    );
+
+    // Return the name of the doctor if found, otherwise return null
+    return doctor?.name;
+  }
+
+  String? getDoctorNameByIdSchedule(int id) {
+    // Find the first doctor where the id matches
+    final doctor = selectedDoctorModelSchedule.firstWhereOrNull(
       (doctor) => doctor.id == id, // Compare the id
     );
 
@@ -421,8 +501,28 @@ class GlobalController extends GetxController {
     return doctor?.name;
   }
 
+  String? getMedicalNameByIdSchedule(int id) {
+    // Find the first doctor where the id matches
+    final doctor = selectedMedicalModelSchedule.firstWhereOrNull(
+      (doctor) => doctor.id == id, // Compare the id
+    );
+
+    // Return the name of the doctor if found, otherwise return null
+    return doctor?.name;
+  }
+
   int getMedicalIdByName(String? name) {
     final doctor = selectedMedicalModel.firstWhereOrNull(
+      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      // Return null if no match is found
+    );
+
+    // Return the id if doctor is found, otherwise return null
+    return doctor?.id ?? -1;
+  }
+
+  int getMedicalIdByNameSchedule(String? name) {
+    final doctor = selectedMedicalModelSchedule.firstWhereOrNull(
       (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
       // Return null if no match is found
     );
@@ -534,6 +634,7 @@ class GlobalController extends GetxController {
       json['selectedMedicationId'] = [];
       json['selectedDoctorId'] = [];
       json['selectedDateValue'] = [];
+
       json['startDate'] = "";
       json['endDate'] = "";
       homePastPatientListSortingModel.value = HomePastPatientListSortingModel.fromJson(json);
@@ -569,6 +670,8 @@ class GlobalController extends GetxController {
       json['isAscending'] = false;
       json['selectedDateValue'] = [];
       json['startDate'] = "";
+      json['selectedMedicationId'] = [];
+      json['selectedDoctorId'] = [];
       json['endDate'] = "";
       homeScheduleListSortingModel.value = HomeScheduleListSortingModel.fromJson(json);
       print("first initialize homeScheduleListSortingModel :- $json");
@@ -587,11 +690,29 @@ class GlobalController extends GetxController {
     }
   }
 
+  void setDoctorModelSchedule() {
+    var selectedDoctorIds = Set<int>.from(homeScheduleListSortingModel.value!.selectedDoctorId ?? []);
+
+    // Loop through doctor models and mark them as selected if their ID exists in the set
+    for (var doctorModel in selectedDoctorModelSchedule) {
+      doctorModel.isSelected = selectedDoctorIds.contains(doctorModel.id);
+    }
+  }
+
   void setMedicalModel() {
     var selectedMedicalIds = Set<int>.from(homePastPatientListSortingModel.value!.selectedMedicationId ?? []);
 
     // Loop through doctor models and mark them as selected if their ID exists in the set
     for (var medicalModel in selectedMedicalModel) {
+      medicalModel.isSelected = selectedMedicalIds.contains(medicalModel.id);
+    }
+  }
+
+  void setMedicalModelSchedule() {
+    var selectedMedicalIds = Set<int>.from(homeScheduleListSortingModel.value!.selectedMedicationId ?? []);
+
+    // Loop through doctor models and mark them as selected if their ID exists in the set
+    for (var medicalModel in selectedMedicalModelSchedule) {
       medicalModel.isSelected = selectedMedicalIds.contains(medicalModel.id);
     }
   }
@@ -616,10 +737,33 @@ class GlobalController extends GetxController {
     }
   }
 
+  void setScheduleListingModel() {
+    scheduleFilterListingModel.clear();
+
+    if ((homeScheduleListSortingModel.value?.startDate ?? "").isNotEmpty && (homeScheduleListSortingModel.value?.endDate ?? "").isNotEmpty) {
+      scheduleFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} "));
+    }
+
+    if ((homeScheduleListSortingModel.value?.selectedMedicationNames ?? []).isNotEmpty) {
+      scheduleFilterListingModel.add(FilterListingModel(filterName: "Medical Assistant", filterValue: homeScheduleListSortingModel.value!.selectedMedicationNames!.join(",")));
+    }
+
+    if ((homeScheduleListSortingModel.value?.selectedDoctorNames ?? []).isNotEmpty) {
+      scheduleFilterListingModel.add(FilterListingModel(filterName: "Doctor", filterValue: homeScheduleListSortingModel.value!.selectedDoctorNames!.join(",")));
+    }
+  }
+
   void saveMedicalFilter({required int selectedId, required String name}) {
     homePastPatientListSortingModel.value?.selectedMedicationId?.add(selectedId);
     homePastPatientListSortingModel.value?.selectedMedicationNames?.add(name);
     saveHomePastPatientData();
+  }
+
+  void saveMedicalFilterSchedule({required int selectedId, required String name}) {
+    homeScheduleListSortingModel.value?.selectedMedicationId?.add(selectedId);
+    homeScheduleListSortingModel.value?.selectedMedicationNames?.add(name);
+
+    saveHomeScheduleListData();
   }
 
   void removeMedicalFilterByIndex({required int index}) {
@@ -631,12 +775,30 @@ class GlobalController extends GetxController {
     saveHomePastPatientData();
   }
 
+  void removeMedicalFilterByIndexSchedule({required int index}) {
+    homeScheduleListSortingModel.value?.selectedMedicationId?.removeAt(index);
+    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeAt(index);
+
+    selectedMedicalModelSchedule.refresh();
+    homeScheduleListSortingModel.refresh();
+    saveHomeScheduleListData();
+  }
+
   void removeDoctorFilterByIndex({required int index}) {
     homePastPatientListSortingModel.value?.selectedDoctorNames?.removeAt(index);
     homePastPatientListSortingModel.value?.selectedDoctorId?.removeAt(index);
     selectedDoctorModel.refresh();
     homePastPatientListSortingModel.refresh();
     saveHomePastPatientData();
+  }
+
+  void removeDoctorFilterByIndexSchedule({required int index}) {
+    homeScheduleListSortingModel.value?.selectedDoctorNames?.removeAt(index);
+    homeScheduleListSortingModel.value?.selectedDoctorId?.removeAt(index);
+    selectedDoctorModelSchedule.refresh();
+    homeScheduleListSortingModel.refresh();
+
+    saveHomeScheduleListData();
   }
 
   void removeStatusFilterByIndex({required int index}) {
@@ -653,6 +815,13 @@ class GlobalController extends GetxController {
     saveHomePastPatientData();
   }
 
+  void saveDoctorFilterSchedule({required int selectedId, required String name}) {
+    homeScheduleListSortingModel.value?.selectedDoctorId?.add(selectedId);
+    homeScheduleListSortingModel.value?.selectedDoctorNames?.add(name);
+
+    saveHomeScheduleListData();
+  }
+
   void removeDoctorFilter({required int selectedId, required String name}) {
     homePastPatientListSortingModel.value?.selectedDoctorId?.removeWhere(
       (element) {
@@ -665,6 +834,21 @@ class GlobalController extends GetxController {
       },
     );
     saveHomePastPatientData();
+  }
+
+  void removeDoctorFilterSchedule({required int selectedId, required String name}) {
+    homeScheduleListSortingModel.value?.selectedDoctorId?.removeWhere(
+      (element) {
+        return element == selectedId;
+      },
+    );
+    homeScheduleListSortingModel.value?.selectedDoctorNames?.removeWhere(
+      (element) {
+        return element == name;
+      },
+    );
+
+    saveHomeScheduleListData();
   }
 
   void removeMedicalFilter({required int selectedId, required String name}) {
@@ -681,12 +865,19 @@ class GlobalController extends GetxController {
     saveHomePastPatientData();
   }
 
-  void setScheduleListingModel() {
-    scheduleFilterListingModel.clear();
+  void removeMedicalFilterSchedule({required int selectedId, required String name}) {
+    homeScheduleListSortingModel.value?.selectedMedicationId?.removeWhere(
+      (element) {
+        return element == selectedId;
+      },
+    );
+    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeWhere(
+      (element) {
+        return element == name;
+      },
+    );
 
-    if ((homeScheduleListSortingModel.value?.startDate ?? "").isNotEmpty && (homeScheduleListSortingModel.value?.endDate ?? "").isNotEmpty) {
-      scheduleFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} "));
-    }
+    saveHomeScheduleListData();
   }
 
   void removePastFilter({String? keyName}) {
@@ -738,11 +929,27 @@ class GlobalController extends GetxController {
         homeScheduleListSortingModel.value?.selectedDateValue = [];
       }
 
+      if (keyName == "Medical Assistant") {
+        homeScheduleListSortingModel.value?.selectedMedicationNames = [];
+        homeScheduleListSortingModel.value?.selectedMedicationId = [];
+        setMedicalModelSchedule();
+      }
+
+      if (keyName == "Doctor") {
+        homeScheduleListSortingModel.value?.selectedDoctorNames = [];
+        homeScheduleListSortingModel.value?.selectedDoctorId = [];
+        setDoctorModelSchedule();
+      }
+
       saveHomeScheduleListData();
     } else {
       homeScheduleListSortingModel.value?.startDate = "";
       homeScheduleListSortingModel.value?.endDate = "";
       homeScheduleListSortingModel.value?.selectedDateValue = [];
+      homePastPatientListSortingModel.value?.selectedDoctorNames = [];
+      homePastPatientListSortingModel.value?.selectedDoctorId = [];
+      homePastPatientListSortingModel.value?.selectedMedicationNames = [];
+      homePastPatientListSortingModel.value?.selectedMedicationId = [];
 
       saveHomeScheduleListData();
     }
