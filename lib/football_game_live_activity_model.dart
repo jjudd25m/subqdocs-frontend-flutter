@@ -9,6 +9,7 @@ class FootballGameLiveActivityModel {
 
   final String? userName;
   final String? recordingTime;
+  final String? resumeRecording;
   // final String? teamAState;
   // final int? teamAScore;
   // final LiveActivityFileFromAsset? teamALogo;
@@ -21,6 +22,7 @@ class FootballGameLiveActivityModel {
   FootballGameLiveActivityModel({
     this.userName,
     this.recordingTime,
+    this.resumeRecording,
     // this.matchName,
     // this.teamAState,
     // this.ruleFile,
@@ -40,6 +42,7 @@ class FootballGameLiveActivityModel {
       // 'ruleFile': ruleFile,
       'userName': userName,
       'recordingTime': recordingTime,
+      'resumeRecording': resumeRecording,
       // 'teamAState': teamAState,
       // 'teamALogo': teamALogo,
       // 'teamAScore': teamAScore,
@@ -57,6 +60,7 @@ class FootballGameLiveActivityModel {
   FootballGameLiveActivityModel copyWith({
     String? userName,
     String? recordingTime,
+    String? resumeRecording,
     // DateTime? matchStartDate,
     // DateTime? matchEndDate,
     // LiveActivityFileFromAsset? ruleFile,
@@ -77,6 +81,7 @@ class FootballGameLiveActivityModel {
       // matchName: matchName ?? this.matchName,
       userName: userName ?? this.userName,
       recordingTime: recordingTime ?? this.recordingTime,
+      resumeRecording: resumeRecording ?? this.resumeRecording,
       // teamAState: teamAState ?? this.teamAState,
       // teamAScore: teamAScore ?? this.teamAScore,
       // teamALogo: teamALogo ?? this.teamALogo,

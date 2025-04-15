@@ -210,6 +210,8 @@ class HomeController extends GetxController {
 
     globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
 
+    globalController.listenForUserNameUpdate();
+
     globalController.liveActivitiesPlugin.activityUpdateStream.listen((event) {
       print('Activity update: $event');
     });
@@ -219,7 +221,8 @@ class HomeController extends GetxController {
         File? audioFile = await globalController.recorderService.stopRecording();
         customPrint("audio file url is :- ${audioFile?.absolute}");
         if (audioFile != null) {
-          globalController.submitAudio(audioFile!);
+          globalController.stopLiveActivityAudio();
+          globalController.submitAudio(audioFile);
         }
 
         // showDialog(

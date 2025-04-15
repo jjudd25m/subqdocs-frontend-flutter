@@ -269,9 +269,11 @@ class BaseScreen extends StatelessWidget {
                                           await globalController.recorderService.startRecording(context);
                                         } else if (globalController.recorderService.recordingStatus.value == 1) {
                                           // If recording, pause it
+                                          globalController.updatePauseResumeAudioWidget();
                                           await globalController.recorderService.pauseRecording();
                                         } else if (globalController.recorderService.recordingStatus.value == 2) {
                                           // If paused, resume the recording
+                                          globalController.updatePauseResumeAudioWidget();
                                           await globalController.recorderService.resumeRecording();
                                         }
                                       },
@@ -334,7 +336,8 @@ class BaseScreen extends StatelessWidget {
                                         File? audioFile = await globalController.recorderService.stopRecording();
                                         customPrint("audio file url is :- ${audioFile?.absolute}");
                                         if (audioFile != null) {
-                                          globalController.submitAudio(audioFile!);
+                                          globalController.stopLiveActivityAudio();
+                                          globalController.submitAudio(audioFile);
                                         }
                                       },
                                       child: Column(
@@ -650,9 +653,11 @@ class BaseScreen extends StatelessWidget {
                                         await globalController.recorderService.startRecording(context);
                                       } else if (globalController.recorderService.recordingStatus.value == 1) {
                                         // If recording, pause it
+                                        globalController.updatePauseResumeAudioWidget();
                                         await globalController.recorderService.pauseRecording();
                                       } else if (globalController.recorderService.recordingStatus.value == 2) {
                                         // If paused, resume the recording
+                                        globalController.updatePauseResumeAudioWidget();
                                         await globalController.recorderService.resumeRecording();
                                       }
                                       // await controller.recorderService.startRecording(context);
@@ -693,7 +698,8 @@ class BaseScreen extends StatelessWidget {
                                         customPrint("audio file url is :- ${audioFile?.absolute}");
 
                                         if (audioFile != null) {
-                                          globalController.submitAudio(audioFile!);
+                                          globalController.stopLiveActivityAudio();
+                                          globalController.submitAudio(audioFile);
                                         }
                                       },
                                       child: SvgPicture.asset(

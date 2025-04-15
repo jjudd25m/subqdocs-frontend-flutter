@@ -8,6 +8,7 @@
 import ActivityKit
 import WidgetKit
 import SwiftUI
+import AppIntents
 
 @main
 struct Widgets: WidgetBundle {
@@ -36,6 +37,7 @@ struct FootballMatchApp: Widget {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
 
       let userName = sharedDefault.string(forKey: context.attributes.prefixedKey("userName"))!
+      let isResumeRecording = sharedDefault.string(forKey: context.attributes.prefixedKey("resumeRecording"))!
       let recordingTime = sharedDefault.string(forKey: context.attributes.prefixedKey("recordingTime"))!;
 
 
@@ -64,16 +66,16 @@ struct FootballMatchApp: Widget {
                        .fill(Color.white)
                        .frame(width: 60, height: 60)
                        .overlay(
-                           Image(systemName: "pause")
+                        Image(systemName: isResumeRecording == "1" ? "pause" : "play")
                                .font(.system(size: 26))
                                .foregroundColor(.gray)
                        ).onTapGesture {
                          // Handle the tap action here
                          print("Circle tapped!")
-                         sharedDefault.set("Kishan Suthar", forKey: "userName")
+                         sharedDefault.set(isResumeRecording == "1" ? "2" : "1", forKey: "resumeRecording")
                          sharedDefault.synchronize()
-
-                     }
+                         NotificationCenter.default.post(name: Notification.Name("userNameUpdated"), object: nil)
+                       }
 
 
                    Link(destination: URL(string: "la://my.app/stop")!) {
@@ -86,15 +88,6 @@ struct FootballMatchApp: Widget {
                                    .foregroundColor(.white)
                            )
                    }
-
-//                     Circle()
-//                         .fill(Color.red)
-//                         .frame(width: 60, height: 60)
-//                         .overlay(
-//                             Image(systemName: "stop.fill")
-//                                 .font(.system(size: 26))
-//                                 .foregroundColor(.white)
-//                         )
                  }
              }
              .padding()
@@ -114,7 +107,63 @@ struct FootballMatchApp: Widget {
       } compactLeading: {
       } compactTrailing: {
       } minimal: {
+        let userName = sharedDefault.string(forKey: context.attributes.prefixedKey("userName"))!
+        let isResumeRecording = sharedDefault.string(forKey: context.attributes.prefixedKey("resumeRecording"))!
+        let recordingTime = sharedDefault.string(forKey: context.attributes.prefixedKey("recordingTime"))!;
 
+
+
+        HStack(spacing: 20) {
+                   // Mic Icon & Name
+                   HStack(spacing: 12) {
+
+                       VStack(alignment: .leading, spacing: 4) {
+                           Text(userName)
+                               .font(.system(size: 24, weight: .semibold))
+                               .foregroundColor(.white)
+
+                           Text(recordingTime)
+                               .font(.system(size: 20, weight: .medium))
+                               .foregroundColor(Color(red: 139/255, green: 149/255, blue: 166/255)) // greyish blue
+                       }
+                   }
+
+                   Spacer()
+
+                   // Action Buttons
+                   HStack(spacing: 20) {
+
+                     Circle()
+                         .fill(Color.white)
+                         .frame(width: 60, height: 60)
+                         .overlay(
+                          Image(systemName: isResumeRecording == "1" ? "pause" : "play")
+                                 .font(.system(size: 26))
+                                 .foregroundColor(.gray)
+                         ).onTapGesture {
+                           // Handle the tap action here
+                           print("Circle tapped!")
+                           sharedDefault.set(isResumeRecording == "1" ? "2" : "1", forKey: "resumeRecording")
+                           sharedDefault.synchronize()
+                           NotificationCenter.default.post(name: Notification.Name("userNameUpdated"), object: nil)
+                         }
+
+
+                     Link(destination: URL(string: "la://my.app/stop")!) {
+                         Circle()
+                             .fill(Color.red)
+                             .frame(width: 60, height: 60)
+                             .overlay(
+                                 Image(systemName: "stop.fill")
+                                     .font(.system(size: 26))
+                                     .foregroundColor(.white)
+                             )
+                     }
+                   }
+               }
+               .padding()
+               .background(Color.black)
+               .shadow(radius: 20)
       }
     }
   }
@@ -124,4 +173,18 @@ extension LiveActivitiesAppAttributes {
   func prefixedKey(_ key: String) -> String {
     return "\(id)_\(key)"
   }
+}
+
+struct SetCounterIntent: AppIntent {
+    static var title: LocalizedStringResource = "Set Counter"
+
+    @Parameter(title: "New Value")
+    var value: Int
+
+    func perform() async throws -> some IntentResult {
+        if let activity = Activity<LiveActivitiesAppAttributes>.activities.first {
+//            await activity.update(using: .init(counter: value))
+        }
+        return .result()
+    }
 }
