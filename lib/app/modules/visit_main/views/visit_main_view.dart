@@ -260,7 +260,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         ),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          controller.formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                          controller.formatDateTime(
+                                              firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                           style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
@@ -1199,7 +1200,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                           customPrint("row index is :- ${index}");
                                                                           customPrint("visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString()}");
                                                                           controller.patientReScheduleCreate(
-                                                                              param: {"visit_date": p1, "visit_time": p0}, visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
+                                                                              param: {"visit_date": p1, "visit_time": p0},
+                                                                              visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
                                                                         },
                                                                       ); // Our custom dialog
                                                                     },
@@ -1441,7 +1443,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     offset: const Offset(0, 5),
                                     color: AppColors.white,
                                     position: PopupMenuPosition.over,
-                                    style: const ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                    style: const ButtonStyle(
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
                                     itemBuilder: (context) => [
                                           PopupMenuItem(
                                               enabled: false,
@@ -1489,7 +1492,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     ImagePath.document_attchment,
                                                     width: 30,
                                                     height: 30,
-                                                    colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                    colorFilter:
+                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
@@ -1516,7 +1520,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 children: [
                                                   const SizedBox(width: 5),
                                                   SvgPicture.asset(ImagePath.image_attchment,
-                                                      width: 30, height: 30, colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                                      width: 30,
+                                                      height: 30,
+                                                      colorFilter:
+                                                          ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
                                                   const SizedBox(width: 8),
                                                   Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                                   const SizedBox(width: 5),
@@ -1542,7 +1549,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     ImagePath.date_attchment,
                                                     width: 30,
                                                     height: 30,
-                                                    colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                    colorFilter:
+                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
@@ -1901,8 +1909,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 padding: EdgeInsets.zero,
                                 onTap: () async {
                                   // controller.captureProfileImage();
-
-                                  controller.pickFiles(context);
+                                  await controller.pickFiles(context);
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
