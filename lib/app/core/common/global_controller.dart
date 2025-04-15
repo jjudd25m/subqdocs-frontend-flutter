@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:siri_wave/siri_wave.dart';
+import 'package:subqdocs/utils/app_colors.dart';
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,6 +71,7 @@ class GlobalController extends GetxController {
   RxBool isStartRecording = false.obs;
   RxBool isExpandRecording = true.obs;
   RecorderService recorderService = RecorderService();
+
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   final HomeRepository _homeRepository = HomeRepository();
 
@@ -91,6 +94,13 @@ class GlobalController extends GetxController {
 
   RxList<SelectedDoctorModel> selectedDoctorModelSchedule = RxList<SelectedDoctorModel>();
   RxList<SelectedDoctorModel> selectedMedicalModelSchedule = RxList<SelectedDoctorModel>();
+
+  final waveController = IOS7SiriWaveformController(
+    amplitude: 0,
+    color: Colors.red,
+    frequency: 4,
+    speed: 0.3,
+  );
 
   // below  all the function is for the recording model
   // ----------------------------------------------------------------------------------------------------------------------------------------------------

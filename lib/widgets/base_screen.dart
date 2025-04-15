@@ -7,6 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:record/record.dart';
+import 'package:siri_wave/siri_wave.dart';
+import 'package:subqdocs/app/data/service/recorder_service.dart';
 import '../app/core/common/common_service.dart';
 import '../app/core/common/global_controller.dart';
 import '../app/core/common/logger.dart';
@@ -27,6 +30,7 @@ class BaseScreen extends StatelessWidget {
   final VoidCallback? onPlayCallBack;
 
   final GlobalController globalController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
@@ -240,11 +244,14 @@ class BaseScreen extends StatelessWidget {
                                   style: AppFonts.regular(17, AppColors.textBlack),
                                 ),
                                 SizedBox(height: 20),
-                                Image.asset(
-                                  ImagePath.wave,
-                                  height: 90,
-                                  width: 90,
-                                  fit: BoxFit.fill,
+                                Container(
+                                  height: 110,
+                                  width: 110,
+                                  decoration: BoxDecoration(color: AppColors.ScreenBackGround1, shape: BoxShape.circle),
+                                  child: SiriWaveform.ios7(
+                                    controller: globalController.waveController,
+                                    options: const IOS7SiriWaveformOptions(height: 80, width: 80),
+                                  ),
                                 ),
                                 SizedBox(height: 20),
                                 Row(
@@ -258,6 +265,8 @@ class BaseScreen extends StatelessWidget {
                                           }
                                           globalController.changeStatus("In-Room");
                                           // If not recording, start the recording
+
+                                          globalController.recorderService.audioRecorder = AudioRecorder();
 
                                           await globalController.recorderService.startRecording(context);
                                         } else if (globalController.recorderService.recordingStatus.value == 1) {
@@ -638,6 +647,7 @@ class BaseScreen extends StatelessWidget {
                                           onPlayCallBack?.call();
                                         }
                                         globalController.changeStatus("In-Room");
+                                        globalController.recorderService.audioRecorder = AudioRecorder();
 
                                         await globalController.recorderService.startRecording(context);
                                       } else if (globalController.recorderService.recordingStatus.value == 1) {
