@@ -39,10 +39,7 @@ class BaseScreen extends StatelessWidget {
       key: globalKey,
       backgroundColor: AppColors.white,
       drawer: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 5.0,
-          sigmaY: 5.0,
-        ),
+        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
         child: CustomDrawerView(
           onItemSelected: (index) async {
             // await onItemSelected!(index);
@@ -145,6 +142,8 @@ class BaseScreen extends StatelessWidget {
         onTap: removeFocus,
         child: SafeArea(
           child: Obx(() {
+            globalController.reinitController();
+
             return SizedBox(
               width: Get.width,
               height: Get.height,
@@ -178,13 +177,7 @@ class BaseScreen extends StatelessWidget {
                           // Set the duration for smooth animation
                           width: MediaQuery.of(context).size.width * 0.45,
                           decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.backgroundLightGrey.withValues(alpha: 0.9),
-                                spreadRadius: 6,
-                                blurRadius: 4.0,
-                              ),
-                            ],
+                            boxShadow: [BoxShadow(color: AppColors.backgroundLightGrey.withValues(alpha: 0.9), spreadRadius: 6, blurRadius: 4.0)],
                             borderRadius: BorderRadius.circular(12),
                             color: globalController.isExpandRecording.value ? AppColors.backgroundWhite : AppColors.black,
                           ),
@@ -193,23 +186,13 @@ class BaseScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               // Header Row (expand/collapse button)
-
                               if (globalController.isExpandRecording.value) ...[
                                 Container(
                                   height: 50,
                                   padding: EdgeInsets.symmetric(horizontal: 20),
                                   decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.backgroundLightGrey.withValues(alpha: 0.9),
-                                        spreadRadius: 6,
-                                        blurRadius: 4.0,
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(12),
-                                      topLeft: Radius.circular(12),
-                                    ),
+                                    boxShadow: [BoxShadow(color: AppColors.backgroundLightGrey.withValues(alpha: 0.9), spreadRadius: 6, blurRadius: 4.0)],
+                                    borderRadius: BorderRadius.only(topRight: Radius.circular(12), topLeft: Radius.circular(12)),
                                     color: AppColors.backgroundPurple,
                                   ),
                                   child: Row(
@@ -228,30 +211,19 @@ class BaseScreen extends StatelessWidget {
                                         onTap: () {
                                           globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
                                         },
-                                        child: SvgPicture.asset(
-                                          globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording,
-                                          height: 30,
-                                          width: 30,
-                                        ),
+                                        child: SvgPicture.asset(globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording, height: 30, width: 30),
                                       ),
                                     ],
                                   ),
                                 ),
                                 SizedBox(height: 20),
-                                Text(
-                                  textAlign: TextAlign.center,
-                                  "Recording in Progress",
-                                  style: AppFonts.regular(17, AppColors.textBlack),
-                                ),
+                                Text(textAlign: TextAlign.center, "Recording in Progress", style: AppFonts.regular(17, AppColors.textBlack)),
                                 SizedBox(height: 20),
                                 Container(
                                   height: 110,
                                   width: 110,
                                   decoration: BoxDecoration(color: AppColors.ScreenBackGround1, shape: BoxShape.circle),
-                                  child: SiriWaveform.ios7(
-                                    controller: globalController.waveController,
-                                    options: const IOS7SiriWaveformOptions(height: 80, width: 80),
-                                  ),
+                                  child: SiriWaveform.ios7(controller: globalController.waveController, options: const IOS7SiriWaveformOptions(height: 60, width: 60)),
                                 ),
                                 SizedBox(height: 20),
                                 Row(
@@ -283,11 +255,7 @@ class BaseScreen extends StatelessWidget {
                                           Obx(() {
                                             if (globalController.recorderService.recordingStatus.value == 0) {
                                               // If recording is stopped, show start button
-                                              return SvgPicture.asset(
-                                                ImagePath.start_recording,
-                                                height: 50,
-                                                width: 50,
-                                              );
+                                              return SvgPicture.asset(ImagePath.start_recording, height: 50, width: 50);
                                             } else if (globalController.recorderService.recordingStatus.value == 1) {
                                               // If recording, show pause button
                                               return SvgPicture.asset(
@@ -308,23 +276,11 @@ class BaseScreen extends StatelessWidget {
                                           // Display corresponding text based on the status
                                           Obx(() {
                                             if (globalController.recorderService.recordingStatus.value == 0) {
-                                              return Text(
-                                                textAlign: TextAlign.center,
-                                                "Start",
-                                                style: AppFonts.medium(17, AppColors.textGrey),
-                                              );
+                                              return Text(textAlign: TextAlign.center, "Start", style: AppFonts.medium(17, AppColors.textGrey));
                                             } else if (globalController.recorderService.recordingStatus.value == 1) {
-                                              return Text(
-                                                textAlign: TextAlign.center,
-                                                "Pause",
-                                                style: AppFonts.medium(17, AppColors.textGrey),
-                                              );
+                                              return Text(textAlign: TextAlign.center, "Pause", style: AppFonts.medium(17, AppColors.textGrey));
                                             } else {
-                                              return Text(
-                                                textAlign: TextAlign.center,
-                                                "Resume",
-                                                style: AppFonts.medium(17, AppColors.textGrey),
-                                              );
+                                              return Text(textAlign: TextAlign.center, "Resume", style: AppFonts.medium(17, AppColors.textGrey));
                                             }
                                           }),
                                         ],
@@ -341,17 +297,9 @@ class BaseScreen extends StatelessWidget {
                                       },
                                       child: Column(
                                         children: [
-                                          SvgPicture.asset(
-                                            ImagePath.stop_recording,
-                                            height: 50,
-                                            width: 50,
-                                          ),
+                                          SvgPicture.asset(ImagePath.stop_recording, height: 50, width: 50),
                                           SizedBox(height: 10),
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            "Stop",
-                                            style: AppFonts.medium(17, AppColors.textGrey),
-                                          ),
+                                          Text(textAlign: TextAlign.center, "Stop", style: AppFonts.medium(17, AppColors.textGrey)),
                                         ],
                                       ),
                                     ),
@@ -359,20 +307,12 @@ class BaseScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 20),
                                 Obx(() {
-                                  return Text(
-                                    textAlign: TextAlign.center,
-                                    globalController.recorderService.formattedRecordingTime,
-                                    style: AppFonts.regular(14, AppColors.textBlack),
-                                  );
+                                  return Text(textAlign: TextAlign.center, globalController.recorderService.formattedRecordingTime, style: AppFonts.regular(14, AppColors.textBlack));
                                 }),
                                 SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    "Press the stop button to start generating your summary.",
-                                    style: AppFonts.regular(14, AppColors.textGrey),
-                                  ),
+                                  child: Text(textAlign: TextAlign.center, "Press the stop button to start generating your summary.", style: AppFonts.regular(14, AppColors.textGrey)),
                                 ),
                                 SizedBox(height: 15),
                                 Padding(
@@ -384,11 +324,7 @@ class BaseScreen extends StatelessWidget {
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () async {
-                                            FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                              allowMultiple: false,
-                                              type: FileType.custom,
-                                              allowedExtensions: ['mp3', 'aac', 'm4a'],
-                                            );
+                                            FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.custom, allowedExtensions: ['mp3', 'aac', 'm4a']);
 
                                             if (onPlayCallBack != null) {
                                               onPlayCallBack?.call();
@@ -400,11 +336,7 @@ class BaseScreen extends StatelessWidget {
                                           },
                                           child: Container(
                                             height: 50,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
-                                              color: AppColors.white,
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
+                                            decoration: BoxDecoration(border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2), color: AppColors.white, borderRadius: BorderRadius.circular(8)),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
@@ -418,7 +350,7 @@ class BaseScreen extends StatelessWidget {
                                                     style: AppFonts.medium(13, AppColors.textGrey),
                                                   ),
                                                 ),
-                                                SizedBox(width: 10)
+                                                SizedBox(width: 10),
                                               ],
                                             ),
                                           ),
@@ -435,166 +367,108 @@ class BaseScreen extends StatelessWidget {
                                             menuPadding: EdgeInsetsDirectional.zero,
                                             onSelected: (value) {},
                                             style: const ButtonStyle(
-                                                padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                                            itemBuilder: (context) => [
-                                              PopupMenuItem(
-                                                  padding: EdgeInsets.zero,
-                                                  onTap: () {
-                                                    // controller.pickProfileImage();
-                                                    globalController.captureImage(context);
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                                            ),
+                                            itemBuilder:
+                                                (context) => [
+                                                  PopupMenuItem(
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () {
+                                                      // controller.pickProfileImage();
+                                                      globalController.captureImage(context);
 
-                                                    // customPrint(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
-                                                  },
-                                                  // value: "",
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                    child: Row(
+                                                      // customPrint(" patient id is ${controller.patientList[rowIndex - 1].patientId.toString()}");
+                                                    },
+                                                    // value: "",
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                      child: Row(
+                                                        children: [Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack))],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  PopupMenuItem(
+                                                    // value: "",
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () async {
+                                                      // controller.captureProfileImage();
+
+                                                      globalController.captureImage(context, fromCamera: false);
+                                                    },
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Icon(
-                                                          CupertinoIcons.camera,
-                                                          color: AppColors.textDarkGrey,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Take Photo or Video",
-                                                          style: AppFonts.regular(16, AppColors.textBlack),
+                                                        Container(width: double.infinity, height: 1, color: AppColors.textDarkGrey),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(CupertinoIcons.photo_fill_on_rectangle_fill, color: AppColors.textDarkGrey),
+                                                              SizedBox(width: 10),
+                                                              Text("Choose Photo", style: AppFonts.regular(16, AppColors.textBlack)),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                  )),
-                                              PopupMenuItem(
-                                                  // value: "",
-                                                  padding: EdgeInsets.zero,
-                                                  onTap: () async {
-                                                    // controller.captureProfileImage();
+                                                  ),
+                                                  PopupMenuItem(
+                                                    // value: "",
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () async {
+                                                      // controller.captureProfileImage();
+                                                    },
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(Icons.document_scanner_sharp, color: AppColors.textDarkGrey),
+                                                              SizedBox(width: 10),
+                                                              Text("Scan Documents", style: AppFonts.regular(16, AppColors.textDarkGrey)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  PopupMenuItem(
+                                                    // value: "",
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () async {
+                                                      // controller.captureProfileImage();
 
-                                                    globalController.captureImage(context, fromCamera: false);
-                                                  },
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                        width: double.infinity,
-                                                        height: 1,
-                                                        color: AppColors.textDarkGrey,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              CupertinoIcons.photo_fill_on_rectangle_fill,
-                                                              color: AppColors.textDarkGrey,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Text(
-                                                              "Choose Photo",
-                                                              style: AppFonts.regular(16, AppColors.textBlack),
-                                                            ),
-                                                          ],
+                                                      globalController.pickFiles(context);
+                                                    },
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                          child: Row(
+                                                            children: [Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  )),
-                                              PopupMenuItem(
-                                                  // value: "",
-                                                  padding: EdgeInsets.zero,
-                                                  onTap: () async {
-                                                    // controller.captureProfileImage();
-                                                  },
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                        width: double.infinity,
-                                                        height: 1,
-                                                        color: AppColors.appbarBorder,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.document_scanner_sharp,
-                                                              color: AppColors.textDarkGrey,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Text(
-                                                              "Scan Documents",
-                                                              style: AppFonts.regular(16, AppColors.textDarkGrey),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )),
-                                              PopupMenuItem(
-                                                  // value: "",
-                                                  padding: EdgeInsets.zero,
-                                                  onTap: () async {
-                                                    // controller.captureProfileImage();
-
-                                                    globalController.pickFiles(context);
-                                                  },
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                        width: double.infinity,
-                                                        height: 1,
-                                                        color: AppColors.appbarBorder,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.file_copy_rounded,
-                                                              color: AppColors.textDarkGrey,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Text(
-                                                              "Attach File",
-                                                              style: AppFonts.regular(16, AppColors.textBlack),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )),
-                                            ],
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
                                             child: Container(
                                               height: 50,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(color: AppColors.textPurple, width: 2),
-                                                color: AppColors.white,
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
+                                              decoration: BoxDecoration(border: Border.all(color: AppColors.textPurple, width: 2), color: AppColors.white, borderRadius: BorderRadius.circular(8)),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  SvgPicture.asset(
-                                                    ImagePath.uploadImage,
-                                                    height: 20,
-                                                    width: 20,
-                                                  ),
+                                                  SvgPicture.asset(ImagePath.uploadImage, height: 20, width: 20),
                                                   SizedBox(width: 10),
-                                                  Text(
-                                                    textAlign: TextAlign.center,
-                                                    "Upload Photos",
-                                                    style: AppFonts.medium(13, AppColors.textPurple),
-                                                  ),
+                                                  Text(textAlign: TextAlign.center, "Upload Photos", style: AppFonts.medium(13, AppColors.textPurple)),
                                                 ],
                                               ),
                                             ),
@@ -610,84 +484,69 @@ class BaseScreen extends StatelessWidget {
                                 SizedBox(height: 5),
                                 Row(
                                   children: [
-                                    SvgPicture.asset(
-                                      ImagePath.recording,
-                                      height: 45,
-                                      width: 45,
-                                    ),
+                                    SvgPicture.asset(ImagePath.recording, height: 45, width: 45),
                                     SizedBox(width: 10),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
                                           width: MediaQuery.of(context).size.width * 0.10,
-                                          child: Text(
-                                            maxLines: 2,
-                                            textAlign: TextAlign.left,
-                                            "${globalController.patientFirstName} ${globalController.patientLsatName}",
-                                            style: AppFonts.regular(14, AppColors.textWhite),
-                                          ),
+                                          child: Text(maxLines: 2, textAlign: TextAlign.left, "${globalController.patientFirstName} ${globalController.patientLsatName}", style: AppFonts.regular(14, AppColors.textWhite)),
                                         ),
                                         SizedBox(height: 0),
                                         Obx(() {
-                                          return Text(
-                                            textAlign: TextAlign.left,
-                                            globalController.recorderService.formattedRecordingTime,
-                                            style: AppFonts.regular(14, AppColors.textGrey),
-                                          );
+                                          return Text(textAlign: TextAlign.left, globalController.recorderService.formattedRecordingTime, style: AppFonts.regular(14, AppColors.textGrey));
                                         }),
                                       ],
                                     ),
                                     Spacer(),
-                                    GestureDetector(onTap: () async {
-                                      if (globalController.recorderService.recordingStatus.value == 0) {
-                                        // If not recording, start the recording
+                                    GestureDetector(
+                                      onTap: () async {
+                                        if (globalController.recorderService.recordingStatus.value == 0) {
+                                          // If not recording, start the recording
 
-                                        if (onPlayCallBack != null) {
-                                          onPlayCallBack?.call();
+                                          if (onPlayCallBack != null) {
+                                            onPlayCallBack?.call();
+                                          }
+                                          globalController.changeStatus("In-Room");
+                                          globalController.recorderService.audioRecorder = AudioRecorder();
+
+                                          await globalController.recorderService.startRecording(context);
+                                        } else if (globalController.recorderService.recordingStatus.value == 1) {
+                                          // If recording, pause it
+                                          await globalController.recorderService.pauseRecording();
+                                        } else if (globalController.recorderService.recordingStatus.value == 2) {
+                                          // If paused, resume the recording
+                                          await globalController.recorderService.resumeRecording();
                                         }
-                                        globalController.changeStatus("In-Room");
-                                        globalController.recorderService.audioRecorder = AudioRecorder();
-
-                                        await globalController.recorderService.startRecording(context);
-                                      } else if (globalController.recorderService.recordingStatus.value == 1) {
-                                        // If recording, pause it
-                                        await globalController.recorderService.pauseRecording();
-                                      } else if (globalController.recorderService.recordingStatus.value == 2) {
-                                        // If paused, resume the recording
-                                        await globalController.recorderService.resumeRecording();
-                                      }
-                                      // await controller.recorderService.startRecording(context);
-                                    }, child: Obx(() {
-                                      if (globalController.recorderService.recordingStatus.value == 0) {
-                                        // If recording is stopped, show start button
-                                        return SvgPicture.asset(
-                                          ImagePath.dark_play,
-                                          height: 45,
-                                          width: 45,
-                                        );
-                                      } else if (globalController.recorderService.recordingStatus.value == 1) {
-                                        // If recording, show pause button
-                                        return SvgPicture.asset(
-                                          ImagePath.pause_white, // Replace with the actual pause icon
-                                          height: 45,
-                                          width: 45,
-                                        );
-                                      } else {
-                                        // If paused, show resume button
-                                        return SvgPicture.asset(
-                                          ImagePath.dark_play, // Replace with the actual resume icon
-                                          height: 45,
-                                          width: 45,
-                                        );
-                                      }
-                                    })
-                                        // SvgPicture.asset(
-                                        //   ImagePath.pause_white,
-                                        //   height: 45,
-                                        //   width: 45,
-                                        // ),
-                                        ),
+                                        // await controller.recorderService.startRecording(context);
+                                      },
+                                      child: Obx(() {
+                                        if (globalController.recorderService.recordingStatus.value == 0) {
+                                          // If recording is stopped, show start button
+                                          return SvgPicture.asset(ImagePath.dark_play, height: 45, width: 45);
+                                        } else if (globalController.recorderService.recordingStatus.value == 1) {
+                                          // If recording, show pause button
+                                          return SvgPicture.asset(
+                                            ImagePath.pause_white, // Replace with the actual pause icon
+                                            height: 45,
+                                            width: 45,
+                                          );
+                                        } else {
+                                          // If paused, show resume button
+                                          return SvgPicture.asset(
+                                            ImagePath.dark_play, // Replace with the actual resume icon
+                                            height: 45,
+                                            width: 45,
+                                          );
+                                        }
+                                      }),
+                                      // SvgPicture.asset(
+                                      //   ImagePath.pause_white,
+                                      //   height: 45,
+                                      //   width: 45,
+                                      // ),
+                                    ),
                                     SizedBox(width: 10),
                                     GestureDetector(
                                       onTap: () async {
@@ -698,22 +557,14 @@ class BaseScreen extends StatelessWidget {
                                           globalController.submitAudio(audioFile!);
                                         }
                                       },
-                                      child: SvgPicture.asset(
-                                        ImagePath.stop_recording,
-                                        height: 45,
-                                        width: 45,
-                                      ),
+                                      child: SvgPicture.asset(ImagePath.stop_recording, height: 45, width: 45),
                                     ),
                                     SizedBox(width: 10),
                                     GestureDetector(
                                       onTap: () {
                                         globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
                                       },
-                                      child: SvgPicture.asset(
-                                        ImagePath.expand_recording,
-                                        height: 45,
-                                        width: 45,
-                                      ),
+                                      child: SvgPicture.asset(ImagePath.expand_recording, height: 45, width: 45),
                                     ),
                                   ],
                                 ),
@@ -722,7 +573,7 @@ class BaseScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ],
               ),

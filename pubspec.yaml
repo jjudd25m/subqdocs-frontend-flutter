@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.7.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -72,7 +72,9 @@ dependencies:
   flutter_side_menu: ^0.5.41
   draggable_float_widget:
     path: ./draggable_float_widget
-  open_file_plus: ^3.4.1+1
+  open_file_plus:
+    git:
+      url: https://github.com/postflow/open_file_plus.git
   intl_phone_field: ^3.2.0
   phone_number_text_input_formatter: ^0.0.2
   mask_text_input_formatter: ^2.9.0
@@ -80,7 +82,9 @@ dependencies:
   awesome_side_sheet: ^0.0.3
   flutter_typeahead: ^5.2.0
   flutter_popup: ^3.3.4
-  siri_wave: ^2.2.0
+
+  siri_wave: ^2.3.0
+
 
 
 

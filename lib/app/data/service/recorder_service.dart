@@ -24,9 +24,9 @@ class RecorderService {
 
   File? recordFile;
 
-  StreamSubscription<Amplitude> waves = LightSubscription(
-    (subs) {},
-  );
+  late StreamSubscription<Amplitude> waves;
+
+  double normalized = 0.0;
 
   // Track recording time in seconds (using GetX Rx for reactivity)
   Rx<int> recordingTime = 0.obs;
@@ -48,16 +48,13 @@ class RecorderService {
       Directory dir = await getApplicationCacheDirectory();
       String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
 
-      await audioRecorder.start(
-        const RecordConfig(),
-        path: "${dir.path}/$filename",
-      );
+      await audioRecorder.start(const RecordConfig(), path: "${dir.path}/$filename");
 
-      waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 100)).listen((amp) {
+      waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
         final db = amp.current ?? -160;
 
         // Normalize the decibel to 0.0 - 1.0
-        final normalized = ((db + 60) / 60).clamp(0.0, 1.0);
+        normalized = ((db + 60) / 60).clamp(0.0, 1.0);
 
         // Update the waveform
         globalController.waveController.amplitude = normalized;
@@ -72,13 +69,15 @@ class RecorderService {
       // Handle permission denial here
 
       showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => PermissionAlert(
-                permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.",
-                permissionTitle: " Microphone  permission request",
-                isMicPermission: true,
-              ));
+        barrierDismissible: false,
+        context: context,
+        builder:
+            (context) => PermissionAlert(
+              permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.",
+              permissionTitle: " Microphone  permission request",
+              isMicPermission: true,
+            ),
+      );
     }
     return false;
   }

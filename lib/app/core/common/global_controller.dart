@@ -61,8 +61,8 @@ class GlobalController extends GetxController {
 
   int closeFormState = 0;
 
-//all variable for the model recording
-//   --------------------------------------------------------------------------------------------------------------------------------------------------
+  //all variable for the model recording
+  //   --------------------------------------------------------------------------------------------------------------------------------------------------
   RxBool isStartTranscript = RxBool(false);
   Rxn<MedicalDoctorModel> doctorListModel = Rxn<MedicalDoctorModel>();
   Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
@@ -95,12 +95,11 @@ class GlobalController extends GetxController {
   RxList<SelectedDoctorModel> selectedDoctorModelSchedule = RxList<SelectedDoctorModel>();
   RxList<SelectedDoctorModel> selectedMedicalModelSchedule = RxList<SelectedDoctorModel>();
 
-  final waveController = IOS7SiriWaveformController(
-    amplitude: 0,
-    color: Colors.red,
-    frequency: 4,
-    speed: 0.3,
-  );
+  IOS7SiriWaveformController waveController = IOS7SiriWaveformController(amplitude: 0, color: Colors.red, frequency: 4, speed: 0.3);
+
+  void reinitController() {
+    waveController = IOS7SiriWaveformController(amplitude: 0, color: AppColors.backgroundPurple, frequency: 3, speed: 0.9);
+  }
 
   // below  all the function is for the recording model
   // ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -134,15 +133,13 @@ class GlobalController extends GetxController {
       if (medicalListModel.value?.responseType == "success") {
         selectedMedicalModel.clear();
         selectedMedicalModelSchedule.clear();
-        medicalListModel.value?.responseData?.forEach(
-          (element) {
-            selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
-            selectedMedicalModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+        medicalListModel.value?.responseData?.forEach((element) {
+          selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+          selectedMedicalModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
 
-            setMedicalModel();
-            setMedicalModelSchedule();
-          },
-        );
+          setMedicalModel();
+          setMedicalModelSchedule();
+        });
       }
     } catch (e) {
       print("$e");
@@ -168,15 +165,13 @@ class GlobalController extends GetxController {
       if (doctorListModel.value?.responseType == "success") {
         selectedDoctorModel.clear();
         selectedDoctorModelSchedule.clear();
-        doctorListModel.value?.responseData?.forEach(
-          (element) {
-            selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
-            selectedDoctorModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+        doctorListModel.value?.responseData?.forEach((element) {
+          selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+          selectedDoctorModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
 
-            setDoctorModel();
-            setDoctorModelSchedule();
-          },
-        );
+          setDoctorModel();
+          setDoctorModelSchedule();
+        });
       }
     } catch (e) {
       print("$e");
@@ -269,15 +264,9 @@ class GlobalController extends GetxController {
           addRoute(Routes.HOME);
           // addRoute(Routes.PATIENT_INFO);
 
-          await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-            "trascriptUploadData": patientTranscriptUploadModel,
-            "unique_tag": DateTime.now().toString(),
-          });
+          await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
         } else {
-          await Get.toNamed(Routes.PATIENT_INFO, arguments: {
-            "trascriptUploadData": patientTranscriptUploadModel,
-            "unique_tag": DateTime.now().toString(),
-          });
+          await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
         }
 
         if (Get.currentRoute == Routes.VISIT_MAIN) {
@@ -293,11 +282,9 @@ class GlobalController extends GetxController {
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach(
-      (element) {
-        totalSize += element.calculateSize ?? 0;
-      },
-    );
+    list.value.forEach((element) {
+      totalSize += element.calculateSize ?? 0;
+    });
 
     if (totalSize < 100) {
       return true;
@@ -309,13 +296,11 @@ class GlobalController extends GetxController {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach(
-      (element) {
-        if (element.isGraterThan10 ?? false) {
-          isGraterThan10 = true;
-        }
-      },
-    );
+    list.value.forEach((element) {
+      if (element.isGraterThan10 ?? false) {
+        isGraterThan10 = true;
+      }
+    });
 
     return isGraterThan10;
   }
@@ -378,36 +363,43 @@ class GlobalController extends GetxController {
 
     customPrint("media  file is  $fileList");
 
-    fileList?.forEach(
-      (element) {
-        XFile? _pickedFile;
-        String? _fileName;
-        DateTime? _pickDate;
-        int? _fileSize;
-        if (element != null) {
-          _fileName = element.name; // Get the file name
-          _pickDate = DateTime.now(); // Get the date when the file is picked
+    fileList?.forEach((element) {
+      XFile? _pickedFile;
+      String? _fileName;
+      DateTime? _pickDate;
+      int? _fileSize;
+      if (element != null) {
+        _fileName = element.name; // Get the file name
+        _pickDate = DateTime.now(); // Get the date when the file is picked
 
-          // Get the size of the file
-          File file = File(element.xFile.path);
-          _fileSize = file.lengthSync(); // Size in bytes
+        // Get the size of the file
+        File file = File(element.xFile.path);
+        _fileSize = file.lengthSync(); // Size in bytes
 
-          String? _filesizeString = _formatFileSize(_fileSize);
+        String? _filesizeString = _formatFileSize(_fileSize);
 
-          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+        double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
 
-          String? _shortFileName;
-          if (p.basename(_fileName).length > 15) {
-            // Truncate the name to 12 characters and add ellipsis
-            _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
-          } else {
-            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
-          }
-          list.value.add(MediaListingModel(
-              file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        String? _shortFileName;
+        if (p.basename(_fileName).length > 15) {
+          // Truncate the name to 12 characters and add ellipsis
+          _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+        } else {
+          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-      },
-    );
+        list.value.add(
+          MediaListingModel(
+            file: file,
+            previewImage: null,
+            fileName: _shortFileName,
+            date: _formatDate(_pickDate),
+            Size: _filesizeString,
+            calculateSize: _filesizeStringDouble,
+            isGraterThan10: _filesizeStringDouble < 10.00 ? false : true,
+          ),
+        );
+      }
+    });
     list.refresh();
     if (clear) {
       if (list.isNotEmpty) {
@@ -629,11 +621,11 @@ class GlobalController extends GetxController {
 
   List<Map<String, dynamic>> patientListSelectedSorting = [];
   List<Map<String, dynamic>> scheduleVisitSelectedSorting = [
-    {"id": "appointmentTime", "desc": false}
+    {"id": "appointmentTime", "desc": false},
   ];
 
   List<Map<String, dynamic>> pastVisitSelectedSorting = [
-    {"id": "appointmentTime", "desc": "true"}
+    {"id": "appointmentTime", "desc": "true"},
   ];
 
   Rxn<HomePastPatientListSortingModel> homePastPatientListSortingModel = Rxn();
@@ -847,59 +839,43 @@ class GlobalController extends GetxController {
   }
 
   void removeDoctorFilter({required int selectedId, required String name}) {
-    homePastPatientListSortingModel.value?.selectedDoctorId?.removeWhere(
-      (element) {
-        return element == selectedId;
-      },
-    );
-    homePastPatientListSortingModel.value?.selectedDoctorNames?.removeWhere(
-      (element) {
-        return element == name;
-      },
-    );
+    homePastPatientListSortingModel.value?.selectedDoctorId?.removeWhere((element) {
+      return element == selectedId;
+    });
+    homePastPatientListSortingModel.value?.selectedDoctorNames?.removeWhere((element) {
+      return element == name;
+    });
     saveHomePastPatientData();
   }
 
   void removeDoctorFilterSchedule({required int selectedId, required String name}) {
-    homeScheduleListSortingModel.value?.selectedDoctorId?.removeWhere(
-      (element) {
-        return element == selectedId;
-      },
-    );
-    homeScheduleListSortingModel.value?.selectedDoctorNames?.removeWhere(
-      (element) {
-        return element == name;
-      },
-    );
+    homeScheduleListSortingModel.value?.selectedDoctorId?.removeWhere((element) {
+      return element == selectedId;
+    });
+    homeScheduleListSortingModel.value?.selectedDoctorNames?.removeWhere((element) {
+      return element == name;
+    });
 
     saveHomeScheduleListData();
   }
 
   void removeMedicalFilter({required int selectedId, required String name}) {
-    homePastPatientListSortingModel.value?.selectedMedicationId?.removeWhere(
-      (element) {
-        return element == selectedId;
-      },
-    );
-    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeWhere(
-      (element) {
-        return element == name;
-      },
-    );
+    homePastPatientListSortingModel.value?.selectedMedicationId?.removeWhere((element) {
+      return element == selectedId;
+    });
+    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeWhere((element) {
+      return element == name;
+    });
     saveHomePastPatientData();
   }
 
   void removeMedicalFilterSchedule({required int selectedId, required String name}) {
-    homeScheduleListSortingModel.value?.selectedMedicationId?.removeWhere(
-      (element) {
-        return element == selectedId;
-      },
-    );
-    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeWhere(
-      (element) {
-        return element == name;
-      },
-    );
+    homeScheduleListSortingModel.value?.selectedMedicationId?.removeWhere((element) {
+      return element == selectedId;
+    });
+    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeWhere((element) {
+      return element == name;
+    });
 
     saveHomeScheduleListData();
   }

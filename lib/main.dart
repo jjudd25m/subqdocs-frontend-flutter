@@ -22,28 +22,15 @@ Future<void> main() async {
   });
   socketService.socket.on('event', (data) => print(data));
   socketService.socket.onDisconnect((_) => print('disconnect'));
-  socketService.socket.on('fromServer', (_) => print(_));
-  socketService.socket.onConnectError(
-    (data) {
-      print("socket connect error is :- ${data}");
-    },
-  );
-  socketService.socket.onError(
-    (data) {
-      print("socket onError is :- ${data}");
-    },
-  );
+  socketService.socket.on('fromServer', (_) => print(""));
+  socketService.socket.onConnectError((data) {
+    print("socket connect error is :- ${data}");
+  });
+  socketService.socket.onError((data) {
+    print("socket onError is :- ${data}");
+  });
 
   Get.put(GlobalController());
 
-  runApp(
-    ToastificationWrapper(
-      child: GetMaterialApp(
-        title: "Application",
-        debugShowCheckedModeBanner: false,
-        initialRoute: AppPages.INITIAL,
-        getPages: AppPages.routes,
-      ),
-    ),
-  );
+  runApp(ToastificationWrapper(child: GetMaterialApp(title: "Application", debugShowCheckedModeBanner: false, initialRoute: AppPages.INITIAL, getPages: AppPages.routes)));
 }
