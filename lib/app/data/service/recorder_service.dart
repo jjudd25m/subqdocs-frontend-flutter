@@ -6,6 +6,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:record/record.dart';
 
 import '../../../widgets/customPermission.dart';
@@ -13,6 +14,8 @@ import '../../core/utils/app_keys.dart';
 
 class RecorderService {
   final AudioRecorder audioRecorder = AudioRecorder();
+
+  // late AudioFileWaveformsC _waveformController;
 
   File? recordFile;
 
@@ -33,6 +36,7 @@ class RecorderService {
         const RecordConfig(),
         path: "${dir.path}/$filename",
       );
+
       recordingStatus.value = 1;
       // Start the timer to update recording time
       _startTimer();

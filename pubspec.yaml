@@ -80,6 +80,8 @@ dependencies:
   awesome_side_sheet: ^0.0.3
   flutter_typeahead: ^5.2.0
   flutter_popup: ^3.3.4
+  audio_waveforms: ^0.3.2
+
 
 
 dev_dependencies:

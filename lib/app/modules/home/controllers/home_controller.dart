@@ -212,6 +212,8 @@ class HomeController extends GetxController {
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "PAST", subcategories: ["Pending", "Finalized", "Insufficient Information", "Not Recorded"]));
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "CANCELLED/NO SHOW", subcategories: ["Cancelled", "No Show"]));
 
+    globalController.getUserDetail();
+
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   globalController.addRouteInit(Routes.HOME);
     // });

@@ -45,6 +45,7 @@ class ResponseData {
   String? gender;
   // List<Null>? attachments;
   PersonalNote? personalNote;
+  VisitSnapshot? visitSnapshot; // ✅ New field added
 
   ResponseData(
       {this.doctorFirstName,
@@ -64,7 +65,8 @@ class ResponseData {
       this.age,
       this.gender,
       // this.attachments,
-      this.personalNote});
+      this.personalNote,
+      this.visitSnapshot});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     doctorName = json['doctorName'];
@@ -89,7 +91,10 @@ class ResponseData {
     //   attachments = <Null>[];
     //   json['attachments'].forEach((v) {});
     // }
+
     personalNote = json['personal_note'] != null ? PersonalNote.fromJson(json['personal_note']) : null;
+
+    visitSnapshot = json['visit_snapshot'] != null ? VisitSnapshot.fromJson(json['visit_snapshot']) : null; // ✅ Parse visit_snapshot
   }
 
   Map<String, dynamic> toJson() {
@@ -111,9 +116,15 @@ class ResponseData {
     data['profile_image'] = profileImage;
     data['age'] = age;
     data['gender'] = gender;
+
     if (personalNote != null) {
       data['personal_note'] = personalNote!.toJson();
     }
+
+    if (visitSnapshot != null) {
+      data['visit_snapshot'] = visitSnapshot!.toJson();
+    }
+
     return data;
   }
 }
@@ -136,6 +147,28 @@ class PersonalNote {
     data['id'] = id;
     data['visit_date'] = visitDate;
     data['personal_note'] = personalNote;
+    return data;
+  }
+}
+
+class VisitSnapshot {
+  int? id;
+  String? visitDate;
+  List<dynamic>? visitSnapshot;
+
+  VisitSnapshot({this.id, this.visitDate, this.visitSnapshot});
+
+  VisitSnapshot.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    visitDate = json['visit_date'];
+    visitSnapshot = json['visit_snapshot'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['visit_date'] = visitDate;
+    data['visit_snapshot'] = visitSnapshot;
     return data;
   }
 }

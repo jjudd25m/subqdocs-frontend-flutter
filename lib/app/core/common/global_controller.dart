@@ -32,6 +32,8 @@ import '../../modules/home/model/home_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_schedule_list_sorting_model.dart';
 import '../../modules/home/repository/home_repository.dart';
 import '../../modules/login/model/login_model.dart';
+import '../../modules/personal_setting/model/get_user_detail_model.dart';
+import '../../modules/personal_setting/repository/personal_setting_repository.dart';
 import '../../modules/visit_main/controllers/visit_main_controller.dart';
 import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
 import '../../modules/visit_main/repository/visit_main_repository.dart';
@@ -61,6 +63,7 @@ class GlobalController extends GetxController {
 //   --------------------------------------------------------------------------------------------------------------------------------------------------
   RxBool isStartTranscript = RxBool(false);
   Rxn<MedicalDoctorModel> doctorListModel = Rxn<MedicalDoctorModel>();
+  Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
 
   Rxn<MedicalDoctorModel> medicalListModel = Rxn<MedicalDoctorModel>();
   RxBool isStartRecording = false.obs;
@@ -68,6 +71,8 @@ class GlobalController extends GetxController {
   RecorderService recorderService = RecorderService();
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   final HomeRepository _homeRepository = HomeRepository();
+
+  final PersonalSettingRepository _personalSettingRepository = PersonalSettingRepository();
   static const ROLE_DOCTOR = "Doctor";
   static const ROLE_MEDICAL_ASSISTANT = "Medical Assistant";
 
@@ -131,6 +136,15 @@ class GlobalController extends GetxController {
       }
     } catch (e) {
       print("$e");
+    }
+  }
+
+  Future<void> getUserDetail() async {
+    try {
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+      getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
+    } catch (e) {
+      print(e);
     }
   }
 

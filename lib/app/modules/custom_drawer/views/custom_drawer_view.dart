@@ -25,8 +25,6 @@ import '../controllers/custom_drawer_controller.dart';
 class CustomDrawerView extends GetView<CustomDrawerController> {
   final Function(int index)? onItemSelected;
 
-  var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-
   CustomDrawerView({Key? key, this.onItemSelected}) : super(key: key);
 
   @override
@@ -50,7 +48,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                   Row(
                     children: [
                       SizedBox(width: 20),
-                      loginData.responseData?.user?.id == 49
+                      controller.globalController.getUserDetailModel.value?.responseData?.id == -1
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child: Image.asset(
@@ -60,10 +58,14 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                 width: 40,
                               ),
                             )
-                          : BaseImageView(
-                              imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                              width: 40,
-                              height: 40,
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: BaseImageView(
+                                imageUrl: controller.globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                width: 40,
+                                height: 40,
+                                nameLetters: "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              ),
                             ),
                       SizedBox(
                         width: 8,
@@ -72,7 +74,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${loginData.responseData?.user?.firstName} ${loginData.responseData?.user?.lastName}",
+                            "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                             style: AppFonts.medium(14, AppColors.textBlackDark),
                           ),
                           SizedBox(

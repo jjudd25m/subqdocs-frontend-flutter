@@ -2,12 +2,16 @@ import 'package:get/get.dart';
 import 'package:subqdocs/app/modules/custom_drawer/Models/drawer_model.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
+import '../../../core/common/global_controller.dart';
+
 class CustomDrawerController extends GetxController {
   //TODO: Implement CustomDrawerController
 
   final count = 0.obs;
 
   RxList<DrawerItemModel> drawerItemModelList = RxList();
+
+  final GlobalController globalController = Get.find();
 
   @override
   void onInit() {

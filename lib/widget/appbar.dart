@@ -47,7 +47,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? elevation;
   final bool? centerTitle;
 
-  var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  // var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  final GlobalController globalController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -100,46 +101,52 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 Spacer(),
-                Row(
-                  children: [
-                    loginData.responseData?.user?.id == 49
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: Image.asset(
-                              fit: BoxFit.cover,
-                              ImagePath.user,
-                              height: 50,
-                              width: 50,
+                Obx(() {
+                  return Row(
+                    children: [
+                      globalController.getUserDetailModel.value?.responseData?.id == -1
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: Image.asset(
+                                fit: BoxFit.cover,
+                                ImagePath.user,
+                                height: 50,
+                                width: 50,
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: BaseImageView(
+                                imageUrl: globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                width: 50,
+                                height: 50,
+                                nameLetters: "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""}  ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              ),
                             ),
-                          )
-                        : BaseImageView(
-                            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s",
-                            width: 50,
-                            height: 50,
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            textAlign: TextAlign.center,
+                            "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                            style: AppFonts.medium(15, AppColors.textBlack),
                           ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          textAlign: TextAlign.center,
-                          "${loginData.responseData?.user?.firstName} ${loginData.responseData?.user?.lastName}",
-                          style: AppFonts.medium(15, AppColors.textBlack),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          textAlign: TextAlign.center,
-                          "DO, FAAD",
-                          style: AppFonts.regular(13, AppColors.textGrey),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            textAlign: TextAlign.center,
+                            "${globalController.getUserDetailModel.value?.responseData?.degree ?? ""}",
+                            style: AppFonts.regular(13, AppColors.textGrey),
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                }),
                 SizedBox(width: 20),
                 // GestureDetector(
                 //   onTap: () async {

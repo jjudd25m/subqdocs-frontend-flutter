@@ -261,6 +261,7 @@ class PersonalSettingController extends GetxController {
     CustomToastification().showToast(updateUserResponseModel.message ?? "", type: ToastificationType.success);
 
     getUserDetail();
+    globalController.getUserDetail();
 
     if (updateUserResponseModel.responseData?.token != null) {
       String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);

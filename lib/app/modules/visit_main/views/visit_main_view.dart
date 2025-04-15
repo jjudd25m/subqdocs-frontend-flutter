@@ -419,6 +419,83 @@ class _VisitMainViewState extends State<VisitMainView> {
                               children: [
                                 Text(
                                   textAlign: TextAlign.center,
+                                  "Next Visit Snapshot",
+                                  style: AppFonts.regular(16, AppColors.textBlack),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      // border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                      color: AppColors.backgroundWhite,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: (controller.patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? []).isEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text("Visit Snapshot Not Found"),
+                                          )
+                                        : Column(
+                                            children: [
+                                              for (String note in controller.patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? [])
+                                                Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    if (controller.patientData.value?.responseData?.visitSnapshot?.visitSnapshot != 1)
+                                                      Text(
+                                                        "•",
+                                                        style: AppFonts.regular(24, AppColors.textDarkGrey),
+                                                      ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        textAlign: TextAlign.start,
+                                                        maxLines: 2,
+                                                        note,
+                                                        // "He enjoys fishing and gardening. His wife's name is Julie.",
+                                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    SizedBox(width: 7),
+                                                  ],
+                                                ),
+                                            ],
+                                          )),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Theme(
+                          data: ThemeData(
+                            splashColor: Colors.transparent, // Remove splash color
+                            highlightColor: Colors.transparent, // Remove highlight color
+                          ),
+                          child: ExpansionTile(
+                            initiallyExpanded: true,
+                            childrenPadding: EdgeInsets.all(0),
+                            collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                            backgroundColor: AppColors.backgroundWhite,
+                            collapsedBackgroundColor: AppColors.backgroundWhite,
+                            title: Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
                                   "Personal Note",
                                   style: AppFonts.regular(16, AppColors.textBlack),
                                 ),
@@ -434,39 +511,44 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       color: AppColors.backgroundWhite,
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: Column(
-                                      children: [
-                                        for (String note in controller.patientData.value?.responseData?.personalNote?.personalNote ?? [])
-                                          Row(
+                                    child: (controller.patientData.value?.responseData?.personalNote?.personalNote ?? []).isEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text("Personal Note Not Found"),
+                                          )
+                                        : Column(
                                             children: [
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              if (controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1)
-                                                Text(
-                                                  "•",
-                                                  style: AppFonts.regular(24, AppColors.textDarkGrey),
+                                              for (String note in controller.patientData.value?.responseData?.personalNote?.personalNote ?? [])
+                                                Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    if (controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1)
+                                                      Text(
+                                                        "•",
+                                                        style: AppFonts.regular(24, AppColors.textDarkGrey),
+                                                      ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        textAlign: TextAlign.start,
+                                                        maxLines: 2,
+                                                        note,
+                                                        // "He enjoys fishing and gardening. His wife's name is Julie.",
+                                                        style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    SizedBox(width: 7),
+                                                  ],
                                                 ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  textAlign: TextAlign.start,
-                                                  maxLines: 2,
-                                                  note,
-                                                  // "He enjoys fishing and gardening. His wife's name is Julie.",
-                                                  style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 7,
-                                              ),
-                                              SizedBox(width: 7),
                                             ],
-                                          ),
-                                      ],
-                                    )),
+                                          )),
                               ),
                               SizedBox(
                                 height: 10,
