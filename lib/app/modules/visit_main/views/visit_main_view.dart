@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -1542,25 +1543,93 @@ class _VisitMainViewState extends State<VisitMainView> {
                                               },
                                               height: 30,
                                               padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                              child: Row(
+                                              child: Column(
                                                 children: [
-                                                  const SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    ImagePath.date_attchment,
-                                                    width: 30,
-                                                    height: 30,
-                                                    colorFilter:
-                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        ImagePath.date_attchment,
+                                                        width: 30,
+                                                        height: 30,
+                                                        colorFilter:
+                                                            ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                                      const SizedBox(width: 5),
+                                                      if (controller.isSelectedAttchmentOption.value == 2) ...[
+                                                        SvgPicture.asset(
+                                                          ImagePath.attchment_check,
+                                                          width: 16,
+                                                          height: 16,
+                                                        )
+                                                      ]
+                                                    ],
                                                   ),
-                                                  const SizedBox(width: 8),
-                                                  Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                  const SizedBox(width: 5),
                                                   if (controller.isSelectedAttchmentOption.value == 2) ...[
-                                                    SvgPicture.asset(
-                                                      ImagePath.attchment_check,
-                                                      width: 16,
-                                                      height: 16,
-                                                    )
+                                                    Obx(() {
+                                                      return SizedBox(
+                                                        width: Get.width,
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.circular(6),
+                                                            border: Border.all(color: Colors.grey.shade300, width: 1),
+                                                          ),
+                                                          child: CalendarDatePicker2(
+                                                            config: CalendarDatePicker2Config(
+                                                              dayViewController: controller.pageController,
+                                                              weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                                              weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                                              daySplashColor: AppColors.clear,
+                                                              calendarViewMode: CalendarDatePicker2Mode.day,
+                                                              selectedDayHighlightColor: AppColors.backgroundPurple,
+                                                              dayMaxWidth: 30,
+                                                              allowSameValueSelection: true,
+                                                              firstDayOfWeek: 6,
+                                                              rangeBidirectional: true,
+                                                              animateToDisplayedMonthDate: true,
+                                                              dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
+                                                              disableMonthPicker: true,
+                                                              dayBorderRadius: BorderRadius.all(Radius.circular(6)),
+                                                              scrollViewTopHeaderTextStyle: const TextStyle(
+                                                                color: Colors.black87,
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                              controlsTextStyle: const TextStyle(
+                                                                color: Colors.black,
+                                                                fontSize: 15,
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                              centerAlignModePicker: true,
+                                                              customModePickerIcon: const SizedBox(),
+                                                              calendarViewScrollPhysics: RangeMaintainingScrollPhysics(),
+                                                              calendarType: CalendarDatePicker2Type.range,
+                                                              firstDate: DateTime(2000, 01, 01),
+                                                              lastDate: DateTime.now().add(Duration(days: 365)),
+                                                            ),
+                                                            onValueChanged: (value) {
+                                                              // selectedDate?.value = value;
+                                                              //
+                                                              // if (selectedStatusIndex.isNotEmpty) {
+                                                              //   controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
+                                                              // }
+                                                              //
+                                                              // controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
+                                                              // List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
+                                                              // if (dates.length == 2) {
+                                                              //   controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
+                                                              //   controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
+                                                              //   controller.globalController.saveHomePastPatientData();
+                                                              //   controller.pastTriggeredIndexes.clear();
+                                                              // }
+                                                            },
+                                                            value: controller.selectedDate ?? [DateTime.now()],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })
                                                   ]
                                                 ],
                                               )),
@@ -1909,7 +1978,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 padding: EdgeInsets.zero,
                                 onTap: () async {
                                   // controller.captureProfileImage();
-                                  await controller.pickFiles(context);
+                                  // await controller.pickFiles(context);
+                                  controller.pickFilesForDoc();
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -44,6 +44,9 @@ import '../views/attachmentDailog.dart';
 class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
 
+  PageController pageController = PageController();
+  RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
+
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
   Rxn<MedicalRecords> medicalRecords = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
@@ -196,6 +199,74 @@ class VisitMainController extends GetxController {
     isImage.value = false;
     getPatientAttachment();
     Get.back();
+  }
+
+  Future<void> pickFilesForDoc({bool clear = true}) async {
+    if (clear) {
+      list.clear();
+    }
+
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
+
+    customPrint("media  file is  ${fileList}");
+
+    // double totalFileSize = 0.0;
+
+    fileList?.forEach(
+      (element) {
+        XFile? _pickedFile;
+        String? _fileName;
+        DateTime? _pickDate;
+        int? _fileSize;
+
+        if (element != null) {
+          _fileName = element.name; // Get the file name
+          _pickDate = DateTime.now(); // Get the date when the file is picked
+
+          // Get the size of the file
+          File file = File(element.xFile.path);
+          _fileSize = file.lengthSync(); // Size in bytes
+
+          // totalFileSize += _fileSize / (1024 * 1024);
+
+          String? _filesizeString = _formatFileSize(_fileSize);
+          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+
+          String? _shortFileName;
+          if (p.basename(_fileName).length > 15) {
+            // Truncate the name to 12 characters and add ellipsis
+            _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+          } else {
+            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          }
+          list.value.add(MediaListingModel(
+              file: file,
+              previewImage: null,
+              fileName: _shortFileName,
+              date: _formatDate(_pickDate),
+              Size: _filesizeString,
+              calculateSize: _filesizeStringDouble,
+              isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        }
+
+        list.refresh();
+      },
+    );
+
+    list.refresh();
+    if (clear) {
+      if (list.isNotEmpty) {
+        showCustomDialog(Get.context!);
+      }
+    }
+
+    // calculateTotalFileSize();
+  }
+
+  double _formatFileSizeDouble(int bytes) {
+    double sizeInKB = bytes / 1024; // Convert bytes to KB
+    double sizeInMB = sizeInKB / 1024; // Convert KB to MB
+    return (sizeInMB * 100).roundToDouble() / 100;
   }
 
   Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
