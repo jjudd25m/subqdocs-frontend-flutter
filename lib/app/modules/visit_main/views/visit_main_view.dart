@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:awesome_side_sheet/Enums/sheet_position.dart';
+import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:file_picker/file_picker.dart';
@@ -15,9 +17,11 @@ import 'package:sqflite/utils/utils.dart';
 import 'package:subqdocs/app/modules/home/views/search_drop_down.dart';
 import 'package:subqdocs/app/modules/visit_main/views/table_custom.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
+import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
+import 'package:subqdocs/widgets/custom_animated_button.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_diamentions.dart';
@@ -1228,7 +1232,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       // return SizedBox();
                                                                       return DeleteScheduleVisit(
                                                                         onDelete: () {
-                                                                          controller.globalController.changeStatus("Cancelled");
+                                                                          controller.changeStatus(
+                                                                              "Cancelled", controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "");
+
+                                                                          // controller.globalController.changeStatus("Cancelled");
 
                                                                           // controller.deletePatientVisit(
                                                                           //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() ?? "");
@@ -1355,7 +1362,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       textAlign: TextAlign.left,
-                                                      controller.visitRecapList.value?.responseData?[index].summary ?? "",
+                                                      controller.visitRecapList.value?.responseData?[index].summary?.firstOrNull ?? "",
                                                       style: AppFonts.regular(14, AppColors.textGrey),
                                                     )),
                                                     // Spacer(),
@@ -1439,206 +1446,251 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                PopupMenuButton<String>(
-                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                                    offset: const Offset(0, 5),
-                                    color: AppColors.white,
-                                    position: PopupMenuPosition.over,
-                                    style: const ButtonStyle(
-                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                                    itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                              enabled: false,
-                                              onTap: () {},
-                                              padding: EdgeInsets.zero,
-                                              value: "1",
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 16, right: 5, bottom: 5, top: 10),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "Filters",
-                                                      style: AppFonts.medium(16, AppColors.textBlack),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 80,
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        customPrint("clicked");
-
-                                                        controller.clearFilter();
-                                                      },
-                                                      child: Text(
-                                                        "Clear",
-                                                        style: AppFonts.medium(14, AppColors.backgroundPurple),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
-                                          PopupMenuItem(
-                                              onTap: () {
-                                                controller.isSelectedAttchmentOption.value = 0;
-                                                controller.isDocument.value = true;
-                                                controller.isImage.value = false;
-                                                controller.getPatientAttachment();
-                                              },
-                                              height: 30,
-                                              padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                              child: Row(
-                                                children: [
-                                                  const SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    ImagePath.document_attchment,
-                                                    width: 30,
-                                                    height: 30,
-                                                    colorFilter:
-                                                        ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                  const SizedBox(width: 5),
-                                                  if (controller.isSelectedAttchmentOption.value == 0) ...[
-                                                    SvgPicture.asset(
-                                                      ImagePath.attchment_check,
-                                                      width: 16,
-                                                      height: 16,
-                                                    )
-                                                  ]
-                                                ],
-                                              )),
-                                          PopupMenuItem(
-                                              onTap: () {
-                                                controller.isSelectedAttchmentOption.value = 1;
-                                                controller.isDocument.value = false;
-                                                controller.isImage.value = true;
-                                                controller.getPatientAttachment();
-                                              },
-                                              height: 30,
-                                              padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                              child: Row(
-                                                children: [
-                                                  const SizedBox(width: 5),
-                                                  SvgPicture.asset(ImagePath.image_attchment,
-                                                      width: 30,
-                                                      height: 30,
-                                                      colorFilter:
-                                                          ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
-                                                  const SizedBox(width: 8),
-                                                  Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                  const SizedBox(width: 5),
-                                                  if (controller.isSelectedAttchmentOption.value == 1) ...[
-                                                    SvgPicture.asset(
-                                                      ImagePath.attchment_check,
-                                                      width: 16,
-                                                      height: 16,
-                                                    )
-                                                  ]
-                                                ],
-                                              )),
-                                          PopupMenuItem(
-                                              onTap: () {
-                                                controller.isSelectedAttchmentOption.value = 2;
-                                              },
-                                              height: 30,
-                                              padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      const SizedBox(width: 5),
-                                                      SvgPicture.asset(
-                                                        ImagePath.date_attchment,
-                                                        width: 30,
-                                                        height: 30,
-                                                        colorFilter:
-                                                            ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
-                                                      ),
-                                                      const SizedBox(width: 8),
-                                                      Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                                                      const SizedBox(width: 5),
-                                                      if (controller.isSelectedAttchmentOption.value == 2) ...[
-                                                        SvgPicture.asset(
-                                                          ImagePath.attchment_check,
-                                                          width: 16,
-                                                          height: 16,
-                                                        )
-                                                      ]
-                                                    ],
-                                                  ),
-                                                  if (controller.isSelectedAttchmentOption.value == 2) ...[
-                                                    Obx(() {
-                                                      return SizedBox(
-                                                        width: Get.width,
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius: BorderRadius.circular(6),
-                                                            border: Border.all(color: Colors.grey.shade300, width: 1),
-                                                          ),
-                                                          child: CalendarDatePicker2(
-                                                            config: CalendarDatePicker2Config(
-                                                              dayViewController: controller.pageController,
-                                                              weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                                                              weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
-                                                              daySplashColor: AppColors.clear,
-                                                              calendarViewMode: CalendarDatePicker2Mode.day,
-                                                              selectedDayHighlightColor: AppColors.backgroundPurple,
-                                                              dayMaxWidth: 30,
-                                                              allowSameValueSelection: true,
-                                                              firstDayOfWeek: 6,
-                                                              rangeBidirectional: true,
-                                                              animateToDisplayedMonthDate: true,
-                                                              dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
-                                                              disableMonthPicker: true,
-                                                              dayBorderRadius: BorderRadius.all(Radius.circular(6)),
-                                                              scrollViewTopHeaderTextStyle: const TextStyle(
-                                                                color: Colors.black87,
-                                                                fontWeight: FontWeight.bold,
-                                                              ),
-                                                              controlsTextStyle: const TextStyle(
-                                                                color: Colors.black,
-                                                                fontSize: 15,
-                                                                fontWeight: FontWeight.bold,
-                                                              ),
-                                                              centerAlignModePicker: true,
-                                                              customModePickerIcon: const SizedBox(),
-                                                              calendarViewScrollPhysics: RangeMaintainingScrollPhysics(),
-                                                              calendarType: CalendarDatePicker2Type.range,
-                                                              firstDate: DateTime(2000, 01, 01),
-                                                              lastDate: DateTime.now().add(Duration(days: 365)),
-                                                            ),
-                                                            onValueChanged: (value) {
-                                                              // selectedDate?.value = value;
-                                                              //
-                                                              // if (selectedStatusIndex.isNotEmpty) {
-                                                              //   controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex = selectedStatusIndex;
-                                                              // }
-                                                              //
-                                                              // controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue = selectedDate;
-                                                              // List<String> dates = controller.getCustomDateRange(selectedDate ?? []);
-                                                              // if (dates.length == 2) {
-                                                              //   controller.globalController.homePastPatientListSortingModel.value?.startDate = dates[0];
-                                                              //   controller.globalController.homePastPatientListSortingModel.value?.endDate = dates[1];
-                                                              //   controller.globalController.saveHomePastPatientData();
-                                                              //   controller.pastTriggeredIndexes.clear();
-                                                              // }
-                                                            },
-                                                            value: controller.selectedDate ?? [DateTime.now()],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    })
-                                                  ]
-                                                ],
-                                              )),
-                                        ],
-                                    child: SvgPicture.asset(
-                                      ImagePath.logo_filter,
-                                      width: 40,
-                                      height: 40,
-                                    )),
+                                GestureDetector(
+                                  child: SvgPicture.asset(
+                                    ImagePath.logo_filter,
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  onTap: () {
+                                    // Get.put(VisitMainController());
+                                    aweSideSheet(
+                                      header: SizedBox(),
+                                      footer: SizedBox(),
+                                      showActions: false,
+                                      backgroundColor: AppColors.white,
+                                      barrierDismissible: true,
+                                      showCloseButton: false,
+                                      showBackButton: true,
+                                      context: context,
+                                      body: VisitMainAttachmentFilter(
+                                        onTap: () {
+                                          print("on tap VisitMainAttachmentFilter");
+                                          // controller.getPatientAttachment();
+                                          // controller.getPastVisitList(isFist: true);
+                                        },
+                                      ),
+                                      sheetPosition: SheetPosition.right,
+                                    ).then(
+                                      (value) {
+                                        print("on then VisitMainAttachmentFilter");
+                                        // controller.getPatientAttachment();
+                                        // controller.getPastVisitList(isFist: true);
+                                        print("value");
+                                      },
+                                    );
+                                  },
+                                ),
+                                // PopupMenuButton<String>(
+                                //     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                                //     offset: const Offset(0, 5),
+                                //     color: AppColors.white,
+                                //     position: PopupMenuPosition.over,
+                                //     style: const ButtonStyle(
+                                //         tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+                                //     itemBuilder: (context) => [
+                                //           PopupMenuItem(
+                                //               enabled: false,
+                                //               onTap: () {},
+                                //               padding: EdgeInsets.zero,
+                                //               value: "1",
+                                //               child: Padding(
+                                //                 padding: const EdgeInsets.only(left: 16, right: 5, bottom: 5, top: 10),
+                                //                 child: Row(
+                                //                   children: [
+                                //                     Text(
+                                //                       "Filters",
+                                //                       style: AppFonts.medium(16, AppColors.textBlack),
+                                //                     ),
+                                //                     // SizedBox(
+                                //                     //   width: 80,
+                                //                     // ),
+                                //                     Spacer(),
+                                //                     GestureDetector(
+                                //                       onTap: () {
+                                //                         customPrint("clicked");
+                                //
+                                //                         controller.clearFilter();
+                                //                       },
+                                //                       child: Text(
+                                //                         "Clear",
+                                //                         style: AppFonts.medium(14, AppColors.backgroundPurple),
+                                //                       ),
+                                //                     ),
+                                //                     SizedBox(width: 10)
+                                //                   ],
+                                //                 ),
+                                //               )),
+                                //           PopupMenuItem(
+                                //               onTap: () {
+                                //                 controller.isSelectedAttchmentOption.value = 0;
+                                //                 controller.isDocument.value = true;
+                                //                 controller.isImage.value = false;
+                                //                 controller.getPatientAttachment();
+                                //               },
+                                //               height: 30,
+                                //               padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                //               child: Row(
+                                //                 children: [
+                                //                   const SizedBox(width: 5),
+                                //                   SvgPicture.asset(
+                                //                     ImagePath.document_attchment,
+                                //                     width: 30,
+                                //                     height: 30,
+                                //                     colorFilter:
+                                //                         ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                //                   ),
+                                //                   const SizedBox(width: 8),
+                                //                   Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                //                   const SizedBox(width: 5),
+                                //                   if (controller.isSelectedAttchmentOption.value == 0) ...[
+                                //                     SvgPicture.asset(
+                                //                       ImagePath.attchment_check,
+                                //                       width: 16,
+                                //                       height: 16,
+                                //                     )
+                                //                   ]
+                                //                 ],
+                                //               )),
+                                //           PopupMenuItem(
+                                //               onTap: () {
+                                //                 controller.isSelectedAttchmentOption.value = 1;
+                                //                 controller.isDocument.value = false;
+                                //                 controller.isImage.value = true;
+                                //                 controller.getPatientAttachment();
+                                //               },
+                                //               height: 30,
+                                //               padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                //               child: Row(
+                                //                 children: [
+                                //                   const SizedBox(width: 5),
+                                //                   SvgPicture.asset(ImagePath.image_attchment,
+                                //                       width: 30,
+                                //                       height: 30,
+                                //                       colorFilter:
+                                //                           ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
+                                //                   const SizedBox(width: 8),
+                                //                   Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                //                   const SizedBox(width: 5),
+                                //                   if (controller.isSelectedAttchmentOption.value == 1) ...[
+                                //                     SvgPicture.asset(
+                                //                       ImagePath.attchment_check,
+                                //                       width: 16,
+                                //                       height: 16,
+                                //                     )
+                                //                   ]
+                                //                 ],
+                                //               )),
+                                //           PopupMenuItem(
+                                //               onTap: () {
+                                //                 controller.isSelectedAttchmentOption.value = 2;
+                                //                 controller.isDateFilter.value = true;
+                                //                 controller.isDocument.value = true;
+                                //                 controller.isImage.value = true;
+                                //                 controller.getPatientAttachment();
+                                //               },
+                                //               height: 30,
+                                //               padding: const EdgeInsets.only(top: 10, bottom: 8, left: 8, right: 8),
+                                //               child: Column(
+                                //                 children: [
+                                //                   Row(
+                                //                     children: [
+                                //                       const SizedBox(width: 5),
+                                //                       SvgPicture.asset(
+                                //                         ImagePath.date_attchment,
+                                //                         width: 30,
+                                //                         height: 30,
+                                //                         colorFilter:
+                                //                             ColorFilter.mode(controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                                //                       ),
+                                //                       const SizedBox(width: 8),
+                                //                       Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                                //                       const SizedBox(width: 5),
+                                //                       if (controller.isSelectedAttchmentOption.value == 2) ...[
+                                //                         SvgPicture.asset(
+                                //                           ImagePath.attchment_check,
+                                //                           width: 16,
+                                //                           height: 16,
+                                //                         )
+                                //                       ]
+                                //                     ],
+                                //                   ),
+                                //                   // if (controller.isSelectedAttchmentOption.value == 2) ...[
+                                //                   SizedBox(height: 20),
+                                //                   Obx(() {
+                                //                     return SizedBox(
+                                //                       width: Get.width,
+                                //                       child: Container(
+                                //                         decoration: BoxDecoration(
+                                //                           color: Colors.white,
+                                //                           borderRadius: BorderRadius.circular(6),
+                                //                           border: Border.all(color: Colors.grey.shade300, width: 1),
+                                //                         ),
+                                //                         child: CalendarDatePicker2(
+                                //                           config: CalendarDatePicker2Config(
+                                //                             dayViewController: controller.pageController,
+                                //                             weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
+                                //                             weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                //                             daySplashColor: AppColors.clear,
+                                //                             calendarViewMode: CalendarDatePicker2Mode.day,
+                                //                             selectedDayHighlightColor: AppColors.backgroundPurple,
+                                //                             dayMaxWidth: 30,
+                                //                             allowSameValueSelection: true,
+                                //                             firstDayOfWeek: 6,
+                                //                             rangeBidirectional: true,
+                                //                             animateToDisplayedMonthDate: true,
+                                //                             dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
+                                //                             disableMonthPicker: true,
+                                //                             dayBorderRadius: BorderRadius.all(Radius.circular(6)),
+                                //                             scrollViewTopHeaderTextStyle: const TextStyle(
+                                //                               color: Colors.black87,
+                                //                               fontWeight: FontWeight.bold,
+                                //                             ),
+                                //                             controlsTextStyle: const TextStyle(
+                                //                               color: Colors.black,
+                                //                               fontSize: 15,
+                                //                               fontWeight: FontWeight.bold,
+                                //                             ),
+                                //                             centerAlignModePicker: true,
+                                //                             customModePickerIcon: const SizedBox(),
+                                //                             calendarViewScrollPhysics: RangeMaintainingScrollPhysics(),
+                                //                             calendarType: CalendarDatePicker2Type.range,
+                                //                             firstDate: DateTime(2000, 01, 01),
+                                //                             lastDate: DateTime.now().add(Duration(days: 365)),
+                                //                           ),
+                                //                           onValueChanged: (value) {
+                                //                             controller.selectedDate?.value = value;
+                                //                             controller.updateSelectedDate();
+                                //                           },
+                                //                           value: controller.selectedDate ?? [DateTime.now()],
+                                //                         ),
+                                //                       ),
+                                //                     );
+                                //                   }),
+                                //                   SizedBox(height: 10),
+                                //                   CustomAnimatedButton(
+                                //                     onPressed: () {
+                                //                       controller.updateSelectedDate();
+                                //
+                                //                       controller.isSelectedAttchmentOption.value = 2;
+                                //                       controller.isDateFilter.value = true;
+                                //                       controller.isDocument.value = true;
+                                //                       controller.isImage.value = true;
+                                //                       controller.getPatientAttachment();
+                                //                     },
+                                //                     text: "Apply",
+                                //                     enabledColor: AppColors.backgroundPurple,
+                                //                     height: 45,
+                                //                   )
+                                //                   // ]
+                                //                 ],
+                                //               )),
+                                //         ],
+                                //     child: SvgPicture.asset(
+                                //       ImagePath.logo_filter,
+                                //       width: 40,
+                                //       height: 40,
+                                //     )),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -1684,162 +1736,165 @@ class _VisitMainViewState extends State<VisitMainView> {
                               ],
                             ),
                             children: <Widget>[
-                              Container(
-                                color: Colors.white,
-                                child: controller.patientAttachmentList.value?.responseData?.length != 0
-                                    ? Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                        child: SizedBox(
-                                            height: 200,
-                                            width: double.infinity,
-                                            child: Obx(
-                                              () {
-                                                return ListView.separated(
-                                                  scrollDirection: Axis.horizontal,
-                                                  padding: EdgeInsets.only(top: 20),
-                                                  itemBuilder: (context, index) {
-                                                    return Container(
-                                                      height: 200,
-                                                      width: 140,
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(height: 10),
-                                                          Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              Stack(
-                                                                clipBehavior: Clip.none,
-                                                                alignment: Alignment.topRight,
-                                                                children: [
-                                                                  Container(
-                                                                    decoration: BoxDecoration(
-                                                                      color: AppColors.appbarBorder,
-                                                                      borderRadius: BorderRadius.circular(10),
-                                                                    ),
-                                                                    width: 120,
-                                                                    height: 120,
-                                                                    child: GestureDetector(
-                                                                      onTap: () {
-                                                                        customPrint(controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image"));
-
-                                                                        if (controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false) {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                            builder: (BuildContext context) {
-                                                                              return ViewAttchmentImage(
-                                                                                imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                                attchmentUrl: '',
-                                                                              );
-
-                                                                              // return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
-                                                                              //     ? ViewAttchmentImage(
-                                                                              //         imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                              //         attchmentUrl: '',
-                                                                              //       )
-                                                                              //     : ViewAttchmentImage(
-                                                                              //         imageUrl: "",
-                                                                              //         attchmentUrl:
-                                                                              //             controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
-                                                                            },
-                                                                          );
-                                                                        } else {
-                                                                          Uri attchmentUri = Uri.parse(controller.patientAttachmentList.value?.responseData?[index].filePath ?? "");
-                                                                          customPrint("attchmentUri is :- ${attchmentUri}");
-                                                                          controller.launchInAppWithBrowserOptions(attchmentUri);
-                                                                        }
-                                                                      },
-                                                                      child: ClipRRect(
-                                                                        borderRadius: BorderRadius.circular(10), // Set the radius here
-                                                                        child: CachedNetworkImage(
-                                                                          imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
-                                                                          width: 120,
-                                                                          height: 120,
-                                                                          errorWidget: (context, url, error) {
-                                                                            return Image.asset(
-                                                                              ImagePath.file_placeHolder,
-                                                                            );
-                                                                          },
-                                                                          fit: BoxFit.cover,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Positioned(
-                                                                    top: -10,
-                                                                    // Align at the top of the first container
-                                                                    right: -10,
-                                                                    child: Container(
-                                                                      width: 40,
-                                                                      height: 40,
+                              Obx(() {
+                                return Container(
+                                  color: Colors.white,
+                                  child: controller.patientAttachmentList.isNotEmpty
+                                      ? Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                          child: SizedBox(
+                                              height: 200,
+                                              width: double.infinity,
+                                              child: Obx(
+                                                () {
+                                                  print("Obx called-----------------");
+                                                  return ListView.separated(
+                                                    scrollDirection: Axis.horizontal,
+                                                    padding: EdgeInsets.only(top: 20),
+                                                    itemBuilder: (context, index) {
+                                                      return Container(
+                                                        height: 200,
+                                                        width: 140,
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(height: 10),
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Stack(
+                                                                  clipBehavior: Clip.none,
+                                                                  alignment: Alignment.topRight,
+                                                                  children: [
+                                                                    Container(
                                                                       decoration: BoxDecoration(
-                                                                        shape: BoxShape.circle,
-                                                                        color: Colors.white,
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                            color: Colors.black.withOpacity(0.2),
-                                                                            blurRadius: 2.2,
-                                                                            offset: Offset(0.2, 0),
-                                                                          ),
-                                                                        ],
+                                                                        color: AppColors.appbarBorder,
+                                                                        borderRadius: BorderRadius.circular(10),
                                                                       ),
+                                                                      width: 120,
+                                                                      height: 120,
                                                                       child: GestureDetector(
                                                                         onTap: () {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            barrierDismissible: true,
-                                                                            builder: (BuildContext context) {
-                                                                              // return SizedBox();
-                                                                              return DeleteImageDialog(
-                                                                                onDelete: () {
-                                                                                  controller.deleteAttachments(controller.patientAttachmentList.value?.responseData![index].id ?? 0);
-                                                                                },
-                                                                                extension: controller.patientAttachmentList.value?.responseData?[index].fileType,
+                                                                          customPrint(controller.patientAttachmentList[index].fileType?.contains("image"));
+
+                                                                          if (controller.patientAttachmentList[index].fileType?.contains("image") ?? false) {
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                              builder: (BuildContext context) {
+                                                                                return ViewAttchmentImage(
+                                                                                  imageUrl: controller.patientAttachmentList[index].filePath ?? "",
+                                                                                  attchmentUrl: '',
+                                                                                );
+
+                                                                                // return controller.patientAttachmentList.value?.responseData?[index].fileType?.contains("image") ?? false
+                                                                                //     ? ViewAttchmentImage(
+                                                                                //         imageUrl: controller.patientAttachmentList.value?.responseData?[index].filePath ?? "",
+                                                                                //         attchmentUrl: '',
+                                                                                //       )
+                                                                                //     : ViewAttchmentImage(
+                                                                                //         imageUrl: "",
+                                                                                //         attchmentUrl:
+                                                                                //             controller.patientAttachmentList.value?.responseData?[index].filePath ?? ""); // Our custom dialog
+                                                                              },
+                                                                            );
+                                                                          } else {
+                                                                            Uri attchmentUri = Uri.parse(controller.patientAttachmentList[index].filePath ?? "");
+                                                                            customPrint("attchmentUri is :- ${attchmentUri}");
+                                                                            controller.launchInAppWithBrowserOptions(attchmentUri);
+                                                                          }
+                                                                        },
+                                                                        child: ClipRRect(
+                                                                          borderRadius: BorderRadius.circular(10), // Set the radius here
+                                                                          child: CachedNetworkImage(
+                                                                            imageUrl: controller.patientAttachmentList[index].filePath ?? "",
+                                                                            width: 120,
+                                                                            height: 120,
+                                                                            errorWidget: (context, url, error) {
+                                                                              return Image.asset(
+                                                                                ImagePath.file_placeHolder,
                                                                               );
                                                                             },
-                                                                          );
-                                                                        },
-                                                                        child: SvgPicture.asset(
-                                                                          ImagePath.delete_black,
+                                                                            fit: BoxFit.cover,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 6,
-                                                              ),
-                                                              Text(
-                                                                maxLines: 1,
-                                                                controller.patientAttachmentList.value?.responseData?[index].fileName ?? "",
-                                                                style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 6,
-                                                              ),
-                                                              Text(
-                                                                DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.patientAttachmentList.value?.responseData?[index].createdAt ?? "").toLocal()),
-                                                                style: AppFonts.regular(12, AppColors.textDarkGrey),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                  separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
-                                                  itemCount: controller.patientAttachmentList.value?.responseData?.length ?? 0,
-                                                );
-                                              },
-                                            )))
-                                    : Container(
-                                        width: double.infinity,
-                                        height: 200,
-                                        child: Center(child: Text("Attachments Not available")),
-                                      ),
-                              ),
+                                                                    Positioned(
+                                                                      top: -10,
+                                                                      // Align at the top of the first container
+                                                                      right: -10,
+                                                                      child: Container(
+                                                                        width: 40,
+                                                                        height: 40,
+                                                                        decoration: BoxDecoration(
+                                                                          shape: BoxShape.circle,
+                                                                          color: Colors.white,
+                                                                          boxShadow: [
+                                                                            BoxShadow(
+                                                                              color: Colors.black.withOpacity(0.2),
+                                                                              blurRadius: 2.2,
+                                                                              offset: Offset(0.2, 0),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        child: GestureDetector(
+                                                                          onTap: () {
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              barrierDismissible: true,
+                                                                              builder: (BuildContext context) {
+                                                                                // return SizedBox();
+                                                                                return DeleteImageDialog(
+                                                                                  onDelete: () {
+                                                                                    controller.deleteAttachments(controller.patientAttachmentList[index].id ?? 0);
+                                                                                  },
+                                                                                  extension: controller.patientAttachmentList[index].fileType,
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                          child: SvgPicture.asset(
+                                                                            ImagePath.delete_black,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 6,
+                                                                ),
+                                                                Text(
+                                                                  maxLines: 1,
+                                                                  controller.patientAttachmentList[index].fileName ?? "",
+                                                                  style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 6,
+                                                                ),
+                                                                Text(
+                                                                  DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.patientAttachmentList[index].createdAt ?? "").toLocal()),
+                                                                  style: AppFonts.regular(12, AppColors.textDarkGrey),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    separatorBuilder: (context, index) => const SizedBox(width: Dimen.margin15),
+                                                    itemCount: controller.patientAttachmentList.length,
+                                                  );
+                                                },
+                                              )))
+                                      : Container(
+                                          width: double.infinity,
+                                          height: 200,
+                                          child: Center(child: Text("Attachments Not available")),
+                                        ),
+                                );
+                              }),
                             ],
                           ),
                         ),

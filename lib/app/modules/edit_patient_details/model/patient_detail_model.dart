@@ -156,7 +156,7 @@ class PastVisits {
   String? visitTime;
   String? visitStatus;
   int? id;
-  String? summary;
+  dynamic summary;
 
   PastVisits({this.visitDate, this.visitTime, this.visitStatus, this.id, this.summary});
 

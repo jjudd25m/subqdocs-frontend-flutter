@@ -46,6 +46,8 @@ class VisitMainController extends GetxController {
 
   PageController pageController = PageController();
   RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
+  String? attachmentStartDate;
+  String? attachmentEndDate;
 
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
   Rxn<MedicalRecords> medicalRecords = Rxn();
@@ -62,6 +64,7 @@ class VisitMainController extends GetxController {
 
   RxBool isImage = RxBool(false);
   RxBool isDocument = RxBool(false);
+  RxBool isDateFilter = RxBool(false);
 
   String visitRecaps = "visitRecaps";
   String visitMainData = "visitMainData";
@@ -86,7 +89,8 @@ class VisitMainController extends GetxController {
   RxnString selectedMedicalAssistant = RxnString();
 
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
-  Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
+  // Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
+  RxList<PatientAttachmentResponseData> patientAttachmentList = RxList();
   Rxn<VisitMainPatientDetails> patientData = Rxn();
 
   RxString visitId = RxString("");
@@ -103,6 +107,7 @@ class VisitMainController extends GetxController {
     });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
+    pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
 
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
@@ -197,8 +202,50 @@ class VisitMainController extends GetxController {
     isSelectedAttchmentOption.value = -1;
     isDocument.value = false;
     isImage.value = false;
+    isDateFilter.value = false;
+    selectedDate = RxList([DateTime.now()]);
     getPatientAttachment();
     Get.back();
+  }
+
+  Future<void> updateSelectedDate() async {
+    List<String> dates = getCustomDateRange(selectedDate ?? []);
+    if (dates.length == 2) {
+      attachmentStartDate = dates[0];
+      attachmentEndDate = dates[1];
+    }
+  }
+
+  List<String> getCustomDateRange(List<DateTime> selectedDate) {
+    String startDate = '';
+    String endDate = '';
+
+    if (selectedDate.isNotEmpty) {
+      for (int i = 0; i < selectedDate.length; i++) {
+        var dateTime = selectedDate[i];
+        if (selectedDate.length == 1) {
+          // If there's only one date, set both startDate and endDate to the same value
+          startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          endDate = startDate;
+        } else {
+          if (i == 0) {
+            // Set startDate to the first date
+            startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          } else {
+            // Set endDate to the second date
+            endDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          }
+        }
+      }
+    } else {
+      // If no date is selected, set startDate and endDate to the current date
+      DateTime dateTime = DateTime.now();
+      startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+      endDate = startDate; // Set both dates to the current date
+    }
+
+    // Return both dates in a list
+    return [startDate, endDate];
   }
 
   Future<void> pickFilesForDoc({bool clear = true}) async {
@@ -487,14 +534,24 @@ class VisitMainController extends GetxController {
       param['document'] = true;
     }
 
-    try {
-      patientAttachmentList.value = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
-      // Get.back();
-    } catch (error) {
-      // Get.back();
+    if (isDateFilter.value) {
+      param["dateRange[startDate]"] = attachmentStartDate;
+      param["dateRange[endDate]"] = attachmentEndDate;
     }
 
-    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+    print("param is :- $param");
+
+    try {
+      PatientAttachmentListModel patientAttachmentData = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+      patientAttachmentList.value = patientAttachmentData.responseData ?? [];
+      // patientAttachmentList.refresh();
+      // Get.back();
+    } catch (error) {
+      print("getPatientAttachment error is :- $error");
+      // Get.back();
+    }
+    customPrint("patientAttachmentList is:- count ${patientAttachmentList.length}");
+    customPrint("patientAttachmentList is:- ${patientAttachmentList.toJson()}");
   }
 
   void updateDoctorView(int id) async {
@@ -559,7 +616,7 @@ class VisitMainController extends GetxController {
 
       print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
 
-      customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+      // customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
       if (isLoading) {
         Get.back();
       }
@@ -716,6 +773,32 @@ class VisitMainController extends GetxController {
       };
     } else {
       return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
+    }
+  }
+
+  Future<void> changeStatus(String status, String visitId) async {
+    try {
+      Map<String, dynamic> param = {};
+
+      param['status'] = status;
+
+      ChangeStatusModel changeStatusModel = await _homeRepository.changeStatus(id: visitId, params: param);
+      if (changeStatusModel.responseType == "success") {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+      } else {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+      }
+
+      // getScheduleVisitList(isFist: true);
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+      // getScheduleVisitList(isFist: true);
+    }
+
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+      Get.back();
     }
   }
 }

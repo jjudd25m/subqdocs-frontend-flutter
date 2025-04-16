@@ -434,8 +434,21 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                           onChanged: (value) {
                                             controller.userSelectedStateValue.value = value;
 
-                                            controller.userCityOption = controller.statesCities.firstWhere((element) => element.state == value).cities;
-                                            controller.userSelectedCityValue.value = controller.userCityOption.first;
+                                            print("state is:- ${value}");
+
+                                            List<String> cityList = controller.statesCities.firstWhere((element) => element.state == value).cities;
+
+                                            print("city is :- ${cityList}");
+
+                                            if (cityList.isNotEmpty) {
+                                              print("city list if");
+                                              controller.userCityOption.value = cityList;
+                                              controller.userSelectedCityValue.value = controller.userCityOption.first;
+                                            } else {
+                                              print("city list else");
+                                              controller.userSelectedCityValue.value = "";
+                                              controller.userCityOption.value = [];
+                                            }
                                           },
                                           // selectText: "United States",
                                         );
@@ -448,30 +461,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                             Row(
                               spacing: 15,
                               children: [
-                                // Expanded(
-                                //   child: TextFormFiledWidget(
-                                //       format: [
-                                //         CustomTextInputFormatter(),
-                                //       ],
-                                //       label: "City",
-                                //       isValid: controller.isValid.value,
-                                //       // isImportant: true,
-                                //       controller: controller.userCityController,
-                                //       isSuffixIconVisible: false,
-                                //       isFirst: true,
-                                //       hint: "",
-                                //       onTap: () {
-                                //         controller.userCityController.clear();
-                                //       },
-                                //       suffixIcon: Icon(
-                                //         Icons.highlight_remove,
-                                //         color: AppColors.textDarkGrey,
-                                //         size: 25,
-                                //       ),
-                                //       checkValidation: (value) {
-                                //         return Validation.requiredFiled(value);
-                                //       }),
-                                // ),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,30 +524,28 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                      // format: [
-                                      //   CustomTextInputFormatter(),
-                                      // ],
-                                      label: "Street name",
-                                      isValid: controller.isValid.value,
-                                      // isImportant: true,
-                                      controller: controller.userStreetNameController,
-                                      isSuffixIconVisible: false,
-                                      isFirst: true,
-                                      hint: "",
-                                      onTap: () {
-                                        controller.userStreetNameController.clear();
-                                      },
-                                      suffixIcon: Icon(
-                                        Icons.highlight_remove,
-                                        color: AppColors.textDarkGrey,
-                                        size: 25,
-                                      ),
-                                      // checkValidation: (value) {
-                                      //   return Validation.requiredFiled(value);
-                                      // }
+                                  child: TextFormFiledWidget(
+                                    // format: [
+                                    //   CustomTextInputFormatter(),
+                                    // ],
+                                    label: "Street name",
+                                    isValid: controller.isValid.value,
+                                    // isImportant: true,
+                                    controller: controller.userStreetNameController,
+                                    isSuffixIconVisible: false,
+                                    isFirst: true,
+                                    hint: "",
+                                    onTap: () {
+                                      controller.userStreetNameController.clear();
+                                    },
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
                                     ),
+                                    // checkValidation: (value) {
+                                    //   return Validation.requiredFiled(value);
+                                    // }
                                   ),
                                 ),
                               ],
@@ -580,58 +567,54 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               spacing: 15,
                               children: [
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                      format: [
-                                        CustomTextInputFormatter(),
-                                      ],
-                                      label: "Title",
-                                      isValid: controller.isValid.value,
-                                      // isImportant: true,
-                                      controller: controller.userPractitionerController,
-                                      isSuffixIconVisible: false,
-                                      isFirst: true,
-                                      hint: "",
-                                      onTap: () {
-                                        controller.userPractitionerController.clear();
-                                      },
-                                      suffixIcon: Icon(
-                                        Icons.highlight_remove,
-                                        color: AppColors.textDarkGrey,
-                                        size: 25,
-                                      ),
-                                      // checkValidation: (value) {
-                                      //   return Validation.requiredFiled(value);
-                                      // }
+                                  child: TextFormFiledWidget(
+                                    format: [
+                                      CustomTextInputFormatter(),
+                                    ],
+                                    label: "Title",
+                                    isValid: controller.isValid.value,
+                                    // isImportant: true,
+                                    controller: controller.userPractitionerController,
+                                    isSuffixIconVisible: false,
+                                    isFirst: true,
+                                    hint: "",
+                                    onTap: () {
+                                      controller.userPractitionerController.clear();
+                                    },
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
                                     ),
+                                    // checkValidation: (value) {
+                                    //   return Validation.requiredFiled(value);
+                                    // }
                                   ),
                                 ),
                                 Expanded(
-                                  child: Expanded(
-                                    child: TextFormFiledWidget(
-                                      format: [
-                                        MedicalLicenseNumberFormatter(),
-                                      ],
-                                      label: "Medical License Number",
-                                      isValid: controller.isValid.value,
-                                      // isImportant: true,
-                                      controller: controller.userMedicalLicenseNumberController,
-                                      isSuffixIconVisible: false,
-                                      isFirst: true,
-                                      hint: "",
-                                      onTap: () {
-                                        controller.userMedicalLicenseNumberController.clear();
-                                      },
-                                      suffixIcon: Icon(
-                                        Icons.highlight_remove,
-                                        color: AppColors.textDarkGrey,
-                                        size: 25,
-                                      ),
-                                      // checkValidation: (value) {
-                                      //   return Validation.medicalRequiredFiled(value);
-                                      //   // return Validation.requiredFiled(value);
-                                      // }
+                                  child: TextFormFiledWidget(
+                                    format: [
+                                      MedicalLicenseNumberFormatter(),
+                                    ],
+                                    label: "Medical License Number",
+                                    isValid: controller.isValid.value,
+                                    // isImportant: true,
+                                    controller: controller.userMedicalLicenseNumberController,
+                                    isSuffixIconVisible: false,
+                                    isFirst: true,
+                                    hint: "",
+                                    onTap: () {
+                                      controller.userMedicalLicenseNumberController.clear();
+                                    },
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
                                     ),
+                                    // checkValidation: (value) {
+                                    //   return Validation.medicalRequiredFiled(value);
+                                    //   // return Validation.requiredFiled(value);
+                                    // }
                                   ),
                                 ),
                               ],
