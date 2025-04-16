@@ -97,6 +97,23 @@ class GlobalController extends GetxController {
 
   IOS7SiriWaveformController waveController = IOS7SiriWaveformController(amplitude: 0, color: Colors.red, frequency: 4, speed: 0.3);
 
+  double adjustYPosition(double yPosition, BuildContext context) {
+    // Get the height of the screen
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate the threshold for the bottom 400px
+    double bottomThreshold = screenHeight - 600;
+
+    // If the yPosition exceeds the threshold (more than 400px from the bottom), adjust it
+    if (yPosition > bottomThreshold) {
+      // Adjust the position to be exactly 400px above the bottom
+      return bottomThreshold;
+    } else {
+      // Return the original yPosition if it's within the last 400px from the bottom
+      return yPosition;
+    }
+  }
+
   void reinitController() {
     waveController = IOS7SiriWaveformController(amplitude: 0, color: AppColors.backgroundPurple, frequency: 3, speed: 0.9);
   }

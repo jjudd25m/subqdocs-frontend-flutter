@@ -24,19 +24,14 @@ class PatientProfileController extends GetxController {
   String visitId = "";
   final count = 0.obs;
 
-  RxString dob = RxString("");
+  RxString dob = RxString("N/A");
 
   @override
   void onInit() {
     super.onInit();
 
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       globalController.addRouteInit(Routes.PATIENT_PROFILE);
-
-
     });
     print("PatientProfileController init called");
     patientId = Get.arguments["patientData"];
@@ -55,14 +50,10 @@ class PatientProfileController extends GetxController {
   void onClose() {
     super.onClose();
 
-    if(globalController.getKeyByValue(globalController.breadcrumbHistory.last) ==   Routes.PATIENT_PROFILE )
-    {
-
-
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PATIENT_PROFILE) {
       globalController.popRoute();
     }
     // globalController.popRoute();
-
   }
 
   Future<void> onRefresh() async {

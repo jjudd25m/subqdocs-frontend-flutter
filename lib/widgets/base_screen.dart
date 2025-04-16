@@ -210,6 +210,9 @@ class BaseScreen extends StatelessWidget {
                                       GestureDetector(
                                         onTap: () {
                                           globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
+
+                                          print(" when the view is expanded  value of the y ${globalController.valueOfy}");
+                                          print(" when the view is expanded  value of the x ${globalController.valueOfx}");
                                         },
                                         child: SvgPicture.asset(globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording, height: 30, width: 30),
                                       ),
@@ -563,6 +566,11 @@ class BaseScreen extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () {
                                         globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
+
+                                        print(" when the view is non expanded  value of the y ${globalController.valueOfy}");
+                                        print(" when the view is non  expanded  value of the x ${globalController.valueOfx}");
+
+                                        globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, context);
                                       },
                                       child: SvgPicture.asset(ImagePath.expand_recording, height: 45, width: 45),
                                     ),
