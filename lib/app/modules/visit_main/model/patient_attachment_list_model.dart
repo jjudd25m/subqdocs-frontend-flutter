@@ -1,5 +1,5 @@
 class PatientAttachmentListModel {
-  List<ResponseData>? responseData;
+  List<PatientAttachmentResponseData>? responseData;
   String? message;
   bool? toast;
   String? responseType;
@@ -8,9 +8,9 @@ class PatientAttachmentListModel {
 
   PatientAttachmentListModel.fromJson(Map<String, dynamic> json) {
     if (json['responseData'] != null) {
-      responseData = <ResponseData>[];
+      responseData = <PatientAttachmentResponseData>[];
       json['responseData'].forEach((v) {
-        responseData!.add(ResponseData.fromJson(v));
+        responseData!.add(PatientAttachmentResponseData.fromJson(v));
       });
     }
     message = json['message'];
@@ -30,7 +30,7 @@ class PatientAttachmentListModel {
   }
 }
 
-class ResponseData {
+class PatientAttachmentResponseData {
   int? id;
   String? fileName;
   String? filePath;
@@ -44,9 +44,10 @@ class ResponseData {
   String? updatedAt;
   dynamic deletedAt;
 
-  ResponseData({this.id, this.fileName, this.filePath, this.fileType, this.fileSize, this.uploadedBy, this.visitId, this.patientId, this.isActive, this.createdAt, this.updatedAt, this.deletedAt});
+  PatientAttachmentResponseData(
+      {this.id, this.fileName, this.filePath, this.fileType, this.fileSize, this.uploadedBy, this.visitId, this.patientId, this.isActive, this.createdAt, this.updatedAt, this.deletedAt});
 
-  ResponseData.fromJson(Map<String, dynamic> json) {
+  PatientAttachmentResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fileName = json['file_name'];
     filePath = json['file_path'];

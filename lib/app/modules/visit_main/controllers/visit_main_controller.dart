@@ -23,6 +23,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 
+import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalRecords.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
@@ -42,6 +43,11 @@ import '../views/attachmentDailog.dart';
 class VisitMainController extends GetxController {
   //TODO: Implement VisitMainController
 
+  PageController pageController = PageController();
+  RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
+  String? attachmentStartDate;
+  String? attachmentEndDate;
+
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
   Rxn<MedicalRecords> medicalRecords = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
@@ -57,6 +63,7 @@ class VisitMainController extends GetxController {
 
   RxBool isImage = RxBool(false);
   RxBool isDocument = RxBool(false);
+  RxBool isDateFilter = RxBool(false);
 
   String visitRecaps = "visitRecaps";
   String visitMainData = "visitMainData";
@@ -81,7 +88,8 @@ class VisitMainController extends GetxController {
   RxnString selectedMedicalAssistant = RxnString();
 
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
-  Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
+  // Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
+  RxList<PatientAttachmentResponseData> patientAttachmentList = RxList();
   Rxn<VisitMainPatientDetails> patientData = Rxn();
 
   RxString visitId = RxString("");
@@ -98,6 +106,7 @@ class VisitMainController extends GetxController {
     });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
+    pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
 
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
@@ -172,8 +181,17 @@ class VisitMainController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+      list.value.add(
+        MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString,
+          calculateSize: _filesizeStringDouble,
+          isGraterThan10: _filesizeStringDouble < 10.00 ? false : true,
+        ),
+      );
     }
 
     list.refresh();
@@ -201,9 +219,120 @@ class VisitMainController extends GetxController {
     isSelectedAttchmentOption.value = -1;
     isDocument.value = false;
     isImage.value = false;
+    isDateFilter.value = false;
+    selectedDate = RxList([DateTime.now()]);
     getPatientAttachment();
     Get.back();
   }
+
+  Future<void> updateSelectedDate() async {
+    List<String> dates = getCustomDateRange(selectedDate ?? []);
+    if (dates.length == 2) {
+      attachmentStartDate = dates[0];
+      attachmentEndDate = dates[1];
+    }
+  }
+
+  List<String> getCustomDateRange(List<DateTime> selectedDate) {
+    String startDate = '';
+    String endDate = '';
+
+    if (selectedDate.isNotEmpty) {
+      for (int i = 0; i < selectedDate.length; i++) {
+        var dateTime = selectedDate[i];
+        if (selectedDate.length == 1) {
+          // If there's only one date, set both startDate and endDate to the same value
+          startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          endDate = startDate;
+        } else {
+          if (i == 0) {
+            // Set startDate to the first date
+            startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          } else {
+            // Set endDate to the second date
+            endDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          }
+        }
+      }
+    } else {
+      // If no date is selected, set startDate and endDate to the current date
+      DateTime dateTime = DateTime.now();
+      startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+      endDate = startDate; // Set both dates to the current date
+    }
+
+    // Return both dates in a list
+    return [startDate, endDate];
+  }
+
+  Future<void> pickFilesForDoc({bool clear = true}) async {
+    if (clear) {
+      list.clear();
+    }
+
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
+
+    customPrint("media  file is  ${fileList}");
+
+    // double totalFileSize = 0.0;
+
+    fileList?.forEach((element) {
+      XFile? _pickedFile;
+      String? _fileName;
+      DateTime? _pickDate;
+      int? _fileSize;
+
+      if (element != null) {
+        _fileName = element.name; // Get the file name
+        _pickDate = DateTime.now(); // Get the date when the file is picked
+
+        // Get the size of the file
+        File file = File(element.xFile.path);
+        _fileSize = file.lengthSync(); // Size in bytes
+
+        // totalFileSize += _fileSize / (1024 * 1024);
+
+        String? _filesizeString = _formatFileSize(_fileSize);
+        double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+
+        String? _shortFileName;
+        if (p.basename(_fileName).length > 15) {
+          // Truncate the name to 12 characters and add ellipsis
+          _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+        } else {
+          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+        }
+        list.value.add(
+          MediaListingModel(
+            file: file,
+            previewImage: null,
+            fileName: _shortFileName,
+            date: _formatDate(_pickDate),
+            Size: _filesizeString,
+            calculateSize: _filesizeStringDouble,
+            isGraterThan10: _filesizeStringDouble < 10.00 ? false : true,
+          ),
+        );
+      }
+
+      list.refresh();
+    });
+
+    list.refresh();
+    if (clear) {
+      if (list.isNotEmpty) {
+        showCustomDialog(Get.context!);
+      }
+    }
+
+    // calculateTotalFileSize();
+  }
+
+  // double _formatFileSizeDouble(int bytes) {
+  //   double sizeInKB = bytes / 1024; // Convert bytes to KB
+  //   double sizeInMB = sizeInKB / 1024; // Convert KB to MB
+  //   return (sizeInMB * 100).roundToDouble() / 100;
+  // }
 
   Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
     if (clear) {
@@ -214,36 +343,43 @@ class VisitMainController extends GetxController {
 
     customPrint("media  file is  $fileList");
 
-    fileList?.forEach(
-      (element) {
-        XFile? _pickedFile;
-        String? _fileName;
-        DateTime? _pickDate;
-        int? _fileSize;
-        if (element != null) {
-          _fileName = element.name; // Get the file name
-          _pickDate = DateTime.now(); // Get the date when the file is picked
+    fileList?.forEach((element) {
+      XFile? _pickedFile;
+      String? _fileName;
+      DateTime? _pickDate;
+      int? _fileSize;
+      if (element != null) {
+        _fileName = element.name; // Get the file name
+        _pickDate = DateTime.now(); // Get the date when the file is picked
 
-          // Get the size of the file
-          File file = File(element.xFile.path);
-          _fileSize = file.lengthSync(); // Size in bytes
+        // Get the size of the file
+        File file = File(element.xFile.path);
+        _fileSize = file.lengthSync(); // Size in bytes
 
-          String? _filesizeString = _formatFileSize(_fileSize);
+        String? _filesizeString = _formatFileSize(_fileSize);
 
-          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
+        double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
 
-          String? _shortFileName;
-          if (p.basename(_fileName).length > 15) {
-            // Truncate the name to 12 characters and add ellipsis
-            _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
-          } else {
-            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
-          }
-          list.value.add(MediaListingModel(
-              file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        String? _shortFileName;
+        if (p.basename(_fileName).length > 15) {
+          // Truncate the name to 12 characters and add ellipsis
+          _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+        } else {
+          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-      },
-    );
+        list.value.add(
+          MediaListingModel(
+            file: file,
+            previewImage: null,
+            fileName: _shortFileName,
+            date: _formatDate(_pickDate),
+            Size: _filesizeString,
+            calculateSize: _filesizeStringDouble,
+            isGraterThan10: _filesizeStringDouble < 10.00 ? false : true,
+          ),
+        );
+      }
+    });
     list.refresh();
     if (clear) {
       if (list.isNotEmpty) {
@@ -391,11 +527,9 @@ class VisitMainController extends GetxController {
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach(
-      (element) {
-        totalSize += element.calculateSize ?? 0;
-      },
-    );
+    list.value.forEach((element) {
+      totalSize += element.calculateSize ?? 0;
+    });
 
     if (totalSize < 100) {
       return true;
@@ -407,13 +541,11 @@ class VisitMainController extends GetxController {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach(
-      (element) {
-        if (element.isGraterThan10 ?? false) {
-          isGraterThan10 = true;
-        }
-      },
-    );
+    list.value.forEach((element) {
+      if (element.isGraterThan10 ?? false) {
+        isGraterThan10 = true;
+      }
+    });
 
     return isGraterThan10;
   }
@@ -465,14 +597,24 @@ class VisitMainController extends GetxController {
       param['document'] = true;
     }
 
-    try {
-      patientAttachmentList.value = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
-      // Get.back();
-    } catch (error) {
-      // Get.back();
+    if (isDateFilter.value) {
+      param["dateRange[startDate]"] = attachmentStartDate;
+      param["dateRange[endDate]"] = attachmentEndDate;
     }
 
-    customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+    print("param is :- $param");
+
+    try {
+      PatientAttachmentListModel patientAttachmentData = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+      patientAttachmentList.value = patientAttachmentData.responseData ?? [];
+      // patientAttachmentList.refresh();
+      // Get.back();
+    } catch (error) {
+      print("getPatientAttachment error is :- $error");
+      // Get.back();
+    }
+    customPrint("patientAttachmentList is:- count ${patientAttachmentList.length}");
+    customPrint("patientAttachmentList is:- ${patientAttachmentList.toJson()}");
   }
 
   void updateDoctorView(int id) async {
@@ -537,7 +679,7 @@ class VisitMainController extends GetxController {
 
       print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
 
-      customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
+      // customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
       if (isLoading) {
         Get.back();
       }
@@ -549,11 +691,7 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.inAppBrowserView,
-      browserConfiguration: const BrowserConfiguration(showTitle: true),
-    )) {
+    if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView, browserConfiguration: const BrowserConfiguration(showTitle: true))) {
       throw Exception('Could not launch $url');
     }
   }
@@ -690,10 +828,36 @@ class VisitMainController extends GetxController {
         "responseData": {"scheduledVisits": responseDataResult},
         "message": " Details Fetched Successfully",
         "toast": true,
-        "response_type": "success"
+        "response_type": "success",
       };
     } else {
       return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
+    }
+  }
+
+  Future<void> changeStatus(String status, String visitId) async {
+    try {
+      Map<String, dynamic> param = {};
+
+      param['status'] = status;
+
+      ChangeStatusModel changeStatusModel = await _homeRepository.changeStatus(id: visitId, params: param);
+      if (changeStatusModel.responseType == "success") {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+      } else {
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+      }
+
+      // getScheduleVisitList(isFist: true);
+    } catch (e) {
+      CustomToastification().showToast("$e", type: ToastificationType.error);
+      // getScheduleVisitList(isFist: true);
+    }
+
+    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+      Get.back();
     }
   }
 }

@@ -90,7 +90,7 @@ class PersonalSettingController extends GetxController {
   List<String> userStateOption = [];
   RxnString userSelectedStateValue = RxnString("");
 
-  List<String> userCityOption = [];
+  RxList<String> userCityOption = RxList();
   RxnString userSelectedCityValue = RxnString("");
 
   List<String> organizationStateOption = [];
@@ -112,11 +112,16 @@ class PersonalSettingController extends GetxController {
 
       loadStateCityData().then((data) {
         statesCities.value = data;
+        // print("state city is :- ${statesCities.map((e) => e.state).join(",")}");
         userStateOption = statesCities.map((state) => state.state).toList();
         userSelectedStateValue.value = userStateOption.first;
 
         organizationStateOption = statesCities.map((state) => state.state).toList();
         organizationSelectedStateValue.value = organizationStateOption.first;
+
+        List<String> cityList = statesCities.firstWhere((element) => element.state == "Montana").cities;
+
+        print("montana city is:- $cityList");
       });
 
       getOrganizationDetail();
@@ -142,6 +147,8 @@ class PersonalSettingController extends GetxController {
 
     // Decode the JSON data
     Map<String, dynamic> jsonData = json.decode(jsonString);
+
+    // print("json data is :- $jsonData");
 
     // Parse the JSON data into a list of StateCityModel objects
     return StateCityModel.fromJson(jsonData);
