@@ -23,7 +23,7 @@ class RecorderService {
   // late AudioFileWaveformsC _waveformController;
 
   File? recordFile;
-
+  RxString updatedRecordingTime = RxString("00:00");
   late StreamSubscription<Amplitude> waves;
 
   double normalized = 0.0;
@@ -154,6 +154,7 @@ class RecorderService {
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       recordingTime.value++;
+      updatedRecordingTime.value = formattedRecordingTime;
     });
   }
 

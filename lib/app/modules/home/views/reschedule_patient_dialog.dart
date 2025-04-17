@@ -48,12 +48,10 @@ class ReschedulePatientDialog extends GetView<HomeController> {
     "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM",
     "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
     "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
-    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
+    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ]);
 
-  List<DateTime?> _singleDatePickerValueWithDefaultValue = [
-    DateTime.now().add(const Duration(days: 0)),
-  ];
+  List<DateTime?> _singleDatePickerValueWithDefaultValue = [DateTime.now().add(const Duration(days: 0))];
 
   final void Function(String, String) receiveParam;
 
@@ -61,26 +59,18 @@ class ReschedulePatientDialog extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    // print(generateTimeIntervals());
-    //
     visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
     visitTime.value = generateTimeIntervals(DateTime.now());
     generatedTime.value = generateTimeIntervals(DateTime.now());
     selectedVisitTimeValue.value = generatedTime[0];
-    // selectedVisitTimeValue.value = generatedTime.first;
 
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 16,
       child: Obx(() {
         return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -91,74 +81,44 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Visit Date",
-                            style: AppFonts.regular(14, AppColors.textBlack),
-                          ),
-                          Text(
-                            "*",
-                            style: AppFonts.regular(14, AppColors.redText),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      Row(children: [Text("Visit Date", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      SizedBox(height: 8),
                       Container(
                         height: 48,
                         padding: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
+                        decoration: BoxDecoration(border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5), color: Colors.white, borderRadius: BorderRadius.circular(6)),
                         child: DateFormatField(
-                            decoration: InputDecoration(
-                                hintText: "02/23/2024",
-                                border: InputBorder.none,
-                                suffixIconConstraints: BoxConstraints(maxHeight: 60),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    print("hello world");
-                                    isCalendarOpen.value = !isCalendarOpen.value;
-                                  },
-                                  icon: const Icon(Icons.calendar_month),
-                                )),
-                            addCalendar: false,
-                            controller: visitDateController,
-                            type: DateFormatType.type2,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(Duration(days: 365)),
-                            onComplete: (date) {
-                              visitTime.value = generateTimeIntervals(date!);
-                              generatedTime.value = generateTimeIntervals(date!);
-                              selectedVisitTimeValue.value = generatedTime[0];
-                              print("date is :- ${visitDateController.text}");
-                              print("DateFormatField date is:-  ${date}");
-                              visitDate = date;
-                            }),
+                          decoration: InputDecoration(
+                            hintText: "02/23/2024",
+                            border: InputBorder.none,
+                            suffixIconConstraints: BoxConstraints(maxHeight: 60),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                print("hello world");
+                                isCalendarOpen.value = !isCalendarOpen.value;
+                              },
+                              icon: const Icon(Icons.calendar_month),
+                            ),
+                          ),
+                          addCalendar: false,
+                          controller: visitDateController,
+                          type: DateFormatType.type2,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 365)),
+                          onComplete: (date) {
+                            visitTime.value = generateTimeIntervals(date!);
+                            generatedTime.value = generateTimeIntervals(date!);
+                            selectedVisitTimeValue.value = generatedTime[0];
+                            print("date is :- ${visitDateController.text}");
+                            print("DateFormatField date is:-  ${date}");
+                            visitDate = date;
+                          },
+                        ),
                       ),
                       if (isCalendarOpen.value) ...[buildSingleDatePickerWithValue()],
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Visit Time",
-                            style: AppFonts.regular(14, AppColors.textBlack),
-                          ),
-                          Text(
-                            "*",
-                            style: AppFonts.regular(14, AppColors.redText),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      SizedBox(height: 5),
+                      Row(children: [Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      SizedBox(height: 8),
                       Obx(() {
                         return BaseDropdown<String>(
                           valueAsString: (value) => value ?? "",
@@ -170,9 +130,7 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                           selectText: "11 PM",
                         );
                       }),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20),
                       Row(
                         spacing: 10,
                         children: [
@@ -208,13 +166,7 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                                     DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
 
                                     // Combine current date with the given time
-                                    DateTime givenDateTime = DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      givenTime.hour,
-                                      givenTime.minute,
-                                    );
+                                    DateTime givenDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, givenTime.hour, givenTime.minute);
 
                                     print("given time is :- ${givenDateTime}");
                                     print("current time is :- ${DateTime.now()}");
@@ -252,11 +204,11 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -342,7 +294,6 @@ class ReschedulePatientDialog extends GetView<HomeController> {
   }
 }
 
-
 class HomeReschedulePatientDialog extends GetView<HomeController> {
   RxBool isCalendarOpen = RxBool(true);
 
@@ -379,40 +330,28 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
     "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM",
     "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
     "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
-    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
+    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ]);
 
-  List<DateTime?> _singleDatePickerValueWithDefaultValue = [
-    DateTime.now().add(const Duration(days: 0)),
-  ];
+  List<DateTime?> _singleDatePickerValueWithDefaultValue = [DateTime.now().add(const Duration(days: 0))];
 
   final void Function(String, String) receiveParam;
 
-  HomeReschedulePatientDialog({super.key,required this.visitDate,required this.selectedVisitTimeValue, required this.receiveParam});
+  HomeReschedulePatientDialog({super.key, required this.visitDate, required this.selectedVisitTimeValue, required this.receiveParam});
 
   @override
   Widget build(BuildContext context) {
-    // print(generateTimeIntervals());
-    //
     visitDateController.text = DateFormat('MM/dd/yyyy').format(visitDate!);
-    // visitTime.value = generateTimeIntervals(visitDate!);
     generatedTime.value = generateTimeIntervals(visitDate!);
     _singleDatePickerValueWithDefaultValue = [visitDate!];
-    // selectedVisitTimeValue.value =
-    // selectedVisitTimeValue.value = generatedTime.first;
 
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 16,
       child: Obx(() {
         return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -423,74 +362,44 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Visit Date",
-                            style: AppFonts.regular(14, AppColors.textBlack),
-                          ),
-                          Text(
-                            "*",
-                            style: AppFonts.regular(14, AppColors.redText),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      Row(children: [Text("Visit Date", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      SizedBox(height: 8),
                       Container(
                         height: 48,
                         padding: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
+                        decoration: BoxDecoration(border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5), color: Colors.white, borderRadius: BorderRadius.circular(6)),
                         child: DateFormatField(
-                            decoration: InputDecoration(
-                                hintText: "02/23/2024",
-                                border: InputBorder.none,
-                                suffixIconConstraints: BoxConstraints(maxHeight: 60),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    print("hello world");
-                                    isCalendarOpen.value = !isCalendarOpen.value;
-                                  },
-                                  icon: const Icon(Icons.calendar_month),
-                                )),
-                            addCalendar: false,
-                            controller: visitDateController,
-                            type: DateFormatType.type2,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(Duration(days: 365)),
-                            onComplete: (date) {
-                              visitTime.value = generateTimeIntervals(date!);
-                              generatedTime.value = generateTimeIntervals(date!);
-                              selectedVisitTimeValue.value = generatedTime[0];
-                              print("date is :- ${visitDateController.text}");
-                              print("DateFormatField date is:-  ${date}");
-                              visitDate = date;
-                            }),
+                          decoration: InputDecoration(
+                            hintText: "02/23/2024",
+                            border: InputBorder.none,
+                            suffixIconConstraints: BoxConstraints(maxHeight: 60),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                print("hello world");
+                                isCalendarOpen.value = !isCalendarOpen.value;
+                              },
+                              icon: const Icon(Icons.calendar_month),
+                            ),
+                          ),
+                          addCalendar: false,
+                          controller: visitDateController,
+                          type: DateFormatType.type2,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 365)),
+                          onComplete: (date) {
+                            visitTime.value = generateTimeIntervals(date!);
+                            generatedTime.value = generateTimeIntervals(date!);
+                            selectedVisitTimeValue.value = generatedTime[0];
+                            print("date is :- ${visitDateController.text}");
+                            print("DateFormatField date is:-  ${date}");
+                            visitDate = date;
+                          },
+                        ),
                       ),
                       if (isCalendarOpen.value) ...[buildSingleDatePickerWithValue()],
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Visit Time",
-                            style: AppFonts.regular(14, AppColors.textBlack),
-                          ),
-                          Text(
-                            "*",
-                            style: AppFonts.regular(14, AppColors.redText),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      SizedBox(height: 5),
+                      Row(children: [Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      SizedBox(height: 8),
                       Obx(() {
                         return BaseDropdown<String>(
                           valueAsString: (value) => value ?? "",
@@ -502,9 +411,7 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                           selectText: "11 PM",
                         );
                       }),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20),
                       Row(
                         spacing: 10,
                         children: [
@@ -540,13 +447,7 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                                     DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
 
                                     // Combine current date with the given time
-                                    DateTime givenDateTime = DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      givenTime.hour,
-                                      givenTime.minute,
-                                    );
+                                    DateTime givenDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, givenTime.hour, givenTime.minute);
 
                                     print("given time is :- ${givenDateTime}");
                                     print("current time is :- ${DateTime.now()}");
@@ -584,11 +485,11 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );

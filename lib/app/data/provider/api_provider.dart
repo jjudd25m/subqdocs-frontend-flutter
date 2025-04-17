@@ -175,10 +175,7 @@ class ApiProvider {
         for (File file in files[key]!) {
           String mimeType = lookupMimeType(file.path) ?? "";
 
-          formData.files.add(MapEntry(
-            key,
-            await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse(mimeType)),
-          ));
+          formData.files.add(MapEntry(key, await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse(mimeType))));
         }
       }
 
@@ -206,10 +203,10 @@ class ApiProvider {
   }
 
   Future<Map<String, dynamic>> callPutMultiPartDioListOfFiles({required String url, required Map<String, dynamic> params, required Map<String, List<File>> files, required String token}) async {
-    customPrint("URL is :- ${url}");
-    customPrint("files is :- ${files}");
-    customPrint("params is :- ${params}");
-    customPrint("token is :- ${token}");
+    customPrint("URL is :- $url");
+    customPrint("files is :- $files");
+    customPrint("params is :- $params");
+    customPrint("token is :- $token");
 
     if (kDebugMode) {
       customPrint(UrlProvider.baseUrl + url);
@@ -221,10 +218,7 @@ class ApiProvider {
         for (File file in files[key]!) {
           String mimeType = lookupMimeType(file.path) ?? "";
 
-          formData.files.add(MapEntry(
-            key,
-            await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse(mimeType)),
-          ));
+          formData.files.add(MapEntry(key, await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse(mimeType))));
         }
       }
 
@@ -288,8 +282,9 @@ class ApiProvider {
       customPrint(UrlProvider.baseUrl + url);
     }
     try {
-      var response =
-          await dio.delete(UrlProvider.baseUrl + url, queryParameters: queryParameters, data: jsonEncode(data), options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 120));
+      var response = await dio
+          .delete(UrlProvider.baseUrl + url, queryParameters: queryParameters, data: jsonEncode(data), options: Options(headers: getApiHeader()))
+          .timeout(const Duration(seconds: 120));
 
       if (response.data is List) {
         return {"data": response.data};

@@ -6,9 +6,5 @@ class AddPatientBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(AddPatientController());
-
-    // Get.lazyPut<AddPatientController>(
-    //   () => AddPatientController(),
-    // );
   }
 }

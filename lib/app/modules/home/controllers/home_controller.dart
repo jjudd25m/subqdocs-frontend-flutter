@@ -10,9 +10,7 @@ import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
-import 'package:subqdocs/app/modules/home/model/Status.dart';
 import 'package:subqdocs/app/modules/home/model/statusModel.dart';
-
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
@@ -21,8 +19,6 @@ import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalDoctorModel.dart';
-import '../../../models/SelectedDoctorMedicationModel.dart';
-import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../../personal_setting/model/filter_past_visit_status.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -69,9 +65,6 @@ class HomeController extends GetxController {
   static const ROLE_DOCTOR = "Doctor";
   static const ROLE_MEDICAL_ASSISTANT = "Medical Assistant";
 
-  // final ScrollController scrollControllerPatientList = ScrollController();
-
-  // RxList<StatusModel> statusModel = RxList();
   String getNextRoundedTime() {
     DateTime now = DateTime.now();
 
@@ -134,23 +127,6 @@ class HomeController extends GetxController {
     return formatter.format(now);
   }
 
-  // void _onScroll() {
-  //
-  //
-  //   print("scolling");
-  //   //
-  //   // if (!isLoading.value) {
-  //   //   int currentLength = patientList.length;
-  //   //   if (currentLength % 50 == 0 && !_loadedThresholds.contains(currentLength)) {
-  //   //     _loadedThresholds.add(currentLength);
-  //   //
-  //   //
-  //   //     print("scroll is needed ${scrollControllerPatientList.position}");
-  //   //   }else{
-  //   //     print("scroll is  not needed.  ${scrollControllerPatientList.position}");
-  //   //   }
-  //   // }
-  // }
   @override
   void _onScrollPatientList() {
     if (!scrollControllerPatientList.hasClients) return;
@@ -161,9 +137,7 @@ class HomeController extends GetxController {
     if (currentIndex != 0 && (currentIndex - 50) % 100 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
-
       print("scroll is needed ${currentIndex}");
-      // onLoadMore(currentIndex);
     } else {
       print("scroll is  not needed.  ${currentIndex}");
     }
@@ -180,7 +154,6 @@ class HomeController extends GetxController {
       getPastVisitListFetchMore();
 
       print("scroll is needed $currentIndex");
-      // onLoadMore(currentIndex);
     } else {
       print("scroll is  not needed.  $currentIndex");
     }
@@ -197,7 +170,6 @@ class HomeController extends GetxController {
       getScheduleVisitListFetchMore();
 
       print("scroll is needed $currentIndex");
-      // onLoadMore(currentIndex);
     } else {
       print("scroll is  not needed.  $currentIndex");
     }
@@ -207,16 +179,37 @@ class HomeController extends GetxController {
     super.onInit();
     Get.put(GlobalController());
 
+    globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
+
+    globalController.listenForUserNameUpdate();
+
+    globalController.liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      print('Activity update: $event');
+    });
+
+    globalController.urlSchemeSubscription = globalController.liveActivitiesPlugin.urlSchemeStream().listen((schemeData) async {
+      if (schemeData.path == '/stop') {
+        File? audioFile = await globalController.recorderService.stopRecording();
+        customPrint("audio file url is :- ${audioFile?.absolute}");
+        if (audioFile != null) {
+          globalController.stopLiveActivityAudio();
+          globalController.submitAudio(audioFile);
+        }
+      } else if (schemeData.path == '/pause') {
+        globalController.updatePauseResumeAudioWidget();
+        await globalController.recorderService.pauseRecording();
+      } else if (schemeData.path == '/resume') {
+        globalController.updatePauseResumeAudioWidget();
+        await globalController.recorderService.resumeRecording();
+      }
+    });
+
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "SCHEDULED", subcategories: ["Scheduled", "Late"]));
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "IN PROGRESS", subcategories: ["Checked In", "In Progress", "Paused"]));
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "PAST", subcategories: ["Pending", "Finalized", "Insufficient Information", "Not Recorded"]));
     filterPastVisitStatusCategoryData.add(FilterPastVisitStatusCategoryModel(category: "CANCELLED/NO SHOW", subcategories: ["Cancelled", "No Show"]));
 
     globalController.getUserDetail();
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   globalController.addRouteInit(Routes.HOME);
-    // });
 
     HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
 
@@ -234,8 +227,6 @@ class HomeController extends GetxController {
     scrollControllerPatientList.addListener(_onScrollPatientList);
     scrollControllerPastPatientList.addListener(_onScrollPastPatientList);
     scrollControllerSchedulePatientList.addListener(_onScrollSchedulePatientList);
-    //
-    // _observer = ScrollObserver.sliverMulti(itemCount: items.length);
   }
 
   @override
@@ -366,10 +357,6 @@ class HomeController extends GetxController {
     if (patientListModel.value?.responseData?.data != null) {
       patientList.value = patientListModel.value?.responseData?.data ?? [];
 
-      // if(patientList.length > 80)
-      //   {
-      //     isLoading.value = true;
-      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -378,60 +365,6 @@ class HomeController extends GetxController {
       // print("element is ${element.toJson()}");
     }
   }
-
-  // Future<void> getPatientList({String? sortingName = "", bool isLoader = false}) async {
-  //   if (isLoader) {
-  //     Loader().showLoadingDialogForSimpleLoader();
-  //   }
-  //   Map<String, dynamic> param = {};
-  //   pagePatient = 1;
-  //   triggeredIndexes.clear();
-  //
-  //   param['page'] = 1;
-  //   param['limit'] = "100";
-  //   if (searchController.text.isNotEmpty) {
-  //     param['search'] = searchController.text;
-  //   }
-  //
-  //   // Dynamically add sorting to the param map
-  //
-  //   if (sortingName!.isNotEmpty) {
-  //     globalController.homePatientListSortingModel.value?.patientListSelectedSorting = toggleSortDesc(globalController.sortingPatientList, sortingName, 0);
-  //     param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
-  //   } else {
-  //     param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
-  //   }
-  //
-  //   if (globalController.homePatientListSortingModel.value?.startDate != "" && globalController.homePatientListSortingModel.value?.endDate != "") {
-  //     DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.startDate ?? "");
-  //     String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-  //     DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(globalController.homePatientListSortingModel.value?.endDate ?? "");
-  //     String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
-  //     param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
-  //   }
-  //
-  //   print("param:- $param");
-  //   globalController.saveHomePatientListData();
-  //   patientListModel.value = await _homeRepository.getPatient(param: param);
-  //   if (isLoader) {
-  //     Loader().stopLoader();
-  //   }
-  //
-  //   if (patientListModel.value?.responseData?.data != null) {
-  //     patientList.value = patientListModel.value?.responseData?.data ?? [];
-  //
-  //     // if(patientList.length > 80)
-  //     //   {
-  //     //     isLoading.value = true;
-  //     //   }
-  //     getLast2DaysData();
-  //     getOfflineData();
-  //   }
-  //
-  //   for (var element in patientList) {
-  //     // print("element is ${element.toJson()}");
-  //   }
-  // }
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
     pageSchedule = 1;
@@ -496,11 +429,6 @@ class HomeController extends GetxController {
     if (scheduleVisitListModel.value?.responseData?.data != null) {
       scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
 
-      // if(scheduleVisitList.length >=80)
-      //   {
-      //     isLoading.value = true;
-      //
-      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -574,13 +502,6 @@ class HomeController extends GetxController {
 
     if (pastVisitListModel.value?.responseData?.data != null) {
       pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];
-
-      // if(pastVisitList.length >=80)
-      //   {
-      //     isLoading.value = true;
-      //
-      //
-      //   }
       getLast2DaysData();
       getOfflineData();
     }
@@ -684,44 +605,6 @@ class HomeController extends GetxController {
       print("no pagination is not needed  beacuse ${patientList.length}  is this and $totalCount");
     }
   }
-  // Future<void> getPatientListFetchMore({int? page}) async {
-  //   isLoading.value = true;
-  //   Map<String, dynamic> param = {};
-  //
-  //   param['page'] = ++pagePatient;
-  //   param['limit'] = "100";
-  //   if (searchController.text.isNotEmpty) {
-  //     param['search'] = searchController.text;
-  //   }
-  //
-  //   // Dynamically add sorting to the param map
-  //   param["sorting"] = globalController.homePatientListSortingModel.value?.patientListSelectedSorting;
-  //
-  //   if (startDate.value != "" && endDate.value != "") {
-  //     DateTime startDateTime = DateFormat('MM/dd/yyyy').parse(startDate.value);
-  //     String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDateTime);
-  //     DateTime endDateTime = DateFormat('MM/dd/yyyy').parse(endDate.value);
-  //     String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDateTime);
-  //     param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
-  //   }
-  //
-  //   globalController.saveHomePatientListData();
-  //   patientListModel.value = await _homeRepository.getPatient(param: param);
-  //
-  //   isLoading.value = false;
-  //   if (patientListModel.value?.responseData?.data != null) {
-  //     int? totalCount = patientListModel.value?.responseData?.totalCount ?? 0;
-  //     int? dataCount = patientList.length;
-  //
-  //     if (patientList.length >= totalCount!) {
-  //       pagePatient--;
-  //     } else {
-  //       patientList.addAll(patientListModel.value?.responseData?.data as Iterable<PatientListData>);
-  //     }
-  //   } else {
-  //     pagePatient--;
-  //   }
-  // }
 
   Future<void> getPastVisitListFetchMore() async {
     int? totalCount = pastVisitListModel.value?.responseData?.totalCount ?? 0;
@@ -742,7 +625,6 @@ class HomeController extends GetxController {
       if (globalController.homePastPatientListSortingModel.value?.selectedStatusIndex?.isNotEmpty ?? false) {
         List<String>? statusList = globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
 
-        // customPrint("status array is- $statusList");
         if (statusList.length == 1) {
           param['status[0]'] = statusList;
         } else {
@@ -868,8 +750,6 @@ class HomeController extends GetxController {
   }
 
   void setDateRange() {
-    // customPrint("function  is called ");
-
     if (selectedValue.isNotEmpty) {
       for (int i = 0; i < selectedValue.length; i++) {
         var dateTime = selectedValue[i];
@@ -911,14 +791,6 @@ class HomeController extends GetxController {
 
   Future<void> getStatus() async {
     StatusResponseModel statusResponseModel = await _homeRepository.getStatus();
-
-    // statusModel.clear();
-
-    // statusResponseModel.responseData?.forEach(
-    //   (element) {
-    //     statusModel.add(StatusModel(status: element));
-    //   },
-    // );
   }
 
   void patientLoadMore() async {
@@ -1009,12 +881,14 @@ class HomeController extends GetxController {
     List<Future<bool>> uploadFutures = [];
 
     for (var file in audio) {
-      uploadFutures.add(uploadLocalAudio(file).then((success) {
-        if (success) {
-          DatabaseHelper.instance.deleteAudioFile(file.id ?? 0);
-        }
-        return success;
-      }));
+      uploadFutures.add(
+        uploadLocalAudio(file).then((success) {
+          if (success) {
+            DatabaseHelper.instance.deleteAudioFile(file.id ?? 0);
+          }
+          return success;
+        }),
+      );
     }
 
     await Future.wait(uploadFutures);
@@ -1026,15 +900,13 @@ class HomeController extends GetxController {
     try {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      // customPrint("audio data is:- ${file.id}, ${file.fileName}, ${file.visitId}");
-
-      PatientTranscriptUploadModel patientTranscriptUploadModel =
-          await _visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
-      // customPrint("audio upload response is:- ${patientTranscriptUploadModel.toJson()}");
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await _visitMainRepository.uploadAudio(
+        audioFile: File.fromUri(Uri.file(file.fileName ?? "")),
+        token: loginData.responseData?.token ?? "",
+        patientVisitId: file.visitId ?? "",
+      );
       return true; // You might want to change this logic to match your actual upload process
     } catch (error) {
-      // If an error occurs during upload, return false
-      // customPrint('Failed to upload audio: $error');
       return false;
     }
   }
@@ -1044,7 +916,6 @@ class HomeController extends GetxController {
 
     try {
       PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
-      // customPrint("patientVisitCreate API  internal response $response");
       CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
       globalController.tabIndex.value = 1;
 
@@ -1067,7 +938,6 @@ class HomeController extends GetxController {
 
     try {
       PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);
-      // customPrint("patientVisitCreate API  internal response $response");
       CustomToastification().showToast(response.message ?? "", type: ToastificationType.success);
       globalController.tabIndex.value = 1;
 
@@ -1091,8 +961,6 @@ class HomeController extends GetxController {
     customPrint("patientReScheduleCreate API  internal response $response");
     CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
     getScheduleVisitList(isFist: true);
-    // patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
-    // getPatientDetails();
   }
 
   Future<void> changeStatus(String status, String visitId) async {

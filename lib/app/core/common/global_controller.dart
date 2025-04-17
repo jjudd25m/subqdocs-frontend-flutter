@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,6 +7,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:live_activities/live_activities.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +23,7 @@ import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../football_game_live_activity_model.dart';
 import '../../../widget/globle_attchmnets.dart';
 import '../../data/service/database_helper.dart';
 import '../../data/service/recorder_service.dart';
@@ -88,6 +92,13 @@ class GlobalController extends GetxController {
   RxString patientLsatName = RxString("");
 
   RxList<MediaListingModel> list = RxList();
+
+  final liveActivitiesPlugin = LiveActivities();
+  String? latestActivityId;
+  StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
+  FootballGameLiveActivityModel? footballGameLiveActivityModel;
+
+  static const subqdocsChannel = MethodChannel('com.subqdocs/shared');
 
   RxList<SelectedDoctorModel> selectedDoctorModel = RxList<SelectedDoctorModel>();
   RxList<SelectedDoctorModel> selectedMedicalModel = RxList<SelectedDoctorModel>();
@@ -197,13 +208,15 @@ class GlobalController extends GetxController {
 
   Future<void> changeStatus(String status) async {
     try {
-      // Loader().showLoadingDialogForSimpleLoader();
+      Loader().showLoadingDialogForSimpleLoader();
 
       Map<String, dynamic> param = {};
 
       param['status'] = status;
 
       ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
+
+      Loader().stopLoader();
       if (changeStatusModel.responseType == "success") {
         // Get.back();
         // Get.back();
@@ -219,8 +232,65 @@ class GlobalController extends GetxController {
       }
     } catch (e) {
       // customPrint("$e");
+      Loader().stopLoader();
       CustomToastification().showToast("$e", type: ToastificationType.error);
       // Get.back();
+    }
+  }
+
+  Future<void> stopLiveActivityAudio() async {
+    liveActivitiesPlugin.endAllActivities();
+    latestActivityId = null;
+  }
+
+  Future<void> startAudioWidget() async {
+    print("audio time is :- ${recorderService.formattedRecordingTime}");
+
+    footballGameLiveActivityModel = FootballGameLiveActivityModel(
+      userName: "${patientFirstName.value} ${patientLsatName.value}",
+      recordingTime: recorderService.formattedRecordingTime,
+      resumeRecording: recorderService.recordingStatus.value.toString(),
+    );
+
+    print("footballGameLiveActivityModel is :- ${footballGameLiveActivityModel?.toMap()}");
+    final activityId = await liveActivitiesPlugin.createActivity(footballGameLiveActivityModel?.toMap() ?? {});
+
+    liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      print("activityUpdateStream event is:- ${event}");
+    });
+
+    recorderService.updatedRecordingTime.listen((p0) {
+      final data = footballGameLiveActivityModel!.copyWith(
+        userName: "${patientFirstName.value} ${patientLsatName.value}",
+        recordingTime: p0,
+        resumeRecording: recorderService.recordingStatus.value.toString(),
+      );
+      liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
+    });
+
+    // String = updatedRecordingTime;
+
+    latestActivityId = activityId;
+  }
+
+  // Listen for native event when userName is updated
+  void listenForUserNameUpdate() {
+    subqdocsChannel.setMethodCallHandler((call) async {
+      if (call.method == 'onUserNameUpdated') {
+        // Data updated, handle it in Flutter
+        print("User Name Updated in native code!");
+        // You can refresh your UI or take any necessary action here
+      }
+    });
+  }
+
+  Future<void> updatePauseResumeAudioWidget() async {
+    if (recorderService.recordingStatus.value == 1) {
+      final data = FootballGameLiveActivityModel(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: recorderService.formattedRecordingTime, resumeRecording: "2");
+      liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
+    } else {
+      final data = FootballGameLiveActivityModel(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: recorderService.formattedRecordingTime, resumeRecording: "1");
+      liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
     }
   }
 
@@ -264,7 +334,11 @@ class GlobalController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       try {
-        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(
+          audioFile: audioFile,
+          token: loginData.responseData?.token ?? "",
+          patientVisitId: visitId.value,
+        );
         Loader().stopLoader();
         customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 

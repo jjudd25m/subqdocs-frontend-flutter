@@ -86,7 +86,7 @@ class AddPatientController extends GetxController {
     "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM",
     "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
     "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
-    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
+    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ];
 
   RxString selectedVisitTime = RxString("11 PM");
@@ -128,10 +128,10 @@ class AddPatientController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT || globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
+    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT ||
+        globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
       globalController.popRoute();
     }
-    // globalController.popRoute();
   }
 
   String extractDigits(String input) {
@@ -178,22 +178,13 @@ class AddPatientController extends GetxController {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return dateFormat.format(date); // Format date to dd/MM/yyyy
   }
-  //
-  // void calculateTotalFileSize() {
-  //   totalFileSize = 0.0;
-  //   for (var item in list) {
-  //     totalFileSize += (item.file?.lengthSync() ?? 0) / (1024 * 1024); // Convert bytes to MB
-  //   }
-  // }
 
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach(
-      (element) {
-        totalSize += element.calculateSize ?? 0;
-      },
-    );
+    list.value.forEach((element) {
+      totalSize += element.calculateSize ?? 0;
+    });
 
     if (totalSize < 100) {
       return true;
@@ -205,13 +196,11 @@ class AddPatientController extends GetxController {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach(
-      (element) {
-        if (element.isGraterThan10 ?? false) {
-          isGraterThan10 = true;
-        }
-      },
-    );
+    list.value.forEach((element) {
+      if (element.isGraterThan10 ?? false) {
+        isGraterThan10 = true;
+      }
+    });
 
     return isGraterThan10;
   }
@@ -225,7 +214,6 @@ class AddPatientController extends GetxController {
 
         selectedList.addAll(list);
         Get.back();
-
       }
     } else {
       CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
@@ -240,46 +228,49 @@ class AddPatientController extends GetxController {
   Future<void> pickFiles() async {
     List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
 
-    customPrint("media  file is  ${fileList}");
+    customPrint("media  file is  $fileList");
 
-    // double totalFileSize = 0.0;
+    fileList?.forEach((element) {
+      XFile? _pickedFile;
+      String? _fileName;
+      DateTime? _pickDate;
+      int? _fileSize;
 
-    fileList?.forEach(
-      (element) {
-        XFile? _pickedFile;
-        String? _fileName;
-        DateTime? _pickDate;
-        int? _fileSize;
+      if (element != null) {
+        _fileName = element.name; // Get the file name
+        _pickDate = DateTime.now(); // Get the date when the file is picked
 
-        if (element != null) {
-          _fileName = element.name; // Get the file name
-          _pickDate = DateTime.now(); // Get the date when the file is picked
+        // Get the size of the file
+        File file = File(element.xFile.path);
+        _fileSize = file.lengthSync(); // Size in bytes
 
-          // Get the size of the file
-          File file = File(element.xFile.path);
-          _fileSize = file.lengthSync(); // Size in bytes
+        // totalFileSize += _fileSize / (1024 * 1024);
 
-          // totalFileSize += _fileSize / (1024 * 1024);
+        String? _filesizeString = _formatFileSize(_fileSize);
+        double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
 
-          String? _filesizeString = _formatFileSize(_fileSize);
-          double? _filesizeStringDouble = _formatFileSizeDouble(_fileSize);
-
-          String? _shortFileName;
-          if (p.basename(_fileName).length > 15) {
-            // Truncate the name to 12 characters and add ellipsis
-            _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
-          } else {
-            _shortFileName = p.basename(_fileName); // Use the full name if it's already short
-          }
-          list.value.add(MediaListingModel(
-              file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        String? _shortFileName;
+        if (p.basename(_fileName).length > 15) {
+          // Truncate the name to 12 characters and add ellipsis
+          _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
+        } else {
+          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
+        list.value.add(
+          MediaListingModel(
+            file: file,
+            previewImage: null,
+            fileName: _shortFileName,
+            date: _formatDate(_pickDate),
+            Size: _filesizeString,
+            calculateSize: _filesizeStringDouble,
+            isGraterThan10: _filesizeStringDouble < 10.00 ? false : true,
+          ),
+        );
+      }
 
-        list.refresh();
-      },
-    );
-
-    // calculateTotalFileSize();
+      list.refresh();
+    });
   }
 
   Future<void> captureProfileImage() async {
@@ -327,8 +318,17 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(
-          file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+      list.value.add(
+        MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString,
+          calculateSize: _filesizeStringDouble,
+          isGraterThan10: _filesizeStringDouble < 10.00 ? false : true,
+        ),
+      );
     }
 
     list.refresh();
@@ -350,7 +350,6 @@ class AddPatientController extends GetxController {
 
     if (profileImage.value != null) {
       customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
       profileParams['profile_image'] = [profileImage.value!];
     } else {
       customPrint("profile is not  available");
@@ -358,8 +357,6 @@ class AddPatientController extends GetxController {
 
     if (selectedList.isNotEmpty) {
       customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
-      // profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
     } else {
       customPrint("profile is not  available");
     }
@@ -457,26 +454,21 @@ class AddPatientController extends GetxController {
     Map<String, List<File>> profileParams = {};
     if (selectedList.isNotEmpty) {
       customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
       profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
-      // profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
     } else {
       customPrint("profile is not  available");
     }
 
-    try{
+    try {
       await _addPatientRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId);
       selectedList.clear();
       Get.back();
-    }catch(e){
+    } catch (e) {
       selectedList.clear();
       Get.back();
     }
 
-
-
     return true;
-    // getPatientAttachment();
   }
 
   Future<void> clearForm() async {
@@ -509,10 +501,7 @@ class AddPatientController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          title: Text(
-            "Pick a Date",
-            style: AppFonts.medium(16, AppColors.black),
-          ),
+          title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
           actions: <Widget>[
             Container(
               height: 400,

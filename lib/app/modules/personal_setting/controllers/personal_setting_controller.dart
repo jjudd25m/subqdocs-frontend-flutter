@@ -30,7 +30,7 @@ class PersonalSettingController extends GetxController {
 
   RxInt tabIndex = RxInt(0);
   final PersonalSettingRepository _personalSettingRepository = PersonalSettingRepository();
-  // RxList<PatientListData> patientList = RxList<PatientListData>();
+
   Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
   Rxn<GetUserRolesModel> userRolesModel = Rxn<GetUserRolesModel>();
   Rxn<GetUserOrganizationListModel> filterGetUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
@@ -112,7 +112,6 @@ class PersonalSettingController extends GetxController {
 
       loadStateCityData().then((data) {
         statesCities.value = data;
-        // print("state city is :- ${statesCities.map((e) => e.state).join(",")}");
         userStateOption = statesCities.map((state) => state.state).toList();
         userSelectedStateValue.value = userStateOption.first;
 
@@ -236,10 +235,6 @@ class PersonalSettingController extends GetxController {
       InvitedUserResponseModel response = await _personalSettingRepository.userInvite(param: param);
       print("response is $response");
 
-      // await Get.toNamed(Routes.INVITED_USER_SUBMITTED, arguments: {
-      //   "invited_user_data": param,
-      // });
-
       getOrganizationDetail();
       getUserDetail();
       getUserByOrganization();
@@ -254,8 +249,6 @@ class PersonalSettingController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     if (userProfileImage.value != null) {
-      // customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
       profileParams['user_image'] = [userProfileImage.value!];
     }
 
@@ -278,23 +271,16 @@ class PersonalSettingController extends GetxController {
 
         AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
         await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
-        // token = loginModel.responseData?.token ?? "";
       }
     }
-
-    // getOrganizationDetail();
-    // } catch (error) {
-    //   // customPrint("userInvite catch error is $error");
-    // }
   }
 
   Future<void> updateOrganization(Map<String, dynamic> param) async {
     Map<String, List<File>> profileParams = {};
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-    if (userProfileImage.value != null) {
+    if (organizationProfileImage.value != null) {
       customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
       profileParams['org_image'] = [organizationProfileImage.value!];
     }
 
@@ -307,9 +293,6 @@ class PersonalSettingController extends GetxController {
       getUserDetail();
       getOrganizationDetail();
       Get.back();
-      // Get.toNamed(Routes.INVITED_USER_SUBMITTED, arguments: {
-      //   "invited_user_data": param,
-      // });
     } catch (error) {
       Get.back();
       customPrint("userInvite catch error is $error");
@@ -347,7 +330,7 @@ class PersonalSettingController extends GetxController {
     // Loader().showLoadingDialogForSimpleLoader();
     // try {
     UpdateRoleAndAdminResponseModel updateRoleAndAdminResponseData = await _personalSettingRepository.updateRoleAndAdminControl(param: param);
-    // Get.back();
+
     print("UpdateRoleAndAdminResponseModel response:- ${updateRoleAndAdminResponseData.toJson()}");
 
     if (updateRoleAndAdminResponseData.responseType?.toLowerCase() == "success") {
@@ -365,12 +348,6 @@ class PersonalSettingController extends GetxController {
     } else {
       CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.error);
     }
-
-    // getUserByOrganization();
-    // } catch (error) {
-    //   Get.back();
-    //   customPrint("login catch error is $error");
-    // }
   }
 
   Future<void> captureProfileImage(bool isUserProfile) async {

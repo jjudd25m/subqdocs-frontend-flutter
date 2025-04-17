@@ -88,7 +88,6 @@ class VisitMainController extends GetxController {
   RxnString selectedMedicalAssistant = RxnString();
 
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
-  // Rxn<PatientAttachmentListModel> patientAttachmentList = Rxn();
   RxList<PatientAttachmentResponseData> patientAttachmentList = RxList();
   Rxn<VisitMainPatientDetails> patientData = Rxn();
 
@@ -324,15 +323,7 @@ class VisitMainController extends GetxController {
         showCustomDialog(Get.context!);
       }
     }
-
-    // calculateTotalFileSize();
   }
-
-  // double _formatFileSizeDouble(int bytes) {
-  //   double sizeInKB = bytes / 1024; // Convert bytes to KB
-  //   double sizeInMB = sizeInKB / 1024; // Convert KB to MB
-  //   return (sizeInMB * 100).roundToDouble() / 100;
-  // }
 
   Future<void> pickFiles(BuildContext context, {bool clear = true}) async {
     if (clear) {
@@ -607,11 +598,8 @@ class VisitMainController extends GetxController {
     try {
       PatientAttachmentListModel patientAttachmentData = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
       patientAttachmentList.value = patientAttachmentData.responseData ?? [];
-      // patientAttachmentList.refresh();
-      // Get.back();
     } catch (error) {
       print("getPatientAttachment error is :- $error");
-      // Get.back();
     }
     customPrint("patientAttachmentList is:- count ${patientAttachmentList.length}");
     customPrint("patientAttachmentList is:- ${patientAttachmentList.toJson()}");
@@ -629,8 +617,6 @@ class VisitMainController extends GetxController {
     }
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
     try {
-      // AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-
       dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId.value, param: param, token: loginData.responseData?.token ?? "");
 
       CustomToastification().showToast("Update Doctor Successfully", type: ToastificationType.success);
@@ -651,8 +637,6 @@ class VisitMainController extends GetxController {
     }
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
     try {
-      // AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-
       dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId.value, param: param, token: loginData.responseData?.token ?? "");
 
       CustomToastification().showToast("Update Medical Assistant Successfully", type: ToastificationType.success);
@@ -669,6 +653,8 @@ class VisitMainController extends GetxController {
     try {
       patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
 
+      print("patientData age is :- ${patientData.value?.responseData?.age}");
+
       if (patientData.value?.responseData?.doctorId != null) {
         doctorValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.doctorId ?? -1) ?? "";
       }
@@ -679,7 +665,6 @@ class VisitMainController extends GetxController {
 
       print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
 
-      // customPrint("patientAttachmentList is:- ${patientAttachmentList.value?.toJson()}");
       if (isLoading) {
         Get.back();
       }
@@ -847,11 +832,8 @@ class VisitMainController extends GetxController {
       } else {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
       }
-
-      // getScheduleVisitList(isFist: true);
     } catch (e) {
       CustomToastification().showToast("$e", type: ToastificationType.error);
-      // getScheduleVisitList(isFist: true);
     }
 
     patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);

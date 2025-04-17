@@ -9,7 +9,7 @@ class CustomToastification {
     toastification.show(
       context: Get.context,
       type: type,
-      title: Text(message),
+      title: Text(message, maxLines: 2),
       alignment: Alignment.bottomCenter,
       style: ToastificationStyle.flat,
       autoCloseDuration: Duration(seconds: toastDuration),

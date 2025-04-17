@@ -16,11 +16,9 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widgets/ContainerButton.dart';
-import '../../../../widgets/custom_table.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../home/views/schedule_patient_dialog.dart';
 import '../controllers/patient_profile_controller.dart';
@@ -80,8 +78,6 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                     breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                     onBack: (breadcrumb) {
                                       controller.globalController.popUntilRoute(breadcrumb);
-                                      // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
-
                                       while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
                                         Get.back(); // Pop the current screen
                                       }
@@ -140,7 +136,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                   Spacer(),
                                                   GestureDetector(
                                                     onTap: () async {
-                                                      final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true});
+                                                      final result = await Get.toNamed(
+                                                        Routes.EDIT_PATENT_DETAILS,
+                                                        arguments: {"patientData": controller.patientId, "visitId": controller.visitId, "fromSchedule": true},
+                                                      );
                                                       controller.globalController.addRoute(Routes.EDIT_PATENT_DETAILS);
                                                       controller.onReady();
                                                     },
@@ -162,7 +161,6 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                           ); // Our custom dialog
                                                         },
                                                       );
-                                                      // final result = await Get.toNamed(Routes.ADD_PATIENT);
                                                     },
                                                     text: 'Schedule Visit',
 
@@ -246,7 +244,9 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                         collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                         backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                         collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                        title: Container(child: Row(children: [SizedBox(width: 10), Text(textAlign: TextAlign.center, "Scheduled Visit", style: AppFonts.medium(16, AppColors.backgroundPurple))])),
+                                        title: Container(
+                                          child: Row(children: [SizedBox(width: 10), Text(textAlign: TextAlign.center, "Scheduled Visit", style: AppFonts.medium(16, AppColors.backgroundPurple))]),
+                                        ),
                                         children: <Widget>[
                                           controller.patientDetailModel.value?.responseData?.scheduledVisits?.length != 0
                                               ? Container(
@@ -296,7 +296,9 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                           receiveParam: (p0, p1) {
                                                                             customPrint("p0 is $p0 p1 is $p1");
                                                                             customPrint("row index is :- ${rowIndex}");
-                                                                            customPrint("visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}");
+                                                                            customPrint(
+                                                                              "visit id :- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString()}",
+                                                                            );
                                                                             controller.patientReScheduleCreate(
                                                                               param: {"visit_date": p1, "visit_time": p0},
                                                                               visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1",
@@ -314,10 +316,10 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                           onDelete: () {
                                                                             print("id is:- ${controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id}");
 
-                                                                            controller.changeStatus("Cancelled");
-
-                                                                            // controller.deletePatientVisit(
-                                                                            //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[rowIndex - 1].id.toString() ?? "");
+                                                                            controller.changeStatus(
+                                                                              "Cancelled",
+                                                                              controller.patientDetailModel.value?.responseData?.scheduledVisits![rowIndex - 1].id.toString() ?? "-1",
+                                                                            );
                                                                           },
                                                                         );
                                                                       },
@@ -438,7 +440,9 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                           collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                           backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                           collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                          title: Container(child: Row(children: [SizedBox(width: 10), Text(textAlign: TextAlign.center, "Visit Recaps", style: AppFonts.medium(16, AppColors.backgroundPurple))])),
+                                          title: Container(
+                                            child: Row(children: [SizedBox(width: 10), Text(textAlign: TextAlign.center, "Visit Recaps", style: AppFonts.medium(16, AppColors.backgroundPurple))]),
+                                          ),
                                           children: <Widget>[
                                             Container(
                                               width: double.infinity,
@@ -521,9 +525,6 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                                                 Spacer(),
                                                                 ContainerButton(
                                                                   onPressed: () async {
-                                                                    // Get.back();
-                                                                    // final result = await Get.toNamed(Routes.ADD_PATIENT);
-
                                                                     showDialog(
                                                                       context: context,
                                                                       barrierDismissible: true,

@@ -17,7 +17,6 @@ import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/patient_detail_model.dart';
 import '../repository/edit_patient_details_repository.dart';
@@ -72,7 +71,7 @@ class EditPatentDetailsController extends GetxController {
     "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM",
     "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
     "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
-    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
+    "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ];
   List<String> sex = ["Female", "Male"];
   List<String> patientType = ["New Patient", "Old Patient"];
@@ -130,7 +129,6 @@ class EditPatentDetailsController extends GetxController {
     if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.EDIT_PATENT_DETAILS) {
       globalController.popRoute();
     }
-    // globalController.popRoute();
   }
 
   Future<void> getPatient(String id, String visitId) async {
@@ -215,10 +213,7 @@ class EditPatentDetailsController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          title: Text(
-            "Pick a Date",
-            style: AppFonts.medium(16, AppColors.black),
-          ),
+          title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
           actions: <Widget>[
             Container(
               height: 400,
@@ -266,10 +261,7 @@ class EditPatentDetailsController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          title: Text(
-            "Pick a Date",
-            style: AppFonts.medium(16, AppColors.black),
-          ),
+          title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
           actions: <Widget>[
             Container(
               height: 400,
@@ -325,7 +317,6 @@ class EditPatentDetailsController extends GetxController {
     param['first_name'] = firstNameController.text;
     if (profileImage.value != null) {
       customPrint("profile is   available");
-      // param['profile_image'] = profileImage.value;
       profileParams['profile_image'] = [profileImage.value!];
     } else {
       param['isDeleteProfileImage'] = true;

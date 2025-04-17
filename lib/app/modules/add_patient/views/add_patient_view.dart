@@ -6,17 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fullscreen_image_viewer/fullscreen_image_viewer.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:phone_number_text_input_formatter/phone_number_text_input_formatter.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
-import 'package:subqdocs/widgets/rounded_image_widget.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../../../utils/FileOpener.dart';
 import '../../../../utils/Formetors.dart';
@@ -32,12 +26,9 @@ import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
-import '../../../../widgets/base_image_view.dart';
-import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
 import '../widgets/custom_dailog.dart';
 import '../../../../widgets/custom_textfiled.dart';
@@ -242,7 +233,11 @@ class AddPatientView extends GetView<AddPatientController> {
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                         child: Row(
-                                                          children: [Icon(Icons.file_copy_sharp, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Pick From Files", style: AppFonts.regular(16, AppColors.textBlack))],
+                                                          children: [
+                                                            Icon(Icons.file_copy_sharp, color: AppColors.textDarkGrey),
+                                                            SizedBox(width: 10),
+                                                            Text("Pick From Files", style: AppFonts.regular(16, AppColors.textBlack)),
+                                                          ],
                                                         ),
                                                       ),
                                                     ),
@@ -258,7 +253,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                                           Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
                                                           Padding(
                                                             padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                            child: Row(children: [Icon(CupertinoIcons.camera), SizedBox(width: 10), Text("Take A Photo", style: AppFonts.regular(16, AppColors.textBlack))]),
+                                                            child: Row(
+                                                              children: [Icon(CupertinoIcons.camera), SizedBox(width: 10), Text("Take A Photo", style: AppFonts.regular(16, AppColors.textBlack))],
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -290,9 +287,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 controller.patientId.clear();
                                               },
                                               suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                              // checkValidation: (value) {
-                                              //   return Validation.requiredFiled(value);
-                                              // }
                                             ),
                                           ),
                                           SizedBox(width: Dimen.margin10),
@@ -364,9 +358,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               suffixIcon: Icon(Icons.calendar_month),
                                               format: [NoSpaceTextFormatter()],
                                               label: "Date of birth",
-
                                               readOnly: true,
-                                              // isImportant: true,
                                               controller: controller.dobController,
                                               onTap: () async {
                                                 final picked = await showDatePicker(
@@ -395,9 +387,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 }
                                               },
                                               hint: "mm/dd/yyyy",
-                                              // checkValidation: (value) {
-                                              //   return Validation.requiredFiled(value);
-                                              // }
                                             ),
                                           ),
                                           SizedBox(width: Dimen.margin10),
@@ -405,15 +394,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    Text("Sex", style: AppFonts.regular(14, AppColors.textBlack)),
-                                                    // Text(
-                                                    //   "*",
-                                                    //   style: AppFonts.regular(14, AppColors.redText),
-                                                    // ),
-                                                  ],
-                                                ),
+                                                Row(children: [Text("Sex", style: AppFonts.regular(14, AppColors.textBlack))]),
                                                 SizedBox(height: 8),
                                                 Obx(() {
                                                   return BaseDropdown<String>(
@@ -459,19 +440,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                             SizedBox(width: Dimen.margin10),
                                             Expanded(
                                               child: TextFormFiledWidget(
-                                                format: [
-                                                  MaskTextInputFormatter(mask: "+1 (###) ###-####"),
-                                                  // FilteringTextInputFormatter.allow(RegExp(r'[0-9,+]')),
-                                                  // const NationalPhoneNumberTextInputFormatter(
-                                                  //   prefix: '+',
-                                                  //   countryCode: '1',
-                                                  //   groups: [
-                                                  //     (length: 3, leading: ' (', trailing: ') '),
-                                                  //     (length: 3, leading: '', trailing: '-'),
-                                                  //     (length: 4, leading: '', trailing: ' '),
-                                                  //   ],
-                                                  // ),
-                                                ],
+                                                format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
                                                 label: "Contact Number",
                                                 controller: controller.contactNumberController,
                                                 // isValid: true,
@@ -494,15 +463,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Text("Doctor Name", style: AppFonts.regular(14, AppColors.textBlack)),
-                                                      // Text(
-                                                      //   "*",
-                                                      //   style: AppFonts.regular(14, AppColors.redText),
-                                                      // ),
-                                                    ],
-                                                  ),
+                                                  Row(children: [Text("Doctor Name", style: AppFonts.regular(14, AppColors.textBlack))]),
                                                   SizedBox(height: 8),
                                                   Obx(() {
                                                     return BaseDropdown<String>(
@@ -532,15 +493,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack)),
-                                                      // Text(
-                                                      //   "*",
-                                                      //   style: AppFonts.regular(14, AppColors.redText),
-                                                      // ),
-                                                    ],
-                                                  ),
+                                                  Row(children: [Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack))]),
                                                   SizedBox(height: 8),
                                                   Obx(() {
                                                     return BaseDropdown<String>(
@@ -569,8 +522,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     onTap: () async {
                                                       final picked = await showDatePicker(
                                                         context: context,
-
-                                                        // initialDate:  DateFormat('MM/dd/yy').parse(controller.visitDateController.text),
                                                         initialDate: DateTime.now(),
                                                         firstDate: DateTime.now(),
                                                         lastDate: DateTime.now().add(Duration(days: 1000)),
@@ -643,7 +594,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                               backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                               collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                               collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                              title: Container(child: Row(children: [SizedBox(width: 10), Text(textAlign: TextAlign.center, "Attachments", style: AppFonts.medium(16, AppColors.textBlack))])),
+                                              title: Container(
+                                                child: Row(children: [SizedBox(width: 10), Text(textAlign: TextAlign.center, "Attachments", style: AppFonts.medium(16, AppColors.textBlack))]),
+                                              ),
                                               children: <Widget>[
                                                 Obx(() {
                                                   return Container(
@@ -679,25 +632,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                       width: 120,
                                                                                       height: 120,
                                                                                       child: GestureDetector(
-                                                                                        onTap: () {
-                                                                                          // FullscreenImageViewer.open(
-                                                                                          //   context: context,
-                                                                                          //   child: CachedNetworkImage(imageUrl: controller.selectedList[index].file),
-                                                                                          // );
-                                                                                        },
+                                                                                        onTap: () {},
                                                                                         child: GestureDetector(
                                                                                           onTap: () {
                                                                                             FileOpener.openDocument(controller.selectedList[index].file?.path ?? "");
-                                                                                            // if (getFileExtension(controller.selectedList[index].file?.path ?? "") == "image") {
-                                                                                            //   customPrint("1");
-                                                                                            //   FullscreenImageViewer.open(
-                                                                                            //     context: context,
-                                                                                            //     child: Image.file(controller.selectedList[index].file ?? File("")),
-                                                                                            //   );
-                                                                                            // } else {
-                                                                                            //   customPrint("2");
-                                                                                            //   controller.launchInAppWithBrowserOptions(Uri.file(controller.selectedList[index].file?.path ?? ""));
-                                                                                            // }
                                                                                           },
                                                                                           child: ClipRRect(
                                                                                             borderRadius: BorderRadius.circular(10), // Set the radius here
@@ -727,7 +665,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                                               context: context,
                                                                                               barrierDismissible: true,
                                                                                               builder: (BuildContext context) {
-                                                                                                // return SizedBox();
                                                                                                 return DeleteImageDialog(
                                                                                                   onDelete: () {
                                                                                                     controller.deleteAttachments(index);
@@ -759,7 +696,10 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                 }),
                                                               ),
                                                             )
-                                                            : Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Container(width: double.infinity, height: 200, child: Center(child: Text("Attachments Not available")))),
+                                                            : Padding(
+                                                              padding: EdgeInsets.symmetric(vertical: 20),
+                                                              child: Container(width: double.infinity, height: 200, child: Center(child: Text("Attachments Not available"))),
+                                                            ),
                                                   );
                                                 }),
                                               ],
@@ -850,11 +790,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                           SizedBox(width: Dimen.margin8),
                                           GestureDetector(
                                             onTap: () {
-                                              // if (controller.totalFileSize > 100) {
-                                              //   CustomToastification().showToast("File size exceeded 100 MB", type: ToastificationType.error);
-                                              //   return;
-                                              // }
-
                                               controller.isSaveAddAnother.value = false;
 
                                               if (controller.formKey.currentState!.validate()) {
@@ -894,5 +829,3 @@ class AddPatientView extends GetView<AddPatientController> {
     );
   }
 }
-
-//

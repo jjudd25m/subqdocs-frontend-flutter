@@ -9,11 +9,7 @@ import 'package:subqdocs/app/modules/forgot_password/controllers/forgot_password
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
-
-import '../../../../utils/app_string.dart';
-import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
-import '../../../../widget/custom_textfiled.dart';
 
 class EnterOtpView extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {
@@ -27,16 +23,9 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
     bool isSmallScreen = isWidthLessThan428(context);
     return Column(
       children: [
-        SizedBox(
-          height: 24,
-        ),
-        Text(
-          "Verify your Email",
-          style: AppFonts.medium(18, AppColors.textBlack),
-        ),
-        SizedBox(
-          height: 16,
-        ),
+        SizedBox(height: 24),
+        Text("Verify your Email", style: AppFonts.medium(18, AppColors.textBlack)),
+        SizedBox(height: 16),
         SizedBox(
           width: 330,
           child: Text(
@@ -45,9 +34,7 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
             style: AppFonts.regular(14, AppColors.textDarkGrey),
           ),
         ),
-        SizedBox(
-          height: 24,
-        ),
+        SizedBox(height: 24),
         Center(
           child: OtpTextField(
             styles: [],
@@ -88,15 +75,12 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
             // end onSubmit
           ),
         ),
-        SizedBox(
-          height: 40,
-        ),
+        SizedBox(height: 40),
         Obx(() {
           return SizedBox(
             width: isSmallScreen ? Get.width - 30 : 416,
             child: CustomAnimatedButton(
               onPressed: () {
-                // controller.authLoginUser();
                 if (controller.otpCode.length == 6) {
                   controller.verifyOtp();
                 } else {
@@ -111,9 +95,7 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
             ),
           );
         }),
-        SizedBox(
-          height: 30,
-        ),
+        SizedBox(height: 30),
         SizedBox(
           width: isSmallScreen ? Get.width - 30 : 416,
           child: Obx(() {
@@ -127,10 +109,7 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
                   onTap: () {
                     controller.resendOtp();
                   },
-                  child: Text(
-                    'Time Remaining: $minutes:${seconds.toString().padLeft(2, '0')}',
-                    style: AppFonts.medium(12, AppColors.textDarkGrey),
-                  ),
+                  child: Text('Time Remaining: $minutes:${seconds.toString().padLeft(2, '0')}', style: AppFonts.medium(12, AppColors.textDarkGrey)),
                 ),
                 Spacer(),
                 GestureDetector(
@@ -139,26 +118,18 @@ class EnterOtpView extends GetView<ForgotPasswordController> {
                       controller.resendOtp();
                     }
                   },
-                  child: Text(
-                    "Resend verification code",
-                    style: AppFonts.medium(12, controller.isTimerActive.value ? AppColors.textGrey : AppColors.backgroundPurple),
-                  ),
+                  child: Text("Resend verification code", style: AppFonts.medium(12, controller.isTimerActive.value ? AppColors.textGrey : AppColors.backgroundPurple)),
                 ),
               ],
             );
           }),
         ),
-        SizedBox(
-          height: 20,
-        ),
+        SizedBox(height: 20),
         GestureDetector(
           onTap: () {
             Get.back();
           },
-          child: Text(
-            "Back to Login",
-            style: AppFonts.medium(12, AppColors.backgroundPurple),
-          ),
+          child: Text("Back to Login", style: AppFonts.medium(12, AppColors.backgroundPurple)),
         ),
       ],
     );

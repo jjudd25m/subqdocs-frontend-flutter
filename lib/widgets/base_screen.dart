@@ -240,15 +240,17 @@ class BaseScreen extends StatelessWidget {
                                           }
                                           globalController.changeStatus("In-Room");
                                           // If not recording, start the recording
-
+                                          globalController.startAudioWidget();
                                           globalController.recorderService.audioRecorder = AudioRecorder();
 
                                           await globalController.recorderService.startRecording(context);
                                         } else if (globalController.recorderService.recordingStatus.value == 1) {
                                           // If recording, pause it
+                                          globalController.updatePauseResumeAudioWidget();
                                           await globalController.recorderService.pauseRecording();
                                         } else if (globalController.recorderService.recordingStatus.value == 2) {
                                           // If paused, resume the recording
+                                          globalController.updatePauseResumeAudioWidget();
                                           await globalController.recorderService.resumeRecording();
                                         }
                                       },
@@ -293,6 +295,7 @@ class BaseScreen extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () async {
                                         File? audioFile = await globalController.recorderService.stopRecording();
+                                        globalController.stopLiveActivityAudio();
                                         customPrint("audio file url is :- ${audioFile?.absolute}");
                                         if (audioFile != null) {
                                           globalController.submitAudio(audioFile!);
@@ -339,7 +342,11 @@ class BaseScreen extends StatelessWidget {
                                           },
                                           child: Container(
                                             height: 50,
-                                            decoration: BoxDecoration(border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2), color: AppColors.white, borderRadius: BorderRadius.circular(8)),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 2),
+                                              color: AppColors.white,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
@@ -389,7 +396,11 @@ class BaseScreen extends StatelessWidget {
                                                     child: Padding(
                                                       padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                       child: Row(
-                                                        children: [Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack))],
+                                                        children: [
+                                                          Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey),
+                                                          SizedBox(width: 10),
+                                                          Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack)),
+                                                        ],
                                                       ),
                                                     ),
                                                   ),
@@ -456,7 +467,11 @@ class BaseScreen extends StatelessWidget {
                                                         Padding(
                                                           padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                                           child: Row(
-                                                            children: [Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))],
+                                                            children: [
+                                                              Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey),
+                                                              SizedBox(width: 10),
+                                                              Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack)),
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
@@ -494,7 +509,12 @@ class BaseScreen extends StatelessWidget {
                                       children: [
                                         SizedBox(
                                           width: MediaQuery.of(context).size.width * 0.10,
-                                          child: Text(maxLines: 2, textAlign: TextAlign.left, "${globalController.patientFirstName} ${globalController.patientLsatName}", style: AppFonts.regular(14, AppColors.textWhite)),
+                                          child: Text(
+                                            maxLines: 2,
+                                            textAlign: TextAlign.left,
+                                            "${globalController.patientFirstName} ${globalController.patientLsatName}",
+                                            style: AppFonts.regular(14, AppColors.textWhite),
+                                          ),
                                         ),
                                         SizedBox(height: 0),
                                         Obx(() {
@@ -512,14 +532,17 @@ class BaseScreen extends StatelessWidget {
                                             onPlayCallBack?.call();
                                           }
                                           globalController.changeStatus("In-Room");
+                                          globalController.startAudioWidget();
                                           globalController.recorderService.audioRecorder = AudioRecorder();
 
                                           await globalController.recorderService.startRecording(context);
                                         } else if (globalController.recorderService.recordingStatus.value == 1) {
                                           // If recording, pause it
+                                          globalController.updatePauseResumeAudioWidget();
                                           await globalController.recorderService.pauseRecording();
                                         } else if (globalController.recorderService.recordingStatus.value == 2) {
                                           // If paused, resume the recording
+                                          globalController.updatePauseResumeAudioWidget();
                                           await globalController.recorderService.resumeRecording();
                                         }
                                         // await controller.recorderService.startRecording(context);
@@ -555,7 +578,7 @@ class BaseScreen extends StatelessWidget {
                                       onTap: () async {
                                         File? audioFile = await globalController.recorderService.stopRecording();
                                         customPrint("audio file url is :- ${audioFile?.absolute}");
-
+                                        globalController.stopLiveActivityAudio();
                                         if (audioFile != null) {
                                           globalController.submitAudio(audioFile!);
                                         }

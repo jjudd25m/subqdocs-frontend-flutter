@@ -20,12 +20,7 @@ class SignUpSetPasswordController extends GetxController {
 
   final SignupRepository _signupRepository = SignupRepository();
 
-  var passwordValidation = {
-    'length': false,
-    'number': false,
-    'letter': false,
-    'special': false,
-  }.obs;
+  var passwordValidation = {'length': false, 'number': false, 'letter': false, 'special': false}.obs;
 
   String firstName = '';
   String lastName = '';
@@ -92,16 +87,7 @@ class SignUpSetPasswordController extends GetxController {
       print("response is :- ${signUpModel.toJson()}");
       isLoading.value = false;
       if (signUpModel.responseType == "success") {
-        Get.toNamed(
-          Routes.SIGN_UP_SET_ORGANIZATION_INFO,
-          arguments: {
-            'signupdata': signUpModel
-            // 'first_name': firstName,
-            // 'last_name': lastName,
-            // 'email': email,
-            // 'password': passwordController.text,
-          },
-        );
+        Get.toNamed(Routes.SIGN_UP_SET_ORGANIZATION_INFO, arguments: {'signupdata': signUpModel});
       } else {
         isLoading.value = false;
         Get.back();

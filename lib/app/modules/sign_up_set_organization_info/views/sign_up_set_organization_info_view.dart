@@ -39,118 +39,64 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(
-                height: isSmallScreen ? 130 : 300,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: isPortrait ? 0 : -80,
-                      child: Image.asset(
-                        ImagePath.loginHeader,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: isSmallScreen ? 130 : 300, child: Stack(children: [Positioned(left: 0, right: 0, top: isPortrait ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: isPortrait ? null : 30),
+                  Text("Lets Get Started", style: AppFonts.medium(24, AppColors.backgroundPurple)),
+                  SizedBox(height: 24),
+                  Text("Set up your subQdocs profile", style: AppFonts.medium(20, AppColors.textBlack)),
+                  SizedBox(height: 20),
+                  Text("Provide details about your organization and we’ll customize your subQdocs just for you!", style: AppFonts.regular(14, AppColors.textDarkGrey)),
+                  SizedBox(height: 24),
                   SizedBox(
-                    height: isPortrait ? null : 30,
-                  ),
-                  Text(
-                    "Lets Get Started",
-                    style: AppFonts.medium(24, AppColors.backgroundPurple),
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  Text(
-                    "Set up your subQdocs profile",
-                    style: AppFonts.medium(20, AppColors.textBlack),
+                    width: isSmallScreen ? Get.width - 30 : 416,
+                    child: TextFormFiledWidget(
+                      isSuffixIconVisible: false,
+                      isFirst: true,
+                      label: "Organization name",
+                      // format: [NoSpaceLowercaseTextFormatter()],
+                      controller: controller.organizationNameController,
+                      hint: "",
+                      onTap: () {
+                        controller.organizationNameController.clear();
+                      },
+                      suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                      checkValidation: (value) {
+                        return Validation.requiredFiled(value);
+                      },
+                    ),
                   ),
                   SizedBox(height: 20),
-                  Text(
-                    "Provide details about your organization and we’ll customize your subQdocs just for you!",
-                    style: AppFonts.regular(14, AppColors.textDarkGrey),
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
-                        isSuffixIconVisible: false,
-                        isFirst: true,
-                        label: "Organization name",
-                        // format: [NoSpaceLowercaseTextFormatter()],
-                        controller: controller.organizationNameController,
-                        hint: "",
-                        onTap: () {
-                          controller.organizationNameController.clear();
-                        },
-                        suffixIcon: Icon(
-                          Icons.highlight_remove,
-                          color: AppColors.textDarkGrey,
-                          size: 25,
-                        ),
-                        checkValidation: (value) {
-                          return Validation.requiredFiled(value);
-                        }),
+                      isSuffixIconVisible: false,
+                      isFirst: true,
+                      type: TextInputType.number,
+                      format: [FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$'))],
+                      label: "How many providers are in your practice?",
+                      // format: [NoSpaceLowercaseTextFormatter()],
+                      controller: controller.noOfProviderController,
+                      hint: "Type here",
+                      onTap: () {
+                        controller.noOfProviderController.clear();
+                      },
+                      suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                      checkValidation: (value) {
+                        return Validation.requiredFiled(value);
+                      },
+                    ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
-                    child: TextFormFiledWidget(
-                        isSuffixIconVisible: false,
-                        isFirst: true,
-                        type: TextInputType.number,
-                        format: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
-                        ],
-                        label: "How many providers are in your practice?",
-                        // format: [NoSpaceLowercaseTextFormatter()],
-                        controller: controller.noOfProviderController,
-                        hint: "Type here",
-                        onTap: () {
-                          controller.noOfProviderController.clear();
-                        },
-                        suffixIcon: Icon(
-                          Icons.highlight_remove,
-                          color: AppColors.textDarkGrey,
-                          size: 25,
-                        ),
-                        checkValidation: (value) {
-                          return Validation.requiredFiled(value);
-                        }),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 20),
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "What is your role within the organization?",
-                              style: AppFonts.regular(14, AppColors.textBlack),
-                            ),
-                            // Text(
-                            //   "*",
-                            //   style: AppFonts.regular(14, AppColors.redText),
-                            // ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
+                        Row(children: [Text("What is your role within the organization?", style: AppFonts.regular(14, AppColors.textBlack))]),
+                        SizedBox(height: 8),
                         Obx(() {
                           return BaseDropdown<String>(
                             valueAsString: (value) => value ?? "",
@@ -161,13 +107,11 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                             },
                             selectText: controller.selectedRoleValue.value,
                           );
-                        })
+                        }),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 20),
                   SizedBox(
                     width: isSmallScreen ? Get.width - 30 : 416,
                     child: CustomAnimatedButton(
@@ -176,9 +120,6 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                           print("org name:- ${controller.organizationNameController.text}");
                           print("provider:- ${controller.noOfProviderController.text}");
                           print("org type:- ${controller.selectedRoleValue.value}");
-
-
-
                           controller.organizationUpdate();
                         }
                       },
@@ -188,11 +129,9 @@ class SignUpSetOrganizationInfoView extends GetView<SignUpSetOrganizationInfoCon
                       enabledColor: AppColors.backgroundPurple,
                     ),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 30),
                 ],
-              )
+              ),
             ],
           ),
         ),

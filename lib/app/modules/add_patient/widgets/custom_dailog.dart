@@ -7,33 +7,23 @@ import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
 
-import '../../../../widgets/custom_toastification.dart';
-
 class CustomDialogAttachment extends GetView<AddPatientController> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 16,
       child: Container(
         constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .50),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: ListView(
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           children: [
             Container(
               width: 360,
-              decoration: BoxDecoration(
-                color: AppColors.backgroundPurple,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-              ),
+              decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
               // color: AppColors.backgroundPurple,
               child: Padding(
                 padding: const EdgeInsets.all(0),
@@ -41,28 +31,15 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      child: Text(
-                        "Add Attachments",
-                        style: AppFonts.medium(14, Colors.white),
-                      ),
-                    ),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Add Attachments", style: AppFonts.medium(14, Colors.white))),
                     Spacer(),
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                         // controller.list.clear();
                       },
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        color: AppColors.clear,
-                        child: SvgPicture.asset(
-                          "assets/images/cross_white.svg",
-                          width: 15,
-                        ),
-                      ),
-                    )
+                      child: Container(padding: EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
+                    ),
                   ],
                 ),
               ),
@@ -80,46 +57,26 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                         color: Colors.white,
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 20,
-                            ),
+                            SizedBox(height: 20),
                             SvgPicture.asset("assets/images/upload_image.svg"),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                              child: Text(
-                                "Upload and manage Photos",
-                                style: AppFonts.medium(14, AppColors.black),
-                              ),
-                            ),
+                            Padding(padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10), child: Text("Upload and manage Photos", style: AppFonts.medium(14, AppColors.black))),
                             Padding(
                               padding: const EdgeInsets.only(left: 80, right: 80),
                               child: CustomButton(
-                                  navigate: () async {
-                                    await controller.pickFiles();
-                                  },
-                                  label: "Choose Files"),
+                                navigate: () async {
+                                  await controller.pickFiles();
+                                },
+                                label: "Choose Files",
+                              ),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            SizedBox(height: 20),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Supported Formats: JPG, PNG, WEBP, MP3, WAV,MP4, DOC, PDF",
-                      textAlign: TextAlign.start,
-                      style: AppFonts.medium(
-                        10,
-                        AppColors.textDarkGrey,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
+                    SizedBox(height: 5),
+                    Text("Supported Formats: JPG, PNG, WEBP, MP3, WAV,MP4, DOC, PDF", textAlign: TextAlign.start, style: AppFonts.medium(10, AppColors.textDarkGrey)),
+                    SizedBox(height: 12),
                     CustomButton(
                       navigate: () async {
                         await controller.captureImage();
@@ -129,9 +86,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                       isTrue: false,
                       textColor: AppColors.backgroundPurple,
                     ),
-                    SizedBox(
-                      height: 12,
-                    ),
+                    SizedBox(height: 12),
                     Obx(() {
                       return ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
@@ -155,31 +110,21 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                                 child: Row(
                                   children: [
                                     SvgPicture.asset("assets/images/placeholde_image.svg"),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
+                                    SizedBox(width: 8),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(controller.list.value[index].fileName ?? ""),
                                         Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
-                                        if (controller.list.value[index].isGraterThan10 ?? false)
-                                          Text(
-                                            "File Size must not exceed 10 MB",
-                                            style: AppFonts.medium(15, Colors.red),
-                                          )
+                                        if (controller.list.value[index].isGraterThan10 ?? false) Text("File Size must not exceed 10 MB", style: AppFonts.medium(15, Colors.red)),
                                       ],
                                     ),
                                     Spacer(),
                                     GestureDetector(
                                       onTap: () {
                                         controller.removeItem(index);
-                                        // controller.calculateTotalFileSize();
                                       },
-                                      child: SvgPicture.asset(
-                                        "assets/images/logo_cross.svg",
-                                        width: 18,
-                                      ),
+                                      child: SvgPicture.asset("assets/images/logo_cross.svg", width: 18),
                                     ),
                                   ],
                                 ),
@@ -190,17 +135,13 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                         itemCount: controller.list.value.length,
                       );
                     }),
-                    SizedBox(
-                      height: 12,
-                    ),
+                    SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
                           child: CustomButton(
                             navigate: () {
                               Navigator.pop(context);
-                              // controller.list.clear();
-                              // controller.calculateTotalFileSize();
                             },
                             label: "Cancel",
                             backGround: Colors.white,
@@ -208,24 +149,21 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                             textColor: AppColors.backgroundPurple,
                           ),
                         ),
-                        SizedBox(
-                          width: 12,
-                        ),
+                        SizedBox(width: 12),
                         Expanded(
                           child: CustomButton(
                             navigate: () {
                               controller.addImage();
-
                             },
                             label: "Add",
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -81,29 +81,6 @@ class HomeView extends GetView<HomeController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 15, right: 15),
-                  //   child: Container(
-                  //     width: double.infinity,
-                  //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(14),
-                  //       child: Text(
-                  //         "Scheduling view",
-                  //         style: AppFonts.regular(17, AppColors.textBlack),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 16,
-                  // ),
-                  // SizedBox(
-                  //   width: 20,
-                  // ),
                   Obx(() {
                     return Expanded(
                       child: Padding(
@@ -118,7 +95,6 @@ class HomeView extends GetView<HomeController> {
                                 breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                 onBack: (breadcrumb) {
                                   controller.globalController.popUntilRoute(breadcrumb);
-                                  // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
                                   while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
                                     Get.back(); // Pop the current screen
@@ -237,22 +213,6 @@ class HomeView extends GetView<HomeController> {
                                                         controller.getScheduleVisitList();
                                                         print("value");
                                                       });
-
-                                                      // showMaterialModalBottomSheet(
-                                                      //   context: context,
-                                                      //   builder: (context) {
-                                                      //     return ScheduleListFilterBottomSheet(
-                                                      //       onTap: () {
-                                                      //         controller.getScheduleVisitList();
-                                                      //       },
-                                                      //     );
-                                                      //   },
-                                                      // ).then(
-                                                      //   (value) {
-                                                      //     controller.getScheduleVisitList();
-                                                      //     print("value");
-                                                      //   },
-                                                      // );
                                                     } else if (controller.globalController.tabIndex.value == 2) {
                                                       aweSideSheet(
                                                         header: SizedBox(),
@@ -273,22 +233,6 @@ class HomeView extends GetView<HomeController> {
                                                         controller.getPastVisitList(isFist: true);
                                                         print("value");
                                                       });
-
-                                                      // showMaterialModalBottomSheet(
-                                                      //   context: context,
-                                                      //   builder: (context) {
-                                                      //     return PastPatientListFilterBottomSheet(
-                                                      //       onTap: () {
-                                                      //         controller.getPastVisitList(isFist: true);
-                                                      //       },
-                                                      //     );
-                                                      //   },
-                                                      // ).then(
-                                                      //   (value) {
-                                                      //     controller.getPastVisitList(isFist: true);
-                                                      //     print("value");
-                                                      //   },
-                                                      // );
                                                     }
                                                   },
                                                   child: Container(
@@ -300,7 +244,6 @@ class HomeView extends GetView<HomeController> {
                                                         color: AppColors.textDarkGrey, // Border color
                                                         width: 0.5,
                                                       ),
-
                                                       borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                                     ),
                                                     child: Padding(padding: const EdgeInsets.all(10), child: SvgPicture.asset("assets/images/filter_logo.svg", width: 40, height: 40)),

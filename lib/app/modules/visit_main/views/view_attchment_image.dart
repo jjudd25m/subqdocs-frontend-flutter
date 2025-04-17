@@ -31,54 +31,23 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
     super.initState();
 
     customPrint("_ViewAttchmentImageState called");
-
-    // #docregion webview_controller
-    // widget.controller = WebViewController()
-    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    //   ..setNavigationDelegate(
-    //     NavigationDelegate(
-    //       onProgress: (int progress) {
-    //         // Update loading bar.
-    //       },
-    //       onPageStarted: (String url) {},
-    //       onPageFinished: (String url) {},
-    //       onHttpError: (HttpResponseError error) {},
-    //       onWebResourceError: (WebResourceError error) {},
-    //       onNavigationRequest: (NavigationRequest request) {
-    //         // if (request.url.startsWith('https://www.youtube.com/')) {
-    //         //   return NavigationDecision.prevent;
-    //         // }
-    //         return NavigationDecision.navigate;
-    //       },
-    //     ),
-    //   )
-    //   ..loadRequest(Uri.parse('https://flutter.dev'));
-    // widget.controller.loadRequest(Uri.https(widget.attchmentUrl));
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 16,
       child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               height: 50,
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.backgroundPurple,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-              ),
+              decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(
@@ -96,31 +65,20 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                        child: SvgPicture.asset(
-                          ImagePath.logo_cross,
-                          width: 25,
-                          height: 25,
-                          colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn),
-                        ),
+                        child: SvgPicture.asset(ImagePath.logo_cross, width: 25, height: 25, colorFilter: ColorFilter.mode(AppColors.backgroundWhite, BlendMode.srcIn)),
                       ),
                     ),
-                    SizedBox(width: 10)
+                    SizedBox(width: 10),
                   ],
                 ),
               ),
             ),
             Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: widget.imageUrl.isNotEmpty
-                    ? ClipRect(
-                        child: PhotoView(
-                        gaplessPlayback: true,
-                        imageProvider: NetworkImage(widget.imageUrl),
-                      ))
-                    : SizedBox(width: 10))
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: widget.imageUrl.isNotEmpty ? ClipRect(child: PhotoView(gaplessPlayback: true, imageProvider: NetworkImage(widget.imageUrl))) : SizedBox(width: 10),
+            ),
             // WebViewWidget(controller: widget.controller))
-            ,
             Container(
               width: double.infinity,
               color: AppColors.white,
@@ -135,18 +93,12 @@ class _ViewAttchmentImageState extends State<ViewAttchmentImage> {
                       style: AppFonts.medium(14, AppColors.textGrey),
                     ),
                     Spacer(),
-                    SvgPicture.asset(
-                      ImagePath.edit_outline,
-                      width: 40,
-                      height: 40,
-                    )
+                    SvgPicture.asset(ImagePath.edit_outline, width: 40, height: 40),
                   ],
                 ),
               ),
             ),
-            SizedBox(
-              height: 8,
-            )
+            SizedBox(height: 8),
           ],
         ),
       ),

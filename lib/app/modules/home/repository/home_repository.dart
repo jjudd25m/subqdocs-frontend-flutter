@@ -13,20 +13,16 @@ import '../model/schedule_visit_list_model.dart';
 class HomeRepository {
   Future<PatientListModel> getPatient({required Map<String, dynamic> param}) async {
     var response = await ApiProvider.instance.callGet("patient/getAllPatients", queryParameters: param);
-    // print("getPatient:- ${response}");
-    // customPrint("getPatient API  internal response $response");
     return PatientListModel.fromJson(response);
   }
 
   Future<DeletePatientModel> deletePatientById({required int id}) async {
     var response = await ApiProvider.instance.callDelete(url: "patient/delete/${id}", data: {});
-    // customPrint("getPatient API  internal response $response");
     return DeletePatientModel.fromJson(response);
   }
 
   Future<ScheduleVisitListModel> getScheduleVisit({required Map<String, dynamic> param}) async {
     var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
-    // customPrint("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
   }
 
@@ -37,8 +33,6 @@ class HomeRepository {
   }
 
   Future<ScheduleVisitListModel> getPastVisit({required Map<String, dynamic> param}) async {
-    // customPrint(param);
-
     var response = await ApiProvider.instance.callGet("patient/getScheduledAndPastPatient", queryParameters: param);
     customPrint("getScheduleVisit API  internal response $response");
     return ScheduleVisitListModel.fromJson(response);
@@ -46,13 +40,11 @@ class HomeRepository {
 
   Future<Map<String, dynamic>> getOfflineData() async {
     var response = await ApiProvider.instance.callGet("patient-visit-offline", queryParameters: {});
-    // customPrint("offLineData is  $response");
     return response;
   }
 
   Future<StatusResponseModel> getStatus() async {
     var response = await ApiProvider.instance.callGet("patient/visit/status");
-    // customPrint("getScheduleVisit API  internal response $response");
     return StatusResponseModel.fromJson(response);
   }
 
@@ -63,7 +55,6 @@ class HomeRepository {
 
   Future<dynamic> patientReScheduleVisit({required Map<String, dynamic> param, required String visitId}) async {
     var response = await ApiProvider.instance.callPut("patient-visit/update/$visitId", param);
-    // customPrint("patientReScheduleVisit ${response}");
     return response;
   }
 

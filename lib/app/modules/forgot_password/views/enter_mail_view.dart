@@ -11,7 +11,6 @@ import '../../../../utils/app_string.dart';
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
-import '../../../../widget/custom_textfiled.dart';
 import '../../../../widgets/custom_textfiled.dart';
 
 class EnterMailView extends GetView<ForgotPasswordController> {
@@ -26,16 +25,9 @@ class EnterMailView extends GetView<ForgotPasswordController> {
     bool isSmallScreen = isWidthLessThan428(context);
     return Column(
       children: [
-        SizedBox(
-          height: 24,
-        ),
-        Text(
-          "Forgot Password",
-          style: AppFonts.medium(18, AppColors.textBlack),
-        ),
-        SizedBox(
-          height: 16,
-        ),
+        SizedBox(height: 24),
+        Text("Forgot Password", style: AppFonts.medium(18, AppColors.textBlack)),
+        SizedBox(height: 16),
         Container(
           width: isSmallScreen ? 350 : 450,
           child: Text(
@@ -44,44 +36,35 @@ class EnterMailView extends GetView<ForgotPasswordController> {
             textAlign: TextAlign.center,
           ),
         ),
-        SizedBox(
-          height: 24,
-        ),
+        SizedBox(height: 24),
         Container(
           color: AppColors.white,
           width: isSmallScreen ? Get.width - 30 : 416,
           child: TextFormFiledWidget(
-              isSuffixIconVisible: false,
-              isFirst: true,
-              label: AppString.emailAddress,
-              format: [NoSpaceLowercaseTextFormatter()],
-              controller: controller.emailController,
-              hint: AppString.emailPlaceHolder,
-              onTap: () {
-                controller.emailController.clear();
-              },
-              suffixIcon: Icon(
-                Icons.highlight_remove,
-                color: AppColors.textDarkGrey,
-                size: 25,
-              ),
-              checkValidation: (value) {
-                return Validation.emailValidate(value);
-              }),
+            isSuffixIconVisible: false,
+            isFirst: true,
+            label: AppString.emailAddress,
+            format: [NoSpaceLowercaseTextFormatter()],
+            controller: controller.emailController,
+            hint: AppString.emailPlaceHolder,
+            onTap: () {
+              controller.emailController.clear();
+            },
+            suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+            checkValidation: (value) {
+              return Validation.emailValidate(value);
+            },
+          ),
         ),
-        SizedBox(
-          height: 30,
-        ),
+        SizedBox(height: 30),
         Obx(() {
           return Container(
             width: isSmallScreen ? Get.width - 30 : 416,
             child: CustomAnimatedButton(
               onPressed: () {
                 if (controller.formKey.currentState!.validate()) {
-                  // controller.addPatient();
                   controller.sendOtp();
                 }
-                // controller.authLoginUser();
               },
               height: 45,
               text: "Send Verification Code",
@@ -91,17 +74,12 @@ class EnterMailView extends GetView<ForgotPasswordController> {
             ),
           );
         }),
-        SizedBox(
-          height: 30,
-        ),
+        SizedBox(height: 30),
         GestureDetector(
           onTap: () {
             Get.back();
           },
-          child: Text(
-            "Back to Login",
-            style: AppFonts.medium(14, AppColors.backgroundPurple),
-          ),
+          child: Text("Back to Login", style: AppFonts.medium(14, AppColors.backgroundPurple)),
         ),
       ],
     );

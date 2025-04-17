@@ -36,8 +36,6 @@ class PatientProfileController extends GetxController {
     print("PatientProfileController init called");
     patientId = Get.arguments["patientData"];
     visitId = Get.arguments["visitId"];
-
-    // print("our patient data is $patientId visitId is $visitId");
   }
 
   @override
@@ -53,14 +51,13 @@ class PatientProfileController extends GetxController {
     if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PATIENT_PROFILE) {
       globalController.popRoute();
     }
-    // globalController.popRoute();
   }
 
   Future<void> onRefresh() async {
     print("_onRefresh called");
   }
 
-  Future<void> changeStatus(String status) async {
+  Future<void> changeStatus(String status, String strVisitId) async {
     try {
       Loader().showLoadingDialogForSimpleLoader();
 
@@ -68,14 +65,16 @@ class PatientProfileController extends GetxController {
 
       param['status'] = status;
 
-      ChangeStatusModel changeStatusModel = await _editPatientDetailsRepository.changeStatus(id: visitId, params: param);
+      ChangeStatusModel changeStatusModel = await _editPatientDetailsRepository.changeStatus(id: strVisitId, params: param);
+      Loader().stopLoader();
       if (changeStatusModel.responseType == "success") {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
-        getPatient(patientId, visitId);
+        getPatient(patientId, strVisitId);
       } else {
         CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
       }
     } catch (e) {
+      Loader().stopLoader();
       CustomToastification().showToast("$e", type: ToastificationType.error);
     }
   }
@@ -92,8 +91,6 @@ class PatientProfileController extends GetxController {
     try {
       PatientDetailModel localPatientDetailModel = await _editPatientDetailsRepository.getPatientDetails(id: id);
       patientDetailModel.value = localPatientDetailModel;
-
-      // patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: id);
 
       print("patientDetailModel-----:- ${patientDetailModel.value?.toJson()}");
 

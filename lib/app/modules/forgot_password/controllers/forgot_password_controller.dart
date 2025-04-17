@@ -7,11 +7,9 @@ import 'package:subqdocs/app/modules/forgot_password/models/valid_otp_model.dart
 import 'package:subqdocs/app/modules/forgot_password/repository/forgot_password_repository.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
-
 import '../views/enter_mail_view.dart';
 import '../views/enter_otp_view.dart';
 import '../views/enter_password_view.dart';
-import '../views/forgot_password_view.dart';
 import '../views/password_changed_screen.dart';
 
 class ForgotPasswordController extends GetxController {
@@ -38,11 +36,7 @@ class ForgotPasswordController extends GetxController {
   RxString currentScreen = RxString("deafault");
 
   // Map that associates the value to a corresponding screen (widget)
-  Map<String, Widget> screenMap = {
-    "otp_Screen": EnterOtpView(),
-    "enter_password": EnterPasswordView(),
-    "password_changed_screen": PasswordChangedScreen(),
-  };
+  Map<String, Widget> screenMap = {"otp_Screen": EnterOtpView(), "enter_password": EnterPasswordView(), "password_changed_screen": PasswordChangedScreen()};
 
   @override
   void onInit() {
@@ -178,8 +172,6 @@ class ForgotPasswordController extends GetxController {
         print("response is ${sendOtpModel.toJson()} ");
         timeRemaining.value = 900;
         startTimer();
-        // currentScreen.value = optScreen;
-        // currentScreen.refresh();
         CustomToastification().showToast(sendOtpModel.message ?? "", type: ToastificationType.success);
       } else {
         isLoading.value = false;

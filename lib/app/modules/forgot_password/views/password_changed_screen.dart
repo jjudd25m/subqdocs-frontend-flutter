@@ -6,12 +6,8 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:subqdocs/app/modules/forgot_password/controllers/forgot_password_controller.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
-
-import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
-import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
-import '../../../../widget/custom_textfiled.dart';
 
 class PasswordChangedScreen extends GetView<ForgotPasswordController> {
   bool isWidthLessThan428(BuildContext context) {
@@ -25,20 +21,11 @@ class PasswordChangedScreen extends GetView<ForgotPasswordController> {
     bool isSmallScreen = isWidthLessThan428(context);
     return Column(
       children: [
-        SizedBox(
-          height: 29,
-        ),
+        SizedBox(height: 29),
         SvgPicture.asset(ImagePath.rightCheck),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          "Password Changed",
-          style: AppFonts.medium(18, AppColors.textBlack),
-        ),
-        SizedBox(
-          height: 16,
-        ),
+        SizedBox(height: 20),
+        Text("Password Changed", style: AppFonts.medium(18, AppColors.textBlack)),
+        SizedBox(height: 16),
         SizedBox(
           width: isSmallScreen ? 300 : 400,
           child: Text(
@@ -47,9 +34,7 @@ class PasswordChangedScreen extends GetView<ForgotPasswordController> {
             textAlign: TextAlign.center,
           ),
         ),
-        SizedBox(
-          height: 30,
-        ),
+        SizedBox(height: 30),
         Obx(() {
           return SizedBox(
             width: isSmallScreen ? Get.width - 30 : 416,

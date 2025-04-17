@@ -17,76 +17,33 @@ class VisitMainAttachmentFilter extends StatelessWidget {
 
   final VoidCallback onTap;
 
-  // RxList<DateTime>? selectedDate = RxList([DateTime.now()]);
-  // RxList<String> selectedStatusIndex = RxList();
-  // RxList<int> selectedDoctorId = RxList();
-  //
-  // RxBool isExpandedDoctor = RxBool(false);
-  // RxBool isExpandedMedicalAssistant = RxBool(false);
-
-  // PageController pageController = PageController();
-
   VisitMainAttachmentFilter({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    // print("arr count:- ${controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? []}");
-    // selectedDate?.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue ?? RxList([DateTime.now()]);
     controller.pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), controller.selectedDate?.firstOrNull ?? DateTime.now()));
-    // selectedStatusIndex.value = controller.globalController.homePastPatientListSortingModel.value?.selectedStatusIndex ?? [];
-    // selectedDoctorId.value = controller.globalController.homePastPatientListSortingModel.value?.selectedDoctorId ?? [];
     return SizedBox(
       width: double.infinity, // Ensures full width
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-          color: AppColors.backgroundWhite,
-        ),
+        decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), color: AppColors.backgroundWhite),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Dimen.margin0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              // Container(
-              //   width: 80,
-              //   height: 5,
-              //   margin: const EdgeInsets.only(top: 15),
-              //   decoration: BoxDecoration(
-              //     color: AppColors.textDarkGrey.withOpacity(0.4),
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              // ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Dimen.margin20),
                 child: Row(
                   children: [
-                    Text(
-                      "Filter",
-                      style: AppFonts.medium(16, AppColors.textBlack),
-                    ),
+                    Text("Filter", style: AppFonts.medium(16, AppColors.textBlack)),
                     Spacer(),
                     GestureDetector(
                       onTap: () {
                         controller.clearFilter();
-                        // onTap();
-
-                        // selectedStatusIndex.clear();
-                        // selectedDoctorId.clear();
-                        // controller.globalController.homePastPatientListSortingModel.value?.selectedDateValue?.clear();
-                        // controller.globalController.homePastPatientListSortingModel.value?.startDate = "";
-                        // controller.globalController.homePastPatientListSortingModel.value?.endDate = "";
-                        // controller.globalController.saveHomePastPatientData();
-                        // controller.pastTriggeredIndexes.clear();
-
-                        // Get.back();
-                        // onTap();
                       },
-                      child: Text(
-                        "Clear",
-                        style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline),
-                      ),
+                      child: Text("Clear", style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline)),
                     ),
                   ],
                 ),
@@ -99,66 +56,62 @@ class VisitMainAttachmentFilter extends StatelessWidget {
                     children: [
                       const SizedBox(height: 20),
                       SizedBox(height: 30),
-                      GestureDetector(onTap: () {
-                        controller.isSelectedAttchmentOption.value = 0;
-                        controller.isDocument.value = true;
-                        controller.isImage.value = false;
-                        controller.isDateFilter.value = false;
-                        controller.getPatientAttachment();
-                        // onTap();
-                        Get.back();
-                      }, child: Obx(() {
-                        return Row(
-                          children: [
-                            const SizedBox(width: 5),
-                            SvgPicture.asset(
-                              ImagePath.document_attchment,
-                              width: 30,
-                              height: 30,
-                              colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
-                            ),
-                            const SizedBox(width: 8),
-                            Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                            const SizedBox(width: 5),
-                            if (controller.isSelectedAttchmentOption.value == 0) ...[
+                      GestureDetector(
+                        onTap: () {
+                          controller.isSelectedAttchmentOption.value = 0;
+                          controller.isDocument.value = true;
+                          controller.isImage.value = false;
+                          controller.isDateFilter.value = false;
+                          controller.getPatientAttachment();
+                          // onTap();
+                          Get.back();
+                        },
+                        child: Obx(() {
+                          return Row(
+                            children: [
+                              const SizedBox(width: 5),
                               SvgPicture.asset(
-                                ImagePath.attchment_check,
-                                width: 16,
-                                height: 16,
-                              )
-                            ]
-                          ],
-                        );
-                      })),
-                      GestureDetector(onTap: () {
-                        controller.isSelectedAttchmentOption.value = 1;
-                        controller.isDocument.value = false;
-                        controller.isDateFilter.value = false;
-                        controller.isImage.value = true;
-                        controller.getPatientAttachment();
-                        // onTap();
-                        Get.back();
-                      }, child: Obx(() {
-                        return Row(
-                          children: [
-                            const SizedBox(width: 5),
-                            SvgPicture.asset(ImagePath.image_attchment,
+                                ImagePath.document_attchment,
                                 width: 30,
                                 height: 30,
-                                colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn)),
-                            const SizedBox(width: 8),
-                            Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
-                            const SizedBox(width: 5),
-                            if (controller.isSelectedAttchmentOption.value == 1) ...[
+                                colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                              ),
+                              const SizedBox(width: 8),
+                              Text("Document", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 0 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                              const SizedBox(width: 5),
+                              if (controller.isSelectedAttchmentOption.value == 0) ...[SvgPicture.asset(ImagePath.attchment_check, width: 16, height: 16)],
+                            ],
+                          );
+                        }),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          controller.isSelectedAttchmentOption.value = 1;
+                          controller.isDocument.value = false;
+                          controller.isDateFilter.value = false;
+                          controller.isImage.value = true;
+                          controller.getPatientAttachment();
+                          // onTap();
+                          Get.back();
+                        },
+                        child: Obx(() {
+                          return Row(
+                            children: [
+                              const SizedBox(width: 5),
                               SvgPicture.asset(
-                                ImagePath.attchment_check,
-                                width: 16,
-                                height: 16,
-                              )
-                            ]
-                          ],
-                        );
-                      })),
+                                ImagePath.image_attchment,
+                                width: 30,
+                                height: 30,
+                                colorFilter: ColorFilter.mode(controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textDarkGrey, BlendMode.srcIn),
+                              ),
+                              const SizedBox(width: 8),
+                              Text("Image", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 1 ? AppColors.backgroundPurple : AppColors.textBlack)),
+                              const SizedBox(width: 5),
+                              if (controller.isSelectedAttchmentOption.value == 1) ...[SvgPicture.asset(ImagePath.attchment_check, width: 16, height: 16)],
+                            ],
+                          );
+                        }),
+                      ),
                       GestureDetector(
                         onTap: () {
                           controller.isSelectedAttchmentOption.value = 2;
@@ -184,31 +137,20 @@ class VisitMainAttachmentFilter extends StatelessWidget {
                                   const SizedBox(width: 8),
                                   Text("Date", style: AppFonts.medium(17, controller.isSelectedAttchmentOption.value == 2 ? AppColors.backgroundPurple : AppColors.textBlack)),
                                   const SizedBox(width: 5),
-                                  if (controller.isSelectedAttchmentOption.value == 2) ...[
-                                    SvgPicture.asset(
-                                      ImagePath.attchment_check,
-                                      width: 16,
-                                      height: 16,
-                                    )
-                                  ]
+                                  if (controller.isSelectedAttchmentOption.value == 2) ...[SvgPicture.asset(ImagePath.attchment_check, width: 16, height: 16)],
                                 ],
                               ),
-                              // if (controller.isSelectedAttchmentOption.value == 2) ...[
                               SizedBox(height: 20),
                               Obx(() {
                                 return SizedBox(
                                   width: Get.width,
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: Colors.grey.shade300, width: 1),
-                                    ),
+                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.grey.shade300, width: 1)),
                                     child: CalendarDatePicker2(
                                       config: CalendarDatePicker2Config(
                                         dayViewController: controller.pageController,
                                         weekdayLabelTextStyle: AppFonts.regular(14, AppColors.textGrey),
-                                        weekdayLabels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "su"],
+                                        weekdayLabels: ["sun", "Mon", "Tu", "We", "Th", "Fri", "Sat"],
                                         daySplashColor: AppColors.clear,
                                         calendarViewMode: CalendarDatePicker2Mode.day,
                                         selectedDayHighlightColor: AppColors.backgroundPurple,
@@ -220,15 +162,8 @@ class VisitMainAttachmentFilter extends StatelessWidget {
                                         dayTextStyle: AppFonts.regular(14, AppColors.textBlack),
                                         disableMonthPicker: true,
                                         dayBorderRadius: BorderRadius.all(Radius.circular(6)),
-                                        scrollViewTopHeaderTextStyle: const TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        controlsTextStyle: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        scrollViewTopHeaderTextStyle: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                                        controlsTextStyle: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
                                         centerAlignModePicker: true,
                                         customModePickerIcon: const SizedBox(),
                                         calendarViewScrollPhysics: RangeMaintainingScrollPhysics(),
@@ -254,23 +189,22 @@ class VisitMainAttachmentFilter extends StatelessWidget {
                                   controller.isDateFilter.value = true;
                                   controller.isDocument.value = true;
                                   controller.isImage.value = true;
-                                  // onTap();
                                   controller.getPatientAttachment();
                                   Get.back();
                                 },
                                 text: "Apply",
                                 enabledColor: AppColors.backgroundPurple,
                                 height: 45,
-                              )
+                              ),
                               // ]
                             ],
                           );
                         }),
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
