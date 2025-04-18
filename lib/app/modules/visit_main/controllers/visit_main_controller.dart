@@ -457,6 +457,9 @@ class VisitMainController extends GetxController {
   Future<void> onRefresh() async {
     print("_onRefresh called");
 
+    globalController.getDoctorsFilter();
+    globalController.getMedicalAssistance();
+
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
       //it  will check the internet  connection and handel   offline and online mode

@@ -110,7 +110,7 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                                   ),
                                 ),
                                 SizedBox(width: 10),
-                                Text(widget.filteredList[index].name ?? "", style: AppFonts.medium(14, AppColors.black)),
+                                Expanded(child: Text(widget.filteredList[index].name ?? "", style: AppFonts.medium(14, AppColors.black))),
                               ],
                             ),
                           ),
