@@ -7,13 +7,17 @@ class AppColors {
   static const black = Colors.black;
 
   static const Color clear = Colors.transparent;
+
   // Text color
   static const Color textWhite = Color(0xFFFFFFFF);
+  static const Color tableItem = Color(0xFFF3F3F3);
+
   static const Color textBlack = Color(0xFF000000);
   static const Color textBlackDark = Color(0xFF1E212A);
 
   static const Color textDarkGrey = Color(0xFF6C778B);
   static const Color textGrey = Color(0xFF65676E);
+  static const Color textGreyTable = Color(0xFF6C778B);
   static const Color textPurple = Color(0xFF5B5BE1);
   static const Color textOrangle = Color(0xFFFF8000);
   static const Color drawerText = Color(0xFF555A63);

@@ -1,0 +1,2 @@
+/Users/mihirrajpopat/Downloads/subqdocs-frontend-flutter/android/app/.cxx/Debug/2e6g5f4j/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/mihirrajpopat/Downloads/subqdocs-frontend-flutter/android/app/.cxx/Debug/2e6g5f4j/armeabi-v7a/CMakeFiles/rebuild_cache.dir

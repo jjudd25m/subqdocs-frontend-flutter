@@ -38,6 +38,11 @@ class ImagePath {
   static const String plus = 'assets/images/plus.svg';
   static const String trash = 'assets/images/trash.svg';
 
+
+  static const String drag_button = 'assets/images/drag_button.svg';
+  static const String plus_icon_table = 'assets/images/plus_icon_table.svg';
+  static const String delete_table_icon= 'assets/images/delete_table_icon.svg';
+
   static const String delete_popup = 'assets/images/delete_popup.svg';
   static const String finalize_time = 'assets/images/finalize_time.svg';
   static const String signature = 'assets/images/signature.svg';
