@@ -24,6 +24,7 @@ abstract class Routes {
   static const SIGN_UP_SET_ORGANIZATION_INFO =
       _Paths.SIGN_UP_SET_ORGANIZATION_INFO;
   static const SIGN_UP_PROFILE_COMPLETE = _Paths.SIGN_UP_PROFILE_COMPLETE;
+  static const BETA_TESTER_CODE = _Paths.BETA_TESTER_CODE;
 }
 
 abstract class _Paths {
@@ -48,4 +49,5 @@ abstract class _Paths {
   static const SIGN_UP_SET_PASSWORD = '/sign-up-set-password';
   static const SIGN_UP_SET_ORGANIZATION_INFO = '/sign-up-set-organization-info';
   static const SIGN_UP_PROFILE_COMPLETE = '/sign-up-profile-complete';
+  static const BETA_TESTER_CODE = '/beta-tester-code';
 }
