@@ -28,6 +28,7 @@ import '../model/patient_fullnote_model.dart';
 import '../model/patient_view_list_model.dart';
 import '../model/transcript_list_model.dart';
 import '../repository/patient_info_repository.dart';
+import '../views/CustomTableDragDemo.dart';
 import '../views/confirm_finalize_dialog.dart';
 
 class PatientInfoController extends GetxController with WidgetsBindingObserver {
@@ -45,6 +46,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   final count = 0.obs;
   Rxn<TranscriptListModel> transcriptListModel = Rxn();
   Rxn<PatientViewListModel> patientViewListModel = Rxn();
+  Rxn<TableModel> tableModel = Rxn();
+
   Rxn<PatientDoctorVisitDataModel> patientDoctorVisitDataModel = Rxn();
   Rxn<PatientFullNoteModel> patientFullNoteModel = Rxn();
   Rxn<DoctorViewModel> doctorViewList = Rxn();
@@ -1068,8 +1071,33 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
-    getPatientDetails();
+    setDoctorModel();
+    await getPatientDetails();
+
     customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
+  }
+
+  void setDoctorModel() {
+    tableModel.value = TableModel(rows: []);
+    for (DiagnosisCodesProcedures diagnosis in (doctorViewList.value?.responseData?.diagnosisCodesProcedures ?? [])) {
+      List<DiagnosisModel>? diagnosisModelList = [];
+
+      for (Diagnosis diagnosisModel in diagnosis.diagnosis ?? []) {
+        diagnosisModelList.add(DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description));
+      }
+      tableModel.value?.rows.add(
+        TableRowModel(
+          cells: [
+            TableCellModel(items: [SingleCellModel(code: diagnosis.procedure?.code, unit: "0", description: diagnosis.procedure?.description ?? "", unitPrice: "0")]),
+
+            TableCellModel(items: [SingleCellModel(code: diagnosis.diagnosis?.first.code, unit: "0", description: diagnosis.diagnosis?.first.description, unitPrice: "0", diagnosisModelList: diagnosisModelList)]),
+            TableCellModel(items: [SingleCellModel(unit: diagnosis.units)]),
+            TableCellModel(items: [SingleCellModel(unitPrice: diagnosis.unitCharge)]),
+          ],
+        ),
+      );
+      tableModel.refresh();
+    }
   }
 
   void offLine() {

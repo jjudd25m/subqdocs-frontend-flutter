@@ -10,17 +10,31 @@ import 'InlineEditableText.dart';
 import 'drop_drown_search_table.dart';
 
 class NestedDraggableTable extends StatefulWidget {
+  TableModel tableModel;
+
+  NestedDraggableTable({required this.tableModel});
+
   @override
   _NestedDraggableTableState createState() => _NestedDraggableTableState();
 }
 
+class DiagnosisModel {
+  String? description;
+  String? code;
+  String? confidence;
+
+  DiagnosisModel({this.description, this.code, this.confidence});
+}
+
 class SingleCellModel {
   String? description;
-  int? code;
-  int? unit;
-  int? unitPrice;
+  String? code;
+  String? unit;
 
-  SingleCellModel({this.description, this.code, this.unit, this.unitPrice});
+  List<DiagnosisModel>? diagnosisModelList;
+
+  String? unitPrice;
+  SingleCellModel({this.description, this.code, this.unit, this.unitPrice, this.diagnosisModelList});
 }
 
 class TableCellModel {
@@ -41,15 +55,26 @@ class TableModel {
   TableModel({required this.rows});
 
   void addRow() {
-    rows.add(TableRowModel(cells: List.generate(4, (index) => TableCellModel(items: [SingleCellModel(code: 0, unit: 0, description: "select item ", unitPrice: 0)]))));
+    rows.add(
+      TableRowModel(
+        cells: List.generate(
+          4,
+          (index) => TableCellModel(
+            items: [
+              SingleCellModel(code: "0", unit: "0", description: "select item ", unitPrice: "0", diagnosisModelList: [DiagnosisModel(description: "selected item ", code: "", confidence: "high ")]),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void addItemAtIndex(int row, int col, int index) {
-    rows[row].cells[col].items.insert(index + 1, SingleCellModel(code: 0, unit: 0, description: "select item ", unitPrice: 0));
+    rows[row].cells[col].items.insert(index + 1, SingleCellModel(code: "", unit: "0", description: "select item ", unitPrice: "0"));
   }
 
   void addItem(int row, int col) {
-    rows[row].cells[col].items.add(SingleCellModel(code: 0, unit: 0, description: "select item ", unitPrice: 0));
+    rows[row].cells[col].items.add(SingleCellModel(code: "", unit: "0", description: "select item ", unitPrice: "0"));
   }
 
   void deleteItem(int row, int col, int itemIndex) {
@@ -81,48 +106,28 @@ class TableModel {
 }
 
 class _NestedDraggableTableState extends State<NestedDraggableTable> {
-  late TableModel tableModel;
   int? selectedRowIndex;
+
+  _NestedDraggableTableState();
 
   @override
   void initState() {
     super.initState();
-    tableModel = TableModel(
-      rows: [
-        TableRowModel(
-          cells: [
-            TableCellModel(items: [SingleCellModel(code: 40, unit: 0, description: "this the  procedure code ", unitPrice: 0)]),
-            TableCellModel(items: [SingleCellModel(code: 10, unit: 0, description: "this is the daignosis ", unitPrice: 0)]),
-            TableCellModel(items: [SingleCellModel(unit: 10)]),
-            TableCellModel(items: [SingleCellModel(unitPrice: 20)]),
-          ],
-        ),
-        TableRowModel(
-          cells: [
-            TableCellModel(items: [SingleCellModel(code: 40, unit: 0, description: "this the  procedure code ", unitPrice: 0)]),
-            TableCellModel(items: [SingleCellModel(code: 10, unit: 0, description: "this is the daignosis ", unitPrice: 0)]),
-            TableCellModel(items: [SingleCellModel(unit: 10)]),
-            TableCellModel(items: [SingleCellModel(unitPrice: 20)]),
-          ],
-        ),
-      ],
-    );
   }
 
-  void _addItemAtIndex(int row, int col, int index) => setState(() => tableModel.addItemAtIndex(row, col, index));
+  void _addItemAtIndex(int row, int col, int index) => setState(() => widget.tableModel.addItemAtIndex(row, col, index));
 
-  void _addRow() => setState(() => tableModel.addRow());
+  void _addRow() => setState(() => widget.tableModel.addRow());
 
-  void _deleteItem(int row, int col, int index) => setState(() => tableModel.deleteItem(row, col, index));
+  void _deleteItem(int row, int col, int index) => setState(() => widget.tableModel.deleteItem(row, col, index));
 
-  void _swapRows(int from, int to) => setState(() => tableModel.swapRows(from, to));
+  void _swapRows(int from, int to) => setState(() => widget.tableModel.swapRows(from, to));
 
-  void _swapItems(int row, int col, int from, int to) => setState(() => tableModel.swapItems(row, col, from, to));
+  void _swapItems(int row, int col, int from, int to) => setState(() => widget.tableModel.swapItems(row, col, from, to));
 
-  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) =>
-      setState(() => tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
+  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) => setState(() => widget.tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
 
-  void _moveCell(int fromRow, int fromCol, int toRow, int toCol) => setState(() => tableModel.moveCell(fromRow, fromCol, toRow, toCol));
+  void _moveCell(int fromRow, int fromCol, int toRow, int toCol) => setState(() => widget.tableModel.moveCell(fromRow, fromCol, toRow, toCol));
 
   Widget _buildTableHeader() {
     return Table(
@@ -153,10 +158,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
               child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text("100", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))),
-          ),
+          Expanded(flex: 3, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text("100", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)))),
         ],
       ),
     );
@@ -217,7 +219,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          tableModel.rows.removeAt(rowIndex);
+                          widget.tableModel.rows.removeAt(rowIndex);
                           selectedRowIndex = null;
                         });
                       },
@@ -268,18 +270,159 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
   }
 
   Widget _buildCell(int row, int col, {bool isDiagnosis = false}) {
-    final items = tableModel.rows[row].cells[col].items;
+    final items = widget.tableModel.rows[row].cells[col].items;
 
     return LongPressDraggable<Map<String, int>>(
       data: {'row': row, 'col': col, 'isCell': 1},
       feedback: Material(
-        child: Container(
-          width: 100,
-          padding: EdgeInsets.all(8),
-          color: Colors.orangeAccent,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: items.map((e) => Text(e.description ?? "", style: TextStyle(color: Colors.white))).toList()),
+        color: Colors.white,
+        child: IntrinsicHeight(
+          child: IntrinsicWidth(
+            child: Container(
+              constraints: BoxConstraints(minHeight: 100),
+              decoration: BoxDecoration(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(items.length, (i) {
+                  return DragTarget<Map<String, int>>(
+                    onWillAccept: (data) => data != null && data['row'] == row && data['col'] == col && data['itemIndex'] != null && data['itemIndex'] != i,
+                    onAccept: (data) {
+                      final fromIndex = data['itemIndex'];
+                      if (fromIndex != null) {
+                        _swapItems(row, col, fromIndex, i);
+                      }
+                    },
+                    builder: (context, _, __) {
+                      return LongPressDraggable<Map<String, int>>(
+                        data: {'row': row, 'col': col, 'itemIndex': i},
+                        feedback: Material(child: Text(items[i].description ?? "", style: AppFonts.regular(14, AppColors.textGreyTable))),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child:
+                              (col == 2)
+                                  ? InlineEditableText(
+                                    initialText: "${items[i].unit}",
+                                    textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                    onSubmitted: (newText) {
+                                      items[i].description = newText;
+                                    },
+                                  )
+                                  : (col == 3)
+                                  ? InlineEditableText(
+                                    initialText: "${items[i].unitPrice}",
+                                    textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                    onSubmitted: (newText) {
+                                      items[i].description = newText;
+                                    },
+                                  )
+                                  : isDiagnosis
+                                  ? Container(
+                                    decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              showPopover(
+                                                context: context,
+
+                                                barrierColor: Colors.transparent,
+                                                bodyBuilder:
+                                                    (context) => DropDrownSearchTable(
+                                                      items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                      onItemSelected: (value) {
+                                                        Navigator.pop(context);
+                                                        setState(() {
+                                                          // tableModel.rows[row].cells[col].items[index] = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                onPop: () => print('Popover was popped!'),
+                                                direction: PopoverDirection.bottom,
+                                                width: 350,
+                                                barrierDismissible: true,
+                                                arrowHeight: 0,
+                                                arrowWidth: 0,
+                                              );
+                                            },
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                  TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
+                                          child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
+                                        ),
+                                        SizedBox(width: 8),
+                                        GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table)),
+                                        SizedBox(width: 3),
+                                        GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon)),
+                                      ],
+                                    ),
+                                  )
+                                  : col == 0
+                                  ? GestureDetector(
+                                    onTap: () {
+                                      showPopover(
+                                        context: context,
+
+                                        constraints: BoxConstraints(maxWidth: 400),
+                                        barrierColor: Colors.transparent,
+                                        bodyBuilder:
+                                            (context) => DropDrownSearchTable(
+                                              items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                              onItemSelected: (value) {
+                                                Navigator.pop(context);
+                                                setState(() {
+                                                  // tableModel.rows[row].cells[col].items[index] = value;
+                                                });
+                                              },
+                                            ),
+                                        onPop: () => print('Popover was popped!'),
+                                        direction: PopoverDirection.bottom,
+                                        width: 150,
+                                        barrierDismissible: true,
+                                        arrowHeight: 0,
+                                        arrowWidth: 0,
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                            TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  : RichText(
+                                    text: TextSpan(
+                                      children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
+                                    ),
+                                  ),
+                        ),
+                      );
+                    },
+                  );
+                }),
+              ),
+            ),
+          ),
         ),
       ),
+
       child: GestureDetector(
         onTap: () => setState(() => selectedRowIndex = row),
         child: Container(
@@ -302,7 +445,131 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                 builder: (context, _, __) {
                   return LongPressDraggable<Map<String, int>>(
                     data: {'row': row, 'col': col, 'itemIndex': i},
-                    feedback: Material(child: Text(items[i].description ?? "", style: AppFonts.regular(14, AppColors.textGreyTable))),
+                    feedback: Material(
+                      child: IntrinsicHeight(
+                        child: IntrinsicWidth(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child:
+                                (col == 2)
+                                    ? InlineEditableText(
+                                      initialText: "${items[i].unit}",
+                                      textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                      onSubmitted: (newText) {
+                                        items[i].description = newText;
+                                      },
+                                    )
+                                    : (col == 3)
+                                    ? InlineEditableText(
+                                      initialText: "${items[i].unitPrice}",
+                                      textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                      onSubmitted: (newText) {
+                                        items[i].description = newText;
+                                      },
+                                    )
+                                    : isDiagnosis
+                                    ? Container(
+                                      decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                showPopover(
+                                                  context: context,
+
+                                                  barrierColor: Colors.transparent,
+                                                  bodyBuilder:
+                                                      (context) => DropDrownSearchTable(
+                                                        items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                        onItemSelected: (value) {
+                                                          Navigator.pop(context);
+                                                          setState(() {
+                                                            // tableModel.rows[row].cells[col].items[index] = value;
+                                                          });
+                                                        },
+                                                      ),
+                                                  onPop: () => print('Popover was popped!'),
+                                                  direction: PopoverDirection.bottom,
+
+                                                  barrierDismissible: true,
+                                                  arrowHeight: 0,
+                                                  arrowWidth: 0,
+                                                );
+                                              },
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                    TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                            decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
+                                            child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
+                                          ),
+                                          SizedBox(width: 8),
+                                          GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table)),
+                                          SizedBox(width: 3),
+                                          GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon)),
+                                        ],
+                                      ),
+                                    )
+                                    : col == 0
+                                    ? GestureDetector(
+                                      onTap: () {
+                                        showPopover(
+                                          context: context,
+
+                                          barrierColor: Colors.transparent,
+                                          bodyBuilder:
+                                              (context) => DropDrownSearchTable(
+                                                items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                onItemSelected: (value) {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    // tableModel.rows[row].cells[col].items[index] = value;
+                                                  });
+                                                },
+                                              ),
+                                          onPop: () => print('Popover was popped!'),
+                                          contentDxOffset: -200,
+
+                                          barrierDismissible: true,
+                                          arrowHeight: 0,
+                                          arrowWidth: 0,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                              TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    : RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                          TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                        ],
+                                      ),
+                                    ),
+                          ),
+                        ),
+                      ),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child:
@@ -337,11 +604,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                             barrierColor: Colors.transparent,
                                             bodyBuilder:
                                                 (context) => DropDrownSearchTable(
-                                                  items: [
-                                                    "Cryotherapy for the destruction of benign lesions (first lesion)",
-                                                    "Destruction of benign lesions (first lesion)",
-                                                    "Another Procedure Option",
-                                                  ],
+                                                  items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
                                                   onItemSelected: (value) {
                                                     Navigator.pop(context);
                                                     setState(() {
@@ -351,7 +614,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                 ),
                                             onPop: () => print('Popover was popped!'),
                                             direction: PopoverDirection.bottom,
-                                            width: 300,
+                                            width: 350,
                                             barrierDismissible: true,
                                             arrowHeight: 0,
                                             arrowWidth: 0,
@@ -399,8 +662,10 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                         ),
                                     onPop: () => print('Popover was popped!'),
                                     direction: PopoverDirection.bottom,
-                                    width: 300,
+                                    width: 190,
                                     barrierDismissible: true,
+                                    contentDxOffset: -100,
+
                                     arrowHeight: 0,
                                     arrowWidth: 0,
                                   );
@@ -419,10 +684,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                               )
                               : RichText(
                                 text: TextSpan(
-                                  children: [
-                                    TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
-                                    TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                  ],
+                                  children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
                                 ),
                               ),
                     ),
@@ -443,7 +705,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
       child: Column(
         children: [
           _buildTableHeader(),
-          Expanded(child: SingleChildScrollView(child: Column(children: [...List.generate(tableModel.rows.length, _buildRow), _buildFooterRow()]))),
+          Expanded(child: SingleChildScrollView(child: Column(children: [...List.generate(widget.tableModel.rows.length, _buildRow), _buildFooterRow()]))),
         ],
       ),
     );
