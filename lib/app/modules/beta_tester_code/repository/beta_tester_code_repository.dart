@@ -7,4 +7,10 @@ class BetaTesterCodeRepository {
     ValidateBetaTesterCodeModel res = ValidateBetaTesterCodeModel.fromJson(response);
     return res;
   }
+
+  Future<dynamic> joinWishlist({required String email}) async {
+    var response = await ApiProvider.instance.callPostWithoutHeader("user/joinWishlist", params: {'email': email});
+    print("joinWishlist :- $response");
+    return response;
+  }
 }

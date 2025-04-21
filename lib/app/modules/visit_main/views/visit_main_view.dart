@@ -1,27 +1,16 @@
-import 'dart:io';
-import 'dart:ui';
-
 import 'package:awesome_side_sheet/Enums/sheet_position.dart';
 import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite/utils/utils.dart';
-import 'package:subqdocs/app/modules/home/views/search_drop_down.dart';
-import 'package:subqdocs/app/modules/visit_main/views/table_custom.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
-import 'package:subqdocs/widgets/custom_animated_button.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_diamentions.dart';
@@ -29,21 +18,13 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
-import '../../../../widgets/ContainerButton.dart';
-import '../../../../widgets/custom_table.dart';
-import '../../../core/common/common_service.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/views/custom_drawer_view.dart';
-import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
-import '../../home/views/in_search_drop_down.dart';
 import '../../home/views/reschedule_patient_dialog.dart';
-import '../../home/views/schedule_patient_dialog.dart';
 import '../controllers/visit_main_controller.dart';
-import '../model/patient_attachment_list_model.dart';
 import 'delete_image_dialog.dart';
 import 'delete_schedule_visit.dart';
 
@@ -1524,6 +1505,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                 } else {
                                   controller.globalController.isStartTranscript.value = true;
+
+                                  controller.globalController.patientId.value = controller.patientId.value;
+                                  controller.globalController.visitId.value = controller.visitId.value;
 
                                   controller.globalController.patientFirstName.value = controller.patientData.value?.responseData?.patientFirstName ?? "";
                                   controller.globalController.patientLsatName.value = controller.patientData.value?.responseData?.patientLastName ?? "";

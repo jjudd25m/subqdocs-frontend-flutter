@@ -1,20 +1,17 @@
 import 'dart:io';
-import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:path/path.dart' as p;
 import 'package:subqdocs/widget/appbar.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 
 import '../../../../utils/FileOpener.dart';
 import '../../../../utils/Formetors.dart';
-import 'package:path/path.dart' as p;
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
@@ -26,13 +23,13 @@ import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
+import '../../../../widgets/custom_textfiled.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
-import '../widgets/custom_dailog.dart';
-import '../../../../widgets/custom_textfiled.dart';
 import '../controllers/add_patient_controller.dart';
+import '../widgets/custom_dailog.dart';
 
 class AddPatientView extends GetView<AddPatientController> {
   AddPatientView({super.key});
@@ -575,6 +572,26 @@ class AddPatientView extends GetView<AddPatientController> {
                                           ],
                                         );
                                       }),
+                                    ),
+                                    SizedBox(height: Dimen.margin16),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Obx(() {
+                                            return Checkbox(
+                                              visualDensity: VisualDensity.compact,
+                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              activeColor: AppColors.backgroundPurple,
+                                              value: controller.isExistingPatient.value,
+                                              onChanged: (value) => {controller.isExistingPatient.value = value!},
+                                            );
+                                          }),
+                                          Text("Existing Patient", style: AppFonts.medium(14, AppColors.textDarkGrey)),
+                                          Spacer(),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(height: Dimen.margin16),
                                     Padding(

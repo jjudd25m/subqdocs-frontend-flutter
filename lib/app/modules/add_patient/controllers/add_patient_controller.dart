@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import 'package:path/path.dart' as p;
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,6 +27,8 @@ import '../repository/add_patient_repository.dart';
 
 class AddPatientController extends GetxController {
   //TODO: Implement AddPatientController
+
+  RxBool isExistingPatient = RxBool(false);
 
   RxBool isSaveAddAnother = RxBool(false);
   final GlobalController globalController = Get.find();
@@ -416,6 +417,8 @@ class AddPatientController extends GetxController {
 
       param['visit_time'] = formattedTime;
     }
+
+    param["existing_patient"] = isExistingPatient.value.toString();
 
     customPrint("param is :- $param");
 

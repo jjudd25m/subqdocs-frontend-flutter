@@ -28,4 +28,10 @@ class BetaTesterCodeController extends GetxController {
       CustomToastification().showToast(res.message ?? "", type: ToastificationType.error);
     }
   }
+
+  Future<void> joinWishlist() async {
+    dynamic res = await betaTesterCodeRepository.joinWishlist(email: emailController.text);
+    CustomToastification().showToast(res['message'] ?? "", type: ToastificationType.success);
+    Get.back();
+  }
 }

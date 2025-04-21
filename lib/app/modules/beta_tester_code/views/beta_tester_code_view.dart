@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:subqdocs/widgets/custom_animated_button.dart';
 
@@ -109,7 +108,19 @@ class BetaTesterCodeView extends GetView<BetaTesterCodeController> {
                                 },
                               ),
                             ),
-                            SizedBox(width: 160, child: CustomAnimatedButton(text: "Join the waitlist", enabledColor: AppColors.backgroundPurple, height: 45)),
+                            SizedBox(
+                              width: 160,
+                              child: CustomAnimatedButton(
+                                onPressed: () {
+                                  if (validateEmail(controller.emailController.text)) {
+                                    controller.joinWishlist();
+                                  }
+                                },
+                                text: "Join the waitlist",
+                                enabledColor: AppColors.backgroundPurple,
+                                height: 45,
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: 30),
