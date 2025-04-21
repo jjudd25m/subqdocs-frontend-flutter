@@ -1,6 +1,7 @@
 // your imports remain unchanged
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:popover/popover.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../utils/app_colors.dart';
@@ -13,8 +14,17 @@ class NestedDraggableTable extends StatefulWidget {
   _NestedDraggableTableState createState() => _NestedDraggableTableState();
 }
 
+class SingleCellModel {
+  String? description;
+  int? code;
+  int? unit;
+  int? unitPrice;
+
+  SingleCellModel({this.description, this.code, this.unit, this.unitPrice});
+}
+
 class TableCellModel {
-  List<String> items;
+  List<SingleCellModel> items;
 
   TableCellModel({required this.items});
 }
@@ -31,28 +41,15 @@ class TableModel {
   TableModel({required this.rows});
 
   void addRow() {
-    rows.add(
-      TableRowModel(
-        cells: List.generate(
-          4,
-          (index) => TableCellModel(
-            items: ['${String.fromCharCode(65 + index)}${rows.length + 1}.1'],
-          ),
-        ),
-      ),
-    );
+    rows.add(TableRowModel(cells: List.generate(4, (index) => TableCellModel(items: [SingleCellModel(code: 0, unit: 0, description: "select item ", unitPrice: 0)]))));
   }
 
   void addItemAtIndex(int row, int col, int index) {
-    String newItem =
-        '${String.fromCharCode(65 + col)}${row + 1}.${rows[row].cells[col].items.length + 1}';
-    rows[row].cells[col].items.insert(index + 1, newItem);
+    rows[row].cells[col].items.insert(index + 1, SingleCellModel(code: 0, unit: 0, description: "select item ", unitPrice: 0));
   }
 
   void addItem(int row, int col) {
-    String newItem =
-        '${String.fromCharCode(65 + col)}${row + 1}.${rows[row].cells[col].items.length + 1}';
-    rows[row].cells[col].items.add(newItem);
+    rows[row].cells[col].items.add(SingleCellModel(code: 0, unit: 0, description: "select item ", unitPrice: 0));
   }
 
   void deleteItem(int row, int col, int itemIndex) {
@@ -94,96 +91,48 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
       rows: [
         TableRowModel(
           cells: [
-            TableCellModel(
-              items: [
-                '17000',
-                'Cryotherapy for the destruction of benign lesions (first lesion)',
-              ],
-            ),
-            TableCellModel(items: ['B07.0 (Verruca vulgaris (common warts))']),
-            TableCellModel(items: ['1']),
-            TableCellModel(items: ['150']),
+            TableCellModel(items: [SingleCellModel(code: 40, unit: 0, description: "this the  procedure code ", unitPrice: 0)]),
+            TableCellModel(items: [SingleCellModel(code: 10, unit: 0, description: "this is the daignosis ", unitPrice: 0)]),
+            TableCellModel(items: [SingleCellModel(unit: 10)]),
+            TableCellModel(items: [SingleCellModel(unitPrice: 20)]),
           ],
         ),
         TableRowModel(
           cells: [
-            TableCellModel(
-              items: [
-                '17000',
-                'Cryotherapy for the destruction of benign lesions (first lesion)',
-              ],
-            ),
-            TableCellModel(items: ['B07.0 (Verruca vulgaris (common warts))']),
-            TableCellModel(items: ['1']),
-            TableCellModel(items: ['150']),
+            TableCellModel(items: [SingleCellModel(code: 40, unit: 0, description: "this the  procedure code ", unitPrice: 0)]),
+            TableCellModel(items: [SingleCellModel(code: 10, unit: 0, description: "this is the daignosis ", unitPrice: 0)]),
+            TableCellModel(items: [SingleCellModel(unit: 10)]),
+            TableCellModel(items: [SingleCellModel(unitPrice: 20)]),
           ],
         ),
       ],
     );
   }
 
-  void _addItemAtIndex(int row, int col, int index) =>
-      setState(() => tableModel.addItemAtIndex(row, col, index));
+  void _addItemAtIndex(int row, int col, int index) => setState(() => tableModel.addItemAtIndex(row, col, index));
 
   void _addRow() => setState(() => tableModel.addRow());
 
-  void _addItem(int row, int col) =>
-      setState(() => tableModel.addItem(row, col));
+  void _deleteItem(int row, int col, int index) => setState(() => tableModel.deleteItem(row, col, index));
 
-  void _deleteItem(int row, int col, int index) =>
-      setState(() => tableModel.deleteItem(row, col, index));
+  void _swapRows(int from, int to) => setState(() => tableModel.swapRows(from, to));
 
-  void _swapRows(int from, int to) =>
-      setState(() => tableModel.swapRows(from, to));
+  void _swapItems(int row, int col, int from, int to) => setState(() => tableModel.swapItems(row, col, from, to));
 
-  void _swapItems(int row, int col, int from, int to) =>
-      setState(() => tableModel.swapItems(row, col, from, to));
+  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) => setState(() => tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
 
-  void _moveItem({
-    required int fromRow,
-    required int fromCol,
-    required int itemIndex,
-    required int toRow,
-    required int toCol,
-  }) => setState(
-    () => tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol),
-  );
-
-  void _moveCell(int fromRow, int fromCol, int toRow, int toCol) =>
-      setState(() => tableModel.moveCell(fromRow, fromCol, toRow, toCol));
+  void _moveCell(int fromRow, int fromCol, int toRow, int toCol) => setState(() => tableModel.moveCell(fromRow, fromCol, toRow, toCol));
 
   Widget _buildTableHeader() {
     return Table(
-      border: TableBorder.all(
-        color: AppColors.buttonBackgroundGrey,
-        width: 1,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(5),
-          topRight: Radius.circular(5),
-        ),
-      ),
-      columnWidths: const {
-        0: FractionColumnWidth(0.25),
-        1: FractionColumnWidth(0.50),
-        2: FractionColumnWidth(0.10),
-        3: FractionColumnWidth(0.15),
-      },
+      border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+      columnWidths: const {0: FractionColumnWidth(0.25), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.15)},
       children: [
         TableRow(
           decoration: BoxDecoration(color: AppColors.white),
           children:
               ['Procedure', 'Diagnosis', 'Units', 'Unit Charge'].map((col) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  child: Text(
-                    col,
-                    textAlign: TextAlign.left,
-                    style: AppFonts.medium(14, AppColors.black),
-                  ),
-                );
+                return Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text(col, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)));
               }).toList(),
         ),
       ],
@@ -192,41 +141,18 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   Widget _buildFooterRow() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1),
-      ),
+      decoration: BoxDecoration(border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
       child: Row(
         children: [
           Expanded(
             flex: 17,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
-              decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(
-                    color: AppColors.buttonBackgroundGrey,
-                    width: 1,
-                  ),
-                ),
-              ),
-              child: Text(
-                "Total",
-                textAlign: TextAlign.left,
-                style: AppFonts.medium(14, AppColors.black),
-              ),
+              decoration: BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
+              child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Text(
-                "100",
-                textAlign: TextAlign.left,
-                style: AppFonts.medium(14, AppColors.black),
-              ),
-            ),
-          ),
+          Expanded(flex: 3, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text("100", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)))),
         ],
       ),
     );
@@ -257,25 +183,10 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                   children: [
                     LongPressDraggable<int>(
                       data: rowIndex,
-                      feedback: Material(
-                        child: Opacity(
-                          opacity: 0.7,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: _buildRowContent(rowIndex),
-                          ),
-                        ),
-                      ),
+                      feedback: Material(child: Opacity(opacity: 0.7, child: Container(width: MediaQuery.of(context).size.width, child: _buildRowContent(rowIndex)))),
                       child: SvgPicture.asset(ImagePath.drag_button),
                     ),
-                    GestureDetector(
-                      onTap: _addRow,
-                      child: SvgPicture.asset(
-                        ImagePath.plus_icon_table,
-                        height: 40,
-                        width: 40,
-                      ),
-                    ),
+                    GestureDetector(onTap: _addRow, child: SvgPicture.asset(ImagePath.plus_icon_table, height: 40, width: 40)),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -296,20 +207,8 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   Widget _buildRowContent(int rowIndex) {
     return Table(
-      border: TableBorder.all(
-        color: AppColors.buttonBackgroundGrey,
-        width: 1,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(5),
-          topRight: Radius.circular(5),
-        ),
-      ),
-      columnWidths: const {
-        0: FractionColumnWidth(0.25),
-        1: FractionColumnWidth(0.50),
-        2: FractionColumnWidth(0.10),
-        3: FractionColumnWidth(0.15),
-      },
+      border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+      columnWidths: const {0: FractionColumnWidth(0.25), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.15)},
       children: [
         TableRow(
           children: List.generate(4, (colIndex) {
@@ -319,96 +218,17 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                 if ((data?['isCell'] ?? 0) == 1) {
                   _moveCell(data!['row']!, data['col']!, rowIndex, colIndex);
                 } else {
-                  _moveItem(
-                    fromRow: data!['row']!,
-                    fromCol: data['col']!,
-                    itemIndex: data['itemIndex']!,
-                    toRow: rowIndex,
-                    toCol: colIndex,
-                  );
+                  _moveItem(fromRow: data!['row']!, fromCol: data['col']!, itemIndex: data['itemIndex']!, toRow: rowIndex, toCol: colIndex);
                 }
               },
               builder: (context, candidate, rejected) {
-                return colIndex == 1
-                    ? _buildCell(rowIndex, colIndex, isDiagnosis: true)
-                    : _buildCell(rowIndex, colIndex);
+                return colIndex == 1 ? _buildCell(rowIndex, colIndex, isDiagnosis: true) : _buildCell(rowIndex, colIndex);
               },
             );
           }),
         ),
       ],
     );
-  }
-
-  void _showSearchPopup(int row, int col, int index) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => Dialog(
-            insetPadding: const EdgeInsets.all(16),
-            backgroundColor: AppColors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: SizedBox(
-              width: 300,
-              child: DropDrownSearchTable(
-                items: [
-                  "Cryotherapy for the destruction of benign lesions (first lesion)",
-                  "Destruction of benign lesions (first lesion)",
-                  "Another Procedure Option",
-                ],
-                onItemSelected: (value) {
-                  Navigator.pop(context);
-                  setState(() {
-                    tableModel.rows[row].cells[col].items[index] = value;
-                  });
-                },
-              ),
-            ),
-          ),
-    );
-  }
-
-  void _showOverlayPopup(
-    BuildContext context,
-    GlobalKey key,
-    int row,
-    int col,
-    int index,
-    List<String> dropdownItems,
-    Function(String) onSelected,
-  ) {
-    final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
-
-    final position = renderBox.localToGlobal(Offset.zero);
-    final size = renderBox.size;
-
-    final overlay = Overlay.of(context);
-    late OverlayEntry entry;
-
-    entry = OverlayEntry(
-      builder:
-          (context) => Positioned(
-            left: position.dx,
-            top: position.dy + size.height + 4,
-            width: 300,
-            child: Material(
-              elevation: 6,
-              borderRadius: BorderRadius.circular(8),
-              child: DropDrownSearchTable(
-                items: dropdownItems,
-                onItemSelected: (selectedValue) {
-                  entry.remove();
-                  onSelected(selectedValue);
-                },
-              ),
-            ),
-          ),
-    );
-
-    overlay.insert(entry);
   }
 
   Widget _buildCell(int row, int col, {bool isDiagnosis = false}) {
@@ -421,34 +241,21 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
           width: 100,
           padding: EdgeInsets.all(8),
           color: Colors.orangeAccent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                items
-                    .map((e) => Text(e, style: TextStyle(color: Colors.white)))
-                    .toList(),
-          ),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: items.map((e) => Text(e.description ?? "", style: TextStyle(color: Colors.white))).toList()),
         ),
       ),
       child: GestureDetector(
         onTap: () => setState(() => selectedRowIndex = row),
         child: Container(
+          // height: double.maxFinite,
           width: double.infinity,
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.redText),
-          ),
+          decoration: BoxDecoration(border: Border.all(color: AppColors.redText)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(items.length, (i) {
               return DragTarget<Map<String, int>>(
-                onWillAccept:
-                    (data) =>
-                        data != null &&
-                        data['row'] == row &&
-                        data['col'] == col &&
-                        data['itemIndex'] != null &&
-                        data['itemIndex'] != i,
+                onWillAccept: (data) => data != null && data['row'] == row && data['col'] == col && data['itemIndex'] != null && data['itemIndex'] != i,
                 onAccept: (data) {
                   final fromIndex = data['itemIndex'];
                   if (fromIndex != null) {
@@ -458,57 +265,62 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                 builder: (context, _, __) {
                   return LongPressDraggable<Map<String, int>>(
                     data: {'row': row, 'col': col, 'itemIndex': i},
-                    feedback: Material(
-                      child: Text(
-                        items[i],
-                        style: AppFonts.regular(14, AppColors.textGreyTable),
-                      ),
-                    ),
+                    feedback: Material(child: Text(items[i].description ?? "", style: AppFonts.regular(14, AppColors.textGreyTable))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child:
-                          (col == 2 || col == 3)
+                          (col == 2)
                               ? InlineEditableText(
-                                initialText: items[i],
-                                textStyle: AppFonts.regular(
-                                  14,
-                                  AppColors.textGreyTable,
-                                ),
+                                initialText: "${items[i].unit}",
+                                textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                 onSubmitted: (newText) {
-                                  items[i] = newText;
+                                  items[i].description = newText;
+                                },
+                              )
+                              : (col == 3)
+                              ? InlineEditableText(
+                                initialText: "${items[i].unitPrice}",
+                                textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                onSubmitted: (newText) {
+                                  items[i].description = newText;
                                 },
                               )
                               : isDiagnosis
                               ? Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.tableItem,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
+                                decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
                                 padding: const EdgeInsets.all(6.0),
                                 child: Row(
                                   children: [
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
-                                          _showSearchPopup(row, col, i);
+                                          showPopover(
+                                            context: context,
+
+                                            barrierColor: Colors.transparent,
+                                            bodyBuilder:
+                                                (context) => DropDrownSearchTable(
+                                                  items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                  onItemSelected: (value) {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      // tableModel.rows[row].cells[col].items[index] = value;
+                                                    });
+                                                  },
+                                                ),
+                                            onPop: () => print('Popover was popped!'),
+                                            direction: PopoverDirection.bottom,
+                                            width: 300,
+                                            barrierDismissible: true,
+                                            arrowHeight: 0,
+                                            arrowWidth: 0,
+                                          );
                                         },
                                         child: RichText(
                                           text: TextSpan(
                                             children: [
-                                              TextSpan(
-                                                text: '405 ',
-                                                style: AppFonts.semiBold(
-                                                  14,
-                                                  AppColors.black,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: '${items[i]}',
-                                                style: AppFonts.regular(
-                                                  14,
-                                                  AppColors.textGreyTable,
-                                                ),
-                                              ),
+                                              TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                              TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                             ],
                                           ),
                                         ),
@@ -516,57 +328,51 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                     ),
                                     SizedBox(width: 10),
                                     Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.lightgreenPastVisit,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Text(
-                                        "high",
-                                        style: AppFonts.regular(
-                                          14,
-                                          AppColors.greenPastVisit,
-                                        ),
-                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                      decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
+                                      child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
                                     ),
                                     SizedBox(width: 8),
-                                    GestureDetector(
-                                      onTap: () => _addItemAtIndex(row, col, i),
-                                      child: SvgPicture.asset(
-                                        ImagePath.plus_icon_table,
-                                      ),
-                                    ),
+                                    GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table)),
                                     SizedBox(width: 3),
-                                    GestureDetector(
-                                      onTap: () => _deleteItem(row, col, i),
-                                      child: SvgPicture.asset(
-                                        ImagePath.delete_table_icon,
-                                      ),
-                                    ),
+                                    GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon)),
                                   ],
                                 ),
                               )
                               : col == 0
                               ? GestureDetector(
                                 onTap: () {
-                                  _showSearchPopup(row, col, i);
+                                  showPopover(
+                                    context: context,
+
+                                    barrierColor: Colors.transparent,
+                                    bodyBuilder:
+                                        (context) => DropDrownSearchTable(
+                                          items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                          onItemSelected: (value) {
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              // tableModel.rows[row].cells[col].items[index] = value;
+                                            });
+                                          },
+                                        ),
+                                    onPop: () => print('Popover was popped!'),
+                                    direction: PopoverDirection.bottom,
+                                    width: 300,
+                                    barrierDismissible: true,
+                                    arrowHeight: 0,
+                                    arrowWidth: 0,
+                                  );
                                 },
-                                child: Text(
-                                  items[i],
-                                  style: AppFonts.regular(
-                                    14,
-                                    AppColors.textGreyTable,
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
                                   ),
                                 ),
                               )
-                              : Text(
-                                items[i],
-                                style: AppFonts.regular(
-                                  14,
-                                  AppColors.textGreyTable,
+                              : RichText(
+                                text: TextSpan(
+                                  children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
                                 ),
                               ),
                     ),
@@ -587,16 +393,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
       child: Column(
         children: [
           _buildTableHeader(),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...List.generate(tableModel.rows.length, _buildRow),
-                  _buildFooterRow(),
-                ],
-              ),
-            ),
-          ),
+          Expanded(child: SingleChildScrollView(child: Column(children: [...List.generate(tableModel.rows.length, _buildRow), _buildFooterRow()]))),
         ],
       ),
     );

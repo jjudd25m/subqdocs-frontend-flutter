@@ -12,6 +12,7 @@ import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -138,11 +139,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           onTap: () {
                                             Get.back();
                                           },
-                                          child: Container(
-                                            color: AppColors.white,
-                                            padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
-                                            child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20),
-                                          ),
+                                          child: Container(color: AppColors.white, padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
                                         ),
                                         ClipRRect(
                                           borderRadius: BorderRadius.circular(30),
@@ -182,11 +179,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             children: [
                                               Text(textAlign: TextAlign.center, "Age", style: AppFonts.regular(12, AppColors.textBlack)),
                                               SizedBox(height: 6),
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                (controller.patientData.value?.responseData?.age.toString() ?? "") == "null" ? "N/A" : "",
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
+                                              Text(textAlign: TextAlign.center, (controller.patientData.value?.responseData?.age.toString() ?? "") == "null" ? "N/A" : "", style: AppFonts.regular(14, AppColors.textGrey)),
                                             ],
                                           ),
                                           Spacer(),
@@ -204,10 +197,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               SizedBox(height: 6),
                                               Text(
                                                 textAlign: TextAlign.center,
-                                                formatDateTime(
-                                                  firstDate: controller.patientData.value?.responseData?.visitDate ?? "-",
-                                                  secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
-                                                ),
+                                                formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "-", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                                 style: AppFonts.regular(14, AppColors.textGrey),
                                               ),
                                             ],
@@ -218,54 +208,59 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             children: [
                                               Text(textAlign: TextAlign.start, "Medical Assistant", style: AppFonts.regular(12, AppColors.textBlack)),
                                               SizedBox(height: 6),
-                                              PopupMenuButton<String>(
-                                                offset: const Offset(0, 8),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                                color: AppColors.white,
-                                                position: PopupMenuPosition.under,
-                                                padding: EdgeInsetsDirectional.zero,
-                                                menuPadding: EdgeInsetsDirectional.zero,
-                                                onSelected: (value) {},
-                                                style: const ButtonStyle(
-                                                  padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                  maximumSize: WidgetStatePropertyAll(Size.zero),
-                                                  visualDensity: VisualDensity(horizontal: 0, vertical: 0),
-                                                ),
-                                                itemBuilder:
-                                                    (context) => [
-                                                      PopupMenuItem(
-                                                        padding: EdgeInsets.zero,
-                                                        onTap: () async {},
-                                                        value: "",
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(0),
-                                                          child: SizedBox(
-                                                            width: 160,
-                                                            child: DropDownWithSearchPopup(
-                                                              key: UniqueKey(),
-                                                              onChanged: (value, index, selectedId, name) {
-                                                                print("hello");
+                                              GestureDetector(
+                                                onLongPress: () {
+                                                  CustomToastification().showToast("test");
+                                                },
+                                                child: PopupMenuButton<String>(
+                                                  offset: const Offset(0, 8),
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                                  color: AppColors.white,
+                                                  position: PopupMenuPosition.under,
+                                                  padding: EdgeInsetsDirectional.zero,
+                                                  menuPadding: EdgeInsetsDirectional.zero,
+                                                  onSelected: (value) {},
+                                                  style: const ButtonStyle(
+                                                    padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                    maximumSize: WidgetStatePropertyAll(Size.zero),
+                                                    visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                                                  ),
+                                                  itemBuilder:
+                                                      (context) => [
+                                                        PopupMenuItem(
+                                                          padding: EdgeInsets.zero,
+                                                          onTap: () async {},
+                                                          value: "",
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(0),
+                                                            child: SizedBox(
+                                                              width: 160,
+                                                              child: DropDownWithSearchPopup(
+                                                                key: UniqueKey(),
+                                                                onChanged: (value, index, selectedId, name) {
+                                                                  print("hello");
 
-                                                                controller.medicationValue.value = name;
-                                                                Get.back();
-                                                                controller.updateMedicalView(selectedId);
-                                                              },
-                                                              list: controller.globalController.selectedMedicalModel.value,
-                                                              receiveParam: (String value) {},
-                                                              selectedId: 1,
+                                                                  controller.medicationValue.value = name;
+                                                                  Get.back();
+                                                                  controller.updateMedicalView(selectedId);
+                                                                },
+                                                                list: controller.globalController.selectedMedicalModel.value,
+                                                                receiveParam: (String value) {},
+                                                                selectedId: 1,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                child: SizedBox(
-                                                  width: 170,
-                                                  child: ContainerDropdownViewPopUp(
-                                                    receiveParam: (isExpand) {
-                                                      // isExpandedMedicalAssistant.value = isExpand;
-                                                    },
-                                                    name: controller.medicationValue.value,
+                                                      ],
+                                                  child: SizedBox(
+                                                    width: 170,
+                                                    child: ContainerDropdownViewPopUp(
+                                                      receiveParam: (isExpand) {
+                                                        // isExpandedMedicalAssistant.value = isExpand;
+                                                      },
+                                                      name: controller.medicationValue.value,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -481,10 +476,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           ),
                                           Text(
                                             textAlign: TextAlign.center,
-                                            formatDateTime(
-                                              firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                              secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
-                                            ),
+                                            formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                             style: AppFonts.medium(16, AppColors.textWhite),
                                           ),
                                         ],
@@ -505,11 +497,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             onTap: () {},
                             child: Container(
                               height: 81,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                color: AppColors.backgroundLightGrey,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                              decoration: BoxDecoration(border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)), color: AppColors.backgroundLightGrey, borderRadius: BorderRadius.circular(8)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
