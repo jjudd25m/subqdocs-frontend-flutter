@@ -119,7 +119,8 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   void _swapItems(int row, int col, int from, int to) => setState(() => tableModel.swapItems(row, col, from, to));
 
-  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) => setState(() => tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
+  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) =>
+      setState(() => tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
 
   void _moveCell(int fromRow, int fromCol, int toRow, int toCol) => setState(() => tableModel.moveCell(fromRow, fromCol, toRow, toCol));
 
@@ -141,7 +142,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   Widget _buildFooterRow() {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
+      decoration: BoxDecoration(borderRadius: BorderRadius.only(bottomRight: Radius.circular(6), bottomLeft: Radius.circular(6)), border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
       child: Row(
         children: [
           Expanded(
@@ -152,7 +153,10 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
               child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
             ),
           ),
-          Expanded(flex: 3, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text("100", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)))),
+          Expanded(
+            flex: 3,
+            child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text("100", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))),
+          ),
         ],
       ),
     );
@@ -173,7 +177,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
           ),
           if (selectedRowIndex == rowIndex)
             Positioned(
-              left: -18,
+              left: -10,
               top: 0,
               bottom: 0,
               child: Container(
@@ -183,10 +187,33 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                   children: [
                     LongPressDraggable<int>(
                       data: rowIndex,
-                      feedback: Material(child: Opacity(opacity: 0.7, child: Container(width: MediaQuery.of(context).size.width, child: _buildRowContent(rowIndex)))),
-                      child: SvgPicture.asset(ImagePath.drag_button),
+                      feedback: Material(child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex)))),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.white,
+                          boxShadow: [
+                            BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
+                          ],
+                        ),
+                        child: SvgPicture.asset(ImagePath.drag_button, height: 20, width: 20),
+                      ),
                     ),
-                    GestureDetector(onTap: _addRow, child: SvgPicture.asset(ImagePath.plus_icon_table, height: 40, width: 40)),
+                    SizedBox(height: 5),
+                    GestureDetector(
+                      onTap: _addRow,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.white,
+                          boxShadow: [
+                            BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
+                          ],
+                        ),
+                        child: SvgPicture.asset(ImagePath.plus_icon_table, height: 20, width: 20),
+                      ),
+                    ),
+                    SizedBox(height: 5),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -194,7 +221,16 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                           selectedRowIndex = null;
                         });
                       },
-                      child: SvgPicture.asset(ImagePath.delete_table_icon),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.white,
+                          boxShadow: [
+                            BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
+                          ],
+                        ),
+                        child: SvgPicture.asset(ImagePath.delete_table_icon, height: 20, width: 20),
+                      ),
                     ),
                   ],
                 ),
@@ -207,7 +243,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   Widget _buildRowContent(int rowIndex) {
     return Table(
-      border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+      border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1),
       columnWidths: const {0: FractionColumnWidth(0.25), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.15)},
       children: [
         TableRow(
@@ -250,7 +286,8 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
           // height: double.maxFinite,
           width: double.infinity,
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(border: Border.all(color: AppColors.redText)),
+          constraints: BoxConstraints(minHeight: 100),
+          decoration: BoxDecoration(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(items.length, (i) {
@@ -300,7 +337,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                             barrierColor: Colors.transparent,
                                             bodyBuilder:
                                                 (context) => DropDrownSearchTable(
-                                                  items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                  items: [
+                                                    "Cryotherapy for the destruction of benign lesions (first lesion)",
+                                                    "Destruction of benign lesions (first lesion)",
+                                                    "Another Procedure Option",
+                                                  ],
                                                   onItemSelected: (value) {
                                                     Navigator.pop(context);
                                                     setState(() {
@@ -319,7 +360,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                         child: RichText(
                                           text: TextSpan(
                                             children: [
-                                              TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                              TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
                                               TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                             ],
                                           ),
@@ -364,15 +405,24 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                     arrowWidth: 0,
                                   );
                                 },
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                        TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               )
                               : RichText(
                                 text: TextSpan(
-                                  children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
+                                  children: [
+                                    TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                    TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                  ],
                                 ),
                               ),
                     ),
