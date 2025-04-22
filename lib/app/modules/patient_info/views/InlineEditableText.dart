@@ -3,14 +3,10 @@ import 'package:flutter/material.dart';
 class InlineEditableText extends StatefulWidget {
   final String initialText;
   final Function(String) onSubmitted;
+  final Function(String) onChanged;
   final TextStyle? textStyle;
 
-  const InlineEditableText({
-    required this.initialText,
-    required this.onSubmitted,
-    this.textStyle,
-    Key? key,
-  }) : super(key: key);
+  const InlineEditableText({required this.initialText, required this.onSubmitted, required this.onChanged, this.textStyle, Key? key}) : super(key: key);
 
   @override
   _InlineEditableTextState createState() => _InlineEditableTextState();
@@ -66,6 +62,9 @@ class _InlineEditableTextState extends State<InlineEditableText> {
         ? SizedBox(
           width: textStyle.fontSize! * _controller.text.length * 0.6 + 20,
           child: TextField(
+            onChanged: (value) {
+              widget.onChanged(value);
+            },
             controller: _controller,
             focusNode: _focusNode,
             autofocus: true,
@@ -82,9 +81,6 @@ class _InlineEditableTextState extends State<InlineEditableText> {
             onSubmitted: (_) => _submitEdit(),
           ),
         )
-        : GestureDetector(
-          onTap: _startEditing,
-          child: Text(_controller.text, style: textStyle),
-        );
+        : GestureDetector(onTap: _startEditing, child: Text(_controller.text, style: textStyle));
   }
 }

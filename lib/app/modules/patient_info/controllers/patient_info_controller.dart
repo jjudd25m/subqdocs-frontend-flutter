@@ -15,10 +15,9 @@ import '../../../core/common/logger.dart';
 import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../routes/app_pages.dart';
-import '../../add_patient/model/add_patient_model.dart';
-import '../../add_patient/repository/add_patient_repository.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../login/model/login_model.dart';
+// import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/model/visitmainModel.dart';
@@ -1079,21 +1078,34 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   void setDoctorModel() {
     tableModel.value = TableModel(rows: []);
-    for (DiagnosisCodesProcedures diagnosis in (doctorViewList.value?.responseData?.diagnosisCodesProcedures ?? [])) {
+
+    for (MainDiagnosisCodesProceduresDiagnosisCodesProcedures diagnosis in (doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.diagnosisCodesProcedures ?? [])) {
       List<DiagnosisModel>? diagnosisModelList = [];
 
       for (Diagnosis diagnosisModel in diagnosis.diagnosis ?? []) {
         diagnosisModelList.add(DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description));
       }
+
+      List<SingleCellModel> singleCellList = List.generate(
+        diagnosisModelList.length,
+        (index) => SingleCellModel(code: diagnosisModelList[index].code, description: diagnosisModelList[index].description, unitPrice: diagnosisModelList[index].confidence),
+      );
+
       tableModel.value?.rows.add(
         TableRowModel(
           cells: [
             TableCellModel(items: [SingleCellModel(code: diagnosis.procedure?.code, unit: "0", description: diagnosis.procedure?.description ?? "", unitPrice: "0")]),
 
-            TableCellModel(items: [SingleCellModel(code: diagnosis.diagnosis?.first.code, unit: "0", description: diagnosis.diagnosis?.first.description, unitPrice: "0", diagnosisModelList: diagnosisModelList)]),
+            TableCellModel(items: singleCellList),
+
+            // TableCellModel(
+            //   items: [SingleCellModel(code: diagnosis.diagnosis?.first.code, unit: "0", description: diagnosis.diagnosis?.first.description, unitPrice: "0", diagnosisModelList: diagnosisModelList)],
+            // ),
             TableCellModel(items: [SingleCellModel(unit: diagnosis.units)]),
             TableCellModel(items: [SingleCellModel(unitPrice: diagnosis.unitCharge)]),
           ],
+          procedurePossibleAlternatives: diagnosis.procedure?.procedurePossibleAlternatives,
+          diagnosisPossibleAlternatives: diagnosis.diagnosis?.first.diagnosisPossibleAlternatives,
         ),
       );
       tableModel.refresh();

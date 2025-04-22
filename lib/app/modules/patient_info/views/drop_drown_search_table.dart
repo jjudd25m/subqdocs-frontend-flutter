@@ -37,16 +37,25 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextField(controller: searchController, onChanged: _filterItems, decoration: InputDecoration(hintText: "Search...", hintStyle: AppFonts.regular(14, AppColors.textGrey), border: OutlineInputBorder())),
-          const SizedBox(height: 8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              controller: searchController,
+              onChanged: _filterItems,
+              decoration: InputDecoration(hintText: "Search...", hintStyle: AppFonts.regular(14, AppColors.textGrey), border: OutlineInputBorder()),
+            ),
+          ),
+          const SizedBox(height: 3),
           ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: 200),
+            constraints: BoxConstraints(maxHeight: 160),
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: filteredItems.length,
               itemBuilder: (_, index) {
                 return ListTile(
-                  title: Text(filteredItems[index], style: AppFonts.regular(14, AppColors.black)),
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(filteredItems[index], style: AppFonts.regular(12, AppColors.black)),
                   onTap: () {
                     widget.onItemSelected(filteredItems[index]);
                   },

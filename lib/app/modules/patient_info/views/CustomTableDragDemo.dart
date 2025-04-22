@@ -1,18 +1,21 @@
 // your imports remain unchanged
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:popover/popover.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../visit_main/model/doctor_view_model.dart';
 import 'InlineEditableText.dart';
 import 'drop_drown_search_table.dart';
 
 class NestedDraggableTable extends StatefulWidget {
   TableModel tableModel;
+  RxInt totalUnitCharge = RxInt(0);
 
-  NestedDraggableTable({required this.tableModel});
+  NestedDraggableTable({super.key, required this.tableModel});
 
   @override
   _NestedDraggableTableState createState() => _NestedDraggableTableState();
@@ -34,6 +37,7 @@ class SingleCellModel {
   List<DiagnosisModel>? diagnosisModelList;
 
   String? unitPrice;
+
   SingleCellModel({this.description, this.code, this.unit, this.unitPrice, this.diagnosisModelList});
 }
 
@@ -45,8 +49,10 @@ class TableCellModel {
 
 class TableRowModel {
   List<TableCellModel> cells;
+  List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives;
+  List<DiagnosisPossibleAlternatives>? diagnosisPossibleAlternatives;
 
-  TableRowModel({required this.cells});
+  TableRowModel({required this.cells, this.procedurePossibleAlternatives, this.diagnosisPossibleAlternatives});
 }
 
 class TableModel {
@@ -125,7 +131,8 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   void _swapItems(int row, int col, int from, int to) => setState(() => widget.tableModel.swapItems(row, col, from, to));
 
-  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) => setState(() => widget.tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
+  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) =>
+      setState(() => widget.tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
 
   void _moveCell(int fromRow, int fromCol, int toRow, int toCol) => setState(() => widget.tableModel.moveCell(fromRow, fromCol, toRow, toCol));
 
@@ -158,7 +165,15 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
               child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
             ),
           ),
-          Expanded(flex: 3, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text("100", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)))),
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Obx(() {
+                return Text("\$ ${widget.totalUnitCharge.toString()}", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black));
+              }),
+            ),
+          ),
         ],
       ),
     );
@@ -198,7 +213,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                             BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
                           ],
                         ),
-                        child: SvgPicture.asset(ImagePath.drag_button, height: 20, width: 20),
+                        child: SvgPicture.asset(ImagePath.drag_button, height: 30, width: 30),
                       ),
                     ),
                     SizedBox(height: 5),
@@ -212,7 +227,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                             BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
                           ],
                         ),
-                        child: SvgPicture.asset(ImagePath.plus_icon_table, height: 20, width: 20),
+                        child: SvgPicture.asset(ImagePath.plus_icon_table, height: 30, width: 30),
                       ),
                     ),
                     SizedBox(height: 5),
@@ -231,7 +246,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                             BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
                           ],
                         ),
-                        child: SvgPicture.asset(ImagePath.delete_table_icon, height: 20, width: 20),
+                        child: SvgPicture.asset(ImagePath.delete_table_icon, height: 30, width: 30),
                       ),
                     ),
                   ],
@@ -301,18 +316,32 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                           child:
                               (col == 2)
                                   ? InlineEditableText(
+                                    onChanged: (p0) {
+                                      widget.tableModel.rows[row].cells[col].items[i].unit = p0;
+                                      items[i].unit = p0;
+                                      calculateTotal();
+                                    },
                                     initialText: "${items[i].unit}",
                                     textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                     onSubmitted: (newText) {
-                                      items[i].description = newText;
+                                      print("onSubmitted :- ${newText}");
+                                      calculateTotal();
+                                      items[i].unit = newText;
                                     },
                                   )
                                   : (col == 3)
                                   ? InlineEditableText(
+                                    onChanged: (p0) {
+                                      widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
+                                      items[i].unitPrice = p0;
+                                      calculateTotal();
+                                    },
                                     initialText: "${items[i].unitPrice}",
                                     textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                     onSubmitted: (newText) {
-                                      items[i].description = newText;
+                                      print("onSubmitted :- ${newText}");
+                                      calculateTotal();
+                                      items[i].unitPrice = newText;
                                     },
                                   )
                                   : isDiagnosis
@@ -330,7 +359,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                 barrierColor: Colors.transparent,
                                                 bodyBuilder:
                                                     (context) => DropDrownSearchTable(
-                                                      items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                      items: [
+                                                        "Cryotherapy for the destruction of benign lesions (first lesion)",
+                                                        "Destruction of benign lesions (first lesion)",
+                                                        "Another Procedure Option",
+                                                      ],
                                                       onItemSelected: (value) {
                                                         Navigator.pop(context);
                                                         setState(() {
@@ -363,9 +396,9 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                           child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
                                         ),
                                         SizedBox(width: 8),
-                                        GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table)),
+                                        GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                         SizedBox(width: 3),
-                                        GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon)),
+                                        GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
                                       ],
                                     ),
                                   )
@@ -374,12 +407,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                     onTap: () {
                                       showPopover(
                                         context: context,
-
                                         constraints: BoxConstraints(maxWidth: 400),
                                         barrierColor: Colors.transparent,
                                         bodyBuilder:
                                             (context) => DropDrownSearchTable(
-                                              items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                              items: ["dsgfdgd", "gdsgdfgfd", "fdsgdsgds"],
                                               onItemSelected: (value) {
                                                 Navigator.pop(context);
                                                 setState(() {
@@ -409,7 +441,10 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                   )
                                   : RichText(
                                     text: TextSpan(
-                                      children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
+                                      children: [
+                                        TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                        TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                      ],
                                     ),
                                   ),
                         ),
@@ -453,18 +488,28 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                             child:
                                 (col == 2)
                                     ? InlineEditableText(
+                                      onChanged: (p0) {
+                                        widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
+                                        items[i].unitPrice = p0;
+                                        calculateTotal();
+                                      },
                                       initialText: "${items[i].unit}",
                                       textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                       onSubmitted: (newText) {
-                                        items[i].description = newText;
+                                        items[i].unitPrice = newText;
                                       },
                                     )
                                     : (col == 3)
                                     ? InlineEditableText(
+                                      onChanged: (p0) {
+                                        widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
+                                        items[i].unitPrice = p0;
+                                        calculateTotal();
+                                      },
                                       initialText: "${items[i].unitPrice}",
                                       textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                       onSubmitted: (newText) {
-                                        items[i].description = newText;
+                                        items[i].unitPrice = newText;
                                       },
                                     )
                                     : isDiagnosis
@@ -482,7 +527,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                   barrierColor: Colors.transparent,
                                                   bodyBuilder:
                                                       (context) => DropDrownSearchTable(
-                                                        items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                        items: [
+                                                          "Cryotherapy for the destruction of benign lesions (first lesion)",
+                                                          "Destruction of benign lesions (first lesion)",
+                                                          "Another Procedure Option",
+                                                        ],
                                                         onItemSelected: (value) {
                                                           Navigator.pop(context);
                                                           setState(() {
@@ -515,9 +564,9 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                             child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
                                           ),
                                           SizedBox(width: 8),
-                                          GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table)),
+                                          GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                           SizedBox(width: 3),
-                                          GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon)),
+                                          GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
                                         ],
                                       ),
                                     )
@@ -575,18 +624,28 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                       child:
                           (col == 2)
                               ? InlineEditableText(
+                                onChanged: (p0) {
+                                  widget.tableModel.rows[row].cells[col].items[i].unit = p0;
+                                  items[i].unit = p0;
+                                  calculateTotal();
+                                },
                                 initialText: "${items[i].unit}",
                                 textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                 onSubmitted: (newText) {
-                                  items[i].description = newText;
+                                  items[i].unit = newText;
                                 },
                               )
                               : (col == 3)
                               ? InlineEditableText(
+                                onChanged: (p0) {
+                                  widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
+                                  items[i].unitPrice = p0;
+                                  calculateTotal();
+                                },
                                 initialText: "${items[i].unitPrice}",
                                 textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                 onSubmitted: (newText) {
-                                  items[i].description = newText;
+                                  items[i].unitPrice = newText;
                                 },
                               )
                               : isDiagnosis
@@ -604,7 +663,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                             barrierColor: Colors.transparent,
                                             bodyBuilder:
                                                 (context) => DropDrownSearchTable(
-                                                  items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
+                                                  items: [
+                                                    "Cryotherapy for the destruction of benign lesions (first lesion)",
+                                                    "Destruction of benign lesions (first lesion)",
+                                                    "Another Procedure Option",
+                                                  ],
                                                   onItemSelected: (value) {
                                                     Navigator.pop(context);
                                                     setState(() {
@@ -637,9 +700,9 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                       child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
                                     ),
                                     SizedBox(width: 8),
-                                    GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table)),
+                                    GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                     SizedBox(width: 3),
-                                    GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon)),
+                                    GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
                                   ],
                                 ),
                               )
@@ -684,7 +747,10 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                               )
                               : RichText(
                                 text: TextSpan(
-                                  children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
+                                  children: [
+                                    TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                    TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                  ],
                                 ),
                               ),
                     ),
@@ -696,6 +762,26 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
         ),
       ),
     );
+  }
+
+  Future<void> calculateTotal() async {
+    print("dgjbdfgju");
+    for (var row in widget.tableModel.rows) {
+      print("e is :- ${row.cells[2].items[0].unit} ${row.cells[3].items[0].unitPrice}");
+
+      widget.totalUnitCharge.value = int.parse(row.cells[2].items[0].unit ?? "0") * int.parse(row.cells[3].items[0].unitPrice?.replaceAll("\$", "") ?? "0");
+
+      // for (var cell in row.cells) {
+      //   print(
+      //     cell.items.map((e) {
+      //       print("e is :- ${e.unit} ${e.unitPrice}");
+      //     }),
+      //   );
+      // }
+      print("--------------------------------");
+    }
+
+    print("widget total is :- ${widget.totalUnitCharge} ");
   }
 
   @override

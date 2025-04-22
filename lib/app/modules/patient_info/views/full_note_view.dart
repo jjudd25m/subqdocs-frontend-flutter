@@ -1,14 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:lottie/lottie.dart';
-import 'package:subqdocs/widget/base_image_view.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -18,6 +13,7 @@ import '../model/patient_fullnote_model.dart';
 
 class FullNoteView extends StatelessWidget {
   FullNoteView({super.key});
+
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
 
   @override
@@ -665,7 +661,7 @@ class FullNoteView extends StatelessWidget {
                                             (context, index) => InkWell(
                                               onTap: () {},
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 0),
+                                                padding: const EdgeInsets.symmetric(horizontal: 20),
                                                 child: Column(
                                                   children: [
                                                     SizedBox(height: 0),
@@ -673,13 +669,81 @@ class FullNoteView extends StatelessWidget {
                                                       children: [
                                                         SizedBox(width: 0),
                                                         Expanded(
-                                                          child: Html(
-                                                            data: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "",
-                                                            style: {"body": Style(margin: Margins.all(0), fontFamily: "Poppins", fontSize: FontSize(14.0))},
+                                                          child: SizedBox(
+                                                            width: double.maxFinite,
+                                                            child: Text.rich(
+                                                              TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text: "General Appearance: ",
+                                                                    recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                    style: AppFonts.semiBold(14, AppColors.black),
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam?.generalAppearance ?? "",
+                                                                    recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                    style: AppFonts.regular(14, AppColors.black),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              textAlign: TextAlign.left,
+                                                            ),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
+                                                    SizedBox(height: 10),
+                                                    Row(children: [Text("Skin: ", style: AppFonts.semiBold(14, AppColors.black)), Spacer()]),
+                                                    for (Skin skinData in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam?.skin ?? [])
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: SizedBox(
+                                                              width: double.maxFinite,
+                                                              child: Text.rich(
+                                                                TextSpan(
+                                                                  children: [
+                                                                    TextSpan(text: "• ", style: AppFonts.medium(20, AppColors.textPurple)),
+                                                                    TextSpan(
+                                                                      text: "${skinData.location}: ",
+                                                                      recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                      style: AppFonts.semiBold(14, AppColors.black),
+                                                                    ),
+                                                                    TextSpan(text: skinData.finding, recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.regular(14, AppColors.black)),
+                                                                  ],
+                                                                ),
+                                                                textAlign: TextAlign.left,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    SizedBox(height: 10),
+                                                    Row(children: [Text("Other Systems: ", style: AppFonts.semiBold(14, AppColors.black)), Spacer()]),
+                                                    for (String otherSystemData in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam?.otherSystems ?? [])
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: SizedBox(
+                                                              width: double.maxFinite,
+                                                              child: Text.rich(
+                                                                TextSpan(
+                                                                  children: [
+                                                                    TextSpan(text: "• ", style: AppFonts.medium(20, AppColors.textPurple)),
+                                                                    // TextSpan(
+                                                                    //   text: "${skinData.location}: ",
+                                                                    //   recognizer: TapGestureRecognizer()..onTap = () {},
+                                                                    //   style: AppFonts.semiBold(14, AppColors.black),
+                                                                    // ),
+                                                                    TextSpan(text: otherSystemData, recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.regular(14, AppColors.black)),
+                                                                  ],
+                                                                ),
+                                                                textAlign: TextAlign.left,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     SizedBox(height: 0),
                                                   ],
                                                 ),

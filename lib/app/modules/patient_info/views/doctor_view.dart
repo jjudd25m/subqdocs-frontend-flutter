@@ -169,7 +169,13 @@ class DoctorView extends StatelessWidget {
                         child: Column(
                           children: [
                             SizedBox(height: 5),
-                            Row(children: [Text(textAlign: TextAlign.center, "Impressions and Plan", style: AppFonts.medium(16, AppColors.textPurple)), Spacer(), SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28)]),
+                            Row(
+                              children: [
+                                Text(textAlign: TextAlign.center, "Impressions and Plan", style: AppFonts.medium(16, AppColors.textPurple)),
+                                Spacer(),
+                                SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28),
+                              ],
+                            ),
                             SizedBox(height: 5),
                           ],
                         ),
@@ -195,7 +201,7 @@ class DoctorView extends StatelessWidget {
                                         if ((task.treatments ?? []).isNotEmpty) ...[
                                           SizedBox(height: 10),
                                           Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.center, "Treatments:", style: AppFonts.bold(15, AppColors.textBlack))),
-                                          for (Treatments treatments in task.treatments ?? [])
+                                          for (ImpressionsAndPlanTreatments treatments in task.treatments ?? [])
                                             if (treatments.type?.isNotEmpty ?? false) ...[
                                               Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -204,15 +210,21 @@ class DoctorView extends StatelessWidget {
                                                     SizedBox(height: 10),
                                                     Padding(
                                                       padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                      child: Row(children: [SizedBox(width: 10), Expanded(child: Text(" ${treatments.type} ${treatments.name} \n", style: AppFonts.regular(14, AppColors.textBlack)))]),
+                                                      child: Row(
+                                                        children: [
+                                                          SizedBox(width: 10),
+                                                          Expanded(child: Text(" ${treatments.type} ${treatments.name} \n", style: AppFonts.regular(14, AppColors.textBlack))),
+                                                        ],
+                                                      ),
                                                     ),
                                                     Column(
                                                       children: [
-                                                        for (Specifications specifications in treatments.specifications ?? [])
+                                                        for (String specifications in treatments.specifications ?? [])
                                                           Row(
                                                             children: [
                                                               SizedBox(width: 20),
-                                                              Expanded(child: Text(textAlign: TextAlign.start, "• ${specifications.parameter}: ${specifications.value}", style: AppFonts.regular(14, AppColors.black))),
+                                                              Expanded(child: Text(textAlign: TextAlign.start, "• ${specifications}", style: AppFonts.regular(14, AppColors.black))),
+                                                              // Expanded(child: Text(textAlign: TextAlign.start, "• ${specifications.parameter}: ${specifications.value}", style: AppFonts.regular(14, AppColors.black))),
                                                             ],
                                                           ),
                                                         SizedBox(height: 5),
@@ -265,7 +277,9 @@ class DoctorView extends StatelessWidget {
                                         SizedBox(height: 10),
                                         if (task.medications != "-" && task.medications != "") ...[
                                           Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Medications:", style: AppFonts.bold(15, AppColors.black))),
-                                          Row(children: [SizedBox(width: 25), Expanded(child: Text(textAlign: TextAlign.left, "${task.medications}", style: AppFonts.regular(14, AppColors.textBlack)))]),
+                                          Row(
+                                            children: [SizedBox(width: 25), Expanded(child: Text(textAlign: TextAlign.left, "${task.medications}", style: AppFonts.regular(14, AppColors.textBlack)))],
+                                          ),
                                           SizedBox(height: 10),
                                         ],
                                         if (task.orders != "-" && task.orders != "") ...[
@@ -274,7 +288,10 @@ class DoctorView extends StatelessWidget {
                                         ],
                                         SizedBox(height: 10),
                                         if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "") ...[
-                                          Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Counseling and Discussion:", style: AppFonts.bold(15, AppColors.black))),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 25),
+                                            child: Text(textAlign: TextAlign.left, "Counseling and Discussion:", style: AppFonts.bold(15, AppColors.black)),
+                                          ),
                                           Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.counselingAndDiscussion}", style: AppFonts.regular(14, AppColors.textBlack)))]),
                                         ],
                                         SizedBox(height: 10),
@@ -306,7 +323,11 @@ class DoctorView extends StatelessWidget {
   Widget _headerBuildTableCell(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(text, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))]),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text(text, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))],
+      ),
     );
   }
 
@@ -314,7 +335,7 @@ class DoctorView extends StatelessWidget {
     return Padding(padding: const EdgeInsets.all(8.0), child: Text(text, style: isTotal ? AppFonts.medium(14, AppColors.black) : AppFonts.regular(14, AppColors.textGrey)));
   }
 
-  List<TableRow> _getTableRows(ResponseData patients) {
+  List<TableRow> _getTableRows(DoctorViewResponseData patients) {
     List<TableRow> rows = [];
 
     rows.add(
@@ -326,11 +347,11 @@ class DoctorView extends StatelessWidget {
       ),
     );
 
-    print("procedure List is :- ${patients.diagnosisCodesProcedures}");
+    // print("procedure List is :- ${patients.mainDiagnosisCodesProcedures.diagnosisCodesProcedures}");
 
     controller.totalUnitCost.value = 0;
     // Iterate over each diagnosis procedure data
-    for (DiagnosisCodesProcedures diagnosis in patients.diagnosisCodesProcedures ?? []) {
+    for (MainDiagnosisCodesProceduresDiagnosisCodesProcedures diagnosis in patients.mainDiagnosisCodesProcedures?.diagnosisCodesProcedures ?? []) {
       controller.totalUnitCost.value += double.parse(diagnosis.unitCharge.toString().isEmpty ? "0.0" : diagnosis.unitCharge.toString().replaceAll("\$", "").replaceAll(",", ""));
 
       // Ensure each row has exactly 4 children
@@ -362,7 +383,11 @@ class DoctorView extends StatelessWidget {
                                       TextSpan(
                                         children: [
                                           TextSpan(text: "${diagnosis.diagnosis?[index].code} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.semiBold(14, AppColors.black)),
-                                          TextSpan(text: "${diagnosis.diagnosis?[index].description} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.regular(14, AppColors.black)),
+                                          TextSpan(
+                                            text: "${diagnosis.diagnosis?[index].description} ",
+                                            recognizer: TapGestureRecognizer()..onTap = () {},
+                                            style: AppFonts.regular(14, AppColors.black),
+                                          ),
                                           if (diagnosis.diagnosis?[index].confidenceScore != "-" && (diagnosis.diagnosis?[index].confidenceScore != "")) ...[
                                             WidgetSpan(
                                               alignment: PlaceholderAlignment.middle,
