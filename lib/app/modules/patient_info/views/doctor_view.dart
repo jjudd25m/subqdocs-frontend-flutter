@@ -135,6 +135,23 @@ class DoctorView extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                            updateResponse: (List<Map<String, dynamic>> updatedMap) {
+                              List<Map<String, dynamic>> possibleDiagnosisCodesProcedures = [];
+
+                              for (PossibleDiagnosisCodesProcedures item in controller.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? []) {
+                                possibleDiagnosisCodesProcedures.add(item.toJson());
+                              }
+
+                              final Map<String, dynamic> apiPayload = {
+                                "diagnosis_codes_procedures": {"diagnosis_codes_procedures": updatedMap, "possible_diagnosis_codes_procedures": possibleDiagnosisCodesProcedures},
+                              };
+
+                              // print("doctor id :- ${controller.doctorViewList.value?.responseData?.id.toString()}");
+
+                              controller.updateDoctorViewAPI(controller.doctorViewList.value?.responseData?.id.toString() ?? "", apiPayload);
+
+                              print("API Payload is:- ${apiPayload}");
+                            },
                           ),
                         );
                       }),
@@ -261,7 +278,7 @@ class DoctorView extends StatelessWidget {
                                                 padding: const EdgeInsets.only(left: 25),
                                                 child: Text(textAlign: TextAlign.left, task.procedure?.type != null ? "${task.procedure?.type}:" : "", style: AppFonts.bold(16, AppColors.black)),
                                               ),
-                                              for (var details in task.procedure?.details ?? [])
+                                              for (var details in task.procedure?.details?.keys ?? [])
                                                 Padding(
                                                   padding: const EdgeInsets.symmetric(horizontal: 20),
                                                   child: Column(

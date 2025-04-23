@@ -54,4 +54,10 @@ class PatientInfoRepository {
     customPrint("getDoctorNote API  internal response $response");
     return DoctorViewModel.fromJson(response);
   }
+
+  Future<dynamic> updateDoctorView({required String id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("doctors-view-table/update/$id", params);
+    customPrint("updateDoctorView API  internal response $response");
+    return response;
+  }
 }

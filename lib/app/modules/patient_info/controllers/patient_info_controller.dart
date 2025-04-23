@@ -959,6 +959,11 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  Future<void> updateDoctorViewAPI(String id, Map<String, dynamic> param) async {
+    dynamic response = await _patientInfoRepository.updateDoctorView(id: id, params: param);
+    print(" update doctor view response is:- $response");
+  }
+
   void updateDoctorView(int id) async {
     Map<String, dynamic> param = {};
     Map<String, List<File>> profileParams = {};
@@ -1070,6 +1075,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
+
+    print(
+      "suggestion:- ${doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures?.map((e) {
+        print(" data:-------- ${e.toJson()}");
+      })}",
+    );
+
     setDoctorModel();
     await getPatientDetails();
 
@@ -1083,20 +1095,44 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       List<DiagnosisModel>? diagnosisModelList = [];
 
       for (Diagnosis diagnosisModel in diagnosis.diagnosis ?? []) {
-        diagnosisModelList.add(DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description));
+        print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+
+        diagnosisModelList.add(
+          DiagnosisModel(
+            confidence: diagnosisModel.confidenceScore,
+            code: diagnosisModel.code,
+            description: diagnosisModel.description,
+            diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+          ),
+        );
       }
 
-      List<SingleCellModel> singleCellList = List.generate(
-        diagnosisModelList.length,
-        (index) => SingleCellModel(code: diagnosisModelList[index].code, description: diagnosisModelList[index].description, unitPrice: diagnosisModelList[index].confidence),
-      );
+      // print("setDoctorModel:- ${diagnosis.procedure?.procedurePossibleAlternatives?.first.toJson()}");
+      // print("setDoctorModel:- ${diagnosis.procedure?.code}");
+      // print("setDoctorModel:- ${diagnosis.procedure?.confidenceScore}");
+
+      // List<SingleCellModel> singleCellList = List.generate(
+      //   diagnosisModelList.length,
+      //   (index) => SingleCellModel(code: diagnosisModelList[index].code, description: diagnosisModelList[index].description, unitPrice: diagnosisModelList[index].confidence),
+      // );
 
       tableModel.value?.rows.add(
         TableRowModel(
           cells: [
-            TableCellModel(items: [SingleCellModel(code: diagnosis.procedure?.code, unit: "0", description: diagnosis.procedure?.description ?? "", unitPrice: "0")]),
+            TableCellModel(
+              items: [
+                SingleCellModel(
+                  code: diagnosis.procedure?.code,
+                  unit: "0",
+                  description: diagnosis.procedure?.description ?? "",
+                  unitPrice: "0",
+                  procedurePossibleAlternatives: diagnosis.procedure?.procedurePossibleAlternatives,
+                ),
+              ],
+            ),
 
-            TableCellModel(items: singleCellList),
+            // TableCellModel(items: singleCellList),
+            TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
 
             // TableCellModel(
             //   items: [SingleCellModel(code: diagnosis.diagnosis?.first.code, unit: "0", description: diagnosis.diagnosis?.first.description, unitPrice: "0", diagnosisModelList: diagnosisModelList)],
@@ -1104,8 +1140,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
             TableCellModel(items: [SingleCellModel(unit: diagnosis.units)]),
             TableCellModel(items: [SingleCellModel(unitPrice: diagnosis.unitCharge)]),
           ],
-          procedurePossibleAlternatives: diagnosis.procedure?.procedurePossibleAlternatives,
-          diagnosisPossibleAlternatives: diagnosis.diagnosis?.first.diagnosisPossibleAlternatives,
         ),
       );
       tableModel.refresh();

@@ -860,9 +860,15 @@ class FullNoteView extends StatelessWidget {
                                                                   ],
                                                                 ),
                                                                 SizedBox(height: 10),
-                                                                for (final details
-                                                                    in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details ?? [])
-                                                                  Row(children: [Expanded(child: Text(textAlign: TextAlign.left, "$details.", style: AppFonts.regular(14, AppColors.textBlack)))]),
+
+                                                                // for (final detailEntry
+                                                                //     in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details?.entries ?? {})
+                                                                //   Row(
+                                                                //     children: [
+                                                                //       Text(textAlign: TextAlign.left, detailEntry, style: AppFonts.regular(14, AppColors.textBlack)),
+                                                                //       Expanded(child: Text(textAlign: TextAlign.left, "$details.", style: AppFonts.regular(14, AppColors.textBlack))),
+                                                                //     ],
+                                                                //   )
                                                               ],
                                                               SizedBox(height: 10),
                                                               if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications != "-") ...[

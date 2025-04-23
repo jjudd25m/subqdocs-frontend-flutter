@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../visit_main/model/doctor_view_model.dart';
 
 class DropDrownSearchTable extends StatefulWidget {
-  final List<String> items;
-  final Function(String) onItemSelected;
+  final List<ProcedurePossibleAlternatives> items;
+  final Function(ProcedurePossibleAlternatives, int) onItemSelected;
 
   const DropDrownSearchTable({Key? key, required this.items, required this.onItemSelected}) : super(key: key);
 
@@ -14,18 +15,21 @@ class DropDrownSearchTable extends StatefulWidget {
 }
 
 class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
-  late List<String> filteredItems;
+  late List<ProcedurePossibleAlternatives> filteredItems = [];
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    // print("DropDrownSearchTable data:- ${widget.items.first.toJson()}");
+
     filteredItems = List.from(widget.items);
   }
 
   void _filterItems(String query) {
     setState(() {
-      filteredItems = widget.items.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
+      filteredItems = widget.items.where((item) => (item.description ?? "").toLowerCase().contains(query.toLowerCase()) || (item.code ?? "").toLowerCase().contains(query.toLowerCase())).toList();
     });
   }
 
@@ -55,9 +59,9 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
                 return ListTile(
                   dense: true,
                   contentPadding: EdgeInsets.zero,
-                  title: Text(filteredItems[index], style: AppFonts.regular(12, AppColors.black)),
+                  title: Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)),
                   onTap: () {
-                    widget.onItemSelected(filteredItems[index]);
+                    widget.onItemSelected(filteredItems[index], index);
                   },
                 );
               },

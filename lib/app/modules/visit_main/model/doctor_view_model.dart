@@ -1853,13 +1853,13 @@ class ImpressionsAndPlanTreatments {
 
 class ImpressionsAndPlanProcedure {
   String? type;
-  List<String>? details;
+  Map<String, dynamic>? details;
 
   ImpressionsAndPlanProcedure({this.type, this.details});
 
   ImpressionsAndPlanProcedure.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    details = json['details'].cast<String>();
+    details = json['details'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1954,9 +1954,9 @@ class Procedure {
     description = json['description'];
     modifier = json['modifier'];
     confidenceScore = json['confidence_score'];
-    if (json['procedure_possible_alternatives'] != null) {
+    if (json['possible_alternatives'] != null) {
       procedurePossibleAlternatives = <ProcedurePossibleAlternatives>[];
-      json['procedure_possible_alternatives'].forEach((v) {
+      json['possible_alternatives'].forEach((v) {
         procedurePossibleAlternatives!.add(new ProcedurePossibleAlternatives.fromJson(v));
       });
     }
@@ -1969,7 +1969,7 @@ class Procedure {
     data['modifier'] = modifier;
     data['confidence_score'] = confidenceScore;
     if (procedurePossibleAlternatives != null) {
-      data['procedure_possible_alternatives'] = procedurePossibleAlternatives!.map((v) => v.toJson()).toList();
+      data['possible_alternatives'] = procedurePossibleAlternatives!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -1978,7 +1978,7 @@ class Procedure {
 class ProcedurePossibleAlternatives {
   String? code;
   String? description;
-  Null? modifier;
+  String? modifier;
 
   ProcedurePossibleAlternatives({this.code, this.description, this.modifier});
 
@@ -2011,9 +2011,9 @@ class Diagnosis {
     description = json['description'];
     icd10Code = json['icd_10_code'];
     confidenceScore = json['confidence_score'];
-    if (json['diagnosis_possible_alternatives'] != null) {
+    if (json['possible_alternatives'] != null) {
       diagnosisPossibleAlternatives = <DiagnosisPossibleAlternatives>[];
-      json['diagnosis_possible_alternatives'].forEach((v) {
+      json['possible_alternatives'].forEach((v) {
         diagnosisPossibleAlternatives!.add(new DiagnosisPossibleAlternatives.fromJson(v));
       });
     }
@@ -2026,7 +2026,7 @@ class Diagnosis {
     data['icd_10_code'] = icd10Code;
     data['confidence_score'] = confidenceScore;
     if (diagnosisPossibleAlternatives != null) {
-      data['diagnosis_possible_alternatives'] = diagnosisPossibleAlternatives!.map((v) => v.toJson()).toList();
+      data['possible_alternatives'] = diagnosisPossibleAlternatives!.map((v) => v.toJson()).toList();
     }
     return data;
   }

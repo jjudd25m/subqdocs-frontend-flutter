@@ -876,13 +876,15 @@ class Treatments {
 
 class Procedure {
   String? type;
-  List<String>? details;
+  Map<String, dynamic>? details;
+
+  // List<String>? details;
 
   Procedure({this.type, this.details});
 
   Procedure.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    details = json['details'].cast<String>();
+    details = json['details'];
   }
 
   Map<String, dynamic> toJson() {

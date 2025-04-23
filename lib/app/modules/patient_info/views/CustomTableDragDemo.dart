@@ -14,8 +14,9 @@ import 'drop_drown_search_table.dart';
 class NestedDraggableTable extends StatefulWidget {
   TableModel tableModel;
   RxInt totalUnitCharge = RxInt(0);
+  final Function(List<Map<String, dynamic>>) updateResponse;
 
-  NestedDraggableTable({super.key, required this.tableModel});
+  NestedDraggableTable({super.key, required this.tableModel, required this.updateResponse});
 
   @override
   _NestedDraggableTableState createState() => _NestedDraggableTableState();
@@ -26,7 +27,9 @@ class DiagnosisModel {
   String? code;
   String? confidence;
 
-  DiagnosisModel({this.description, this.code, this.confidence});
+  List<DiagnosisPossibleAlternatives>? diagnosisPossibleAlternatives;
+
+  DiagnosisModel({this.description, this.code, this.confidence, this.diagnosisPossibleAlternatives});
 }
 
 class SingleCellModel {
@@ -34,11 +37,13 @@ class SingleCellModel {
   String? code;
   String? unit;
 
+  List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives;
+
   List<DiagnosisModel>? diagnosisModelList;
 
   String? unitPrice;
 
-  SingleCellModel({this.description, this.code, this.unit, this.unitPrice, this.diagnosisModelList});
+  SingleCellModel({this.description, this.code, this.unit, this.procedurePossibleAlternatives, this.unitPrice, this.diagnosisModelList});
 }
 
 class TableCellModel {
@@ -49,10 +54,11 @@ class TableCellModel {
 
 class TableRowModel {
   List<TableCellModel> cells;
-  List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives;
-  List<DiagnosisPossibleAlternatives>? diagnosisPossibleAlternatives;
 
-  TableRowModel({required this.cells, this.procedurePossibleAlternatives, this.diagnosisPossibleAlternatives});
+  // List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives;
+  // List<DiagnosisPossibleAlternatives>? diagnosisPossibleAlternatives;
+
+  TableRowModel({required this.cells});
 }
 
 class TableModel {
@@ -359,14 +365,17 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                 barrierColor: Colors.transparent,
                                                 bodyBuilder:
                                                     (context) => DropDrownSearchTable(
-                                                      items: [
-                                                        "Cryotherapy for the destruction of benign lesions (first lesion)",
-                                                        "Destruction of benign lesions (first lesion)",
-                                                        "Another Procedure Option",
-                                                      ],
-                                                      onItemSelected: (value) {
+                                                      items: [],
+                                                      onItemSelected: (value, index) {
                                                         Navigator.pop(context);
                                                         setState(() {
+                                                          // widget.tableModel.rows[row].cells[col].items[i]
+                                                          //
+                                                          // widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList
+
+                                                          widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                                                          widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+                                                          calculateTotal();
                                                           // tableModel.rows[row].cells[col].items[index] = value;
                                                         });
                                                       },
@@ -390,11 +399,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                           ),
                                         ),
                                         SizedBox(width: 10),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
-                                          child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
-                                        ),
+                                        // Container(
+                                        //   padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        //   decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
+                                        //   child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
+                                        // ),
                                         SizedBox(width: 8),
                                         GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                         SizedBox(width: 3),
@@ -411,11 +420,13 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                         barrierColor: Colors.transparent,
                                         bodyBuilder:
                                             (context) => DropDrownSearchTable(
-                                              items: ["dsgfdgd", "gdsgdfgfd", "fdsgdsgds"],
-                                              onItemSelected: (value) {
+                                              items: items[i].procedurePossibleAlternatives ?? [],
+                                              onItemSelected: (value, index) {
                                                 Navigator.pop(context);
                                                 setState(() {
-                                                  // tableModel.rows[row].cells[col].items[index] = value;
+                                                  widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                                                  widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+                                                  calculateTotal();
                                                 });
                                               },
                                             ),
@@ -527,12 +538,8 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                   barrierColor: Colors.transparent,
                                                   bodyBuilder:
                                                       (context) => DropDrownSearchTable(
-                                                        items: [
-                                                          "Cryotherapy for the destruction of benign lesions (first lesion)",
-                                                          "Destruction of benign lesions (first lesion)",
-                                                          "Another Procedure Option",
-                                                        ],
-                                                        onItemSelected: (value) {
+                                                        items: [],
+                                                        onItemSelected: (value, index) {
                                                           Navigator.pop(context);
                                                           setState(() {
                                                             // tableModel.rows[row].cells[col].items[index] = value;
@@ -557,12 +564,12 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(width: 10),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                            decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
-                                            child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
-                                          ),
+                                          // SizedBox(width: 10),
+                                          // Container(
+                                          //   padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          //   decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
+                                          //   child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
+                                          // ),
                                           SizedBox(width: 8),
                                           GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                           SizedBox(width: 3),
@@ -579,8 +586,12 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                           barrierColor: Colors.transparent,
                                           bodyBuilder:
                                               (context) => DropDrownSearchTable(
-                                                items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
-                                                onItemSelected: (value) {
+                                                items: [],
+                                                // items[i].procedurePossibleAlternatives?.map((e) {
+                                                //       DiagnosisPossibleAlternatives.fromJson(e.toJson());
+                                                //     }).toList()
+                                                //     as List<DiagnosisPossibleAlternatives>,
+                                                onItemSelected: (value, index) {
                                                   Navigator.pop(context);
                                                   setState(() {
                                                     // tableModel.rows[row].cells[col].items[index] = value;
@@ -649,62 +660,79 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                 },
                               )
                               : isDiagnosis
-                              ? Container(
-                                decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
-                                padding: const EdgeInsets.all(6.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          showPopover(
-                                            context: context,
+                              ? Column(
+                                spacing: 10,
+                                children:
+                                    (items[i].diagnosisModelList ?? []).map((e) {
+                                      return Container(
+                                        decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  showPopover(
+                                                    context: context,
 
-                                            barrierColor: Colors.transparent,
-                                            bodyBuilder:
-                                                (context) => DropDrownSearchTable(
-                                                  items: [
-                                                    "Cryotherapy for the destruction of benign lesions (first lesion)",
-                                                    "Destruction of benign lesions (first lesion)",
-                                                    "Another Procedure Option",
-                                                  ],
-                                                  onItemSelected: (value) {
-                                                    Navigator.pop(context);
-                                                    setState(() {
-                                                      // tableModel.rows[row].cells[col].items[index] = value;
-                                                    });
-                                                  },
+                                                    barrierColor: Colors.transparent,
+                                                    bodyBuilder:
+                                                        (context) => DropDrownSearchTable(
+                                                          items:
+                                                              (e.diagnosisPossibleAlternatives ?? [])
+                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
+                                                                  .toList(),
+                                                          onItemSelected: (value, index) {
+                                                            Navigator.pop(context);
+
+                                                            print("called diagnosis");
+
+                                                            setState(() {
+                                                              String localCode = e.code ?? "";
+                                                              String localDescription = e.description ?? "";
+
+                                                              e.code = value.code;
+                                                              e.description = value.description;
+
+                                                              e.diagnosisPossibleAlternatives?[index].code = localCode;
+                                                              e.diagnosisPossibleAlternatives?[index].description = localDescription;
+
+                                                              calculateTotal();
+                                                            });
+                                                          },
+                                                        ),
+                                                    onPop: () => print('Popover was popped!'),
+                                                    direction: PopoverDirection.bottom,
+                                                    width: 350,
+                                                    barrierDismissible: true,
+                                                    arrowHeight: 0,
+                                                    arrowWidth: 0,
+                                                  );
+                                                },
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(text: " ${e.code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                      TextSpan(text: '${e.description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                    ],
+                                                  ),
                                                 ),
-                                            onPop: () => print('Popover was popped!'),
-                                            direction: PopoverDirection.bottom,
-                                            width: 350,
-                                            barrierDismissible: true,
-                                            arrowHeight: 0,
-                                            arrowWidth: 0,
-                                          );
-                                        },
-                                        child: RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                              TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                            ],
-                                          ),
+                                              ),
+                                            ),
+                                            // SizedBox(width: 10),
+                                            // Container(
+                                            //   padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                            //   decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
+                                            //   child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
+                                            // ),
+                                            SizedBox(width: 10),
+                                            GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
+                                            SizedBox(width: 3),
+                                            GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
+                                          ],
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                      decoration: BoxDecoration(color: AppColors.lightgreenPastVisit, borderRadius: BorderRadius.circular(8)),
-                                      child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
-                                    ),
-                                    SizedBox(width: 8),
-                                    GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
-                                    SizedBox(width: 3),
-                                    GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
-                                  ],
-                                ),
+                                      );
+                                    }).toList(),
                               )
                               : col == 0
                               ? GestureDetector(
@@ -715,10 +743,22 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                     barrierColor: Colors.transparent,
                                     bodyBuilder:
                                         (context) => DropDrownSearchTable(
-                                          items: ["Cryotherapy for the destruction of benign lesions (first lesion)", "Destruction of benign lesions (first lesion)", "Another Procedure Option"],
-                                          onItemSelected: (value) {
+                                          items: items[i].procedurePossibleAlternatives ?? [],
+                                          onItemSelected: (value, index) {
                                             Navigator.pop(context);
                                             setState(() {
+                                              print("is procedure changes");
+
+                                              String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
+                                              String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
+
+                                              widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                                              widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+
+                                              widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
+                                              widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
+
+                                              calculateTotal();
                                               // tableModel.rows[row].cells[col].items[index] = value;
                                             });
                                           },
@@ -765,23 +805,206 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
   }
 
   Future<void> calculateTotal() async {
-    print("dgjbdfgju");
-    for (var row in widget.tableModel.rows) {
-      print("e is :- ${row.cells[2].items[0].unit} ${row.cells[3].items[0].unitPrice}");
+    widget.totalUnitCharge.value = 0;
 
-      widget.totalUnitCharge.value = int.parse(row.cells[2].items[0].unit ?? "0") * int.parse(row.cells[3].items[0].unitPrice?.replaceAll("\$", "") ?? "0");
+    List<Map<String, dynamic>> mainDic = [];
+
+    for (var row in widget.tableModel.rows) {
+      print("procedure data:- ${row.cells.first.items[0].code}, ${row.cells.first.items[0].description}, , ${row.cells.first.items[0].procedurePossibleAlternatives}");
+      print("-------------------------------------------");
+
+      List<Map<String, String>> procedureListPossibleAlternatives = [];
+
+      List<Map<String, dynamic>> diagnosisList1 = [];
+
+      for (ProcedurePossibleAlternatives procedurePossibleAlternatives in row.cells.first.items[0].procedurePossibleAlternatives ?? []) {
+        procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
+      }
+
+      final procedure1 = createProcedure(
+        code: row.cells.first.items[0].code ?? "",
+        description: row.cells.first.items[0].description ?? "",
+        modifier: "",
+        possibleAlternatives: procedureListPossibleAlternatives,
+      );
+
+      for (var item in row.cells[1].items[0].diagnosisModelList ?? []) {
+        List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
+
+        for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in item.diagnosisPossibleAlternatives ?? []) {
+          diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
+        }
+
+        final localdiagnosisList = createDiagnosis(
+          code: item.code ?? "",
+          description: item.description ?? "",
+          icd10: item.code ?? "",
+          confidenceScore: item.confidence ?? "",
+          possibleAlternatives: diagnosisListListPossibleAlternatives,
+        );
+
+        diagnosisList1.add(localdiagnosisList);
+
+        // print("${item.code}, ${item.description}, ${item.diagnosisPossibleAlternatives}");
+        print("*******");
+      }
+
+      Map<String, dynamic> arrAiagnosis_codes_procedures = {};
+
+      arrAiagnosis_codes_procedures["procedure"] = procedure1;
+      arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
+      arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
+      arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
+      arrAiagnosis_codes_procedures["modifier"] = null;
+      arrAiagnosis_codes_procedures["total_charge"] = "0";
+
+      mainDic.add(arrAiagnosis_codes_procedures);
+
+      print("-------------------------------------------");
+
+      // for (var row in widget.tableModel.rows) {
+      //   for (var cell in row.cells) {
+      //     for (var item in cell.items) {
+      //       List<Map<String, String>> procedureListPossibleAlternatives = [];
+      //
+      //       for (ProcedurePossibleAlternatives procedurePossibleAlternatives in item.procedurePossibleAlternatives ?? []) {
+      //         procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
+      //       }
+      //
+      //       // List<Map<String, String>> procedureListPossibleAlternatives = List<Map<String, String>>.from(
+      //       //   item.procedurePossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
+      //       // );
+      //
+      //       print("procedure code :- ${item.code}");
+      //       print("procedure description :- ${item.description}");
+      //
+      //       final procedure1 = createProcedure(code: item.code ?? "", description: item.code ?? "", modifier: "", possibleAlternatives: procedureListPossibleAlternatives);
+      //
+      //       List<Map<String, dynamic>> diagnosisList1 = [];
+      //
+      //       for (DiagnosisModel diagnosisList in item.diagnosisModelList ?? []) {
+      //         List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
+      //
+      //         for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in diagnosisList.diagnosisPossibleAlternatives ?? []) {
+      //           diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
+      //         }
+      //
+      //         // List<Map<String, String>> diagnosisListListPossibleAlternatives = List<Map<String, String>>.from(
+      //         //   diagnosisList.diagnosisPossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
+      //         // );
+      //
+      //         final localdiagnosisList = createDiagnosis(
+      //           code: diagnosisList.code ?? "",
+      //           description: diagnosisList.description ?? "",
+      //           icd10: diagnosisList.code ?? "",
+      //           confidenceScore: diagnosisList.confidence ?? "",
+      //           possibleAlternatives: diagnosisListListPossibleAlternatives,
+      //         );
+      //
+      //         diagnosisList1.add(localdiagnosisList);
+      //       }
+      //
+      //       Map<String, dynamic> arrAiagnosis_codes_procedures = {};
+      //
+      //       arrAiagnosis_codes_procedures["procedure"] = procedure1;
+      //       arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
+      //       arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
+      //       arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
+      //       arrAiagnosis_codes_procedures["modifier"] = null;
+      //       arrAiagnosis_codes_procedures["total_charge"] = "0";
+      //
+      //       mainDic.add(arrAiagnosis_codes_procedures);
+      //     }
+      //   }
+
+      // print(
+      //   "diagnosis data:- ${row.cells[1].items[0].diagnosisModelList?.first.code}, ${row.cells[1].items[0].diagnosisModelList?.first.description}, ${row.cells[1].items[0].diagnosisModelList?.first.diagnosisPossibleAlternatives}",
+      // );
 
       // for (var cell in row.cells) {
-      //   print(
-      //     cell.items.map((e) {
-      //       print("e is :- ${e.unit} ${e.unitPrice}");
-      //     }),
-      //   );
+      // print("procedure data:- ${cell.items[0].code}, ${cell.items[0].description}");
+      // print("procedure data:- ${cell.items[0]}, ${cell.items[1]} , ${cell.items[2]}, ${cell.items[3]}");
+
+      //   for (var item in cell.items) {
+      //     List<Map<String, String>> procedureListPossibleAlternatives = [];
+      //
+      //     for (ProcedurePossibleAlternatives procedurePossibleAlternatives in item.procedurePossibleAlternatives ?? []) {
+      //       procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
+      //     }
+      //
+      //     // List<Map<String, String>> procedureListPossibleAlternatives = List<Map<String, String>>.from(
+      //     //   item.procedurePossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
+      //     // );
+      //
+      //     print("procedure code :- ${item.code}");
+      //     print("procedure description :- ${item.description}");
+      //
+      //     final procedure1 = createProcedure(code: item.code ?? "", description: item.code ?? "", modifier: "", possibleAlternatives: procedureListPossibleAlternatives);
+      //
+      //     List<Map<String, dynamic>> diagnosisList1 = [];
+      //
+      //     for (DiagnosisModel diagnosisList in item.diagnosisModelList ?? []) {
+      //       List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
+      //
+      //       for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in diagnosisList.diagnosisPossibleAlternatives ?? []) {
+      //         diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
+      //       }
+      //
+      //       // List<Map<String, String>> diagnosisListListPossibleAlternatives = List<Map<String, String>>.from(
+      //       //   diagnosisList.diagnosisPossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
+      //       // );
+      //
+      //       final localdiagnosisList = createDiagnosis(
+      //         code: diagnosisList.code ?? "",
+      //         description: diagnosisList.description ?? "",
+      //         icd10: diagnosisList.code ?? "",
+      //         confidenceScore: diagnosisList.confidence ?? "",
+      //         possibleAlternatives: diagnosisListListPossibleAlternatives,
+      //       );
+      //
+      //       diagnosisList1.add(localdiagnosisList);
+      //     }
+      //
+      //     Map<String, dynamic> arrAiagnosis_codes_procedures = {};
+      //
+      //     arrAiagnosis_codes_procedures["procedure"] = procedure1;
+      //     arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
+      //     arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
+      //     arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
+      //     arrAiagnosis_codes_procedures["modifier"] = null;
+      //     arrAiagnosis_codes_procedures["total_charge"] = "0";
+      //
+      //     mainDic.add(arrAiagnosis_codes_procedures);
+      //   }
       // }
+
+      // print("possible_diagnosis_codes_procedures is:- ${patientInfoController.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures.toString()}");
+
+      widget.updateResponse(mainDic);
+
+      // print("API payload is :- ${apiPayload}");
+
+      print("e is :- ${row.cells[2].items[0].unit} ${row.cells[3].items[0].unitPrice}");
+      widget.totalUnitCharge.value += int.parse(row.cells[2].items[0].unit ?? "0") * int.parse(row.cells[3].items[0].unitPrice?.replaceAll("\$", "") ?? "0");
       print("--------------------------------");
     }
 
     print("widget total is :- ${widget.totalUnitCharge} ");
+  }
+
+  Map<String, dynamic> createProcedure({required String code, required String description, String? modifier, String confidenceScore = "", List<Map<String, dynamic>> possibleAlternatives = const []}) {
+    return {"code": code, "description": description, "modifier": modifier, "confidence_score": confidenceScore, "possible_alternatives": possibleAlternatives};
+  }
+
+  // Create a dynamic diagnosis
+  Map<String, dynamic> createDiagnosis({
+    required String code,
+    required String description,
+    required String icd10,
+    String confidenceScore = "",
+    List<Map<String, dynamic>> possibleAlternatives = const [],
+  }) {
+    return {"code": code, "description": description, "icd_10_code": icd10, "confidence_score": confidenceScore, "possible_alternatives": possibleAlternatives};
   }
 
   @override
