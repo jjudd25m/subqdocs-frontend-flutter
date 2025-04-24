@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/app_colors.dart';
-import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
-import '../../../models/MedicalDoctorModel.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 
 class DropDownWithSearch extends StatefulWidget {
@@ -49,35 +46,23 @@ class _DropDownWithSearchState extends State<DropDownWithSearch> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          border: Border.all(width: 1, color: AppColors.textfieldBorder),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  border: Border.all(width: 1, color: AppColors.textfieldBorder),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      ImagePath.search,
-                      height: 25,
-                      width: 25,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    SizedBox(
-                      width: 130,
+      width: double.infinity,
+      decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+              decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
+              child: Row(
+                children: [
+                  SvgPicture.asset(ImagePath.search, height: 25, width: 25),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Container(
+                      // color: AppColors.redText,
+                      // width: 130,
                       child: TextFormField(
                         controller: widget.searchController,
 
@@ -87,85 +72,61 @@ class _DropDownWithSearchState extends State<DropDownWithSearch> {
                         decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            widget.filteredList.isNotEmpty
-                ? Container(
-                    constraints: BoxConstraints(maxHeight: 250),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  widget.onChanged(
-                                    widget.filteredList[index].isSelected ?? false,
-                                    index,
-                                    widget.filteredList[index].id ?? -1,
-                                    widget.filteredList[index].name ?? "",
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12.5),
-                                        child: widget.filteredList?[index].isSelected == false
-                                            ? SvgPicture.asset(
-                                                ImagePath.unCheckedBox,
-                                                width: 14,
-                                                height: 14,
-                                              )
-                                            : SvgPicture.asset(
-                                                ImagePath.checkedBox,
-                                                width: 14,
-                                                height: 14,
-                                              )),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(14),
-                                      child: BaseImageView(
-                                        height: 32,
-                                        width: 32,
-                                        nameLetters: widget.filteredList?[index].name ?? "",
-                                        fontSize: 12,
-                                        imageUrl: widget.filteredList?[index].profileImage ?? "",
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      widget.filteredList?[index].name ?? "",
-                                      style: AppFonts.medium(14, AppColors.black),
-                                    ),
-                                  ],
+          ),
+          widget.filteredList.isNotEmpty
+              ? Container(
+                constraints: BoxConstraints(maxHeight: 250),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              widget.onChanged(widget.filteredList[index].isSelected ?? false, index, widget.filteredList[index].id ?? -1, widget.filteredList[index].name ?? "");
+                            },
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.5),
+                                  child:
+                                      widget.filteredList?[index].isSelected == false
+                                          ? SvgPicture.asset(ImagePath.unCheckedBox, width: 14, height: 14)
+                                          : SvgPicture.asset(ImagePath.checkedBox, width: 14, height: 14),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              if (widget.filteredList?.length != index + 1)
-                                Container(
-                                  color: AppColors.textfieldBorder,
-                                  height: 1,
-                                )
-                            ],
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: BaseImageView(
+                                    height: 32,
+                                    width: 32,
+                                    nameLetters: widget.filteredList?[index].name ?? "",
+                                    fontSize: 12,
+                                    imageUrl: widget.filteredList?[index].profileImage ?? "",
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text(widget.filteredList?[index].name ?? "", style: AppFonts.medium(14, AppColors.black)),
+                              ],
+                            ),
                           ),
-                        );
-                      },
-                      itemCount: widget.filteredList?.length ?? 0,
-                    ),
-                  )
-                : Center(
-                    child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("No Options"),
-                  ))
-          ],
-        ));
+                          SizedBox(height: 10),
+                          if (widget.filteredList?.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: widget.filteredList?.length ?? 0,
+                ),
+              )
+              : Center(child: Padding(padding: const EdgeInsets.all(8.0), child: Text("No Options"))),
+        ],
+      ),
+    );
   }
 }

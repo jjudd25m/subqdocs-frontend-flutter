@@ -495,10 +495,15 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   Obx(() {
                                                     return BaseDropdown<String>(
                                                       valueAsString: (value) => value ?? "",
-                                                      items: controller.globalController.selectedMedicalModel.map((model) => model.name).toList(),
+                                                      items:
+                                                          controller.globalController.selectedMedicalModel.map((model) => model.name).toList().isNotEmpty
+                                                              ? controller.globalController.selectedMedicalModel.map((model) => model.name).toList()
+                                                              : ["No options"],
                                                       selectedValue: controller.selectedMedicalValue.value,
                                                       onChanged: (value) {
-                                                        controller.selectedMedicalValue.value = value;
+                                                        if (value != "No options") {
+                                                          controller.selectedMedicalValue.value = value;
+                                                        }
                                                       },
                                                       selectText: "select Medical..",
                                                     );
