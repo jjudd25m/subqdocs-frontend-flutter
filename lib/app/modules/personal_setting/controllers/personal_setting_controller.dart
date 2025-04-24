@@ -233,7 +233,11 @@ class PersonalSettingController extends GetxController {
   Future<void> userInvite(Map<String, dynamic> param) async {
     try {
       InvitedUserResponseModel response = await _personalSettingRepository.userInvite(param: param);
-      print("response is $response");
+
+      emailAddressController.text = "";
+      firstNameController.text = "";
+      lastNameController.text = "";
+      selectedRoleValue.value = "";
 
       getOrganizationDetail();
       getUserDetail();
