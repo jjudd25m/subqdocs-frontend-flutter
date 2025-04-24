@@ -278,33 +278,55 @@ class DoctorView extends StatelessWidget {
                                                 padding: const EdgeInsets.only(left: 25),
                                                 child: Text(textAlign: TextAlign.left, task.procedure?.type != null ? "${task.procedure?.type}:" : "", style: AppFonts.bold(16, AppColors.black)),
                                               ),
-                                              for (var details in task.procedure?.details?.keys ?? [])
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(children: [SizedBox(width: 0), Expanded(child: Text(textAlign: TextAlign.left, " $details", style: AppFonts.regular(14, AppColors.black)))]),
-                                                      SizedBox(width: 10),
-                                                    ],
-                                                  ),
-                                                ),
+
+                                              ListView(
+                                                children:
+                                                    task.procedure!.details!.entries.map((entry) {
+                                                      // For each entry in the map, display its key and value
+                                                      return Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(width: 0),
+                                                                Expanded(child: Text(textAlign: TextAlign.left, " ${entry.key} :${entry.value}", style: AppFonts.regular(14, AppColors.black))),
+                                                              ],
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                              ),
+
+                                              // for (var details in task.procedure?.details?.keys ?? [])
+                                              //   Padding(
+                                              //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                                              //     child: Column(
+                                              //       children: [
+                                              //         Row(children: [SizedBox(width: 0), Expanded(child: Text(textAlign: TextAlign.left, " $details", style: AppFonts.regular(14, AppColors.black)))]),
+                                              //         SizedBox(width: 10),
+                                              //       ],
+                                              //     ),
+                                              //   ),
                                             ],
                                           ],
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.medications != "-" && task.medications != "") ...[
+                                        if (task.medications != "-" && task.medications != "" && task.medications != null) ...[
                                           Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Medications:", style: AppFonts.bold(15, AppColors.black))),
                                           Row(
                                             children: [SizedBox(width: 25), Expanded(child: Text(textAlign: TextAlign.left, "${task.medications}", style: AppFonts.regular(14, AppColors.textBlack)))],
                                           ),
                                           SizedBox(height: 10),
                                         ],
-                                        if (task.orders != "-" && task.orders != "") ...[
+                                        if (task.orders != "-" && task.orders != "" && task.orders != null) ...[
                                           Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Orders:", style: AppFonts.bold(15, AppColors.black))),
                                           Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.orders}", style: AppFonts.regular(14, AppColors.textBlack)))]),
                                         ],
                                         SizedBox(height: 10),
-                                        if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "") ...[
+                                        if (task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "" && task.counselingAndDiscussion != null) ...[
                                           Padding(
                                             padding: const EdgeInsets.only(left: 25),
                                             child: Text(textAlign: TextAlign.left, "Counseling and Discussion:", style: AppFonts.bold(15, AppColors.black)),

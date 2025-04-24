@@ -82,7 +82,13 @@ class TableModel {
   }
 
   void addItemAtIndex(int row, int col, int index) {
-    rows[row].cells[col].items.insert(index + 1, SingleCellModel(code: "", unit: "0", description: "select item ", unitPrice: "0"));
+    rows[row].cells[1].items[0].diagnosisModelList?.add(DiagnosisModel(description: "selected item ", code: "", confidence: "high "));
+
+    // rows[row].cells[1].items[0].diagnosisModelList?.insert(index + 1, SingleCellModel(code: "", unit: "0", description: "select item ", unitPrice: "0"));
+
+    // rows[row].cells[1].items[0].diagnosisModelList;
+
+    // rows[row].cells[col].items.insert(index + 1, SingleCellModel(code: "", unit: "0", description: "select item ", unitPrice: "0"));
   }
 
   void addItem(int row, int col) {
@@ -90,9 +96,13 @@ class TableModel {
   }
 
   void deleteItem(int row, int col, int itemIndex) {
-    if (rows[row].cells[col].items.length > itemIndex) {
-      rows[row].cells[col].items.removeAt(itemIndex);
-    }
+    print("row is :- $row col is:- $col and item index:- $itemIndex");
+
+    rows[row].cells[1].items[0].diagnosisModelList?.removeAt(itemIndex);
+
+    // if (rows[row].cells[col].items.length > itemIndex) {
+    //   rows[row].cells[col].items.removeAt(itemIndex);
+    // }
   }
 
   void swapRows(int fromRowIndex, int toRowIndex) {
@@ -407,7 +417,12 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                         SizedBox(width: 8),
                                         GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                         SizedBox(width: 3),
-                                        GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _deleteItem(row, col, i);
+                                          },
+                                          child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                        ),
                                       ],
                                     ),
                                   )
@@ -557,7 +572,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                               child: RichText(
                                                 text: TextSpan(
                                                   children: [
-                                                    TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                    TextSpan(text: "demo  ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
                                                     TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                                   ],
                                                 ),
@@ -573,7 +588,12 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                           SizedBox(width: 8),
                                           GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                           SizedBox(width: 3),
-                                          GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
+                                          GestureDetector(
+                                            onTap: () {
+                                              _deleteItem(row, col, i);
+                                            },
+                                            child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -712,7 +732,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                 child: RichText(
                                                   text: TextSpan(
                                                     children: [
-                                                      TextSpan(text: " ${e.code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                      TextSpan(text: "demo ${e.code} ", style: AppFonts.semiBold(14, AppColors.black)),
                                                       TextSpan(text: '${e.description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                                     ],
                                                   ),
@@ -726,9 +746,30 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                             //   child: Text("high", style: AppFonts.regular(14, AppColors.greenPastVisit)),
                                             // ),
                                             SizedBox(width: 10),
-                                            GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // int? indexof = items[i].diagnosisModelList?.indexOf(e);
+                                                _addItemAtIndex(row, col, i);
+                                              },
+                                              child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30),
+                                            ),
                                             SizedBox(width: 3),
-                                            GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
+                                            GestureDetector(
+                                              onTap: () {
+                                                int? indexof = items[i].diagnosisModelList?.indexOf(e);
+
+                                                if (indexof != null) {
+                                                  _deleteItem(row, col, indexof);
+                                                  print("delete_table_icon");
+
+                                                  Future.delayed(Duration(milliseconds: 100), () {
+                                                    // Do something
+                                                    calculateTotal();
+                                                  });
+                                                }
+                                              },
+                                              child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                            ),
                                           ],
                                         ),
                                       );
@@ -835,15 +876,17 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
           diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
         }
 
-        final localdiagnosisList = createDiagnosis(
-          code: item.code ?? "",
-          description: item.description ?? "",
-          icd10: item.code ?? "",
-          confidenceScore: item.confidence ?? "",
-          possibleAlternatives: diagnosisListListPossibleAlternatives,
-        );
+        if (item.code != "") {
+          final localdiagnosisList = createDiagnosis(
+            code: item.code ?? "",
+            description: item.description ?? "",
+            icd10: item.code ?? "",
+            confidenceScore: item.confidence ?? "",
+            possibleAlternatives: diagnosisListListPossibleAlternatives,
+          );
 
-        diagnosisList1.add(localdiagnosisList);
+          diagnosisList1.add(localdiagnosisList);
+        }
 
         // print("${item.code}, ${item.description}, ${item.diagnosisPossibleAlternatives}");
         print("*******");

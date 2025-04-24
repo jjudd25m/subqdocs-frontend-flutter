@@ -861,17 +861,69 @@ class FullNoteView extends StatelessWidget {
                                                                 ),
                                                                 SizedBox(height: 10),
 
-                                                                // for (final detailEntry
-                                                                //     in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details?.entries ?? {})
-                                                                //   Row(
-                                                                //     children: [
-                                                                //       Text(textAlign: TextAlign.left, detailEntry, style: AppFonts.regular(14, AppColors.textBlack)),
-                                                                //       Expanded(child: Text(textAlign: TextAlign.left, "$details.", style: AppFonts.regular(14, AppColors.textBlack))),
-                                                                //     ],
-                                                                //   )
+                                                                // ListView(
+                                                                //   children:
+                                                                //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details?.entries?.map(
+                                                                //         (entry) {
+                                                                //           return Row(
+                                                                //             children: [
+                                                                //               Text(
+                                                                //                 entry.key, // Assuming you meant to show the entry key
+                                                                //                 textAlign: TextAlign.left,
+                                                                //                 style: AppFonts.regular(14, AppColors.textBlack),
+                                                                //               ),
+                                                                //               Expanded(
+                                                                //                 child: Text(
+                                                                //                   entry.value.toString(), // Assuming this is what "details" meant
+                                                                //                   textAlign: TextAlign.left,
+                                                                //                   style: AppFonts.regular(14, AppColors.textBlack),
+                                                                //                 ),
+                                                                //               ),
+                                                                //             ],
+                                                                //           );
+                                                                //         },
+                                                                //       ).toList() ??
+                                                                //       [], // provide an empty list if entries is null
+                                                                // ),
+
+                                                                // ListView(
+                                                                //   children:
+                                                                //       controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details!.entries.map((
+                                                                //         entry,
+                                                                //       ) {
+                                                                //         return Row(
+                                                                //           children: [
+                                                                //             Text(textAlign: TextAlign.left, detailEntry, style: AppFonts.regular(14, AppColors.textBlack)),
+                                                                //             Expanded(child: Text(textAlign: TextAlign.left, "$details.", style: AppFonts.regular(14, AppColors.textBlack))),
+                                                                //           ],
+                                                                //         );
+                                                                //       }).toList(),
+                                                                // ),
+                                                                for (final detailEntry
+                                                                    in controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].procedure?.details?.keys ?? {})
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(textAlign: TextAlign.left, detailEntry.toString(), style: AppFonts.regular(14, AppColors.textBlack)),
+                                                                      Expanded(
+                                                                        child: Text(
+                                                                          textAlign: TextAlign.left,
+                                                                          controller
+                                                                              .patientFullNoteModel
+                                                                              .value
+                                                                              ?.responseData
+                                                                              ?.fullNoteDetails
+                                                                              ?.impressionsAndPlan?[index]
+                                                                              .procedure!
+                                                                              .details?[detailEntry],
+                                                                          style: AppFonts.regular(14, AppColors.textBlack),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                               ],
                                                               SizedBox(height: 10),
-                                                              if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications != "-") ...[
+                                                              if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications != "-" &&
+                                                                  controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].medications != null) ...[
                                                                 Row(children: [Expanded(child: Text(textAlign: TextAlign.left, "Medications", style: AppFonts.bold(14, AppColors.textBlack)))]),
                                                                 Row(
                                                                   children: [
@@ -886,7 +938,8 @@ class FullNoteView extends StatelessWidget {
                                                                 ),
                                                               ],
                                                               SizedBox(height: 10),
-                                                              if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders != "-") ...[
+                                                              if (controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders != "-" &&
+                                                                  controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan?[index].orders != null) ...[
                                                                 Row(children: [Expanded(child: Text(textAlign: TextAlign.left, "Orders:", style: AppFonts.bold(14, AppColors.textBlack)))]),
                                                                 Row(
                                                                   children: [
