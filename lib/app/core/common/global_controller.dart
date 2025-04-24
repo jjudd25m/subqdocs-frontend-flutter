@@ -4,20 +4,17 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:live_activities/live_activities.dart';
-import 'package:live_activities/models/url_scheme_data.dart';
-import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:live_activities/live_activities.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
+import 'package:path/path.dart' as p;
 import 'package:siri_wave/siri_wave.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:toastification/toastification.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
@@ -31,7 +28,6 @@ import '../../models/ChangeModel.dart';
 import '../../models/MedicalDoctorModel.dart';
 import '../../models/SelectedDoctorMedicationModel.dart';
 import '../../models/media_listing_model.dart';
-import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../modules/home/model/FilterListingModel.dart';
 import '../../modules/home/model/home_past_patient_list_sorting_model.dart';
 import '../../modules/home/model/home_patient_list_sorting_model.dart';
@@ -43,7 +39,6 @@ import '../../modules/personal_setting/repository/personal_setting_repository.da
 import '../../modules/visit_main/controllers/visit_main_controller.dart';
 import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
 import '../../modules/visit_main/repository/visit_main_repository.dart';
-import '../../modules/visit_main/views/attachmentDailog.dart';
 import '../../routes/app_pages.dart';
 import 'app_preferences.dart';
 import 'logger.dart';
@@ -365,6 +360,7 @@ class GlobalController extends GetxController {
           Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
         }
       } catch (e) {
+        print("Audio failed error is :- ${e}");
         Loader().stopLoader();
       }
     }

@@ -66,4 +66,9 @@ class SignUpController extends GetxController {
       CustomToastification().showToast("$error", type: ToastificationType.error);
     }
   }
+
+  Future<CheckNewUserModel> checkIsNewUser({required String email}) async {
+    CheckNewUserModel checkNewUserModel = await _signupRepository.checkIsNewUser(email: email);
+    return checkNewUserModel;
+  }
 }

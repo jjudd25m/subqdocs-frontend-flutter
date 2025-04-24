@@ -188,7 +188,16 @@ class HomeView extends GetView<HomeController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                                           child: Row(
                                             children: [
-                                              Expanded(child: Text(controller.globalController.tabIndex.value != 1 ? "" : "", style: AppFonts.medium(16, AppColors.black))),
+                                              Expanded(
+                                                child: Text(
+                                                  controller.globalController.tabIndex.value == 0
+                                                      ? "Patient List (${controller.patientListModel.value?.responseData?.totalCount})"
+                                                      : controller.globalController.tabIndex.value == 1
+                                                      ? "Scheduled List (${controller.scheduleVisitListModel.value?.responseData?.totalCount})"
+                                                      : "Past Visits List (${controller.pastVisitListModel.value?.responseData?.totalCount})",
+                                                  style: AppFonts.medium(16, AppColors.black),
+                                                ),
+                                              ),
                                               SizedBox(width: 5),
                                               if (controller.globalController.tabIndex.value != 0) ...[
                                                 GestureDetector(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:subqdocs/app/modules/sign_up/models/sign_up_models.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
 
@@ -157,15 +158,21 @@ class SignUpView extends GetView<SignUpController> {
                     return SizedBox(
                       width: isSmallScreen ? Get.width - 30 : 460,
                       child: CustomAnimatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             if (!controller.isTermsCondition.value) {
                               CustomToastification().showToast("Please accept terms and conditions", type: ToastificationType.error);
                             } else {
-                              Get.toNamed(
-                                Routes.SIGN_UP_SET_PASSWORD,
-                                arguments: {'first_name': controller.firstNameController.text, 'last_name': controller.lastNameController.text, 'email': controller.emailController.text},
-                              );
+                              CheckNewUserModel checkNewUserModel = await controller.checkIsNewUser(email: controller.emailController.text);
+
+                              if (checkNewUserModel.responseData ?? false) {
+                                Get.toNamed(
+                                  Routes.SIGN_UP_SET_PASSWORD,
+                                  arguments: {'first_name': controller.firstNameController.text, 'last_name': controller.lastNameController.text, 'email': controller.emailController.text},
+                                );
+                              } else {
+                                CustomToastification().showToast(checkNewUserModel.message ?? "", type: ToastificationType.error);
+                              }
                             }
                           }
                         },

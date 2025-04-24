@@ -198,6 +198,7 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                                   param["first_name"] = controller.firstNameController.text;
                                   param["last_name"] = controller.lastNameController.text;
                                   param["role"] = controller.selectedRoleValue.value;
+
                                   receiveParam(param);
                                   Navigator.pop(context);
                                 }

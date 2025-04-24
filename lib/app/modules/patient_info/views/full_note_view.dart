@@ -256,91 +256,91 @@ class FullNoteView extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                              color: AppColors.white,
-                              border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                                    color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
-                                  ),
-                                  // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Row(
-                                        children: [
-                                          Text(textAlign: TextAlign.center, "Medications", style: AppFonts.medium(16, AppColors.textPurple)),
-                                          Spacer(),
-                                          SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child:
-                                      controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
-                                          ? ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: NeverScrollableScrollPhysics(),
-                                            itemBuilder:
-                                                (context, index) => InkWell(
-                                                  onTap: () {},
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                    child: Column(
-                                                      children: [
-                                                        SizedBox(height: 2),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(width: 10),
-                                                            Expanded(
-                                                              child: Text(
-                                                                textAlign: TextAlign.left,
-                                                                "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].title} : ${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage} ",
-                                                                style: AppFonts.regular(15, AppColors.textGrey),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(width: 10),
-                                                            Expanded(
-                                                              child: Text(
-                                                                textAlign: TextAlign.left,
-                                                                "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].purpose}",
-                                                                style: AppFonts.regular(15, AppColors.textGrey),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 0),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                            itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length ?? 0,
-                                          )
-                                          : Row(children: [Text(textAlign: TextAlign.left, "-", style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
-                                ),
-                                SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
+                          // Container(
+                          //   width: double.infinity,
+                          //   padding: EdgeInsets.symmetric(horizontal: 0),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                          //     color: AppColors.white,
+                          //     border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                          //   ),
+                          //   child: Column(
+                          //     children: [
+                          //       Container(
+                          //         height: 60,
+                          //         decoration: BoxDecoration(
+                          //           borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                          //           color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                          //           border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
+                          //         ),
+                          //         // color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                          //         padding: EdgeInsets.symmetric(horizontal: 10),
+                          //         child: Column(
+                          //           children: [
+                          //             SizedBox(height: 10),
+                          //             Row(
+                          //               children: [
+                          //                 Text(textAlign: TextAlign.center, "Medications", style: AppFonts.medium(16, AppColors.textPurple)),
+                          //                 Spacer(),
+                          //                 SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
+                          //               ],
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //       SizedBox(height: 10),
+                          //       Padding(
+                          //         padding: const EdgeInsets.symmetric(horizontal: 10),
+                          //         child:
+                          //             controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.isNotEmpty ?? false
+                          //                 ? ListView.builder(
+                          //                   shrinkWrap: true,
+                          //                   physics: NeverScrollableScrollPhysics(),
+                          //                   itemBuilder:
+                          //                       (context, index) => InkWell(
+                          //                         onTap: () {},
+                          //                         child: Padding(
+                          //                           padding: const EdgeInsets.symmetric(horizontal: 0),
+                          //                           child: Column(
+                          //                             children: [
+                          //                               SizedBox(height: 2),
+                          //                               Row(
+                          //                                 children: [
+                          //                                   SizedBox(width: 10),
+                          //                                   Expanded(
+                          //                                     child: Text(
+                          //                                       textAlign: TextAlign.left,
+                          //                                       "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].title} : ${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].dosage} ",
+                          //                                       style: AppFonts.regular(15, AppColors.textGrey),
+                          //                                     ),
+                          //                                   ),
+                          //                                 ],
+                          //                               ),
+                          //                               Row(
+                          //                                 children: [
+                          //                                   SizedBox(width: 10),
+                          //                                   Expanded(
+                          //                                     child: Text(
+                          //                                       textAlign: TextAlign.left,
+                          //                                       "${controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?[index].purpose}",
+                          //                                       style: AppFonts.regular(15, AppColors.textGrey),
+                          //                                     ),
+                          //                                   ),
+                          //                                 ],
+                          //                               ),
+                          //                               SizedBox(height: 0),
+                          //                             ],
+                          //                           ),
+                          //                         ),
+                          //                       ),
+                          //                   itemCount: controller.patientFullNoteModel.value?.responseData?.fullNoteDetails?.medications?.length ?? 0,
+                          //                 )
+                          //                 : Row(children: [Text(textAlign: TextAlign.left, "-", style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
+                          //       ),
+                          //       SizedBox(height: 10),
+                          //     ],
+                          //   ),
+                          // ),
                           Container(
                             width: double.infinity,
                             padding: EdgeInsets.symmetric(horizontal: 0),

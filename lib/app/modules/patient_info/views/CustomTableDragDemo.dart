@@ -572,7 +572,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                               child: RichText(
                                                 text: TextSpan(
                                                   children: [
-                                                    TextSpan(text: "demo  ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                    TextSpan(text: "${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
                                                     TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                                   ],
                                                 ),
@@ -732,7 +732,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                 child: RichText(
                                                   text: TextSpan(
                                                     children: [
-                                                      TextSpan(text: "demo ${e.code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                      TextSpan(text: "${e.code} ", style: AppFonts.semiBold(14, AppColors.black)),
                                                       TextSpan(text: '${e.description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                                     ],
                                                   ),

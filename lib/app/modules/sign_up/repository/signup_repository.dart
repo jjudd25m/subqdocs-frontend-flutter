@@ -11,4 +11,12 @@ class SignupRepository {
 
     return SignUpModel.fromJson(response);
   }
+
+  Future<CheckNewUserModel> checkIsNewUser({required String email}) async {
+    var response = await ApiProvider.instance.callGet("user/checkIsNewUser?email=$email");
+
+    print("checkIsNewUser API  internal response $response");
+
+    return CheckNewUserModel.fromJson(response);
+  }
 }

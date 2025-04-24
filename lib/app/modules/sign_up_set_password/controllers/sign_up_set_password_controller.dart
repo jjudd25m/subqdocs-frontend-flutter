@@ -80,6 +80,7 @@ class SignUpSetPasswordController extends GetxController {
     param["last_name"] = lastName.trim();
     param["email"] = email.trim();
     param["password"] = confirmPasswordController.text.trim();
+    param["betaTesterCode"] = "fdgdfg56egdfg";
 
     try {
       SignUpModel signUpModel = await _signupRepository.registerUser(param: param);

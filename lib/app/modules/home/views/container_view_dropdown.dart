@@ -29,7 +29,7 @@ class _ContainerDropdownViewState extends State<ContainerDropdownViewPopUp> {
         decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
         child: Row(
           children: [
-            Padding(padding: const EdgeInsets.only(left: 10), child: Text(widget.name)),
+            Flexible(child: Padding(padding: const EdgeInsets.only(left: 10), child: Text("${widget.name} "))),
             Spacer(),
             isExpand
                 ? Padding(padding: const EdgeInsets.only(right: 10), child: SvgPicture.asset(ImagePath.upArrowDropDown, height: 10, width: 10))

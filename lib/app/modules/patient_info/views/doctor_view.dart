@@ -62,60 +62,60 @@ class DoctorView extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.zero,
-                          child: Column(
-                            children: [
-                              Table(
-                                border: TableBorder.all(
-                                  color: AppColors.buttonBackgroundGrey,
-                                  // Table border color
-                                  width: 1,
-                                  // Border width
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
-                                ),
-                                columnWidths: {
-                                  0: FractionColumnWidth(0.33),
-                                  // Fixed width for "Procedure" column
-                                  1: FractionColumnWidth(0.33),
-                                  // Fixed width for "Diagnosis" column
-                                  2: FractionColumnWidth(0.15),
-                                  // Flexible width for "Unit" column (20% of screen)
-                                  3: FractionColumnWidth(0.19),
-                                  // Flexible width for "Unit charges" column (40% of screen)
-                                },
-                                children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
-                              ),
-                              Table(
-                                border: TableBorder.all(
-                                  color: AppColors.buttonBackgroundGrey,
-                                  // Table border color
-                                  width: 1,
-                                  // Border width
-                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
-                                ),
-                                columnWidths: {
-                                  0: FractionColumnWidth(0.81),
-                                  // Fixed width for "Procedure" column
-                                  1: FractionColumnWidth(0.19),
-                                  // Fixed width for "Diagnosis" column
-                                },
-                                children: [
-                                  TableRow(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white, // Header row background color
-                                    ),
-                                    children: [_headerBuildTableCell('Total'), _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}")],
-                                  ),
-                                  // Add more rows if needed
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                      //   child: SingleChildScrollView(
+                      //     padding: EdgeInsets.zero,
+                      //     child: Column(
+                      //       children: [
+                      //         Table(
+                      //           border: TableBorder.all(
+                      //             color: AppColors.buttonBackgroundGrey,
+                      //             // Table border color
+                      //             width: 1,
+                      //             // Border width
+                      //             borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
+                      //           ),
+                      //           columnWidths: {
+                      //             0: FractionColumnWidth(0.33),
+                      //             // Fixed width for "Procedure" column
+                      //             1: FractionColumnWidth(0.33),
+                      //             // Fixed width for "Diagnosis" column
+                      //             2: FractionColumnWidth(0.15),
+                      //             // Flexible width for "Unit" column (20% of screen)
+                      //             3: FractionColumnWidth(0.19),
+                      //             // Flexible width for "Unit charges" column (40% of screen)
+                      //           },
+                      //           children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
+                      //         ),
+                      //         Table(
+                      //           border: TableBorder.all(
+                      //             color: AppColors.buttonBackgroundGrey,
+                      //             // Table border color
+                      //             width: 1,
+                      //             // Border width
+                      //             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
+                      //           ),
+                      //           columnWidths: {
+                      //             0: FractionColumnWidth(0.81),
+                      //             // Fixed width for "Procedure" column
+                      //             1: FractionColumnWidth(0.19),
+                      //             // Fixed width for "Diagnosis" column
+                      //           },
+                      //           children: [
+                      //             TableRow(
+                      //               decoration: BoxDecoration(
+                      //                 color: AppColors.white, // Header row background color
+                      //               ),
+                      //               children: [_headerBuildTableCell('Total'), _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}")],
+                      //             ),
+                      //             // Add more rows if needed
+                      //           ],
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(height: 20),
 
                       Obx(() {

@@ -4,6 +4,8 @@ import '../modules/add_patient/bindings/add_patient_binding.dart';
 import '../modules/add_patient/views/add_patient_view.dart';
 import '../modules/all_attachment/bindings/all_attachment_binding.dart';
 import '../modules/all_attachment/views/all_attachment_view.dart';
+import '../modules/beta_tester_code/bindings/beta_tester_code_binding.dart';
+import '../modules/beta_tester_code/views/beta_tester_code_view.dart';
 import '../modules/edit_patient_details/bindings/edit_patent_details_binding.dart';
 import '../modules/edit_patient_details/views/edit_patent_details_view.dart';
 import '../modules/forgot_password/bindings/forgot_password_binding.dart';
@@ -45,100 +47,25 @@ class AppPages {
   static const INITIAL = Routes.SPLASH;
 
   static final routes = [
-    GetPage(
-      name: _Paths.HOME,
-      page: () => HomeView(),
-      binding: HomeBinding(),
-    ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => LoginView(),
-      binding: LoginBinding(),
-    ),
-    GetPage(
-      name: _Paths.SPLASH,
-      page: () => const SplashView(),
-      binding: SplashBinding(),
-    ),
-    GetPage(
-      name: _Paths.VISIT_MAIN,
-      page: () => VisitMainView(),
-      binding: VisitMainBinding(),
-    ),
-    GetPage(
-      name: _Paths.PATIENT_INFO,
-      page: () => PatientInfoView(),
-      binding: PatientInfoBinding(),
-    ),
-    GetPage(
-      name: _Paths.ALL_ATTACHMENT,
-      page: () => AllAttachmentView(),
-      binding: AllAttachmentBinding(),
-    ),
-    GetPage(
-      name: _Paths.PATIENT_VIEW_READ_ONLY,
-      page: () => PatientViewReadOnlyView(),
-      binding: PatientViewReadOnlyBinding(),
-    ),
-    GetPage(
-      name: _Paths.ADD_PATIENT,
-      page: () => AddPatientView(),
-      binding: AddPatientBinding(),
-    ),
-    GetPage(
-      name: _Paths.SCHEDULE_PATIENT,
-      page: () => AddPatientView(),
-      binding: AddPatientBinding(),
-    ),
-    GetPage(
-      name: _Paths.EDIT_PATENT_DETAILS,
-      page: () => EditPatentDetailsView(),
-      binding: EditPatentDetailsBinding(),
-    ),
-    GetPage(
-      name: _Paths.PATIENT_PROFILE,
-      page: () => PatientProfileView(),
-      binding: PatientProfileBinding(),
-    ),
-    GetPage(
-      name: _Paths.PROFILE,
-      page: () => const ProfileView(),
-      binding: ProfileBinding(),
-    ),
-    GetPage(
-      name: _Paths.FORGOT_PASSWORD,
-      page: () => ForgotPasswordView(),
-      binding: ForgotPasswordBinding(),
-    ),
-    GetPage(
-      name: _Paths.SIGN_UP,
-      page: () => SignUpView(),
-      binding: SignUpBinding(),
-    ),
-    GetPage(
-      name: _Paths.PERSONAL_SETTING,
-      page: () => PersonalSettingView(),
-      binding: PersonalSettingBinding(),
-    ),
-    GetPage(
-      name: _Paths.INVITED_USER_SUBMITTED,
-      page: () => InvitedUserSubmittedView(),
-      binding: InvitedUserSubmittedBinding(),
-    ),
-    GetPage(
-      name: _Paths.SIGN_UP_SET_PASSWORD,
-      page: () => SignUpSetPasswordView(),
-      binding: SignUpSetPasswordBinding(),
-    ),
-    GetPage(
-      name: _Paths.SIGN_UP_SET_ORGANIZATION_INFO,
-      page: () => SignUpSetOrganizationInfoView(),
-      binding: SignUpSetOrganizationInfoBinding(),
-    ),
-    GetPage(
-      name: _Paths.SIGN_UP_PROFILE_COMPLETE,
-      page: () => SignUpProfileCompleteView(),
-      binding: SignUpProfileCompleteBinding(),
-    ),
+    GetPage(name: _Paths.HOME, page: () => HomeView(), binding: HomeBinding()),
+    GetPage(name: _Paths.LOGIN, page: () => LoginView(), binding: LoginBinding()),
+    GetPage(name: _Paths.SPLASH, page: () => const SplashView(), binding: SplashBinding()),
+    GetPage(name: _Paths.VISIT_MAIN, page: () => VisitMainView(), binding: VisitMainBinding()),
+    GetPage(name: _Paths.PATIENT_INFO, page: () => PatientInfoView(), binding: PatientInfoBinding()),
+    GetPage(name: _Paths.ALL_ATTACHMENT, page: () => AllAttachmentView(), binding: AllAttachmentBinding()),
+    GetPage(name: _Paths.PATIENT_VIEW_READ_ONLY, page: () => PatientViewReadOnlyView(), binding: PatientViewReadOnlyBinding()),
+    GetPage(name: _Paths.ADD_PATIENT, page: () => AddPatientView(), binding: AddPatientBinding()),
+    GetPage(name: _Paths.SCHEDULE_PATIENT, page: () => AddPatientView(), binding: AddPatientBinding()),
+    GetPage(name: _Paths.EDIT_PATENT_DETAILS, page: () => EditPatentDetailsView(), binding: EditPatentDetailsBinding()),
+    GetPage(name: _Paths.PATIENT_PROFILE, page: () => PatientProfileView(), binding: PatientProfileBinding()),
+    GetPage(name: _Paths.PROFILE, page: () => const ProfileView(), binding: ProfileBinding()),
+    GetPage(name: _Paths.FORGOT_PASSWORD, page: () => ForgotPasswordView(), binding: ForgotPasswordBinding()),
+    GetPage(name: _Paths.SIGN_UP, page: () => SignUpView(), binding: SignUpBinding()),
+    GetPage(name: _Paths.PERSONAL_SETTING, page: () => PersonalSettingView(), binding: PersonalSettingBinding()),
+    GetPage(name: _Paths.INVITED_USER_SUBMITTED, page: () => InvitedUserSubmittedView(), binding: InvitedUserSubmittedBinding()),
+    GetPage(name: _Paths.SIGN_UP_SET_PASSWORD, page: () => SignUpSetPasswordView(), binding: SignUpSetPasswordBinding()),
+    GetPage(name: _Paths.SIGN_UP_SET_ORGANIZATION_INFO, page: () => SignUpSetOrganizationInfoView(), binding: SignUpSetOrganizationInfoBinding()),
+    GetPage(name: _Paths.SIGN_UP_PROFILE_COMPLETE, page: () => SignUpProfileCompleteView(), binding: SignUpProfileCompleteBinding()),
+    GetPage(name: _Paths.BETA_TESTER_CODE, page: () => BetaTesterCodeView(), binding: BetaTesterCodeBinding()),
   ];
 }
