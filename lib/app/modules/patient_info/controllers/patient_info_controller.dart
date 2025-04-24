@@ -1107,15 +1107,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         );
       }
 
-      // print("setDoctorModel:- ${diagnosis.procedure?.procedurePossibleAlternatives?.first.toJson()}");
-      // print("setDoctorModel:- ${diagnosis.procedure?.code}");
-      // print("setDoctorModel:- ${diagnosis.procedure?.confidenceScore}");
-
-      // List<SingleCellModel> singleCellList = List.generate(
-      //   diagnosisModelList.length,
-      //   (index) => SingleCellModel(code: diagnosisModelList[index].code, description: diagnosisModelList[index].description, unitPrice: diagnosisModelList[index].confidence),
-      // );
-
       tableModel.value?.rows.add(
         TableRowModel(
           cells: [
@@ -1132,12 +1123,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
               ],
             ),
 
-            // TableCellModel(items: singleCellList),
             TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
 
-            // TableCellModel(
-            //   items: [SingleCellModel(code: diagnosis.diagnosis?.first.code, unit: "0", description: diagnosis.diagnosis?.first.description, unitPrice: "0", diagnosisModelList: diagnosisModelList)],
-            // ),
             TableCellModel(items: [SingleCellModel(unit: diagnosis.units)]),
             TableCellModel(items: [SingleCellModel(unitPrice: diagnosis.unitCharge)]),
           ],
