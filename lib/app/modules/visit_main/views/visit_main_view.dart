@@ -136,11 +136,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     onTap: () {
                                       Get.back();
                                     },
-                                    child: Container(
-                                      color: AppColors.white,
-                                      padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
-                                      child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20),
-                                    ),
+                                    child: Container(color: AppColors.white, padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
                                   ),
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(30),
@@ -202,10 +198,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         SizedBox(height: 6),
                                         Text(
                                           textAlign: TextAlign.center,
-                                          controller.formatDateTime(
-                                            firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                            secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
-                                          ),
+                                          controller.formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
                                           style: AppFonts.regular(14, AppColors.textGrey),
                                         ),
                                       ],
@@ -266,7 +259,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(textAlign: TextAlign.center, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
-                                        SizedBox(width: 15),
+                                        SizedBox(height: 6),
                                         PopupMenuButton<String>(
                                           offset: const Offset(0, 8),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -402,8 +395,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 Row(
                                                   children: [
                                                     SizedBox(width: 5),
-                                                    if (controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1)
-                                                      Text("•", style: AppFonts.regular(24, AppColors.textDarkGrey)),
+                                                    if (controller.patientData.value?.responseData?.personalNote?.personalNote?.length != 1) Text("•", style: AppFonts.regular(24, AppColors.textDarkGrey)),
                                                     SizedBox(width: 10),
                                                     Expanded(
                                                       child: Text(
@@ -494,12 +486,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       SizedBox(width: 10),
                                                                       Text("•", style: AppFonts.regular(24, AppColors.textGrey)),
                                                                       SizedBox(width: 10),
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory ?? "",
-                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                        ),
-                                                                      ),
+                                                                      Expanded(child: Text(controller.medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistory ?? "", style: AppFonts.regular(14, AppColors.textGrey))),
                                                                     ],
                                                                   ),
                                                                   SizedBox(height: 0),
@@ -563,9 +550,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     )
                                                     : SizedBox(),
                                                 controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ? SizedBox(height: 10) : SizedBox(),
-                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null
-                                                    ? Container(height: 0.5, width: double.infinity, color: AppColors.textGrey)
-                                                    : SizedBox(),
+                                                controller.medicalRecords.value?.responseData?.fullNoteDetails?.medications != null ? Container(height: 0.5, width: double.infinity, color: AppColors.textGrey) : SizedBox(),
                                               ],
                                             ),
                                           ),
@@ -688,12 +673,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       SizedBox(width: 10),
                                                                       Text("•", style: AppFonts.regular(24, AppColors.black)),
                                                                       SizedBox(width: 10),
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory ?? "",
-                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                        ),
-                                                                      ),
+                                                                      Expanded(child: Text(controller.medicalRecords.value?.responseData?.fullNoteDetails?.skinHistory ?? "", style: AppFonts.regular(14, AppColors.textGrey))),
                                                                     ],
                                                                   ),
                                                                   SizedBox(height: 0),
@@ -759,12 +739,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       SizedBox(width: 10),
                                                                       Text("•", style: AppFonts.regular(24, AppColors.black)),
                                                                       SizedBox(width: 10),
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory ?? "",
-                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                        ),
-                                                                      ),
+                                                                      Expanded(child: Text(controller.medicalRecords.value?.responseData?.fullNoteDetails?.socialHistory ?? "", style: AppFonts.regular(14, AppColors.textGrey))),
                                                                     ],
                                                                   ),
                                                                   SizedBox(height: 0),
@@ -830,12 +805,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                       SizedBox(width: 10),
                                                                       Text("•", style: AppFonts.regular(24, AppColors.black)),
                                                                       SizedBox(width: 10),
-                                                                      Expanded(
-                                                                        child: Text(
-                                                                          controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "",
-                                                                          style: AppFonts.regular(14, AppColors.textGrey),
-                                                                        ),
-                                                                      ),
+                                                                      Expanded(child: Text(controller.medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "", style: AppFonts.regular(14, AppColors.textGrey))),
                                                                     ],
                                                                   ),
                                                                   SizedBox(height: 0),
@@ -954,13 +924,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             },
                                                           );
                                                         },
-                                                        child: Text(
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          textAlign: TextAlign.left,
-                                                          "Start visit now",
-                                                          style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                        ),
+                                                        child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Start visit now", style: AppFonts.regular(14, AppColors.backgroundPurple)),
                                                       ),
                                                       SizedBox(width: 30),
                                                       GestureDetector(
@@ -985,13 +949,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               )
                                                               : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                                         },
-                                                        child: Text(
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          textAlign: TextAlign.left,
-                                                          "Reschedule",
-                                                          style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                        ),
+                                                        child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Reschedule", style: AppFonts.regular(14, AppColors.backgroundPurple)),
                                                       ),
                                                       SizedBox(width: 30),
                                                       GestureDetector(
@@ -1004,10 +962,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                   // return SizedBox();
                                                                   return DeleteScheduleVisit(
                                                                     onDelete: () {
-                                                                      controller.changeStatus(
-                                                                        "Cancelled",
-                                                                        controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "",
-                                                                      );
+                                                                      controller.changeStatus("Cancelled", controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "");
 
                                                                       // controller.globalController.changeStatus("Cancelled");
 
@@ -1019,13 +974,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               )
                                                               : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                                         },
-                                                        child: Text(
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          textAlign: TextAlign.left,
-                                                          "Cancel visit",
-                                                          style: AppFonts.regular(14, AppColors.backgroundPurple),
-                                                        ),
+                                                        child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Cancel visit", style: AppFonts.regular(14, AppColors.backgroundPurple)),
                                                       ),
                                                       SizedBox(width: 60),
                                                     ],
@@ -1059,11 +1008,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                             collapsedBackgroundColor: AppColors.backgroundWhite,
                             title: Row(
                               children: [
-                                Text(
-                                  textAlign: TextAlign.start,
-                                  "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)",
-                                  style: AppFonts.regular(16, AppColors.textBlack),
-                                ),
+                                Text(textAlign: TextAlign.start, "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)", style: AppFonts.regular(16, AppColors.textBlack)),
                                 Spacer(),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
@@ -1130,11 +1075,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                       controller.globalController.addRoute(Routes.PATIENT_INFO);
                                                       Get.toNamed(
                                                         Routes.PATIENT_INFO,
-                                                        arguments: {
-                                                          "visitId": controller.visitRecapList.value?.responseData?[index].id.toString(),
-                                                          "patientId": controller.patientId.value,
-                                                          "unique_tag": DateTime.now().toString(),
-                                                        },
+                                                        arguments: {"visitId": controller.visitRecapList.value?.responseData?[index].id.toString(), "patientId": controller.patientId.value, "unique_tag": DateTime.now().toString()},
                                                       );
                                                     },
                                                     child: Text(textAlign: TextAlign.center, "View", style: AppFonts.medium(12, AppColors.textPurple)),
@@ -1414,13 +1355,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   // value: "",
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                    child: Row(
-                                      children: [
-                                        Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey),
-                                        SizedBox(width: 10),
-                                        Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack)),
-                                      ],
-                                    ),
+                                    child: Row(children: [Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack))]),
                                   ),
                                 ),
                                 PopupMenuItem(
@@ -1435,11 +1370,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                         child: Row(
-                                          children: [
-                                            Icon(CupertinoIcons.photo_fill_on_rectangle_fill, color: AppColors.textDarkGrey),
-                                            SizedBox(width: 10),
-                                            Text("Choose Photo", style: AppFonts.regular(16, AppColors.textBlack)),
-                                          ],
+                                          children: [Icon(CupertinoIcons.photo_fill_on_rectangle_fill, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Choose Photo", style: AppFonts.regular(16, AppColors.textBlack))],
                                         ),
                                       ),
                                     ],
@@ -1457,13 +1388,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.document_scanner_sharp, color: AppColors.textDarkGrey),
-                                            SizedBox(width: 10),
-                                            Text("Scan Documents", style: AppFonts.regular(16, AppColors.textDarkGrey)),
-                                          ],
-                                        ),
+                                        child: Row(children: [Icon(Icons.document_scanner_sharp, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Scan Documents", style: AppFonts.regular(16, AppColors.textDarkGrey))]),
                                       ),
                                     ],
                                   ),
@@ -1480,13 +1405,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey),
-                                            SizedBox(width: 10),
-                                            Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack)),
-                                          ],
-                                        ),
+                                        child: Row(children: [Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))]),
                                       ),
                                     ],
                                   ),
@@ -1494,21 +1413,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                               ],
                           child: Container(
                             height: 81,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                              color: AppColors.backgroundLightGrey,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            decoration: BoxDecoration(border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)), color: AppColors.backgroundLightGrey, borderRadius: BorderRadius.circular(8)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(ImagePath.add_photo, height: 30, width: 30),
-                                    SizedBox(height: 10),
-                                    Text(textAlign: TextAlign.center, "Add a Photo ", style: AppFonts.medium(16, AppColors.textBlack)),
-                                  ],
+                                  children: [SvgPicture.asset(ImagePath.add_photo, height: 30, width: 30), SizedBox(height: 10), Text(textAlign: TextAlign.center, "Add a Photo ", style: AppFonts.medium(16, AppColors.textBlack))],
                                 ),
                               ],
                             ),
@@ -1565,11 +1476,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(ImagePath.pause, height: 30, width: 30),
-                                      SizedBox(height: 10),
-                                      Text(textAlign: TextAlign.center, "Pause", style: AppFonts.medium(16, AppColors.textWhite)),
-                                    ],
+                                    children: [SvgPicture.asset(ImagePath.pause, height: 30, width: 30), SizedBox(height: 10), Text(textAlign: TextAlign.center, "Pause", style: AppFonts.medium(16, AppColors.textWhite))],
                                   ),
                                 ],
                               ),

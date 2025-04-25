@@ -137,8 +137,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
   void _swapItems(int row, int col, int from, int to) => setState(() => widget.tableModel.swapItems(row, col, from, to));
 
-  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) =>
-      setState(() => widget.tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
+  void _moveItem({required int fromRow, required int fromCol, required int itemIndex, required int toRow, required int toCol}) => setState(() => widget.tableModel.moveItem(fromRow, fromCol, itemIndex, toRow, toCol));
 
   void _moveCell(int fromRow, int fromCol, int toRow, int toCol) => setState(() => widget.tableModel.moveCell(fromRow, fromCol, toRow, toCol));
 
@@ -452,10 +451,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                   )
                                   : RichText(
                                     text: TextSpan(
-                                      children: [
-                                        TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
-                                        TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                      ],
+                                      children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
                                     ),
                                   ),
                         ),
@@ -678,10 +674,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                     barrierColor: Colors.transparent,
                                                     bodyBuilder:
                                                         (context) => DropDrownSearchTable(
-                                                          items:
-                                                              (e.diagnosisPossibleAlternatives ?? [])
-                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                  .toList(),
+                                                          items: (e.diagnosisPossibleAlternatives ?? []).map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description)).toList(),
                                                           onItemSelected: (value, index) {
                                                             Navigator.pop(context);
 
@@ -787,10 +780,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                               )
                               : RichText(
                                 text: TextSpan(
-                                  children: [
-                                    TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
-                                    TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                  ],
+                                  children: [TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
                                 ),
                               ),
                     ),
@@ -821,12 +811,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
         procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
       }
 
-      final procedure1 = createProcedure(
-        code: row.cells.first.items[0].code ?? "",
-        description: row.cells.first.items[0].description ?? "",
-        modifier: "",
-        possibleAlternatives: procedureListPossibleAlternatives,
-      );
+      final procedure1 = createProcedure(code: row.cells.first.items[0].code ?? "", description: row.cells.first.items[0].description ?? "", modifier: "", possibleAlternatives: procedureListPossibleAlternatives);
 
       for (var item in row.cells[1].items[0].diagnosisModelList ?? []) {
         List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
@@ -862,124 +847,6 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
       print("-------------------------------------------");
 
-      // for (var row in widget.tableModel.rows) {
-      //   for (var cell in row.cells) {
-      //     for (var item in cell.items) {
-      //       List<Map<String, String>> procedureListPossibleAlternatives = [];
-      //
-      //       for (ProcedurePossibleAlternatives procedurePossibleAlternatives in item.procedurePossibleAlternatives ?? []) {
-      //         procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
-      //       }
-      //
-      //       // List<Map<String, String>> procedureListPossibleAlternatives = List<Map<String, String>>.from(
-      //       //   item.procedurePossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
-      //       // );
-      //
-      //       print("procedure code :- ${item.code}");
-      //       print("procedure description :- ${item.description}");
-      //
-      //       final procedure1 = createProcedure(code: item.code ?? "", description: item.code ?? "", modifier: "", possibleAlternatives: procedureListPossibleAlternatives);
-      //
-      //       List<Map<String, dynamic>> diagnosisList1 = [];
-      //
-      //       for (DiagnosisModel diagnosisList in item.diagnosisModelList ?? []) {
-      //         List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
-      //
-      //         for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in diagnosisList.diagnosisPossibleAlternatives ?? []) {
-      //           diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
-      //         }
-      //
-      //         // List<Map<String, String>> diagnosisListListPossibleAlternatives = List<Map<String, String>>.from(
-      //         //   diagnosisList.diagnosisPossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
-      //         // );
-      //
-      //         final localdiagnosisList = createDiagnosis(
-      //           code: diagnosisList.code ?? "",
-      //           description: diagnosisList.description ?? "",
-      //           icd10: diagnosisList.code ?? "",
-      //           confidenceScore: diagnosisList.confidence ?? "",
-      //           possibleAlternatives: diagnosisListListPossibleAlternatives,
-      //         );
-      //
-      //         diagnosisList1.add(localdiagnosisList);
-      //       }
-      //
-      //       Map<String, dynamic> arrAiagnosis_codes_procedures = {};
-      //
-      //       arrAiagnosis_codes_procedures["procedure"] = procedure1;
-      //       arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
-      //       arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
-      //       arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
-      //       arrAiagnosis_codes_procedures["modifier"] = null;
-      //       arrAiagnosis_codes_procedures["total_charge"] = "0";
-      //
-      //       mainDic.add(arrAiagnosis_codes_procedures);
-      //     }
-      //   }
-
-      // print(
-      //   "diagnosis data:- ${row.cells[1].items[0].diagnosisModelList?.first.code}, ${row.cells[1].items[0].diagnosisModelList?.first.description}, ${row.cells[1].items[0].diagnosisModelList?.first.diagnosisPossibleAlternatives}",
-      // );
-
-      // for (var cell in row.cells) {
-      // print("procedure data:- ${cell.items[0].code}, ${cell.items[0].description}");
-      // print("procedure data:- ${cell.items[0]}, ${cell.items[1]} , ${cell.items[2]}, ${cell.items[3]}");
-
-      //   for (var item in cell.items) {
-      //     List<Map<String, String>> procedureListPossibleAlternatives = [];
-      //
-      //     for (ProcedurePossibleAlternatives procedurePossibleAlternatives in item.procedurePossibleAlternatives ?? []) {
-      //       procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
-      //     }
-      //
-      //     // List<Map<String, String>> procedureListPossibleAlternatives = List<Map<String, String>>.from(
-      //     //   item.procedurePossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
-      //     // );
-      //
-      //     print("procedure code :- ${item.code}");
-      //     print("procedure description :- ${item.description}");
-      //
-      //     final procedure1 = createProcedure(code: item.code ?? "", description: item.code ?? "", modifier: "", possibleAlternatives: procedureListPossibleAlternatives);
-      //
-      //     List<Map<String, dynamic>> diagnosisList1 = [];
-      //
-      //     for (DiagnosisModel diagnosisList in item.diagnosisModelList ?? []) {
-      //       List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
-      //
-      //       for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in diagnosisList.diagnosisPossibleAlternatives ?? []) {
-      //         diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
-      //       }
-      //
-      //       // List<Map<String, String>> diagnosisListListPossibleAlternatives = List<Map<String, String>>.from(
-      //       //   diagnosisList.diagnosisPossibleAlternatives!.map((item) => {'code': item.code, 'description': item.description}),
-      //       // );
-      //
-      //       final localdiagnosisList = createDiagnosis(
-      //         code: diagnosisList.code ?? "",
-      //         description: diagnosisList.description ?? "",
-      //         icd10: diagnosisList.code ?? "",
-      //         confidenceScore: diagnosisList.confidence ?? "",
-      //         possibleAlternatives: diagnosisListListPossibleAlternatives,
-      //       );
-      //
-      //       diagnosisList1.add(localdiagnosisList);
-      //     }
-      //
-      //     Map<String, dynamic> arrAiagnosis_codes_procedures = {};
-      //
-      //     arrAiagnosis_codes_procedures["procedure"] = procedure1;
-      //     arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
-      //     arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
-      //     arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
-      //     arrAiagnosis_codes_procedures["modifier"] = null;
-      //     arrAiagnosis_codes_procedures["total_charge"] = "0";
-      //
-      //     mainDic.add(arrAiagnosis_codes_procedures);
-      //   }
-      // }
-
-      // print("possible_diagnosis_codes_procedures is:- ${patientInfoController.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures.toString()}");
-
       widget.updateResponse(mainDic);
 
       // print("API payload is :- ${apiPayload}");
@@ -997,13 +864,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
   }
 
   // Create a dynamic diagnosis
-  Map<String, dynamic> createDiagnosis({
-    required String code,
-    required String description,
-    required String icd10,
-    String confidenceScore = "",
-    List<Map<String, dynamic>> possibleAlternatives = const [],
-  }) {
+  Map<String, dynamic> createDiagnosis({required String code, required String description, required String icd10, String confidenceScore = "", List<Map<String, dynamic>> possibleAlternatives = const []}) {
     return {"code": code, "description": description, "icd_10_code": icd10, "confidence_score": confidenceScore, "possible_alternatives": possibleAlternatives};
   }
 

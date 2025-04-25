@@ -71,8 +71,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   String visitId = "";
   String patientId = "";
 
-  RxString doctorValue = RxString("select...");
-  RxString medicationValue = RxString("select...");
+  RxString doctorValue = RxString("select Doctor");
+  RxString medicationValue = RxString("select M.A");
 
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
@@ -1098,12 +1098,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
 
         diagnosisModelList.add(
-          DiagnosisModel(
-            confidence: diagnosisModel.confidenceScore,
-            code: diagnosisModel.code,
-            description: diagnosisModel.description,
-            diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
-          ),
+          DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description, diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives),
         );
       }
 
@@ -1121,13 +1116,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
           cells: [
             TableCellModel(
               items: [
-                SingleCellModel(
-                  code: diagnosis.procedure?.code,
-                  unit: "0",
-                  description: diagnosis.procedure?.description ?? "",
-                  unitPrice: "0",
-                  procedurePossibleAlternatives: diagnosis.procedure?.procedurePossibleAlternatives,
-                ),
+                SingleCellModel(code: diagnosis.procedure?.code, unit: "0", description: diagnosis.procedure?.description ?? "", unitPrice: "0", procedurePossibleAlternatives: diagnosis.procedure?.procedurePossibleAlternatives),
               ],
             ),
 

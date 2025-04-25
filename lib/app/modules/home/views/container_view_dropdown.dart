@@ -25,15 +25,16 @@ class _ContainerDropdownViewState extends State<ContainerDropdownViewPopUp> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 40,
-        decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
+        height: 20,
+        // decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(padding: const EdgeInsets.only(left: 10), child: Text(widget.name)),
-            Spacer(),
+            Flexible(child: Padding(padding: const EdgeInsets.only(left: 0), child: Text(widget.name, textAlign: TextAlign.start))),
+            SizedBox(width: 5),
             isExpand
-                ? Padding(padding: const EdgeInsets.only(right: 10), child: SvgPicture.asset(ImagePath.upArrowDropDown, height: 10, width: 10))
-                : Padding(padding: const EdgeInsets.only(right: 10), child: SvgPicture.asset(ImagePath.downArrowDropDown, height: 13, width: 13)),
+                ? Padding(padding: const EdgeInsets.only(right: 15), child: SvgPicture.asset(ImagePath.upArrowDropDown, height: 7, width: 7))
+                : Padding(padding: const EdgeInsets.only(right: 15), child: SvgPicture.asset(ImagePath.downArrowDropDown, height: 10, width: 10)),
           ],
         ),
       ),
