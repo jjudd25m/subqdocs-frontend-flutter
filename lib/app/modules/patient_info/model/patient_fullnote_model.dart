@@ -65,19 +65,7 @@ class FullNoteDetails {
   Exam? exam;
   List<ImpressionsAndPlan>? impressionsAndPlan;
 
-  FullNoteDetails({
-    this.cancerHistory,
-    this.skinHistory,
-    this.skinHistoryWithLocation,
-    this.socialHistory,
-    this.medications,
-    this.allergies,
-    this.chiefComplain,
-    this.hpi,
-    this.reviewOfSystem,
-    this.exam,
-    this.impressionsAndPlan,
-  });
+  FullNoteDetails({this.cancerHistory, this.skinHistory, this.skinHistoryWithLocation, this.socialHistory, this.medications, this.allergies, this.chiefComplain, this.hpi, this.reviewOfSystem, this.exam, this.impressionsAndPlan});
 
   FullNoteDetails.fromJson(Map<String, dynamic> json) {
     cancerHistory = json['cancer_history'];
@@ -326,7 +314,7 @@ class Procedure {
   String? type;
   String? location;
   String? typeWithLocation;
-  Details? details;
+  Map<String, dynamic>? details;
 
   Procedure({this.type, this.location, this.typeWithLocation, this.details});
 
@@ -334,7 +322,7 @@ class Procedure {
     type = json['type'];
     location = json['location'];
     typeWithLocation = json['type_with_location'];
-    details = json['details'] != null ? new Details.fromJson(json['details']) : null;
+    details = details = json['details'];
   }
 
   Map<String, dynamic> toJson() {
@@ -342,21 +330,19 @@ class Procedure {
     data['type'] = this.type;
     data['location'] = this.location;
     data['type_with_location'] = this.typeWithLocation;
-    if (this.details != null) {
-      data['details'] = this.details!.toJson();
-    }
+    data['details'] = details;
     return data;
   }
 }
 
 class Details {
   String? handpiece;
-  Null? wavelength;
-  Null? spotSize;
-  Null? fluence;
-  Null? passes;
-  Null? density;
-  Null? anesthesia;
+  String? wavelength;
+  String? spotSize;
+  String? fluence;
+  String? passes;
+  String? density;
+  String? anesthesia;
 
   Details({this.handpiece, this.wavelength, this.spotSize, this.fluence, this.passes, this.density, this.anesthesia});
 

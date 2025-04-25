@@ -913,6 +913,7 @@ class HomeController extends GetxController {
 
   Future<void> patientScheduleCreate({required Map<String, dynamic> param}) async {
     Loader().showLoadingDialogForSimpleLoader();
+    Get.back();
 
     try {
       PatientScheduleModel response = await _homeRepository.patientVisitCreate(param: param);

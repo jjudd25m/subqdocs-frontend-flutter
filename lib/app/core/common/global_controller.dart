@@ -255,11 +255,7 @@ class GlobalController extends GetxController {
     });
 
     recorderService.updatedRecordingTime.listen((p0) {
-      final data = footballGameLiveActivityModel!.copyWith(
-        userName: "${patientFirstName.value} ${patientLsatName.value}",
-        recordingTime: p0,
-        resumeRecording: recorderService.recordingStatus.value.toString(),
-      );
+      final data = footballGameLiveActivityModel!.copyWith(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: p0, resumeRecording: recorderService.recordingStatus.value.toString());
       liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
     });
 
@@ -329,11 +325,7 @@ class GlobalController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       try {
-        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(
-          audioFile: audioFile,
-          token: loginData.responseData?.token ?? "",
-          patientVisitId: visitId.value,
-        );
+        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
         Loader().stopLoader();
         customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
@@ -1033,10 +1025,10 @@ class GlobalController extends GetxController {
       homeScheduleListSortingModel.value?.startDate = "";
       homeScheduleListSortingModel.value?.endDate = "";
       homeScheduleListSortingModel.value?.selectedDateValue = [];
-      homePastPatientListSortingModel.value?.selectedDoctorNames = [];
-      homePastPatientListSortingModel.value?.selectedDoctorId = [];
-      homePastPatientListSortingModel.value?.selectedMedicationNames = [];
-      homePastPatientListSortingModel.value?.selectedMedicationId = [];
+      homeScheduleListSortingModel.value?.selectedDoctorNames = [];
+      homeScheduleListSortingModel.value?.selectedDoctorId = [];
+      homeScheduleListSortingModel.value?.selectedMedicationNames = [];
+      homeScheduleListSortingModel.value?.selectedMedicationId = [];
 
       saveHomeScheduleListData();
     }

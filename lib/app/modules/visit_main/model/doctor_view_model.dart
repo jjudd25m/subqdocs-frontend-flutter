@@ -1855,17 +1855,24 @@ class ImpressionsAndPlanProcedure {
   String? type;
   Map<String, dynamic>? details;
 
+  String? location;
+  String? typeWithLocation;
+
   ImpressionsAndPlanProcedure({this.type, this.details});
 
   ImpressionsAndPlanProcedure.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     details = json['details'];
+    typeWithLocation = json['type_with_location'];
+    location = json['location'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
     data['details'] = details;
+    data['type_with_location'] = this.typeWithLocation;
+    data['location'] = this.location;
     return data;
   }
 }

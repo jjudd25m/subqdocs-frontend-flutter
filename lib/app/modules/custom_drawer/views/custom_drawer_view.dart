@@ -47,8 +47,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                               imageUrl: controller.globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
                               width: 40,
                               height: 40,
-                              nameLetters:
-                                  "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              nameLetters: "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                             ),
                           ),
                       SizedBox(width: 8),
@@ -61,7 +60,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            "DO, FAAD", // Dummy email
+                            controller.globalController.getUserDetailModel.value?.responseData?.degree ?? "", // Dummy email
                             style: AppFonts.medium(12, AppColors.textDarkGrey),
                           ),
                         ],

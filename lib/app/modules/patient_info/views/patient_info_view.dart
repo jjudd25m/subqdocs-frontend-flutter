@@ -281,7 +281,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(textAlign: TextAlign.center, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
+                                              Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
                                               SizedBox(height: 6),
                                               PopupMenuButton<String>(
                                                 offset: const Offset(0, 8),

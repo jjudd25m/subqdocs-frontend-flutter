@@ -484,6 +484,7 @@ import '../../../../utils/imagepath.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 import 'CustomTableDragDemo.dart';
+import 'impression_and_plan_docote_view.dart';
 
 class DoctorView extends StatelessWidget {
   DoctorView({super.key});
@@ -637,179 +638,7 @@ class DoctorView extends StatelessWidget {
               ),
               //after table
               SizedBox(height: 10),
-
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                    color: AppColors.white,
-                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Text(textAlign: TextAlign.center, "Impressions and Plan", style: AppFonts.medium(16, AppColors.textPurple)),
-                                Spacer(),
-                                SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            for (ImpressionsAndPlan task in controller.doctorViewList.value?.responseData?.impressionsAndPlan ?? [])
-                              Container(
-                                key: ValueKey(task),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(children: [Text(textAlign: TextAlign.left, "${task.number}. ${task.title} (${task.code})", style: AppFonts.medium(14, AppColors.textPurple))]),
-                                    Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, task.description ?? "", style: AppFonts.regular(14, AppColors.black))),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        if ((task.treatments ?? []).isNotEmpty) ...[
-                                          SizedBox(height: 10),
-                                          Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.center, "Treatments:", style: AppFonts.bold(15, AppColors.textBlack))),
-                                          for (ImpressionsAndPlanTreatments treatments in task.treatments ?? [])
-                                            if (treatments.type?.isNotEmpty ?? false) ...[
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(height: 5),
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                      child: Row(
-                                                        children: [
-                                                          SizedBox(width: 10),
-                                                          Expanded(child: Text(" ${treatments.type} ${treatments.name} \n", style: AppFonts.regular(14, AppColors.textBlack))),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        for (String specifications in treatments.specifications ?? [])
-                                                          Row(
-                                                            children: [
-                                                              SizedBox(width: 5),
-                                                              Expanded(child: Text(textAlign: TextAlign.start, "• ${specifications}", style: AppFonts.regular(14, AppColors.black))),
-                                                              // Expanded(child: Text(textAlign: TextAlign.start, "• ${specifications.parameter}: ${specifications.value}", style: AppFonts.regular(14, AppColors.black))),
-                                                            ],
-                                                          ),
-
-                                                        for (String note in treatments.notes ?? [])
-                                                          Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                                  child: Text(textAlign: TextAlign.left, "Notes:", style: AppFonts.bold(14, AppColors.black)),
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    SizedBox(width: 55),
-                                                                    Text(textAlign: TextAlign.left, "•", style: AppFonts.regular(14, AppColors.black)),
-
-                                                                    SizedBox(width: 5),
-                                                                    Expanded(child: Text(maxLines: 2, textAlign: TextAlign.left, " $note ", style: AppFonts.regular(14, AppColors.black))),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(width: 5),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(width: 5),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(height: 5),
-                                            ],
-                                        ],
-                                        if (task.procedure != null) ...[
-                                          if (task.procedure?.details?.isNotEmpty ?? false) ...[
-                                            if (task.procedure?.type?.isNotEmpty ?? false) ...[
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 25),
-                                                child: Text(textAlign: TextAlign.left, task.procedure?.type != null ? "${task.procedure?.type}:" : "", style: AppFonts.bold(16, AppColors.black)),
-                                              ),
-                                              for (var details in task.procedure?.details?.keys ?? [])
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(children: [SizedBox(width: 0), Expanded(child: Text(textAlign: TextAlign.left, " $details", style: AppFonts.regular(14, AppColors.black)))]),
-                                                      SizedBox(width: 10),
-                                                    ],
-                                                  ),
-                                                ),
-                                            ],
-                                          ],
-                                        ],
-                                        SizedBox(height: 5),
-                                        if (task.medications != null && task.medications != "-" && task.medications != "") ...[
-                                          Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Medications:", style: AppFonts.bold(15, AppColors.black))),
-                                          Row(
-                                            children: [SizedBox(width: 25), Expanded(child: Text(textAlign: TextAlign.left, "${task.medications}", style: AppFonts.regular(14, AppColors.textBlack)))],
-                                          ),
-                                          SizedBox(height: 5),
-                                        ],
-                                        if (task.orders != null && task.orders != "-" && task.orders != "") ...[
-                                          Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Orders:", style: AppFonts.bold(15, AppColors.black))),
-                                          Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.orders}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-                                        ],
-                                        SizedBox(height: 5),
-                                        if (task.counselingAndDiscussion != null && task.counselingAndDiscussion != "-" && task.counselingAndDiscussion != "") ...[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(textAlign: TextAlign.left, "Counseling and Discussion:", style: AppFonts.bold(15, AppColors.black)),
-                                          ),
-                                          Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.counselingAndDiscussion}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-                                        ],
-                                        SizedBox(height: 5),
-                                        if (task.followUp != null && task.followUp != "-" && task.followUp != "") ...[
-                                          Padding(padding: const EdgeInsets.only(left: 25), child: Text(textAlign: TextAlign.left, "Follow Up:", style: AppFonts.bold(15, AppColors.black))),
-                                          Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.followUp}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-                                        ],
-                                      ],
-                                    ),
-                                    SizedBox(height: 7),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                ),
-              ),
+              ImpressionAndPlanDoctorView(doctorViewList: controller.doctorViewList),
             ],
           ],
         ],
@@ -820,11 +649,7 @@ class DoctorView extends StatelessWidget {
   Widget _headerBuildTableCell(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(text, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))],
-      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(text, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))]),
     );
   }
 
@@ -884,11 +709,7 @@ class DoctorView extends StatelessWidget {
                                       TextSpan(
                                         children: [
                                           TextSpan(text: "${diagnosis.diagnosis?[index].code} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.semiBold(14, AppColors.black)),
-                                          TextSpan(
-                                            text: "${diagnosis.diagnosis?[index].description} ",
-                                            recognizer: TapGestureRecognizer()..onTap = () {},
-                                            style: AppFonts.regular(14, AppColors.black),
-                                          ),
+                                          TextSpan(text: "${diagnosis.diagnosis?[index].description} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.regular(14, AppColors.black)),
                                           if (diagnosis.diagnosis?[index].confidenceScore != "-" && (diagnosis.diagnosis?[index].confidenceScore != "")) ...[
                                             WidgetSpan(
                                               alignment: PlaceholderAlignment.middle,

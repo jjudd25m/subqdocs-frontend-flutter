@@ -299,7 +299,12 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
         children: [
           DragTarget<int>(
             onWillAccept: (data) => data != rowIndex,
-            onAccept: (fromRow) => _swapRows(fromRow, rowIndex),
+            onAccept: (fromRow) {
+              _swapRows(fromRow, rowIndex);
+              Future.delayed(const Duration(milliseconds: 500), () {
+                calculateTotal();
+              });
+            },
             builder: (context, candidateData, rejectedData) {
               return GestureDetector(
                 onTap: () {
@@ -406,7 +411,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                     );
 
                     Future.delayed(const Duration(milliseconds: 500), () {
-                      // calculateTotal();
+                      calculateTotal();
                     });
                   }
                 }
@@ -467,7 +472,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
 
                 _swapDiagnosisItems(fromRow: data['row']!, fromCol: data['col']!, fromItemIndex: data['itemIndex']!, fromDiagnosisIndex: data['subIndex']!, toRow: row, toCol: col, toItemIndex: i);
                 Future.delayed(const Duration(milliseconds: 500), () {
-                  // calculateTotal();
+                  calculateTotal();
                 });
                 // _swapDiagnosisItems(
                 //   fromRow: data['row']!,
@@ -680,7 +685,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                       toItemIndex: i,
                                     );
                                     Future.delayed(const Duration(milliseconds: 500), () {
-                                      // calculateTotal();
+                                      calculateTotal();
                                     });
 
                                     // int fromRow = data['row']!;
