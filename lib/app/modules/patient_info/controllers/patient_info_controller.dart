@@ -1115,7 +1115,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
                 SingleCellModel(
                   code: diagnosis.procedure?.code,
                   unit: "0",
-                  confidenceScore: diagnosis.procedure?.confidenceScore,
+                  modifiers: diagnosis.procedure?.modifier,
                   description: diagnosis.procedure?.description ?? "",
                   unitPrice: "0",
                   procedurePossibleAlternatives: diagnosis.procedure?.procedurePossibleAlternatives,

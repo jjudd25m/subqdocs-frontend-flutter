@@ -1,4 +1,6 @@
 // your imports remain unchanged
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,7 +27,7 @@ class SingleCellModel {
   String? description;
   String? code;
   String? unit;
-  String? confidenceScore;
+  String? modifiers;
 
   List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives;
 
@@ -33,7 +35,7 @@ class SingleCellModel {
 
   String? unitPrice;
 
-  SingleCellModel({this.description, this.code, this.unit, this.confidenceScore, this.procedurePossibleAlternatives, this.unitPrice, this.diagnosisModelList});
+  SingleCellModel({this.description, this.code, this.unit, this.modifiers, this.procedurePossibleAlternatives, this.unitPrice, this.diagnosisModelList});
 }
 
 class TableCellModel {
@@ -58,7 +60,7 @@ class TableModel {
       TableRowModel(
         cells: List.generate(
           4,
-              (index) => TableCellModel(
+          (index) => TableCellModel(
             items: [
               SingleCellModel(code: "0", unit: "0", description: "select item ", unitPrice: "0", diagnosisModelList: [DiagnosisModel(description: "selected item ", code: "", confidence: "high ")]),
             ],
@@ -76,26 +78,18 @@ class TableModel {
     rows[row].cells[col].items.add(SingleCellModel(code: "", unit: "0", description: "select item ", unitPrice: "0"));
   }
 
-  void swapDiagnosisItems({
-    required int fromRow,
-    required int fromCol,
-    required int fromItemIndex,
-    required int fromDiagnosisIndex,
-    required int toRow,
-    required int toCol,
-    required int toItemIndex,
-  }) {
-
+  void swapDiagnosisItems({required int fromRow, required int fromCol, required int fromItemIndex, required int fromDiagnosisIndex, required int toRow, required int toCol, required int toItemIndex}) {
     print("fromrow is :- ${fromRow}");
     print("fromCol is :- ${fromCol}");
     print("fromItemIndex is :- ${fromItemIndex}");
     print("fromDiagnosisIndex is :- ${fromDiagnosisIndex}");
+
+    print("---------------------------");
     print("toRow is :- ${toRow}");
     print("toCol is :- ${toCol}");
     print("toItemIndex is :- ${toItemIndex}");
 
-
-    final fromItem =   rows[fromRow].cells[fromCol].items[fromItemIndex];
+    final fromItem = rows[fromRow].cells[fromCol].items[fromItemIndex];
     final toItem = rows[toRow].cells[toCol].items[toItemIndex];
 
     final fromList = fromItem.diagnosisModelList;
@@ -104,7 +98,15 @@ class TableModel {
     final diagnosis = fromList.removeAt(fromDiagnosisIndex);
 
     toItem.diagnosisModelList ??= [];
-    toItem.diagnosisModelList!.add(diagnosis);
+
+    print("toItem lenth :- ${toItem.diagnosisModelList?.length ?? 0}");
+
+    if (toItem.diagnosisModelList?.length == 0) {
+      toItem.diagnosisModelList!.add(diagnosis);
+    } else {
+      print("toItemIndex is :- ${toItemIndex}");
+      toItem.diagnosisModelList?.insert(toItemIndex, diagnosis);
+    }
   }
 
   void deleteItem(int row, int col, int itemIndex) {
@@ -125,15 +127,7 @@ class TableModel {
     rows[row].cells[col].items.insert(toIndex, item);
   }
 
-  void moveDiagnosisItem({
-    required int fromRow,
-    required int fromCol,
-    required int fromItemIndex,
-    required int fromDiagnosisIndex,
-    required int toRow,
-    required int toCol,
-    required int toItemIndex,
-  }) {
+  void moveDiagnosisItem({required int fromRow, required int fromCol, required int fromItemIndex, required int fromDiagnosisIndex, required int toRow, required int toCol, required int toItemIndex}) {
     final fromList = rows[fromRow].cells[fromCol].items[fromItemIndex].diagnosisModelList;
     if (fromList == null || fromList.length <= fromDiagnosisIndex) return;
 
@@ -141,7 +135,6 @@ class TableModel {
     final toList = rows[toRow].cells[toCol].items[toItemIndex].diagnosisModelList ??= [];
     toList.add(diagnosis);
   }
-
 
   // void swapDiagnosisItems(int fromRow, int fromCol, int fromItemIndex, int toItemIndex, int subIndex) {
   //   final fromList = rows[fromRow].cells[fromCol].items[fromItemIndex].diagnosisModelList;
@@ -212,6 +205,8 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
   @override
   void initState() {
     super.initState();
+
+    calculateTotalOnly();
   }
 
   void _addItemAtIndex(int row, int col, int index) => setState(() => widget.tableModel.addItemAtIndex(row, col, index));
@@ -243,6 +238,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
       );
     });
   }
+
   // void _swapDiagnosisItems(int row, int col, int from, int to, int subIndex) => setState(() => widget.tableModel.swapDiagnosisItems(row, col, from, to, subIndex));
 
   void _swapItems(int row, int col, int from, int to) => setState(() => widget.tableModel.swapItems(row, col, from, to));
@@ -255,7 +251,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
   Widget _buildTableHeader() {
     return Table(
       border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
-      columnWidths: const {0: FractionColumnWidth(0.25), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.15)},
+      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
       children: [
         TableRow(
           decoration: BoxDecoration(color: AppColors.white),
@@ -274,7 +270,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
       child: Row(
         children: [
           Expanded(
-            flex: 17,
+            flex: 92,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
               decoration: BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
@@ -282,7 +278,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 10,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               child: Obx(() {
@@ -305,7 +301,12 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
             onWillAccept: (data) => data != rowIndex,
             onAccept: (fromRow) => _swapRows(fromRow, rowIndex),
             builder: (context, candidateData, rejectedData) {
-              return _buildRowContent(rowIndex);
+              return GestureDetector(
+                onTap: () {
+                  selectedRowIndex = rowIndex;
+                },
+                child: _buildRowContent(rowIndex),
+              );
             },
           ),
           if (selectedRowIndex == rowIndex)
@@ -377,7 +378,9 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
   Widget _buildRowContent(int rowIndex) {
     return Table(
       border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1),
-      columnWidths: const {0: FractionColumnWidth(0.25), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.15)},
+      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
+
+      // columnWidths: const {0: FractionColumnWidth(0.25), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.15)},
       children: [
         TableRow(
           children: List.generate(4, (colIndex) {
@@ -387,39 +390,25 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                 if ((data?['isCell'] ?? 0) == 1) {
                   _moveCell(data!['row']!, data['col']!, rowIndex, colIndex);
                 } else {
+                  print(" %%%%%%%% data val is:- ${data}");
 
-                  _swapDiagnosisItems(
-                    fromRow: data['row']!,
-                    fromCol: data['col']!,
-                    fromItemIndex: data['itemIndex']!,
-                    fromDiagnosisIndex: data['subIndex']!,
-                    toRow: rowIndex,
-                    toCol: colIndex,
-                    toItemIndex: 0,
-                  );
+                  int subIndex = data['subIndex'] ?? -1;
 
-                  // int fromRow = data['row']!;
-                  // int fromCol = data['col']!;
-                  // int fromItemIndex = data['itemIndex']!;
-                  // int fromDiagnosisIndex = data['subIndex']!;
-                  //
-                  // int toItemIndex = rowIndex; // <- target item
-                  // _swapDiagnosisItems(fromRow, fromCol, fromItemIndex, toItemIndex, fromDiagnosisIndex);
+                  if (subIndex != -1) {
+                    _swapDiagnosisItems(
+                      fromRow: data['row']!,
+                      fromCol: data['col']!,
+                      fromItemIndex: data['itemIndex']!,
+                      fromDiagnosisIndex: data['subIndex']!,
+                      toRow: rowIndex,
+                      toCol: colIndex,
+                      toItemIndex: 0,
+                    );
 
-                  // print("diagnosis data is :- ${data}");
-                  //
-                  // int row = data!['row']!;
-                  // int col = data['col']!;
-                  // int fromIndex = rowIndex;
-                  // int subIndex = data!['subIndex']!;
-                  // int itemIndex = data!['itemIndex']!;
-                  //
-                  // // _swapDiagnosisItems(data!['row']!, data['col']!, rowIndex, data['itemIndex']!, data!['subIndex']!);
-                  //
-                  // final item = widget.tableModel.rows[row].cells[1].items[0].diagnosisModelList?.removeAt(fromIndex);
-                  // widget.tableModel.rows[row].cells[1].items[0].diagnosisModelList?.add(item!);
-
-                  // _moveItem(fromRow: data!['row']!, fromCol: data['col']!, itemIndex: data['itemIndex']!, toRow: rowIndex, toCol: colIndex);
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      // calculateTotal();
+                    });
+                  }
                 }
               },
               builder: (context, candidate, rejected) {
@@ -470,17 +459,16 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
           children: List.generate(items.length, (i) {
             return DragTarget<Map<String, int>>(
               onWillAccept: (data) => data != null && data['row'] == row && data['col'] == col && data['itemIndex'] != null && data['itemIndex'] != i,
+              onAcceptWithDetails: (details) {
+                print("onAcceptWithDetails :- ${details}");
+              },
               onAccept: (data) {
+                print(" &&&&&&&&& data val is:- ${data}");
 
-                _swapDiagnosisItems(
-                  fromRow: data['row']!,
-                  fromCol: data['col']!,
-                  fromItemIndex: data['itemIndex']!,
-                  fromDiagnosisIndex: data['subIndex']!,
-                  toRow: row,
-                  toCol: col,
-                  toItemIndex: i,
-                );
+                _swapDiagnosisItems(fromRow: data['row']!, fromCol: data['col']!, fromItemIndex: data['itemIndex']!, fromDiagnosisIndex: data['subIndex']!, toRow: row, toCol: col, toItemIndex: i);
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  // calculateTotal();
+                });
                 // _swapDiagnosisItems(
                 //   fromRow: data['row']!,
                 //   fromCol: data['col']!,
@@ -496,7 +484,13 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                 //   _swapItems(row, col, fromIndex, i);
                 // }
               },
-              builder: (context, _, __) {
+              builder: (context, candidateData, __) {
+                GlobalKey _procedureGestureKey = GlobalKey();
+
+                final Orientation orientation = MediaQuery.of(context).orientation;
+                final bool isPortrait = orientation == Orientation.portrait;
+                final bool isIPad = Platform.isIOS && MediaQuery.of(context).size.shortestSide >= 600;
+
                 return LongPressDraggable<Map<String, int>>(
                   data: {'row': row, 'col': col, 'itemIndex': i},
                   feedback: Material(
@@ -573,7 +567,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                           ),
                                         ),
                                         SizedBox(width: 8),
-                                        GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
+                                        // GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                         SizedBox(width: 3),
                                         GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
                                       ],
@@ -674,6 +668,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                     print("diagnosisModelList data is :- ${details}");
                                   },
                                   onAccept: (data) {
+                                    print(" ********** data val is:- ${data}");
 
                                     _swapDiagnosisItems(
                                       fromRow: data['row']!,
@@ -684,6 +679,9 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                       toCol: col,
                                       toItemIndex: i,
                                     );
+                                    Future.delayed(const Duration(milliseconds: 500), () {
+                                      // calculateTotal();
+                                    });
 
                                     // int fromRow = data['row']!;
                                     // int fromCol = data['col']!;
@@ -703,13 +701,11 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                     //   // _swapItems(row, col, fromIndex, i);
                                     // }
                                   },
-                                  builder: (context, _, __) {
+                                  builder: (context, candidateData, __) {
                                     return LongPressDraggable<Map<String, int>>(
-                                      data: {
-                                        'row': row,
-                                        'col': col,
-                                        'itemIndex': i,
-                                        'subIndex': subIndex,
+                                      data: {'row': row, 'col': col, 'itemIndex': i, 'subIndex': subIndex},
+                                      onDragEnd: (details) {
+                                        print("onDragEnd :- $subIndex");
                                       },
                                       feedback: IntrinsicHeight(
                                         child: IntrinsicWidth(
@@ -727,24 +723,31 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                             (context) => DropDrownSearchTable(
                                                               items:
                                                                   (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                      .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                      .toList(),
+                                                                          .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
+                                                                          .toList()
+                                                                          .isNotEmpty
+                                                                      ? (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
+                                                                          .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
+                                                                          .toList()
+                                                                      : [ProcedurePossibleAlternatives(code: "", description: "No data found")],
                                                               onItemSelected: (value, index) {
                                                                 Navigator.pop(context);
 
-                                                                print("called diagnosis");
+                                                                if (value.description != "No data found") {
+                                                                  print("called diagnosis");
 
-                                                                setState(() {
-                                                                  String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
-                                                                  String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
-                                                                  items[i].diagnosisModelList?[subIndex].code = value.code;
-                                                                  items[i].diagnosisModelList?[subIndex].description = value.description;
+                                                                  setState(() {
+                                                                    String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
+                                                                    String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
+                                                                    items[i].diagnosisModelList?[subIndex].code = value.code;
+                                                                    items[i].diagnosisModelList?[subIndex].description = value.description;
 
-                                                                  items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
-                                                                  items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
+                                                                    items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
+                                                                    items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
 
-                                                                  calculateTotal();
-                                                                });
+                                                                    calculateTotal();
+                                                                  });
+                                                                }
                                                               },
                                                             ),
                                                         onPop: () => print('Popover was popped!'),
@@ -767,7 +770,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                   ),
                                                 ),
                                                 SizedBox(width: 10),
-                                                GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
+                                                // GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                                 SizedBox(width: 3),
                                                 GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
                                               ],
@@ -791,25 +794,32 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                                         (context) => DropDrownSearchTable(
                                                           items:
                                                               (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                  .toList(),
+                                                                      .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
+                                                                      .toList()
+                                                                      .isNotEmpty
+                                                                  ? (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
+                                                                      .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
+                                                                      .toList()
+                                                                  : [ProcedurePossibleAlternatives(code: "", description: "No data found")],
                                                           onItemSelected: (value, index) {
                                                             Navigator.pop(context);
 
-                                                            print("called diagnosis");
+                                                            if (value.description != "No data found") {
+                                                              print("called diagnosis");
 
-                                                            setState(() {
-                                                              String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
-                                                              String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
+                                                              setState(() {
+                                                                String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
+                                                                String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
 
-                                                              items[i].diagnosisModelList?[subIndex].code = value.code;
-                                                              items[i].diagnosisModelList?[subIndex].description = value.description;
+                                                                items[i].diagnosisModelList?[subIndex].code = value.code;
+                                                                items[i].diagnosisModelList?[subIndex].description = value.description;
 
-                                                              items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
-                                                              items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
+                                                                items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
+                                                                items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
 
-                                                              calculateTotal();
-                                                            });
+                                                                calculateTotal();
+                                                              });
+                                                            }
                                                           },
                                                         ),
                                                     onPop: () => print('Popover was popped!'),
@@ -831,7 +841,7 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                               ),
                                             ),
                                             SizedBox(width: 10),
-                                            GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
+                                            // GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                             SizedBox(width: 3),
                                             GestureDetector(onTap: () => _deleteItem(row, col, i), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
                                           ],
@@ -844,9 +854,16 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                             )
                             : col == 0
                             ? GestureDetector(
+                              key: _procedureGestureKey,
                               onTap: () {
+                                final RenderBox? renderBox = _procedureGestureKey.currentContext?.findRenderObject() as RenderBox?;
+                                final position = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+                                final size = renderBox?.size ?? Size.zero;
+
+                                print("position is :- ${position}");
+
                                 showPopover(
-                                  context: context,
+                                  context: _procedureGestureKey.currentContext!,
 
                                   barrierColor: Colors.transparent,
                                   bodyBuilder:
@@ -875,9 +892,14 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                   direction: PopoverDirection.bottom,
                                   width: 190,
                                   barrierDismissible: true,
-                                  contentDxOffset: -100,
-
-                                  arrowHeight: 0,
+                                  // contentDxOffset: 100,
+                                  // Align popover horizontally
+                                  // contentDyOffset: position.dy + size.height,
+                                  // Align popover vertically below the widget
+                                  // Align popover with GestureDetector
+                                  // contentDxOffset: -100,
+                                  arrowHeight: isPortrait ? 60 : 40,
+                                  arrowDyOffset: isPortrait ? -50 : -30,
                                   arrowWidth: 0,
                                 );
                               },
@@ -886,7 +908,9 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
                                 child: RichText(
                                   text: TextSpan(
                                     children: [
-                                      TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                      (items[i].modifiers != "" && items[i].modifiers != null)
+                                          ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
+                                          : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
                                       TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                     ],
                                   ),
@@ -1003,6 +1027,14 @@ class _NestedDraggableTableState extends State<NestedDraggableTable> {
     }
 
     print("widget total is :- ${widget.totalUnitCharge} ");
+  }
+
+  Future<void> calculateTotalOnly() async {
+    widget.totalUnitCharge.value = 0;
+
+    for (var row in widget.tableModel.rows) {
+      widget.totalUnitCharge.value += int.parse(row.cells[2].items[0].unit ?? "0") * int.parse(row.cells[3].items[0].unitPrice?.replaceAll("\$", "") ?? "0");
+    }
   }
 }
 

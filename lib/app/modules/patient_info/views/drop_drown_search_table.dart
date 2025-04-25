@@ -59,7 +59,10 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
                 return ListTile(
                   dense: true,
                   contentPadding: EdgeInsets.zero,
-                  title: Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)),
+                  title:
+                      filteredItems[index].code?.isNotEmpty ?? false
+                          ? Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black))
+                          : Text("${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)),
                   onTap: () {
                     widget.onItemSelected(filteredItems[index], index);
                   },
