@@ -483,6 +483,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
+import '../model/diagnosis_model.dart';
 import 'CustomTableDragDemo.dart';
 import 'impression_and_plan_docote_view.dart';
 
@@ -649,7 +650,11 @@ class DoctorView extends StatelessWidget {
   Widget _headerBuildTableCell(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(text, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))]),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Text(text, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black))],
+      ),
     );
   }
 
@@ -709,7 +714,11 @@ class DoctorView extends StatelessWidget {
                                       TextSpan(
                                         children: [
                                           TextSpan(text: "${diagnosis.diagnosis?[index].code} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.semiBold(14, AppColors.black)),
-                                          TextSpan(text: "${diagnosis.diagnosis?[index].description} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.regular(14, AppColors.black)),
+                                          TextSpan(
+                                            text: "${diagnosis.diagnosis?[index].description} ",
+                                            recognizer: TapGestureRecognizer()..onTap = () {},
+                                            style: AppFonts.regular(14, AppColors.black),
+                                          ),
                                           if (diagnosis.diagnosis?[index].confidenceScore != "-" && (diagnosis.diagnosis?[index].confidenceScore != "")) ...[
                                             WidgetSpan(
                                               alignment: PlaceholderAlignment.middle,

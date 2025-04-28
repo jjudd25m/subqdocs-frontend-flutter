@@ -22,12 +22,12 @@ import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/model/visitmainModel.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
+import '../model/diagnosis_model.dart';
 import '../model/patient_doctor_visit_data_model.dart';
 import '../model/patient_fullnote_model.dart';
 import '../model/patient_view_list_model.dart';
 import '../model/transcript_list_model.dart';
 import '../repository/patient_info_repository.dart';
-import '../views/CustomTableDragDemo.dart';
 import '../views/confirm_finalize_dialog.dart';
 
 class PatientInfoController extends GetxController with WidgetsBindingObserver {
@@ -1098,7 +1098,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
 
         diagnosisModelList.add(
-          DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description, diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives),
+          DiagnosisModel(
+            confidence: diagnosisModel.confidenceScore,
+            code: diagnosisModel.code,
+            description: diagnosisModel.description,
+            diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+          ),
         );
       }
 
