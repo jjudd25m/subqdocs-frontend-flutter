@@ -476,11 +476,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
+
 import 'package:lottie/lottie.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../core/common/html_editor_container.dart';
+import '../../../core/common/html_editor_view_custom.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 import 'CustomTableDragDemo.dart';
@@ -494,154 +498,193 @@ class DoctorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Column(
-        children: [
-          if (controller.isDoctorViewLoading.value || controller.doctorViewList.value?.responseData == null) ...[
-            Center(child: Column(children: [Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isDoctorViewLoadText.value)])),
-          ] else ...[
-            if (controller.doctorViewList.value?.responseData?.status == "Failure") ...[
-              Center(child: Text(controller.doctorViewList.value?.responseData?.message ?? "", textAlign: TextAlign.center)),
+      return GestureDetector(
+        onTap: () {
+          print("p");
+        },
+        child: Column(
+          children: [
+            if (controller.isDoctorViewLoading.value || controller.doctorViewList.value?.responseData == null) ...[
+              Center(child: Column(children: [Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isDoctorViewLoadText.value)])),
             ] else ...[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-                    color: AppColors.white,
-                    border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-                          color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Text(textAlign: TextAlign.center, "Diagnosis codes / Procedures", style: AppFonts.medium(16, AppColors.textPurple)),
-                                Spacer(),
-                                SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                      //   child: SingleChildScrollView(
-                      //     padding: EdgeInsets.zero,
-                      //     child: Column(
-                      //       children: [
-                      //         Table(
-                      //           border: TableBorder.all(
-                      //             color: AppColors.buttonBackgroundGrey,
-                      //             // Table border color
-                      //             width: 1,
-                      //             // Border width
-                      //             borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
-                      //           ),
-                      //           columnWidths: {
-                      //             0: FractionColumnWidth(0.33),
-                      //             // Fixed width for "Procedure" column
-                      //             1: FractionColumnWidth(0.33),
-                      //             // Fixed width for "Diagnosis" column
-                      //             2: FractionColumnWidth(0.15),
-                      //             // Flexible width for "Unit" column (20% of screen)
-                      //             3: FractionColumnWidth(0.19),
-                      //             // Flexible width for "Unit charges" column (40% of screen)
-                      //           },
-                      //           children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
-                      //         ),
-                      //         Table(
-                      //           border: TableBorder.all(
-                      //             color: AppColors.buttonBackgroundGrey,
-                      //             // Table border color
-                      //             width: 1,
-                      //             // Border width
-                      //             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
-                      //           ),
-                      //           columnWidths: {
-                      //             0: FractionColumnWidth(0.81),
-                      //             // Fixed width for "Procedure" column
-                      //             1: FractionColumnWidth(0.19),
-                      //             // Fixed width for "Diagnosis" column
-                      //           },
-                      //           children: [
-                      //             TableRow(
-                      //               decoration: BoxDecoration(
-                      //                 color: AppColors.white, // Header row background color
-                      //               ),
-                      //               children: [_headerBuildTableCell('Total'), _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}")],
-                      //             ),
-                      //             // Add more rows if needed
-                      //           ],
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(height: 10),
-
-                      Obx(() {
-                        return IntrinsicHeight(
-                          child: NestedDraggableTable(
-                            tableModel:
-                                controller.tableModel.value ??
-                                TableModel(
-                                  rows: [
-                                    TableRowModel(
-                                      cells: [
-                                        TableCellModel(items: [SingleCellModel(code: "40", unit: "0", description: "this the  procedure code", unitPrice: "0")]),
-                                        TableCellModel(items: [SingleCellModel(code: "10", unit: "0", description: "this is the Diagnosis", unitPrice: "0")]),
-                                        TableCellModel(items: [SingleCellModel(unit: "10")]),
-                                        TableCellModel(items: [SingleCellModel(unitPrice: "20")]),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                            updateResponse: (List<Map<String, dynamic>> updatedMap) {
-                              List<Map<String, dynamic>> possibleDiagnosisCodesProcedures = [];
-
-                              for (PossibleDiagnosisCodesProcedures item in controller.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? []) {
-                                possibleDiagnosisCodesProcedures.add(item.toJson());
-                              }
-
-                              final Map<String, dynamic> apiPayload = {
-                                "diagnosis_codes_procedures": {"diagnosis_codes_procedures": updatedMap, "possible_diagnosis_codes_procedures": possibleDiagnosisCodesProcedures},
-                              };
-
-                              // print("doctor id :- ${controller.doctorViewList.value?.responseData?.id.toString()}");
-
-                              controller.updateDoctorViewAPI(controller.doctorViewList.value?.responseData?.id.toString() ?? "", apiPayload);
-
-                              print("API Payload is:- ${apiPayload}");
-                            },
+              if (controller.doctorViewList.value?.responseData?.status == "Failure") ...[
+                Center(child: Text(controller.doctorViewList.value?.responseData?.message ?? "", textAlign: TextAlign.center)),
+              ] else ...[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+                            color: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                            border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0),
                           ),
-                        );
-                      }),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  Text(textAlign: TextAlign.center, "Diagnosis codes / Procedures", style: AppFonts.medium(16, AppColors.textPurple)),
+                                  Spacer(),
+                                  SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20),
 
-                      SizedBox(height: 20),
-                    ],
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                        //   child: SingleChildScrollView(
+                        //     padding: EdgeInsets.zero,
+                        //     child: Column(
+                        //       children: [
+                        //         Table(
+                        //           border: TableBorder.all(
+                        //             color: AppColors.buttonBackgroundGrey,
+                        //             // Table border color
+                        //             width: 1,
+                        //             // Border width
+                        //             borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), // Optional rounded corners
+                        //           ),
+                        //           columnWidths: {
+                        //             0: FractionColumnWidth(0.33),
+                        //             // Fixed width for "Procedure" column
+                        //             1: FractionColumnWidth(0.33),
+                        //             // Fixed width for "Diagnosis" column
+                        //             2: FractionColumnWidth(0.15),
+                        //             // Flexible width for "Unit" column (20% of screen)
+                        //             3: FractionColumnWidth(0.19),
+                        //             // Flexible width for "Unit charges" column (40% of screen)
+                        //           },
+                        //           children: controller.doctorViewList.value?.responseData != null ? _getTableRows(controller.doctorViewList.value!.responseData!) : [],
+                        //         ),
+                        //         Table(
+                        //           border: TableBorder.all(
+                        //             color: AppColors.buttonBackgroundGrey,
+                        //             // Table border color
+                        //             width: 1,
+                        //             // Border width
+                        //             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)), // Optional rounded corners
+                        //           ),
+                        //           columnWidths: {
+                        //             0: FractionColumnWidth(0.81),
+                        //             // Fixed width for "Procedure" column
+                        //             1: FractionColumnWidth(0.19),
+                        //             // Fixed width for "Diagnosis" column
+                        //           },
+                        //           children: [
+                        //             TableRow(
+                        //               decoration: BoxDecoration(
+                        //                 color: AppColors.white, // Header row background color
+                        //               ),
+                        //               children: [_headerBuildTableCell('Total'), _headerBuildTableCell("\$${controller.totalUnitCost.value.toStringAsFixed(2)}")],
+                        //             ),
+                        //             // Add more rows if needed
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(height: 10),
+                        // IntrinsicWidth(child: IntrinsicHeight(child: HtmlEditorPage(htmlController: HtmlEditorController(), initialText: "demo test"))),
+
+                        // Container(
+                        //   height: 200,
+                        //   width: double.maxFinite,
+                        //   decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(200))),
+                        //   child: InkWell(
+                        //     onTap: () async {
+                        //       if (controller.isDetail) return;
+                        //       await WidgetConstant.showHtmlEditorDialog(
+                        //         title: patientProfileStr,
+                        //         getXController: controller,
+                        //         htmlController: controller.patientProfileHtmlController,
+                        //         initialText: controller.patientProfileText,
+                        //         showToolbar: controller.showPatientProfileToolbar,
+                        //         callbacks: Callbacks(
+                        //           onChangeContent: (p0) {
+                        //             if (controller.loading == false) {
+                        //               controller.patientProfileText = p0;
+                        //               controller.checkValue();
+                        //               controller.update();
+                        //             }
+                        //           },
+                        //         ),
+                        //         disabled: false,
+                        //       );
+                        //     },
+                        //     child: IgnorePointer(
+                        //       child: HtmlEditorView(key: UniqueKey(), controller: HtmlEditorController(), initialText: "demo text", disabled: false, showToolbar: false, isReadOnly: false, height: 200, toggleToolbarOptions: () {}),
+                        //     ),
+                        //   ),
+                        // ),
+                        Obx(() {
+                          return IntrinsicHeight(
+                            child: NestedDraggableTable(
+                              tableModel:
+                                  controller.tableModel.value ??
+                                  TableModel(
+                                    rows: [
+                                      TableRowModel(
+                                        cells: [
+                                          TableCellModel(items: [SingleCellModel(code: "40", unit: "0", description: "this the  procedure code", unitPrice: "0")]),
+                                          TableCellModel(items: [SingleCellModel(code: "10", unit: "0", description: "this is the Diagnosis", unitPrice: "0")]),
+                                          TableCellModel(items: [SingleCellModel(unit: "10")]),
+                                          TableCellModel(items: [SingleCellModel(unitPrice: "20")]),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                              updateResponse: (List<Map<String, dynamic>> updatedMap) {
+                                List<Map<String, dynamic>> possibleDiagnosisCodesProcedures = [];
+
+                                for (PossibleDiagnosisCodesProcedures item in controller.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? []) {
+                                  possibleDiagnosisCodesProcedures.add(item.toJson());
+                                }
+
+                                final Map<String, dynamic> apiPayload = {
+                                  "diagnosis_codes_procedures": {"diagnosis_codes_procedures": updatedMap, "possible_diagnosis_codes_procedures": possibleDiagnosisCodesProcedures},
+                                };
+
+                                // print("doctor id :- ${controller.doctorViewList.value?.responseData?.id.toString()}");
+
+                                controller.updateDoctorViewAPI(controller.doctorViewList.value?.responseData?.id.toString() ?? "", apiPayload);
+
+                                print("API Payload is:- ${apiPayload}");
+                              },
+                            ),
+                          );
+                        }),
+
+                        SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              //after table
-              SizedBox(height: 10),
-              ImpressionAndPlanDoctorView(doctorViewList: controller.doctorViewList),
+                //after table
+                SizedBox(height: 10),
+                ImpressionAndPlanDoctorView(doctorViewList: controller.doctorViewList, impressionAndPlanList: controller.impressionAndPlanList),
+
+                // HtmlEditorViewWidget(headerText: "demo", initialText: "hello this is demo text ", controller: HtmlEditorController()),
+              ],
             ],
           ],
-        ],
+        ),
       );
     });
   }

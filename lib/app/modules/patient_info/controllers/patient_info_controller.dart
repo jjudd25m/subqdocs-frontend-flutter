@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:toastification/toastification.dart';
@@ -22,6 +23,7 @@ import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/model/visitmainModel.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
+import '../model/impresion_and_plan_view_model.dart';
 import '../model/patient_doctor_visit_data_model.dart';
 import '../model/patient_fullnote_model.dart';
 import '../model/patient_view_list_model.dart';
@@ -73,6 +75,101 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   RxString doctorValue = RxString("select Doctor");
   RxString medicationValue = RxString("select M.A");
+  RxList<ImpresionAndPlanViewModel> impressionAndPlanList = RxList();
+
+  String htmlContent = """
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      h2 {
+        color: #000000;
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      h3 {
+        color: #000000;
+        font-size: 1rem;
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+      p, li {
+        font-size: 1rem;
+        color: #555555;
+        margin: 4px 0;
+      }
+      strong {
+        color: #000000;
+      }
+      .diagnosis {
+        margin: 0px;
+        padding: 0px;
+       
+      }
+      .treatment, .procedure, .procedure-details {
+        margin-top: 15px;
+        padding-left: 15px;
+      }
+      ul {
+        list-style-type: disc;
+        padding-left: 20px;
+        margin: 8px 0;
+      }
+      ul ul {
+        list-style-type: circle;
+        padding-left: 20px;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="diagnosis">
+      <h2>Diagnosis: Seborrheic Keratosis</h2>
+      <p><strong>Code:</strong> L82.1</p>
+      <p><strong>Description:</strong> The patient has seborrheic keratosis that is getting larger and will be treated with liquid nitrogen.</p>
+
+      <h3>Treatments</h3>
+      <div class="treatment">
+          <p><strong>Type:</strong> Cryotherapy</p>
+          <p><strong>Name:</strong> Liquid nitrogen</p>
+          <ul>
+              <li><strong>Notes:</strong> 
+                <ul>
+                  <li>Treatment will cause the area to become red and crusty before falling off.</li>
+                </ul>
+              </li>
+          </ul>
+      </div>
+
+      <h3>Procedure</h3>
+      <div class="procedure">
+          <p><strong>Type:</strong> Destruction of benign lesions</p>
+          <p><strong>Location:</strong> Left temple</p>
+          <p><strong>Type with Location:</strong> Destruction of benign lesions on left temple</p>
+          <div class="procedure-details">
+              <p><strong>Handpiece:</strong> Liquid nitrogen applicator</p>
+          </div>
+      </div>
+
+      <h3>Medications</h3>
+      <p>No medications prescribed.</p>
+
+      <h3>Orders</h3>
+      <p>No orders specified.</p>
+
+      <h3>Counseling and Discussion</h3>
+      <p>The patient was informed about the nature of the lesions and the treatment options available.</p>
+
+      <h3>Follow-up</h3>
+      <p>Follow up in a few months to assess the treatment outcome.</p>
+    </div>
+  </body>
+</html>
+""";
 
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
@@ -119,6 +216,15 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     super.onInit();
 
     WidgetsBinding.instance.addObserver(this);
+
+    HtmlEditorController htmlEditorController = HtmlEditorController();
+    HtmlEditorController htmlEditorController1 = HtmlEditorController();
+    htmlEditorController.setText(htmlContent);
+    htmlEditorController1.setText(htmlContent);
+
+    impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlEditorController: htmlEditorController, title: "1. Seborrheic Keratosis(D17.9)", htmlContent: htmlContent));
+    impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlEditorController: htmlEditorController1, title: "2. Lipomas(D17.9)", htmlContent: htmlContent));
+    impressionAndPlanList.refresh();
 
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 

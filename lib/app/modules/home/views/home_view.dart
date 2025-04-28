@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:subqdocs/app/modules/home/views/home_past_visits_list.dart';
 import 'package:subqdocs/app/modules/home/views/home_schedule_list_view.dart';
@@ -24,6 +25,7 @@ import '../../../../widget/bredcums.dart';
 import '../../../../widgets/custom_animated_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../core/common/common_service.dart';
+import '../../../core/common/html_editor_container.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
@@ -177,6 +179,7 @@ class HomeView extends GetView<HomeController> {
                                 }),
                               ),
                               SizedBox(height: 20),
+
                               Expanded(
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
