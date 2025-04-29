@@ -30,14 +30,21 @@ class ResponseData {
   String? status;
   FullNoteDetails? fullNoteDetails;
   String? message;
+  List<Icd10Codes>? icd10Codes;
 
-  ResponseData({this.id, this.status, this.fullNoteDetails, this.message});
+  ResponseData({this.id, this.status, this.fullNoteDetails, this.message, this.icd10Codes});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
     fullNoteDetails = json['full_note_details'] != null ? new FullNoteDetails.fromJson(json['full_note_details']) : null;
     message = json['message'];
+    if (json['icd10Codes'] != null) {
+      icd10Codes = <Icd10Codes>[];
+      json['icd10Codes'].forEach((v) {
+        icd10Codes!.add(new Icd10Codes.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -48,41 +55,65 @@ class ResponseData {
       data['full_note_details'] = this.fullNoteDetails!.toJson();
     }
     data['message'] = this.message;
+    if (this.icd10Codes != null) {
+      data['icd10Codes'] = this.icd10Codes!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
 class FullNoteDetails {
   String? cancerHistory;
+  String? cancerHistoryHtml;
   String? skinHistory;
-  List<String>? skinHistoryWithLocation;
+  String? skinHistoryWithLocation;
   String? socialHistory;
+  String? socialHistoryHtml;
   List<Medications>? medications;
+  String? medicationsHtml;
   String? allergies;
   String? chiefComplain;
   String? hpi;
-  ReviewOfSystem? reviewOfSystem;
-  Exam? exam;
+  String? reviewOfSystem;
+  String? exam;
   List<ImpressionsAndPlan>? impressionsAndPlan;
 
-  FullNoteDetails({this.cancerHistory, this.skinHistory, this.skinHistoryWithLocation, this.socialHistory, this.medications, this.allergies, this.chiefComplain, this.hpi, this.reviewOfSystem, this.exam, this.impressionsAndPlan});
+  FullNoteDetails({
+    this.cancerHistory,
+    this.cancerHistoryHtml,
+    this.skinHistory,
+    this.skinHistoryWithLocation,
+    this.socialHistory,
+    this.socialHistoryHtml,
+    this.medications,
+    this.medicationsHtml,
+    this.allergies,
+    this.chiefComplain,
+    this.hpi,
+    this.reviewOfSystem,
+    this.exam,
+    this.impressionsAndPlan,
+  });
 
   FullNoteDetails.fromJson(Map<String, dynamic> json) {
     cancerHistory = json['cancer_history'];
+    cancerHistoryHtml = json['cancer_history_html'];
     skinHistory = json['skin_history'];
-    skinHistoryWithLocation = json['skin_history_with_location'].cast<String>();
+    skinHistoryWithLocation = json['skin_history_with_location'];
     socialHistory = json['social_history'];
+    socialHistoryHtml = json['social_history_html'];
     if (json['medications'] != null) {
       medications = <Medications>[];
       json['medications'].forEach((v) {
         medications!.add(new Medications.fromJson(v));
       });
     }
+    medicationsHtml = json['medications_html'];
     allergies = json['allergies'];
     chiefComplain = json['chief_complain'];
     hpi = json['hpi'];
-    reviewOfSystem = json['review_of_system'] != null ? new ReviewOfSystem.fromJson(json['review_of_system']) : null;
-    exam = json['exam'] != null ? new Exam.fromJson(json['exam']) : null;
+    reviewOfSystem = json['review_of_system'];
+    exam = json['exam'];
     if (json['impressions_and_plan'] != null) {
       impressionsAndPlan = <ImpressionsAndPlan>[];
       json['impressions_and_plan'].forEach((v) {
@@ -94,21 +125,20 @@ class FullNoteDetails {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['cancer_history'] = this.cancerHistory;
+    data['cancer_history_html'] = this.cancerHistoryHtml;
     data['skin_history'] = this.skinHistory;
     data['skin_history_with_location'] = this.skinHistoryWithLocation;
     data['social_history'] = this.socialHistory;
+    data['social_history_html'] = this.socialHistoryHtml;
     if (this.medications != null) {
       data['medications'] = this.medications!.map((v) => v.toJson()).toList();
     }
+    data['medications_html'] = this.medicationsHtml;
     data['allergies'] = this.allergies;
     data['chief_complain'] = this.chiefComplain;
     data['hpi'] = this.hpi;
-    if (this.reviewOfSystem != null) {
-      data['review_of_system'] = this.reviewOfSystem!.toJson();
-    }
-    if (this.exam != null) {
-      data['exam'] = this.exam!.toJson();
-    }
+    data['review_of_system'] = this.reviewOfSystem;
+    data['exam'] = this.exam;
     if (this.impressionsAndPlan != null) {
       data['impressions_and_plan'] = this.impressionsAndPlan!.map((v) => v.toJson()).toList();
     }
@@ -150,221 +180,40 @@ class Medications {
   }
 }
 
-class ReviewOfSystem {
-  String? constitutional;
-  String? skin;
-  String? respiratory;
-  String? cardiovascular;
-  String? allergicImmunologic;
-
-  ReviewOfSystem({this.constitutional, this.skin, this.respiratory, this.cardiovascular, this.allergicImmunologic});
-
-  ReviewOfSystem.fromJson(Map<String, dynamic> json) {
-    constitutional = json['Constitutional'];
-    skin = json['Skin'];
-    respiratory = json['Respiratory'];
-    cardiovascular = json['Cardiovascular'];
-    allergicImmunologic = json['Allergic/Immunologic'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Constitutional'] = this.constitutional;
-    data['Skin'] = this.skin;
-    data['Respiratory'] = this.respiratory;
-    data['Cardiovascular'] = this.cardiovascular;
-    data['Allergic/Immunologic'] = this.allergicImmunologic;
-    return data;
-  }
-}
-
-class Exam {
-  String? generalAppearance;
-  List<Skin>? skin;
-  List<String>? otherSystems;
-
-  Exam({this.generalAppearance, this.skin, this.otherSystems});
-
-  Exam.fromJson(Map<String, dynamic> json) {
-    generalAppearance = json['general_appearance'];
-    if (json['skin'] != null) {
-      skin = <Skin>[];
-      json['skin'].forEach((v) {
-        skin!.add(new Skin.fromJson(v));
-      });
-    }
-    otherSystems = json['other_systems'].cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['general_appearance'] = this.generalAppearance;
-    if (this.skin != null) {
-      data['skin'] = this.skin!.map((v) => v.toJson()).toList();
-    }
-    data['other_systems'] = this.otherSystems;
-    return data;
-  }
-}
-
-class Skin {
-  String? location;
-  String? finding;
-
-  Skin({this.location, this.finding});
-
-  Skin.fromJson(Map<String, dynamic> json) {
-    location = json['location'];
-    finding = json['finding'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['location'] = this.location;
-    data['finding'] = this.finding;
-    return data;
-  }
-}
-
 class ImpressionsAndPlan {
-  String? number;
   String? title;
-  String? code;
-  String? description;
-  List<Treatments>? treatments;
-  Procedure? procedure;
-  String? medications;
-  String? orders;
-  String? counselingAndDiscussion;
-  String? followUp;
+  String? content;
 
-  ImpressionsAndPlan({this.number, this.title, this.code, this.description, this.treatments, this.procedure, this.medications, this.orders, this.counselingAndDiscussion, this.followUp});
+  ImpressionsAndPlan({this.title, this.content});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
-    number = json['number'];
     title = json['title'];
+    content = json['content'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['content'] = this.content;
+    return data;
+  }
+}
+
+class Icd10Codes {
+  String? code;
+  String? description;
+
+  Icd10Codes({this.code, this.description});
+
+  Icd10Codes.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     description = json['description'];
-    if (json['treatments'] != null) {
-      treatments = <Treatments>[];
-      json['treatments'].forEach((v) {
-        treatments!.add(new Treatments.fromJson(v));
-      });
-    }
-    procedure = json['procedure'] != null ? new Procedure.fromJson(json['procedure']) : null;
-    medications = json['medications'];
-    orders = json['orders'];
-    counselingAndDiscussion = json['counseling_and_discussion'];
-    followUp = json['follow_up'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['number'] = this.number;
-    data['title'] = this.title;
     data['code'] = this.code;
     data['description'] = this.description;
-    if (this.treatments != null) {
-      data['treatments'] = this.treatments!.map((v) => v.toJson()).toList();
-    }
-    if (this.procedure != null) {
-      data['procedure'] = this.procedure!.toJson();
-    }
-    data['medications'] = this.medications;
-    data['orders'] = this.orders;
-    data['counseling_and_discussion'] = this.counselingAndDiscussion;
-    data['follow_up'] = this.followUp;
-    return data;
-  }
-}
-
-class Treatments {
-  String? type;
-  String? name;
-  List<dynamic>? specifications;
-  List<String>? notes;
-
-  Treatments({this.type, this.name, this.specifications, this.notes});
-
-  Treatments.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    name = json['name'];
-    if (json['specifications'] != null) {
-      specifications = [];
-      json['specifications'].forEach((v) {
-        // specifications!.add(new dynamic.fromJson(v));
-      });
-    }
-    notes = json['notes'].cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['name'] = this.name;
-    if (this.specifications != null) {
-      data['specifications'] = this.specifications!.map((v) => v.toJson()).toList();
-    }
-    data['notes'] = this.notes;
-    return data;
-  }
-}
-
-class Procedure {
-  String? type;
-  String? location;
-  String? typeWithLocation;
-  Map<String, dynamic>? details;
-
-  Procedure({this.type, this.location, this.typeWithLocation, this.details});
-
-  Procedure.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    location = json['location'];
-    typeWithLocation = json['type_with_location'];
-    details = details = json['details'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['location'] = this.location;
-    data['type_with_location'] = this.typeWithLocation;
-    data['details'] = details;
-    return data;
-  }
-}
-
-class Details {
-  String? handpiece;
-  String? wavelength;
-  String? spotSize;
-  String? fluence;
-  String? passes;
-  String? density;
-  String? anesthesia;
-
-  Details({this.handpiece, this.wavelength, this.spotSize, this.fluence, this.passes, this.density, this.anesthesia});
-
-  Details.fromJson(Map<String, dynamic> json) {
-    handpiece = json['handpiece'];
-    wavelength = json['wavelength'];
-    spotSize = json['spot_size'];
-    fluence = json['fluence'];
-    passes = json['passes'];
-    density = json['density'];
-    anesthesia = json['anesthesia'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['handpiece'] = this.handpiece;
-    data['wavelength'] = this.wavelength;
-    data['spot_size'] = this.spotSize;
-    data['fluence'] = this.fluence;
-    data['passes'] = this.passes;
-    data['density'] = this.density;
-    data['anesthesia'] = this.anesthesia;
     return data;
   }
 }

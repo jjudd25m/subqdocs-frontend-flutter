@@ -223,78 +223,46 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
-import '../../../../utils/app_colors.dart';
-import '../../../../utils/app_fonts.dart';
-import '../../../../utils/imagepath.dart';
-import '../../../core/common/html_editor_container.dart';
-import '../../visit_main/model/doctor_view_model.dart';
-import '../controllers/patient_info_controller.dart';
-import '../model/impresion_and_plan_view_model.dart';
+import '../../../../../utils/app_colors.dart';
+import '../../../../../utils/app_fonts.dart';
+import '../../../../../utils/imagepath.dart';
+import '../../../../core/common/html_editor_container.dart';
+import '../../../visit_main/model/doctor_view_model.dart';
+import '../../controllers/patient_info_controller.dart';
+import '../../model/impresion_and_plan_view_model.dart';
 
-class ImpressionAndPlanPatientView extends StatelessWidget {
+class ReviewOfSystemsEditableView extends StatelessWidget {
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
-  ImpressionAndPlanPatientView({super.key});
+  ReviewOfSystemsEditableView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-          color: AppColors.white,
-          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-        ),
-        child: Column(children: [_headerSection(), SizedBox(height: 12), _taskListSection(), SizedBox(height: 5)]),
-      ),
-    );
-  }
-
-  Widget _headerSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          SizedBox(height: 5),
-          Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer(), SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28)]),
-          SizedBox(height: 5),
-        ],
-      ),
-    );
+    return _taskListSection();
   }
 
   // Widget _taskListSection() {
   Widget _taskListSection() {
     return Obx(() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: controller.impressionAndPlanListFullNote.length,
-          itemBuilder: (context, index) {
-            return HtmlEditorViewWidget(
-              impresionAndPlanViewModel: controller.impressionAndPlanListFullNote[index],
-              onUpdateCallBack: (impressionModel) {
-                controller.impressionAndPlanListFullNote[index] = impressionModel;
-                controller.impressionAndPlanListFullNote.refresh();
+      return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: controller.editableDataForReviewOfSystems.length,
+        itemBuilder: (context, index) {
+          return HtmlEditorViewWidget(
+            heightOfTheEditableView: 400,
+            impresionAndPlanViewModel: controller.editableDataForReviewOfSystems[index],
+            onUpdateCallBack: (impressionModel) {
+              controller.editableDataForReviewOfSystems[index] = impressionModel;
+              controller.editableDataForReviewOfSystems.refresh();
 
-                controller.updateImpressionAndPlan();
-              },
-              toggleCallBack: (impressionModel) {
-                controller.impressionAndPlanListFullNote[index] = impressionModel;
-                controller.impressionAndPlanListFullNote.refresh();
-              },
-            );
-          },
-        ),
+              // controller.updateImpressionAndPlan();
+            },
+            toggleCallBack: (impressionModel) {
+              controller.editableDataForReviewOfSystems[index] = impressionModel;
+              controller.editableDataForReviewOfSystems.refresh();
+            },
+          );
+        },
       );
     });
   }

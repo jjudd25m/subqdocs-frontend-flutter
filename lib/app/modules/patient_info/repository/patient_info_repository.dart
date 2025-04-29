@@ -43,6 +43,12 @@ class PatientInfoRepository {
     return PatientDoctorVisitDataModel.fromJson(response);
   }
 
+  Future<dynamic> updateImpressionAndPlan({required int id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("doctors-view/impression_plan/update/${id}", params);
+    customPrint("getPatientView API  internal response $response");
+    return response;
+  }
+
   Future<PatientFullNoteModel> getFullNote({required String id}) async {
     var response = await ApiProvider.instance.callGet("full-note/$id");
     customPrint("getFullNote API  internal response $response");
@@ -50,9 +56,13 @@ class PatientInfoRepository {
   }
 
   Future<DoctorViewModel> getDoctorNote({required String id}) async {
-    var response = await ApiProvider.instance.callGet("doctors-view/$id");
-    customPrint("getDoctorNote API  internal response $response");
-    return DoctorViewModel.fromJson(response);
+    try {
+      var response = await ApiProvider.instance.callGet("doctors-view/$id");
+      customPrint("getDoctorNote API  internal response $response");
+      return DoctorViewModel.fromJson(response);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Future<dynamic> updateDoctorView({required String id, required Map<String, dynamic> params}) async {

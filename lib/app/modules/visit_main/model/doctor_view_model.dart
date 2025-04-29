@@ -1775,53 +1775,20 @@ class DoctorViewResponseData {
 }
 
 class ImpressionsAndPlan {
-  String? number;
   String? title;
-  String? code;
-  String? description;
-  List<ImpressionsAndPlanTreatments>? treatments;
-  ImpressionsAndPlanProcedure? procedure;
-  String? medications;
-  String? orders;
-  String? counselingAndDiscussion;
-  String? followUp;
+  String? content;
 
-  ImpressionsAndPlan({this.number, this.title, this.code, this.description, this.treatments, this.procedure, this.medications, this.orders, this.counselingAndDiscussion, this.followUp});
+  ImpressionsAndPlan({this.title, this.content});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
-    number = json['number'];
     title = json['title'];
-    code = json['code'];
-    description = json['description'];
-    if (json['treatments'] != null) {
-      treatments = <ImpressionsAndPlanTreatments>[];
-      json['treatments'].forEach((v) {
-        treatments!.add(ImpressionsAndPlanTreatments.fromJson(v));
-      });
-    }
-    procedure = json['procedure'] != null ? ImpressionsAndPlanProcedure.fromJson(json['procedure']) : null;
-    medications = json['medications'];
-    orders = json['orders'];
-    counselingAndDiscussion = json['counseling_and_discussion'];
-    followUp = json['follow_up'];
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['number'] = number;
-    data['title'] = title;
-    data['code'] = code;
-    data['description'] = description;
-    if (treatments != null) {
-      data['treatments'] = treatments!.map((v) => v.toJson()).toList();
-    }
-    if (procedure != null) {
-      data['procedure'] = procedure!.toJson();
-    }
-    data['medications'] = medications;
-    data['orders'] = orders;
-    data['counseling_and_discussion'] = counselingAndDiscussion;
-    data['follow_up'] = followUp;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['content'] = this.content;
     return data;
   }
 }
@@ -2057,56 +2024,6 @@ class DiagnosisPossibleAlternatives {
     return data;
   }
 }
-
-// class Procedure {
-//   String? code;
-//   String? description;
-//   Null? modifier;
-//   String? confidenceScore;
-//
-//   Procedure({this.code, this.description, this.modifier, this.confidenceScore});
-//
-//   Procedure.fromJson(Map<String, dynamic> json) {
-//     code = json['code'];
-//     description = json['description'];
-//     modifier = json['modifier'];
-//     confidenceScore = json['confidence_score'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['code'] = code;
-//     data['description'] = description;
-//     data['modifier'] = modifier;
-//     data['confidence_score'] = confidenceScore;
-//     return data;
-//   }
-// }
-
-// class Diagnosis {
-//   String? code;
-//   String? description;
-//   String? icd10Code;
-//   String? confidenceScore;
-//
-//   Diagnosis({this.code, this.description, this.icd10Code, this.confidenceScore});
-//
-//   Diagnosis.fromJson(Map<String, dynamic> json) {
-//     code = json['code'];
-//     description = json['description'];
-//     icd10Code = json['icd_10_code'];
-//     confidenceScore = json['confidence_score'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['code'] = code;
-//     data['description'] = description;
-//     data['icd_10_code'] = icd10Code;
-//     data['confidence_score'] = confidenceScore;
-//     return data;
-//   }
-// }
 
 class Treatments {
   String? type;

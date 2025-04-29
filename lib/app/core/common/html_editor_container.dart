@@ -1,32 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_fonts.dart';
+import '../../modules/patient_info/model/impresion_and_plan_view_model.dart';
 
 class HtmlEditorViewWidget extends StatefulWidget {
-  final HtmlEditorController controller;
-  final String? headerText;
-  final bool isRequired;
-  final String? initialText;
+  ImpresionAndPlanViewModel impresionAndPlanViewModel;
+  final Function(ImpresionAndPlanViewModel) toggleCallBack;
+  final Function(ImpresionAndPlanViewModel) onUpdateCallBack;
 
-  const HtmlEditorViewWidget({super.key, required this.controller, this.headerText, this.isRequired = false, this.initialText});
+  double heightOfTheEditableView;
+
+  HtmlEditorViewWidget({super.key, required this.impresionAndPlanViewModel, required this.toggleCallBack, required this.onUpdateCallBack, this.heightOfTheEditableView = 800});
 
   @override
   State<HtmlEditorViewWidget> createState() => _HtmlEditorViewWidgetState();
 }
 
 class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
-  bool isEditing = false;
   late String renderedHtml;
   late WebViewController webViewController;
+  Timer? timer;
+
+  void onChangeContent(String? content) {
+    timer?.cancel();
+    timer = Timer(const Duration(seconds: 2), () {
+      widget.impresionAndPlanViewModel.htmlContent = content;
+      widget.onUpdateCallBack(widget.impresionAndPlanViewModel);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    renderedHtml = widget.initialText ?? "";
+    renderedHtml = widget.impresionAndPlanViewModel.htmlContent ?? "";
 
     webViewController =
         WebViewController()
@@ -35,18 +48,16 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
   }
 
   void toggleEditing() async {
-    if (isEditing) {
+    if (widget.impresionAndPlanViewModel.isEditing) {
       // Save the updated HTML when exiting edit mode
-      String? updatedHtml = await widget.controller.getText();
-      setState(() {
-        renderedHtml = updatedHtml ?? renderedHtml;
-        isEditing = false;
-        webViewController.loadHtmlString(renderedHtml);
-      });
+      String? updatedHtml = await widget.impresionAndPlanViewModel.htmlEditorController.getText();
+
+      renderedHtml = updatedHtml ?? renderedHtml;
+      widget.impresionAndPlanViewModel.isEditing = false;
+      widget.toggleCallBack(widget.impresionAndPlanViewModel);
     } else {
-      setState(() {
-        isEditing = true;
-      });
+      widget.impresionAndPlanViewModel.isEditing = true;
+      widget.toggleCallBack(widget.impresionAndPlanViewModel);
     }
   }
 
@@ -56,18 +67,19 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
-        if (widget.headerText?.isNotEmpty ?? false)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text(widget.headerText ?? "", style: AppFonts.medium(18, AppColors.textPurple)), if (isEditing) TextButton(onPressed: toggleEditing, child: Text('View'))],
-          ),
-        const SizedBox(height: 10),
-        if (isEditing)
+        if (widget.impresionAndPlanViewModel.title?.isNotEmpty ?? false)
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(widget.impresionAndPlanViewModel.title ?? "", style: AppFonts.medium(18, AppColors.textPurple))]),
+        const SizedBox(height: 5),
+        if (widget.impresionAndPlanViewModel.isEditing)
           HtmlEditor(
-            controller: widget.controller,
+            controller: widget.impresionAndPlanViewModel.htmlEditorController,
+
             callbacks: Callbacks(
+              onChangeContent: (content) {
+                onChangeContent(content);
+              },
               onInit: () {
-                widget.controller.setFullScreen();
+                widget.impresionAndPlanViewModel.htmlEditorController.setFullScreen();
               },
             ),
             htmlEditorOptions: HtmlEditorOptions(shouldEnsureVisible: false, androidUseHybridComposition: false, initialText: renderedHtml, autoAdjustHeight: true, adjustHeightForKeyboard: false),
@@ -94,11 +106,11 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
               ],
               toolbarType: ToolbarType.nativeScrollable,
             ),
-            otherOptions: OtherOptions(height: 800, decoration: const BoxDecoration(color: Colors.white)),
+            otherOptions: OtherOptions(height: widget.heightOfTheEditableView, decoration: const BoxDecoration(color: Colors.white)),
           )
         else
           // Html(data: widget.initialText, style: {}),
-          GestureDetector(onTap: toggleEditing, child: Container(child: Padding(padding: const EdgeInsets.all(8.0), child: Html(data: widget.initialText, style: {})))),
+          GestureDetector(onTap: toggleEditing, child: Container(child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {}))),
       ],
     );
   }

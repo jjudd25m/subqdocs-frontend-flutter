@@ -76,100 +76,16 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   RxString doctorValue = RxString("select Doctor");
   RxString medicationValue = RxString("select M.A");
   RxList<ImpresionAndPlanViewModel> impressionAndPlanList = RxList();
+  RxList<ImpresionAndPlanViewModel> impressionAndPlanListFullNote = RxList();
 
-  String htmlContent = """
-<html>
-  <head>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-      }
-      h2 {
-        color: #000000;
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
-      h3 {
-        color: #000000;
-        font-size: 1rem;
-        margin-top: 20px;
-        margin-bottom: 10px;
-      }
-      p, li {
-        font-size: 1rem;
-        color: #555555;
-        margin: 4px 0;
-      }
-      strong {
-        color: #000000;
-      }
-      .diagnosis {
-        margin: 0px;
-        padding: 0px;
-       
-      }
-      .treatment, .procedure, .procedure-details {
-        margin-top: 15px;
-        padding-left: 15px;
-      }
-      ul {
-        list-style-type: disc;
-        padding-left: 20px;
-        margin: 8px 0;
-      }
-      ul ul {
-        list-style-type: circle;
-        padding-left: 20px;
-        margin-top: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="diagnosis">
-      <h2>Diagnosis: Seborrheic Keratosis</h2>
-      <p><strong>Code:</strong> L82.1</p>
-      <p><strong>Description:</strong> The patient has seborrheic keratosis that is getting larger and will be treated with liquid nitrogen.</p>
-
-      <h3>Treatments</h3>
-      <div class="treatment">
-          <p><strong>Type:</strong> Cryotherapy</p>
-          <p><strong>Name:</strong> Liquid nitrogen</p>
-          <ul>
-              <li><strong>Notes:</strong> 
-                <ul>
-                  <li>Treatment will cause the area to become red and crusty before falling off.</li>
-                </ul>
-              </li>
-          </ul>
-      </div>
-
-      <h3>Procedure</h3>
-      <div class="procedure">
-          <p><strong>Type:</strong> Destruction of benign lesions</p>
-          <p><strong>Location:</strong> Left temple</p>
-          <p><strong>Type with Location:</strong> Destruction of benign lesions on left temple</p>
-          <div class="procedure-details">
-              <p><strong>Handpiece:</strong> Liquid nitrogen applicator</p>
-          </div>
-      </div>
-
-      <h3>Medications</h3>
-      <p>No medications prescribed.</p>
-
-      <h3>Orders</h3>
-      <p>No orders specified.</p>
-
-      <h3>Counseling and Discussion</h3>
-      <p>The patient was informed about the nature of the lesions and the treatment options available.</p>
-
-      <h3>Follow-up</h3>
-      <p>Follow up in a few months to assess the treatment outcome.</p>
-    </div>
-  </body>
-</html>
-""";
+  RxList<ImpresionAndPlanViewModel> editableDataForSkinHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForCancerHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForSocialHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForMedication = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForAllergies = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForReviewOfSystems = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForExam = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataForPatientView = RxList();
 
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
@@ -216,15 +132,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     super.onInit();
 
     WidgetsBinding.instance.addObserver(this);
-
-    HtmlEditorController htmlEditorController = HtmlEditorController();
-    HtmlEditorController htmlEditorController1 = HtmlEditorController();
-    htmlEditorController.setText(htmlContent);
-    htmlEditorController1.setText(htmlContent);
-
-    impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlEditorController: htmlEditorController, title: "1. Seborrheic Keratosis(D17.9)", htmlContent: htmlContent));
-    impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlEditorController: htmlEditorController1, title: "2. Lipomas(D17.9)", htmlContent: htmlContent));
-    impressionAndPlanList.refresh();
 
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
@@ -671,6 +578,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
       globalController.popRoute();
     }
+  }
+
+  void resetImpressionAndPlanList() {
+    impressionAndPlanList.map((element) {
+      element.isEditing = false;
+    }).toList();
+    impressionAndPlanList.refresh();
   }
 
   Future<void> onRefresh() async {
@@ -1163,6 +1077,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getPatientView() async {
     patientViewListModel.value = await _patientInfoRepository.getPatientView(id: visitId);
+
+    setPatientViewEditableData();
+
     getPatientDetails();
     customPrint("getPatientView is :- ${patientViewListModel.value?.toJson()}");
   }
@@ -1175,21 +1092,37 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getFullNote() async {
     patientFullNoteModel.value = await _patientInfoRepository.getFullNote(id: visitId);
+
+    setImpressionAndPlanListPatientView();
     getPatientDetails();
     customPrint("getFullNote is :- ${patientFullNoteModel.value}");
   }
 
+  Future<void> updateImpressionAndPlan() async {
+    Map<String, List<dynamic>> params = {};
+
+    params["impressions_and_plan"] = impressionAndPlanList.map((item) => item.toJson()).toList();
+
+    print(params);
+
+    var response = await _patientInfoRepository.updateImpressionAndPlan(id: doctorViewList.value?.responseData?.id ?? 0, params: params);
+
+    // setImpressionAndPlanList();
+    // setDoctorModel();
+    //
+    // await getPatientDetails();
+    //
+    // // setDoctorModel();
+    customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
+  }
+
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
-
-    print(
-      "suggestion:- ${doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures?.map((e) {
-        print(" data:-------- ${e.toJson()}");
-      })}",
-    );
+    setImpressionAndPlanList();
+    setDoctorModel();
 
     await getPatientDetails();
-    setDoctorModel();
+
     // setDoctorModel();
     customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
   }
@@ -1296,5 +1229,109 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
           break;
       }
     });
+  }
+
+  void setImpressionAndPlanList() {
+    if (doctorViewList.value?.responseData?.impressionsAndPlan != null) {
+      impressionAndPlanList.clear();
+
+      for (var ImpressionsAndPlan in doctorViewList.value!.responseData!.impressionsAndPlan!) {
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
+
+        impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlContent: ImpressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: ImpressionsAndPlan.title));
+      }
+
+      impressionAndPlanList.refresh();
+    }
+  }
+
+  void setImpressionAndPlanListPatientView() {
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan != null) {
+      impressionAndPlanListFullNote.clear();
+
+      for (var ImpressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
+
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: ImpressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: ImpressionsAndPlan.title));
+      }
+
+      impressionAndPlanListFullNote.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
+      editableDataForSkinHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
+      editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForSkinHistory.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml != null) {
+      editableDataForCancerHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
+      editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForCancerHistory.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml != null) {
+      editableDataForSocialHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
+      editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForSocialHistory.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml != null) {
+      editableDataForMedication.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
+      editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForMedication.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies != null) {
+      editableDataForAllergies.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "");
+      editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForAllergies.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem != null) {
+      editableDataForReviewOfSystems.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "");
+      editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForReviewOfSystems.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam != null) {
+      editableDataForExam.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "");
+      editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForExam.refresh();
+    }
+  }
+
+  void setPatientViewEditableData() {
+    if (patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml != null) {
+      editableDataForPatientView.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "");
+      editableDataForPatientView.add(ImpresionAndPlanViewModel(htmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataForPatientView.refresh();
+    }
   }
 }

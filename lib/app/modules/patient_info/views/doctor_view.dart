@@ -500,7 +500,8 @@ class DoctorView extends StatelessWidget {
     return Obx(() {
       return GestureDetector(
         onTap: () {
-          print("p");
+          print("called  this");
+          controller.resetImpressionAndPlanList();
         },
         child: Column(
           children: [
@@ -678,7 +679,7 @@ class DoctorView extends StatelessWidget {
                 ),
                 //after table
                 SizedBox(height: 10),
-                ImpressionAndPlanDoctorView(doctorViewList: controller.doctorViewList, impressionAndPlanList: controller.impressionAndPlanList),
+                ImpressionAndPlanDoctorView(doctorViewList: controller.doctorViewList),
 
                 // HtmlEditorViewWidget(headerText: "demo", initialText: "hello this is demo text ", controller: HtmlEditorController()),
               ],

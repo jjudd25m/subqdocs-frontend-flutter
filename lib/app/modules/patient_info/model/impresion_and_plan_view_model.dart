@@ -6,5 +6,11 @@ class ImpresionAndPlanViewModel {
   String? htmlContent;
   HtmlEditorController htmlEditorController;
 
-  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController});
+  bool isEditing;
+
+  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false});
+
+  Map<String, dynamic> toJson() {
+    return {'title': title ?? '', 'content': htmlContent ?? ''};
+  }
 }
