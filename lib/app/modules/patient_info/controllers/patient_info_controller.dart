@@ -46,6 +46,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Rxn<TranscriptListModel> transcriptListModel = Rxn();
   Rxn<PatientViewListModel> patientViewListModel = Rxn();
   Rxn<TableModel> tableModel = Rxn();
+  Rxn<TableModel> possibleDignosisProcedureTableModel = Rxn();
 
   Rxn<PatientDoctorVisitDataModel> patientDoctorVisitDataModel = Rxn();
   Rxn<PatientFullNoteModel> patientFullNoteModel = Rxn();
@@ -1016,9 +1017,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   Future<void> getAllPatientInfo({bool isLoading = false}) async {
     await getTranscript();
-    getPatientView();
+    // getPatientView();
     getPatientDoctorVisitData();
-    getFullNote();
+    // getFullNote();
     getDoctorNote();
   }
 
@@ -1082,14 +1083,17 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       })}",
     );
 
-    await getPatientDetails();
     setDoctorModel();
+    await getPatientDetails();
+
     // setDoctorModel();
     customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
   }
 
   void setDoctorModel() {
+    print("setDoctorModel called");
     tableModel.value = TableModel(rows: []);
+    possibleDignosisProcedureTableModel.value = TableModel(rows: []);
 
     for (MainDiagnosisCodesProceduresDiagnosisCodesProcedures diagnosis in (doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.diagnosisCodesProcedures ?? [])) {
       List<DiagnosisModel>? diagnosisModelList = [];
@@ -1131,6 +1135,46 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         ),
       );
       tableModel.refresh();
+    }
+
+    for (PossibleDiagnosisCodesProcedures possibleDiagnosisCodesProcedures in (doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? [])) {
+      List<DiagnosisModel>? diagnosisModelList = [];
+
+      for (Diagnosis diagnosisModel in possibleDiagnosisCodesProcedures.diagnosis ?? []) {
+        print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+
+        diagnosisModelList.add(
+          DiagnosisModel(
+            confidence: diagnosisModel.confidenceScore,
+            code: diagnosisModel.code,
+            description: diagnosisModel.description,
+            diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+          ),
+        );
+      }
+
+      possibleDignosisProcedureTableModel.value?.rows.add(
+        TableRowModel(
+          cells: [
+            TableCellModel(
+              items: [
+                SingleCellModel(
+                  code: possibleDiagnosisCodesProcedures.procedure?.code,
+                  unit: "0",
+                  modifiers: possibleDiagnosisCodesProcedures.procedure?.modifier,
+                  description: possibleDiagnosisCodesProcedures.procedure?.description ?? "",
+                  unitPrice: "0",
+                  procedurePossibleAlternatives: possibleDiagnosisCodesProcedures.procedure?.procedurePossibleAlternatives,
+                ),
+              ],
+            ),
+            TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
+            TableCellModel(items: [SingleCellModel(unit: possibleDiagnosisCodesProcedures.units)]),
+            TableCellModel(items: [SingleCellModel(unitPrice: possibleDiagnosisCodesProcedures.unitCharge)]),
+          ],
+        ),
+      );
+      possibleDignosisProcedureTableModel.refresh();
     }
   }
 

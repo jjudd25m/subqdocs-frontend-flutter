@@ -21,9 +21,15 @@ class SignUpController extends GetxController {
   TextEditingController confirmPasswordController = TextEditingController();
 
   final count = 0.obs;
+
+  String beta_code = "";
+
   @override
   void onInit() {
     super.onInit();
+
+    var arguments = Get.arguments;
+    beta_code = arguments['beta_code'];
   }
 
   void increment() => count.value++;

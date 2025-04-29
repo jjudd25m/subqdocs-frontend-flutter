@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mime/mime.dart';
+
 import '../../../utils/app_string.dart';
 import '../../../utils/validation_string.dart';
 import '../../core/common/app_preferences.dart';
@@ -336,6 +337,8 @@ class ApiProvider {
     customPrint("getApiHeader");
 
     // Initialize the headers map
+
+    // Map<String, String> headers = {"accept": "application/json"};
     Map<String, String> headers = {"accept": "*/*", "Content-Type": "application/json"};
 
     customPrint("header is $headers");

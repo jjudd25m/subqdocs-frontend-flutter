@@ -43,30 +43,32 @@ class ResponseData {
   String? profileImage;
   int? age;
   String? gender;
+
   // List<Null>? attachments;
   PersonalNote? personalNote;
   VisitSnapshot? visitSnapshot; // ✅ New field added
 
-  ResponseData(
-      {this.doctorFirstName,
-      this.doctorLastName,
-      this.visitId,
-      this.visitDate,
-      this.visitTime,
-      this.visitStatus,
-      this.id,
-      this.medicalAssistantId,
-      this.doctorId,
-      this.patientId,
-      this.patientFirstName,
-      this.patientMiddleName,
-      this.patientLastName,
-      this.profileImage,
-      this.age,
-      this.gender,
-      // this.attachments,
-      this.personalNote,
-      this.visitSnapshot});
+  ResponseData({
+    this.doctorFirstName,
+    this.doctorLastName,
+    this.visitId,
+    this.visitDate,
+    this.visitTime,
+    this.visitStatus,
+    this.id,
+    this.medicalAssistantId,
+    this.doctorId,
+    this.patientId,
+    this.patientFirstName,
+    this.patientMiddleName,
+    this.patientLastName,
+    this.profileImage,
+    this.age,
+    this.gender,
+    // this.attachments,
+    this.personalNote,
+    this.visitSnapshot,
+  });
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     doctorName = json['doctorName'];
@@ -132,7 +134,7 @@ class ResponseData {
 class PersonalNote {
   int? id;
   String? visitDate;
-  List<dynamic>? personalNote;
+  String? personalNote;
 
   PersonalNote({this.id, this.visitDate, this.personalNote});
 

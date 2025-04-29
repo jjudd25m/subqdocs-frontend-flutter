@@ -21,9 +21,10 @@ class BetaTesterCodeController extends GetxController {
   }
 
   Future<void> validateBetaTesterCode() async {
-    ValidateBetaTesterCodeModel res = await betaTesterCodeRepository.validateBetaTesterCode(code: betaCodeController.text);
+    ValidateBetaTesterCodeModel res = await betaTesterCodeRepository.validateBetaTesterCode(code: betaCodeController.text.trim());
+    print("response is:- ${res}");
     if (res.responseData == true) {
-      Get.toNamed(Routes.SIGN_UP);
+      Get.toNamed(Routes.SIGN_UP, arguments: {'beta_code': betaCodeController.text.trim()});
     } else {
       CustomToastification().showToast(res.message ?? "", type: ToastificationType.error);
     }

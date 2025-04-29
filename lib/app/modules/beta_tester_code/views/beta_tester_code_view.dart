@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:subqdocs/widgets/custom_animated_button.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
@@ -54,15 +56,15 @@ class BetaTesterCodeView extends GetView<BetaTesterCodeController> {
                       isFirst: true,
                       label: "Enter the code",
                       controller: controller.betaCodeController,
-                      format: [NoSpaceLowercaseTextFormatter()],
+                      // format: [NoSpaceLowercaseTextFormatter()],
                       hint: "123456",
                       onTap: () {
                         // controller.emailController.clear();
                       },
                       suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                      checkValidation: (value) {
-                        return Validation.emailValidateRequired(value);
-                      },
+                      // checkValidation: (value) {
+                      //   return Validation.emailValidateRequired(value);
+                      // },
                     ),
                   ),
                   SizedBox(height: 30),
@@ -70,7 +72,11 @@ class BetaTesterCodeView extends GetView<BetaTesterCodeController> {
                     width: 120,
                     child: CustomAnimatedButton(
                       onPressed: () {
-                        controller.validateBetaTesterCode();
+                        if (controller.betaCodeController.text.isEmpty) {
+                          CustomToastification().showToast("Please enter beta code", type: ToastificationType.error);
+                        } else {
+                          controller.validateBetaTesterCode();
+                        }
                       },
                       text: "Continue",
                       enabledColor: AppColors.backgroundPurple,

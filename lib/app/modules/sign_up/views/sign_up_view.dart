@@ -168,7 +168,12 @@ class SignUpView extends GetView<SignUpController> {
                               if (checkNewUserModel.responseData ?? false) {
                                 Get.toNamed(
                                   Routes.SIGN_UP_SET_PASSWORD,
-                                  arguments: {'first_name': controller.firstNameController.text, 'last_name': controller.lastNameController.text, 'email': controller.emailController.text},
+                                  arguments: {
+                                    'first_name': controller.firstNameController.text,
+                                    'last_name': controller.lastNameController.text,
+                                    'email': controller.emailController.text,
+                                    'beta_code': controller.beta_code,
+                                  },
                                 );
                               } else {
                                 CustomToastification().showToast(checkNewUserModel.message ?? "", type: ToastificationType.error);

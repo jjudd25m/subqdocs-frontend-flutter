@@ -593,10 +593,23 @@ class DoctorView extends StatelessWidget {
                       //   ),
                       // ),
                       SizedBox(height: 10),
-
                       Obx(() {
                         return IntrinsicHeight(
                           child: NestedDraggableTable(
+                            possibleDignosisProcedureTableModel:
+                                controller.possibleDignosisProcedureTableModel.value ??
+                                TableModel(
+                                  rows: [
+                                    TableRowModel(
+                                      cells: [
+                                        TableCellModel(items: [SingleCellModel(code: "40", unit: "0", description: "this the  procedure code", unitPrice: "0")]),
+                                        TableCellModel(items: [SingleCellModel(code: "10", unit: "0", description: "this is the Diagnosis", unitPrice: "0")]),
+                                        TableCellModel(items: [SingleCellModel(unit: "10")]),
+                                        TableCellModel(items: [SingleCellModel(unitPrice: "20")]),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                             tableModel:
                                 controller.tableModel.value ??
                                 TableModel(
@@ -611,7 +624,7 @@ class DoctorView extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                            updateResponse: (List<Map<String, dynamic>> updatedMap) {
+                            updateResponse: (List<Map<String, dynamic>> updatedMap, List<Map<String, dynamic>> possibleAlternativeUpdatedMap) {
                               List<Map<String, dynamic>> possibleDiagnosisCodesProcedures = [];
 
                               for (PossibleDiagnosisCodesProcedures item in controller.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? []) {
@@ -619,14 +632,15 @@ class DoctorView extends StatelessWidget {
                               }
 
                               final Map<String, dynamic> apiPayload = {
-                                "diagnosis_codes_procedures": {"diagnosis_codes_procedures": updatedMap, "possible_diagnosis_codes_procedures": possibleDiagnosisCodesProcedures},
+                                "diagnosis_codes_procedures": {"diagnosis_codes_procedures": updatedMap, "possible_diagnosis_codes_procedures": possibleAlternativeUpdatedMap},
                               };
 
-                              // print("doctor id :- ${controller.doctorViewList.value?.responseData?.id.toString()}");
+                              print("API Payload is:- ${apiPayload}");
+                              // print("apiPayload is :- ${controller.doctorViewList.value?.responseData?.id.toString()}");
 
                               controller.updateDoctorViewAPI(controller.doctorViewList.value?.responseData?.id.toString() ?? "", apiPayload);
 
-                              print("API Payload is:- ${apiPayload}");
+                              // print("API Payload is:- ${apiPayload}");
                             },
                           ),
                         );

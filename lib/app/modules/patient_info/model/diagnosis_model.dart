@@ -100,9 +100,9 @@ class TableModel {
     }
   }
 
-  void deleteItem(int row, int col, int itemIndex) {
+  void deleteItem(int row, int col, int itemIndex, int subIndex) {
     print("row is :- $row col is:- $col and item index:- $itemIndex");
-    rows[row].cells[1].items[0].diagnosisModelList?.removeAt(itemIndex);
+    rows[row].cells[col].items[itemIndex].diagnosisModelList?.removeAt(subIndex);
   }
 
   void swapRows(int fromRowIndex, int toRowIndex) {
