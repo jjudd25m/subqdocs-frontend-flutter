@@ -242,13 +242,16 @@ class AlergiesEditable extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForAllergies[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForAllergies[index] = impressionModel;
               controller.editableDataForAllergies.refresh();
-
+              controller.updateFullNote("allergies", controller.editableDataForAllergies);
               // controller.updateImpressionAndPlan();
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
+
               controller.editableDataForAllergies[index] = impressionModel;
               controller.editableDataForAllergies.refresh();
             },

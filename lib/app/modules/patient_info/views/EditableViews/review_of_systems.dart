@@ -251,13 +251,15 @@ class ReviewOfSystemsEditableView extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForReviewOfSystems[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForReviewOfSystems[index] = impressionModel;
               controller.editableDataForReviewOfSystems.refresh();
-
+              controller.updateFullNote("review_of_system", controller.editableDataForReviewOfSystems);
               // controller.updateImpressionAndPlan();
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
               controller.editableDataForReviewOfSystems[index] = impressionModel;
               controller.editableDataForReviewOfSystems.refresh();
             },

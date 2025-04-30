@@ -251,13 +251,16 @@ class skinHistoryEditableView extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForSkinHistory[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForSkinHistory[index] = impressionModel;
               controller.editableDataForSkinHistory.refresh();
+              controller.updateFullNote("skin_history_with_location", controller.editableDataForSkinHistory);
 
               // controller.updateImpressionAndPlan();
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
               controller.editableDataForSkinHistory[index] = impressionModel;
               controller.editableDataForSkinHistory.refresh();
             },

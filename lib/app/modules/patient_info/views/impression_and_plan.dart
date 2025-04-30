@@ -237,23 +237,21 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-          color: AppColors.white,
-          border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-        ),
-        child: Column(children: [_headerSection(), SizedBox(height: 12), _taskListSection(), SizedBox(height: 5)]),
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+        color: AppColors.white,
+        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
       ),
+      child: Column(children: [_headerSection(), SizedBox(height: 12), _taskListSection(), SizedBox(height: 5)]),
     );
   }
 
   Widget _headerSection() {
     return Container(
+      height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
@@ -263,7 +261,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 5),
-          Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer(), SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28)]),
+          Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
           SizedBox(height: 5),
         ],
       ),
@@ -282,13 +280,17 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
           itemBuilder: (context, index) {
             return HtmlEditorViewWidget(
               impresionAndPlanViewModel: controller.impressionAndPlanListFullNote[index],
-              onUpdateCallBack: (impressionModel) {
+              onUpdateCallBack: (impressionModel, content) {
+                impressionModel.htmlContent = content;
+
                 controller.impressionAndPlanListFullNote[index] = impressionModel;
                 controller.impressionAndPlanListFullNote.refresh();
 
-                controller.updateImpressionAndPlan();
+                controller.updateImpressionAndPlanFullNote();
               },
               toggleCallBack: (impressionModel) {
+                controller.resetImpressionAndPlanList();
+                impressionModel.isEditing = true;
                 controller.impressionAndPlanListFullNote[index] = impressionModel;
                 controller.impressionAndPlanListFullNote.refresh();
               },

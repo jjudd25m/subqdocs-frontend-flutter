@@ -55,7 +55,7 @@ class PatientView extends StatelessWidget {
                             child: Column(
                               children: [
                                 SizedBox(height: 5),
-                                Row(children: [Text(textAlign: TextAlign.center, "Note", style: AppFonts.medium(16, AppColors.textPurple)), Spacer(), SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28)]),
+                                Row(children: [Text(textAlign: TextAlign.center, "Note", style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
                                 SizedBox(height: 5),
                               ],
                             ),

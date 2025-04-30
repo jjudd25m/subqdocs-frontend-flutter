@@ -251,13 +251,15 @@ class MedicationEditable extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForMedication[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForMedication[index] = impressionModel;
               controller.editableDataForMedication.refresh();
-
+              controller.updateFullNote("medications_html", controller.editableDataForMedication);
               // controller.updateImpressionAndPlan();
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
               controller.editableDataForMedication[index] = impressionModel;
               controller.editableDataForMedication.refresh();
             },

@@ -13,7 +13,7 @@ import '../../modules/patient_info/model/impresion_and_plan_view_model.dart';
 class HtmlEditorViewWidget extends StatefulWidget {
   ImpresionAndPlanViewModel impresionAndPlanViewModel;
   final Function(ImpresionAndPlanViewModel) toggleCallBack;
-  final Function(ImpresionAndPlanViewModel) onUpdateCallBack;
+  final Function(ImpresionAndPlanViewModel, String? content) onUpdateCallBack;
 
   double heightOfTheEditableView;
 
@@ -30,9 +30,9 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
 
   void onChangeContent(String? content) {
     timer?.cancel();
-    timer = Timer(const Duration(seconds: 2), () {
+    timer = Timer(const Duration(seconds: 5), () {
       widget.impresionAndPlanViewModel.htmlContent = content;
-      widget.onUpdateCallBack(widget.impresionAndPlanViewModel);
+      widget.onUpdateCallBack(widget.impresionAndPlanViewModel, content);
     });
   }
 
@@ -86,22 +86,27 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
             htmlToolbarOptions: HtmlToolbarOptions(
               gridViewHorizontalSpacing: 0,
               gridViewVerticalSpacing: 0,
-              customToolbarButtons: [],
+
+              dropdownBackgroundColor: Colors.white,
+
               buttonFillColor: AppColors.borderTable.withOpacity(0.2),
               buttonColor: AppColors.textGrey,
               buttonSelectedColor: AppColors.black,
               buttonHighlightColor: AppColors.borderTable.withOpacity(0.2),
-              separatorWidget: const VerticalDivider(color: AppColors.borderTable, width: 1, thickness: 6),
-              dropdownBoxDecoration: BoxDecoration(color: AppColors.borderTable.withOpacity(0.2)),
+              separatorWidget: const VerticalDivider(color: Colors.transparent, width: 0, thickness: 1),
+              dropdownBoxDecoration: BoxDecoration(color: Colors.white.withOpacity(0.2)),
               textStyle: const TextStyle(fontSize: 14, color: AppColors.black),
               defaultToolbarButtons: [
                 const FontButtons(clearAll: false, strikethrough: true, superscript: false, subscript: false),
                 // const ColorButtons(),
                 const FontSettingButtons(fontSizeUnit: false, fontName: false),
+
                 // const ParagraphButtons(alignCenter: true, alignJustify: false, alignLeft: true, alignRight: true, caseConverter: false, decreaseIndent: false, increaseIndent: false, lineHeight: false, textDirection: false),
-                const ListButtons(listStyles: false),
+                const ListButtons(listStyles: true),
+
                 // const OtherButtons(fullscreen: false, codeview: true, undo: false, redo: false, help: false, copy: false, paste: false),
                 // const InsertButtons(video: false, audio: false, table: false, hr: false, otherFile: false),
+                OtherButtons(undo: true, redo: true, codeview: false, help: false, fullscreen: false, paste: false),
                 const StyleButtons(),
               ],
               toolbarType: ToolbarType.nativeScrollable,
@@ -110,7 +115,15 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
           )
         else
           // Html(data: widget.initialText, style: {}),
-          GestureDetector(onTap: toggleEditing, child: Container(child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {}))),
+          GestureDetector(
+            onTap: toggleEditing,
+            child: Container(
+              child: Html(
+                data: widget.impresionAndPlanViewModel.htmlContent,
+                style: {"*": Style(margin: Margins.only(left: 2), lineHeight: LineHeight(1.5), fontFamily: "Poppins"), "ul": Style(margin: Margins.only(left: 7), lineHeight: LineHeight(1.5), fontFamily: "Poppins")},
+              ),
+            ),
+          ),
       ],
     );
   }

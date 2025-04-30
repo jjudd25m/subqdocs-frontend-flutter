@@ -33,13 +33,15 @@ class SocialHistoryEditableView extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForSocialHistory[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForSocialHistory[index] = impressionModel;
               controller.editableDataForSocialHistory.refresh();
-
+              controller.updateFullNote("social_history_html", controller.editableDataForSocialHistory);
               // controller.updateImpressionAndPlan();
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
               controller.editableDataForSocialHistory[index] = impressionModel;
               controller.editableDataForSocialHistory.refresh();
             },

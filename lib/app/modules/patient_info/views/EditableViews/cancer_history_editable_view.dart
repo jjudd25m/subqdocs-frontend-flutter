@@ -245,13 +245,15 @@ class CancerHistoryEditableView extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForCancerHistory[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForCancerHistory[index] = impressionModel;
               controller.editableDataForCancerHistory.refresh();
 
-              // controller.updateImpressionAndPlan();
+              controller.updateFullNote("cancer_history_html", controller.editableDataForCancerHistory);
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
               controller.editableDataForCancerHistory[index] = impressionModel;
               controller.editableDataForCancerHistory.refresh();
             },

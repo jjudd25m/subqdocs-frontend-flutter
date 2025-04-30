@@ -86,6 +86,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   RxList<ImpresionAndPlanViewModel> editableDataForReviewOfSystems = RxList();
   RxList<ImpresionAndPlanViewModel> editableDataForExam = RxList();
   RxList<ImpresionAndPlanViewModel> editableDataForPatientView = RxList();
+  RxList<ImpresionAndPlanViewModel> editableDataHpiView = RxList();
+  RxList<ImpresionAndPlanViewModel> editableChiefView = RxList();
 
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
@@ -581,10 +583,27 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   }
 
   void resetImpressionAndPlanList() {
-    impressionAndPlanList.map((element) {
-      element.isEditing = false;
-    }).toList();
-    impressionAndPlanList.refresh();
+    final editableLists = [
+      editableChiefView,
+      editableDataHpiView,
+      editableDataForPatientView,
+      editableDataForExam,
+      editableDataForReviewOfSystems,
+      editableDataForAllergies,
+      editableDataForMedication,
+      editableDataForSocialHistory,
+      editableDataForCancerHistory,
+      editableDataForSkinHistory,
+      impressionAndPlanListFullNote,
+      impressionAndPlanList,
+    ];
+
+    for (var list in editableLists) {
+      for (var element in list) {
+        element.isEditing = false;
+      }
+      list.refresh();
+    }
   }
 
   Future<void> onRefresh() async {
@@ -1116,6 +1135,24 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     customPrint("getDoctorNote is :- ${doctorViewList.value?.toJson()}");
   }
 
+  Future<void> updateImpressionAndPlanFullNote() async {
+    Map<String, List<dynamic>> params = {};
+
+    params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJson()).toList();
+
+    print(params);
+
+    var response = await _patientInfoRepository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
+  }
+
+  Future<void> updateFullNote(String keyName, List<ImpresionAndPlanViewModel> list) async {
+    var response = await _patientInfoRepository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+  }
+
+  Future<void> updatePatientView(String keyName, List<ImpresionAndPlanViewModel> list) async {
+    var response = await _patientInfoRepository.updatePatientView(id: patientViewListModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+  }
+
   Future<void> getDoctorNote() async {
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
     setImpressionAndPlanList();
@@ -1322,6 +1359,28 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForExam.refresh();
     }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi != null) {
+      editableDataHpiView.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "");
+      editableDataHpiView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableDataHpiView.refresh();
+    }
+
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain != null) {
+      editableChiefView.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "");
+      editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableChiefView.refresh();
+    }
+  }
+
+  Map<String, String> buildParams(String keyName, List<ImpresionAndPlanViewModel> list) {
+    return {keyName: list.firstOrNull?.htmlContent ?? ""};
   }
 
   void setPatientViewEditableData() {

@@ -49,6 +49,24 @@ class PatientInfoRepository {
     return response;
   }
 
+  Future<dynamic> updateImpressionAndPlanFullNote({required int id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("full-note/impression_plan/update/${id}", params);
+    customPrint("getPatientView API  internal response $response");
+    return response;
+  }
+
+  Future<dynamic> updateFullNote({required int id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("full-note/update/${id}", params);
+    customPrint("getPatientView API  internal response $response");
+    return response;
+  }
+
+  Future<dynamic> updatePatientView({required int id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("patient-view/update/${id}", params);
+    customPrint("getPatientView API  internal response $response");
+    return response;
+  }
+
   Future<PatientFullNoteModel> getFullNote({required String id}) async {
     var response = await ApiProvider.instance.callGet("full-note/$id");
     customPrint("getFullNote API  internal response $response");

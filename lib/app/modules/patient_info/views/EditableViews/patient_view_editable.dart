@@ -251,13 +251,16 @@ class PatientViewEditable extends StatelessWidget {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableDataForPatientView[index],
-            onUpdateCallBack: (impressionModel) {
+            onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForPatientView[index] = impressionModel;
               controller.editableDataForPatientView.refresh();
-
+              // controller.updateFullNote("medications_html", controller.editableDataForMedication);
               // controller.updateImpressionAndPlan();
+              controller.updatePatientView("patient_view_note_html", controller.editableDataForPatientView);
             },
             toggleCallBack: (impressionModel) {
+              controller.resetImpressionAndPlanList();
+              impressionModel.isEditing = true;
               controller.editableDataForPatientView[index] = impressionModel;
               controller.editableDataForPatientView.refresh();
             },

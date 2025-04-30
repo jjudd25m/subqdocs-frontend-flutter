@@ -231,9 +231,9 @@ import '../../../visit_main/model/doctor_view_model.dart';
 import '../../controllers/patient_info_controller.dart';
 import '../../model/impresion_and_plan_view_model.dart';
 
-class ExamEditable extends StatelessWidget {
+class ChiefComplaint extends StatelessWidget {
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
-  ExamEditable({super.key});
+  ChiefComplaint({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -246,23 +246,22 @@ class ExamEditable extends StatelessWidget {
       return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: controller.editableDataForExam.length,
+        itemCount: controller.editableChiefView.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
-            impresionAndPlanViewModel: controller.editableDataForExam[index],
+            impresionAndPlanViewModel: controller.editableChiefView[index],
             onUpdateCallBack: (impressionModel, content) {
-              controller.editableDataForExam[index] = impressionModel;
-              controller.editableDataForExam.refresh();
-              controller.updateFullNote("exam", controller.editableDataForExam);
+              controller.editableChiefView[index] = impressionModel;
+              controller.editableChiefView.refresh();
+              controller.updateFullNote("chief_complain", controller.editableChiefView);
               // controller.updateImpressionAndPlan();
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();
-              controller.resetImpressionAndPlanList();
               impressionModel.isEditing = true;
-              controller.editableDataForExam[index] = impressionModel;
-              controller.editableDataForExam.refresh();
+              controller.editableChiefView[index] = impressionModel;
+              controller.editableChiefView.refresh();
             },
           );
         },

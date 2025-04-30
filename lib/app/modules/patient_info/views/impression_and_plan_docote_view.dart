@@ -265,7 +265,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 5),
-          Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer(), SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28)]),
+          Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
           SizedBox(height: 5),
         ],
       ),
@@ -284,13 +284,15 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
           itemBuilder: (context, index) {
             return HtmlEditorViewWidget(
               impresionAndPlanViewModel: controller.impressionAndPlanList[index],
-              onUpdateCallBack: (impressionModel) {
+              onUpdateCallBack: (impressionModel, content) {
                 controller.impressionAndPlanList[index] = impressionModel;
                 controller.impressionAndPlanList.refresh();
 
                 controller.updateImpressionAndPlan();
               },
               toggleCallBack: (impressionModel) {
+                controller.resetImpressionAndPlanList();
+                impressionModel.isEditing = true;
                 controller.impressionAndPlanList[index] = impressionModel;
                 controller.impressionAndPlanList.refresh();
               },
