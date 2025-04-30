@@ -473,11 +473,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           children: [
                                             SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
                                             SizedBox(height: 10),
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Digitally Signed by ${controller.patientData.value?.responseData?.doctorFirstName} ${controller.patientData.value?.responseData?.doctorLastName}",
-                                              style: AppFonts.medium(16, AppColors.textWhite),
-                                            ),
+                                            Text(textAlign: TextAlign.center, "Digitally Signed by ${controller.patientData.value?.responseData?.doctorName}", style: AppFonts.medium(16, AppColors.textWhite)),
                                             Text(
                                               textAlign: TextAlign.center,
                                               formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),

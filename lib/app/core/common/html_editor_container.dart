@@ -111,7 +111,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
               ],
               toolbarType: ToolbarType.nativeScrollable,
             ),
-            otherOptions: OtherOptions(height: widget.heightOfTheEditableView, decoration: const BoxDecoration(color: Colors.white)),
+            otherOptions: OtherOptions(height: double.infinity, decoration: const BoxDecoration(color: Colors.white)),
           )
         else
           // Html(data: widget.initialText, style: {}),
