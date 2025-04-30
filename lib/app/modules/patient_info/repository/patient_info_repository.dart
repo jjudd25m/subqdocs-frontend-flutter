@@ -2,6 +2,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../models/ChangeModel.dart';
 import '../../visit_main/model/doctor_view_model.dart';
+import '../model/icd10_code_list_model.dart';
 import '../model/patient_doctor_visit_data_model.dart';
 import '../model/patient_fullnote_model.dart';
 import '../model/patient_view_list_model.dart';
@@ -59,5 +60,10 @@ class PatientInfoRepository {
     var response = await ApiProvider.instance.callPut("doctors-view-table/update/$id", params);
     customPrint("updateDoctorView API  internal response $response");
     return response;
+  }
+
+  Future<Icd10CodeListModel> getIcd10CodeAll({required Map<String, dynamic> param}) async {
+    var response = await ApiProvider.instance.callGet("icd-10/getAll", queryParameters: param);
+    return Icd10CodeListModel.fromJson(response);
   }
 }

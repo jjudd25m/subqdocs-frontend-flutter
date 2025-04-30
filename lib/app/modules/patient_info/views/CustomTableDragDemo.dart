@@ -10,6 +10,7 @@ import 'package:subqdocs/widgets/custom_animated_button.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../visit_main/model/doctor_view_model.dart';
+import '../controllers/patient_info_controller.dart';
 import '../model/diagnosis_model.dart';
 import 'InlineEditableText.dart';
 import 'drop_drown_search_table.dart';
@@ -25,12 +26,15 @@ class DiagnosisDragData {
 }
 
 class NestedDraggableTable extends StatefulWidget {
+  PatientInfoController controller;
   TableModel tableModel;
   TableModel possibleDignosisProcedureTableModel;
   RxInt totalUnitCharge = RxInt(0);
   final Function(List<Map<String, dynamic>>, List<Map<String, dynamic>>) updateResponse;
 
-  NestedDraggableTable({super.key, required this.tableModel, required this.possibleDignosisProcedureTableModel, required this.updateResponse});
+  bool isPossibleAlternativeShow = false;
+
+  NestedDraggableTable({super.key, required this.controller, required this.tableModel, required this.possibleDignosisProcedureTableModel, required this.updateResponse});
 
   @override
   NestedDraggableTableState createState() => NestedDraggableTableState();
@@ -143,10 +147,15 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                       if (widget.possibleDignosisProcedureTableModel.rows.isNotEmpty) ...[
                         Expanded(
                           child: CustomAnimatedButton(
+                            onPressed: () {
+                              setState(() {
+                                widget.isPossibleAlternativeShow = !widget.isPossibleAlternativeShow;
+                              });
+                            },
                             height: 40,
                             text: "${widget.possibleDignosisProcedureTableModel.rows.length} Possible Additions",
-                            enabledColor: AppColors.white,
-                            enabledTextColor: AppColors.textDarkGrey,
+                            enabledColor: widget.isPossibleAlternativeShow ? AppColors.orange : AppColors.white,
+                            enabledTextColor: widget.isPossibleAlternativeShow ? AppColors.orangeText : AppColors.textDarkGrey,
                             isOutline: true,
                             outlineColor: AppColors.textBlackDark.withValues(alpha: 0.5),
                           ),
@@ -159,7 +168,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
               ),
             ],
           ),
-          buildPossibleAddition(),
+          if (widget.isPossibleAlternativeShow) ...[buildPossibleAddition()],
         ],
       ),
     );
@@ -286,56 +295,64 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                 final bool isPortrait = orientation == Orientation.portrait;
                 final bool isIPad = Platform.isIOS && MediaQuery.of(context).size.shortestSide >= 600;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child:
-                      (col == 2)
-                          ? InlineEditableText(
-                            onChanged: (p0) {
-                              widget.tableModel.rows[row].cells[col].items[i].unit = p0;
-                              items[i].unit = p0;
-                              calculateTotal();
-                            },
-                            initialText: "${items[i].unit}",
-                            textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                            onSubmitted: (newText) {
-                              items[i].unit = newText;
-                            },
-                          )
-                          : (col == 3)
-                          ? InlineEditableText(
-                            onChanged: (p0) {
-                              widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
-                              items[i].unitPrice = p0;
-                              calculateTotal();
-                            },
-                            initialText: "${items[i].unitPrice}",
-                            textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                            onSubmitted: (newText) {
-                              items[i].unitPrice = newText;
-                            },
-                          )
-                          : isDiagnosis
-                          ? Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DragTarget<Map<String, dynamic>>(
-                                  builder: (context, candidateData, rejectedData) {
-                                    return Container(
-                                      margin: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: candidateData.isNotEmpty ? Colors.red : AppColors.orange, width: 2),
-                                        borderRadius: BorderRadius.circular(8),
-                                        // color: AppColors.lightgreenPastVisit,
-                                      ),
-                                      height: 150,
-                                      child: Expanded(
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: items[i].diagnosisModelList?.length,
-                                          itemBuilder: (context, subIndex) {
-                                            return LongPressDraggable<Map<String, int>>(
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedRowIndex = row;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child:
+                        (col == 2)
+                            ? InlineEditableText(
+                              onChanged: (p0) {
+                                widget.tableModel.rows[row].cells[col].items[i].unit = p0;
+                                items[i].unit = p0;
+                                calculateTotal();
+                              },
+                              initialText: "${items[i].unit}",
+                              textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                              onSubmitted: (newText) {
+                                items[i].unit = newText;
+                                calculateTotal();
+                              },
+                            )
+                            : (col == 3)
+                            ? InlineEditableText(
+                              onChanged: (p0) {
+                                widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
+                                items[i].unitPrice = p0;
+                                calculateTotal();
+                              },
+                              initialText: "${items[i].unitPrice}",
+                              textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                              onSubmitted: (newText) {
+                                items[i].unitPrice = newText;
+                                calculateTotal();
+                              },
+                            )
+                            : isDiagnosis
+                            ? DragTarget<Map<String, dynamic>>(
+                              builder: (context, candidateData, rejectedData) {
+                                bool isEmptyItems = items[i].diagnosisModelList?.isNotEmpty ?? false;
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: isEmptyItems ? MainAxisAlignment.end : MainAxisAlignment.start,
+                                  children: [
+                                    if (isEmptyItems)
+                                      Container(
+                                        margin: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: candidateData.isNotEmpty ? Colors.transparent : Colors.transparent, width: 2),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        width: double.maxFinite,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: List.generate(
+                                            items[i].diagnosisModelList?.length ?? 0,
+                                            (subIndex) => LongPressDraggable<Map<String, int>>(
                                               data: {'row': row, 'col': col, 'itemIndex': i, 'subIndex': subIndex},
                                               feedback: IntrinsicHeight(
                                                 child: IntrinsicWidth(
@@ -350,16 +367,11 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                               showPopover(
                                                                 barrierColor: Colors.transparent,
                                                                 bodyBuilder:
-                                                                    (context) => DropDrownSearchTable(
+                                                                    (context) => DiagnosisDropDrownSearchTable(
                                                                       items:
                                                                           (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                                  .toList()
-                                                                                  .isNotEmpty
-                                                                              ? (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                                  .toList()
-                                                                              : [ProcedurePossibleAlternatives(code: "", description: "No data found")],
+                                                                              .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
+                                                                              .toList(),
                                                                       onItemSelected: (value, index) {
                                                                         Navigator.pop(context);
 
@@ -378,6 +390,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                             calculateTotal();
                                                                           });
                                                                         }
+                                                                      },
+                                                                      controller: widget.controller,
+                                                                      onSearchItemSelected: (p0, p1) {
+                                                                        setState(() {
+                                                                          items[i].diagnosisModelList?[subIndex].code = p0;
+                                                                          items[i].diagnosisModelList?[subIndex].description = p1;
+                                                                          calculateTotal();
+                                                                        });
                                                                       },
                                                                     ),
                                                                 onPop: () => print('Popover was popped!'),
@@ -457,6 +477,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                 },
                                                 builder: (context, candidateData, __) {
                                                   return Container(
+                                                    margin: EdgeInsets.symmetric(vertical: 5),
                                                     decoration: BoxDecoration(
                                                       color: candidateData.isNotEmpty ? Colors.blue.withOpacity(0.1) : AppColors.tableItem,
                                                       borderRadius: BorderRadius.circular(6),
@@ -471,16 +492,11 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                 context: context,
                                                                 barrierColor: Colors.transparent,
                                                                 bodyBuilder:
-                                                                    (context) => DropDrownSearchTable(
+                                                                    (context) => DiagnosisDropDrownSearchTable(
                                                                       items:
                                                                           (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                                  .toList()
-                                                                                  .isNotEmpty
-                                                                              ? (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description))
-                                                                                  .toList()
-                                                                              : [ProcedurePossibleAlternatives(code: "", description: "No data found")],
+                                                                              .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
+                                                                              .toList(),
                                                                       onItemSelected: (value, index) {
                                                                         Navigator.pop(context);
 
@@ -500,6 +516,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                             calculateTotal();
                                                                           });
                                                                         }
+                                                                      },
+                                                                      controller: widget.controller,
+                                                                      onSearchItemSelected: (p0, p1) {
+                                                                        setState(() {
+                                                                          items[i].diagnosisModelList?[subIndex].code = p0;
+                                                                          items[i].diagnosisModelList?[subIndex].description = p1;
+                                                                          calculateTotal();
+                                                                        });
                                                                       },
                                                                     ),
                                                                 onPop: () => print('Popover was popped!'),
@@ -527,128 +551,127 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                   );
                                                 },
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  onWillAcceptWithDetails: (data) => true,
-                                  onAccept: (data) {
-                                    int oldfromRow = data['row']!;
-                                    int oldfromCol = data['col']!;
-                                    int olditemIndex = data['itemIndex']!;
-                                    int oldsubIndex = data['subIndex']!;
-
-                                    print("outer drag val is:- ${data}");
-                                    print("outer drop val row is:- $row col is:- $col i is:- $i");
-
-                                    if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
-                                      DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-
-                                      widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                      widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
-                                    } else {
-                                      DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-
-                                      widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                      widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
-                                    }
-
-                                    setState(() {});
-                                  },
-                                ),
-                                const SizedBox(height: 10),
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: CustomAnimatedButton(
-                                            height: 40,
-                                            text: "+ Diagnosis",
-                                            enabledColor: AppColors.orange,
-                                            enabledTextColor: AppColors.orangeText,
-                                            onPressed: () {
-                                              _addItemAtIndex(row, col, i);
-                                            },
+                                            ),
                                           ),
                                         ),
-                                      ],
+                                      ),
+                                    SizedBox(height: isEmptyItems ? 10 : 40),
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: CustomAnimatedButton(
+                                                height: 40,
+                                                text: "+ Diagnosis",
+                                                enabledColor: AppColors.orange,
+                                                enabledTextColor: AppColors.orangeText,
+                                                onPressed: () {
+                                                  _addItemAtIndex(row, col, i);
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
+                                  ],
+                                );
+                              },
+                              onWillAcceptWithDetails: (data) => true,
+                              onAccept: (data) {
+                                int oldfromRow = data['row']!;
+                                int oldfromCol = data['col']!;
+                                int olditemIndex = data['itemIndex']!;
+                                int oldsubIndex = data['subIndex']!;
+
+                                print("outer drag val is:- ${data}");
+                                print("outer drop val row is:- $row col is:- $col i is:- $i");
+
+                                if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
+                                  DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+
+                                  widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
+                                } else {
+                                  DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+
+                                  widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
+                                }
+
+                                setState(() {});
+                              },
+                            )
+                            : col == 0
+                            ? GestureDetector(
+                              key: _procedureGestureKey,
+                              onTap: () {
+                                final RenderBox? renderBox = _procedureGestureKey.currentContext?.findRenderObject() as RenderBox?;
+                                final position = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+                                final size = renderBox?.size ?? Size.zero;
+
+                                print("position is :- ${position}");
+
+                                showPopover(
+                                  context: _procedureGestureKey.currentContext!,
+
+                                  barrierColor: Colors.transparent,
+                                  bodyBuilder:
+                                      (context) => DropDrownSearchTable(
+                                        items: items[i].procedurePossibleAlternatives ?? [],
+                                        onItemSelected: (value, index) {
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            print("is procedure changes");
+
+                                            String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
+                                            String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
+
+                                            widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                                            widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+
+                                            widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
+                                            widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
+
+                                            calculateTotal();
+                                            // tableModel.rows[row].cells[col].items[index] = value;
+                                          });
+                                        },
+                                      ),
+                                  onPop: () => print('Popover was popped!'),
+                                  direction: PopoverDirection.bottom,
+                                  width: 190,
+                                  barrierDismissible: true,
+                                  arrowHeight: isPortrait ? 60 : 40,
+                                  arrowDyOffset: isPortrait ? -50 : -30,
+                                  arrowWidth: 0,
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      (items[i].modifiers != "" && items[i].modifiers != null)
+                                          ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
+                                          : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                      TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                          : col == 0
-                          ? GestureDetector(
-                            key: _procedureGestureKey,
-                            onTap: () {
-                              final RenderBox? renderBox = _procedureGestureKey.currentContext?.findRenderObject() as RenderBox?;
-                              final position = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
-                              final size = renderBox?.size ?? Size.zero;
-
-                              print("position is :- ${position}");
-
-                              showPopover(
-                                context: _procedureGestureKey.currentContext!,
-
-                                barrierColor: Colors.transparent,
-                                bodyBuilder:
-                                    (context) => DropDrownSearchTable(
-                                      items: items[i].procedurePossibleAlternatives ?? [],
-                                      onItemSelected: (value, index) {
-                                        Navigator.pop(context);
-                                        setState(() {
-                                          print("is procedure changes");
-
-                                          String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
-                                          String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
-
-                                          widget.tableModel.rows[row].cells[col].items[i].code = value.code;
-                                          widget.tableModel.rows[row].cells[col].items[i].description = value.description;
-
-                                          widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
-                                          widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
-
-                                          calculateTotal();
-                                          // tableModel.rows[row].cells[col].items[index] = value;
-                                        });
-                                      },
-                                    ),
-                                onPop: () => print('Popover was popped!'),
-                                direction: PopoverDirection.bottom,
-                                width: 190,
-                                barrierDismissible: true,
-                                arrowHeight: isPortrait ? 60 : 40,
-                                arrowDyOffset: isPortrait ? -50 : -30,
-                                arrowWidth: 0,
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
-                              child: RichText(
-                                text: TextSpan(
-                                  children: [
-                                    (items[i].modifiers != "" && items[i].modifiers != null)
-                                        ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
-                                        : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                    TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                  ],
-                                ),
+                              ),
+                            )
+                            : RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                                  TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                ],
                               ),
                             ),
-                          )
-                          : RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
-                                TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                              ],
-                            ),
-                          ),
+                  ),
                 );
               }),
             ),
@@ -771,7 +794,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                 Expanded(
                                   child: CustomAnimatedButton(
                                     onPressed: () {
-                                      _addRow();
+                                      setState(() {
+                                        widget.possibleDignosisProcedureTableModel.rows.removeAt(row);
+                                        calculateTotal();
+                                      });
                                     },
                                     height: 35,
                                     text: "Cancel",
@@ -839,47 +865,51 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
       List<Map<String, dynamic>> diagnosisList1 = [];
 
-      for (ProcedurePossibleAlternatives procedurePossibleAlternatives in row.cells.first.items[0].procedurePossibleAlternatives ?? []) {
-        procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
-      }
-
-      final procedure1 = createProcedure(
-        code: row.cells.first.items[0].code ?? "",
-        description: row.cells.first.items[0].description ?? "",
-        modifier: "",
-        possibleAlternatives: procedureListPossibleAlternatives,
-      );
-
-      for (var item in row.cells[1].items[0].diagnosisModelList ?? []) {
-        List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
-
-        for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in item.diagnosisPossibleAlternatives ?? []) {
-          diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
+      if (row.cells.first.items[0].code != "0") {
+        for (ProcedurePossibleAlternatives procedurePossibleAlternatives in row.cells.first.items[0].procedurePossibleAlternatives ?? []) {
+          procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
         }
 
-        final localdiagnosisList = createDiagnosis(
-          code: item.code ?? "",
-          description: item.description ?? "",
-          icd10: item.code ?? "",
-          confidenceScore: item.confidence ?? "",
-          possibleAlternatives: diagnosisListListPossibleAlternatives,
+        final procedure1 = createProcedure(
+          code: row.cells.first.items[0].code ?? "",
+          description: row.cells.first.items[0].description ?? "",
+          modifier: "",
+          possibleAlternatives: procedureListPossibleAlternatives,
         );
 
-        diagnosisList1.add(localdiagnosisList);
-        // print("${item.code}, ${item.description}, ${item.diagnosisPossibleAlternatives}");
-        print("*******");
+        for (var item in row.cells[1].items[0].diagnosisModelList ?? []) {
+          List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
+
+          for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in item.diagnosisPossibleAlternatives ?? []) {
+            diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
+          }
+
+          final localdiagnosisList = createDiagnosis(
+            code: item.code ?? "",
+            description: item.description ?? "",
+            icd10: item.code ?? "",
+            confidenceScore: item.confidence ?? "",
+            possibleAlternatives: diagnosisListListPossibleAlternatives,
+          );
+
+          diagnosisList1.add(localdiagnosisList);
+          // print("${item.code}, ${item.description}, ${item.diagnosisPossibleAlternatives}");
+          print("*******");
+        }
+
+        Map<String, dynamic> arrAiagnosis_codes_procedures = {};
+
+        arrAiagnosis_codes_procedures["procedure"] = procedure1;
+        arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
+        arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
+        arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
+        arrAiagnosis_codes_procedures["modifier"] = null;
+        arrAiagnosis_codes_procedures["total_charge"] = "0";
+
+        print("arrAiagnosis_codes_procedures is:- ${arrAiagnosis_codes_procedures}");
+
+        mainDic.add(arrAiagnosis_codes_procedures);
       }
-
-      Map<String, dynamic> arrAiagnosis_codes_procedures = {};
-
-      arrAiagnosis_codes_procedures["procedure"] = procedure1;
-      arrAiagnosis_codes_procedures["diagnosis"] = diagnosisList1;
-      arrAiagnosis_codes_procedures["units"] = row.cells[2].items[0].unit;
-      arrAiagnosis_codes_procedures["unit_charge"] = row.cells[3].items[0].unitPrice;
-      arrAiagnosis_codes_procedures["modifier"] = null;
-      arrAiagnosis_codes_procedures["total_charge"] = "0";
-
-      mainDic.add(arrAiagnosis_codes_procedures);
 
       print("-------------------------------------------");
       // widget.updateResponse(mainDic, );

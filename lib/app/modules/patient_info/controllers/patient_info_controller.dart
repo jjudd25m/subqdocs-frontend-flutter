@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:subqdocs/app/modules/patient_info/model/icd10_code_list_model.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:toastification/toastification.dart';
 
@@ -47,6 +48,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Rxn<PatientViewListModel> patientViewListModel = Rxn();
   Rxn<TableModel> tableModel = Rxn();
   Rxn<TableModel> possibleDignosisProcedureTableModel = Rxn();
+
+  List<ProcedurePossibleAlternatives> icd10CodeItems = [];
 
   Rxn<PatientDoctorVisitDataModel> patientDoctorVisitDataModel = Rxn();
   Rxn<PatientFullNoteModel> patientFullNoteModel = Rxn();
@@ -1062,6 +1065,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     customPrint("getPatientView is :- ${patientViewListModel.value?.toJson()}");
   }
 
+  Future<Icd10CodeListModel> getIcd10CodeList(Map<String, dynamic> param) async {
+    return await _patientInfoRepository.getIcd10CodeAll(param: param);
+  }
+
   Future<void> getPatientDoctorVisitData() async {
     patientDoctorVisitDataModel.value = await _patientInfoRepository.getDoctorVisitData(id: visitId);
     getPatientDetails();
@@ -1075,6 +1082,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> getDoctorNote() async {
+    final startTime = DateTime.now();
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
 
     print(
@@ -1095,11 +1103,21 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     tableModel.value = TableModel(rows: []);
     possibleDignosisProcedureTableModel.value = TableModel(rows: []);
 
+    icd10CodeItems.clear();
+
+    // for (Icd10Codes icdItem in doctorViewList.value?.responseData?.icd10Codes ?? []) {
+    //   icd10CodeItems.add(ProcedurePossibleAlternatives(code: icdItem.code, description: icdItem.description, modifier: null, isPin: false));
+    // }
+
     for (MainDiagnosisCodesProceduresDiagnosisCodesProcedures diagnosis in (doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.diagnosisCodesProcedures ?? [])) {
       List<DiagnosisModel>? diagnosisModelList = [];
 
       for (Diagnosis diagnosisModel in diagnosis.diagnosis ?? []) {
         print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+
+        // for (ProcedurePossibleAlternatives icd10CodeItem in icd10CodeItems) {
+        //   diagnosisModel.diagnosisPossibleAlternatives?.add(DiagnosisPossibleAlternatives(code: icd10CodeItem.code, description: icd10CodeItem.description, isPin: false));
+        // }
 
         diagnosisModelList.add(
           DiagnosisModel(
@@ -1110,6 +1128,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
           ),
         );
       }
+
+      // diagnosis.procedure?.procedurePossibleAlternatives?.addAll(icd10CodeItems);
 
       tableModel.value?.rows.add(
         TableRowModel(

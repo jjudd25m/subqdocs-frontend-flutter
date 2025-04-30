@@ -93,7 +93,7 @@ class ApiProvider {
       customPrint(UrlProvider.baseUrl + url);
     }
     try {
-      var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
+      var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 3000));
       print("put response := $response");
       return getResponse(response.data);
     } on TimeoutException {

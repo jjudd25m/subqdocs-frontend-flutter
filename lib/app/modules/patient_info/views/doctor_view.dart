@@ -642,6 +642,7 @@ class DoctorView extends StatelessWidget {
 
                               // print("API Payload is:- ${apiPayload}");
                             },
+                            controller: controller,
                           ),
                         );
                       }),

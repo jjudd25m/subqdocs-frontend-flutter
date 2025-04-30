@@ -1715,6 +1715,8 @@ class DoctorViewResponseData {
   String? updatedAt;
   String? deletedAt;
 
+  // List<Icd10Codes>? icd10Codes;
+
   DoctorViewResponseData({
     this.id,
     this.patientId,
@@ -1728,6 +1730,7 @@ class DoctorViewResponseData {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
+    // this.icd10Codes,
   });
 
   DoctorViewResponseData.fromJson(Map<String, dynamic> json) {
@@ -1748,6 +1751,12 @@ class DoctorViewResponseData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    // if (json['icd10Codes'] != null) {
+    //   icd10Codes = <Icd10Codes>[];
+    //   json['icd10Codes'].forEach((v) {
+    //     icd10Codes!.add(new Icd10Codes.fromJson(v));
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -1770,9 +1779,31 @@ class DoctorViewResponseData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    // if (this.icd10Codes != null) {
+    //   data['icd10Codes'] = this.icd10Codes!.map((v) => v.toJson()).toList();
+    // }
     return data;
   }
 }
+
+// class Icd10Codes {
+//   String? code;
+//   String? description;
+//
+//   Icd10Codes({this.code, this.description});
+//
+//   Icd10Codes.fromJson(Map<String, dynamic> json) {
+//     code = json['code'];
+//     description = json['description'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['code'] = this.code;
+//     data['description'] = this.description;
+//     return data;
+//   }
+// }
 
 class ImpressionsAndPlan {
   String? number;
@@ -1986,8 +2017,9 @@ class ProcedurePossibleAlternatives {
   String? code;
   String? description;
   String? modifier;
+  bool isPin = true;
 
-  ProcedurePossibleAlternatives({this.code, this.description, this.modifier});
+  ProcedurePossibleAlternatives({this.code, this.description, this.modifier, required this.isPin});
 
   ProcedurePossibleAlternatives.fromJson(Map<String, dynamic> json) {
     code = json['code'];
@@ -2042,8 +2074,9 @@ class Diagnosis {
 class DiagnosisPossibleAlternatives {
   String? code;
   String? description;
+  bool? isPin = true;
 
-  DiagnosisPossibleAlternatives({this.code, this.description});
+  DiagnosisPossibleAlternatives({this.code, this.description, required this.isPin});
 
   DiagnosisPossibleAlternatives.fromJson(Map<String, dynamic> json) {
     code = json['code'];
