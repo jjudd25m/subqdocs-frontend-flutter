@@ -272,13 +272,16 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
   Widget _taskListSection() {
     return Obx(() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView.builder(
+          padding: EdgeInsets.zero,
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: controller.impressionAndPlanListFullNote.length,
           itemBuilder: (context, index) {
             return HtmlEditorViewWidget(
+              isBorder: true,
+              padding: const EdgeInsets.only(left: 10, right: 10),
               impresionAndPlanViewModel: controller.impressionAndPlanListFullNote[index],
               onUpdateCallBack: (impressionModel, content) {
                 impressionModel.htmlContent = content;
@@ -291,8 +294,10 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
               toggleCallBack: (impressionModel) {
                 controller.resetImpressionAndPlanList();
                 impressionModel.isEditing = true;
+
                 controller.impressionAndPlanListFullNote[index] = impressionModel;
                 controller.impressionAndPlanListFullNote.refresh();
+                controller.impressionAndPlanListFullNote[index].htmlEditorController.setFocus();
               },
             );
           },

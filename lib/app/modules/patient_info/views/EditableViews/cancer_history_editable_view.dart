@@ -243,7 +243,9 @@ class CancerHistoryEditableView extends StatelessWidget {
         itemCount: controller.editableDataForCancerHistory.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            padding: const EdgeInsets.only(left: 10, right: 10),
+
+            heightOfTheEditableView: 200,
             impresionAndPlanViewModel: controller.editableDataForCancerHistory[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForCancerHistory[index] = impressionModel;

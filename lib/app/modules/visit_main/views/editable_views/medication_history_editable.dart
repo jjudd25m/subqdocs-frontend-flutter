@@ -243,10 +243,9 @@ class MedicationHistoryEditable extends StatelessWidget {
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableMedicationHistory[index],
             onUpdateCallBack: (impressionModel, content) {
-              // controller.editableVisitSnapShot[index] = impressionModel;
-              // controller.editableVisitSnapShot.refresh();
-              // // controller.updateFullNote("allergies", controller.editableDataForAllergies);
-              // // controller.updateImpressionAndPlan();
+              controller.editableMedicationHistory[index] = impressionModel;
+              controller.editableMedicationHistory.refresh();
+              controller.updateFullNote("medications_html", controller.editableMedicationHistory);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

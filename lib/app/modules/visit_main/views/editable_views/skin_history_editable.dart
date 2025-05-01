@@ -243,10 +243,9 @@ class SkinHistoryEditable extends StatelessWidget {
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableSkinHistory[index],
             onUpdateCallBack: (impressionModel, content) {
-              // controller.editableVisitSnapShot[index] = impressionModel;
-              // controller.editableVisitSnapShot.refresh();
-              // controller.updateFullNote("allergies", controller.editableDataForAllergies);
-              // controller.updateImpressionAndPlan();
+              controller.editableSkinHistory[index] = impressionModel;
+              controller.editableSkinHistory.refresh();
+              controller.updateFullNote("social_history_html", controller.editableSkinHistory);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

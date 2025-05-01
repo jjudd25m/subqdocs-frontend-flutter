@@ -240,7 +240,8 @@ class AlergiesEditable extends StatelessWidget {
         itemCount: controller.editableDataForAllergies.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            heightOfTheEditableView: 250,
             impresionAndPlanViewModel: controller.editableDataForAllergies[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForAllergies[index] = impressionModel;
