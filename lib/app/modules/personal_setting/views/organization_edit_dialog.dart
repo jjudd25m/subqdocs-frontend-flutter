@@ -337,25 +337,25 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                       child: CustomButton(
                         navigate: () {
                           if (controller.formKey.currentState!.validate()) {
-                            if (controller.organizationSelectedCityValue.value?.isNotEmpty ?? true) {
-                              Map<String, dynamic> param = Map<String, dynamic>();
+                            // if (controller.organizationSelectedCityValue.value?.isNotEmpty ?? true) {
+                            Map<String, dynamic> param = Map<String, dynamic>();
 
-                              param["name"] = controller.organizationNameController.text;
-                              param["email"] = controller.organizationEmailController.text;
-                              param["state"] = controller.organizationSelectedStateValue.value;
-                              param["city"] = controller.organizationSelectedCityValue.value;
-                              param["contact_no"] = controller.extractDigits(controller.organizationPhoneNumberController.text);
-                              param["country"] = controller.selectedCountryValue.value;
-                              param["street_name"] = controller.organizationStreetNameController.text;
-                              param["postal_code"] = controller.organizationPostalCodeController.text;
-                              param["address1"] = controller.organizationAddress1Controller.text;
-                              param["address2"] = controller.organizationAddress2Controller.text;
+                            param["name"] = controller.organizationNameController.text;
+                            param["email"] = controller.organizationEmailController.text;
+                            param["state"] = controller.organizationSelectedStateValue.value;
+                            param["city"] = controller.organizationSelectedCityValue.value;
+                            param["contact_no"] = controller.extractDigits(controller.organizationPhoneNumberController.text);
+                            param["country"] = controller.selectedCountryValue.value;
+                            param["street_name"] = controller.organizationStreetNameController.text;
+                            param["postal_code"] = controller.organizationPostalCodeController.text;
+                            param["address1"] = controller.organizationAddress1Controller.text;
+                            param["address2"] = controller.organizationAddress2Controller.text;
 
-                              receiveParam(param);
-                              Navigator.pop(context);
-                            } else {
-                              CustomToastification().showToast("Please select city", type: ToastificationType.error);
-                            }
+                            receiveParam(param);
+                            Navigator.pop(context);
+                            // } else {
+                            //   CustomToastification().showToast("Please select city", type: ToastificationType.error);
+                            // }
                           }
                         },
                         label: "Update",

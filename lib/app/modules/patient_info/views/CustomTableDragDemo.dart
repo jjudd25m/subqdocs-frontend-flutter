@@ -393,6 +393,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       },
                                                                       controller: widget.controller,
                                                                       onSearchItemSelected: (p0, p1) {
+                                                                        Navigator.pop(context);
                                                                         setState(() {
                                                                           items[i].diagnosisModelList?[subIndex].code = p0;
                                                                           items[i].diagnosisModelList?[subIndex].description = p1;
@@ -422,7 +423,16 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                         SizedBox(width: 10),
                                                         GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
                                                         SizedBox(width: 3),
-                                                        GestureDetector(onTap: () => _deleteItem(row, col, i, subIndex), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            _deleteItem(row, col, i, subIndex);
+
+                                                            Future.delayed(const Duration(milliseconds: 500), () {
+                                                              calculateTotal();
+                                                            });
+                                                          },
+                                                          child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -459,17 +469,19 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                   print("drag val is:- ${data}");
                                                   print("drop val row is:- $row col is:- $col i is:- $i subIndex is:- $subIndex ");
 
-                                                  if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
-                                                    DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-                                                    DiagnosisModel newDiagnosis = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList![subIndex];
+                                                  setState(() {
+                                                    if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
+                                                      DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+                                                      DiagnosisModel newDiagnosis = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList![subIndex];
 
-                                                    widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex] = oldDiagnosis;
-                                                    widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex] = newDiagnosis;
-                                                  } else {
-                                                    DiagnosisModel diagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-                                                    widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.insert(subIndex, diagnosis);
-                                                    widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                                  }
+                                                      widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex] = oldDiagnosis;
+                                                      widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex] = newDiagnosis;
+                                                    } else {
+                                                      DiagnosisModel diagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+                                                      widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.insert(subIndex, diagnosis);
+                                                      widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                                    }
+                                                  });
 
                                                   Future.delayed(const Duration(milliseconds: 500), () {
                                                     calculateTotal();
@@ -519,6 +531,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       },
                                                                       controller: widget.controller,
                                                                       onSearchItemSelected: (p0, p1) {
+                                                                        Navigator.pop(context);
                                                                         setState(() {
                                                                           items[i].diagnosisModelList?[subIndex].code = p0;
                                                                           items[i].diagnosisModelList?[subIndex].description = p1;
@@ -545,7 +558,16 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                           ),
                                                         ),
                                                         SizedBox(width: 10),
-                                                        GestureDetector(onTap: () => _deleteItem(row, col, i, subIndex), child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30)),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            _deleteItem(row, col, i, subIndex);
+
+                                                            Future.delayed(const Duration(milliseconds: 500), () {
+                                                              calculateTotal();
+                                                            });
+                                                          },
+                                                          child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                                        ),
                                                       ],
                                                     ),
                                                   );
@@ -589,19 +611,21 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                 print("outer drag val is:- ${data}");
                                 print("outer drop val row is:- $row col is:- $col i is:- $i");
 
-                                if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
-                                  DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+                                setState(() {
+                                  if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
+                                    DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
 
-                                  widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
-                                } else {
-                                  DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+                                    widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                    widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
+                                  } else {
+                                    DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
 
-                                  widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
-                                }
+                                    widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                    widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
+                                  }
+                                });
 
-                                setState(() {});
+                                calculateTotal();
                               },
                             )
                             : col == 0
@@ -727,15 +751,17 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child:
                 (col == 2)
-                    ? InlineEditableText(onChanged: (p0) {}, initialText: "${items[i].unit}", textStyle: AppFonts.regular(14, AppColors.textGreyTable), onSubmitted: (newText) {})
+                    ? IgnorePointer(child: InlineEditableText(onChanged: (p0) {}, initialText: "${items[i].unit}", textStyle: AppFonts.regular(14, AppColors.textGreyTable), onSubmitted: (newText) {}))
                     : (col == 3)
-                    ? InlineEditableText(
-                      onChanged: (p0) {},
-                      initialText: "${items[i].unitPrice}",
-                      textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                      onSubmitted: (newText) {
-                        // items[i].unitPrice = newText;
-                      },
+                    ? IgnorePointer(
+                      child: InlineEditableText(
+                        onChanged: (p0) {},
+                        initialText: "${items[i].unitPrice}",
+                        textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                        onSubmitted: (newText) {
+                          // items[i].unitPrice = newText;
+                        },
+                      ),
                     )
                     : isDiagnosis
                     ? Container(

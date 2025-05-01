@@ -191,7 +191,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
               label: '',
             ),
           ),
-          Text("count ${widget.icd10CodeList.length}"),
+          // Text("count ${widget.icd10CodeList.length}"),
           const SizedBox(height: 3),
           Expanded(
             child: NotificationListener<ScrollEndNotification>(
@@ -213,26 +213,28 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: filteredItems.length,
-                      itemBuilder: (_, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            widget.onItemSelected(filteredItems[index], index);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Container(
-                              decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange : AppColors.clear, borderRadius: BorderRadius.circular(6)),
-                              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                              child: Row(children: [Expanded(child: Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)))]),
+                    if (filteredItems.isNotEmpty) ...[
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: filteredItems.length,
+                        itemBuilder: (_, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              widget.onItemSelected(filteredItems[index], index);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Container(
+                                decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange : AppColors.clear, borderRadius: BorderRadius.circular(6)),
+                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                child: Row(children: [Expanded(child: Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)))]),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      ),
+                    ],
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
