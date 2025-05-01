@@ -218,8 +218,9 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                     // Draggable widget that allows the row to be dragged
                     LongPressDraggable<int>(
                       data: rowIndex,
-                      feedback: Material(child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex)))),
+                      feedback: Material(color: AppColors.white, child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex)))),
                       child: Container(
+                        margin: EdgeInsets.all(5.0),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.white,
@@ -227,7 +228,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
                           ],
                         ),
-                        child: SvgPicture.asset(ImagePath.drag_button, height: 30, width: 30),
+                        child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35),
                       ),
                     ),
                     SizedBox(height: 5),
@@ -239,6 +240,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                         });
                       },
                       child: Container(
+                        margin: EdgeInsets.all(5.0),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.white,
@@ -246,7 +248,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
                           ],
                         ),
-                        child: SvgPicture.asset(ImagePath.delete_table_icon, height: 30, width: 30),
+                        child: SvgPicture.asset(ImagePath.delete_table_icon, height: 35, width: 35),
                       ),
                     ),
                   ],
