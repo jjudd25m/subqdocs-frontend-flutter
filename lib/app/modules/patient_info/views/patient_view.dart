@@ -9,6 +9,8 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
+import 'EditableViews/exam_editable.dart';
+import 'EditableViews/patient_view_editable.dart';
 
 class PatientView extends StatelessWidget {
   PatientView({super.key});
@@ -22,9 +24,7 @@ class PatientView extends StatelessWidget {
             if (controller.isPatientViewLoadText.value.toLowerCase() == "failure") ...[
               Center(child: Column(children: [SizedBox(height: 90), Text("An error occurred while processing the patient view")])),
             ] else ...[
-              Center(
-                child: Column(children: [SizedBox(height: 90), Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isPatientViewLoadText.value)]),
-              ),
+              Center(child: Column(children: [SizedBox(height: 90), Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isPatientViewLoadText.value)])),
             ],
           ] else ...[
             if (controller.patientViewListModel.value?.responseData?.status == "Failure") ...[
@@ -55,104 +55,14 @@ class PatientView extends StatelessWidget {
                             child: Column(
                               children: [
                                 SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    Text(textAlign: TextAlign.center, "Note", style: AppFonts.medium(16, AppColors.textPurple)),
-                                    Spacer(),
-                                    SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28),
-                                  ],
-                                ),
+                                Row(children: [Text(textAlign: TextAlign.center, "Note", style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
                                 SizedBox(height: 5),
                               ],
                             ),
                           ),
                           SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: SingleChildScrollView(
-                              padding: EdgeInsets.zero,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        Map<String, dynamic> dynamicData = controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData ?? {};
-                                        var data = dynamicData[dynamicData.keys.elementAt(index)];
-                                        if (data is List && data.isEmpty) {
-                                          return SizedBox();
-                                        } else if (data is String && data.isEmpty) {
-                                          return SizedBox();
-                                        }
-                                        return InkWell(
-                                          onTap: () {},
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      textAlign: TextAlign.left,
-                                                      dynamicData.keys.elementAt(index).replaceAll("_", " ").capitalizeFirst ?? '',
-                                                      style: AppFonts.medium(14, AppColors.textBlack),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10),
-                                                if (dynamicData[dynamicData.keys.elementAt(index)] is List) ...[
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 10),
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      physics: NeverScrollableScrollPhysics(),
-                                                      itemCount: dynamicData[dynamicData.keys.elementAt(index)]?.length ?? 0, // Number of items
-                                                      itemBuilder: (context, subIndex) {
-                                                        return Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: Text(
-                                                                "• ${dynamicData[dynamicData.keys.elementAt(index)]?[subIndex] ?? ''}",
-                                                                textAlign: TextAlign.left,
-                                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                ] else if (dynamicData[dynamicData.keys.elementAt(index)] is String) ...[
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 10),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Text(dynamicData[dynamicData.keys.elementAt(index)] ?? "", textAlign: TextAlign.left, style: AppFonts.regular(14, AppColors.textGrey)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                                SizedBox(height: 20),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      itemCount: controller.patientViewListModel.value?.responseData?.visitNoteDetails.dynamicData.keys.length ?? 0,
-                                    ),
-                                    //
-                                  ),
-                                  SizedBox(height: 10),
-                                  SizedBox(height: 10),
-                                ],
-                              ),
-                            ),
-                          ),
+
+                          PatientViewEditable(),
                           SizedBox(height: 0),
                         ],
                       ),

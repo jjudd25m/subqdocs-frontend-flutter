@@ -26,16 +26,11 @@ class VisitMainPatientDetails {
 }
 
 class ResponseData {
-  String? doctorName;
-  String? doctorFirstName;
-  String? doctorLastName;
   int? visitId;
   String? visitDate;
   String? visitTime;
   String? visitStatus;
   int? id;
-  int? medicalAssistantId;
-  int? doctorId;
   String? patientId;
   String? patientFirstName;
   String? patientMiddleName;
@@ -43,21 +38,21 @@ class ResponseData {
   String? profileImage;
   int? age;
   String? gender;
-
-  // List<Null>? attachments;
+  String? doctorName;
+  String? medicalAssistantName;
+  int? doctorId;
+  int? medicalAssistantId;
+  List<dynamic>? attachments;
+  List<PastVisit>? pastVisitsList;
   PersonalNote? personalNote;
-  VisitSnapshot? visitSnapshot; // ✅ New field added
+  VisitSnapshot? visitSnapshot;
 
   ResponseData({
-    this.doctorFirstName,
-    this.doctorLastName,
     this.visitId,
     this.visitDate,
     this.visitTime,
     this.visitStatus,
     this.id,
-    this.medicalAssistantId,
-    this.doctorId,
     this.patientId,
     this.patientFirstName,
     this.patientMiddleName,
@@ -65,52 +60,54 @@ class ResponseData {
     this.profileImage,
     this.age,
     this.gender,
-    // this.attachments,
+    this.doctorName,
+    this.medicalAssistantName,
+    this.doctorId,
+    this.medicalAssistantId,
+    this.attachments,
+    this.pastVisitsList,
     this.personalNote,
     this.visitSnapshot,
   });
 
   ResponseData.fromJson(Map<String, dynamic> json) {
-    doctorName = json['doctorName'];
-    doctorFirstName = json['doctor_first_name'];
-    doctorLastName = json['doctor_last_name'];
     visitId = json['visit_id'];
     visitDate = json['visit_date'];
     visitTime = json['visit_time'];
     visitStatus = json['visit_status'];
     id = json['id'];
-    doctorId = json['doctor_id'];
-    medicalAssistantId = json['medical_assistant_id'];
-    patientId = json['patient_id'];
+    patientId = json['patient_id']?.toString();
     patientFirstName = json['patient_first_name'];
     patientMiddleName = json['patient_middle_name'];
     patientLastName = json['patient_last_name'];
     profileImage = json['profile_image'];
     age = json['age'];
     gender = json['gender'];
+    doctorName = json['doctorName'];
+    medicalAssistantName = json['medicalAssistantName'];
+    doctorId = json['doctor_id'];
+    medicalAssistantId = json['medical_assistant_id'];
+    attachments = json['attachments'] ?? [];
 
-    // if (json['attachments'] != null) {
-    //   attachments = <Null>[];
-    //   json['attachments'].forEach((v) {});
-    // }
+    if (json['pastVisitsList'] != null) {
+      pastVisitsList = <PastVisit>[];
+      json['pastVisitsList'].forEach((v) {
+        pastVisitsList!.add(PastVisit.fromJson(v));
+      });
+    }
 
     personalNote = json['personal_note'] != null ? PersonalNote.fromJson(json['personal_note']) : null;
 
-    visitSnapshot = json['visit_snapshot'] != null ? VisitSnapshot.fromJson(json['visit_snapshot']) : null; // ✅ Parse visit_snapshot
+    visitSnapshot = json['visit_snapshot'] != null ? VisitSnapshot.fromJson(json['visit_snapshot']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['doctorName'] = doctorName;
-    data['doctor_first_name'] = doctorFirstName;
-    data['doctor_last_name'] = doctorLastName;
     data['visit_id'] = visitId;
     data['visit_date'] = visitDate;
     data['visit_time'] = visitTime;
     data['visit_status'] = visitStatus;
     data['id'] = id;
-    data['doctor_id'] = doctorId;
-    data['medical_assistant_id'] = medicalAssistantId;
     data['patient_id'] = patientId;
     data['patient_first_name'] = patientFirstName;
     data['patient_middle_name'] = patientMiddleName;
@@ -118,15 +115,45 @@ class ResponseData {
     data['profile_image'] = profileImage;
     data['age'] = age;
     data['gender'] = gender;
-
+    data['doctorName'] = doctorName;
+    data['medicalAssistantName'] = medicalAssistantName;
+    data['doctor_id'] = doctorId;
+    data['medical_assistant_id'] = medicalAssistantId;
+    data['attachments'] = attachments;
+    if (pastVisitsList != null) {
+      data['pastVisitsList'] = pastVisitsList!.map((v) => v.toJson()).toList();
+    }
     if (personalNote != null) {
       data['personal_note'] = personalNote!.toJson();
     }
-
     if (visitSnapshot != null) {
       data['visit_snapshot'] = visitSnapshot!.toJson();
     }
+    return data;
+  }
+}
 
+class PastVisit {
+  int? id;
+  String? visitDate;
+  String? visitTime;
+  String? visitStatus;
+
+  PastVisit({this.id, this.visitDate, this.visitTime, this.visitStatus});
+
+  PastVisit.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    visitDate = json['visit_date'];
+    visitTime = json['visit_time'];
+    visitStatus = json['visit_status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['visit_status'] = visitStatus;
     return data;
   }
 }
@@ -156,7 +183,7 @@ class PersonalNote {
 class VisitSnapshot {
   int? id;
   String? visitDate;
-  List<dynamic>? visitSnapshot;
+  String? visitSnapshot;
 
   VisitSnapshot({this.id, this.visitDate, this.visitSnapshot});
 

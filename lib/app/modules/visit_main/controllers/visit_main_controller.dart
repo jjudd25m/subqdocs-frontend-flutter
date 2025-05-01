@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ import '../../forgot_password/models/common_respons.dart';
 
 import '../../home/repository/home_repository.dart';
 import '../../login/model/login_model.dart';
+import '../../patient_info/model/impresion_and_plan_view_model.dart';
 import '../model/patient_attachment_list_model.dart';
 
 import '../model/visit_recap_list_model.dart';
@@ -51,6 +53,15 @@ class VisitMainController extends GetxController {
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
   Rxn<MedicalRecords> medicalRecords = Rxn();
   RxList<ScheduledVisits>? scheduledVisitsModel = RxList();
+
+  RxList<ImpresionAndPlanViewModel> editableVisitSnapShot = RxList();
+  RxList<ImpresionAndPlanViewModel> editablePersnoalNote = RxList();
+
+  RxList<ImpresionAndPlanViewModel> editableCancerHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableMedicationHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableSkinHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableSocialHistory = RxList();
+  RxList<ImpresionAndPlanViewModel> editableAllergies = RxList();
 
   RxBool isConnected = RxBool(true);
 
@@ -89,7 +100,7 @@ class VisitMainController extends GetxController {
 
   Rxn<VisitRecapListModel> visitRecapList = Rxn();
   RxList<PatientAttachmentResponseData> patientAttachmentList = RxList();
-  Rxn<VisitMainPatientDetails> patientData = Rxn();
+  Rx<VisitMainPatientDetails> patientData = Rx(VisitMainPatientDetails());
 
   RxString visitId = RxString("");
   RxString patientId = RxString("");
@@ -137,6 +148,10 @@ class VisitMainController extends GetxController {
 
     if (pickedImage != null) {}
   }
+
+  // Future<void> updatePatientVisit(String keyName, List<ImpresionAndPlanViewModel> list) async {
+  //   var response = await _patientInfoRepository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+  // }
 
   String _formatDate(DateTime date) {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
@@ -656,6 +671,7 @@ class VisitMainController extends GetxController {
     try {
       patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
 
+      setPatientEditableData();
       print("patientData age is :- ${patientData.value?.responseData?.age}");
 
       if (patientData.value?.responseData?.doctorId != null) {
@@ -746,6 +762,7 @@ class VisitMainController extends GetxController {
   Future<void> getMedicalRecords({required String id}) async {
     medicalRecords.value = await _editPatientDetailsRepository.getMedicalRecords(id: patientId.value);
 
+    setMedicalHistroeyEditableData();
     medicalRecords.refresh();
   }
 
@@ -843,6 +860,84 @@ class VisitMainController extends GetxController {
 
     if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
       Get.back();
+    }
+  }
+
+  void setPatientEditableData() {
+    if (patientData.value?.responseData?.visitSnapshot?.visitSnapshot != null) {
+      editableVisitSnapShot.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? "");
+      editableVisitSnapShot.add(ImpresionAndPlanViewModel(htmlContent: patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableVisitSnapShot.refresh();
+    }
+
+    if (patientData.value?.responseData?.personalNote?.personalNote != null) {
+      editablePersnoalNote.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(patientData.value?.responseData?.personalNote?.personalNote ?? "");
+      editablePersnoalNote.add(ImpresionAndPlanViewModel(htmlContent: patientData.value?.responseData?.personalNote?.personalNote ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editablePersnoalNote.refresh();
+    }
+  }
+
+  void resetImpressionAndPlanList() {
+    final editableLists = [editableVisitSnapShot, editablePersnoalNote, editableCancerHistory, editableMedicationHistory, editableSkinHistory, editableSocialHistory, editableAllergies];
+
+    for (var list in editableLists) {
+      for (var element in list) {
+        element.isEditing = false;
+      }
+      list.refresh();
+    }
+  }
+
+  void setMedicalHistroeyEditableData() {
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml != null) {
+      editableCancerHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
+      editableCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableCancerHistory.refresh();
+    }
+
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml != null) {
+      editableMedicationHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
+      editableMedicationHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableMedicationHistory.refresh();
+    }
+
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
+      editableSkinHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
+      editableSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableSkinHistory.refresh();
+    }
+
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml != null) {
+      editableSocialHistory.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
+      editableSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableSocialHistory.refresh();
+    }
+
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.allergies != null) {
+      editableAllergies.clear();
+
+      HtmlEditorController htmlEditorController = HtmlEditorController();
+      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "");
+      editableAllergies.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableAllergies.refresh();
     }
   }
 }

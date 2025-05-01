@@ -15,113 +15,55 @@ class PatientViewListModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (responseData != null) {
-      data['responseData'] = responseData!.toJson();
+    if (this.responseData != null) {
+      data['responseData'] = this.responseData!.toJson();
     }
-    data['message'] = message;
-    data['toast'] = toast;
-    data['response_type'] = responseType;
+    data['message'] = this.message;
+    data['toast'] = this.toast;
+    data['response_type'] = this.responseType;
+    return data;
+  }
+}
+
+class ResponseData {
+  int? id;
+  String? status;
+  VisitNoteDetails? visitNoteDetails;
+  String? message;
+
+  ResponseData({this.id, this.status, this.visitNoteDetails, this.message});
+
+  ResponseData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    status = json['status'];
+    visitNoteDetails = json['visit_note_details'] != null ? new VisitNoteDetails.fromJson(json['visit_note_details']) : null;
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['status'] = this.status;
+    if (this.visitNoteDetails != null) {
+      data['visit_note_details'] = this.visitNoteDetails!.toJson();
+    }
+    data['message'] = this.message;
     return data;
   }
 }
 
 class VisitNoteDetails {
-  String yourVisitSummary;
-  Map<String, dynamic> dynamicData;
+  String? patientViewNoteHtml;
 
-  VisitNoteDetails({
-    required this.yourVisitSummary,
-    required this.dynamicData,
-  });
+  VisitNoteDetails({this.patientViewNoteHtml});
 
-  // fromJson method
-  factory VisitNoteDetails.fromJson(Map<String, dynamic> json) {
-    return VisitNoteDetails(
-      yourVisitSummary: json['your_visit_summary'] ?? '',
-      // dynamicData: _parseDynamicData(json),
-      dynamicData: json,
-    );
+  VisitNoteDetails.fromJson(Map<String, dynamic> json) {
+    patientViewNoteHtml = json['patient_view_note_html'];
   }
 
-  // toJson method
   Map<String, dynamic> toJson() {
-    return {
-      'your_visit_summary': yourVisitSummary,
-      ...dynamicData.map((key, value) => MapEntry(key, value)),
-    };
-  }
-
-  // Parse dynamic keys to Map<String, List<String>>
-  static Map<String, List<String>> _parseDynamicData(Map<String, dynamic> json) {
-    Map<String, List<String>> dynamicData = {};
-    json.forEach((key, value) {
-      if (value is List) {
-        dynamicData[key] = List<String>.from(value.map((e) => e.toString()));
-      }
-    });
-    return dynamicData;
-  }
-}
-
-class ResponseData {
-  int id;
-  String status;
-  VisitNoteDetails visitNoteDetails;
-  String? message;
-
-  ResponseData({required this.id, required this.status, required this.visitNoteDetails, this.message});
-
-  // fromJson method
-  factory ResponseData.fromJson(Map<String, dynamic> json) {
-    return ResponseData(
-      id: json['id'] ?? 0,
-      status: json['status'] ?? '',
-      message: json['message'],
-      visitNoteDetails: VisitNoteDetails.fromJson(json['visit_note_details'] ?? {}),
-    );
-  }
-
-  // toJson method
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'message': message,
-      'status': status,
-      'visit_note_details': visitNoteDetails.toJson(),
-    };
-  }
-}
-
-class ApiResponse {
-  ResponseData responseData;
-  String message;
-  bool toast;
-  String responseType;
-
-  ApiResponse({
-    required this.responseData,
-    required this.message,
-    required this.toast,
-    required this.responseType,
-  });
-
-  // fromJson method
-  factory ApiResponse.fromJson(Map<String, dynamic> json) {
-    return ApiResponse(
-      responseData: ResponseData.fromJson(json['responseData'] ?? {}),
-      message: json['message'] ?? '',
-      toast: json['toast'] ?? false,
-      responseType: json['response_type'] ?? '',
-    );
-  }
-
-  // toJson method
-  Map<String, dynamic> toJson() {
-    return {
-      'responseData': responseData.toJson(),
-      'message': message,
-      'toast': toast,
-      'response_type': responseType,
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['patient_view_note_html'] = this.patientViewNoteHtml;
+    return data;
   }
 }
