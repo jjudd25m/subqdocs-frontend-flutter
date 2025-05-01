@@ -305,32 +305,56 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child:
                         (col == 2)
-                            ? InlineEditableText(
-                              onChanged: (p0) {
-                                widget.tableModel.rows[row].cells[col].items[i].unit = p0;
-                                items[i].unit = p0;
-                                calculateTotal();
+                            ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedRowIndex = row;
+                                });
                               },
-                              initialText: "${items[i].unit}",
-                              textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                              onSubmitted: (newText) {
-                                items[i].unit = newText;
-                                calculateTotal();
-                              },
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 100,
+                                padding: EdgeInsets.all(8),
+                                child: InlineEditableText(
+                                  onChanged: (p0) {
+                                    widget.tableModel.rows[row].cells[col].items[i].unit = p0;
+                                    items[i].unit = p0;
+                                    calculateTotal();
+                                  },
+                                  initialText: "${items[i].unit}",
+                                  textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                  onSubmitted: (newText) {
+                                    items[i].unit = newText;
+                                    calculateTotal();
+                                  },
+                                ),
+                              ),
                             )
                             : (col == 3)
-                            ? InlineEditableText(
-                              onChanged: (p0) {
-                                widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
-                                items[i].unitPrice = p0;
-                                calculateTotal();
+                            ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedRowIndex = row;
+                                });
                               },
-                              initialText: "${items[i].unitPrice}",
-                              textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                              onSubmitted: (newText) {
-                                items[i].unitPrice = newText;
-                                calculateTotal();
-                              },
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 100,
+                                padding: EdgeInsets.all(8.0),
+                                child: InlineEditableText(
+                                  onChanged: (p0) {
+                                    widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
+                                    items[i].unitPrice = p0;
+                                    calculateTotal();
+                                  },
+                                  initialText: "${items[i].unitPrice}",
+                                  textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                                  onSubmitted: (newText) {
+                                    items[i].unitPrice = newText;
+                                    calculateTotal();
+                                  },
+                                ),
+                              ),
                             )
                             : isDiagnosis
                             ? DragTarget<Map<String, dynamic>>(
@@ -364,6 +388,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                         Expanded(
                                                           child: GestureDetector(
                                                             onTap: () {
+                                                              setState(() {
+                                                                selectedRowIndex = row;
+                                                              });
+
                                                               showPopover(
                                                                 barrierColor: Colors.transparent,
                                                                 bodyBuilder:
@@ -500,6 +528,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                         Expanded(
                                                           child: GestureDetector(
                                                             onTap: () {
+                                                              setState(() {
+                                                                selectedRowIndex = row;
+                                                              });
+
                                                               showPopover(
                                                                 context: context,
                                                                 barrierColor: Colors.transparent,
@@ -635,6 +667,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                 final RenderBox? renderBox = _procedureGestureKey.currentContext?.findRenderObject() as RenderBox?;
                                 final position = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
                                 final size = renderBox?.size ?? Size.zero;
+
+                                setState(() {
+                                  selectedRowIndex = row;
+                                });
 
                                 print("position is :- ${position}");
 
@@ -903,22 +939,26 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
           possibleAlternatives: procedureListPossibleAlternatives,
         );
 
-        for (var item in row.cells[1].items[0].diagnosisModelList ?? []) {
+        for (DiagnosisModel item in row.cells[1].items[0].diagnosisModelList ?? []) {
           List<Map<String, String>> diagnosisListListPossibleAlternatives = [];
 
           for (DiagnosisPossibleAlternatives diagnosisPossibleAlternatives in item.diagnosisPossibleAlternatives ?? []) {
             diagnosisListListPossibleAlternatives.add({'code': diagnosisPossibleAlternatives.code ?? "", 'description': diagnosisPossibleAlternatives.description ?? ""});
           }
 
-          final localdiagnosisList = createDiagnosis(
-            code: item.code ?? "",
-            description: item.description ?? "",
-            icd10: item.code ?? "",
-            confidenceScore: item.confidence ?? "",
-            possibleAlternatives: diagnosisListListPossibleAlternatives,
-          );
+          if (item.description != "select code") {
+            final localdiagnosisList = createDiagnosis(
+              code: item.code ?? "",
+              description: item.description ?? "",
+              icd10: item.code ?? "",
+              confidenceScore: item.confidence ?? "",
+              possibleAlternatives: diagnosisListListPossibleAlternatives,
+            );
 
-          diagnosisList1.add(localdiagnosisList);
+            diagnosisList1.add(localdiagnosisList);
+          } else {
+            print("found empty diagnosis");
+          }
           // print("${item.code}, ${item.description}, ${item.diagnosisPossibleAlternatives}");
           print("*******");
         }

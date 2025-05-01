@@ -54,7 +54,7 @@ class TableModel {
           4,
           (index) => TableCellModel(
             items: [
-              SingleCellModel(code: "0", unit: "0", description: "select item ", unitPrice: "0", diagnosisModelList: [DiagnosisModel(description: "selected item ", code: "", confidence: "high ")]),
+              SingleCellModel(code: "0", unit: "0", description: "select Procedure", unitPrice: "0", diagnosisModelList: [DiagnosisModel(description: "select code", code: "", confidence: "high ")]),
             ],
           ),
         ),
@@ -63,7 +63,7 @@ class TableModel {
   }
 
   void addItemAtIndex(int row, int col, int index) {
-    rows[row].cells[1].items[0].diagnosisModelList?.add(DiagnosisModel(description: "selected item ", code: "", confidence: "high "));
+    rows[row].cells[1].items[0].diagnosisModelList?.add(DiagnosisModel(description: "select code", code: "", confidence: "high "));
   }
 
   void addItem(int row, int col) {
