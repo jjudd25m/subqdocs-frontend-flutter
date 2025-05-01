@@ -249,7 +249,8 @@ class PatientViewEditable extends StatelessWidget {
         itemCount: controller.editableDataForPatientView.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            heightOfTheEditableView: 800,
             impresionAndPlanViewModel: controller.editableDataForPatientView[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForPatientView[index] = impressionModel;

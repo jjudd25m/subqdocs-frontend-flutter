@@ -243,10 +243,9 @@ class SocialHistoryEditable extends StatelessWidget {
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableSocialHistory[index],
             onUpdateCallBack: (impressionModel, content) {
-              // controller.editableVisitSnapShot[index] = impressionModel;
-              // controller.editableVisitSnapShot.refresh();
-              // // controller.updateFullNote("allergies", controller.editableDataForAllergies);
-              // // controller.updateImpressionAndPlan();
+              controller.editableSocialHistory[index] = impressionModel;
+              controller.editableSocialHistory.refresh();
+              controller.updateFullNote("social_history_html", controller.editableSocialHistory);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

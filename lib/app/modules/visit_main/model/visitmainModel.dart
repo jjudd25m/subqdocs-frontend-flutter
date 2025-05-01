@@ -168,13 +168,15 @@ class PersonalNote {
   PersonalNote.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     visitDate = json['visit_date'];
-    personalNote = json['personal_note'];
+
+    if (json['personal_note'] is String) personalNote = json['personal_note'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['visit_date'] = visitDate;
+
     data['personal_note'] = personalNote;
     return data;
   }
@@ -190,7 +192,7 @@ class VisitSnapshot {
   VisitSnapshot.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     visitDate = json['visit_date'];
-    visitSnapshot = json['visit_snapshot'];
+    if (json['visit_snapshot'] is String) visitSnapshot = json['visit_snapshot'];
   }
 
   Map<String, dynamic> toJson() {

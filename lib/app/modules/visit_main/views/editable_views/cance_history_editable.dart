@@ -243,10 +243,9 @@ class CancerHistoryEditable extends StatelessWidget {
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editableCancerHistory[index],
             onUpdateCallBack: (impressionModel, content) {
-              // controller.editableVisitSnapShot[index] = impressionModel;
-              // controller.editableVisitSnapShot.refresh();
-              // // controller.updateFullNote("allergies", controller.editableDataForAllergies);
-              // // controller.updateImpressionAndPlan();
+              controller.editableCancerHistory[index] = impressionModel;
+              controller.editableCancerHistory.refresh();
+              controller.updateFullNote("cancer_history_html", controller.editableCancerHistory);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

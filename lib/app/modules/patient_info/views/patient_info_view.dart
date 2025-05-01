@@ -354,6 +354,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           IntrinsicWidth(
                                             child: CustomAnimatedButton(
                                               onPressed: () {
+                                                controller.resetImpressionAndPlanList();
                                                 controller.tabIndex.value = 0;
                                               },
                                               isDoctorView: true,
@@ -370,6 +371,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           IntrinsicWidth(
                                             child: CustomAnimatedButton(
                                               onPressed: () {
+                                                controller.resetImpressionAndPlanList();
                                                 controller.tabIndex.value = 3;
                                               },
                                               text: " Full Note ",
@@ -385,6 +387,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           IntrinsicWidth(
                                             child: CustomAnimatedButton(
                                               onPressed: () {
+                                                controller.resetImpressionAndPlanList();
                                                 controller.tabIndex.value = 2;
                                               },
                                               text: " Patient Note ",
@@ -400,6 +403,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           IntrinsicWidth(
                                             child: CustomAnimatedButton(
                                               onPressed: () {
+                                                controller.resetImpressionAndPlanList();
                                                 controller.tabIndex.value = 1;
                                               },
                                               text: " Full Transcript ",

@@ -244,10 +244,9 @@ class PersnoalNoteEditable extends StatelessWidget {
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editablePersnoalNote[index],
             onUpdateCallBack: (impressionModel, content) {
-              // controller.editableVisitSnapShot[index] = impressionModel;
-              // controller.editableVisitSnapShot.refresh();
-              // // controller.updateFullNote("allergies", controller.editableDataForAllergies);
-              // // controller.updateImpressionAndPlan();
+              controller.editablePersnoalNote[index] = impressionModel;
+              controller.editablePersnoalNote.refresh();
+              controller.updatePatientVisit("personal_note", controller.editablePersnoalNote, controller.patientData.value.responseData?.personalNote?.id);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

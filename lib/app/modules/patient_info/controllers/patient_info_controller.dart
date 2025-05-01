@@ -1195,12 +1195,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         // }
 
         diagnosisModelList.add(
-          DiagnosisModel(
-            confidence: diagnosisModel.confidenceScore,
-            code: diagnosisModel.code,
-            description: diagnosisModel.description,
-            diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
-          ),
+          DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description, diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives),
         );
       }
 
@@ -1239,12 +1234,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
 
         diagnosisModelList.add(
-          DiagnosisModel(
-            confidence: diagnosisModel.confidenceScore,
-            code: diagnosisModel.code,
-            description: diagnosisModel.description,
-            diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
-          ),
+          DiagnosisModel(confidence: diagnosisModel.confidenceScore, code: diagnosisModel.code, description: diagnosisModel.description, diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives),
         );
       }
 
@@ -1370,9 +1360,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
-      editableDataForSkinHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForSkinHistory.refresh();
     }
 
@@ -1381,9 +1369,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
-      editableDataForCancerHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForCancerHistory.refresh();
     }
 
@@ -1392,9 +1378,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
-      editableDataForSocialHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForSocialHistory.refresh();
     }
 
@@ -1403,9 +1387,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
-      editableDataForMedication.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForMedication.refresh();
     }
 
@@ -1414,9 +1396,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "");
-      editableDataForAllergies.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForAllergies.refresh();
     }
 
@@ -1425,9 +1405,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "");
-      editableDataForReviewOfSystems.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForReviewOfSystems.refresh();
     }
 
@@ -1454,9 +1432,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "");
-      editableChiefView.add(
-        ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableChiefView.refresh();
     }
   }
@@ -1471,9 +1447,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "");
-      editableDataForPatientView.add(
-        ImpresionAndPlanViewModel(htmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
-      );
+      editableDataForPatientView.add(ImpresionAndPlanViewModel(htmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForPatientView.refresh();
     }
   }

@@ -194,10 +194,10 @@ class HomeView extends GetView<HomeController> {
                                               Expanded(
                                                 child: Text(
                                                   controller.globalController.tabIndex.value == 0
-                                                      ? "Patient List (${controller.patientListModel.value?.responseData?.totalCount})"
+                                                      ? "Patient List (${controller.patientListModel.value?.responseData?.totalCount ?? 0})"
                                                       : controller.globalController.tabIndex.value == 1
-                                                      ? "Scheduled List (${controller.scheduleVisitListModel.value?.responseData?.totalCount})"
-                                                      : "Past Visits List (${controller.pastVisitListModel.value?.responseData?.totalCount})",
+                                                      ? "Scheduled List (${controller.scheduleVisitListModel.value?.responseData?.totalCount ?? 0})"
+                                                      : "Past Visits List (${controller.pastVisitListModel.value?.responseData?.totalCount ?? 0})",
                                                   style: AppFonts.medium(16, AppColors.black),
                                                 ),
                                               ),

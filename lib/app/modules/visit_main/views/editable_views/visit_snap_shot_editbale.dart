@@ -246,9 +246,9 @@ class VisitSnapShotEditbale extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 0),
             impresionAndPlanViewModel: controller.editableVisitSnapShot[index],
             onUpdateCallBack: (impressionModel, content) {
-              // controller.editableVisitSnapShot[index] = impressionModel;
-              // controller.editableVisitSnapShot.refresh();
-              // controller.updatePatientVisit("allergies", controller.editableVisitSnapShot);
+              controller.editableVisitSnapShot[index] = impressionModel;
+              controller.editableVisitSnapShot.refresh();
+              controller.updatePatientVisit("visit_snapshot", controller.editableVisitSnapShot, controller.patientData.value.responseData?.visitSnapshot?.id);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();
