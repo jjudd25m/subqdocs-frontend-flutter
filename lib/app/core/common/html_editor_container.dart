@@ -41,9 +41,9 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
   Timer? timer;
 
   void onChangeContent(String? content) {
+    widget.impresionAndPlanViewModel.htmlContent = content;
     timer?.cancel();
     timer = Timer(const Duration(seconds: 5), () {
-      widget.impresionAndPlanViewModel.htmlContent = content;
       widget.onUpdateCallBack(widget.impresionAndPlanViewModel, content);
     });
   }
@@ -51,12 +51,6 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
   @override
   void initState() {
     super.initState();
-    renderedHtml = widget.impresionAndPlanViewModel.htmlContent ?? "";
-
-    webViewController =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..loadHtmlString(renderedHtml);
   }
 
   void toggleEditing() async {
@@ -101,7 +95,13 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                     widget.impresionAndPlanViewModel.htmlEditorController.setFullScreen();
                   },
                 ),
-                htmlEditorOptions: HtmlEditorOptions(shouldEnsureVisible: false, androidUseHybridComposition: false, initialText: renderedHtml, autoAdjustHeight: true, adjustHeightForKeyboard: false),
+                htmlEditorOptions: HtmlEditorOptions(
+                  shouldEnsureVisible: false,
+                  androidUseHybridComposition: false,
+                  initialText: widget.impresionAndPlanViewModel.htmlContent,
+                  autoAdjustHeight: true,
+                  adjustHeightForKeyboard: false,
+                ),
                 htmlToolbarOptions: HtmlToolbarOptions(
                   gridViewHorizontalSpacing: 0,
                   gridViewVerticalSpacing: 0,
