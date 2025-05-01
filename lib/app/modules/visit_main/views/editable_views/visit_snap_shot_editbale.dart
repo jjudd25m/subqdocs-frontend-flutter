@@ -242,12 +242,13 @@ class VisitSnapShotEditbale extends StatelessWidget {
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
             heightOfTheEditableView: 400,
+
+            padding: EdgeInsets.symmetric(horizontal: 0),
             impresionAndPlanViewModel: controller.editableVisitSnapShot[index],
             onUpdateCallBack: (impressionModel, content) {
               // controller.editableVisitSnapShot[index] = impressionModel;
               // controller.editableVisitSnapShot.refresh();
-              // // controller.updateFullNote("allergies", controller.editableDataForAllergies);
-              // // controller.updateImpressionAndPlan();
+              // controller.updatePatientVisit("allergies", controller.editableVisitSnapShot);
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

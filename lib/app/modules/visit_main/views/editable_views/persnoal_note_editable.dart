@@ -240,6 +240,7 @@ class PersnoalNoteEditable extends StatelessWidget {
         itemCount: controller.editablePersnoalNote.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
+            padding: EdgeInsets.symmetric(horizontal: 0),
             heightOfTheEditableView: 400,
             impresionAndPlanViewModel: controller.editablePersnoalNote[index],
             onUpdateCallBack: (impressionModel, content) {

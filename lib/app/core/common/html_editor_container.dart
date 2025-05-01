@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -15,9 +16,18 @@ class HtmlEditorViewWidget extends StatefulWidget {
   final Function(ImpresionAndPlanViewModel) toggleCallBack;
   final Function(ImpresionAndPlanViewModel, String? content) onUpdateCallBack;
 
+  EdgeInsetsGeometry padding;
+
   double heightOfTheEditableView;
 
-  HtmlEditorViewWidget({super.key, required this.impresionAndPlanViewModel, required this.toggleCallBack, required this.onUpdateCallBack, this.heightOfTheEditableView = 800});
+  HtmlEditorViewWidget({
+    super.key,
+    required this.impresionAndPlanViewModel,
+    required this.toggleCallBack,
+    required this.onUpdateCallBack,
+    this.heightOfTheEditableView = 800,
+    this.padding = const EdgeInsets.only(left: 20, right: 10),
+  });
 
   @override
   State<HtmlEditorViewWidget> createState() => _HtmlEditorViewWidgetState();
@@ -111,16 +121,21 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
               ],
               toolbarType: ToolbarType.nativeScrollable,
             ),
+
             otherOptions: OtherOptions(height: widget.heightOfTheEditableView, decoration: const BoxDecoration(color: Colors.white)),
           )
         else
-          // Html(data: widget.initialText, style: {}),
           GestureDetector(
             onTap: toggleEditing,
-            child: Container(
-              child: Html(
-                data: widget.impresionAndPlanViewModel.htmlContent,
-                style: {"*": Style(margin: Margins.only(left: 2), lineHeight: LineHeight(1.5), fontFamily: "Poppins"), "ul": Style(margin: Margins.only(left: 7), lineHeight: LineHeight(1.5), fontFamily: "Poppins")},
+            child: Padding(
+              padding: widget.padding,
+              child: HtmlWidget(
+                // the first parameter (`html`) is required
+                widget.impresionAndPlanViewModel.htmlContent ?? "",
+
+                customWidgetBuilder: (element) {
+                  return null;
+                },
               ),
             ),
           ),

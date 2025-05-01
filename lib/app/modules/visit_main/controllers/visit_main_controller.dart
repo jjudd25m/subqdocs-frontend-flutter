@@ -149,6 +149,10 @@ class VisitMainController extends GetxController {
     if (pickedImage != null) {}
   }
 
+  // Future<void> updatePatientVisit(String keyName, List<ImpresionAndPlanViewModel> list) async {
+  //   var response = await _patientInfoRepository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+  // }
+
   String _formatDate(DateTime date) {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return dateFormat.format(date); // Format date to dd/MM/yyyy
