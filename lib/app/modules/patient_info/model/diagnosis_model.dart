@@ -1,10 +1,13 @@
 // Model class representing a diagnosis with optional description, code, confidence, and alternatives
+import 'package:easy_popover/easy_popover.dart';
+
 import '../../visit_main/model/doctor_view_model.dart';
 
 class DiagnosisModel {
   String? description; // optional description of the diagnosis
   String? code; // optional code representing the diagnosis
   String? confidence; // optional confidence level for the diagnosis
+  PopoverController popoverController = PopoverController();
 
   List<DiagnosisPossibleAlternatives>? diagnosisPossibleAlternatives; // optional list of alternative diagnoses
 
@@ -37,6 +40,7 @@ class TableCellModel {
 // Model class representing a table row containing a list of table cells
 class TableRowModel {
   List<TableCellModel> cells; // list of table cell models in the table row
+  PopoverController popoverController = PopoverController();
 
   TableRowModel({required this.cells}); // constructor with required cells parameter
 }
