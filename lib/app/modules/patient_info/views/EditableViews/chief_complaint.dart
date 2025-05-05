@@ -249,7 +249,7 @@ class ChiefComplaint extends StatelessWidget {
         itemCount: controller.editableChiefView.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 300,
             impresionAndPlanViewModel: controller.editableChiefView[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableChiefView[index] = impressionModel;

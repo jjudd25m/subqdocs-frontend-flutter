@@ -32,7 +32,7 @@ class SocialHistoryEditableView extends StatelessWidget {
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
             padding: const EdgeInsets.only(left: 10, right: 10),
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 300,
             impresionAndPlanViewModel: controller.editableDataForSocialHistory[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForSocialHistory[index] = impressionModel;

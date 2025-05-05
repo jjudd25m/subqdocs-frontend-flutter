@@ -217,24 +217,19 @@
 // }
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
-import '../../../../utils/imagepath.dart';
 import '../../../core/common/html_editor_container.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
-import '../model/impresion_and_plan_view_model.dart';
 
 class ImpressionAndPlanDoctorView extends StatelessWidget {
   Rxn<DoctorViewModel> doctorViewList = Rxn();
 
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
+
   ImpressionAndPlanDoctorView({super.key, required this.doctorViewList});
 
   @override
@@ -283,6 +278,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
           itemCount: controller.impressionAndPlanList.length,
           itemBuilder: (context, index) {
             return HtmlEditorViewWidget(
+              heightOfTheEditableView: 500,
               impresionAndPlanViewModel: controller.impressionAndPlanList[index],
               onUpdateCallBack: (impressionModel, content) {
                 controller.impressionAndPlanList[index] = impressionModel;

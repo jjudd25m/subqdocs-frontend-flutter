@@ -979,8 +979,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   } else {
                                     controller.globalController.isStartTranscript.value = true;
 
-                                    controller.globalController.patientId.value = controller.patientId.value;
-                                    controller.globalController.visitId.value = controller.visitId.value;
+                                    // controller.globalController.patientId.value = controller.patientId.value;
+                                    // controller.globalController.visitId.value = controller.visitId.value;
 
                                     controller.globalController.patientFirstName.value = controller.patientData.value?.responseData?.patientFirstName ?? "";
                                     controller.globalController.patientLsatName.value = controller.patientData.value?.responseData?.patientLastName ?? "";

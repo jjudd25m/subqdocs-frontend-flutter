@@ -250,7 +250,7 @@ class MedicationEditable extends StatelessWidget {
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
             padding: const EdgeInsets.only(left: 10, right: 10),
-            heightOfTheEditableView: 280,
+            heightOfTheEditableView: 300,
             impresionAndPlanViewModel: controller.editableDataForMedication[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForMedication[index] = impressionModel;
