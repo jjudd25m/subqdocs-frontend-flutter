@@ -249,7 +249,7 @@ class HpiEditableView extends StatelessWidget {
         itemCount: controller.editableDataHpiView.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 300,
             impresionAndPlanViewModel: controller.editableDataHpiView[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataHpiView[index] = impressionModel;

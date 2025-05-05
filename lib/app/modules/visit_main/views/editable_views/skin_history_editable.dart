@@ -240,7 +240,7 @@ class SkinHistoryEditable extends StatelessWidget {
         itemCount: controller.editableSkinHistory.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 250,
             impresionAndPlanViewModel: controller.editableSkinHistory[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableSkinHistory[index] = impressionModel;

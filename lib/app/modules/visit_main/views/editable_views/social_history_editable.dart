@@ -240,7 +240,7 @@ class SocialHistoryEditable extends StatelessWidget {
         itemCount: controller.editableSocialHistory.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 250,
             impresionAndPlanViewModel: controller.editableSocialHistory[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableSocialHistory[index] = impressionModel;

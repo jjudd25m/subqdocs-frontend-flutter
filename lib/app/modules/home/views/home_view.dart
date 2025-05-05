@@ -86,7 +86,7 @@ class HomeView extends GetView<HomeController> {
                   Obx(() {
                     return Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(color: Colors.transparent),
@@ -103,6 +103,7 @@ class HomeView extends GetView<HomeController> {
                                   }
                                 },
                               ),
+                              SizedBox(height: 10),
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),

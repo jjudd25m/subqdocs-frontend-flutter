@@ -1404,7 +1404,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       editableDataForReviewOfSystems.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "");
+      htmlEditorController.setText("""   """ ?? "");
       editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableDataForReviewOfSystems.refresh();
     }

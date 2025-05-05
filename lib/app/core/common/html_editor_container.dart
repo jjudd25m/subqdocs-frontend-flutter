@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:get/get.dart';
+
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -28,7 +27,7 @@ class HtmlEditorViewWidget extends StatefulWidget {
     required this.onUpdateCallBack,
     this.isBorder = false,
     this.heightOfTheEditableView = 800,
-    this.padding = const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+    this.padding = const EdgeInsets.only(left: 10, right: 10, bottom: 10),
   });
 
   @override
@@ -74,13 +73,16 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
       children: [
         const SizedBox(height: 2),
         if (widget.impresionAndPlanViewModel.title?.isNotEmpty ?? false)
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(widget.impresionAndPlanViewModel.title ?? "", style: AppFonts.medium(18, AppColors.textPurple))]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [Flexible(child: Padding(padding: widget.padding, child: Text(widget.impresionAndPlanViewModel.title ?? "", style: AppFonts.medium(18, AppColors.textPurple))))],
+          ),
         const SizedBox(height: 2),
         if (widget.impresionAndPlanViewModel.isEditing)
-          Container(
-            decoration: BoxDecoration(border: Border.all(width: widget.isBorder ? 1 : 0, color: AppColors.borderTable)),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 10, left: 4, right: 4),
+          Padding(
+            padding: widget.padding,
+            child: Container(
+              decoration: BoxDecoration(border: Border.all(width: widget.isBorder ? 1 : 0, color: AppColors.borderTable)),
               child: HtmlEditor(
                 controller: widget.impresionAndPlanViewModel.htmlEditorController,
 
@@ -95,17 +97,11 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                     widget.impresionAndPlanViewModel.htmlEditorController.setFullScreen();
                   },
                 ),
-                htmlEditorOptions: HtmlEditorOptions(
-                  shouldEnsureVisible: false,
-                  androidUseHybridComposition: false,
-                  initialText: widget.impresionAndPlanViewModel.htmlContent,
-                  autoAdjustHeight: true,
-                  adjustHeightForKeyboard: false,
-                ),
+                htmlEditorOptions: HtmlEditorOptions(shouldEnsureVisible: false, androidUseHybridComposition: false, initialText: widget.impresionAndPlanViewModel.htmlContent, adjustHeightForKeyboard: false),
                 htmlToolbarOptions: HtmlToolbarOptions(
                   gridViewHorizontalSpacing: 0,
                   gridViewVerticalSpacing: 0,
-
+                  toolbarPosition: ToolbarPosition.aboveEditor,
                   dropdownBackgroundColor: Colors.white,
 
                   buttonFillColor: AppColors.borderTable.withOpacity(0.2),
@@ -114,6 +110,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                   buttonHighlightColor: AppColors.borderTable.withOpacity(0.2),
                   separatorWidget: const VerticalDivider(color: Colors.transparent, width: 0, thickness: 1),
                   dropdownBoxDecoration: BoxDecoration(color: Colors.white.withOpacity(0.2)),
+
                   textStyle: const TextStyle(fontSize: 14, color: AppColors.black),
                   defaultToolbarButtons: [
                     const FontButtons(clearAll: false, strikethrough: true, superscript: false, subscript: false),
@@ -138,17 +135,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
         else
           GestureDetector(
             onTap: toggleEditing,
-            child: Padding(
-              padding: widget.padding,
-              child: HtmlWidget(
-                // the first parameter (`html`) is required
-                widget.impresionAndPlanViewModel.htmlContent ?? "",
-
-                customWidgetBuilder: (element) {
-                  return null;
-                },
-              ),
-            ),
+            child: Container(color: Colors.transparent, padding: widget.padding, child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {"section": Style(fontSize: FontSize(15))})),
           ),
       ],
     );

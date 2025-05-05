@@ -240,7 +240,7 @@ class MedicationHistoryEditable extends StatelessWidget {
         itemCount: controller.editableMedicationHistory.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 250,
             impresionAndPlanViewModel: controller.editableMedicationHistory[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableMedicationHistory[index] = impressionModel;

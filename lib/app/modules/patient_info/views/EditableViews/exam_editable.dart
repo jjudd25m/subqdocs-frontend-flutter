@@ -249,7 +249,7 @@ class ExamEditable extends StatelessWidget {
         itemCount: controller.editableDataForExam.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-            heightOfTheEditableView: 400,
+            heightOfTheEditableView: 300,
             impresionAndPlanViewModel: controller.editableDataForExam[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForExam[index] = impressionModel;
