@@ -768,28 +768,33 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                     Center(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 6),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(vertical: 5),
-                                                decoration: BoxDecoration(border: Border.all(color: Colors.black.withValues(alpha: 0.1), width: 1.5), borderRadius: BorderRadius.circular(6)),
-                                                // height: 40,
-                                                child: SvgPicture.asset(ImagePath.diagnosis_plus, width: 30, height: 30),
-                                              ),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _addItemAtIndex(row, col, i);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                                  decoration: BoxDecoration(border: Border.all(color: Colors.black.withValues(alpha: 0.1), width: 1.5), borderRadius: BorderRadius.circular(6)),
+                                                  // height: 40,
+                                                  child: SvgPicture.asset(ImagePath.diagnosis_plus, width: 30, height: 30),
+                                                ),
 
-                                              // CustomAnimatedButton(
-                                              //   height: 40,
-                                              //   text: "+",
-                                              //   fontSize: 30,
-                                              //   enabledColor: AppColors.orange,
-                                              //   enabledTextColor: AppColors.orangeText,
-                                              //   onPressed: () {
-                                              //     _addItemAtIndex(row, col, i);
-                                              //   },
-                                              // ),
-                                            ),
-                                          ],
+                                                // CustomAnimatedButton(
+                                                //   height: 40,
+                                                //   text: "+",
+                                                //   fontSize: 30,
+                                                //   enabledColor: AppColors.orange,
+                                                //   enabledTextColor: AppColors.orangeText,
+                                                //   onPressed: () {
+                                                //     _addItemAtIndex(row, col, i);
+                                                //   },
+                                                // ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
