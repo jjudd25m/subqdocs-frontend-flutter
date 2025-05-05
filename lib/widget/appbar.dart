@@ -84,33 +84,39 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 Spacer(),
                 Obx(() {
-                  return Row(
-                    children: [
-                      globalController.getUserDetailModel.value?.responseData?.id == -1
-                          ? ClipRRect(borderRadius: BorderRadius.circular(25.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 50, width: 50))
-                          : ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: BaseImageView(
-                              imageUrl: globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
-                              width: 50,
-                              height: 50,
-                              nameLetters: "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        globalController.getUserDetailModel.value?.responseData?.id == -1
+                            ? ClipRRect(borderRadius: BorderRadius.circular(25.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 50, width: 50))
+                            : ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: BaseImageView(
+                                imageUrl: globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                width: 50,
+                                height: 50,
+                                nameLetters: "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              ),
                             ),
-                          ),
-                      SizedBox(width: 15),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            textAlign: TextAlign.center,
-                            "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                            style: AppFonts.medium(15, AppColors.textBlack),
-                          ),
-                          SizedBox(width: 10),
-                          Text(textAlign: TextAlign.center, globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(13, AppColors.textGrey)),
-                        ],
-                      ),
-                    ],
+                        SizedBox(width: 15),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                              // overflow: TextOverflow.ellipsis,
+                              "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              style: AppFonts.medium(15, AppColors.textBlack),
+                            ),
+                            SizedBox(width: 10),
+                            Text(textAlign: TextAlign.center, globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(13, AppColors.textGrey)),
+                          ],
+                        ),
+                      ],
+                    ),
                   );
                 }),
                 SizedBox(width: 20),

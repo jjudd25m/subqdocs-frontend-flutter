@@ -125,7 +125,15 @@ class Validation {
       '603',
 
       // New Jersey
-      '201', '202' '551', '609', '732', '848', '856', '862', '973',
+      '201',
+      '202'
+          '551',
+      '609',
+      '732',
+      '848',
+      '856',
+      '862',
+      '973',
 
       // New Mexico
       '505', '575',
@@ -225,6 +233,7 @@ class Validation {
 
     return null; // Return null if all checks pass
   }
+
   //
   // static passwordValidate(value) {
   //   if (value == null || value.isEmpty) {
@@ -335,7 +344,7 @@ class Validation {
     }
     if (anotherValue != null) {
       print("value is the ${value}");
-      return "please filed above field";
+      return "please fill in the above field";
     }
 
     return null;
@@ -343,7 +352,7 @@ class Validation {
 
   static requiredFiled(value) {
     if (value == null || value.isEmpty) {
-      return "please filed above field";
+      return "please fill in the above field";
     }
 
     return null;
@@ -351,7 +360,7 @@ class Validation {
 
   static String? medicalRequiredFiled(String? value) {
     if (value == null || value.isEmpty) {
-      return "Please fill the above field";
+      return "Please fill in the above field";
     }
 
     // Check if value contains only alphanumeric characters

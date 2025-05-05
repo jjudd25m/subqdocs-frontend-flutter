@@ -45,6 +45,9 @@ import 'logger.dart';
 
 class GlobalController extends GetxController {
   // var breadcrumbHistory = <String>[];
+
+  RxnInt selectedRowIndex = RxnInt();
+
   RxInt tabIndex = RxInt(0);
   Map<String, String> breadcrumbs = {
     Routes.HOME: 'Patients & Visits',
@@ -55,7 +58,7 @@ class GlobalController extends GetxController {
     Routes.PATIENT_PROFILE: 'Patient Profile',
     Routes.ALL_ATTACHMENT: 'Attachments',
     Routes.SCHEDULE_PATIENT: 'Schedule Visit',
-    Routes.PERSONAL_SETTING: 'Setting',
+    Routes.PERSONAL_SETTING: 'Settings',
   };
 
   int closeFormState = 0;
@@ -255,7 +258,11 @@ class GlobalController extends GetxController {
     });
 
     recorderService.updatedRecordingTime.listen((p0) {
-      final data = footballGameLiveActivityModel!.copyWith(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: p0, resumeRecording: recorderService.recordingStatus.value.toString());
+      final data = footballGameLiveActivityModel!.copyWith(
+        userName: "${patientFirstName.value} ${patientLsatName.value}",
+        recordingTime: p0,
+        resumeRecording: recorderService.recordingStatus.value.toString(),
+      );
       liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
     });
 
@@ -325,7 +332,11 @@ class GlobalController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       try {
-        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
+        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(
+          audioFile: audioFile,
+          token: loginData.responseData?.token ?? "",
+          patientVisitId: visitId.value,
+        );
         Loader().stopLoader();
         customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 

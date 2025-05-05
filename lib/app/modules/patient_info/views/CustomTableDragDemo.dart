@@ -10,6 +10,7 @@ import 'package:subqdocs/widgets/custom_animated_button.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../core/common/global_controller.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 import '../model/diagnosis_model.dart';
@@ -42,8 +43,7 @@ class NestedDraggableTable extends StatefulWidget {
 }
 
 class NestedDraggableTableState extends State<NestedDraggableTable> {
-  int? selectedRowIndex;
-
+  final GlobalController globalController = Get.find();
   int? draggedRowIndex;
   int? draggedColumnIndex;
   int? draggedDiagnosisIndex;
@@ -178,88 +178,93 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
   // A widget that builds a row with drag-and-drop functionality
   Widget _buildRow(int rowIndex) {
-    return GestureDetector(
-      onTap: () => setState(() => selectedRowIndex = rowIndex),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // DragTarget widget to allow other widgets to drag and drop
-          DragTarget<int>(
-            onWillAccept: (data) => data != rowIndex,
-            onAccept: (fromRow) {
-              print("_buildRow onAccept");
+    return Obx(() {
+      globalController.selectedRowIndex.value;
+      return GestureDetector(
+        onTap: () => globalController.selectedRowIndex.value = rowIndex,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // DragTarget widget to allow other widgets to drag and drop
+            DragTarget<int>(
+              onWillAccept: (data) => data != rowIndex,
+              onAccept: (fromRow) {
+                print("_buildRow onAccept");
 
-              _swapRows(fromRow, rowIndex);
-              Future.delayed(const Duration(milliseconds: 500), () {
-                calculateTotal();
-              });
-            },
-            builder: (context, candidateData, rejectedData) {
-              // Gesture detector to select the row when tapped
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedRowIndex = rowIndex;
-                  });
-                },
-                child: _buildRowContent(rowIndex), // Content of the row (define elsewhere)
-              );
-            },
-          ),
-          // Show the row selection UI only if this row is selected
-          if (selectedRowIndex == rowIndex)
-            Positioned(
-              left: -10, // Position the selected UI a bit outside the row
-              top: 0,
-              bottom: 0,
-              child: Container(
-                color: Colors.transparent, // Transparent background
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // Center the actions
-                  children: [
-                    // Draggable widget that allows the row to be dragged
-                    LongPressDraggable<int>(
-                      data: rowIndex,
-                      feedback: Material(color: AppColors.white, child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex)))),
-                      child: Container(
-                        margin: EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.white,
-                          boxShadow: [
-                            BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
-                          ],
-                        ),
-                        child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.tableModel.rows.removeAt(rowIndex);
-                          selectedRowIndex = null;
-                        });
-                      },
-                      child: Container(
-                        margin: EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.white,
-                          boxShadow: [
-                            BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
-                          ],
-                        ),
-                        child: SvgPicture.asset(ImagePath.delete_table_icon, height: 35, width: 35),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                _swapRows(fromRow, rowIndex);
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  calculateTotal();
+                });
+              },
+              builder: (context, candidateData, rejectedData) {
+                // Gesture detector to select the row when tapped
+                return GestureDetector(
+                  onTap: () {
+                    // setState(() {
+                    globalController.selectedRowIndex.value = rowIndex;
+                    // });
+                  },
+                  child: _buildRowContent(rowIndex), // Content of the row (define elsewhere)
+                );
+              },
             ),
-        ],
-      ),
-    );
+
+            // Show the row selection UI only if this row is selected
+            globalController.selectedRowIndex.value == rowIndex
+                ? Positioned(
+                  left: -10, // Position the selected UI a bit outside the row
+                  top: 0,
+                  bottom: 0,
+                  child: Container(
+                    color: Colors.transparent, // Transparent background
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center, // Center the actions
+                      children: [
+                        // Draggable widget that allows the row to be dragged
+                        LongPressDraggable<int>(
+                          data: rowIndex,
+                          feedback: Material(color: AppColors.white, child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex)))),
+                          child: Container(
+                            margin: EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.white,
+                              boxShadow: [
+                                BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
+                              ],
+                            ),
+                            child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35),
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        GestureDetector(
+                          onTap: () {
+                            globalController.selectedRowIndex.value = -1;
+                            setState(() {
+                              widget.tableModel.rows.removeAt(rowIndex);
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.white,
+                              boxShadow: [
+                                BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: Offset(0, 3)), // changes position of shadow
+                              ],
+                            ),
+                            child: SvgPicture.asset(ImagePath.delete_table_icon, height: 35, width: 35),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                : SizedBox(),
+          ],
+        ),
+      );
+    });
   }
 
   // Builds the content for each row, including drag-and-drop functionality for table cells.
@@ -271,7 +276,21 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       children: [
         TableRow(
           children: List.generate(4, (colIndex) {
-            return colIndex == 1 ? _buildCell(rowIndex, colIndex, isDiagnosis: true) : _buildCell(rowIndex, colIndex);
+            return colIndex == 1
+                ? GestureDetector(
+                  onTap: () {
+                    print("on build row content");
+                    globalController.selectedRowIndex.value = rowIndex;
+                  },
+                  child: _buildCell(rowIndex, colIndex, isDiagnosis: true),
+                )
+                : GestureDetector(
+                  onTap: () {
+                    print("on build row content");
+                    globalController.selectedRowIndex.value = rowIndex;
+                  },
+                  child: _buildCell(rowIndex, colIndex),
+                );
           }),
         ),
       ],
@@ -284,7 +303,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
     return DragTarget<String>(
       builder: (context, candidateData, rejectedData) {
         return GestureDetector(
-          onTap: () => setState(() => selectedRowIndex = row),
+          onTap: () => globalController.selectedRowIndex.value = row,
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(8),
@@ -301,22 +320,28 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
                 // items[i].popoverController = PopoverController();
 
-                // items[i].popoverController.onOpen = () {
+                // widget.tableModel.rows[row].popoverController.onOpen = () {
                 //   print("open");
-                //   setState(() {
-                //     selectedRowIndex = row;
-                //   });
+                //
+                //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+                //   //   // Ensure that this state change only happens once the frame is fully rendered
+                //   //   Future.delayed(Duration(milliseconds: 300), () {
+                //   //     globalController.selectedRowIndex.value = row;
+                //   //   });
+                //   // });
+                //
+                //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+                //   //   globalController.selectedRowIndex.value = row;
+                //   // });
                 // };
                 //
-                // items[i].popoverController.onClose = () {
+                // widget.tableModel.rows[row].popoverController.onClose = () {
                 //   print("closed");
                 // };
 
                 return GestureDetector(
                   onTap: () {
-                    setState(() {
-                      selectedRowIndex = row;
-                    });
+                    globalController.selectedRowIndex.value = row;
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -324,9 +349,9 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                         (col == 2)
                             ? GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  selectedRowIndex = row;
-                                });
+                                // setState(() {
+                                globalController.selectedRowIndex.value = row;
+                                // });
                               },
                               child: Container(
                                 width: double.maxFinite,
@@ -350,9 +375,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             : (col == 3)
                             ? GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  selectedRowIndex = row;
-                                });
+                                globalController.selectedRowIndex.value = row;
                               },
                               child: Container(
                                 width: double.maxFinite,
@@ -460,6 +483,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
                                                                       for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
                                                                         if (rows == row && cols == col && newItems == i && diag == subIndex) {
+                                                                          // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
                                                                           // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
                                                                         } else {
                                                                           widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
@@ -468,7 +492,17 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     }
                                                                   }
                                                                 }
+
+                                                                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                //   // Ensure that this state change only happens once the frame is fully rendered
+                                                                //   globalController.selectedRowIndex.value = row;
+                                                                //
+                                                                //   Future.delayed(Duration(milliseconds: 100), () {
+                                                                //     widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.open();
+                                                                //   });
+                                                                // });
                                                               },
+                                                              tableRowIndex: row,
                                                             ),
                                                           ),
                                                           // GestureDetector(
@@ -669,6 +703,8 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
                                                                       for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
                                                                         if (rows == row && cols == col && newItems == i && diag == subIndex) {
+                                                                          // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+
                                                                           // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
                                                                         } else {
                                                                           widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
@@ -677,7 +713,17 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     }
                                                                   }
                                                                 }
+
+                                                                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                //   // Ensure that this state change only happens once the frame is fully rendered
+                                                                //   globalController.selectedRowIndex.value = row;
+                                                                //
+                                                                //   Future.delayed(Duration(milliseconds: 100), () {
+                                                                //     widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.open();
+                                                                //   });
+                                                                // });
                                                               },
+                                                              tableRowIndex: row,
                                                             ),
                                                           ),
 
@@ -779,7 +825,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                   padding: EdgeInsets.symmetric(vertical: 5),
                                                   decoration: BoxDecoration(border: Border.all(color: Colors.black.withValues(alpha: 0.1), width: 1.5), borderRadius: BorderRadius.circular(6)),
                                                   // height: 40,
-                                                  child: SvgPicture.asset(ImagePath.diagnosis_plus, width: 30, height: 30),
+                                                  child: SvgPicture.asset(ImagePath.diagnosis_plus, width: 25, height: 25),
                                                 ),
 
                                                 // CustomAnimatedButton(
@@ -920,10 +966,26 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
                                     if (row != s) {
                                       widget.tableModel.rows[s].popoverController.close();
-                                    } else {}
+                                    } else {
+                                      // widget.tableModel.rows[s].popoverController.close();
+                                    }
                                   }
+
+                                  // globalController.selectedRowIndex.value = row;
+                                  //
+                                  // setState(() {
+                                  //   widget.tableModel.rows[row].popoverController.open();
+                                  // });
+                                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  //   // Ensure that this state change only happens once the frame is fully rendered
+                                  //   Future.delayed(Duration(milliseconds: 500), () {
+                                  //
+                                  //   });
+                                  // });
+
                                   print("onInitCallBack");
                                 },
+                                tableRowIndex: row,
                               ),
                             )
                             // GestureDetector(
@@ -1006,7 +1068,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       onWillAcceptWithDetails: (data) => true,
       onAcceptWithDetails: (data) {
         print("outer onAccept data :- ${data}");
-        setState(() {});
       },
     );
   }

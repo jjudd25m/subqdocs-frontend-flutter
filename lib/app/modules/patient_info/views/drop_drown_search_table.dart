@@ -2,27 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widgets/custom_textfiled.dart';
+import '../../../core/common/global_controller.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 import '../model/icd10_code_list_model.dart';
 
 class DropDrownSearchTable extends StatefulWidget {
   final List<ProcedurePossibleAlternatives> items;
+  final int tableRowIndex;
   final Function(ProcedurePossibleAlternatives, int) onItemSelected;
   final Function() onInitCallBack;
 
-  DropDrownSearchTable({Key? key, required this.items, required this.onItemSelected, required this.onInitCallBack}) : super(key: key);
+  DropDrownSearchTable({Key? key, required this.items, required this.onItemSelected, required this.onInitCallBack, required this.tableRowIndex}) : super(key: key);
 
   @override
   State<DropDrownSearchTable> createState() => _DropDrownSearchTableState();
 }
 
 class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
+  final GlobalController globalController = Get.find();
+
   late List<ProcedurePossibleAlternatives> filteredItems = [];
   TextEditingController searchController = TextEditingController();
 
@@ -30,7 +35,19 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
   void initState() {
     super.initState();
 
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   // Ensure that this state change only happens once the frame is fully rendered
+    //   Future.delayed(Duration(milliseconds: 100), () {
+    //     globalController.selectedRowIndex.value = widget.tableRowIndex;
+    //   });
+    // });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   globalController.selectedRowIndex.value = widget.tableRowIndex;
+    // });
+    // globalController.selectedRowIndex.value = widget.tableRowIndex;
     filteredItems = List.from(widget.items);
+
     widget.onInitCallBack();
   }
 
@@ -141,20 +158,30 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
 
 class DiagnosisDropDrownSearchTable extends StatefulWidget {
   PatientInfoController controller;
+  final int tableRowIndex;
   final List<ProcedurePossibleAlternatives> items;
   final Function(ProcedurePossibleAlternatives, int) onItemSelected;
   final Function(String, String) onSearchItemSelected;
   final Function() onInitCallBack;
   List<Icd10CodeData> icd10CodeList = [];
 
-  DiagnosisDropDrownSearchTable({Key? key, required this.controller, required this.items, required this.onItemSelected, required this.onSearchItemSelected, required this.onInitCallBack})
-    : super(key: key);
+  DiagnosisDropDrownSearchTable({
+    Key? key,
+    required this.controller,
+    required this.items,
+    required this.onItemSelected,
+    required this.onSearchItemSelected,
+    required this.onInitCallBack,
+    required this.tableRowIndex,
+  }) : super(key: key);
 
   @override
   State<DiagnosisDropDrownSearchTable> createState() => _DiagnosisDropDrownSearchTableState();
 }
 
 class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearchTable> {
+  final GlobalController globalController = Get.find();
+
   late List<ProcedurePossibleAlternatives> filteredItems = [];
   TextEditingController searchController = TextEditingController();
   bool isLoading = false;
@@ -169,6 +196,16 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
     filteredItems = List.from(widget.items);
 
     getIcd10Code();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   // Ensure that this state change only happens once the frame is fully rendered
+    //   Future.delayed(Duration(milliseconds: 100), () {
+    //     globalController.selectedRowIndex.value = widget.tableRowIndex;
+    //   });
+    // });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   globalController.selectedRowIndex.value = widget.tableRowIndex;
+    // });
     widget.onInitCallBack();
   }
 
@@ -188,7 +225,10 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
   }
 
   Future<void> getIcd10Code() async {
-    isLoading = true;
+    setState(() {
+      isLoading = true;
+    });
+
     Map<String, dynamic> param = {};
     param['page'] = page;
     param['limit'] = "100";
@@ -198,7 +238,11 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
     }
 
     Icd10CodeListModel icd10codeListModel = await widget.controller.getIcd10CodeList(param);
-    isLoading = false;
+
+    setState(() {
+      isLoading = false;
+    });
+
     setState(() {
       widget.icd10CodeList.addAll(icd10codeListModel.responseData?.data ?? []);
       // widget.icd10CodeList = ;
@@ -275,93 +319,102 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      if (filteredItems.isNotEmpty || widget.icd10CodeList.isNotEmpty) ...[
-                        if (filteredItems.isNotEmpty) ...[
-                          SizedBox(height: 0),
-                          Padding(padding: const EdgeInsets.all(10), child: Row(children: [Text("Pin", style: AppFonts.regular(14, AppColors.black)), Spacer()])),
-                          SizedBox(height: 0),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: filteredItems.length,
-                              itemBuilder: (_, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    widget.onItemSelected(filteredItems[index], index);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 5),
-                                    child: Container(
-                                      decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange.withValues(alpha: 0.5) : AppColors.clear, borderRadius: BorderRadius.circular(6)),
-                                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(text: "${filteredItems[index].code}", style: AppFonts.medium(14, AppColors.black)),
-                                                  TextSpan(text: ' (${filteredItems[index].description})', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                ],
+                      if (isLoading) ...[
+                        SizedBox(height: 10),
+                        Center(child: CircularProgressIndicator(color: AppColors.textPurple, strokeWidth: 2)),
+                        SizedBox(height: 10),
+                      ] else ...[
+                        if (filteredItems.isNotEmpty || widget.icd10CodeList.isNotEmpty) ...[
+                          if (filteredItems.isNotEmpty) ...[
+                            SizedBox(height: 0),
+                            Padding(padding: const EdgeInsets.all(10), child: Row(children: [Text("Pin", style: AppFonts.regular(14, AppColors.black)), Spacer()])),
+                            SizedBox(height: 0),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: filteredItems.length,
+                                itemBuilder: (_, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      widget.onItemSelected(filteredItems[index], index);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 5),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: widget.items[index].isPin ? AppColors.dropdownicdCodeBackgroundColor.withValues(alpha: 0.5) : AppColors.clear,
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    TextSpan(text: "${filteredItems[index].code}", style: AppFonts.medium(14, AppColors.black)),
+                                                    TextSpan(text: ' (${filteredItems[index].description})', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                        // Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)))]),
                                       ),
-                                      // Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)))]),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                        if (filteredItems.isNotEmpty) ...[SizedBox(height: 10), Divider(height: 0.5, thickness: 1)],
-                        if (widget.icd10CodeList.isNotEmpty) ...[
-                          SizedBox(height: 5),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: widget.icd10CodeList.length,
-                              itemBuilder: (_, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    widget.onSearchItemSelected(widget.icd10CodeList[index].code ?? "", widget.icd10CodeList[index].description ?? "");
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 5),
-                                    child: Container(
-                                      // decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange : AppColors.clear, borderRadius: BorderRadius.circular(6)),
-                                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(text: "${widget.icd10CodeList[index].code}", style: AppFonts.medium(14, AppColors.black)),
-                                                  TextSpan(text: ' (${widget.icd10CodeList[index].description})', style: AppFonts.regular(14, AppColors.textDarkGrey)),
-                                                ],
+                          ],
+                          if (filteredItems.isNotEmpty) ...[SizedBox(height: 10), Divider(height: 0.5, thickness: 1)],
+                          if (widget.icd10CodeList.isNotEmpty) ...[
+                            SizedBox(height: 5),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: widget.icd10CodeList.length,
+                                itemBuilder: (_, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      widget.onSearchItemSelected(widget.icd10CodeList[index].code ?? "", widget.icd10CodeList[index].description ?? "");
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 5),
+                                      child: Container(
+                                        // decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange : AppColors.clear, borderRadius: BorderRadius.circular(6)),
+                                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    TextSpan(text: "${widget.icd10CodeList[index].code}", style: AppFonts.medium(14, AppColors.black)),
+                                                    TextSpan(text: ' (${widget.icd10CodeList[index].description})', style: AppFonts.regular(14, AppColors.textDarkGrey)),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ], // Text("(${widget.icd10CodeList[index].code}) ${widget.icd10CodeList[index].description}", style: AppFonts.regular(12, AppColors.black)))],
+                                          ], // Text("(${widget.icd10CodeList[index].code}) ${widget.icd10CodeList[index].description}", style: AppFonts.regular(12, AppColors.black)))],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
+                          ],
                         ],
+                        if (filteredItems.isEmpty && widget.icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],
                       ],
-                      if (filteredItems.isEmpty && widget.icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],
                     ],
                   ),
                 ),

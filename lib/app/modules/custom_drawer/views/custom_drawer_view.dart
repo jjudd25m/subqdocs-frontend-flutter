@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
@@ -47,7 +48,8 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                               imageUrl: controller.globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
                               width: 40,
                               height: 40,
-                              nameLetters: "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              nameLetters:
+                                  "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                             ),
                           ),
                       SizedBox(width: 8),
@@ -55,6 +57,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
+                            maxLines: 2,
                             "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                             style: AppFonts.medium(14, AppColors.textBlackDark),
                           ),
