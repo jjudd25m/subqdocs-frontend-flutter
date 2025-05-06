@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/app/modules/home/views/schedule_patient_dialog.dart';
 
@@ -54,19 +53,19 @@ class HomePatientListView extends GetView<HomeController> {
                       print("refresh patient list view");
                     },
                     rows: _getTableRows(controller.patientList),
-                    columnCount: 6,
+                    columnCount: 7,
                     cellBuilder: _buildTableCell,
                     context: context,
                     onRowSelected: (rowIndex, rowData) {},
                     onLoadMore: () async {
                       controller.patientLoadMore();
                     },
-                    columnWidths: [0.30, 0.09, 0.13, 0.18, 0.19, 0.10],
+                    columnWidths: [0.23, 0.09, 0.12, 0.16, 0.13, 0.16, 0.11],
                     headerBuilder: (context, colIndex) {
-                      List<String> headers = ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Previous Visits', 'Action'];
+                      List<String> headers = ['Patient Name', 'Age', 'Gender', 'Last Visit Date', 'Provider', 'Previous Visits', 'Action'];
                       return GestureDetector(
                         onTap: () {
-                          if (colIndex != 5) {
+                          if (colIndex != 6) {
                             controller.patientSorting(colIndex: colIndex, cellData: headers[colIndex]);
                           }
                         },
@@ -85,11 +84,11 @@ class HomePatientListView extends GetView<HomeController> {
                               ),
                               colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
                                       controller.globalController.homePatientListSortingModel.value!.isAscending &&
-                                      colIndex != 5
+                                      colIndex != 6
                                   ? Icon(CupertinoIcons.down_arrow, size: 15)
                                   : colIndex == controller.globalController.homePatientListSortingModel.value?.colIndex &&
                                       !controller.globalController.homePatientListSortingModel.value!.isAscending &&
-                                      colIndex != 5
+                                      colIndex != 6
                                   ? Icon(CupertinoIcons.up_arrow, size: 15)
                                   : SizedBox(),
                             ],
@@ -117,7 +116,8 @@ class HomePatientListView extends GetView<HomeController> {
         "${patient.firstName} ${patient.lastName}", // Patient Name
         patient.age != null ? patient.age.toString() : "N/A", // Age
         patient.gender.toString()[0], // Gender
-        patient.lastVisitDate ?? "N/A", // Last Visit Date
+        patient.lastVisitDate ?? "N/A",
+        patient.doctorName?.trim() == "" ? 'N/A' : patient.doctorName ?? "", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
         "Action",
         patient.profileImage ?? "", // Action (could be a button or some interaction)
@@ -150,7 +150,8 @@ class HomePatientListView extends GetView<HomeController> {
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     style: AppFonts.regular(14, AppColors.textDarkGrey),
-                    softWrap: true, // Allows text to wrap
+                    softWrap: true,
+                    // Allows text to wrap
                     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                   ),
                 ),
@@ -158,7 +159,7 @@ class HomePatientListView extends GetView<HomeController> {
             ],
           ),
         )
-        : colIndex == 5
+        : colIndex == 6
         ? PopupMenuButton<String>(
           offset: const Offset(0, 8),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),

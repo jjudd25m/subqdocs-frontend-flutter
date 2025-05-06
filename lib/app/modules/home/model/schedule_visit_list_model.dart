@@ -72,29 +72,32 @@ class ScheduleVisitListData {
   String? gender;
   int? age;
   String? appointmentTime;
+  String? doctorName;
   int? previousVisitCount;
 
-  ScheduleVisitListData(
-      {this.id,
-      this.patientId,
-      this.visitId,
-      this.profileImage,
-      this.visitStatus,
-      this.visitDate,
-      this.visitTime,
-      this.visitType,
-      this.visitNotes,
-      this.status,
-      this.visitDetails,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.firstName,
-      this.lastName,
-      this.gender,
-      this.age,
-      this.appointmentTime,
-      this.previousVisitCount});
+  ScheduleVisitListData({
+    this.id,
+    this.patientId,
+    this.visitId,
+    this.profileImage,
+    this.visitStatus,
+    this.visitDate,
+    this.visitTime,
+    this.visitType,
+    this.visitNotes,
+    this.status,
+    this.visitDetails,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.firstName,
+    this.lastName,
+    this.gender,
+    this.age,
+    this.appointmentTime,
+    this.doctorName,
+    this.previousVisitCount,
+  });
 
   ScheduleVisitListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -115,6 +118,7 @@ class ScheduleVisitListData {
     lastName = json['last_name'];
     gender = json['gender'];
     age = json['age'];
+    doctorName = json['doctorName'];
     appointmentTime = json['appointmentTime'];
     previousVisitCount = json['previousVisitCount'];
   }
@@ -139,6 +143,7 @@ class ScheduleVisitListData {
     data['last_name'] = lastName;
     data['gender'] = gender;
     data['age'] = age;
+    data['doctorName'] = doctorName;
     data['appointmentTime'] = appointmentTime;
     data['previousVisitCount'] = previousVisitCount;
     return data;

@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/home/views/schedule_patient_dialog.dart';
 import 'package:subqdocs/app/modules/patient_info/controllers/patient_info_controller.dart';
+
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widget/base_image_view.dart';
@@ -104,13 +104,14 @@ class HomePastVisitsList extends GetView<HomeController> {
                                   maxLines: 2,
                                   textAlign: TextAlign.start,
                                   style: AppFonts.regular(14, AppColors.textDarkGrey),
-                                  softWrap: true, // Allows text to wrap
+                                  softWrap: true,
+                                  // Allows text to wrap
                                   overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                                 ),
                               ),
                             ],
                           )
-                          : colIndex == 5
+                          : colIndex == 6
                           ? Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Container(
@@ -121,7 +122,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                               ),
                             ),
                           )
-                          : colIndex == 6
+                          : colIndex == 7
                           ? PopupMenuButton<String>(
                             offset: const Offset(0, 8),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -244,18 +245,19 @@ class HomePastVisitsList extends GetView<HomeController> {
                             maxLines: 2,
                             textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                             style: AppFonts.regular(14, AppColors.textDarkGrey),
-                            softWrap: true, // Allows text to wrap
+                            softWrap: true,
+                            // Allows text to wrap
                             overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                           );
                     },
-                    columnCount: 7,
+                    columnCount: 8,
                     context: context,
-                    columnWidths: [0.20, 0.17, 0.08, 0.11, 0.14, 0.19, 0.10],
+                    columnWidths: [0.17, 0.14, 0.07, 0.12, 0.10, 0.13, 0.18, 0.09],
                     headerBuilder: (context, colIndex) {
-                      List<String> headers = ['Patient Name', 'Visit Date', 'Age', "Gender", "Previous \nVisits", "Status", "Action"];
+                      List<String> headers = ['Patient Name', 'Visit Date', 'Age', 'Provider', "Gender", "Previous \nVisits", "Status", "Action"];
                       return GestureDetector(
                         onTap: () {
-                          if (colIndex != 6) {
+                          if (colIndex != 7) {
                             customPrint(" data is the ${headers[colIndex]}");
                             controller.getPastVisitList(sortingName: headers[colIndex]);
 
@@ -280,16 +282,17 @@ class HomePastVisitsList extends GetView<HomeController> {
                                 maxLines: 2,
                                 textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
                                 style: AppFonts.medium(12, AppColors.black),
-                                softWrap: true, // Allows text to wrap
+                                softWrap: true,
+                                // Allows text to wrap
                                 overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                               ),
                               colIndex == controller.globalController.homePastPatientListSortingModel.value?.colIndex &&
                                       controller.globalController.homePastPatientListSortingModel.value!.isAscending &&
-                                      colIndex != 6
+                                      colIndex != 7
                                   ? Icon(CupertinoIcons.down_arrow, size: 15)
                                   : colIndex == controller.globalController.homePastPatientListSortingModel.value?.colIndex &&
                                       !controller.globalController.homePastPatientListSortingModel.value!.isAscending &&
-                                      colIndex != 6
+                                      colIndex != 7
                                   ? Icon(CupertinoIcons.up_arrow, size: 15)
                                   : SizedBox(),
                             ],
@@ -329,6 +332,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         "${patient.firstName} ${patient.lastName}", // Patient Name
         formatedDateTime, // Last Visit Date
         patient.age != null ? patient.age.toString() : "N/A", // Age
+        patient.doctorName?.trim() == "" ? "N/A" : patient.doctorName ?? "", // Doctor Name
         patient.gender.toString()[0], // Gender
         patient.previousVisitCount.toString(), // Last Visit Date
         patient.visitStatus ?? "0", // Previous Visits

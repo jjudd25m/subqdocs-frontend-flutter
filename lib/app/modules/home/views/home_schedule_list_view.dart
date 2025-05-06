@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/home/views/reschedule_patient_dialog.dart';
 import 'package:subqdocs/widgets/empty_patient_screen.dart';
+
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widget/base_image_view.dart';
@@ -86,7 +86,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                               ),
                             ],
                           )
-                          : colIndex == 5
+                          : colIndex == 6
                           ? PopupMenuButton<String>(
                             offset: const Offset(0, 8),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -226,9 +226,9 @@ class HomeScheduleListView extends GetView<HomeController> {
                             overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                           );
                     },
-                    columnCount: 6,
+                    columnCount: 7,
                     context: context,
-                    columnWidths: [0.30, 0.20, 0.10, 0.12, 0.19, 0.09],
+                    columnWidths: [0.23, 0.18, 0.15, 0.08, 0.11, 0.16, 0.09],
                     onRowSelected: (rowIndex, rowData) async {
                       customPrint("row index is :- $rowIndex");
                       controller.globalController.addRoute(Routes.VISIT_MAIN);
@@ -254,10 +254,10 @@ class HomeScheduleListView extends GetView<HomeController> {
                       controller.getScheduleVisitListFetchMore();
                     },
                     headerBuilder: (context, colIndex) {
-                      List<String> headers = ['Patient Name', 'Visit Date & Time', 'Age', "Gender", "Previous Visits", "Action"];
+                      List<String> headers = ['Patient Name', 'Visit Date & Time', 'Provider', 'Age', "Gender", "Previous Visits", "Action"];
                       return GestureDetector(
                         onTap: () {
-                          if (colIndex != 5) {
+                          if (colIndex != 6) {
                             controller.scheduleSorting(cellData: headers[colIndex], colIndex: colIndex);
                           }
                         },
@@ -319,6 +319,7 @@ class HomeScheduleListView extends GetView<HomeController> {
       rows.add([
         "${patient.firstName} ${patient.lastName}",
         formatedDateTime, // Last Visit Date// Patient Name
+        patient.doctorName?.trim() == "" ? 'N/A' : patient.doctorName ?? "", // Last Visit Date
         patient.age != null ? patient.age.toString() : "N/A", // Age
         patient.gender.toString()[0], // Gender
         patient.previousVisitCount.toString(), // Previous Visits

@@ -83,42 +83,45 @@ class PatientListData {
   dynamic deletedAt;
   int? pastVisitCount;
   String? lastVisitDate;
+  String? doctorName;
   // String? appointmentTime;
   List<Visits>? visits;
 
-  PatientListData(
-      {this.id,
-      this.patientId,
-      this.visitId,
-      this.firstName,
-      this.lastName,
-      this.middleName,
-      this.dateOfBirth,
-      this.email,
-      this.gender,
-      this.age,
-      this.profileImage,
-      this.appointmentTime,
-      this.status,
-      this.address,
-      this.contactNo,
-      this.streetAddress,
-      this.city,
-      this.state,
-      this.zipcode,
-      this.homePhone,
-      this.cellphone,
-      this.visitHistory,
-      this.createdBy,
-      this.updatedBy,
-      this.deletedBy,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.pastVisitCount,
-      this.lastVisitDate,
-      // this.appointmentTime,
-      this.visits});
+  PatientListData({
+    this.id,
+    this.patientId,
+    this.visitId,
+    this.firstName,
+    this.lastName,
+    this.middleName,
+    this.dateOfBirth,
+    this.email,
+    this.gender,
+    this.age,
+    this.profileImage,
+    this.appointmentTime,
+    this.status,
+    this.address,
+    this.contactNo,
+    this.streetAddress,
+    this.city,
+    this.state,
+    this.zipcode,
+    this.homePhone,
+    this.cellphone,
+    this.visitHistory,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedBy,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.pastVisitCount,
+    this.lastVisitDate,
+    this.doctorName,
+    // this.appointmentTime,
+    this.visits,
+  });
 
   PatientListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -151,6 +154,7 @@ class PatientListData {
     deletedAt = json['deleted_at'];
     pastVisitCount = json['visitCount'];
     appointmentTime = json['appointmentTime'];
+    doctorName = json['doctorName'];
     lastVisitDate = json['lastVisitDate'];
     if (json['visits'] != null) {
       visits = <Visits>[];
@@ -193,6 +197,7 @@ class PatientListData {
     data['visitCount'] = pastVisitCount;
     data['appointmentTime'] = appointmentTime;
     data['lastVisitDate'] = lastVisitDate;
+    data['doctorName'] = doctorName;
     if (visits != null) {
       data['visits'] = visits!.map((v) => v.toJson()).toList();
     }

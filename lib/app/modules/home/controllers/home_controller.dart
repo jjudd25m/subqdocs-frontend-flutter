@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
-import 'package:subqdocs/app/modules/home/model/statusModel.dart';
+
 import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
@@ -95,6 +97,7 @@ class HomeController extends GetxController {
     "Previous": "previousVisitCount",
     "Previous Visits": "previousVisitCount",
     "Status": "status",
+    "Provider": 'doctorName',
   };
   RxBool isInternetConnected = RxBool(true);
 
@@ -110,6 +113,7 @@ class HomeController extends GetxController {
   RxBool noMoreDataPatientList = RxBool(false);
   RxBool noMoreDataPastPatientList = RxBool(false);
   RxBool noMoreDataSchedulePatientList = RxBool(false);
+
   String getNextRoundedTimeHH() {
     DateTime now = DateTime.now().toUtc();
 
@@ -248,6 +252,10 @@ class HomeController extends GetxController {
     String? key = nameToIdMap[displayName];
     print("display name is :- ${displayName}");
 
+    // if (displayName == 'Provider') {
+    //   key = "doctorName";
+    // }
+
     if (tabIndex == 0) {
       if (displayName == "Previous Visits") {
         key = "visitCount";
@@ -283,6 +291,10 @@ class HomeController extends GetxController {
 
     print("tabindex is :- $tabIndex display name is :- $displayName");
     print("key name:- $key");
+
+    // if (displayName == 'Provider') {
+    //   key = "doctorName";
+    // }
 
     if (tabIndex == 0 && displayName == "Previous Visits") {
       key = "visitCount";
