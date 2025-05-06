@@ -90,6 +90,9 @@ class PatientProfileController extends GetxController {
 
     try {
       PatientDetailModel localPatientDetailModel = await _editPatientDetailsRepository.getPatientDetails(id: id);
+
+      print("PatientDetailModel :- ${localPatientDetailModel.toJson()}");
+
       patientDetailModel.value = localPatientDetailModel;
 
       print("patientDetailModel-----:- ${patientDetailModel.value?.toJson()}");

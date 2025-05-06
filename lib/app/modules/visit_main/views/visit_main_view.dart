@@ -25,7 +25,6 @@ import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../../home/views/reschedule_patient_dialog.dart';
 import '../../patient_info/views/EditableViews/CommonContainer.dart';
-import '../../patient_info/views/EditableViews/cancer_history_editable_view.dart';
 import '../controllers/visit_main_controller.dart';
 import 'delete_image_dialog.dart';
 import 'delete_schedule_visit.dart';
@@ -130,7 +129,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       onTap: () {
                                         Get.back();
                                       },
-                                      child: Container(color: AppColors.white, padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
+                                      child: Container(
+                                        color: AppColors.white,
+                                        padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
+                                        child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20),
+                                      ),
                                     ),
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(30),
@@ -192,7 +195,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           SizedBox(height: 6),
                                           Text(
                                             textAlign: TextAlign.center,
-                                            controller.formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                            controller.formatDateTime(
+                                              firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
+                                              secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+                                            ),
                                             style: AppFonts.regular(14, AppColors.textGrey),
                                           ),
                                         ],
@@ -355,10 +361,22 @@ class _VisitMainViewState extends State<VisitMainView> {
                               collapsedBackgroundColor: AppColors.backgroundWhite,
                               title: Row(children: [Text(textAlign: TextAlign.center, "Patient Medical History", style: AppFonts.regular(16, AppColors.textBlack)), Spacer()]),
                               children: <Widget>[
-                                Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: CommonContainer(title: "Cancer History", child: CancerHistoryEditable(controller: controller))),
-                                Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: CommonContainer(title: "Medications History", child: MedicationHistoryEditable(controller: controller))),
-                                Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: CommonContainer(title: "Skin History", child: SkinHistoryEditable(controller: controller))),
-                                Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: CommonContainer(title: "Social History", child: SocialHistoryEditable(controller: controller))),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: CommonContainer(title: "Cancer History", child: CancerHistoryEditable(controller: controller)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: CommonContainer(title: "Medications History", child: MedicationHistoryEditable(controller: controller)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: CommonContainer(title: "Skin History", child: SkinHistoryEditable(controller: controller)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: CommonContainer(title: "Social History", child: SocialHistoryEditable(controller: controller)),
+                                ),
                                 Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), child: CommonContainer(title: "Allergies", child: AllergiesEditable(controller: controller))),
                               ],
                             ),
@@ -459,7 +477,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                               },
                                                             );
                                                           },
-                                                          child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Start visit now", style: AppFonts.regular(14, AppColors.backgroundPurple)),
+                                                          child: Text(
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            textAlign: TextAlign.left,
+                                                            "Start visit now",
+                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                          ),
                                                         ),
                                                         SizedBox(width: 30),
                                                         GestureDetector(
@@ -484,7 +508,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 )
                                                                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                                           },
-                                                          child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Reschedule", style: AppFonts.regular(14, AppColors.backgroundPurple)),
+                                                          child: Text(
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            textAlign: TextAlign.left,
+                                                            "Reschedule",
+                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                          ),
                                                         ),
                                                         SizedBox(width: 30),
                                                         GestureDetector(
@@ -497,7 +527,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                     // return SizedBox();
                                                                     return DeleteScheduleVisit(
                                                                       onDelete: () {
-                                                                        controller.changeStatus("Cancelled", controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "");
+                                                                        controller.changeStatus(
+                                                                          "Cancelled",
+                                                                          controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "",
+                                                                        );
 
                                                                         // controller.globalController.changeStatus("Cancelled");
 
@@ -509,7 +542,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 )
                                                                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
                                                           },
-                                                          child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Cancel visit", style: AppFonts.regular(14, AppColors.backgroundPurple)),
+                                                          child: Text(
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            textAlign: TextAlign.left,
+                                                            "Cancel visit",
+                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                          ),
                                                         ),
                                                         SizedBox(width: 60),
                                                       ],
@@ -543,7 +582,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                               collapsedBackgroundColor: AppColors.backgroundWhite,
                               title: Row(
                                 children: [
-                                  Text(textAlign: TextAlign.start, "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)", style: AppFonts.regular(16, AppColors.textBlack)),
+                                  Text(
+                                    textAlign: TextAlign.start,
+                                    "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)",
+                                    style: AppFonts.regular(16, AppColors.textBlack),
+                                  ),
                                   Spacer(),
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
@@ -598,7 +641,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                         maxLines: 1,
                                                         overflow: TextOverflow.ellipsis,
                                                         textAlign: TextAlign.left,
-                                                        controller.visitRecapList.value?.responseData?[index].summary?.firstOrNull ?? "",
+                                                        controller.visitRecapList.value?.responseData?[index].summary ?? "",
                                                         style: AppFonts.regular(14, AppColors.textGrey),
                                                       ),
                                                     ),
@@ -894,7 +937,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     // value: "",
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                      child: Row(children: [Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack))]),
+                                      child: Row(
+                                        children: [
+                                          Icon(CupertinoIcons.camera, color: AppColors.textDarkGrey),
+                                          SizedBox(width: 10),
+                                          Text("Take Photo or Video", style: AppFonts.regular(16, AppColors.textBlack)),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   PopupMenuItem(
@@ -909,7 +958,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         Padding(
                                           padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
                                           child: Row(
-                                            children: [Icon(CupertinoIcons.photo_fill_on_rectangle_fill, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Choose Photo", style: AppFonts.regular(16, AppColors.textBlack))],
+                                            children: [
+                                              Icon(CupertinoIcons.photo_fill_on_rectangle_fill, color: AppColors.textDarkGrey),
+                                              SizedBox(width: 10),
+                                              Text("Choose Photo", style: AppFonts.regular(16, AppColors.textBlack)),
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -927,7 +980,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                          child: Row(children: [Icon(Icons.document_scanner_sharp, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Scan Documents", style: AppFonts.regular(16, AppColors.textDarkGrey))]),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.document_scanner_sharp, color: AppColors.textDarkGrey),
+                                              SizedBox(width: 10),
+                                              Text("Scan Documents", style: AppFonts.regular(16, AppColors.textDarkGrey)),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -944,7 +1003,13 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                          child: Row(children: [Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))]),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey),
+                                              SizedBox(width: 10),
+                                              Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack)),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -952,7 +1017,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 ],
                             child: Container(
                               height: 81,
-                              decoration: BoxDecoration(border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)), color: AppColors.backgroundLightGrey, borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                color: AppColors.backgroundLightGrey,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -1022,7 +1091,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   children: [
                                     Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [SvgPicture.asset(ImagePath.pause, height: 30, width: 30), SizedBox(height: 10), Text(textAlign: TextAlign.center, "Pause", style: AppFonts.medium(16, AppColors.textWhite))],
+                                      children: [
+                                        SvgPicture.asset(ImagePath.pause, height: 30, width: 30),
+                                        SizedBox(height: 10),
+                                        Text(textAlign: TextAlign.center, "Pause", style: AppFonts.medium(16, AppColors.textWhite)),
+                                      ],
                                     ),
                                   ],
                                 ),

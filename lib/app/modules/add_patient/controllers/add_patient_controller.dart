@@ -41,6 +41,10 @@ class AddPatientController extends GetxController {
   TextEditingController patientId = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
+
+  TextEditingController selectedDoctorController = TextEditingController();
+  TextEditingController selectedMedicalAssistantController = TextEditingController();
+
   TextEditingController dobController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
   TextEditingController visitDateController = TextEditingController();

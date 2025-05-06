@@ -33,7 +33,7 @@ class VisitRecapListModel {
 class ResponseData {
   int? id;
   String? visitDate;
-  List<String>? summary;
+  String? summary;
 
   ResponseData({this.visitDate, this.summary});
 

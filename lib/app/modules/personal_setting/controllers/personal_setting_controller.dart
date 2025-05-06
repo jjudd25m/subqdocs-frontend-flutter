@@ -260,6 +260,11 @@ class PersonalSettingController extends GetxController {
     dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
     print("updateUserDetail is $response");
 
+    if (userProfileImage.value != null) {
+      globalController.getDoctorsFilter();
+      globalController.getMedicalAssistance();
+    }
+
     UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
 
     CustomToastification().showToast(updateUserResponseModel.message ?? "", type: ToastificationType.success);
