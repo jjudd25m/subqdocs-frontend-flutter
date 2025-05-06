@@ -268,7 +268,12 @@ class AddPatientView extends GetView<AddPatientController> {
                                     SizedBox(height: Dimen.margin16),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
+                                      child: Row(children: [Text("Basic Detail", style: AppFonts.medium(14, AppColors.textPurple))]),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                       child: Row(
+                                        spacing: 10,
                                         children: [
                                           Expanded(
                                             child: TextFormFiledWidget(
@@ -286,7 +291,36 @@ class AddPatientView extends GetView<AddPatientController> {
                                               suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                                             ),
                                           ),
-                                          SizedBox(width: Dimen.margin10),
+                                          // SizedBox(width: Dimen.margin10),
+                                          Spacer(),
+                                          // SizedBox(width: Dimen.margin10),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: Dimen.margin16),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
+                                      child: Row(
+                                        spacing: 10,
+                                        children: [
+                                          // Expanded(
+                                          //   child: TextFormFiledWidget(
+                                          //     label: "Patient Id ",
+                                          //
+                                          //     // isImportant: true,
+                                          //     isSuffixIconVisible: false,
+                                          //     isFirst: true,
+                                          //     format: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))],
+                                          //     controller: controller.patientId,
+                                          //     hint: "123",
+                                          //     onTap: () {
+                                          //       controller.patientId.clear();
+                                          //     },
+                                          //     suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                          //   ),
+                                          // ),
+                                          // SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: TextFormFiledWidget(
                                               label: "First Name",
@@ -306,7 +340,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               },
                                             ),
                                           ),
-                                          SizedBox(width: Dimen.margin10),
+                                          // SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: TextFormFiledWidget(
                                               isValid: !controller.isValid.value,
@@ -322,14 +356,6 @@ class AddPatientView extends GetView<AddPatientController> {
                                               suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: Dimen.margin16),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                      child: Row(
-                                        children: [
                                           Expanded(
                                             child: TextFormFiledWidget(
                                               format: [CustomTextInputFormatter()],
@@ -349,7 +375,16 @@ class AddPatientView extends GetView<AddPatientController> {
                                               },
                                             ),
                                           ),
-                                          SizedBox(width: Dimen.margin10),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: Dimen.margin16),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
+                                      child: Row(
+                                        spacing: 10,
+                                        children: [
+                                          // SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: TextFormFiledWidget(
                                               suffixIcon: Icon(Icons.calendar_month),
@@ -386,7 +421,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               hint: "mm/dd/yyyy",
                                             ),
                                           ),
-                                          SizedBox(width: Dimen.margin10),
+                                          // SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,6 +442,55 @@ class AddPatientView extends GetView<AddPatientController> {
                                               ],
                                             ),
                                           ),
+                                          Expanded(
+                                            child: TextFormFiledWidget(
+                                              format: [NoSpaceLowercaseTextFormatter()],
+                                              label: "Email Address",
+                                              controller: controller.emailAddressController,
+                                              isValid: !controller.isValid.value,
+                                              isSuffixIconVisible: false,
+                                              isFirst: true,
+                                              hint: "donjones@example.com",
+                                              onTap: () {
+                                                controller.emailAddressController.clear();
+                                              },
+                                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                              checkValidation: (value) {
+                                                return Validation.emailValidate(value);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: Dimen.margin16),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
+                                      child: Row(
+                                        spacing: 10,
+                                        children: [
+                                          Expanded(
+                                            child: TextFormFiledWidget(
+                                              format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
+                                              label: "Contact Number",
+                                              controller: controller.contactNumberController,
+                                              // isValid: true,
+                                              isSuffixIconVisible: false,
+                                              // prefixIcon: Icon(Icons.flag),
+                                              isFirst: true,
+                                              type: TextInputType.number,
+                                              hint: "123456789",
+                                              onTap: () {
+                                                controller.contactNumberController.clear();
+                                              },
+                                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                              checkValidation: (value) {
+                                                return Validation.phoneValidate(value, isRequired: false);
+                                              },
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Spacer(),
                                         ],
                                       ),
                                     ),
@@ -415,103 +499,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                       padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                       child: Obx(() {
                                         return Row(
+                                          spacing: 10,
                                           children: [
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                format: [NoSpaceLowercaseTextFormatter()],
-                                                label: "Email Address",
-                                                controller: controller.emailAddressController,
-                                                isValid: !controller.isValid.value,
-                                                isSuffixIconVisible: false,
-                                                isFirst: true,
-                                                hint: "donjones@example.com",
-                                                onTap: () {
-                                                  controller.emailAddressController.clear();
-                                                },
-                                                suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                                checkValidation: (value) {
-                                                  return Validation.emailValidate(value);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(width: Dimen.margin10),
-                                            Expanded(
-                                              child: TextFormFiledWidget(
-                                                format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
-                                                label: "Contact Number",
-                                                controller: controller.contactNumberController,
-                                                // isValid: true,
-                                                isSuffixIconVisible: false,
-                                                // prefixIcon: Icon(Icons.flag),
-                                                isFirst: true,
-                                                type: TextInputType.number,
-                                                hint: "123456789",
-                                                onTap: () {
-                                                  controller.contactNumberController.clear();
-                                                },
-                                                suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                                checkValidation: (value) {
-                                                  return Validation.phoneValidate(value, isRequired: false);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(width: Dimen.margin10),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(children: [Text("Doctor Name", style: AppFonts.regular(14, AppColors.textBlack))]),
-                                                  SizedBox(height: 8),
-                                                  Obx(() {
-                                                    return BaseDropdown<String>(
-                                                      valueAsString: (value) => value ?? "",
-                                                      items: controller.globalController.selectedDoctorModel.map((model) => model.name).toList(),
-                                                      selectedValue: controller.selectedDoctorValue.value,
-                                                      onChanged: (value) {
-                                                        controller.selectedDoctorValue.value = value;
-                                                      },
-                                                      selectText: "select Doctor..",
-                                                    );
-                                                  }),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      }),
-                                    ),
-                                    SizedBox(height: Dimen.margin16),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
-                                      child: Obx(() {
-                                        return Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(children: [Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack))]),
-                                                  SizedBox(height: 8),
-                                                  Obx(() {
-                                                    return BaseDropdown<String>(
-                                                      valueAsString: (value) => value ?? "",
-                                                      items:
-                                                          controller.globalController.selectedMedicalModel.map((model) => model.name).toList().isNotEmpty
-                                                              ? controller.globalController.selectedMedicalModel.map((model) => model.name).toList()
-                                                              : ["No options"],
-                                                      selectedValue: controller.selectedMedicalValue.value,
-                                                      onChanged: (value) {
-                                                        if (value != "No options") {
-                                                          controller.selectedMedicalValue.value = value;
-                                                        }
-                                                      },
-                                                      selectText: "select Medical..",
-                                                    );
-                                                  }),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: Dimen.margin10),
+                                            // SizedBox(width: Dimen.margin10),
                                             !controller.isAddPatient.value
                                                 ? Expanded(
                                                   child: TextFormFiledWidget(
@@ -551,7 +541,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   ),
                                                 )
                                                 : Spacer(),
-                                            SizedBox(width: Dimen.margin10),
+                                            // SizedBox(width: Dimen.margin10),
                                             !controller.isAddPatient.value
                                                 ? Expanded(
                                                   child: Column(
@@ -574,30 +564,115 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   ),
                                                 )
                                                 : Spacer(),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(children: [Text("Patient Type", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                                  SizedBox(height: 8),
+                                                  Obx(() {
+                                                    return BaseDropdown<String>(
+                                                      valueAsString: (value) => value ?? "",
+                                                      items: controller.patientType,
+                                                      selectedValue: controller.selectedPatientTypeValue.value,
+                                                      onChanged: (value) {
+                                                        if (value == "New Patient") {
+                                                          controller.isExistingPatient.value = false;
+                                                        } else {
+                                                          controller.isExistingPatient.value = true;
+                                                        }
+                                                        controller.selectedPatientTypeValue.value = value;
+                                                      },
+                                                      selectText: "New Patient",
+                                                    );
+                                                  }),
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         );
                                       }),
                                     ),
                                     SizedBox(height: Dimen.margin16),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        spacing: 10,
                                         children: [
-                                          Obx(() {
-                                            return Checkbox(
-                                              visualDensity: VisualDensity.compact,
-                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              activeColor: AppColors.backgroundPurple,
-                                              value: controller.isExistingPatient.value,
-                                              onChanged: (value) => {controller.isExistingPatient.value = value!},
-                                            );
-                                          }),
-                                          Text("Existing Patient", style: AppFonts.medium(14, AppColors.textDarkGrey)),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(children: [Text("Doctor Name", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                                SizedBox(height: 8),
+                                                Obx(() {
+                                                  return BaseDropdown<String>(
+                                                    valueAsString: (value) => value ?? "",
+                                                    items: controller.globalController.selectedDoctorModel.map((model) => model.name).toList(),
+                                                    selectedValue: controller.selectedDoctorValue.value,
+                                                    onChanged: (value) {
+                                                      controller.selectedDoctorValue.value = value;
+                                                    },
+                                                    selectText: "select Doctor..",
+                                                  );
+                                                }),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(children: [Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                                const SizedBox(height: 8),
+                                                Obx(() {
+                                                  return BaseDropdown<String>(
+                                                    valueAsString: (value) => value ?? "",
+                                                    items:
+                                                        controller.globalController.selectedMedicalModel.map((model) => model.name).toList().isNotEmpty
+                                                            ? controller.globalController.selectedMedicalModel.map((model) => model.name).toList()
+                                                            : ["No options"],
+                                                    selectedValue: controller.selectedMedicalValue.value,
+                                                    onChanged: (value) {
+                                                      if (value != "No options") {
+                                                        controller.selectedMedicalValue.value = value;
+                                                      }
+                                                    },
+                                                    selectText: "select Medical..",
+                                                  );
+                                                }),
+                                              ],
+                                            ),
+                                          ),
                                           Spacer(),
                                         ],
                                       ),
                                     ),
+                                    // SizedBox(height: Dimen.margin16),
+                                    // Obx(() {
+                                    //   return GestureDetector(
+                                    //     onTap: () {
+                                    //       controller.isExistingPatient.value = !controller.isExistingPatient.value;
+                                    //     },
+                                    //     child: Padding(
+                                    //       padding: EdgeInsets.symmetric(horizontal: 10),
+                                    //       child: Row(
+                                    //         mainAxisAlignment: MainAxisAlignment.center,
+                                    //         children: [
+                                    //           Checkbox(
+                                    //             visualDensity: VisualDensity.compact,
+                                    //             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    //             activeColor: AppColors.backgroundPurple,
+                                    //             value: controller.isExistingPatient.value,
+                                    //             onChanged: (value) => {controller.isExistingPatient.value = value!},
+                                    //           ),
+                                    //           Text("Existing Patient", style: AppFonts.medium(14, AppColors.textDarkGrey)),
+                                    //           Spacer(),
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //   );
+                                    // }),
                                     SizedBox(height: Dimen.margin16),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: Dimen.margin16),

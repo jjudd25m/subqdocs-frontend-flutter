@@ -92,7 +92,11 @@ class AddPatientController extends GetxController {
 
   RxString selectedVisitTime = RxString("11 PM");
   List<String> sex = ["Female", "Male"];
+
+  // List<String> patient = ["Female", "Male"];
   List<String> patientType = ["New Patient", "Old Patient"];
+
+  RxnString selectedPatientTypeValue = RxnString("New Patient");
 
   RxList<MediaListingModel> list = RxList();
   RxList<MediaListingModel> selectedList = RxList();

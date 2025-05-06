@@ -687,6 +687,7 @@ class GlobalController extends GetxController {
     {"id": "age", "desc": true},
     {"id": "gender", "desc": true},
     {"id": "previousVisitCount", "desc": true},
+    {"id": "doctorName", "desc": true},
     {"id": "status", "desc": true},
   ];
 
@@ -698,6 +699,7 @@ class GlobalController extends GetxController {
     {"id": "appointmentTime", "desc": true},
     {"id": "age", "desc": true},
     {"id": "gender", "desc": true},
+    {"id": "doctorName", "desc": true},
     {"id": "previousVisitCount", "desc": true},
   ];
 
@@ -706,6 +708,7 @@ class GlobalController extends GetxController {
     {"id": "lastVisitDate", "desc": true},
     {"id": "age", "desc": true},
     {"id": "gender", "desc": true},
+    {"id": "doctorName", "desc": true},
     {"id": "visitCount", "desc": true},
   ];
 

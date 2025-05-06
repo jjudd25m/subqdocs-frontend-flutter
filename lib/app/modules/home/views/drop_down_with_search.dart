@@ -96,32 +96,32 @@ class _DropDownWithSearchState extends State<DropDownWithSearch> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 12.5),
                                   child:
-                                      widget.filteredList?[index].isSelected == false
-                                          ? SvgPicture.asset(ImagePath.unCheckedBox, width: 14, height: 14)
-                                          : SvgPicture.asset(ImagePath.checkedBox, width: 14, height: 14),
+                                      widget.filteredList[index].isSelected == false
+                                          ? SvgPicture.asset(ImagePath.unCheckedBox, width: 20, height: 20)
+                                          : SvgPicture.asset(ImagePath.checkedBox, width: 20, height: 20),
                                 ),
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(14),
                                   child: BaseImageView(
                                     height: 32,
                                     width: 32,
-                                    nameLetters: widget.filteredList?[index].name ?? "",
+                                    nameLetters: widget.filteredList[index].name ?? "",
                                     fontSize: 12,
-                                    imageUrl: widget.filteredList?[index].profileImage ?? "",
+                                    imageUrl: widget.filteredList[index].profileImage ?? "",
                                   ),
                                 ),
                                 SizedBox(width: 10),
-                                Text(widget.filteredList?[index].name ?? "", style: AppFonts.medium(14, AppColors.black)),
+                                Expanded(child: Text(widget.filteredList[index].name ?? "", style: AppFonts.medium(14, AppColors.black))),
                               ],
                             ),
                           ),
                           SizedBox(height: 10),
-                          if (widget.filteredList?.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
+                          if (widget.filteredList.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
                         ],
                       ),
                     );
                   },
-                  itemCount: widget.filteredList?.length ?? 0,
+                  itemCount: widget.filteredList.length ?? 0,
                 ),
               )
               : Center(child: Padding(padding: const EdgeInsets.all(8.0), child: Text("No Options"))),

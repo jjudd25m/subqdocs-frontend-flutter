@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/app_colors.dart';
-
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
-
 import '../../../models/SelectedDoctorMedicationModel.dart';
 
 class DropDownWithSearchPopup extends StatefulWidget {
@@ -63,14 +60,13 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                 child: Row(
                   children: [
                     SvgPicture.asset(ImagePath.search, height: 25, width: 25),
-                    SizedBox(width: 10),
+                    SizedBox(width: 5),
                     SizedBox(
-                      width: 85,
+                      width: 90,
                       child: TextFormField(
                         controller: searchController,
                         onChanged: filterList,
                         maxLines: 1, //or null
-
                         decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
                       ),
                     ),
@@ -100,7 +96,13 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                                   padding: const EdgeInsets.only(left: 10),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(14),
-                                    child: BaseImageView(height: 32, width: 32, nameLetters: widget.filteredList[index].name ?? "", fontSize: 12, imageUrl: widget.filteredList[index].profileImage ?? ""),
+                                    child: BaseImageView(
+                                      height: 32,
+                                      width: 32,
+                                      nameLetters: widget.filteredList[index].name ?? "",
+                                      fontSize: 12,
+                                      imageUrl: widget.filteredList[index].profileImage ?? "",
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 10),
