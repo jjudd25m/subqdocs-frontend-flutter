@@ -12,6 +12,8 @@ import '../../modules/patient_info/model/impresion_and_plan_view_model.dart';
 
 class HtmlEditorViewWidget extends StatefulWidget {
   ImpresionAndPlanViewModel impresionAndPlanViewModel;
+  int? index;
+
   final Function(ImpresionAndPlanViewModel) toggleCallBack;
   final Function(ImpresionAndPlanViewModel, String? content) onUpdateCallBack;
 
@@ -25,6 +27,7 @@ class HtmlEditorViewWidget extends StatefulWidget {
     required this.impresionAndPlanViewModel,
     required this.toggleCallBack,
     required this.onUpdateCallBack,
+    this.index,
     this.isBorder = false,
     this.heightOfTheEditableView = 800,
     this.padding = const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -72,12 +75,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 2),
-        if (widget.impresionAndPlanViewModel.title?.isNotEmpty ?? false)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Flexible(child: Padding(padding: widget.padding, child: Text(widget.impresionAndPlanViewModel.title ?? "", style: AppFonts.medium(18, AppColors.textPurple))))],
-          ),
-        const SizedBox(height: 2),
+
         if (widget.impresionAndPlanViewModel.isEditing)
           Padding(
             padding: widget.padding,
@@ -97,7 +95,12 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                     widget.impresionAndPlanViewModel.htmlEditorController.setFullScreen();
                   },
                 ),
-                htmlEditorOptions: HtmlEditorOptions(shouldEnsureVisible: false, androidUseHybridComposition: false, initialText: widget.impresionAndPlanViewModel.htmlContent, adjustHeightForKeyboard: false),
+                htmlEditorOptions: HtmlEditorOptions(
+                  shouldEnsureVisible: false,
+                  androidUseHybridComposition: false,
+                  initialText: widget.impresionAndPlanViewModel.htmlContent,
+                  adjustHeightForKeyboard: false,
+                ),
                 htmlToolbarOptions: HtmlToolbarOptions(
                   gridViewHorizontalSpacing: 0,
                   gridViewVerticalSpacing: 0,
@@ -135,7 +138,11 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
         else
           GestureDetector(
             onTap: toggleEditing,
-            child: Container(color: Colors.transparent, padding: widget.padding, child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {"section": Style(fontSize: FontSize(15))})),
+            child: Container(
+              color: Colors.transparent,
+              padding: widget.padding,
+              child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {"section": Style(fontSize: FontSize(15))}),
+            ),
           ),
       ],
     );

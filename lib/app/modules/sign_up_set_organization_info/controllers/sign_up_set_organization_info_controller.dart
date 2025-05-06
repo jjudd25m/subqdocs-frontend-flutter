@@ -34,7 +34,7 @@ class SignUpSetOrganizationInfoController extends GetxController {
     super.onInit();
 
     var arguments = Get.arguments;
-    signupdata = arguments['signupdata'];
+    signupdata = arguments['signupdatra'];
 
     print("signupdata is:- ${signupdata.toJson()}");
 

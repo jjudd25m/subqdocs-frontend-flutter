@@ -153,7 +153,8 @@ class DoctorView extends StatelessWidget {
                             updateResponse: (List<Map<String, dynamic>> updatedMap, List<Map<String, dynamic>> possibleAlternativeUpdatedMap) {
                               List<Map<String, dynamic>> possibleDiagnosisCodesProcedures = [];
 
-                              for (PossibleDiagnosisCodesProcedures item in controller.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? []) {
+                              for (PossibleDiagnosisCodesProcedures item
+                                  in controller.doctorViewList.value?.responseData?.mainDiagnosisCodesProcedures?.possibleDiagnosisCodesProcedures ?? []) {
                                 possibleDiagnosisCodesProcedures.add(item.toJson());
                               }
 
@@ -180,7 +181,7 @@ class DoctorView extends StatelessWidget {
               ),
               //after table
               SizedBox(height: 10),
-              ImpressionAndPlanDoctorView(doctorViewList: controller.doctorViewList),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: ImpressionAndPlanDoctorView()),
             ],
           ],
         ],
@@ -254,7 +255,11 @@ class DoctorView extends StatelessWidget {
                                     child: Text.rich(
                                       TextSpan(
                                         children: [
-                                          TextSpan(text: "${diagnosis.diagnosis?[index].code} ", recognizer: TapGestureRecognizer()..onTap = () {}, style: AppFonts.semiBold(14, AppColors.black)),
+                                          TextSpan(
+                                            text: "${diagnosis.diagnosis?[index].code} ",
+                                            recognizer: TapGestureRecognizer()..onTap = () {},
+                                            style: AppFonts.semiBold(14, AppColors.black),
+                                          ),
                                           TextSpan(
                                             text: "${diagnosis.diagnosis?[index].description} ",
                                             recognizer: TapGestureRecognizer()..onTap = () {},

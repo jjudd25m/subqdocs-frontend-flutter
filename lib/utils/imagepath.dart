@@ -49,6 +49,7 @@ class ImagePath {
   static const String unCheckedBox = 'assets/images/un_checked.svg';
   static const String checkedBox = 'assets/images/checked_box.svg';
   static const String share = 'assets/images/share.svg';
+  static const String dragAndDrop = 'assets/images/drag_drop_svg.svg';
 
   static const String reorder = 'assets/images/reorder.svg';
 
