@@ -116,9 +116,9 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                 // Required for ReorderableListView
                 data: ThemeData(splashColor: Colors.transparent, highlightColor: Colors.transparent),
                 child: ExpansionTile(
-                  initiallyExpanded: true,
+                  initiallyExpanded: false,
                   visualDensity: VisualDensity(vertical: -4),
-                  tilePadding: const EdgeInsets.only(left: 10, right: 10),
+                  tilePadding: const EdgeInsets.only(left: 0, right: 10),
                   childrenPadding: EdgeInsets.all(0),
                   collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                   shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -127,9 +127,10 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                   collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                   title: Row(
                     children: [
+                      SizedBox(width: 5),
                       SvgPicture.asset(ImagePath.dragAndDrop),
                       SizedBox(width: 10),
-                      Flexible(child: Text("${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(18, AppColors.textPurple))),
+                      Flexible(child: Text("${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(16, AppColors.textPurple))),
                       // Rearranging icon
                     ],
                   ),

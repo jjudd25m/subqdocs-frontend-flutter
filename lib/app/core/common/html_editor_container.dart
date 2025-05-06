@@ -141,7 +141,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
             child: Container(
               color: Colors.transparent,
               padding: widget.padding,
-              child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {"section": Style(fontSize: FontSize(15))}),
+              child: Html(data: widget.impresionAndPlanViewModel.htmlContent, style: {"section": Style(fontSize: FontSize(14))}),
             ),
           ),
       ],

@@ -25,7 +25,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
     return Obx(() {
       return Container(
         child: ReorderableListView(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(bottom: 5 , top: 5 , left: 10 , right: 10),
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           onReorder: (oldIndex, newIndex) {
@@ -36,54 +36,63 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
           },
           children: List.generate(controller.impressionAndPlanList.length, (index) {
             final model = controller.impressionAndPlanList[index];
-            return Theme(
-              key: ValueKey(index), // Required for ReorderableListView
-              data: ThemeData(
-                splashColor: Colors.transparent, // Remove splash color
-                highlightColor: Colors.transparent, // Remove highlight color
-              ),
-              child: Container(
-                child: ExpansionTile(
-                  initiallyExpanded: true,
-                  tilePadding: EdgeInsets.only(right: 20, bottom: 0),
-                  visualDensity: VisualDensity(vertical: -4),
-                  childrenPadding: EdgeInsets.all(0),
-                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                  shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: AppColors.backgroundWhite,
-                  collapsedBackgroundColor: AppColors.backgroundWhite,
-                  clipBehavior: Clip.none,
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 10),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(ImagePath.dragAndDrop),
-                        SizedBox(width: 10),
-                        Flexible(child: Text(" ${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(18, AppColors.textPurple))),
-                        // Drag icon
-                      ],
-                    ),
-                  ),
-                  children: <Widget>[
-                    Container(
-                      child: HtmlEditorViewWidget(
-                        heightOfTheEditableView: 500,
-                        padding: const EdgeInsets.only(left: 40, right: 10),
-                        impresionAndPlanViewModel: model,
-                        onUpdateCallBack: (impressionModel, content) {
-                          controller.impressionAndPlanList[index] = impressionModel;
-                          controller.impressionAndPlanList.refresh();
-                          controller.updateImpressionAndPlan();
-                        },
-                        toggleCallBack: (impressionModel) {
-                          controller.resetImpressionAndPlanList();
-                          impressionModel.isEditing = true;
-                          controller.impressionAndPlanList[index] = impressionModel;
-                          controller.impressionAndPlanList.refresh();
-                        },
+            return Padding(
+              key: ValueKey(index),
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Theme(
+                // Required for ReorderableListView
+                data: ThemeData(
+                  splashColor: Colors.transparent, // Remove splash color
+                  highlightColor: Colors.transparent, // Remove highlight color
+                ),
+                child: Container(
+                  child: ExpansionTile(
+                    initiallyExpanded: true,
+
+                    tilePadding: EdgeInsets.only(right: 20, bottom: 0),
+                    visualDensity: VisualDensity(vertical: -4),
+                    childrenPadding: EdgeInsets.all(0),
+                    collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                    shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                    backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+
+                    collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                    clipBehavior: Clip.none,
+                    title: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 10),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 5),
+                          SvgPicture.asset(ImagePath.dragAndDrop),
+                          SizedBox(width: 10),
+                          Flexible(child: Text(" ${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(16, AppColors.textPurple))),
+                          // Drag icon
+                        ],
                       ),
                     ),
-                  ],
+                    children: <Widget>[
+                      Container(
+                        color: AppColors.white,
+                        child: HtmlEditorViewWidget(
+                          heightOfTheEditableView: 500,
+                          isBorder: false,
+                          padding: const EdgeInsets.only(left: 40, right: 10),
+                          impresionAndPlanViewModel: model,
+                          onUpdateCallBack: (impressionModel, content) {
+                            controller.impressionAndPlanList[index] = impressionModel;
+                            controller.impressionAndPlanList.refresh();
+                            controller.updateImpressionAndPlan();
+                          },
+                          toggleCallBack: (impressionModel) {
+                            controller.resetImpressionAndPlanList();
+                            impressionModel.isEditing = true;
+                            controller.impressionAndPlanList[index] = impressionModel;
+                            controller.impressionAndPlanList.refresh();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
