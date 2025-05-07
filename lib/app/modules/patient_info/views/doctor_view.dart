@@ -31,6 +31,24 @@ class DoctorView extends StatelessWidget {
             ] else ...[
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(24, AppColors.textPurple)),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        controller.loadDoctorviewPDF(controller.visitId);
+                      },
+                      child: SvgPicture.asset(ImagePath.share, width: 40, height: 40),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 0),

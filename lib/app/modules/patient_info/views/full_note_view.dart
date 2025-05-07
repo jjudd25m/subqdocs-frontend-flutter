@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:subqdocs/app/modules/patient_info/views/EditableViews/skin_history_editable_view.dart';
+
+import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_fonts.dart';
+import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
 import 'EditableViews/CommonContainer.dart';
 import 'EditableViews/alergies_editable.dart';
@@ -30,6 +35,19 @@ class FullNoteView extends StatelessWidget {
             if (controller.patientFullNoteModel.value?.responseData?.status == "Failure") ...[
               Center(child: Text(controller.patientFullNoteModel.value?.responseData?.message ?? "No data found", textAlign: TextAlign.center)),
             ] else ...[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(24, AppColors.textPurple)),
+                    Spacer(),
+                    GestureDetector(onTap: () {}, child: SvgPicture.asset(ImagePath.share, width: 40, height: 40)),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
+              SizedBox(height: 20),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(

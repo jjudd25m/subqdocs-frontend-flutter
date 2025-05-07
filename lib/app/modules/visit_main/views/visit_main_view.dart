@@ -193,19 +193,72 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         children: [
                                           Text(textAlign: TextAlign.center, "Visit Date & Time", style: AppFonts.regular(12, AppColors.textBlack)),
                                           SizedBox(height: 6),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                textAlign: TextAlign.center,
-                                                controller.formatDateTime(
-                                                  firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                                  secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+
+                                          PopupMenuButton<String>(
+                                            offset: const Offset(0, 8),
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                            color: AppColors.white,
+                                            position: PopupMenuPosition.under,
+                                            padding: EdgeInsetsDirectional.zero,
+                                            menuPadding: EdgeInsetsDirectional.zero,
+                                            onSelected: (value) {},
+                                            style: const ButtonStyle(
+                                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              maximumSize: WidgetStatePropertyAll(Size.zero),
+                                              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                                            ),
+                                            itemBuilder:
+                                                (context) => [
+                                                  PopupMenuItem(
+                                                    padding: EdgeInsets.zero,
+                                                    onTap: () async {},
+                                                    value: "",
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(0),
+                                                      child: SizedBox(
+                                                        width: 160,
+                                                        child: VisitRecapDropDownWithSearchPopup(
+                                                          key: UniqueKey(),
+                                                          onChanged: (selectedId) {
+                                                            print("print the doctor view ");
+
+                                                            Get.toNamed(
+                                                              Routes.PATIENT_INFO,
+                                                              arguments: {"visitId": selectedId.toString(), "patientId": controller.patientId.value, "unique_tag": DateTime.now().toString()},
+                                                            );
+
+                                                            // Get.toNamed(
+                                                            //   Routes.VISIT_MAIN,
+                                                            //   arguments: {"visitId": selectedId.toString(), "patientId": controller.patientId.value, "unique_tag": DateTime.now().toString()},
+                                                            // );
+
+                                                            // controller.doctorValue.value = name;
+                                                            // Get.back();
+                                                            // controller.updateDoctorView(selectedId);
+                                                          },
+                                                          list: controller.visitRecapList.value?.responseData ?? [],
+                                                          receiveParam: (String value) {},
+                                                          selectedId: 1,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  controller.formatDateTime(
+                                                    firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
+                                                    secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+                                                  ),
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
                                                 ),
-                                                style: AppFonts.regular(14, AppColors.textGrey),
-                                              ),
-                                              SizedBox(width: 5),
-                                              SvgPicture.asset(ImagePath.down_arrow, width: 20, height: 20),
-                                            ],
+                                                SizedBox(width: 5),
+                                                SvgPicture.asset(ImagePath.down_arrow, width: 20, height: 20),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -469,29 +522,31 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     SizedBox(width: 5),
                                                     Row(
                                                       children: [
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            print("print");
-                                                            Get.back();
-                                                            controller.globalController.addRoute(Routes.VISIT_MAIN);
-                                                            Get.toNamed(
-                                                              Routes.VISIT_MAIN,
-                                                              arguments: {
-                                                                "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString(),
-                                                                "patientId": controller.patientId.value,
-                                                                "unique_tag": DateTime.now().toString(),
-                                                              },
-                                                            );
-                                                          },
-                                                          child: Text(
-                                                            maxLines: 1,
-                                                            overflow: TextOverflow.ellipsis,
-                                                            textAlign: TextAlign.left,
-                                                            "Start visit now",
-                                                            style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                        if (controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() != controller.visitId.value) ...[
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              print("print");
+                                                              Get.back();
+                                                              controller.globalController.addRoute(Routes.VISIT_MAIN);
+                                                              Get.toNamed(
+                                                                Routes.VISIT_MAIN,
+                                                                arguments: {
+                                                                  "visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString(),
+                                                                  "patientId": controller.patientId.value,
+                                                                  "unique_tag": DateTime.now().toString(),
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.ellipsis,
+                                                              textAlign: TextAlign.left,
+                                                              "Start visit now",
+                                                              style: AppFonts.regular(14, AppColors.backgroundPurple),
+                                                            ),
                                                           ),
-                                                        ),
-                                                        SizedBox(width: 30),
+                                                          SizedBox(width: 30),
+                                                        ],
                                                         GestureDetector(
                                                           onTap: () {
                                                             controller.isConnected.value

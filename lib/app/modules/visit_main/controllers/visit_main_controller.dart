@@ -2,15 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-
-import 'package:flutter/cupertino.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +21,6 @@ import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
-
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalRecords.dart';
 import '../../../models/media_listing_model.dart';
@@ -31,12 +28,10 @@ import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../forgot_password/models/common_respons.dart';
-
 import '../../home/repository/home_repository.dart';
 import '../../login/model/login_model.dart';
 import '../../patient_info/model/impresion_and_plan_view_model.dart';
 import '../model/patient_attachment_list_model.dart';
-
 import '../model/visit_recap_list_model.dart';
 import '../model/visitmainModel.dart';
 import '../repository/visit_main_repository.dart';
@@ -908,7 +903,9 @@ class VisitMainController extends GetxController {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
-      editableCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableCancerHistory.add(
+        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
+      );
       editableCancerHistory.refresh();
     }
 
@@ -917,7 +914,9 @@ class VisitMainController extends GetxController {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
-      editableMedicationHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableMedicationHistory.add(
+        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
+      );
       editableMedicationHistory.refresh();
     }
 
@@ -926,7 +925,9 @@ class VisitMainController extends GetxController {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
-      editableSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableSkinHistory.add(
+        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""),
+      );
       editableSkinHistory.refresh();
     }
 
@@ -935,7 +936,9 @@ class VisitMainController extends GetxController {
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
       htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
-      editableSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+      editableSocialHistory.add(
+        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
+      );
       editableSocialHistory.refresh();
     }
 

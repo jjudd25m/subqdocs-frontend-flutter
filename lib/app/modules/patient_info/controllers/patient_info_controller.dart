@@ -192,6 +192,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       if (socketService.socket.connected) {
         customPrint("socket is connected");
 
+        isFullTranscriptLoading.value = true;
+        isFullTranscriptLoadText.value = "Waiting for response";
+
         socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
         socketService.socket.on("AllTabStatus", (data) {
@@ -1478,5 +1481,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       );
       editableDataForPatientView.refresh();
     }
+  }
+
+  void loadDoctorviewPDF(String visitID) async {
+    var response = await _patientInfoRepository.loadDoctorviewPDF(visitId);
+    // print("loadDoctorview PDF response:- ${response}");
   }
 }

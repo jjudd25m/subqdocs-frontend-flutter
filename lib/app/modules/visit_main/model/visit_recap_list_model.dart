@@ -1,5 +1,5 @@
 class VisitRecapListModel {
-  List<ResponseData>? responseData;
+  List<VisitRecapListResponseData>? responseData;
   String? message;
   bool? toast;
   String? responseType;
@@ -8,9 +8,9 @@ class VisitRecapListModel {
 
   VisitRecapListModel.fromJson(Map<String, dynamic> json) {
     if (json['responseData'] != null) {
-      responseData = <ResponseData>[];
+      responseData = <VisitRecapListResponseData>[];
       json['responseData'].forEach((v) {
-        responseData!.add(ResponseData.fromJson(v));
+        responseData!.add(VisitRecapListResponseData.fromJson(v));
       });
     }
     message = json['message'];
@@ -30,14 +30,14 @@ class VisitRecapListModel {
   }
 }
 
-class ResponseData {
+class VisitRecapListResponseData {
   int? id;
   String? visitDate;
   String? summary;
 
-  ResponseData({this.visitDate, this.summary});
+  VisitRecapListResponseData({this.visitDate, this.summary});
 
-  ResponseData.fromJson(Map<String, dynamic> json) {
+  VisitRecapListResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     visitDate = json['visit_date'];
     summary = json['summary'];

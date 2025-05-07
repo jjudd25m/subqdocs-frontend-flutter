@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,7 +17,6 @@ import '../../../../utils/app_string.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
-import '../../home/model/patient_list_model.dart';
 import '../../login/model/login_model.dart';
 import '../model/get_user_detail_model.dart';
 import '../model/update_user_response_model.dart';
@@ -254,6 +252,10 @@ class PersonalSettingController extends GetxController {
 
     if (userProfileImage.value != null) {
       profileParams['user_image'] = [userProfileImage.value!];
+    } else {
+      if (getUserDetailModel.value?.responseData?.profileImage == null) {
+        param['isDeleteProfileImage'] = true;
+      }
     }
 
     // try {
@@ -301,9 +303,9 @@ class PersonalSettingController extends GetxController {
 
       getUserDetail();
       getOrganizationDetail();
-      Get.back();
+      // Get.back();
     } catch (error) {
-      Get.back();
+      // Get.back();
       customPrint("userInvite catch error is $error");
     }
   }
@@ -417,6 +419,23 @@ class PersonalSettingController extends GetxController {
                 title: Text('Pick from Gallery'),
                 onTap: () {
                   pickProfileImage(isUserProfile);
+                  Navigator.pop(context);
+                  // Add your gallery picking logic here
+                  customPrint('Gallery selected');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete),
+                title: Text('Remove Prodfile Image'),
+                onTap: () {
+                  if (isUserProfile) {
+                    userProfileImage.value = null;
+                    getUserDetailModel.value?.responseData?.profileImage = null;
+
+                    updateUserDetail({});
+                  }
+
+                  // pickProfileImage(isUserProfile);
                   Navigator.pop(context);
                   // Add your gallery picking logic here
                   customPrint('Gallery selected');

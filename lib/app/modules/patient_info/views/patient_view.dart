@@ -24,7 +24,9 @@ class PatientView extends StatelessWidget {
             if (controller.isPatientViewLoadText.value.toLowerCase() == "failure") ...[
               Center(child: Column(children: [SizedBox(height: 90), Text("An error occurred while processing the patient view")])),
             ] else ...[
-              Center(child: Column(children: [SizedBox(height: 90), Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isPatientViewLoadText.value)])),
+              Center(
+                child: Column(children: [SizedBox(height: 90), Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isPatientViewLoadText.value)]),
+              ),
             ],
           ] else ...[
             if (controller.patientViewListModel.value?.responseData?.status == "Failure") ...[
@@ -32,6 +34,19 @@ class PatientView extends StatelessWidget {
             ] else ...[
               Column(
                 children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(24, AppColors.textPurple)),
+                        Spacer(),
+                        GestureDetector(onTap: () {}, child: SvgPicture.asset(ImagePath.share, width: 40, height: 40)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
+                  SizedBox(height: 20),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Container(

@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
+
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../models/ChangeModel.dart';
@@ -93,5 +98,44 @@ class PatientInfoRepository {
   Future<Icd10CodeListModel> getIcd10CodeAll({required Map<String, dynamic> param}) async {
     var response = await ApiProvider.instance.callGet("icd-10/getAll", queryParameters: param);
     return Icd10CodeListModel.fromJson(response);
+  }
+
+  Future<void> loadDoctorviewPDF(String visitID) async {
+    late String filePath;
+
+    try {
+      // Call the API to get the PDF
+      var response = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
+
+      // Check if response is a base64 string or direct binary data
+      if (response is Map<String, dynamic> && response['data'] != null) {
+        String pdfData = response['data'];
+
+        // Check if the data is base64 encoded
+        if (pdfData is String) {
+          customPrint("Decoding PDF from base64...");
+          // Decode the base64 string into bytes
+          final decodedBytes = base64Decode(pdfData);
+          Directory directory = await getApplicationDocumentsDirectory();
+          filePath = '${directory.path}/downloaded_pdf.pdf';
+          final file = File(filePath);
+          await file.writeAsBytes(decodedBytes); // Write to file
+        }
+      }
+    } catch (e) {
+      customPrint("Error downloading or displaying PDF: $e");
+      // setState(() {
+      //   isLoading = false;
+      // });
+    }
+
+    // try {
+    //   var response = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
+    //   print("loadDoctorviewPDF :- ${response}");
+    // } catch (e) {
+    //   print("loadDoctorviewPDF error :- ${e}");
+    // }
+    //
+    // return "";
   }
 }

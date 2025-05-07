@@ -359,6 +359,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                 padding: EdgeInsets.all(8),
                                 child: InlineEditableText(
                                   onChanged: (p0) {
+                                    print("unit..");
                                     widget.tableModel.rows[row].cells[col].items[i].unit = p0;
                                     items[i].unit = p0;
                                     calculateTotal();
@@ -366,6 +367,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                   initialText: "${items[i].unit}",
                                   textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                   onSubmitted: (newText) {
+                                    print("unit..");
                                     items[i].unit = newText;
                                     calculateTotal();
                                   },
@@ -383,14 +385,41 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                 padding: EdgeInsets.all(8.0),
                                 child: InlineEditableText(
                                   onChanged: (p0) {
-                                    widget.tableModel.rows[row].cells[col].items[i].unitPrice = p0;
-                                    items[i].unitPrice = p0;
+                                    print("unit price..");
+
+                                    String updatedText = p0;
+
+                                    // If the input doesn't start with "$", prepend "$"
+                                    if (!updatedText.startsWith('\$')) {
+                                      updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
+                                    }
+
+                                    setState(() {
+                                      widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
+                                      items[i].unitPrice = updatedText;
+                                    });
+
+                                    print("onChanged updated unit price.. ${items[i].unitPrice}");
+
                                     calculateTotal();
                                   },
-                                  initialText: "${items[i].unitPrice}",
+                                  initialText: "${widget.tableModel.rows[row].cells[col].items[i].unitPrice}",
                                   textStyle: AppFonts.regular(14, AppColors.textGreyTable),
                                   onSubmitted: (newText) {
-                                    items[i].unitPrice = newText;
+                                    String updatedText = newText;
+
+                                    // If the input doesn't start with "$", prepend "$"
+                                    if (!updatedText.startsWith('\$')) {
+                                      updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
+                                    }
+
+                                    setState(() {
+                                      widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
+                                      items[i].unitPrice = updatedText;
+                                    });
+
+                                    print("onSubmitted updated unit price.. ${items[i].unitPrice}");
+
                                     calculateTotal();
                                   },
                                 ),

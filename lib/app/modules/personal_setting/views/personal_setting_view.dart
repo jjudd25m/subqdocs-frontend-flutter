@@ -12,6 +12,7 @@ import 'package:subqdocs/widgets/custom_animated_button.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
@@ -20,9 +21,14 @@ import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../../widgets/empty_patient_screen.dart';
+import '../../../core/common/app_preferences.dart';
 import '../../../core/common/common_service.dart';
+import '../../../core/common/global_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../custom_drawer/views/custom_drawer_view.dart';
+import '../../home/model/home_past_patient_list_sorting_model.dart';
+import '../../home/model/home_patient_list_sorting_model.dart';
+import '../../home/model/home_schedule_list_sorting_model.dart';
 import '../../patient_profile/widgets/common_patient_data.dart';
 import '../controllers/personal_setting_controller.dart';
 import '../model/get_user_detail_model.dart';
@@ -256,6 +262,24 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                       width: 100,
                                                                       child: CustomAnimatedButton(
                                                                         text: "Logout",
+                                                                        onPressed: () async {
+                                                                          await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                                                                          await AppPreference.instance.removeKey(AppString.prefKeyToken);
+
+                                                                          await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+                                                                          await AppPreference.instance.removeKey("homePatientListSortingModel");
+                                                                          await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+
+                                                                          HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
+                                                                          HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
+                                                                          HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+
+                                                                          print(homePatientListData);
+                                                                          print(homeScheduleListData);
+                                                                          print(homePastPatientData);
+                                                                          Get.delete<GlobalController>();
+                                                                          Get.offAllNamed(Routes.LOGIN);
+                                                                        },
                                                                         height: 35,
                                                                         isOutline: true,
                                                                         enabledColor: AppColors.redText,
