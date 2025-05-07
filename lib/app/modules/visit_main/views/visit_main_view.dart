@@ -193,13 +193,19 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         children: [
                                           Text(textAlign: TextAlign.center, "Visit Date & Time", style: AppFonts.regular(12, AppColors.textBlack)),
                                           SizedBox(height: 6),
-                                          Text(
-                                            textAlign: TextAlign.center,
-                                            controller.formatDateTime(
-                                              firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                              secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
-                                            ),
-                                            style: AppFonts.regular(14, AppColors.textGrey),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.center,
+                                                controller.formatDateTime(
+                                                  firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
+                                                  secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+                                                ),
+                                                style: AppFonts.regular(14, AppColors.textGrey),
+                                              ),
+                                              SizedBox(width: 5),
+                                              SvgPicture.asset(ImagePath.down_arrow, width: 20, height: 20),
+                                            ],
                                           ),
                                         ],
                                       ),

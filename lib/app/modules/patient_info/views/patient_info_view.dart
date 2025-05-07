@@ -1,9 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_popup/flutter_popup.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/patient_info/views/confirm_finalize_dialog.dart';
@@ -21,13 +17,8 @@ import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widget/custom_animated_button.dart';
-import '../../../../widgets/ContainerButton.dart';
-import '../../../core/common/common_service.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/views/custom_drawer_view.dart';
-import '../../home/views/container_dropdown_view.dart';
 import '../../home/views/container_view_dropdown.dart';
-import '../../home/views/drop_down_with_search.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../controllers/patient_info_controller.dart';
 import 'full_transcript_view.dart';
@@ -143,7 +134,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             onTap: () {
                                               Get.back();
                                             },
-                                            child: Container(color: AppColors.white, padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
+                                            child: Container(
+                                              color: AppColors.white,
+                                              padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
+                                              child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20),
+                                            ),
                                           ),
                                           ClipRRect(
                                             borderRadius: BorderRadius.circular(30),
@@ -183,7 +178,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               children: [
                                                 Text(textAlign: TextAlign.center, "Age", style: AppFonts.regular(12, AppColors.textBlack)),
                                                 SizedBox(height: 6),
-                                                Text(textAlign: TextAlign.center, (controller.patientData.value?.responseData?.age.toString() ?? "") == "null" ? "N/A" : "", style: AppFonts.regular(14, AppColors.textGrey)),
+                                                Text(
+                                                  textAlign: TextAlign.center,
+                                                  (controller.patientData.value?.responseData?.age.toString() ?? "") == "null"
+                                                      ? "N/A"
+                                                      : controller.patientData.value?.responseData?.age.toString() ?? "",
+                                                  style: AppFonts.regular(14, AppColors.textGrey),
+                                                ),
                                               ],
                                             ),
                                             Spacer(),
@@ -201,7 +202,10 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 SizedBox(height: 6),
                                                 Text(
                                                   textAlign: TextAlign.center,
-                                                  formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "-", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                                  formatDateTime(
+                                                    firstDate: controller.patientData.value?.responseData?.visitDate ?? "-",
+                                                    secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+                                                  ),
                                                   style: AppFonts.regular(14, AppColors.textGrey),
                                                 ),
                                               ],
@@ -477,10 +481,17 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           children: [
                                             SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
                                             SizedBox(height: 10),
-                                            Text(textAlign: TextAlign.center, "Digitally Signed by ${controller.patientData.value?.responseData?.doctorName}", style: AppFonts.medium(16, AppColors.textWhite)),
                                             Text(
                                               textAlign: TextAlign.center,
-                                              formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""),
+                                              "Digitally Signed by ${controller.patientData.value?.responseData?.doctorName}",
+                                              style: AppFonts.medium(16, AppColors.textWhite),
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              formatDateTime(
+                                                firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
+                                                secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+                                              ),
                                               style: AppFonts.medium(16, AppColors.textWhite),
                                             ),
                                           ],
@@ -501,7 +512,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                               onTap: () {},
                               child: Container(
                                 height: 81,
-                                decoration: BoxDecoration(border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)), color: AppColors.backgroundLightGrey, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                  color: AppColors.backgroundLightGrey,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
