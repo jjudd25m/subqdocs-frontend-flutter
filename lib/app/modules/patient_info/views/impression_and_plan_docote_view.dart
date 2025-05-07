@@ -25,10 +25,11 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
     return Obx(() {
       return Container(
         child: ReorderableListView(
-          padding: EdgeInsets.only(bottom: 5 , top: 5 , left: 10 , right: 10),
+          padding: EdgeInsets.only(bottom: 5, top: 5, left: 10, right: 10),
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           onReorder: (oldIndex, newIndex) {
+            controller.resetImpressionAndPlanList();
             if (newIndex > oldIndex) newIndex -= 1;
             final item = controller.impressionAndPlanList.removeAt(oldIndex);
             controller.impressionAndPlanList.insert(newIndex, item);
