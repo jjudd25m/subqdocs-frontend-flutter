@@ -1487,4 +1487,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     var response = await _patientInfoRepository.loadDoctorviewPDF(visitId);
     // print("loadDoctorview PDF response:- ${response}");
   }
+
+  void loadFullNotePDF(String visitID) async {
+    var response = await _patientInfoRepository.loadFullNotePDF(visitId);
+  }
+
+  void loadPatientNotePDF(String visitID) async {
+    var response = await _patientInfoRepository.loadPatientNotePDF(visitId);
+  }
 }

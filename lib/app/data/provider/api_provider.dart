@@ -278,7 +278,72 @@ class ApiProvider {
     }
   }
 
-  FutureOr<Map<String, dynamic>> callGetDownloadPDF(String url, {Map<String, dynamic>? queryParameters}) async {
+  // FutureOr<Map<String, dynamic>> callGetDownloadPDF(String url, {Map<String, dynamic>? queryParameters}) async {
+  //   if (kDebugMode) {
+  //     print(UrlProvider.baseUrl + url);
+  //     print("queryParameters: $queryParameters");
+  //   }
+  //
+  //   try {
+  //     customPrint("-------------------------------");
+  //     customPrint("queryParameters: $queryParameters");
+  //     customPrint("header is ${getApiHeader()}");
+  //     customPrint("url is : $url");
+  //     customPrint("-------------------------------");
+  //
+  //     var response = await dio.get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
+  //
+  //     customPrint("-------------------------------");
+  //     customPrint("API response $response");
+  //     customPrint("-------------------------------");
+  //
+  //     // Handle response based on the type
+  //     if (response.data is List) {
+  //       return {"data": response.data}; // If the data is a List, wrap it in a Map
+  //     }
+  //
+  //     // If response.data is a String, it could be an error message or PDF in base64
+  //     if (response.data is String) {
+  //       // Here, handle the string appropriately based on what you expect it to be:
+  //       // If it's an error message, return the error.
+  //       // If it's a base64 PDF, decode and save it.
+  //       try {
+  //         // Check if the String is a valid JSON object (Map or List)
+  //         var jsonData = jsonDecode(response.data);
+  //         if (jsonData is Map<String, dynamic>) {
+  //           return jsonData; // Return it if it's a valid JSON Map
+  //         } else {
+  //           return {"data": response.data}; // Otherwise, return as raw string data
+  //         }
+  //       } catch (e) {
+  //         // If it's not valid JSON, it could be a base64-encoded PDF or some other data
+  //         customPrint("Error decoding JSON: $e");
+  //         // Here, you could decide to handle it as a base64 string and save it as a PDF, for example
+  //         return {"data": response.data}; // or handle as you need
+  //       }
+  //     }
+  //
+  //     // If the response data is a Future, await it
+  //     if (response.data is Future) {
+  //       return await response.data; // Await and return the result as Map<String, dynamic>
+  //     }
+  //
+  //     // If it's a Map<String, dynamic>, return the data as is
+  //     return response.data;
+  //   } on TimeoutException {
+  //     throw ValidationString.validationRequestTimeout;
+  //   } on SocketException {
+  //     throw ValidationString.validationNoInternetFound;
+  //   } on DioException catch (e) {
+  //     customPrint("DioException $e");
+  //     throw handleDioException(e);
+  //   } catch (e) {
+  //     customPrint("catch $e");
+  //     rethrow;
+  //   }
+  // }
+
+  Future<Uint8List> callGetDownloadPDF(String url, {Map<String, dynamic>? queryParameters}) async {
     if (kDebugMode) {
       print(UrlProvider.baseUrl + url);
       print("queryParameters: $queryParameters");
@@ -291,45 +356,34 @@ class ApiProvider {
       customPrint("url is : $url");
       customPrint("-------------------------------");
 
-      var response = await dio.get(UrlProvider.baseUrl + url, queryParameters: queryParameters, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 30));
+      // Set responseType to bytes for PDF download
+      var response = await dio
+          .get(
+            UrlProvider.baseUrl + url,
+            queryParameters: queryParameters,
+            options: Options(
+              headers: getApiHeader(),
+              responseType: ResponseType.bytes, // This is crucial for PDF downloads
+            ),
+          )
+          .timeout(const Duration(seconds: 30));
 
       customPrint("-------------------------------");
-      customPrint("API response $response");
+      customPrint("API response received with length: ${response.data.length}");
       customPrint("-------------------------------");
 
-      // Handle response based on the type
-      if (response.data is List) {
-        return {"data": response.data}; // If the data is a List, wrap it in a Map
+      // Directly return the bytes for PDF
+      if (response.data is Uint8List) {
+        return response.data;
       }
 
-      // If response.data is a String, it could be an error message or PDF in base64
-      if (response.data is String) {
-        // Here, handle the string appropriately based on what you expect it to be:
-        // If it's an error message, return the error.
-        // If it's a base64 PDF, decode and save it.
-        try {
-          // Check if the String is a valid JSON object (Map or List)
-          var jsonData = jsonDecode(response.data);
-          if (jsonData is Map<String, dynamic>) {
-            return jsonData; // Return it if it's a valid JSON Map
-          } else {
-            return {"data": response.data}; // Otherwise, return as raw string data
-          }
-        } catch (e) {
-          // If it's not valid JSON, it could be a base64-encoded PDF or some other data
-          customPrint("Error decoding JSON: $e");
-          // Here, you could decide to handle it as a base64 string and save it as a PDF, for example
-          return {"data": response.data}; // or handle as you need
-        }
+      // Handle case where response might still be a Map (shouldn't happen with responseType: bytes)
+      if (response.data is Map<String, dynamic>) {
+        throw Exception("Unexpected JSON response for PDF download");
       }
 
-      // If the response data is a Future, await it
-      if (response.data is Future) {
-        return await response.data; // Await and return the result as Map<String, dynamic>
-      }
-
-      // If it's a Map<String, dynamic>, return the data as is
-      return response.data;
+      // Handle other unexpected cases
+      throw Exception("Unknown response format for PDF download");
     } on TimeoutException {
       throw ValidationString.validationRequestTimeout;
     } on SocketException {

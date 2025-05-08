@@ -1,8 +1,19 @@
 // import 'dart:io';
 // import 'dart:convert';
+// import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
+// import 'dart:io';
+// import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:subqdocs/utils/Loader.dart';
 
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
@@ -101,46 +112,270 @@ class PatientInfoRepository {
     return Icd10CodeListModel.fromJson(response);
   }
 
-  Future<void> loadDoctorviewPDF(String visitID) async {
-    late String filePath;
+  // Future<void> loadDoctorviewPDF(String visitID) async {
+  //   try {
+  //     // Call the API to get the PDF bytes directly
+  //     Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
+  //
+  //     // Get temporary directory
+  //     Directory directory = await getApplicationDocumentsDirectory();
+  //     String filePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}_doctor_view.pdf';
+  //
+  //     // Write bytes to file
+  //     File file = File(filePath);
+  //     await file.writeAsBytes(pdfBytes);
+  //
+  //     customPrint("PDF saved to: $filePath");
+  //
+  //     // Open PDF viewer
+  //     Navigator.push(Get.context!, MaterialPageRoute(builder: (context) => PDFScreen(path: filePath)));
+  //   } catch (e) {
+  //     customPrint("Error downloading or displaying PDF: $e");
+  //     // Show error to user
+  //     Get.snackbar("Error", "Failed to load PDF: ${e.toString()}", snackPosition: SnackPosition.BOTTOM);
+  //   }
+  // }
+
+  Future<void> loadPatientNotePDF(String visitID) async {
+    Loader().showLoadingDialogForSimpleLoader();
 
     try {
-      // Call the API to get the PDF
-      var response = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
+      // Call the API to get the PDF bytes
+      Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-patient-view-pdf?visit_id=$visitID", queryParameters: {});
 
-      // Check if response is a base64 string or direct binary data
-      if (response is Map<String, dynamic> && response['data'] != null) {
-        String pdfData = response['data'];
+      // Generate a filename
+      String fileName = 'patient_note_${DateTime.now().millisecondsSinceEpoch}.pdf';
 
-        print("pdf gfgdfgdf data is:- ${pdfData}");
-        // Check if the data is base64 encoded
-        if (pdfData is String) {
-          customPrint("Decoding PDF from base64...");
-          // Decode the base64 string into bytes
-          // Uint8List bytes = base64Decode(pdfData);
-          // final decodedBytes = base64Decode(pdfData);
-          Directory directory = await getApplicationDocumentsDirectory();
-          filePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}_downloaded_pdf.pdf';
-          final file = File(filePath);
-          print("file path is :- ${filePath}");
-          // await file.writeAsBytes(bytes);
-          // await file.writeAsString(pdfData); // Write to file
-        }
-      }
+      // Save to app's PDF folder
+      String filePath = await savePdfToAppFolder(pdfBytes, fileName);
+
+      customPrint("PDF saved to: $filePath");
+      Loader().stopLoader();
+      // Open PDF viewer
+      Navigator.push(
+        Get.context!,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: Container(
+                color: Colors.white, // Background color
+                child: child,
+              ),
+            );
+          },
+        ),
+      );
+      // Navigator.push(
+      //   Get.context!,
+      //   MaterialPageRoute(theme: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white, canvasColor: Colors.white), builder: (context) => PDFScreen(path: filePath)),
+      // );
     } catch (e) {
+      Loader().stopLoader();
       customPrint("Error downloading or displaying PDF: $e");
-      // setState(() {
-      //   isLoading = false;
-      // });
+      Get.snackbar("Error", "Failed to load PDF: ${e.toString()}", snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> loadFullNotePDF(String visitID) async {
+    Loader().showLoadingDialogForSimpleLoader();
+
+    try {
+      // Call the API to get the PDF bytes
+      Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-notes?visit_id=$visitID", queryParameters: {});
+
+      // Generate a filename
+      String fileName = 'full_note_${DateTime.now().millisecondsSinceEpoch}.pdf';
+
+      // Save to app's PDF folder
+      String filePath = await savePdfToAppFolder(pdfBytes, fileName);
+
+      customPrint("PDF saved to: $filePath");
+      Loader().stopLoader();
+      // Open PDF viewer
+      Navigator.push(
+        Get.context!,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: Container(
+                color: Colors.white, // Background color
+                child: child,
+              ),
+            );
+          },
+        ),
+      );
+      // Navigator.push(
+      //   Get.context!,
+      //   MaterialPageRoute(theme: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white, canvasColor: Colors.white), builder: (context) => PDFScreen(path: filePath)),
+      // );
+    } catch (e) {
+      Loader().stopLoader();
+      customPrint("Error downloading or displaying PDF: $e");
+      Get.snackbar("Error", "Failed to load PDF: ${e.toString()}", snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> loadDoctorviewPDF(String visitID) async {
+    Loader().showLoadingDialogForSimpleLoader();
+
+    try {
+      // Call the API to get the PDF bytes
+      Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
+
+      // Generate a filename
+      String fileName = 'doctor_view_${DateTime.now().millisecondsSinceEpoch}.pdf';
+
+      // Save to app's PDF folder
+      String filePath = await savePdfToAppFolder(pdfBytes, fileName);
+
+      customPrint("PDF saved to: $filePath");
+      Loader().stopLoader();
+      // Open PDF viewer
+      Navigator.push(
+        Get.context!,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: Container(
+                color: Colors.white, // Background color
+                child: child,
+              ),
+            );
+          },
+        ),
+      );
+      // Navigator.push(
+      //   Get.context!,
+      //   MaterialPageRoute(theme: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white, canvasColor: Colors.white), builder: (context) => PDFScreen(path: filePath)),
+      // );
+    } catch (e) {
+      Loader().stopLoader();
+      customPrint("Error downloading or displaying PDF: $e");
+      Get.snackbar("Error", "Failed to load PDF: ${e.toString()}", snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  // Helper function to save PDF to app folder
+  Future<String> savePdfToAppFolder(Uint8List pdfBytes, String fileName) async {
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final Directory pdfDir = Directory('${appDocDir.path}/pdfs');
+
+    if (!await pdfDir.exists()) {
+      await pdfDir.create(recursive: true);
     }
 
-    // try {
-    //   var response = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
-    //   print("loadDoctorviewPDF :- ${response}");
-    // } catch (e) {
-    //   print("loadDoctorviewPDF error :- ${e}");
-    // }
-    //
-    // return "";
+    final String filePath = '${pdfDir.path}/$fileName';
+    await File(filePath).writeAsBytes(pdfBytes);
+
+    return filePath;
+  }
+
+  Future<bool> requestStoragePermission() async {
+    if (Platform.isAndroid) {
+      var status = await Permission.storage.status;
+      if (!status.isGranted) {
+        status = await Permission.storage.request();
+      }
+      return status.isGranted;
+    }
+    return true; // No permission needed on iOS for app directories
+  }
+}
+
+class PDFScreen extends StatefulWidget {
+  final String? path;
+
+  PDFScreen({Key? key, this.path}) : super(key: key);
+
+  _PDFScreenState createState() => _PDFScreenState();
+}
+
+class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
+  final Completer<PDFViewController> _controller = Completer<PDFViewController>();
+  int? pages = 0;
+  int? currentPage = 0;
+  bool isReady = false;
+  String errorMessage = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text("")),
+      body: Stack(
+        children: <Widget>[
+          PDFView(
+            filePath: widget.path,
+            enableSwipe: true,
+            swipeHorizontal: true,
+            autoSpacing: false,
+            pageFling: true,
+            pageSnap: true,
+            defaultPage: currentPage!,
+            fitPolicy: FitPolicy.BOTH,
+            preventLinkNavigation: false,
+            // if set to true the link is handled in flutter
+            backgroundColor: Color(0xFFFEF7FF),
+            onRender: (_pages) {
+              setState(() {
+                pages = _pages;
+                isReady = true;
+              });
+            },
+            onError: (error) {
+              setState(() {
+                errorMessage = error.toString();
+              });
+              print(error.toString());
+            },
+            onPageError: (page, error) {
+              setState(() {
+                errorMessage = '$page: ${error.toString()}';
+              });
+              print('$page: ${error.toString()}');
+            },
+            onViewCreated: (PDFViewController pdfViewController) {
+              _controller.complete(pdfViewController);
+            },
+            onLinkHandler: (String? uri) {
+              print('goto uri: $uri');
+            },
+            onPageChanged: (int? page, int? total) {
+              print('page change: ${page ?? 0 + 1}/$total');
+              setState(() {
+                currentPage = page;
+              });
+            },
+          ),
+          errorMessage.isEmpty
+              ? !isReady
+                  ? Center(child: CircularProgressIndicator())
+                  : Container()
+              : Center(child: Text(errorMessage)),
+        ],
+      ),
+      floatingActionButton: FutureBuilder<PDFViewController>(
+        future: _controller.future,
+        builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
+          if (snapshot.hasData) {
+            return FloatingActionButton.extended(
+              label: Text("Go to ${pages! ~/ 2}"),
+              onPressed: () async {
+                await snapshot.data!.setPage(pages! ~/ 2);
+              },
+            );
+          }
+
+          return Container();
+        },
+      ),
+    );
   }
 }
