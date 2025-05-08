@@ -192,7 +192,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
 
 
             },
-                text: "Add Section +"
+                text: " + Add Section "
 
 
             ),
