@@ -1,18 +1,12 @@
-import 'dart:ui';
-
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_diamentions.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
-import '../../../../widget/base_image_view.dart';
 import '../controllers/home_controller.dart';
 import 'container_dropdown_view.dart';
 import 'drop_down_with_search.dart';
@@ -326,8 +320,8 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                                   child: Row(
                                                     children: [
                                                       selectedStatusIndex.contains(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex])
-                                                          ? SvgPicture.asset(ImagePath.checkedBox, width: 14, height: 14)
-                                                          : SvgPicture.asset(ImagePath.unCheckedBox, width: 14, height: 14),
+                                                          ? SvgPicture.asset(ImagePath.checkedBox, width: 20, height: 20)
+                                                          : SvgPicture.asset(ImagePath.unCheckedBox, width: 20, height: 20),
                                                       SizedBox(width: 9),
                                                       ClipRRect(
                                                         borderRadius: BorderRadius.circular(10),
@@ -341,7 +335,7 @@ class PastPatientListFilterBottomSheet extends GetView<HomeController> {
                                                       Expanded(
                                                         child: Text(controller.filterPastVisitStatusCategoryData[index].subcategories[subIndex], style: AppFonts.regular(14, AppColors.textDarkGrey)),
                                                       ),
-                                                      Spacer(),
+                                                      // Spacer(),
                                                     ],
                                                   ),
                                                 ),

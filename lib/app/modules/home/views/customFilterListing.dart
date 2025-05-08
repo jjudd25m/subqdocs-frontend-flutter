@@ -42,7 +42,7 @@ class CustomFilterListing extends StatelessWidget {
                         children: [
                           Text("${item.filterName}:", style: AppFonts.medium(14, AppColors.offBlackText)),
                           SizedBox(width: 6),
-                          Text(item.filterValue, style: AppFonts.medium(14, AppColors.filterText)),
+                          Flexible(child: Text(item.filterValue, style: AppFonts.medium(14, AppColors.filterText))),
                           SizedBox(width: 6),
                           GestureDetector(
                             onTap: () {

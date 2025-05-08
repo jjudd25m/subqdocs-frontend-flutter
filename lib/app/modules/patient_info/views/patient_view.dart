@@ -1,20 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../controllers/patient_info_controller.dart';
-import 'EditableViews/exam_editable.dart';
 import 'EditableViews/patient_view_editable.dart';
 
 class PatientView extends StatelessWidget {
   PatientView({super.key});
+
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -38,9 +37,10 @@ class PatientView extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
-                        Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(24, AppColors.textPurple)),
+                        Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(20, AppColors.textBlack)),
                         Spacer(),
                         GestureDetector(onTap: () {}, child: SvgPicture.asset(ImagePath.share, width: 40, height: 40)),
+                        SizedBox(width: 10),
                       ],
                     ),
                   ),

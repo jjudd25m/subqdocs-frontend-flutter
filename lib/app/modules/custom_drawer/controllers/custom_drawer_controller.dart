@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subqdocs/app/modules/custom_drawer/Models/drawer_model.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
@@ -12,46 +13,20 @@ class CustomDrawerController extends GetxController {
   RxList<DrawerItemModel> drawerItemModelList = RxList();
 
   final GlobalController globalController = Get.find();
+  RxString version = RxString("");
+  RxString buildNumber = RxString("");
 
   @override
-  void onInit() {
-    drawerItemModelList.add(
-      DrawerItemModel(
-        drawerItemTitle: "Add New Visit",
-        drawerIconPath: ImagePath.calendar,
-        routePath: "",
-      ),
-    );
-    drawerItemModelList.add(
-      DrawerItemModel(
-        drawerItemTitle: "Scheduled Visits",
-        drawerIconPath: ImagePath.scheduleDrawer,
-        routePath: "",
-      ),
-    );
-    drawerItemModelList.add(
-      DrawerItemModel(
-        drawerItemTitle: "Past Visits",
-        drawerIconPath: ImagePath.pastDrawer,
-        routePath: "",
-      ),
-    );
-    drawerItemModelList.add(
-      DrawerItemModel(
-        isSelected: true,
-        drawerItemTitle: "Patient Visits",
-        drawerIconPath: ImagePath.patiton_visit_drawer,
-        routePath: "",
-      ),
-    );
-    drawerItemModelList.add(
-      DrawerItemModel(
-        drawerItemTitle: "Settings",
-        drawerIconPath: ImagePath.settingsDrawer,
-        routePath: "",
-      ),
-    );
+  Future<void> onInit() async {
+    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Add New Visit", drawerIconPath: ImagePath.calendar, routePath: ""));
+    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Scheduled Visits", drawerIconPath: ImagePath.scheduleDrawer, routePath: ""));
+    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Past Visits", drawerIconPath: ImagePath.pastDrawer, routePath: ""));
+    drawerItemModelList.add(DrawerItemModel(isSelected: true, drawerItemTitle: "Patient Visits", drawerIconPath: ImagePath.patiton_visit_drawer, routePath: ""));
+    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Settings", drawerIconPath: ImagePath.settingsDrawer, routePath: ""));
 
+    final info = await PackageInfo.fromPlatform();
+    version.value = info.version;
+    buildNumber.value = info.buildNumber;
     super.onInit();
   }
 
@@ -70,11 +45,9 @@ class CustomDrawerController extends GetxController {
   void changeSelected(int index) {
     print(" selected index is the  $index");
 
-    drawerItemModelList.forEach(
-      (element) {
-        element.isSelected = false;
-      },
-    );
+    drawerItemModelList.forEach((element) {
+      element.isSelected = false;
+    });
 
     drawerItemModelList[index].isSelected = true;
     drawerItemModelList.refresh();

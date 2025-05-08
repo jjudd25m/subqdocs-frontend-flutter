@@ -1,4 +1,5 @@
-import 'dart:convert';
+// import 'dart:io';
+// import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -111,15 +112,19 @@ class PatientInfoRepository {
       if (response is Map<String, dynamic> && response['data'] != null) {
         String pdfData = response['data'];
 
+        print("pdf gfgdfgdf data is:- ${pdfData}");
         // Check if the data is base64 encoded
         if (pdfData is String) {
           customPrint("Decoding PDF from base64...");
           // Decode the base64 string into bytes
-          final decodedBytes = base64Decode(pdfData);
+          // Uint8List bytes = base64Decode(pdfData);
+          // final decodedBytes = base64Decode(pdfData);
           Directory directory = await getApplicationDocumentsDirectory();
-          filePath = '${directory.path}/downloaded_pdf.pdf';
+          filePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}_downloaded_pdf.pdf';
           final file = File(filePath);
-          await file.writeAsBytes(decodedBytes); // Write to file
+          print("file path is :- ${filePath}");
+          // await file.writeAsBytes(bytes);
+          // await file.writeAsString(pdfData); // Write to file
         }
       }
     } catch (e) {

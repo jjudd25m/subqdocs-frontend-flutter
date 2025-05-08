@@ -77,6 +77,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
                       final GlobalController globalController = Get.find();
 
+                      Get.until((route) => Get.currentRoute == Routes.HOME);
+                      globalController.breadcrumbHistory.clear();
+
                       Get.toNamed(Routes.HOME, arguments: {"tabIndex": globalController.tabIndex.value});
                     }
                   },

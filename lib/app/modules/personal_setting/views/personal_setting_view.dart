@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:subqdocs/widget/bredcums.dart';
@@ -19,13 +16,10 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
-import '../../../../widgets/custom_textfiled.dart';
-import '../../../../widgets/empty_patient_screen.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/views/custom_drawer_view.dart';
 import '../../home/model/home_past_patient_list_sorting_model.dart';
 import '../../home/model/home_patient_list_sorting_model.dart';
 import '../../home/model/home_schedule_list_sorting_model.dart';
@@ -38,6 +32,7 @@ import 'organization_use_edit_dialog.dart';
 
 class PersonalSettingView extends GetView<PersonalSettingController> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   PersonalSettingView({super.key});
 
   @override
@@ -221,7 +216,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                     height: 60,
                                                                                     fontSize: 14,
                                                                                     nameLetters:
-                                                                                        "${controller.getUserDetailModel.value?.responseData?.firstName} ${controller.getUserDetailModel.value?.responseData?.lastName}",
+                                                                                        "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                                                                                   ),
                                                                         );
                                                                       }),
@@ -232,7 +227,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                       children: [
                                                                         Text(
                                                                           textAlign: TextAlign.center,
-                                                                          "${controller.loginData.value?.responseData?.user?.firstName} ${controller.loginData.value?.responseData?.user?.lastName}",
+                                                                          "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                                                                           style: AppFonts.medium(16, AppColors.textBlack),
                                                                         ),
                                                                         SizedBox(width: 15),

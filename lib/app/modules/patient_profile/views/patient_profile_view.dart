@@ -72,6 +72,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height: 7),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
                                   child: BreadcrumbWidget(
@@ -84,6 +85,7 @@ class PatientProfileView extends GetView<PatientProfileController> {
                                     },
                                   ),
                                 ),
+                                SizedBox(height: 7),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
                                   child: Container(

@@ -44,21 +44,23 @@ class HomePastVisitsList extends GetView<HomeController> {
               ),
             if (controller.globalController.pastFilterListingModel.isNotEmpty) SizedBox(height: 15),
             controller.pastVisitList.isEmpty
-                ? Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: EmptyPatientScreen(
-                    onBtnPress: () async {
-                      controller.globalController.addRoute(Routes.ADD_PATIENT);
-                      final result = await Get.toNamed(Routes.ADD_PATIENT);
+                ? controller.isHomePastPatientListLoading.value
+                    ? Padding(padding: EdgeInsets.symmetric(vertical: 150, horizontal: 10), child: Center(child: CircularProgressIndicator()))
+                    : Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: EmptyPatientScreen(
+                        onBtnPress: () async {
+                          controller.globalController.addRoute(Routes.ADD_PATIENT);
+                          final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                      controller.getPastVisitList();
-                      controller.getScheduleVisitList();
-                      controller.getPatientList();
-                    },
-                    title: "Your Past Visit List is Empty",
-                    description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
-                  ),
-                )
+                          controller.getPastVisitList();
+                          controller.getScheduleVisitList();
+                          controller.getPatientList();
+                        },
+                        title: "Your Past Visit List is Empty",
+                        description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
+                      ),
+                    )
                 : Expanded(
                   child: CustomTable(
                     scrollController: controller.scrollControllerPastPatientList,
@@ -332,7 +334,7 @@ class HomePastVisitsList extends GetView<HomeController> {
         "${patient.firstName} ${patient.lastName}", // Patient Name
         formatedDateTime, // Last Visit Date
         patient.age != null ? patient.age.toString() : "N/A", // Age
-        patient.doctorName?.trim() == "" ? "N/A" : patient.doctorName ?? "", // Doctor Name
+        patient.doctorName?.trim() == "" ? 'N/A' : "Dr. ${patient.doctorName}" ?? "",
         patient.gender.toString()[0], // Gender
         patient.previousVisitCount.toString(), // Last Visit Date
         patient.visitStatus ?? "0", // Previous Visits

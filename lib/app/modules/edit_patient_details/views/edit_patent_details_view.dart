@@ -1,11 +1,8 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:subqdocs/widget/appbar.dart';
@@ -75,6 +72,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                         physics: BouncingScrollPhysics(),
                         padding: EdgeInsets.zero,
                         children: [
+                          // SizedBox(height: 10),
                           Obx(() {
                             return BreadcrumbWidget(
                               breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
@@ -86,6 +84,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                               },
                             );
                           }),
+                          SizedBox(height: 10),
                           Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(Dimen.margin16),
@@ -412,7 +411,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     onChanged: (value) {
                                                       controller.selectedDoctorValue.value = value;
                                                     },
-                                                    selectText: "select Doctor..",
+                                                    selectText: "Select Doctor",
                                                   );
                                                 }),
                                               ],
@@ -483,7 +482,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                     onChanged: (value) {
                                                       controller.selectedMedicalValue.value = value;
                                                     },
-                                                    selectText: "select Medical..",
+                                                    selectText: "Select M.A",
                                                   );
                                                 }),
                                               ],
@@ -561,11 +560,16 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         Get.back();
                                       },
                                       text: 'Cancel',
-                                      borderColor: AppColors.backgroundPurple, // Custom border color
-                                      backgroundColor: AppColors.white, // Custom background color
-                                      needBorder: true, // Show border
-                                      textColor: AppColors.backgroundPurple, // Custom text color
-                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                      borderColor: AppColors.backgroundPurple,
+                                      // Custom border color
+                                      backgroundColor: AppColors.white,
+                                      // Custom background color
+                                      needBorder: true,
+                                      // Show border
+                                      textColor: AppColors.backgroundPurple,
+                                      // Custom text color
+                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                      // Custom padding
                                       radius: 6, // Custom border radius
                                     ),
                                     SizedBox(width: 8),
@@ -576,11 +580,16 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         }
                                       },
                                       text: 'Save',
-                                      borderColor: AppColors.backgroundPurple, // Custom border color
-                                      backgroundColor: AppColors.backgroundPurple, // Custom background color
-                                      needBorder: false, // Show border
-                                      textColor: AppColors.white, // Custom text color
-                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12), // Custom padding
+                                      borderColor: AppColors.backgroundPurple,
+                                      // Custom border color
+                                      backgroundColor: AppColors.backgroundPurple,
+                                      // Custom background color
+                                      needBorder: false,
+                                      // Show border
+                                      textColor: AppColors.white,
+                                      // Custom text color
+                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                      // Custom padding
                                       radius: 6, // Custom border radius
                                     ),
                                   ],

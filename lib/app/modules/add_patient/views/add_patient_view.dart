@@ -151,6 +151,7 @@ class AddPatientView extends GetView<AddPatientController> {
                             // physics: BouncingScrollPhysics(),
                             padding: EdgeInsets.zero,
                             children: [
+                              // SizedBox(height: 10),
                               Obx(() {
                                 return BreadcrumbWidget(
                                   breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
@@ -517,68 +518,67 @@ class AddPatientView extends GetView<AddPatientController> {
                                           spacing: 10,
                                           children: [
                                             // SizedBox(width: Dimen.margin10),
-                                            !controller.isAddPatient.value
-                                                ? Expanded(
-                                                  child: TextFormFiledWidget(
-                                                    //format: [NoSpaceTextFormatter()],
-                                                    suffixIcon: Icon(Icons.calendar_month),
-                                                    label: "Visit Date",
-                                                    readOnly: true,
-                                                    // isImportant: true,
-                                                    controller: controller.visitDateController,
-                                                    onTap: () async {
-                                                      final picked = await showDatePicker(
-                                                        context: context,
-                                                        initialDate: DateTime.now(),
-                                                        firstDate: DateTime.now(),
-                                                        lastDate: DateTime.now().add(Duration(days: 1000)),
-                                                        builder: (context, child) {
-                                                          return Theme(
-                                                            data: ThemeData.light().copyWith(
-                                                              cardColor: AppColors.white,
-                                                              primaryColor: AppColors.backgroundPurple,
-                                                              hintColor: AppColors.backgroundPurple,
-                                                              colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                                                            ),
-                                                            child: child!,
-                                                          );
-                                                        },
-                                                      );
-                                                      if (picked != null) {
-                                                        String inputText;
-                                                        String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                        inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                        controller.visitDateController.text = inputText;
-                                                      }
-                                                    },
-                                                    hint: "mm/dd/yyyy",
-                                                  ),
-                                                )
-                                                : Spacer(),
-                                            // SizedBox(width: Dimen.margin10),
-                                            !controller.isAddPatient.value
-                                                ? Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)),
-                                                      SizedBox(height: 8),
-                                                      Obx(() {
-                                                        return BaseDropdown<String>(
-                                                          valueAsString: (value) => value ?? "",
-                                                          items: controller.visitTime,
-                                                          selectedValue: controller.selectedVisitTimeValue.value,
-                                                          onChanged: (value) {
-                                                            controller.selectedVisitTimeValue.value = value;
-                                                          },
-                                                          selectText: "11 PM",
+                                            if (!controller.isAddPatient.value) ...[
+                                              Expanded(
+                                                child: TextFormFiledWidget(
+                                                  //format: [NoSpaceTextFormatter()],
+                                                  suffixIcon: Icon(Icons.calendar_month),
+                                                  label: "Visit Date",
+                                                  readOnly: true,
+                                                  // isImportant: true,
+                                                  controller: controller.visitDateController,
+                                                  onTap: () async {
+                                                    final picked = await showDatePicker(
+                                                      context: context,
+                                                      initialDate: DateTime.now(),
+                                                      firstDate: DateTime.now(),
+                                                      lastDate: DateTime.now().add(Duration(days: 1000)),
+                                                      builder: (context, child) {
+                                                        return Theme(
+                                                          data: ThemeData.light().copyWith(
+                                                            cardColor: AppColors.white,
+                                                            primaryColor: AppColors.backgroundPurple,
+                                                            hintColor: AppColors.backgroundPurple,
+                                                            colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
+                                                            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                          ),
+                                                          child: child!,
                                                         );
-                                                      }),
-                                                    ],
-                                                  ),
-                                                )
-                                                : Spacer(),
+                                                      },
+                                                    );
+                                                    if (picked != null) {
+                                                      String inputText;
+                                                      String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                                      inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                      controller.visitDateController.text = inputText;
+                                                    }
+                                                  },
+                                                  hint: "mm/dd/yyyy",
+                                                ),
+                                              ),
+                                            ],
+                                            if (!controller.isAddPatient.value) ...[
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)),
+                                                    SizedBox(height: 8),
+                                                    Obx(() {
+                                                      return BaseDropdown<String>(
+                                                        valueAsString: (value) => value ?? "",
+                                                        items: controller.visitTime,
+                                                        selectedValue: controller.selectedVisitTimeValue.value,
+                                                        onChanged: (value) {
+                                                          controller.selectedVisitTimeValue.value = value;
+                                                        },
+                                                        selectText: "11 PM",
+                                                      );
+                                                    }),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
                                             Expanded(
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -604,6 +604,8 @@ class AddPatientView extends GetView<AddPatientController> {
                                                 ],
                                               ),
                                             ),
+                                            if (controller.isAddPatient.value) ...[Spacer()],
+                                            if (controller.isAddPatient.value) ...[Spacer()],
                                           ],
                                         );
                                       }),

@@ -49,26 +49,28 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                               width: 40,
                               height: 40,
                               nameLetters:
-                                  "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                  "${controller.globalController.getUserDetailModel.value?.responseData?.firstName?.trim() ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName?.trim() ?? ""}",
                             ),
                           ),
                       SizedBox(width: 8),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            maxLines: 2,
-                            "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                            style: AppFonts.medium(14, AppColors.textBlackDark),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            controller.globalController.getUserDetailModel.value?.responseData?.degree ?? "", // Dummy email
-                            style: AppFonts.medium(12, AppColors.textDarkGrey),
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              // maxLines: 2,
+                              "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                              style: AppFonts.medium(14, AppColors.textBlackDark),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              controller.globalController.getUserDetailModel.value?.responseData?.degree ?? "", // Dummy email
+                              style: AppFonts.medium(12, AppColors.textDarkGrey),
+                            ),
+                          ],
+                        ),
                       ),
-                      Spacer(),
+                      // Spacer(),
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
@@ -149,6 +151,16 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
               ),
             ),
             SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Version: ${controller.version} (${controller.buildNumber})', // Dummy email
+                  style: AppFonts.medium(12, AppColors.textDarkGrey),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
           ],
         ),
       ),

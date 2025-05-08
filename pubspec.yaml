@@ -88,8 +88,10 @@ dependencies:
   html: ^0.15.6
   easy_popover: ^0.0.6
   path_provider: ^2.1.5
+  package_info_plus: ^8.3.0
   #  shadcn_ui: ^0.25.0
   flutter_widget_from_html: ^0.16.0
+  flutter_pdfview: ^1.4.0+1
   html_editor_enhanced:
     path: html_editor_enhanced-2.5.0
 

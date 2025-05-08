@@ -293,6 +293,10 @@ class PersonalSettingController extends GetxController {
     if (organizationProfileImage.value != null) {
       customPrint("profile is   available");
       profileParams['org_image'] = [organizationProfileImage.value!];
+    } else {
+      if (getOrganizationDetailModel.value?.responseData?.profileImage == null) {
+        param['isDeleteProfileImage'] = true;
+      }
     }
 
     Loader().showLoadingDialogForSimpleLoader();
@@ -308,6 +312,8 @@ class PersonalSettingController extends GetxController {
       // Get.back();
       customPrint("userInvite catch error is $error");
     }
+
+    Loader().stopLoader();
   }
 
   Future<void> getUserRole() async {
@@ -433,6 +439,11 @@ class PersonalSettingController extends GetxController {
                     getUserDetailModel.value?.responseData?.profileImage = null;
 
                     updateUserDetail({});
+                  } else {
+                    organizationProfileImage.value = null;
+                    getOrganizationDetailModel.value?.responseData?.profileImage = null;
+
+                    updateOrganization({});
                   }
 
                   // pickProfileImage(isUserProfile);

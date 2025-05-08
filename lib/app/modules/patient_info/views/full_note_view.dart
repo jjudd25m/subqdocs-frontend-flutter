@@ -39,9 +39,10 @@ class FullNoteView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(24, AppColors.textPurple)),
+                    Text(textAlign: TextAlign.left, "Patient Medical Record", style: AppFonts.medium(20, AppColors.textBlack)),
                     Spacer(),
                     GestureDetector(onTap: () {}, child: SvgPicture.asset(ImagePath.share, width: 40, height: 40)),
+                    SizedBox(width: 5),
                   ],
                 ),
               ),

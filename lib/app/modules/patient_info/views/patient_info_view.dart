@@ -95,6 +95,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: 10),
                           Obx(() {
                             return BreadcrumbWidget(
                               breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
@@ -106,6 +107,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                               },
                             );
                           }),
+                          SizedBox(height: 10),
                           Column(
                             children: <Widget>[
                               Container(

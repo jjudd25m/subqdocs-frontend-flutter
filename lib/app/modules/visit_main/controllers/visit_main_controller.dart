@@ -84,8 +84,8 @@ class VisitMainController extends GetxController {
 
   TextEditingController searchDoctorController = TextEditingController();
 
-  RxString doctorValue = RxString("select...");
-  RxString medicationValue = RxString("select...");
+  RxString doctorValue = RxString("select doctor");
+  RxString medicationValue = RxString("select M.A");
 
   final count = 0.obs;
 

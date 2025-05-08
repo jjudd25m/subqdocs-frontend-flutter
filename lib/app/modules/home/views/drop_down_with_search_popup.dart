@@ -7,7 +7,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
-import '../../visit_main/model/visit_recap_list_model.dart';
+import '../../edit_patient_details/model/patient_detail_model.dart';
 
 class DropDownWithSearchPopup extends StatefulWidget {
   DropDownWithSearchPopup({super.key, this.list, required this.receiveParam, required this.selectedId, required this.onChanged});
@@ -136,11 +136,11 @@ class VisitRecapDropDownWithSearchPopup extends StatefulWidget {
   final void Function(String) receiveParam;
   final void Function(int) onChanged;
 
-  List<VisitRecapListResponseData>? filteredList;
+  List<PastVisits>? filteredList;
 
   // List<SelectedDoctorModel> filteredList = [];
 
-  List<VisitRecapListResponseData>? list;
+  List<PastVisits>? list;
 
   @override
   State<VisitRecapDropDownWithSearchPopup> createState() => _VisitRecapDropDownWithSearchPopupState();
@@ -229,7 +229,7 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
                                 //   ),
                                 // ),
                                 SizedBox(width: 10),
-                                Flexible(child: Text(fullVisitRecapformatDate(firstDate: widget.filteredList?[index].visitDate ?? ""), style: AppFonts.medium(14, AppColors.black))),
+                                Flexible(child: Text(fullVisitRecapformatDate(firstDate: widget.filteredList?[index].visitTime ?? ""), style: AppFonts.medium(14, AppColors.black))),
                               ],
                             ),
                           ),

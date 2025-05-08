@@ -24,21 +24,23 @@ class HomePatientListView extends GetView<HomeController> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(() {
         return controller.patientList.isEmpty
-            ? Padding(
-              padding: const EdgeInsets.all(10),
-              child: EmptyPatientScreen(
-                onBtnPress: () async {
-                  controller.globalController.addRoute(Routes.ADD_PATIENT);
-                  final result = await Get.toNamed(Routes.ADD_PATIENT);
+            ? controller.isHomePatientListLoading.value
+                ? Padding(padding: const EdgeInsets.all(10), child: Center(child: CircularProgressIndicator()))
+                : Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: EmptyPatientScreen(
+                    onBtnPress: () async {
+                      controller.globalController.addRoute(Routes.ADD_PATIENT);
+                      final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                  controller.getPastVisitList(isFist: true);
-                  controller.getScheduleVisitList();
-                  controller.getPatientList();
-                },
-                title: "Your Patient List is Empty",
-                description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
-              ),
-            )
+                      controller.getPastVisitList(isFist: true);
+                      controller.getScheduleVisitList();
+                      controller.getPatientList();
+                    },
+                    title: "Your Patient List is Empty",
+                    description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
+                  ),
+                )
             : Column(
               children: [
                 // Text("total data is the ${controller.patientList.length}" , style: TextStyle( fontSize: 20),),
@@ -117,7 +119,7 @@ class HomePatientListView extends GetView<HomeController> {
         patient.age != null ? patient.age.toString() : "N/A", // Age
         patient.gender.toString()[0], // Gender
         patient.lastVisitDate ?? "N/A",
-        patient.doctorName?.trim() == "" ? 'N/A' : patient.doctorName ?? "", // Last Visit Date
+        patient.doctorName?.trim() == null ? 'N/A' : "Dr. ${patient.doctorName}" ?? "", // Last Visit Date
         patient.pastVisitCount?.toString() ?? "0", // Previous Visits
         "Action",
         patient.profileImage ?? "", // Action (could be a button or some interaction)

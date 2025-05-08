@@ -131,6 +131,10 @@ class HomeController extends GetxController {
     return formatter.format(now);
   }
 
+  RxBool isHomePatientListLoading = RxBool(false);
+  RxBool isHomeScheduleListLoading = RxBool(false);
+  RxBool isHomePastPatientListLoading = RxBool(false);
+
   @override
   void _onScrollPatientList() {
     if (!scrollControllerPatientList.hasClients) return;
@@ -327,6 +331,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> getPatientList({String? sortingName = "", bool isLoading = false}) async {
+    isHomePatientListLoading.value = true;
+
     Map<String, dynamic> param = {};
     pagePatient = 1;
     triggeredIndexes.clear();
@@ -362,6 +368,8 @@ class HomeController extends GetxController {
     globalController.saveHomePatientListData();
     patientListModel.value = await _homeRepository.getPatient(param: param);
 
+    isHomePatientListLoading.value = false;
+
     if (isLoading) {
       Loader().stopLoader();
     }
@@ -382,6 +390,8 @@ class HomeController extends GetxController {
     pageSchedule = 1;
     scheduleTriggeredIndexes.clear();
     noMoreDataSchedulePatientList.value = false;
+
+    isHomeScheduleListLoading.value = true;
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -438,6 +448,8 @@ class HomeController extends GetxController {
     globalController.saveHomeScheduleListData();
     scheduleVisitListModel.value = await _homeRepository.getScheduleVisit(param: param);
 
+    isHomeScheduleListLoading.value = false;
+
     if (scheduleVisitListModel.value?.responseData?.data != null) {
       scheduleVisitList.value = scheduleVisitListModel.value?.responseData?.data ?? [];
 
@@ -450,6 +462,8 @@ class HomeController extends GetxController {
     pagePast = 1;
     pastTriggeredIndexes.clear();
     noMoreDataPatientList.value = false;
+
+    isHomePastPatientListLoading.value = true;
 
     Map<String, dynamic> param = {};
     param['page'] = 1;
@@ -511,6 +525,8 @@ class HomeController extends GetxController {
     print("param:- $param");
     globalController.saveHomePastPatientData();
     pastVisitListModel.value = await _homeRepository.getPastVisit(param: param);
+
+    isHomePastPatientListLoading.value = false;
 
     if (pastVisitListModel.value?.responseData?.data != null) {
       pastVisitList.value = pastVisitListModel.value?.responseData?.data ?? [];

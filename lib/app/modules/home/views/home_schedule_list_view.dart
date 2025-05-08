@@ -43,21 +43,23 @@ class HomeScheduleListView extends GetView<HomeController> {
               ),
             if (controller.globalController.scheduleFilterListingModel.isNotEmpty) SizedBox(height: 15),
             controller.scheduleVisitList.isEmpty
-                ? Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: EmptyPatientScreen(
-                    onBtnPress: () async {
-                      controller.globalController.addRoute(Routes.ADD_PATIENT);
-                      final result = await Get.toNamed(Routes.ADD_PATIENT);
+                ? controller.isHomeScheduleListLoading.value
+                    ? const Padding(padding: EdgeInsets.symmetric(vertical: 150, horizontal: 10), child: Center(child: CircularProgressIndicator()))
+                    : Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: EmptyPatientScreen(
+                        onBtnPress: () async {
+                          controller.globalController.addRoute(Routes.ADD_PATIENT);
+                          final result = await Get.toNamed(Routes.ADD_PATIENT);
 
-                      controller.getPastVisitList();
-                      controller.getScheduleVisitList();
-                      controller.getPatientList();
-                    },
-                    title: "Your Schedule Visits List is Empty",
-                    description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
-                  ),
-                )
+                          controller.getPastVisitList();
+                          controller.getScheduleVisitList();
+                          controller.getPatientList();
+                        },
+                        title: "Your Schedule Visits List is Empty",
+                        description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
+                      ),
+                    )
                 : Expanded(
                   child: CustomTable(
                     onRefresh: () async {
@@ -319,7 +321,7 @@ class HomeScheduleListView extends GetView<HomeController> {
       rows.add([
         "${patient.firstName} ${patient.lastName}",
         formatedDateTime, // Last Visit Date// Patient Name
-        patient.doctorName?.trim() == "" ? 'N/A' : patient.doctorName ?? "", // Last Visit Date
+        patient.doctorName?.trim() == "" ? 'N/A' : "Dr. ${patient.doctorName}" ?? "",
         patient.age != null ? patient.age.toString() : "N/A", // Age
         patient.gender.toString()[0], // Gender
         patient.previousVisitCount.toString(), // Previous Visits
