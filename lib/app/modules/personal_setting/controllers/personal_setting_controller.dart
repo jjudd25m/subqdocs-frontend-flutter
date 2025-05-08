@@ -241,6 +241,9 @@ class PersonalSettingController extends GetxController {
       getUserDetail();
       getUserByOrganization();
       getUserRole();
+
+      globalController.getDoctorsFilter();
+      globalController.getMedicalAssistance();
     } catch (error) {
       customPrint("userInvite catch error is $error");
     }

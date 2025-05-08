@@ -1,4 +1,3 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -6,13 +5,11 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
-import 'package:toastification/toastification.dart';
-import '../../../../utils/Formetors.dart';
+
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_textfiled.dart';
-import '../../../../widgets/custom_toastification.dart';
 import '../controllers/personal_setting_controller.dart';
 
 class OrganizationEditDialog extends GetView<PersonalSettingController> {
@@ -157,9 +154,9 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                         controller.organizationAddress1Controller.clear();
                                       },
                                       suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      },
+                                      // checkValidation: (value) {
+                                      //   return Validation.requiredFiled(value);
+                                      // },
                                     ),
                                   ),
                                 ),
@@ -181,9 +178,9 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                         controller.organizationAddress2Controller.clear();
                                       },
                                       suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      },
+                                      // checkValidation: (value) {
+                                      //   return Validation.requiredFiled(value);
+                                      // },
                                     ),
                                   ),
                                 ),
@@ -206,9 +203,9 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                         controller.organizationStreetNameController.clear();
                                       },
                                       suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                      checkValidation: (value) {
-                                        return Validation.requiredFiled(value);
-                                      },
+                                      // checkValidation: (value) {
+                                      //   return Validation.requiredFiled(value);
+                                      // },
                                     ),
                                   ),
                                 ),
@@ -279,9 +276,9 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                       controller.organizationPostalCodeController.clear();
                                     },
                                     suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                    checkValidation: (value) {
-                                      return Validation.requiredFiled(value);
-                                    },
+                                    // checkValidation: (value) {
+                                    //   return Validation.requiredFiled(value);
+                                    // },
                                   ),
                                 ),
                                 Expanded(
@@ -341,15 +338,42 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                             Map<String, dynamic> param = Map<String, dynamic>();
 
                             param["name"] = controller.organizationNameController.text;
-                            param["email"] = controller.organizationEmailController.text;
-                            param["state"] = controller.organizationSelectedStateValue.value;
-                            param["city"] = controller.organizationSelectedCityValue.value;
-                            param["contact_no"] = controller.extractDigits(controller.organizationPhoneNumberController.text);
-                            param["country"] = controller.selectedCountryValue.value;
-                            param["street_name"] = controller.organizationStreetNameController.text;
-                            param["postal_code"] = controller.organizationPostalCodeController.text;
-                            param["address1"] = controller.organizationAddress1Controller.text;
-                            param["address2"] = controller.organizationAddress2Controller.text;
+
+                            if (controller.organizationEmailController.text.isNotEmpty) {
+                              param["email"] = controller.organizationEmailController.text;
+                            }
+
+                            if (controller.organizationSelectedStateValue.value?.isNotEmpty ?? false) {
+                              param["state"] = controller.organizationSelectedStateValue.value;
+                            }
+
+                            if (controller.organizationSelectedCityValue.value?.isNotEmpty ?? false) {
+                              param["city"] = controller.organizationSelectedCityValue.value;
+                            }
+
+                            if (controller.organizationPhoneNumberController.text.isNotEmpty) {
+                              param["contact_no"] = controller.extractDigits(controller.organizationPhoneNumberController.text);
+                            }
+
+                            if (controller.selectedCountryValue.value?.isNotEmpty ?? false) {
+                              param["country"] = controller.selectedCountryValue.value;
+                            }
+
+                            if (controller.organizationStreetNameController.text.isNotEmpty) {
+                              param["street_name"] = controller.organizationStreetNameController.text;
+                            }
+
+                            if (controller.organizationPostalCodeController.text.isNotEmpty) {
+                              param["postal_code"] = controller.organizationPostalCodeController.text;
+                            }
+
+                            if (controller.organizationAddress1Controller.text.isNotEmpty) {
+                              param["address1"] = controller.organizationAddress1Controller.text;
+                            }
+
+                            if (controller.organizationAddress2Controller.text.isNotEmpty) {
+                              param["address2"] = controller.organizationAddress2Controller.text;
+                            }
 
                             receiveParam(param);
                             Navigator.pop(context);
