@@ -1,3 +1,4 @@
+import 'package:easy_popover/easy_popover.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,7 +9,9 @@ import 'package:subqdocs/utils/imagepath.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../core/common/html_editor_container.dart';
+import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
+import 'drop_drown_search_table.dart';
 
 class ImpressionAndPlanPatientView extends StatelessWidget {
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
@@ -17,83 +20,11 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonContainer(title: "Impressions and Plan", child: _taskListSection());
+    return CommonContainer(title: "Impressions and Plan", child: _taskListSection(context));
   }
 
-  // Widget _taskListSection() {
-  // Widget _taskListSection() {
-  //   return Obx(() {
-  //     return Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 10),
-  //       child: ListView.builder(
-  //         padding: EdgeInsets.zero,
-  //         physics: NeverScrollableScrollPhysics(),
-  //         shrinkWrap: true,
-  //         itemCount: controller.impressionAndPlanListFullNote.length,
-  //         itemBuilder: (context, index) {
-  //           return Theme(
-  //             data: ThemeData(
-  //               splashColor: Colors.transparent, // Remove splash color
-  //               highlightColor: Colors.transparent, // Remove highlight color
-  //             ),
-  //             child: ExpansionTile(
-  //               initiallyExpanded: true,
-  //               visualDensity: VisualDensity(vertical: -4),
-  //               tilePadding: const EdgeInsets.only(left: 10, right: 10),
-  //               childrenPadding: EdgeInsets.all(0),
-  //               collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-  //               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-  //               backgroundColor: AppColors.backgroundWhite,
-  //               collapsedBackgroundColor: AppColors.backgroundWhite,
-  //               title: Row(
-  //                 children: [
-  //                   Container(
-  //                     padding: EdgeInsets.all(5),
-  //                     decoration: BoxDecoration(
-  //                       borderRadius: BorderRadius.circular(6),
-  //                       color: AppColors.backgroundPurple.withAlpha(50),
-  //                       border: Border.all(color: AppColors.backgroundPurple.withAlpha(50), width: 0.01),
-  //                     ),
-  //
-  //                     child: Flexible(
-  //                       child: Text(" ${index + 1} .${controller.impressionAndPlanListFullNote[index].title}" ?? "", style: AppFonts.medium(18, AppColors.textPurple)),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               children: <Widget>[
-  //                 HtmlEditorViewWidget(
-  //                   heightOfTheEditableView: 500,
-  //                   isBorder: true,
-  //                   padding: const EdgeInsets.only(left: 10, right: 10),
-  //                   impresionAndPlanViewModel: controller.impressionAndPlanListFullNote[index],
-  //                   index: index + 1,
-  //                   onUpdateCallBack: (impressionModel, content) {
-  //                     impressionModel.htmlContent = content;
-  //
-  //                     controller.impressionAndPlanListFullNote[index] = impressionModel;
-  //                     controller.impressionAndPlanListFullNote.refresh();
-  //
-  //                     controller.updateImpressionAndPlanFullNote();
-  //                   },
-  //                   toggleCallBack: (impressionModel) {
-  //                     controller.resetImpressionAndPlanList();
-  //                     impressionModel.isEditing = true;
-  //
-  //                     controller.impressionAndPlanListFullNote[index] = impressionModel;
-  //                     controller.impressionAndPlanListFullNote.refresh();
-  //                     controller.impressionAndPlanListFullNote[index].htmlEditorController.setFocus();
-  //                   },
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     );
-  //   });
-  // }
-  Widget _taskListSection() {
+
+  Widget _taskListSection(BuildContext context) {
     return Obx(() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -106,6 +37,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
             final item = controller.impressionAndPlanListFullNote.removeAt(oldIndex);
             controller.impressionAndPlanListFullNote.insert(newIndex, item);
             controller.impressionAndPlanListFullNote.refresh();
+            controller.updateImpressionAndPlanFullNote();
           },
           children: List.generate(controller.impressionAndPlanListFullNote.length, (index) {
             final model = controller.impressionAndPlanListFullNote[index];
@@ -116,23 +48,74 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                 // Required for ReorderableListView
                 data: ThemeData(splashColor: Colors.transparent, highlightColor: Colors.transparent),
                 child: ExpansionTile(
-                  initiallyExpanded: false,
+                  enabled: false,
+                  initiallyExpanded: true,
                   visualDensity: VisualDensity(vertical: -4),
                   tilePadding: const EdgeInsets.only(left: 0, right: 10),
                   childrenPadding: EdgeInsets.all(0),
                   collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                   shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                   backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-
+                  showTrailingIcon: false,
                   collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                  title: Row(
-                    children: [
-                      SizedBox(width: 5),
-                      SvgPicture.asset(ImagePath.dragAndDrop),
-                      SizedBox(width: 10),
-                      Flexible(child: Text("${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(16, AppColors.textPurple))),
-                      // Rearranging icon
-                    ],
+                  title:
+
+
+                  Popover(
+                    key: UniqueKey(),
+                    context,
+                    controller:PopoverController(
+                    ),
+                    // controller: PopoverController(),
+                    borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                    scrollEnabled: true,
+                    hideArrow: true,
+                    alignment: PopoverAlignment.leftTop,
+
+                    applyActionWidth: false,
+                    contentWidth: 350,
+                    action: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 10),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 5),
+                          SvgPicture.asset(ImagePath.dragAndDrop),
+                          SizedBox(width: 10),
+                          Flexible(child: Text("${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(16, AppColors.textPurple))),
+                          // Drag icon
+                        ],
+                      ),
+                    ),
+                    content: DiagnosisDropDrownSearchTable(
+
+                      items:  (model.siblingIcd10FullNote ?? []).map((e) {
+                        return ProcedurePossibleAlternatives(code: e.code, description:e.name, isPin: true);
+                      }).toList(),
+
+                      onItemSelected: (value, _) {
+
+
+                        print("called ");
+
+                        controller.impressionAndPlanListFullNote[index].title = "${value.description} (${value.code})";
+                        controller.impressionAndPlanListFullNote.refresh();
+                        controller.updateImpressionAndPlanFullNote();
+
+
+                      },controller: controller,
+                      onSearchItemSelected: (p0, p1) {
+                        controller.impressionAndPlanListFullNote[index].title = "${p1} (${p0})";
+                        controller.impressionAndPlanListFullNote.refresh();
+                        controller.updateImpressionAndPlanFullNote();
+
+
+
+                      },
+                      onInitCallBack: () {
+
+                      },
+                      tableRowIndex: -1,
+                    ),
                   ),
                   children: [
                     Container(

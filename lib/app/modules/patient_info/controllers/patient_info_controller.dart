@@ -1146,7 +1146,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Future<void> updateImpressionAndPlanFullNote() async {
     Map<String, List<dynamic>> params = {};
 
-    params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJson()).toList();
+    params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJsonFullNote()).toList();
 
     print(params);
 
@@ -1334,7 +1334,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         HtmlEditorController htmlEditorController = HtmlEditorController();
         htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlContent: ImpressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: ImpressionsAndPlan.title));
+        impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlContent: ImpressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: ImpressionsAndPlan.title , siblingIcd10: ImpressionsAndPlan.siblingIcd10));
       }
 
       impressionAndPlanList.refresh();
@@ -1349,11 +1349,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
         HtmlEditorController htmlEditorController = HtmlEditorController();
         htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: ImpressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: ImpressionsAndPlan.title));
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: ImpressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: ImpressionsAndPlan.title ,siblingIcd10FullNote: ImpressionsAndPlan.siblingIcd10));
       }
 
       impressionAndPlanListFullNote.refresh();
     }
+
 
     if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
       editableDataForSkinHistory.clear();

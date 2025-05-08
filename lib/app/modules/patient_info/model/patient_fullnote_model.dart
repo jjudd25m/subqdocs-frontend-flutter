@@ -179,22 +179,51 @@ class Medications {
     return data;
   }
 }
-
 class ImpressionsAndPlan {
   String? title;
+  List<SiblingIcd10FullNote>? siblingIcd10;
   String? content;
 
-  ImpressionsAndPlan({this.title, this.content});
+  ImpressionsAndPlan({this.title, this.siblingIcd10, this.content});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
     title = json['title'];
+    if (json['sibling_icd_10'] != null) {
+      siblingIcd10 = <SiblingIcd10FullNote>[];
+      json['sibling_icd_10'].forEach((v) {
+        siblingIcd10!.add(new SiblingIcd10FullNote.fromJson(v));
+      });
+    }
     content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['title'] = this.title;
+    if (this.siblingIcd10 != null) {
+      data['sibling_icd_10'] =
+          this.siblingIcd10!.map((v) => v.toJson()).toList();
+    }
     data['content'] = this.content;
+    return data;
+  }
+}
+
+class SiblingIcd10FullNote {
+  String? code;
+  String? name;
+
+  SiblingIcd10FullNote({this.code, this.name});
+
+  SiblingIcd10FullNote.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['name'] = this.name;
     return data;
   }
 }
