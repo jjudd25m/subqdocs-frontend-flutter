@@ -123,4 +123,6 @@ class ImagePath {
   static const String pin_icd = 'assets/images/pin_icd.svg';
 
   static const String diagnosis_plus = 'assets/images/diagnosis_plus.svg';
+
+  static const String download_pdf = 'assets/images/download_pdf.svg';
 }

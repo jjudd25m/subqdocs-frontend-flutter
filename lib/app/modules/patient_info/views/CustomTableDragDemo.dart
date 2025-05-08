@@ -507,6 +507,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                 });
                                                               },
                                                               onInitCallBack: () {
+                                                                // FocusScope.of(context).unfocus();
+
+                                                                for (int s = 0; s < widget.tableModel.rows.length; s++) {
+                                                                  widget.tableModel.rows[s].popoverController.close();
+                                                                }
+
                                                                 for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
                                                                   for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
                                                                     for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
@@ -727,6 +733,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                 });
                                                               },
                                                               onInitCallBack: () {
+                                                                // FocusScope.of(context).unfocus();
+
+                                                                for (int s = 0; s < widget.tableModel.rows.length; s++) {
+                                                                  widget.tableModel.rows[s].popoverController.close();
+                                                                }
+
                                                                 for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
                                                                   for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
                                                                     for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
@@ -989,6 +1001,23 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                 },
                                 onInitCallBack: () {
                                   print("row $row col $col i $i");
+
+                                  // FocusScope.of(context).unfocus();
+
+                                  for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
+                                    for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
+                                      for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
+                                        for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+                                          // if (rows == row && cols == col && newItems == i && diag == subIndex) {
+                                          //   // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                          //   // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
+                                          // } else {
+                                          widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                          // }
+                                        }
+                                      }
+                                    }
+                                  }
 
                                   for (int s = 0; s < widget.tableModel.rows.length; s++) {
                                     print("$s is ${widget.tableModel.rows[s].popoverController.opened}");

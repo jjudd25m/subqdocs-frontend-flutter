@@ -14,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:subqdocs/utils/Loader.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
@@ -151,22 +153,23 @@ class PatientInfoRepository {
 
       customPrint("PDF saved to: $filePath");
       Loader().stopLoader();
+      CustomToastification().showToast("PDF download successfully!", type: ToastificationType.success);
       // Open PDF viewer
-      Navigator.push(
-        Get.context!,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: Container(
-                color: Colors.white, // Background color
-                child: child,
-              ),
-            );
-          },
-        ),
-      );
+      // Navigator.push(
+      //   Get.context!,
+      //   PageRouteBuilder(
+      //     pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //       return FadeTransition(
+      //         opacity: animation,
+      //         child: Container(
+      //           color: Colors.white, // Background color
+      //           child: child,
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // );
       // Navigator.push(
       //   Get.context!,
       //   MaterialPageRoute(theme: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white, canvasColor: Colors.white), builder: (context) => PDFScreen(path: filePath)),
@@ -193,22 +196,23 @@ class PatientInfoRepository {
 
       customPrint("PDF saved to: $filePath");
       Loader().stopLoader();
+      CustomToastification().showToast("PDF download successfully!", type: ToastificationType.success);
       // Open PDF viewer
-      Navigator.push(
-        Get.context!,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: Container(
-                color: Colors.white, // Background color
-                child: child,
-              ),
-            );
-          },
-        ),
-      );
+      // Navigator.push(
+      //   Get.context!,
+      //   PageRouteBuilder(
+      //     pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //       return FadeTransition(
+      //         opacity: animation,
+      //         child: Container(
+      //           color: Colors.white, // Background color
+      //           child: child,
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // );
       // Navigator.push(
       //   Get.context!,
       //   MaterialPageRoute(theme: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white, canvasColor: Colors.white), builder: (context) => PDFScreen(path: filePath)),
@@ -235,22 +239,24 @@ class PatientInfoRepository {
 
       customPrint("PDF saved to: $filePath");
       Loader().stopLoader();
+
+      CustomToastification().showToast("PDF download successfully!", type: ToastificationType.success);
       // Open PDF viewer
-      Navigator.push(
-        Get.context!,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: Container(
-                color: Colors.white, // Background color
-                child: child,
-              ),
-            );
-          },
-        ),
-      );
+      // Navigator.push(
+      //   Get.context!,
+      //   PageRouteBuilder(
+      //     pageBuilder: (context, animation, secondaryAnimation) => PDFScreen(path: filePath),
+      //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //       return FadeTransition(
+      //         opacity: animation,
+      //         child: Container(
+      //           color: Colors.white, // Background color
+      //           child: child,
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // );
       // Navigator.push(
       //   Get.context!,
       //   MaterialPageRoute(theme: Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white, canvasColor: Colors.white), builder: (context) => PDFScreen(path: filePath)),
@@ -361,21 +367,21 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               : Center(child: Text(errorMessage)),
         ],
       ),
-      floatingActionButton: FutureBuilder<PDFViewController>(
-        future: _controller.future,
-        builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-          if (snapshot.hasData) {
-            return FloatingActionButton.extended(
-              label: Text("Go to ${pages! ~/ 2}"),
-              onPressed: () async {
-                await snapshot.data!.setPage(pages! ~/ 2);
-              },
-            );
-          }
-
-          return Container();
-        },
-      ),
+      // floatingActionButton: FutureBuilder<PDFViewController>(
+      //   future: _controller.future,
+      //   builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
+      //     if (snapshot.hasData) {
+      //       return FloatingActionButton.extended(
+      //         label: Text("Go to ${pages! ~/ 2}"),
+      //         onPressed: () async {
+      //           await snapshot.data!.setPage(pages! ~/ 2);
+      //         },
+      //       );
+      //     }
+      //
+      //     return Container();
+      //   },
+      // ),
     );
   }
 }

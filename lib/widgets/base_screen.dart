@@ -20,7 +20,7 @@ import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
 
 class BaseScreen extends StatelessWidget {
-  BaseScreen({super.key, required this.body, required this.globalKey, this.isVisibleModel = false, this.onItemSelected, this.onPlayCallBack});
+  BaseScreen({super.key, required this.body, required this.globalKey, this.isVisibleModel = false, this.onItemSelected, this.onPlayCallBack, this.resizeToAvoidBottomInset});
 
   Widget body;
 
@@ -29,13 +29,15 @@ class BaseScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> globalKey;
   final VoidCallback? onPlayCallBack;
 
+  bool? resizeToAvoidBottomInset = true;
+
   final GlobalController globalController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       key: globalKey,
       backgroundColor: AppColors.white,
       drawer: BackdropFilter(

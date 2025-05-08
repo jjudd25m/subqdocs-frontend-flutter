@@ -57,6 +57,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      resizeToAvoidBottomInset: false,
       onItemSelected: (index) async {
         if (index == 0) {
           final result = await Get.toNamed(Routes.ADD_PATIENT);
@@ -80,20 +81,25 @@ class _PatientInfoViewState extends State<PatientInfoView> {
           onTap: () {
             print("fdgrfge");
 
-            // for (int rows = 0; rows < controller.tableModel.rows.length; rows++) {
-            //   for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
-            //     for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
-            //       for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
-            //         if (rows == row && cols == col && newItems == i && diag == subIndex) {
-            //           // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-            //           // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
-            //         } else {
-            //           widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-            //         }
-            //       }
-            //     }
-            //   }
-            // }
+            for (int s = 0; s < controller.tableModel.value!.rows.length; s++) {
+              // print("$s is ${widget.tableModel.rows[s].popoverController.opened}");
+
+              // if (row != s) {
+              controller.tableModel.value!.rows[s].popoverController.close();
+              // } else {
+              // widget.tableModel.rows[s].popoverController.close();
+              // }
+            }
+
+            for (int rows = 0; rows < controller.tableModel.value!.rows.length; rows++) {
+              for (int cols = 0; cols < controller.tableModel.value!.rows[rows].cells.length; cols++) {
+                for (int newItems = 0; newItems < controller.tableModel.value!.rows[rows].cells[cols].items.length; newItems++) {
+                  for (int diag = 0; diag < (controller.tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+                    controller.tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                  }
+                }
+              }
+            }
 
             // FocusScope.of(context).unfocus();
 

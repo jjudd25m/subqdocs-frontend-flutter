@@ -45,7 +45,7 @@ class FullNoteView extends StatelessWidget {
                       onTap: () {
                         controller.loadFullNotePDF(controller.visitId);
                       },
-                      child: SvgPicture.asset(ImagePath.share, width: 40, height: 40),
+                      child: SvgPicture.asset(ImagePath.download_pdf, width: 30, height: 30),
                     ),
                     SizedBox(width: 5),
                   ],

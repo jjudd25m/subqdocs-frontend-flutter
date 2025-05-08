@@ -75,6 +75,7 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
                 prefixIcon: SvgPicture.asset(ImagePath.search, height: 10, width: 10),
                 controller: searchController,
                 onChanged: (p0) {
+                  // FocusScope.of(context).nextFocus();
                   setState(() {
                     _filterItems(searchController.text);
                     // widget.icd10CodeList.clear();
@@ -263,7 +264,6 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
       color: AppColors.white,
       child: Container(
         height: 250,
-
         color: Colors.white,
         child: Column(
           children: [
@@ -273,11 +273,13 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
               child: TextFormFiledWidget(
                 isValid: isValid,
                 hint: "Search",
+                // isSuffixIconVisible: false,
+                // isFirst: true,
                 prefixIcon: SvgPicture.asset(ImagePath.search, height: 10, width: 10),
                 controller: searchController,
                 onChanged: (p0) {
                   setState(() {
-                    widget.icd10CodeList.clear();
+                    // widget.icd10CodeList.clear();
                   });
                   onSearch();
                   _filterItems(searchController.text);
