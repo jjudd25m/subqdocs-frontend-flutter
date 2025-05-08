@@ -1128,7 +1128,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Future<void> updateImpressionAndPlan() async {
     Map<String, List<dynamic>> params = {};
 
-    params["impressions_and_plan"] = impressionAndPlanList.map((item) => item.toJson()).toList();
+    params["impressions_and_plan"] = impressionAndPlanList..where((item) => item.title != null).map((item) => item.toJson()).toList();
 
     print(params);
 
@@ -1146,7 +1146,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Future<void> updateImpressionAndPlanFullNote() async {
     Map<String, List<dynamic>> params = {};
 
-    params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJsonFullNote()).toList();
+    params["impressions_and_plan"] = impressionAndPlanListFullNote
+        .where((item) => item.title != null)
+        .map((item) => item.toJsonFullNote())
+        .toList();
 
     print(params);
 

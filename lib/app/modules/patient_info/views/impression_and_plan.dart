@@ -80,13 +80,32 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                         applyActionWidth: false,
                         contentWidth: 350,
                         action: Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 10),
+                          padding: const EdgeInsets.only(left: 20, right: 0),
                           child: Row(
                             children: [
                               SizedBox(width: 5),
                               SvgPicture.asset(ImagePath.dragAndDrop),
                               SizedBox(width: 10),
-                              Flexible(child: Text("${index + 1}. ${model.title ?? ""}", style: AppFonts.medium(16, AppColors.textPurple))),
+
+
+                              Expanded(child: Text("${index + 1}. ${model.title ?? "Select Icd10 Code"}", style: AppFonts.medium(16, AppColors.textPurple))),
+
+                              GestureDetector(
+
+                                onTap: () {
+                                  controller.impressionAndPlanListFullNote.removeAt(index);
+                                  controller.impressionAndPlanListFullNote.refresh();
+                                  controller.updateImpressionAndPlanFullNote();
+
+
+                                },
+                                  child: Container(
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:20, right: 10),
+                                      child: SvgPicture.asset(ImagePath.delete_black),
+                                    ),
+                                  )),
                               // Drag icon
                             ],
                           ),
@@ -127,8 +146,8 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                           color: AppColors.white,
                           child: HtmlEditorViewWidget(
                             heightOfTheEditableView: 500,
-                            isBorder: true,
-                            padding: const EdgeInsets.only(left: 40, right: 10),
+                            isBorder: false,
+                            padding: const EdgeInsets.only(left: 15, right: 10),
                             impresionAndPlanViewModel: model,
                             index: index + 1,
                             onUpdateCallBack: (impressionModel, content) {
@@ -161,12 +180,12 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                 borderColor: AppColors.appbarBorder,
                 onPressed: () {
 
-                  controller.impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController() , siblingIcd10: [] , htmlContent: "<br> <br>"  , isEditing: false , siblingIcd10FullNote: [] , title: "Select Icd10 Code"));
+                  controller.impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController() , siblingIcd10: [] , htmlContent: "<br> <br>"  , isEditing: false , siblingIcd10FullNote: [] , title: null));
                   controller.impressionAndPlanListFullNote.refresh();
 
 
                 },
-                text: "Add Section +"
+                text: "+ Add Section "
 
 
             ),
