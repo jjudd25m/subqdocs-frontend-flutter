@@ -60,7 +60,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       onItemSelected: (index) async {
         if (index == 0) {
           final result = await Get.toNamed(Routes.ADD_PATIENT);
-
           _key.currentState!.closeDrawer();
         } else if (index == 1) {
           Get.offNamed(Routes.HOME, arguments: {"tabIndex": 1});
@@ -79,6 +78,25 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
+            print("fdgrfge");
+
+            // for (int rows = 0; rows < controller.tableModel.rows.length; rows++) {
+            //   for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
+            //     for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
+            //       for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+            //         if (rows == row && cols == col && newItems == i && diag == subIndex) {
+            //           // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+            //           // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
+            //         } else {
+            //           widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+            //         }
+            //       }
+            //     }
+            //   }
+            // }
+
+            // FocusScope.of(context).unfocus();
+
             controller.resetImpressionAndPlanList();
           },
           child: Column(

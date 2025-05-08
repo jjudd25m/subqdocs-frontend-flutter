@@ -263,6 +263,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
       color: AppColors.white,
       child: Container(
         height: 250,
+
         color: Colors.white,
         child: Column(
           children: [

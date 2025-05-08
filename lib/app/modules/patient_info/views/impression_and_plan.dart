@@ -1,228 +1,20 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:get/get_rx/src/rx_types/rx_types.dart';
-//
-// import '../../../../utils/app_colors.dart';
-// import '../../../../utils/app_fonts.dart';
-// import '../../../../utils/imagepath.dart';
-// import '../../visit_main/model/doctor_view_model.dart';
-//
-// class ImpressionAndPlanDoctorView extends StatelessWidget {
-//   Rxn<DoctorViewModel> doctorViewList = Rxn();
-//   ImpressionAndPlanDoctorView({super.key, required this.doctorViewList});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.symmetric(horizontal: 10),
-//       child: Container(
-//         width: double.infinity,
-//         padding: EdgeInsets.symmetric(horizontal: 0),
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-//           color: AppColors.white,
-//           border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-//         ),
-//         child: Column(children: [_headerSection(), SizedBox(height: 12), _taskListSection(), SizedBox(height: 5)]),
-//       ),
-//     );
-//   }
-//
-//   Widget _headerSection() {
-//     return Container(
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-//         color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-//         border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
-//       ),
-//       padding: EdgeInsets.symmetric(horizontal: 10),
-//       child: Column(
-//         children: [
-//           SizedBox(height: 5),
-//           Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer(), SvgPicture.asset(ImagePath.edit_outline, height: 28, width: 28)]),
-//           SizedBox(height: 5),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _taskListSection() {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 20),
-//       child: ListView(shrinkWrap: true, physics: NeverScrollableScrollPhysics(), children: [for (ImpressionsAndPlan task in doctorViewList.value?.responseData?.impressionsAndPlan ?? []) _taskSection(task)]),
-//     );
-//   }
-//
-//   Widget _taskSection(ImpressionsAndPlan task) {
-//     return Container(
-//       key: ValueKey(task),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           _taskHeader(task),
-//           _taskDescription(task),
-//           _treatmentsSection(task),
-//           _procedureSection(task),
-//           _medicationsSection(task),
-//           _ordersSection(task),
-//           _counselingSection(task),
-//           _followUpSection(task),
-//           SizedBox(height: 7),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _taskHeader(ImpressionsAndPlan task) {
-//     return Row(children: [Text("${task.number}. ${task.title} (${task.code})", style: AppFonts.medium(14, AppColors.textPurple))]);
-//   }
-//
-//   Widget _taskDescription(ImpressionsAndPlan task) {
-//     return Padding(padding: const EdgeInsets.only(left: 25), child: Text(task.description ?? "", style: AppFonts.regular(14, AppColors.black)));
-//   }
-//
-//   Widget _treatmentsSection(ImpressionsAndPlan task) {
-//     if ((task.treatments ?? []).isEmpty) return SizedBox.shrink();
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 25),
-//       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text("Treatments:", style: AppFonts.bold(15, AppColors.textBlack)), ...task.treatments!.map((treatment) => _treatmentItem(treatment)).toList()]),
-//     );
-//   }
-//
-//   Widget _treatmentItem(ImpressionsAndPlanTreatments treatment) {
-//     if (treatment.type?.isEmpty ?? true) return SizedBox.shrink();
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Row(children: [SizedBox(width: 10), Expanded(child: Text("${treatment.type} ${treatment.name}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-//         ...treatment.specifications?.map((spec) => _treatmentSpecification(spec)).toList() ?? [],
-//         ...treatment.notes?.map((note) => _treatmentNoteSection(note)).toList() ?? [],
-//         SizedBox(height: 5),
-//       ],
-//     );
-//   }
-//
-//   Widget _treatmentSpecification(String spec) {
-//     return Row(children: [SizedBox(width: 5), Expanded(child: Text("• $spec", style: AppFonts.regular(14, AppColors.black)))]);
-//   }
-//
-//   Widget _treatmentNoteSection(String note) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 15),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text("Notes:", style: AppFonts.bold(14, AppColors.black)),
-//           Row(children: [SizedBox(width: 55), Text("•", style: AppFonts.regular(14, AppColors.black)), SizedBox(width: 5), Expanded(child: Text(note, style: AppFonts.regular(14, AppColors.black)))]),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _procedureSection(ImpressionsAndPlan task) {
-//     if (task.procedure == null || (task.procedure?.details?.isEmpty ?? true)) return SizedBox.shrink();
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 25),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           if (task.procedure?.type?.isNotEmpty ?? false) Text("${task.procedure?.type}:", style: AppFonts.bold(16, AppColors.black)),
-//           if (task.procedure?.location?.isNotEmpty ?? false) _procedureLocationSection(task),
-//           ..._procedureDetailsSection(task),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _procedureLocationSection(ImpressionsAndPlan task) {
-//     return Padding(
-//       padding: const EdgeInsets.only(top: 5),
-//       child: Row(
-//         children: [
-//           Padding(padding: const EdgeInsets.only(left: 35), child: Text("• Location:", style: AppFonts.bold(14, AppColors.textBlack))),
-//           Expanded(child: Text(task.procedure?.location ?? "", style: AppFonts.regular(14, AppColors.black))),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   List<Widget> _procedureDetailsSection(ImpressionsAndPlan task) {
-//     return (task.procedure?.details ?? {}).entries
-//         .where((entry) => entry.value != null && entry.value.toString().trim().isNotEmpty)
-//         .map(
-//           (entry) => Padding(
-//             padding: const EdgeInsets.only(left: 35),
-//             child: Row(children: [Text("• ${entry.key}:", style: AppFonts.bold(14, AppColors.black)), Expanded(child: Text(" ${entry.value}", style: AppFonts.regular(14, AppColors.black)))]),
-//           ),
-//         )
-//         .toList();
-//   }
-//
-//   Widget _medicationsSection(ImpressionsAndPlan task) {
-//     if (task.medications == null || task.medications == "-" || task.medications == "") return SizedBox.shrink();
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 25),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text("Medications:", style: AppFonts.bold(15, AppColors.black)),
-//           Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.medications}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-//           SizedBox(height: 5),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _ordersSection(ImpressionsAndPlan task) {
-//     if (task.orders == null || task.orders == "-" || task.orders == "") return SizedBox.shrink();
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 25),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text("Orders:", style: AppFonts.bold(15, AppColors.black)),
-//           Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.orders}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _counselingSection(ImpressionsAndPlan task) {
-//     if (task.counselingAndDiscussion == null || task.counselingAndDiscussion == "-" || task.counselingAndDiscussion == "") return SizedBox.shrink();
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 25),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text("Counseling and Discussion:", style: AppFonts.bold(15, AppColors.black)),
-//           Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.counselingAndDiscussion}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _followUpSection(ImpressionsAndPlan task) {
-//     if (task.followUp == null || task.followUp == "-" || task.followUp == "") return SizedBox.shrink();
-//     return Padding(
-//       padding: const EdgeInsets.only(left: 25),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text("Follow Up:", style: AppFonts.bold(15, AppColors.black)),
-//           Row(children: [SizedBox(width: 25), Expanded(child: Text("${task.followUp}", style: AppFonts.regular(14, AppColors.textBlack)))]),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
+import 'package:easy_popover/easy_popover.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:subqdocs/app/modules/patient_info/views/EditableViews/CommonContainer.dart';
+import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../widgets/ContainerButton.dart';
 import '../../../core/common/html_editor_container.dart';
+import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
+import '../model/impresion_and_plan_view_model.dart';
+import 'drop_drown_search_table.dart';
 
 class ImpressionAndPlanPatientView extends StatelessWidget {
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
@@ -231,72 +23,174 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
-        color: AppColors.white,
-        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 1),
-      ),
-      child: Column(children: [_headerSection(), SizedBox(height: 12), _taskListSection(), SizedBox(height: 5)]),
-    );
+    return CommonContainer(title: "Impressions and Plan", child: _taskListSection(context));
   }
 
-  Widget _headerSection() {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-        color: AppColors.backgroundPurple.withValues(alpha: 0.2),
-        border: Border.all(color: AppColors.backgroundPurple.withValues(alpha: 0.2), width: 0.01),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          SizedBox(height: 5),
-          Row(children: [Text("Impressions and Plan", textAlign: TextAlign.center, style: AppFonts.medium(16, AppColors.textPurple)), Spacer()]),
-          SizedBox(height: 5),
-        ],
-      ),
-    );
-  }
 
-  // Widget _taskListSection() {
-  Widget _taskListSection() {
+  Widget _taskListSection(BuildContext context) {
     return Obx(() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView.builder(
-          padding: EdgeInsets.zero,
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: controller.impressionAndPlanListFullNote.length,
-          itemBuilder: (context, index) {
-            return HtmlEditorViewWidget(
-              heightOfTheEditableView: 500,
-              isBorder: true,
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              impresionAndPlanViewModel: controller.impressionAndPlanListFullNote[index],
-              onUpdateCallBack: (impressionModel, content) {
-                impressionModel.htmlContent = content;
-
-                controller.impressionAndPlanListFullNote[index] = impressionModel;
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ReorderableListView(
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              onReorder: (oldIndex, newIndex) {
+                if (newIndex > oldIndex) newIndex -= 1;
+                final item = controller.impressionAndPlanListFullNote.removeAt(oldIndex);
+                controller.impressionAndPlanListFullNote.insert(newIndex, item);
                 controller.impressionAndPlanListFullNote.refresh();
-
                 controller.updateImpressionAndPlanFullNote();
               },
-              toggleCallBack: (impressionModel) {
-                controller.resetImpressionAndPlanList();
-                impressionModel.isEditing = true;
+              children: List.generate(controller.impressionAndPlanListFullNote.length, (index) {
+                final model = controller.impressionAndPlanListFullNote[index];
+                return Padding(
+                  key: ValueKey(index),
+                  padding: EdgeInsets.only(top: 5),
+                  child: Theme(
+                    // Required for ReorderableListView
+                    data: ThemeData(splashColor: Colors.transparent, highlightColor: Colors.transparent),
+                    child: ExpansionTile(
+                      enabled: false,
+                      initiallyExpanded: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      tilePadding: const EdgeInsets.only(left: 0, right: 10),
+                      childrenPadding: EdgeInsets.all(0),
+                      collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                      shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                      backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                      showTrailingIcon: false,
+                      collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                      title:
 
-                controller.impressionAndPlanListFullNote[index] = impressionModel;
-                controller.impressionAndPlanListFullNote.refresh();
-                controller.impressionAndPlanListFullNote[index].htmlEditorController.setFocus();
-              },
-            );
-          },
-        ),
+
+                      Popover(
+                        key: UniqueKey(),
+                        context,
+                        controller:PopoverController(
+                        ),
+                        // controller: PopoverController(),
+                        borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                        scrollEnabled: true,
+                        hideArrow: true,
+                        alignment: PopoverAlignment.leftTop,
+
+                        applyActionWidth: false,
+                        contentWidth: 350,
+                        action: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 0),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 5),
+                              SvgPicture.asset(ImagePath.dragAndDrop),
+                              SizedBox(width: 10),
+
+
+                              Expanded(child: Text("${index + 1}. ${model.title ?? "Select Icd10 Code"}", style: AppFonts.medium(16, AppColors.textPurple))),
+
+                              GestureDetector(
+
+                                onTap: () {
+                                  controller.impressionAndPlanListFullNote.removeAt(index);
+                                  controller.impressionAndPlanListFullNote.refresh();
+                                  controller.updateImpressionAndPlanFullNote();
+
+
+                                },
+                                  child: Container(
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:20, right: 10),
+                                      child: SvgPicture.asset(ImagePath.delete_black),
+                                    ),
+                                  )),
+                              // Drag icon
+                            ],
+                          ),
+                        ),
+                        content: DiagnosisDropDrownSearchTable(
+
+                          items:  (model.siblingIcd10FullNote ?? []).map((e) {
+                            return ProcedurePossibleAlternatives(code: e.code, description:e.name, isPin: true);
+                          }).toList(),
+
+                          onItemSelected: (value, _) {
+
+
+                            print("called ");
+
+                            controller.impressionAndPlanListFullNote[index].title = "${value.description} (${value.code})";
+                            controller.impressionAndPlanListFullNote.refresh();
+                            controller.updateImpressionAndPlanFullNote();
+
+
+                          },controller: controller,
+                          onSearchItemSelected: (p0, p1) {
+                            controller.impressionAndPlanListFullNote[index].title = "${p1} (${p0})";
+                            controller.impressionAndPlanListFullNote.refresh();
+                            controller.updateImpressionAndPlanFullNote();
+
+
+
+                          },
+                          onInitCallBack: () {
+
+                          },
+                          tableRowIndex: -1,
+                        ),
+                      ),
+                      children: [
+                        Container(
+                          color: AppColors.white,
+                          child: HtmlEditorViewWidget(
+                            heightOfTheEditableView: 500,
+                            isBorder: false,
+                            padding: const EdgeInsets.only(left: 15, right: 10),
+                            impresionAndPlanViewModel: model,
+                            index: index + 1,
+                            onUpdateCallBack: (impressionModel, content) {
+                              impressionModel.htmlContent = content;
+                              controller.impressionAndPlanListFullNote[index] = impressionModel;
+                              controller.impressionAndPlanListFullNote.refresh();
+                              controller.updateImpressionAndPlanFullNote();
+                            },
+                            toggleCallBack: (impressionModel) {
+                              controller.resetImpressionAndPlanList();
+                              impressionModel.isEditing = true;
+                              controller.impressionAndPlanListFullNote[index] = impressionModel;
+                              controller.impressionAndPlanListFullNote.refresh();
+                              impressionModel.htmlEditorController.setFocus();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10 , vertical: 8),
+            child: ContainerButton(
+                backgroundColor: AppColors.white,
+                textColor: AppColors.black,
+                borderColor: AppColors.appbarBorder,
+                onPressed: () {
+
+                  controller.impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController() , siblingIcd10: [] , htmlContent: "<br> <br>"  , isEditing: false , siblingIcd10FullNote: [] , title: null));
+                  controller.impressionAndPlanListFullNote.refresh();
+
+
+                },
+                text: "+ Add Section "
+
+
+            ),
+          )
+        ],
       );
     });
   }

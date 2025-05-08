@@ -1785,40 +1785,53 @@ class DoctorViewResponseData {
     return data;
   }
 }
+class SiblingIcd10 {
+  String? code;
+  String? name;
 
-// class Icd10Codes {
-//   String? code;
-//   String? description;
-//
-//   Icd10Codes({this.code, this.description});
-//
-//   Icd10Codes.fromJson(Map<String, dynamic> json) {
-//     code = json['code'];
-//     description = json['description'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['code'] = this.code;
-//     data['description'] = this.description;
-//     return data;
-//   }
-// }
+  SiblingIcd10({this.code, this.name});
+
+  SiblingIcd10.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['name'] = this.name;
+    return data;
+  }
+}
 
 class ImpressionsAndPlan {
   String? title;
   String? content;
 
-  ImpressionsAndPlan({this.title, this.content});
+  List<SiblingIcd10>? siblingIcd10;
+
+  ImpressionsAndPlan({this.title, this.content , this.siblingIcd10});
 
   ImpressionsAndPlan.fromJson(Map<String, dynamic> json) {
     title = json['title'];
+
+    if (json['sibling_icd_10'] != null) {
+      siblingIcd10 = <SiblingIcd10>[];
+      json['sibling_icd_10'].forEach((v) {
+        siblingIcd10!.add(new SiblingIcd10.fromJson(v));
+      });
+    }
     content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['title'] = this.title;
+
+    if (this.siblingIcd10 != null) {
+      data['sibling_icd_10'] =
+          this.siblingIcd10!.map((v) => v.toJson()).toList();
+    }
     data['content'] = this.content;
     return data;
   }
