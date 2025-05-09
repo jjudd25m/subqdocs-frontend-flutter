@@ -5,8 +5,9 @@ class InlineEditableText extends StatefulWidget {
   final Function(String) onSubmitted;
   final Function(String) onChanged;
   final TextStyle? textStyle;
+  final FocusNode? focusNode;
 
-  const InlineEditableText({required this.initialText, required this.onSubmitted, required this.onChanged, this.textStyle, Key? key}) : super(key: key);
+  const InlineEditableText({required this.initialText, required this.onSubmitted, required this.onChanged, this.textStyle, Key? key, this.focusNode}) : super(key: key);
 
   @override
   _InlineEditableTextState createState() => _InlineEditableTextState();
@@ -22,7 +23,7 @@ class _InlineEditableTextState extends State<InlineEditableText> {
     super.initState();
     _isEditing = false;
     _controller = TextEditingController(text: widget.initialText);
-    _focusNode = FocusNode();
+    _focusNode = widget.focusNode ?? FocusNode();
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus && _isEditing) {

@@ -1,5 +1,6 @@
 // Model class representing a diagnosis with optional description, code, confidence, and alternatives
 import 'package:easy_popover/easy_popover.dart';
+import 'package:flutter/material.dart';
 
 import '../../visit_main/model/doctor_view_model.dart';
 
@@ -20,6 +21,8 @@ class SingleCellModel {
   String? code; // optional code representing the procedure
   String? unit; // optional unit related to the procedure
   String? modifiers; // optional modifiers for the procedure
+  FocusNode focusNode = FocusNode();
+  TextEditingController unitChargeTextfield = TextEditingController();
 
   List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives; // optional list of alternative procedures
 

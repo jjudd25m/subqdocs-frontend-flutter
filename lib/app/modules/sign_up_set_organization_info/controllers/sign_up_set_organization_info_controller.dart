@@ -4,7 +4,6 @@ import 'package:toastification/toastification.dart';
 
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
-import '../../../data/provider/api_provider.dart';
 import '../../../routes/app_pages.dart';
 import '../../personal_setting/model/get_user_detail_model.dart';
 import '../../personal_setting/repository/personal_setting_repository.dart';
@@ -34,7 +33,7 @@ class SignUpSetOrganizationInfoController extends GetxController {
     super.onInit();
 
     var arguments = Get.arguments;
-    signupdata = arguments['signupdatra'];
+    signupdata = arguments['signupdata'];
 
     print("signupdata is:- ${signupdata.toJson()}");
 

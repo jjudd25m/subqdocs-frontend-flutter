@@ -82,13 +82,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             print("fdgrfge");
 
             for (int s = 0; s < controller.tableModel.value!.rows.length; s++) {
-              // print("$s is ${widget.tableModel.rows[s].popoverController.opened}");
-
-              // if (row != s) {
               controller.tableModel.value!.rows[s].popoverController.close();
-              // } else {
-              // widget.tableModel.rows[s].popoverController.close();
-              // }
             }
 
             for (int rows = 0; rows < controller.tableModel.value!.rows.length; rows++) {
@@ -101,13 +95,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
               }
             }
 
-            // FocusScope.of(context).unfocus();
-
             controller.resetImpressionAndPlanList();
           },
           child: Column(
             children: [
-              CustomAppBar(drawerkey: _key),
+              if (!controller.keyboardController.isKeyboardOpen.value) ...[CustomAppBar(drawerkey: _key)],
               Expanded(
                 child: Container(
                   color: AppColors.ScreenBackGround1,
@@ -478,26 +470,106 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                   ),
                 ),
               ),
-              Container(
-                color: AppColors.ScreenBackGround1,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Container(
-                  // color: AppColors.backgroundWhite,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Obx(() {
-                    return Row(
-                      spacing: 15,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        if (controller.isSignatureDone.value) ...[
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 95,
+              if (!controller.keyboardController.isKeyboardOpen.value) ...[
+                Container(
+                  color: AppColors.ScreenBackGround1,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Container(
+                    // color: AppColors.backgroundWhite,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Obx(() {
+                      return Row(
+                        spacing: 15,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          if (controller.isSignatureDone.value) ...[
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 95,
+                                      decoration: BoxDecoration(border: Border.all(color: AppColors.backgroundPurple), color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(8)),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                textAlign: TextAlign.center,
+                                                "Digitally Signed by ${controller.patientData.value?.responseData?.doctorName}",
+                                                style: AppFonts.medium(16, AppColors.textWhite),
+                                              ),
+                                              Text(
+                                                textAlign: TextAlign.center,
+                                                formatDateTime(
+                                                  firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
+                                                  secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
+                                                ),
+                                                style: AppFonts.medium(16, AppColors.textWhite),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(textAlign: TextAlign.center, "Amend Note", style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                          if (controller.isSignatureDone.value == false) ...[
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  height: 81,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                    color: AppColors.backgroundLightGrey,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(ImagePath.add_photo, height: 30, width: 30),
+                                          SizedBox(height: 10),
+                                          Text(textAlign: TextAlign.center, "Add Photo or Document", style: AppFonts.medium(16, AppColors.textBlack)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (controller.patientData.value?.responseData?.visitStatus == "Pending") ...[
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (BuildContext context) {
+                                        return ConfirmFinalizeDialog(
+                                          onDelete: () {
+                                            controller.changeStatus();
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 81,
                                     decoration: BoxDecoration(border: Border.all(color: AppColors.backgroundPurple), color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(8)),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -507,100 +579,22 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           children: [
                                             SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
                                             SizedBox(height: 10),
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              "Digitally Signed by ${controller.patientData.value?.responseData?.doctorName}",
-                                              style: AppFonts.medium(16, AppColors.textWhite),
-                                            ),
-                                            Text(
-                                              textAlign: TextAlign.center,
-                                              formatDateTime(
-                                                firstDate: controller.patientData.value?.responseData?.visitDate ?? "",
-                                                secondDate: controller.patientData.value?.responseData?.visitTime ?? "",
-                                              ),
-                                              style: AppFonts.medium(16, AppColors.textWhite),
-                                            ),
+                                            Text(textAlign: TextAlign.center, "Sign and Finalize", style: AppFonts.medium(16, AppColors.textWhite)),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10),
-                                  Text(textAlign: TextAlign.center, "Amend Note", style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                        if (controller.isSignatureDone.value == false) ...[
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 81,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                  color: AppColors.backgroundLightGrey,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(ImagePath.add_photo, height: 30, width: 30),
-                                        SizedBox(height: 10),
-                                        Text(textAlign: TextAlign.center, "Add Photo or Document", style: AppFonts.medium(16, AppColors.textBlack)),
-                                      ],
-                                    ),
-                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                          if (controller.patientData.value?.responseData?.visitStatus == "Pending") ...[
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () async {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext context) {
-                                      return ConfirmFinalizeDialog(
-                                        onDelete: () {
-                                          controller.changeStatus();
-                                        },
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  height: 81,
-                                  decoration: BoxDecoration(border: Border.all(color: AppColors.backgroundPurple), color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(8)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
-                                          SizedBox(height: 10),
-                                          Text(textAlign: TextAlign.center, "Sign and Finalize", style: AppFonts.medium(16, AppColors.textWhite)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                            ],
                           ],
                         ],
-                      ],
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),

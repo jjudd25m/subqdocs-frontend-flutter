@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_popover/easy_popover.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 // import 'package:shadcn_ui/shadcn_ui.dart';
@@ -270,27 +271,31 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
   // Builds the content for each row, including drag-and-drop functionality for table cells.
   Widget _buildRowContent(int rowIndex) {
     return Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.intrinsicHeight,
       // Border styling for the table
       border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1),
       columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
       children: [
         TableRow(
           children: List.generate(4, (colIndex) {
-            return colIndex == 1
-                ? GestureDetector(
-                  onTap: () {
-                    print("on build row content");
-                    globalController.selectedRowIndex.value = rowIndex;
-                  },
-                  child: _buildCell(rowIndex, colIndex, isDiagnosis: true),
-                )
-                : GestureDetector(
-                  onTap: () {
-                    print("on build row content");
-                    globalController.selectedRowIndex.value = rowIndex;
-                  },
-                  child: _buildCell(rowIndex, colIndex),
-                );
+            return GestureDetector(
+              onTap: () {
+                print("on build row content");
+                if (colIndex == 2 || colIndex == 3) {
+                  TableCellModel cell = widget.tableModel.rows[rowIndex].cells[colIndex];
+                  if (cell.items.isNotEmpty && !cell.items[0].focusNode.hasFocus) {
+                    cell.items[0].focusNode.requestFocus();
+                  }
+                }
+                globalController.selectedRowIndex.value = rowIndex;
+                if (colIndex == 0) {
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    widget.tableModel.rows[rowIndex].popoverController.open();
+                  });
+                }
+              },
+              child: _buildCell(rowIndex, colIndex, isDiagnosis: colIndex == 1),
+            );
           }),
         ),
       ],
@@ -302,824 +307,836 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
     return DragTarget<String>(
       builder: (context, candidateData, rejectedData) {
-        return GestureDetector(
-          onTap: () => globalController.selectedRowIndex.value = row,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(8),
-            constraints: const BoxConstraints(minHeight: 100),
-            decoration: const BoxDecoration(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(items.length, (i) {
-                final GlobalKey _procedureGestureKey = GlobalKey();
-                final Orientation orientation = MediaQuery.of(context).orientation;
-                final bool isPortrait = orientation == Orientation.portrait;
-                final bool isIPad = Platform.isIOS && MediaQuery.of(context).size.shortestSide >= 600;
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(8),
+          constraints: const BoxConstraints(minHeight: 100),
+          decoration: const BoxDecoration(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(items.length, (i) {
+              final GlobalKey _procedureGestureKey = GlobalKey();
+              final Orientation orientation = MediaQuery.of(context).orientation;
+              final bool isPortrait = orientation == Orientation.portrait;
+              final bool isIPad = Platform.isIOS && MediaQuery.of(context).size.shortestSide >= 600;
 
-                // items[i].popoverController = PopoverController();
+              // items[i].popoverController = PopoverController();
 
-                // widget.tableModel.rows[row].popoverController.onOpen = () {
-                //   print("open");
-                //
-                //   // WidgetsBinding.instance.addPostFrameCallback((_) {
-                //   //   // Ensure that this state change only happens once the frame is fully rendered
-                //   //   Future.delayed(Duration(milliseconds: 300), () {
-                //   //     globalController.selectedRowIndex.value = row;
-                //   //   });
-                //   // });
-                //
-                //   // WidgetsBinding.instance.addPostFrameCallback((_) {
-                //   //   globalController.selectedRowIndex.value = row;
-                //   // });
-                // };
-                //
-                // widget.tableModel.rows[row].popoverController.onClose = () {
-                //   print("closed");
-                // };
+              // widget.tableModel.rows[row].popoverController.onOpen = () {
+              //   print("open");
+              //
+              //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   //   // Ensure that this state change only happens once the frame is fully rendered
+              //   //   Future.delayed(Duration(milliseconds: 300), () {
+              //   //     globalController.selectedRowIndex.value = row;
+              //   //   });
+              //   // });
+              //
+              //   // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   //   globalController.selectedRowIndex.value = row;
+              //   // });
+              // };
+              //
+              // widget.tableModel.rows[row].popoverController.onClose = () {
+              //   print("closed");
+              // };
 
-                return GestureDetector(
-                  onTap: () {
-                    globalController.selectedRowIndex.value = row;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child:
-                        (col == 2)
-                            ? GestureDetector(
-                              onTap: () {
-                                // setState(() {
-                                globalController.selectedRowIndex.value = row;
-                                // });
-                              },
-                              child: Container(
-                                width: double.maxFinite,
-                                height: 100,
-                                padding: EdgeInsets.all(8),
-                                child: InlineEditableText(
-                                  onChanged: (p0) {
-                                    print("unit..");
-                                    widget.tableModel.rows[row].cells[col].items[i].unit = p0;
-                                    items[i].unit = p0;
-                                    calculateTotal();
-                                  },
-                                  initialText: "${items[i].unit}",
-                                  textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                                  onSubmitted: (newText) {
-                                    print("unit..");
-                                    items[i].unit = newText;
-                                    calculateTotal();
-                                  },
-                                ),
-                              ),
-                            )
-                            : (col == 3)
-                            ? GestureDetector(
-                              onTap: () {
-                                globalController.selectedRowIndex.value = row;
-                              },
-                              child: Container(
-                                width: double.maxFinite,
-                                height: 100,
-                                padding: EdgeInsets.all(8.0),
-                                child: InlineEditableText(
-                                  onChanged: (p0) {
-                                    print("unit price..");
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child:
+                    (col == 2)
+                        ? Container(
+                          width: double.maxFinite,
+                          // height: double.maxFinite,
+                          // color: AppColors.redText,
+                          padding: EdgeInsets.all(8),
+                          child: InlineEditableText(
+                            focusNode: widget.tableModel.rows[row].cells[col].items[i].focusNode,
+                            onChanged: (p0) {
+                              print("unit..");
+                              widget.tableModel.rows[row].cells[col].items[i].unit = p0;
+                              items[i].unit = p0;
+                              calculateTotal();
+                            },
+                            initialText: "${items[i].unit}",
+                            textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                            onSubmitted: (newText) {
+                              print("unit..");
+                              items[i].unit = newText;
+                              calculateTotal();
+                            },
+                          ),
+                        )
+                        : (col == 3)
+                        ? Container(
+                          // color: AppColors.redText,
+                          width: double.maxFinite,
+                          height: 100,
+                          padding: EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            // Show numeric keyboard
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly, // First filter to digits only
+                              CurrencyInputFormatter(), // Then apply our custom formatter
+                            ],
+                            // controller: widget.tableModel.rows[row].cells[col].items[i].unitChargeTextfield,
+                            initialValue: "${widget.tableModel.rows[row].cells[col].items[i].unitPrice}",
+                            decoration: InputDecoration(border: InputBorder.none),
+                            focusNode: widget.tableModel.rows[row].cells[col].items[i].focusNode,
+                            onChanged: (value) {
+                              String updatedText = value;
 
-                                    String updatedText = p0;
+                              // If the input doesn't start with "$", prepend "$"
+                              if (!updatedText.startsWith('\$')) {
+                                updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
+                              }
 
-                                    // If the input doesn't start with "$", prepend "$"
-                                    if (!updatedText.startsWith('\$')) {
-                                      updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
-                                    }
+                              setState(() {
+                                widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
+                                items[i].unitPrice = updatedText;
+                              });
 
-                                    setState(() {
-                                      widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
-                                      items[i].unitPrice = updatedText;
-                                    });
+                              // widget.tableModel.rows[row].cells[col].items[i].unitChargeTextfield.text = updatedText;
 
-                                    print("onChanged updated unit price.. ${items[i].unitPrice}");
+                              print("onChanged updated unit price.. ${items[i].unitPrice}");
 
-                                    calculateTotal();
-                                  },
-                                  initialText: "${widget.tableModel.rows[row].cells[col].items[i].unitPrice}",
-                                  textStyle: AppFonts.regular(14, AppColors.textGreyTable),
-                                  onSubmitted: (newText) {
-                                    String updatedText = newText;
-
-                                    // If the input doesn't start with "$", prepend "$"
-                                    if (!updatedText.startsWith('\$')) {
-                                      updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
-                                    }
-
-                                    setState(() {
-                                      widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
-                                      items[i].unitPrice = updatedText;
-                                    });
-
-                                    print("onSubmitted updated unit price.. ${items[i].unitPrice}");
-
-                                    calculateTotal();
-                                  },
-                                ),
-                              ),
-                            )
-                            : isDiagnosis
-                            ? DragTarget<Map<String, dynamic>>(
-                              builder: (context, candidateData, rejectedData) {
-                                bool isEmptyItems = items[i].diagnosisModelList?.isNotEmpty ?? false;
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: isEmptyItems ? MainAxisAlignment.end : MainAxisAlignment.start,
-                                  children: [
-                                    if (isEmptyItems)
-                                      Container(
-                                        margin: EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: candidateData.isNotEmpty ? Colors.transparent : Colors.transparent, width: 2),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        width: double.maxFinite,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: List.generate(
-                                            items[i].diagnosisModelList?.length ?? 0,
-                                            (subIndex) => LongPressDraggable<Map<String, int>>(
-                                              data: {'row': row, 'col': col, 'itemIndex': i, 'subIndex': subIndex},
-                                              feedback: IntrinsicHeight(
-                                                child: IntrinsicWidth(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
-                                                    padding: const EdgeInsets.all(6.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Popover(
-                                                            key: UniqueKey(),
-                                                            this.context,
-                                                            controller: widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController,
-                                                            // controller: PopoverController(),
-                                                            borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                                                            scrollEnabled: true,
-                                                            hideArrow: true,
-                                                            applyActionWidth: true,
-                                                            contentWidth: 270,
-                                                            action: RichText(
-                                                              text: TextSpan(
-                                                                children: [
-                                                                  TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                                                  TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            content: DiagnosisDropDrownSearchTable(
-                                                              items:
-                                                                  (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                      .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
-                                                                      .toList(),
-                                                              onItemSelected: (value, index) {
-                                                                // Navigator.pop(context);
-
-                                                                if (value.description != "No data found") {
-                                                                  print("called diagnosis");
-
-                                                                  setState(() {
-                                                                    String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
-                                                                    String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
-                                                                    items[i].diagnosisModelList?[subIndex].code = value.code;
-                                                                    items[i].diagnosisModelList?[subIndex].description = value.description;
-
-                                                                    items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
-                                                                    items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
-
-                                                                    calculateTotal();
-                                                                  });
-                                                                }
-                                                              },
-                                                              controller: widget.controller,
-                                                              onSearchItemSelected: (p0, p1) {
-                                                                // Navigator.pop(context);
-                                                                setState(() {
-                                                                  items[i].diagnosisModelList?[subIndex].code = p0;
-                                                                  items[i].diagnosisModelList?[subIndex].description = p1;
-                                                                  calculateTotal();
-                                                                });
-                                                              },
-                                                              onInitCallBack: () {
-                                                                // FocusScope.of(context).unfocus();
-
-                                                                for (int s = 0; s < widget.tableModel.rows.length; s++) {
-                                                                  widget.tableModel.rows[s].popoverController.close();
-                                                                }
-
-                                                                for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
-                                                                  for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
-                                                                    for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
-                                                                      for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
-                                                                        if (rows == row && cols == col && newItems == i && diag == subIndex) {
-                                                                          // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-                                                                          // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
-                                                                        } else {
-                                                                          widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-
-                                                                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                //   // Ensure that this state change only happens once the frame is fully rendered
-                                                                //   globalController.selectedRowIndex.value = row;
-                                                                //
-                                                                //   Future.delayed(Duration(milliseconds: 100), () {
-                                                                //     widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.open();
-                                                                //   });
-                                                                // });
-                                                              },
-                                                              tableRowIndex: row,
-                                                            ),
+                              calculateTotal();
+                            },
+                          ),
+                          // child: InlineEditableText(
+                          //   focusNode: widget.tableModel.rows[row].cells[col].items[i].focusNode,
+                          //   onChanged: (p0) {
+                          //     print("unit price..");
+                          //
+                          //     String updatedText = p0;
+                          //
+                          //     // If the input doesn't start with "$", prepend "$"
+                          //     if (!updatedText.startsWith('\$')) {
+                          //       updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
+                          //     }
+                          //
+                          //     setState(() {
+                          //       widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
+                          //       items[i].unitPrice = updatedText;
+                          //     });
+                          //
+                          //     print("onChanged updated unit price.. ${items[i].unitPrice}");
+                          //
+                          //     calculateTotal();
+                          //   },
+                          //   initialText: "${widget.tableModel.rows[row].cells[col].items[i].unitPrice}",
+                          //   textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+                          //   onSubmitted: (newText) {
+                          //     String updatedText = newText;
+                          //
+                          //     // If the input doesn't start with "$", prepend "$"
+                          //     if (!updatedText.startsWith('\$')) {
+                          //       updatedText = '\$${updatedText.replaceAll('\$', '')}'; // Remove any existing "$" and add it back
+                          //     }
+                          //
+                          //     setState(() {
+                          //       widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
+                          //       items[i].unitPrice = updatedText;
+                          //     });
+                          //
+                          //     print("onSubmitted updated unit price.. ${items[i].unitPrice}");
+                          //
+                          //     calculateTotal();
+                          //   },
+                          // ),
+                        )
+                        : isDiagnosis
+                        ? DragTarget<Map<String, dynamic>>(
+                          builder: (context, candidateData, rejectedData) {
+                            bool isEmptyItems = items[i].diagnosisModelList?.isNotEmpty ?? false;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: isEmptyItems ? MainAxisAlignment.end : MainAxisAlignment.start,
+                              children: [
+                                if (isEmptyItems)
+                                  Container(
+                                    margin: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: candidateData.isNotEmpty ? Colors.transparent : Colors.transparent, width: 2),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    width: double.maxFinite,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: List.generate(
+                                        items[i].diagnosisModelList?.length ?? 0,
+                                        (subIndex) => LongPressDraggable<Map<String, int>>(
+                                          data: {'row': row, 'col': col, 'itemIndex': i, 'subIndex': subIndex},
+                                          feedback: IntrinsicHeight(
+                                            child: IntrinsicWidth(
+                                              child: Container(
+                                                decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
+                                                padding: const EdgeInsets.all(6.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Popover(
+                                                        key: UniqueKey(),
+                                                        this.context,
+                                                        controller: widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController,
+                                                        // controller: PopoverController(),
+                                                        borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                                                        scrollEnabled: true,
+                                                        hideArrow: true,
+                                                        applyActionWidth: true,
+                                                        contentWidth: 270,
+                                                        action: RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                              TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                            ],
                                                           ),
-                                                          // GestureDetector(
-                                                          //   onTap: () {
-                                                          //     setState(() {
-                                                          //       selectedRowIndex = row;
-                                                          //     });
-                                                          //
-                                                          //     showPopover(
-                                                          //       barrierColor: Colors.transparent,
-                                                          //       bodyBuilder:
-                                                          //           (context) => DiagnosisDropDrownSearchTable(
-                                                          //             items:
-                                                          //                 (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                          //                     .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
-                                                          //                     .toList(),
-                                                          //             onItemSelected: (value, index) {
-                                                          //               // Navigator.pop(context);
-                                                          //
-                                                          //               if (value.description != "No data found") {
-                                                          //                 print("called diagnosis");
-                                                          //
-                                                          //                 setState(() {
-                                                          //                   String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
-                                                          //                   String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
-                                                          //                   items[i].diagnosisModelList?[subIndex].code = value.code;
-                                                          //                   items[i].diagnosisModelList?[subIndex].description = value.description;
-                                                          //
-                                                          //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
-                                                          //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
-                                                          //
-                                                          //                   calculateTotal();
-                                                          //                 });
-                                                          //               }
-                                                          //             },
-                                                          //             controller: widget.controller,
-                                                          //             onSearchItemSelected: (p0, p1) {
-                                                          //               // Navigator.pop(context);
-                                                          //               setState(() {
-                                                          //                 items[i].diagnosisModelList?[subIndex].code = p0;
-                                                          //                 items[i].diagnosisModelList?[subIndex].description = p1;
-                                                          //                 calculateTotal();
-                                                          //               });
-                                                          //             },
-                                                          //           ),
-                                                          //       onPop: () => print('Popover was popped!'),
-                                                          //       direction: PopoverDirection.bottom,
-                                                          //       width: 350,
-                                                          //       barrierDismissible: true,
-                                                          //       arrowHeight: 0,
-                                                          //       arrowWidth: 0,
-                                                          //       context: context,
-                                                          //     );
-                                                          //   },
-                                                          //   child: RichText(
-                                                          //     text: TextSpan(
-                                                          //       children: [
-                                                          //         TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                                          //         TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                          //       ],
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
                                                         ),
-                                                        SizedBox(width: 10),
-                                                        GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
-                                                        SizedBox(width: 3),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            _deleteItem(row, col, i, subIndex);
+                                                        content: DiagnosisDropDrownSearchTable(
+                                                          items:
+                                                              (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
+                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
+                                                                  .toList(),
+                                                          onItemSelected: (value, index) {
+                                                            // Navigator.pop(context);
 
-                                                            Future.delayed(const Duration(milliseconds: 500), () {
+                                                            if (value.description != "No data found") {
+                                                              print("called diagnosis");
+
+                                                              setState(() {
+                                                                String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
+                                                                String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
+                                                                items[i].diagnosisModelList?[subIndex].code = value.code;
+                                                                items[i].diagnosisModelList?[subIndex].description = value.description;
+
+                                                                items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
+                                                                items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
+
+                                                                calculateTotal();
+                                                              });
+                                                            }
+                                                          },
+                                                          controller: widget.controller,
+                                                          onSearchItemSelected: (p0, p1) {
+                                                            // Navigator.pop(context);
+                                                            setState(() {
+                                                              items[i].diagnosisModelList?[subIndex].code = p0;
+                                                              items[i].diagnosisModelList?[subIndex].description = p1;
                                                               calculateTotal();
                                                             });
                                                           },
-                                                          child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                                          onInitCallBack: () {
+                                                            // FocusScope.of(context).unfocus();
+
+                                                            for (int s = 0; s < widget.tableModel.rows.length; s++) {
+                                                              widget.tableModel.rows[s].popoverController.close();
+                                                            }
+
+                                                            for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
+                                                              for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
+                                                                for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
+                                                                  for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+                                                                    if (rows == row && cols == col && newItems == i && diag == subIndex) {
+                                                                      // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                                                      // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
+                                                                    } else {
+                                                                      widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+
+                                                            // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                            //   // Ensure that this state change only happens once the frame is fully rendered
+                                                            //   globalController.selectedRowIndex.value = row;
+                                                            //
+                                                            //   Future.delayed(Duration(milliseconds: 100), () {
+                                                            //     widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.open();
+                                                            //   });
+                                                            // });
+                                                          },
+                                                          tableRowIndex: row,
                                                         ),
-                                                      ],
+                                                      ),
+                                                      // GestureDetector(
+                                                      //   onTap: () {
+                                                      //     setState(() {
+                                                      //       selectedRowIndex = row;
+                                                      //     });
+                                                      //
+                                                      //     showPopover(
+                                                      //       barrierColor: Colors.transparent,
+                                                      //       bodyBuilder:
+                                                      //           (context) => DiagnosisDropDrownSearchTable(
+                                                      //             items:
+                                                      //                 (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
+                                                      //                     .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
+                                                      //                     .toList(),
+                                                      //             onItemSelected: (value, index) {
+                                                      //               // Navigator.pop(context);
+                                                      //
+                                                      //               if (value.description != "No data found") {
+                                                      //                 print("called diagnosis");
+                                                      //
+                                                      //                 setState(() {
+                                                      //                   String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
+                                                      //                   String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
+                                                      //                   items[i].diagnosisModelList?[subIndex].code = value.code;
+                                                      //                   items[i].diagnosisModelList?[subIndex].description = value.description;
+                                                      //
+                                                      //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
+                                                      //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
+                                                      //
+                                                      //                   calculateTotal();
+                                                      //                 });
+                                                      //               }
+                                                      //             },
+                                                      //             controller: widget.controller,
+                                                      //             onSearchItemSelected: (p0, p1) {
+                                                      //               // Navigator.pop(context);
+                                                      //               setState(() {
+                                                      //                 items[i].diagnosisModelList?[subIndex].code = p0;
+                                                      //                 items[i].diagnosisModelList?[subIndex].description = p1;
+                                                      //                 calculateTotal();
+                                                      //               });
+                                                      //             },
+                                                      //           ),
+                                                      //       onPop: () => print('Popover was popped!'),
+                                                      //       direction: PopoverDirection.bottom,
+                                                      //       width: 350,
+                                                      //       barrierDismissible: true,
+                                                      //       arrowHeight: 0,
+                                                      //       arrowWidth: 0,
+                                                      //       context: context,
+                                                      //     );
+                                                      //   },
+                                                      //   child: RichText(
+                                                      //     text: TextSpan(
+                                                      //       children: [
+                                                      //         TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                      //         TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                      //       ],
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
                                                     ),
-                                                  ),
+                                                    SizedBox(width: 10),
+                                                    GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)),
+                                                    SizedBox(width: 3),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        _deleteItem(row, col, i, subIndex);
+
+                                                        Future.delayed(const Duration(milliseconds: 500), () {
+                                                          calculateTotal();
+                                                        });
+                                                      },
+                                                      child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                              childWhenDragging: Container(),
-                                              onDragEnd: (details) {
-                                                print("isDiagnosis onDragEnd");
-                                              },
-                                              onDragStarted: () {
-                                                print("isDiagnosis onDragStarted");
-
-                                                setState(() {
-                                                  draggedRowIndex = row;
-                                                  draggedColumnIndex = col;
-                                                  draggedDiagnosisIndex = subIndex;
-                                                  isDragging = true;
-                                                });
-                                              },
-                                              onDragCompleted: () {
-                                                print("isDiagnosis onDragCompleted");
-                                                setState(() {
-                                                  isDragging = false;
-                                                });
-                                              },
-                                              child: DragTarget<Map<String, int>>(
-                                                onWillAcceptWithDetails: (data) => true,
-                                                onAccept: (data) {
-                                                  int oldfromRow = data['row']!;
-                                                  int oldfromCol = data['col']!;
-                                                  int olditemIndex = data['itemIndex']!;
-                                                  int oldsubIndex = data['subIndex']!;
-
-                                                  print("drag val is:- ${data}");
-                                                  print("drop val row is:- $row col is:- $col i is:- $i subIndex is:- $subIndex ");
-
-                                                  setState(() {
-                                                    if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
-                                                      DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-                                                      DiagnosisModel newDiagnosis = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList![subIndex];
-
-                                                      widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex] = oldDiagnosis;
-                                                      widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex] = newDiagnosis;
-                                                    } else {
-                                                      DiagnosisModel diagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-                                                      widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.insert(subIndex, diagnosis);
-                                                      widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                                    }
-                                                  });
-
-                                                  Future.delayed(const Duration(milliseconds: 500), () {
-                                                    calculateTotal();
-                                                  });
-                                                },
-                                                builder: (context, candidateData, __) {
-                                                  return Container(
-                                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                      color: candidateData.isNotEmpty ? Colors.blue.withOpacity(0.1) : AppColors.tableItem,
-                                                      borderRadius: BorderRadius.circular(6),
-                                                    ),
-                                                    padding: const EdgeInsets.all(6.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Popover(
-                                                            key: UniqueKey(),
-                                                            this.context,
-                                                            controller: widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController,
-                                                            // controller: PopoverController(),
-                                                            borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                                                            scrollEnabled: true,
-                                                            hideArrow: true,
-                                                            applyActionWidth: true,
-                                                            contentWidth: 270,
-                                                            action: RichText(
-                                                              text: TextSpan(
-                                                                children: [
-                                                                  TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                                                  TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            content: DiagnosisDropDrownSearchTable(
-                                                              items:
-                                                                  (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                                      .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
-                                                                      .toList(),
-                                                              onItemSelected: (value, index) {
-                                                                // Navigator.pop(context);
-
-                                                                if (value.description != "No data found") {
-                                                                  print("called diagnosis");
-
-                                                                  setState(() {
-                                                                    String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
-                                                                    String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
-
-                                                                    items[i].diagnosisModelList?[subIndex].code = value.code;
-                                                                    items[i].diagnosisModelList?[subIndex].description = value.description;
-
-                                                                    items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
-                                                                    items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
-
-                                                                    calculateTotal();
-                                                                  });
-                                                                }
-                                                              },
-                                                              controller: widget.controller,
-                                                              onSearchItemSelected: (p0, p1) {
-                                                                // Navigator.pop(context);
-                                                                setState(() {
-                                                                  items[i].diagnosisModelList?[subIndex].code = p0;
-                                                                  items[i].diagnosisModelList?[subIndex].description = p1;
-                                                                  calculateTotal();
-                                                                });
-                                                              },
-                                                              onInitCallBack: () {
-                                                                // FocusScope.of(context).unfocus();
-
-                                                                for (int s = 0; s < widget.tableModel.rows.length; s++) {
-                                                                  widget.tableModel.rows[s].popoverController.close();
-                                                                }
-
-                                                                for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
-                                                                  for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
-                                                                    for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
-                                                                      for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
-                                                                        if (rows == row && cols == col && newItems == i && diag == subIndex) {
-                                                                          // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-
-                                                                          // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
-                                                                        } else {
-                                                                          widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-
-                                                                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                //   // Ensure that this state change only happens once the frame is fully rendered
-                                                                //   globalController.selectedRowIndex.value = row;
-                                                                //
-                                                                //   Future.delayed(Duration(milliseconds: 100), () {
-                                                                //     widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.open();
-                                                                //   });
-                                                                // });
-                                                              },
-                                                              tableRowIndex: row,
-                                                            ),
-                                                          ),
-
-                                                          // GestureDetector(
-                                                          //   onTap: () {
-                                                          //     setState(() {
-                                                          //       selectedRowIndex = row;
-                                                          //     });
-                                                          //
-                                                          //     showPopover(
-                                                          //       context: context,
-                                                          //       barrierColor: Colors.transparent,
-                                                          //       bodyBuilder:
-                                                          //           (context) => DiagnosisDropDrownSearchTable(
-                                                          //             items:
-                                                          //                 (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
-                                                          //                     .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
-                                                          //                     .toList(),
-                                                          //             onItemSelected: (value, index) {
-                                                          //               // Navigator.pop(context);
-                                                          //
-                                                          //               if (value.description != "No data found") {
-                                                          //                 print("called diagnosis");
-                                                          //
-                                                          //                 setState(() {
-                                                          //                   String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
-                                                          //                   String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
-                                                          //
-                                                          //                   items[i].diagnosisModelList?[subIndex].code = value.code;
-                                                          //                   items[i].diagnosisModelList?[subIndex].description = value.description;
-                                                          //
-                                                          //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
-                                                          //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
-                                                          //
-                                                          //                   calculateTotal();
-                                                          //                 });
-                                                          //               }
-                                                          //             },
-                                                          //             controller: widget.controller,
-                                                          //             onSearchItemSelected: (p0, p1) {
-                                                          //               // Navigator.pop(context);
-                                                          //               setState(() {
-                                                          //                 items[i].diagnosisModelList?[subIndex].code = p0;
-                                                          //                 items[i].diagnosisModelList?[subIndex].description = p1;
-                                                          //                 calculateTotal();
-                                                          //               });
-                                                          //             },
-                                                          //           ),
-                                                          //       onPop: () => print('Popover was popped!'),
-                                                          //       direction: PopoverDirection.bottom,
-                                                          //       width: 350,
-                                                          //       barrierDismissible: true,
-                                                          //       arrowHeight: 0,
-                                                          //       arrowWidth: 0,
-                                                          //     );
-                                                          //   },
-                                                          //   child: RichText(
-                                                          //     text: TextSpan(
-                                                          //       children: [
-                                                          //         TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                                          //         TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                          //       ],
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
-                                                        ),
-                                                        SizedBox(width: 10),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            _deleteItem(row, col, i, subIndex);
-
-                                                            Future.delayed(const Duration(milliseconds: 500), () {
-                                                              calculateTotal();
-                                                            });
-                                                          },
-                                                          child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    SizedBox(height: isEmptyItems ? 10 : 40),
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            _addItemAtIndex(row, col, i);
+                                          childWhenDragging: Container(),
+                                          onDragEnd: (details) {
+                                            print("isDiagnosis onDragEnd");
                                           },
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(vertical: 5),
-                                                  decoration: BoxDecoration(border: Border.all(color: Colors.black.withValues(alpha: 0.1), width: 1.5), borderRadius: BorderRadius.circular(6)),
-                                                  // height: 40,
-                                                  child: SvgPicture.asset(ImagePath.diagnosis_plus, width: 25, height: 25),
-                                                ),
+                                          onDragStarted: () {
+                                            print("isDiagnosis onDragStarted");
 
-                                                // CustomAnimatedButton(
-                                                //   height: 40,
-                                                //   text: "+",
-                                                //   fontSize: 30,
-                                                //   enabledColor: AppColors.orange,
-                                                //   enabledTextColor: AppColors.orangeText,
-                                                //   onPressed: () {
-                                                //     _addItemAtIndex(row, col, i);
-                                                //   },
-                                                // ),
-                                              ),
-                                            ],
+                                            setState(() {
+                                              draggedRowIndex = row;
+                                              draggedColumnIndex = col;
+                                              draggedDiagnosisIndex = subIndex;
+                                              isDragging = true;
+                                            });
+                                          },
+                                          onDragCompleted: () {
+                                            print("isDiagnosis onDragCompleted");
+                                            setState(() {
+                                              isDragging = false;
+                                            });
+                                          },
+                                          child: DragTarget<Map<String, int>>(
+                                            onWillAcceptWithDetails: (data) => true,
+                                            onAccept: (data) {
+                                              int oldfromRow = data['row']!;
+                                              int oldfromCol = data['col']!;
+                                              int olditemIndex = data['itemIndex']!;
+                                              int oldsubIndex = data['subIndex']!;
+
+                                              print("drag val is:- ${data}");
+                                              print("drop val row is:- $row col is:- $col i is:- $i subIndex is:- $subIndex ");
+
+                                              setState(() {
+                                                if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
+                                                  DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+                                                  DiagnosisModel newDiagnosis = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList![subIndex];
+
+                                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex] = oldDiagnosis;
+                                                  widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex] = newDiagnosis;
+                                                } else {
+                                                  DiagnosisModel diagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
+                                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.insert(subIndex, diagnosis);
+                                                  widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                                }
+                                              });
+
+                                              Future.delayed(const Duration(milliseconds: 500), () {
+                                                calculateTotal();
+                                              });
+                                            },
+                                            builder: (context, candidateData, __) {
+                                              return Container(
+                                                margin: EdgeInsets.symmetric(vertical: 5),
+                                                decoration: BoxDecoration(color: candidateData.isNotEmpty ? Colors.blue.withOpacity(0.1) : AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
+                                                padding: const EdgeInsets.all(6.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Popover(
+                                                        key: UniqueKey(),
+                                                        this.context,
+                                                        controller: widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController,
+                                                        // controller: PopoverController(),
+                                                        borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                                                        scrollEnabled: true,
+                                                        hideArrow: true,
+                                                        applyActionWidth: true,
+                                                        contentWidth: 270,
+                                                        action: RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                              TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        content: DiagnosisDropDrownSearchTable(
+                                                          items:
+                                                              (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
+                                                                  .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
+                                                                  .toList(),
+                                                          onItemSelected: (value, index) {
+                                                            // Navigator.pop(context);
+
+                                                            if (value.description != "No data found") {
+                                                              print("called diagnosis");
+
+                                                              setState(() {
+                                                                String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
+                                                                String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
+
+                                                                items[i].diagnosisModelList?[subIndex].code = value.code;
+                                                                items[i].diagnosisModelList?[subIndex].description = value.description;
+
+                                                                items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
+                                                                items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
+
+                                                                calculateTotal();
+                                                              });
+                                                            }
+                                                          },
+                                                          controller: widget.controller,
+                                                          onSearchItemSelected: (p0, p1) {
+                                                            // Navigator.pop(context);
+                                                            setState(() {
+                                                              items[i].diagnosisModelList?[subIndex].code = p0;
+                                                              items[i].diagnosisModelList?[subIndex].description = p1;
+                                                              calculateTotal();
+                                                            });
+                                                          },
+                                                          onInitCallBack: () {
+                                                            // FocusScope.of(context).unfocus();
+
+                                                            for (int s = 0; s < widget.tableModel.rows.length; s++) {
+                                                              widget.tableModel.rows[s].popoverController.close();
+                                                            }
+
+                                                            for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
+                                                              for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
+                                                                for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
+                                                                  for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+                                                                    if (rows == row && cols == col && newItems == i && diag == subIndex) {
+                                                                      // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+
+                                                                      // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
+                                                                    } else {
+                                                                      widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+
+                                                            // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                            //   // Ensure that this state change only happens once the frame is fully rendered
+                                                            //   globalController.selectedRowIndex.value = row;
+                                                            //
+                                                            //   Future.delayed(Duration(milliseconds: 100), () {
+                                                            //     widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.open();
+                                                            //   });
+                                                            // });
+                                                          },
+                                                          tableRowIndex: row,
+                                                        ),
+                                                      ),
+
+                                                      // GestureDetector(
+                                                      //   onTap: () {
+                                                      //     setState(() {
+                                                      //       selectedRowIndex = row;
+                                                      //     });
+                                                      //
+                                                      //     showPopover(
+                                                      //       context: context,
+                                                      //       barrierColor: Colors.transparent,
+                                                      //       bodyBuilder:
+                                                      //           (context) => DiagnosisDropDrownSearchTable(
+                                                      //             items:
+                                                      //                 (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
+                                                      //                     .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
+                                                      //                     .toList(),
+                                                      //             onItemSelected: (value, index) {
+                                                      //               // Navigator.pop(context);
+                                                      //
+                                                      //               if (value.description != "No data found") {
+                                                      //                 print("called diagnosis");
+                                                      //
+                                                      //                 setState(() {
+                                                      //                   String localCode = items[i].diagnosisModelList?[subIndex].code ?? "";
+                                                      //                   String localDescription = items[i].diagnosisModelList?[subIndex].description ?? "";
+                                                      //
+                                                      //                   items[i].diagnosisModelList?[subIndex].code = value.code;
+                                                      //                   items[i].diagnosisModelList?[subIndex].description = value.description;
+                                                      //
+                                                      //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].code = localCode;
+                                                      //                   items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives?[index].description = localDescription;
+                                                      //
+                                                      //                   calculateTotal();
+                                                      //                 });
+                                                      //               }
+                                                      //             },
+                                                      //             controller: widget.controller,
+                                                      //             onSearchItemSelected: (p0, p1) {
+                                                      //               // Navigator.pop(context);
+                                                      //               setState(() {
+                                                      //                 items[i].diagnosisModelList?[subIndex].code = p0;
+                                                      //                 items[i].diagnosisModelList?[subIndex].description = p1;
+                                                      //                 calculateTotal();
+                                                      //               });
+                                                      //             },
+                                                      //           ),
+                                                      //       onPop: () => print('Popover was popped!'),
+                                                      //       direction: PopoverDirection.bottom,
+                                                      //       width: 350,
+                                                      //       barrierDismissible: true,
+                                                      //       arrowHeight: 0,
+                                                      //       arrowWidth: 0,
+                                                      //     );
+                                                      //   },
+                                                      //   child: RichText(
+                                                      //     text: TextSpan(
+                                                      //       children: [
+                                                      //         TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                      //         TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                      //       ],
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        _deleteItem(row, col, i, subIndex);
+
+                                                        Future.delayed(const Duration(milliseconds: 500), () {
+                                                          calculateTotal();
+                                                        });
+                                                      },
+                                                      child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                );
-                              },
-                              onWillAcceptWithDetails: (data) => true,
-                              onAccept: (data) {
-                                int oldfromRow = data['row']!;
-                                int oldfromCol = data['col']!;
-                                int olditemIndex = data['itemIndex']!;
-                                int oldsubIndex = data['subIndex']!;
+                                  ),
+                                SizedBox(height: isEmptyItems ? 10 : 40),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _addItemAtIndex(row, col, i);
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(vertical: 5),
+                                              decoration: BoxDecoration(border: Border.all(color: Colors.black.withValues(alpha: 0.1), width: 1.5), borderRadius: BorderRadius.circular(6)),
+                                              // height: 40,
+                                              child: SvgPicture.asset(ImagePath.diagnosis_plus, width: 25, height: 25),
+                                            ),
 
-                                print("outer drag val is:- ${data}");
-                                print("outer drop val row is:- $row col is:- $col i is:- $i");
-
-                                setState(() {
-                                  if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
-                                    DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-
-                                    widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                    widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
-                                  } else {
-                                    DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
-
-                                    widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
-                                    widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
-                                  }
-                                });
-
-                                calculateTotal();
-                              },
-                            )
-                            : col == 0
-                            ?
-                            // ShadPopover(
-                            //       controller: popoverController,
-                            //       popover:
-                            //           (_) => DropDrownSearchTable(
-                            //             items: items[i].procedurePossibleAlternatives ?? [],
-                            //             onItemSelected: (value, index) {
-                            //               // Navigator.pop(context);
-                            //
-                            //               setState(() {
-                            //                 print("is procedure changes");
-                            //
-                            //                 String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
-                            //                 String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
-                            //
-                            //                 widget.tableModel.rows[row].cells[col].items[i].code = value.code;
-                            //                 widget.tableModel.rows[row].cells[col].items[i].description = value.description;
-                            //
-                            //                 widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
-                            //                 widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
-                            //
-                            //                 calculateTotal();
-                            //                 // tableModel.rows[row].cells[col].items[index] = value;
-                            //               });
-                            //             },
-                            //           ),
-                            //       child: Padding(
-                            //         padding: const EdgeInsets.symmetric(horizontal: 5),
-                            //         child: RichText(
-                            //           text: TextSpan(
-                            //             children: [
-                            //               (items[i].modifiers != "" && items[i].modifiers != null)
-                            //                   ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
-                            //                   : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                            //               TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     )
-                            Popover(
-                              key: UniqueKey(),
-                              this.context,
-                              controller: widget.tableModel.rows[row].popoverController,
-                              // controller: PopoverController(),
-                              borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                              scrollEnabled: true,
-                              hideArrow: true,
-                              applyActionWidth: true,
-                              contentWidth: 270,
-                              action: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      (items[i].modifiers != "" && items[i].modifiers != null)
-                                          ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
-                                          : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                      TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                    ],
+                                            // CustomAnimatedButton(
+                                            //   height: 40,
+                                            //   text: "+",
+                                            //   fontSize: 30,
+                                            //   enabledColor: AppColors.orange,
+                                            //   enabledTextColor: AppColors.orangeText,
+                                            //   onPressed: () {
+                                            //     _addItemAtIndex(row, col, i);
+                                            //   },
+                                            // ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              content: DropDrownSearchTable(
-                                items: items[i].procedurePossibleAlternatives ?? [],
-                                onItemSelected: (value, index) {
-                                  // Navigator.pop(context);
-                                  setState(() {
-                                    print("is procedure changes");
+                              ],
+                            );
+                          },
+                          onWillAcceptWithDetails: (data) => true,
+                          onAccept: (data) {
+                            int oldfromRow = data['row']!;
+                            int oldfromCol = data['col']!;
+                            int olditemIndex = data['itemIndex']!;
+                            int oldsubIndex = data['subIndex']!;
 
-                                    String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
-                                    String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
+                            print("outer drag val is:- ${data}");
+                            print("outer drop val row is:- $row col is:- $col i is:- $i");
 
-                                    widget.tableModel.rows[row].cells[col].items[i].code = value.code;
-                                    widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+                            setState(() {
+                              if (oldfromRow == row && oldfromCol == col && olditemIndex == i) {
+                                DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
 
-                                    widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
-                                    widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
+                                widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
+                              } else {
+                                DiagnosisModel oldDiagnosis = widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList![oldsubIndex];
 
-                                    calculateTotal();
-                                    // tableModel.rows[row].cells[col].items[index] = value;
-                                  });
-                                },
-                                onInitCallBack: () {
-                                  print("row $row col $col i $i");
+                                widget.tableModel.rows[oldfromRow].cells[oldfromCol].items[olditemIndex].diagnosisModelList?.removeAt(oldsubIndex);
+                                widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.add(oldDiagnosis);
+                              }
+                            });
 
-                                  // FocusScope.of(context).unfocus();
-
-                                  for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
-                                    for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
-                                      for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
-                                        for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
-                                          // if (rows == row && cols == col && newItems == i && diag == subIndex) {
-                                          //   // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-                                          //   // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
-                                          // } else {
-                                          widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
-                                          // }
-                                        }
-                                      }
-                                    }
-                                  }
-
-                                  for (int s = 0; s < widget.tableModel.rows.length; s++) {
-                                    print("$s is ${widget.tableModel.rows[s].popoverController.opened}");
-
-                                    if (row != s) {
-                                      widget.tableModel.rows[s].popoverController.close();
-                                    } else {
-                                      // widget.tableModel.rows[s].popoverController.close();
-                                    }
-                                  }
-
-                                  // globalController.selectedRowIndex.value = row;
-                                  //
-                                  // setState(() {
-                                  //   widget.tableModel.rows[row].popoverController.open();
-                                  // });
-                                  // WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  //   // Ensure that this state change only happens once the frame is fully rendered
-                                  //   Future.delayed(Duration(milliseconds: 500), () {
-                                  //
-                                  //   });
-                                  // });
-
-                                  print("onInitCallBack");
-                                },
-                                tableRowIndex: row,
-                              ),
-                            )
-                            // GestureDetector(
-                            //       key: _procedureGestureKey,
-                            //       onTap: () {
-                            //         final RenderBox? renderBox = _procedureGestureKey.currentContext?.findRenderObject() as RenderBox?;
-                            //         final position = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
-                            //         final size = renderBox?.size ?? Size.zero;
-                            //
-                            //         setState(() {
-                            //           selectedRowIndex = row;
-                            //         });
-                            //
-                            //         print("position is :- ${position}");
-                            //
-                            //         showPopover(
-                            //           context: _procedureGestureKey.currentContext!,
-                            //
-                            //           barrierColor: Colors.transparent,
-                            //           bodyBuilder:
-                            //               (context) => DropDrownSearchTable(
-                            //                 items: items[i].procedurePossibleAlternatives ?? [],
-                            //                 onItemSelected: (value, index) {
-                            //                   Navigator.pop(context);
-                            //                   setState(() {
-                            //                     print("is procedure changes");
-                            //
-                            //                     String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
-                            //                     String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
-                            //
-                            //                     widget.tableModel.rows[row].cells[col].items[i].code = value.code;
-                            //                     widget.tableModel.rows[row].cells[col].items[i].description = value.description;
-                            //
-                            //                     widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
-                            //                     widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
-                            //
-                            //                     calculateTotal();
-                            //                     // tableModel.rows[row].cells[col].items[index] = value;
-                            //                   });
-                            //                 },
-                            //               ),
-                            //           onPop: () => print('Popover was popped!'),
-                            //           direction: PopoverDirection.bottom,
-                            //           width: 190,
-                            //           barrierDismissible: true,
-                            //           arrowHeight: isPortrait ? 60 : 40,
-                            //           arrowDyOffset: isPortrait ? -50 : -30,
-                            //           arrowWidth: 0,
-                            //         );
-                            //       },
-                            //       child: Padding(
-                            //         padding: const EdgeInsets.symmetric(horizontal: 5),
-                            //         child: RichText(
-                            //           text: TextSpan(
-                            //             children: [
-                            //               (items[i].modifiers != "" && items[i].modifiers != null)
-                            //                   ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
-                            //                   : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                            //               TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     )
-                            : RichText(
+                            calculateTotal();
+                          },
+                        )
+                        : col == 0
+                        ?
+                        // ShadPopover(
+                        //       controller: popoverController,
+                        //       popover:
+                        //           (_) => DropDrownSearchTable(
+                        //             items: items[i].procedurePossibleAlternatives ?? [],
+                        //             onItemSelected: (value, index) {
+                        //               // Navigator.pop(context);
+                        //
+                        //               setState(() {
+                        //                 print("is procedure changes");
+                        //
+                        //                 String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
+                        //                 String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
+                        //
+                        //                 widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                        //                 widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+                        //
+                        //                 widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
+                        //                 widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
+                        //
+                        //                 calculateTotal();
+                        //                 // tableModel.rows[row].cells[col].items[index] = value;
+                        //               });
+                        //             },
+                        //           ),
+                        //       child: Padding(
+                        //         padding: const EdgeInsets.symmetric(horizontal: 5),
+                        //         child: RichText(
+                        //           text: TextSpan(
+                        //             children: [
+                        //               (items[i].modifiers != "" && items[i].modifiers != null)
+                        //                   ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
+                        //                   : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                        //               TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     )
+                        Popover(
+                          key: UniqueKey(),
+                          this.context,
+                          controller: widget.tableModel.rows[row].popoverController,
+                          // controller: PopoverController(),
+                          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                          scrollEnabled: true,
+                          hideArrow: true,
+                          applyActionWidth: true,
+                          contentWidth: 270,
+                          action: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: RichText(
                               text: TextSpan(
                                 children: [
-                                  TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
-                                  TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                  (items[i].modifiers != "" && items[i].modifiers != null)
+                                      ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
+                                      : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                  TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
                                 ],
                               ),
                             ),
-                  ),
-                );
-              }),
-            ),
+                          ),
+                          content: DropDrownSearchTable(
+                            items: items[i].procedurePossibleAlternatives ?? [],
+                            onItemSelected: (value, index) {
+                              // Navigator.pop(context);
+                              setState(() {
+                                print("is procedure changes");
+
+                                String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
+                                String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
+
+                                widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                                widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+
+                                widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
+                                widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
+
+                                calculateTotal();
+                                // tableModel.rows[row].cells[col].items[index] = value;
+                              });
+                            },
+                            onInitCallBack: () {
+                              print("row $row col $col i $i");
+
+                              // FocusScope.of(context).unfocus();
+
+                              for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
+                                for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {
+                                  for (int newItems = 0; newItems < widget.tableModel.rows[rows].cells[cols].items.length; newItems++) {
+                                    for (int diag = 0; diag < (widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+                                      // if (rows == row && cols == col && newItems == i && diag == subIndex) {
+                                      //   // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                      //   // widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList[diag].popoverController.close();
+                                      // } else {
+                                      widget.tableModel.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+                                      // }
+                                    }
+                                  }
+                                }
+                              }
+
+                              for (int s = 0; s < widget.tableModel.rows.length; s++) {
+                                print("$s is ${widget.tableModel.rows[s].popoverController.opened}");
+
+                                if (row != s) {
+                                  widget.tableModel.rows[s].popoverController.close();
+                                } else {
+                                  // widget.tableModel.rows[s].popoverController.close();
+                                }
+                              }
+
+                              // globalController.selectedRowIndex.value = row;
+                              //
+                              // setState(() {
+                              //   widget.tableModel.rows[row].popoverController.open();
+                              // });
+                              // WidgetsBinding.instance.addPostFrameCallback((_) {
+                              //   // Ensure that this state change only happens once the frame is fully rendered
+                              //   Future.delayed(Duration(milliseconds: 500), () {
+                              //
+                              //   });
+                              // });
+
+                              print("onInitCallBack");
+                            },
+                            tableRowIndex: row,
+                          ),
+                        )
+                        // GestureDetector(
+                        //       key: _procedureGestureKey,
+                        //       onTap: () {
+                        //         final RenderBox? renderBox = _procedureGestureKey.currentContext?.findRenderObject() as RenderBox?;
+                        //         final position = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+                        //         final size = renderBox?.size ?? Size.zero;
+                        //
+                        //         setState(() {
+                        //           selectedRowIndex = row;
+                        //         });
+                        //
+                        //         print("position is :- ${position}");
+                        //
+                        //         showPopover(
+                        //           context: _procedureGestureKey.currentContext!,
+                        //
+                        //           barrierColor: Colors.transparent,
+                        //           bodyBuilder:
+                        //               (context) => DropDrownSearchTable(
+                        //                 items: items[i].procedurePossibleAlternatives ?? [],
+                        //                 onItemSelected: (value, index) {
+                        //                   Navigator.pop(context);
+                        //                   setState(() {
+                        //                     print("is procedure changes");
+                        //
+                        //                     String localCode = widget.tableModel.rows[row].cells[col].items[i].code ?? "";
+                        //                     String localDescription = widget.tableModel.rows[row].cells[col].items[i].description ?? "";
+                        //
+                        //                     widget.tableModel.rows[row].cells[col].items[i].code = value.code;
+                        //                     widget.tableModel.rows[row].cells[col].items[i].description = value.description;
+                        //
+                        //                     widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].code = localCode;
+                        //                     widget.tableModel.rows[row].cells[col].items[i].procedurePossibleAlternatives?[index].description = localDescription;
+                        //
+                        //                     calculateTotal();
+                        //                     // tableModel.rows[row].cells[col].items[index] = value;
+                        //                   });
+                        //                 },
+                        //               ),
+                        //           onPop: () => print('Popover was popped!'),
+                        //           direction: PopoverDirection.bottom,
+                        //           width: 190,
+                        //           barrierDismissible: true,
+                        //           arrowHeight: isPortrait ? 60 : 40,
+                        //           arrowDyOffset: isPortrait ? -50 : -30,
+                        //           arrowWidth: 0,
+                        //         );
+                        //       },
+                        //       child: Padding(
+                        //         padding: const EdgeInsets.symmetric(horizontal: 5),
+                        //         child: RichText(
+                        //           text: TextSpan(
+                        //             children: [
+                        //               (items[i].modifiers != "" && items[i].modifiers != null)
+                        //                   ? TextSpan(text: " ${items[i].code} (${items[i].modifiers}) ", style: AppFonts.semiBold(14, AppColors.black))
+                        //                   : TextSpan(text: " ${items[i].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                        //               TextSpan(text: ' ${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     )
+                        : RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(text: "${items[i].code}", style: AppFonts.semiBold(14, AppColors.black)),
+                              TextSpan(text: '${items[i].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                            ],
+                          ),
+                        ),
+              );
+            }),
           ),
         );
       },
@@ -1193,14 +1210,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: GestureDetector(
-                                    child: RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                          TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                        ],
-                                      ),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                        TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -1454,5 +1469,78 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
     List<Map<String, dynamic>> possibleAlternatives = const [],
   }) {
     return {"code": code, "description": description, "icd_10_code": icd10, "confidence_score": confidenceScore, "possible_alternatives": possibleAlternatives};
+  }
+
+  Widget _buildEditableTextField(int row, int col, int i) {
+    return Focus(
+      onFocusChange: (hasFocus) {
+        if (hasFocus) globalController.selectedRowIndex.value = row;
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.text,
+        child: InlineEditableText(
+          // expands: true,  // Critical for expansion
+          // maxLines: null, // Allows multiline
+          // minLines: 1,    // Minimum 1 line
+          // textAlignVertical: TextAlignVertical.center,
+          // decoration: InputDecoration(
+          //   isDense: true,
+          //   border: InputBorder.none,
+          //   contentPadding: EdgeInsets.zero,
+          // ),
+          onChanged: (p0) {
+            if (col == 2) {
+              widget.tableModel.rows[row].cells[col].items[i].unit = p0;
+              // items[i].unit = p0;
+            } else {
+              String updatedText = p0.startsWith(r'$') ? p0 : r'$' + p0.replaceAll(r'$', '');
+              widget.tableModel.rows[row].cells[col].items[i].unitPrice = updatedText;
+              // items[i].unitPrice = updatedText;
+            }
+            calculateTotal();
+          },
+          initialText: "dsfdsf",
+          textStyle: AppFonts.regular(14, AppColors.textGreyTable),
+          onSubmitted: (String) {},
+        ),
+      ),
+    );
+  }
+}
+
+class CurrencyInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    // If the new value is empty, just return with the dollar sign
+    if (newValue.text.isEmpty) {
+      return const TextEditingValue(text: '\$', selection: TextSelection.collapsed(offset: 1));
+    }
+
+    // Remove all non-digit characters
+    String newText = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    // If the new text is empty after removing non-digits, return just the dollar sign
+    if (newText.isEmpty) {
+      return newValue;
+      // return const TextEditingValue(text: '\$', selection: TextSelection.collapsed(offset: 1));
+    }
+
+    // Add the dollar sign prefix
+    if (!newText.startsWith("\$")) {
+      newText = '\$$newText';
+    }
+
+    // Handle cursor position
+    int selectionIndex = newValue.selection.end;
+    // Adjust for removed characters
+    int offset = newText.length - newValue.text.length;
+    selectionIndex += offset;
+
+    // Ensure cursor doesn't go before the dollar sign
+    if (selectionIndex < 1) {
+      selectionIndex = 1;
+    }
+
+    return TextEditingValue(text: newText, selection: TextSelection.collapsed(offset: selectionIndex));
   }
 }
