@@ -15,26 +15,20 @@ class InlineEditableText extends StatefulWidget {
 class _InlineEditableTextState extends State<InlineEditableText> {
   late bool _isEditing;
   late TextEditingController _controller;
-  late FocusNode _focusNode;
+
 
   @override
   void initState() {
     super.initState();
     _isEditing = false;
     _controller = TextEditingController(text: widget.initialText);
-    _focusNode = FocusNode();
 
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus && _isEditing) {
-        _submitEdit();
-      }
-    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _focusNode.dispose();
+
     super.dispose();
   }
 
@@ -42,9 +36,8 @@ class _InlineEditableTextState extends State<InlineEditableText> {
     setState(() {
       _isEditing = true;
     });
-    Future.delayed(Duration(milliseconds: 100), () {
-      FocusScope.of(context).requestFocus(_focusNode);
-    });
+    widget.onChanged("");
+
   }
 
   void _submitEdit() {
@@ -62,13 +55,17 @@ class _InlineEditableTextState extends State<InlineEditableText> {
         ? SizedBox(
           width: textStyle.fontSize! * _controller.text.length * 0.6 + 20,
           child: TextField(
+            onTap: () {
+              widget.onChanged("");
+            },
             onChanged: (value) {
               widget.onChanged(value);
             },
             controller: _controller,
-            focusNode: _focusNode,
+
             autofocus: true,
             style: textStyle,
+            maxLines: 2,
             cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
             decoration: const InputDecoration(
               isDense: true,

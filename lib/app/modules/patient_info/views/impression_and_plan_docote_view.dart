@@ -44,6 +44,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                 final item = controller.impressionAndPlanList.removeAt(oldIndex);
                 controller.impressionAndPlanList.insert(newIndex, item);
                 controller.impressionAndPlanList.refresh();
+
                 controller.updateImpressionAndPlan();
               },
               children: List.generate(controller.impressionAndPlanList.length, (index) {

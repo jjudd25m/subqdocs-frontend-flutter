@@ -1133,14 +1133,22 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Future<void> updateImpressionAndPlan() async {
     Map<String, List<dynamic>> params = {};
 
-    params["impressions_and_plan"] = impressionAndPlanList..where((item) => item.title != null).map((item) => item.toJson()).toList();
-
+    params["impressions_and_plan"] = impressionAndPlanList
+        .map((item) => item.toJson())
+        .where((map) => map.isNotEmpty)
+        .toList();
     print(params);
+    try{
+      var response = await _patientInfoRepository.updateImpressionAndPlan(id: doctorViewList.value?.responseData?.id ?? 0, params: params);
 
-    var response = await _patientInfoRepository.updateImpressionAndPlan(id: doctorViewList.value?.responseData?.id ?? 0, params: params);
+    }catch(e){
+      print(e);
+
+    }
 
     // setImpressionAndPlanList();
     // setDoctorModel();
+
     //
     // await getPatientDetails();
     //
@@ -1151,14 +1159,25 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Future<void> updateImpressionAndPlanFullNote() async {
     Map<String, List<dynamic>> params = {};
 
+
+
     params["impressions_and_plan"] = impressionAndPlanListFullNote
-        .where((item) => item.title != null)
         .map((item) => item.toJsonFullNote())
+        .where((map) => map.isNotEmpty)
         .toList();
 
     print(params);
 
-    var response = await _patientInfoRepository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
+
+
+
+    try{
+      var response = await _patientInfoRepository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
+
+    }catch(e){
+      print(e);
+
+    }
   }
 
   Future<void> updateFullNote(String keyName, List<ImpresionAndPlanViewModel> list) async {
