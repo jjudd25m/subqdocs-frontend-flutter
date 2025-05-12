@@ -17,6 +17,7 @@ class SignUpSetPasswordController extends GetxController {
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController betaCodeController = TextEditingController();
 
   final SignupRepository _signupRepository = SignupRepository();
 
@@ -25,7 +26,8 @@ class SignUpSetPasswordController extends GetxController {
   String firstName = '';
   String lastName = '';
   String email = '';
-  String beta_code = '';
+
+  // String beta_code = '';
 
   @override
   void onInit() {
@@ -35,7 +37,7 @@ class SignUpSetPasswordController extends GetxController {
     firstName = arguments['first_name'];
     lastName = arguments['last_name'];
     email = arguments['email'];
-    beta_code = arguments['beta_code'];
+    // beta_code = arguments['beta_code'];
   }
 
   void changePasswordVisible() {
@@ -82,7 +84,7 @@ class SignUpSetPasswordController extends GetxController {
     param["last_name"] = lastName.trim();
     param["email"] = email.trim();
     param["password"] = confirmPasswordController.text.trim();
-    param["betaTesterCode"] = beta_code;
+    param["betaTesterCode"] = betaCodeController.text.trim();
 
     try {
       SignUpModel signUpModel = await _signupRepository.registerUser(param: param);

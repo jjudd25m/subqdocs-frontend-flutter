@@ -1,34 +1,22 @@
-import 'dart:ui';
 import 'package:awesome_side_sheet/Enums/sheet_position.dart';
 import 'package:awesome_side_sheet/side_sheet.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:subqdocs/app/modules/home/views/home_past_visits_list.dart';
 import 'package:subqdocs/app/modules/home/views/home_schedule_list_view.dart';
 import 'package:subqdocs/app/modules/home/views/past_patient_list_filter_bottom_sheet.dart';
-import 'package:subqdocs/app/modules/home/views/patient_list_filter_bottom_sheet.dart';
 import 'package:subqdocs/app/modules/home/views/schedule_list_filter_bottom_sheet.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widget/appbar.dart';
-import 'package:subqdocs/widgets/ContainerButton.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
-import '../../../../utils/imagepath.dart';
-import '../../../../utils/validation_service.dart';
+
 import '../../../../widget/bredcums.dart';
 import '../../../../widgets/custom_animated_button.dart';
-import '../../../../widgets/custom_textfiled.dart';
-import '../../../core/common/common_service.dart';
-import '../../../core/common/html_editor_container.dart';
-import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/views/custom_drawer_view.dart';
+import '../../patient_info/views/drop_drown_search_table.dart';
 import '../controllers/home_controller.dart';
 import 'home_patient_list_view.dart';
 
@@ -264,36 +252,69 @@ class HomeView extends GetView<HomeController> {
                                                 ),
                                               ],
                                               SizedBox(width: 10),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                                  // color: AppColors.backgroundWhite,
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(ImagePath.search, height: 25, width: 25),
-                                                    SizedBox(width: 10),
-                                                    SizedBox(
-                                                      width: 130,
-                                                      child: TextFormField(
-                                                        controller: controller.searchController,
-                                                        onChanged: (value) {
-                                                          controller.globalController.tabIndex.value == 0
-                                                              ? controller.getPatientList()
-                                                              : controller.globalController.tabIndex.value == 1
-                                                              ? controller.getScheduleVisitList()
-                                                              : controller.getPastVisitList();
-                                                        },
-                                                        maxLines: 1, //or null
+                                              SizedBox(
+                                                height: 42,
+                                                width: 180,
+                                                child: HomeCustomSearchBar(
+                                                  controller: controller.searchController,
+                                                  hintText: 'Search',
+                                                  onChanged: (text) {
+                                                    controller.globalController.tabIndex.value == 0
+                                                        ? controller.getPatientList()
+                                                        : controller.globalController.tabIndex.value == 1
+                                                        ? controller.getScheduleVisitList()
+                                                        : controller.getPastVisitList();
 
-                                                        decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                    // print('Search text changed: $text');
+                                                    // onSearch();
+                                                    // _filterItems(searchController.text);
+                                                  },
+                                                  onSubmit: (text) {
+                                                    print('Submitted search: $text');
+
+                                                    // setState(() {
+                                                    //   widget.icd10CodeList.clear();
+                                                    //   searchController.clear();
+                                                    //   isValid = false;
+                                                    // });
+                                                    // _filterItems(searchController.text);
+                                                    // page = 1;
+                                                    // onSearch();
+                                                    // Perform search operation here
+                                                  },
                                                 ),
                                               ),
+                                              SizedBox(width: 10),
+                                              // Container(
+                                              //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                              //   decoration: BoxDecoration(
+                                              //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                              //     // color: AppColors.backgroundWhite,
+                                              //     borderRadius: BorderRadius.circular(8),
+                                              //   ),
+                                              //   child: Row(
+                                              //     children: [
+                                              //       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
+                                              //       SizedBox(width: 10),
+                                              //       SizedBox(
+                                              //         width: 130,
+                                              //         child: TextFormField(
+                                              //           controller: controller.searchController,
+                                              //           onChanged: (value) {
+                                              //             controller.globalController.tabIndex.value == 0
+                                              //                 ? controller.getPatientList()
+                                              //                 : controller.globalController.tabIndex.value == 1
+                                              //                 ? controller.getScheduleVisitList()
+                                              //                 : controller.getPastVisitList();
+                                              //           },
+                                              //           maxLines: 1, //or null
+                                              //
+                                              //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+                                              //         ),
+                                              //       ),
+                                              //     ],
+                                              //   ),
+                                              // ),
                                               SizedBox(width: 10),
                                               Container(
                                                 width: 140,

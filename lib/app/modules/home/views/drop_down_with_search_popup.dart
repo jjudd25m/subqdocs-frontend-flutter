@@ -251,11 +251,10 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
   String fullVisitRecapformatDate({required String firstDate}) {
     if (firstDate != "") {
       // Parse the first and second arguments to DateTime objects
-      DateTime firstDateTime = DateTime.parse(firstDate);
+      DateTime firstDateTime = DateTime.parse(firstDate).toLocal();
 
       // Format the first date (for month/day/year format)
       String formattedDate = DateFormat('MM/dd hh:mm a').format(firstDateTime);
-
       // Return the formatted string in the desired format
       return formattedDate;
     } else {

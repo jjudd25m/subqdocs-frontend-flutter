@@ -285,7 +285,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                               // isImportant: true,
                                               isSuffixIconVisible: false,
                                               isFirst: true,
-                                              format: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))],
+                                              format: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')), LengthLimitingTextInputFormatter(15)],
                                               controller: controller.patientId,
                                               hint: "123",
                                               onTap: () {
@@ -655,11 +655,30 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                       child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
                                                                     ),
                                                                     const SizedBox(width: 10),
-                                                                    Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
+                                                                    Expanded(
+                                                                      child: Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack), maxLines: 2, overflow: TextOverflow.ellipsis),
+                                                                    ),
                                                                   ],
                                                                 ),
                                                               ),
                                                             ),
+
+                                                            // SizedBox(
+                                                            //   width: 225,
+                                                            //   child: Padding(
+                                                            //     padding: const EdgeInsets.all(8.0),
+                                                            //     child: Row(
+                                                            //       children: [
+                                                            //         ClipRRect(
+                                                            //           borderRadius: BorderRadius.circular(14),
+                                                            //           child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
+                                                            //         ),
+                                                            //         const SizedBox(width: 10),
+                                                            //         Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
+                                                            //       ],
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
                                                           ),
                                                       ],
                                                   child: IgnorePointer(
@@ -697,13 +716,36 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   itemBuilder:
                                                       (context) => [
                                                         for (var item in controller.globalController.selectedMedicalModel)
+                                                          // PopupMenuItem(
+                                                          //   padding: EdgeInsets.zero,
+                                                          //   onTap: () async {
+                                                          //     controller.selectedMedicalAssistantController.text = item.name ?? "";
+                                                          //     controller.selectedMedicalValue.value = item.name;
+                                                          //   },
+                                                          //   // value: "",
+                                                          //   child: SizedBox(
+                                                          //     width: 225,
+                                                          //     child: Padding(
+                                                          //       padding: const EdgeInsets.all(8.0),
+                                                          //       child: Row(
+                                                          //         children: [
+                                                          //           ClipRRect(
+                                                          //             borderRadius: BorderRadius.circular(14),
+                                                          //             child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
+                                                          //           ),
+                                                          //           const SizedBox(width: 10),
+                                                          //           Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
+                                                          //         ],
+                                                          //       ),
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
                                                           PopupMenuItem(
                                                             padding: EdgeInsets.zero,
                                                             onTap: () async {
                                                               controller.selectedMedicalAssistantController.text = item.name ?? "";
                                                               controller.selectedMedicalValue.value = item.name;
                                                             },
-                                                            // value: "",
                                                             child: SizedBox(
                                                               width: 225,
                                                               child: Padding(
@@ -715,7 +757,9 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                       child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
                                                                     ),
                                                                     const SizedBox(width: 10),
-                                                                    Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
+                                                                    Expanded(
+                                                                      child: Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack), maxLines: 2, overflow: TextOverflow.ellipsis),
+                                                                    ),
                                                                   ],
                                                                 ),
                                                               ),

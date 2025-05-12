@@ -14,6 +14,7 @@ import '../app/core/common/common_service.dart';
 import '../app/core/common/global_controller.dart';
 import '../app/core/common/logger.dart';
 import '../app/modules/custom_drawer/views/custom_drawer_view.dart';
+import '../app/modules/personal_setting/controllers/personal_setting_controller.dart';
 import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -74,6 +75,10 @@ class BaseScreen extends StatelessWidget {
                 // });
                 globalKey.currentState!.closeDrawer();
               } else {
+                if (!Get.isRegistered<PersonalSettingController>()) {
+                  Get.put(PersonalSettingController());
+                }
+
                 Get.toNamed(Routes.PERSONAL_SETTING);
 
                 globalController.breadcrumbHistory.clear();

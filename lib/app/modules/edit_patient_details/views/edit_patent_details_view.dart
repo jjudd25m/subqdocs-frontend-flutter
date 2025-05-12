@@ -215,7 +215,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         isValid: true,
                                         isSuffixIconVisible: false,
                                         isFirst: true,
-                                        format: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))],
+                                        format: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')), LengthLimitingTextInputFormatter(15)],
                                         controller: controller.patientIdController,
                                         hint: "123",
                                         onTap: () {

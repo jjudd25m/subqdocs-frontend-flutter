@@ -107,6 +107,9 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                   child: RefreshIndicator(
                     onRefresh: controller.onRefresh, // Trigger the refresh
                     child: SingleChildScrollView(
+                      // padding: EdgeInsets.only(
+                      //   bottom: MediaQuery.of(context).viewInsets.bottom, // Account for keyboard
+                      // ),
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -5,9 +5,12 @@ import 'package:subqdocs/app/modules/sign_up/repository/signup_repository.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../widgets/custom_toastification.dart';
+import '../../beta_tester_code/repository/beta_tester_code_repository.dart';
 
 class SignUpController extends GetxController {
   //TODO: Implement SignUpController
+
+  final BetaTesterCodeRepository betaTesterCodeRepository = BetaTesterCodeRepository();
 
   RxBool isTermsCondition = RxBool(true);
   RxBool passwordVisible = RxBool(true);
@@ -29,7 +32,7 @@ class SignUpController extends GetxController {
     super.onInit();
 
     var arguments = Get.arguments;
-    beta_code = arguments['beta_code'];
+    // beta_code = arguments['beta_code'];
   }
 
   void increment() => count.value++;
@@ -76,5 +79,13 @@ class SignUpController extends GetxController {
   Future<CheckNewUserModel> checkIsNewUser({required String email}) async {
     CheckNewUserModel checkNewUserModel = await _signupRepository.checkIsNewUser(email: email);
     return checkNewUserModel;
+  }
+
+  Future<bool> joinWishlist() async {
+    dynamic res = await betaTesterCodeRepository.joinWishlist(email: emailController.text);
+    CustomToastification().showToast("Verification send to email address.", type: ToastificationType.success);
+    // CustomToastification().showToast(res['message'] ?? "", type: ToastificationType.success);
+    return true;
+    // Get.back();
   }
 }

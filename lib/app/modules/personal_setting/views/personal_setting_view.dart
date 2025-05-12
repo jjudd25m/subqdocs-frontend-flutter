@@ -20,9 +20,6 @@ import '../../../core/common/app_preferences.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../routes/app_pages.dart';
-import '../../home/model/home_past_patient_list_sorting_model.dart';
-import '../../home/model/home_patient_list_sorting_model.dart';
-import '../../home/model/home_schedule_list_sorting_model.dart';
 import '../../patient_profile/widgets/common_patient_data.dart';
 import '../controllers/personal_setting_controller.dart';
 import '../model/get_user_detail_model.dart';
@@ -191,99 +188,182 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                             ),
                                                             child: Column(
                                                               children: [
-                                                                Row(
-                                                                  children: [
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        controller.showImagePickerDialog(context, true);
-                                                                      },
-                                                                      child: Obx(() {
-                                                                        return ClipRRect(
-                                                                          borderRadius: BorderRadius.circular(100),
-                                                                          child:
-                                                                              controller.getUserDetailModel.value?.responseData?.profileImage != null
-                                                                                  ? CachedNetworkImage(
-                                                                                    imageUrl: controller.getUserDetailModel.value?.responseData?.profileImage ?? "",
-                                                                                    width: 60,
-                                                                                    height: 60,
-                                                                                    fit: BoxFit.cover,
-                                                                                  )
-                                                                                  : controller.userProfileImage.value?.path != null
-                                                                                  ? RoundedImageFileWidget(size: 60, imagePath: controller.userProfileImage.value)
-                                                                                  : BaseImageView(
-                                                                                    imageUrl: "",
-                                                                                    width: 60,
-                                                                                    height: 60,
-                                                                                    fontSize: 14,
-                                                                                    nameLetters:
-                                                                                        "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                                                                                  ),
-                                                                        );
-                                                                      }),
-                                                                    ),
-                                                                    SizedBox(width: 10),
-                                                                    Column(
-                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                      children: [
-                                                                        Text(
-                                                                          textAlign: TextAlign.center,
+                                                                // Row(
+                                                                //   children: [
+                                                                //     GestureDetector(
+                                                                //       onTap: () {
+                                                                //         controller.showImagePickerDialog(context, true);
+                                                                //       },
+                                                                //       child: Obx(() {
+                                                                //         return ClipRRect(
+                                                                //           borderRadius: BorderRadius.circular(100),
+                                                                //           child:
+                                                                //               controller.getUserDetailModel.value?.responseData?.profileImage != null
+                                                                //                   ? CachedNetworkImage(
+                                                                //                     imageUrl: controller.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                                                //                     width: 60,
+                                                                //                     height: 60,
+                                                                //                     fit: BoxFit.cover,
+                                                                //                   )
+                                                                //                   : controller.userProfileImage.value?.path != null
+                                                                //                   ? RoundedImageFileWidget(size: 60, imagePath: controller.userProfileImage.value)
+                                                                //                   : BaseImageView(
+                                                                //                     imageUrl: "",
+                                                                //                     width: 60,
+                                                                //                     height: 60,
+                                                                //                     fontSize: 14,
+                                                                //                     nameLetters:
+                                                                //                         "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                                                //                   ),
+                                                                //         );
+                                                                //       }),
+                                                                //     ),
+                                                                //     SizedBox(width: 10),
+                                                                //     Column(
+                                                                //       crossAxisAlignment: CrossAxisAlignment.start,
+                                                                //       children: [
+                                                                //         Text(
+                                                                //           textAlign: TextAlign.center,
+                                                                //           "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                                                //           style: AppFonts.medium(16, AppColors.textBlack),
+                                                                //         ),
+                                                                //         SizedBox(width: 15),
+                                                                //       ],
+                                                                //     ),
+                                                                //     Spacer(),
+                                                                //     GestureDetector(
+                                                                //       onTap: () async {
+                                                                //         controller.setUserDetail();
+                                                                //
+                                                                //         showDialog(
+                                                                //           context: context,
+                                                                //           barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                //           builder: (BuildContext context) {
+                                                                //             return OrganizationUseEditDialog(
+                                                                //               receiveParam: (p0) {
+                                                                //                 controller.updateUserDetail(p0);
+                                                                //               },
+                                                                //             ); // Our custom dialog
+                                                                //           },
+                                                                //         );
+                                                                //       },
+                                                                //       child: SvgPicture.asset(ImagePath.edit, width: 26, height: 26, fit: BoxFit.cover),
+                                                                //     ),
+                                                                //     SizedBox(width: 10),
+                                                                //     SizedBox(
+                                                                //       width: 100,
+                                                                //       child: CustomAnimatedButton(
+                                                                //         text: "Logout",
+                                                                //         onPressed: () async {
+                                                                //           await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                                                                //           await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                                                                //
+                                                                //           await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+                                                                //           await AppPreference.instance.removeKey("homePatientListSortingModel");
+                                                                //           await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+                                                                //
+                                                                //           HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
+                                                                //           HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
+                                                                //           HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+                                                                //
+                                                                //           print(homePatientListData);
+                                                                //           print(homeScheduleListData);
+                                                                //           print(homePastPatientData);
+                                                                //           Get.delete<GlobalController>();
+                                                                //           Get.offAllNamed(Routes.LOGIN);
+                                                                //         },
+                                                                //         height: 35,
+                                                                //         isOutline: true,
+                                                                //         enabledColor: AppColors.redText,
+                                                                //         outlineColor: AppColors.redText,
+                                                                //         enabledTextColor: AppColors.white,
+                                                                //         outLineEnabledColor: AppColors.redText,
+                                                                //       ),
+                                                                //     ),
+                                                                //   ],
+                                                                // ),
+                                                                Container(
+                                                                  width: double.infinity, // Takes all available width
+                                                                  child: Row(
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onTap: () {
+                                                                          controller.showImagePickerDialog(context, true);
+                                                                        },
+                                                                        child: Obx(() {
+                                                                          return ClipRRect(
+                                                                            borderRadius: BorderRadius.circular(100),
+                                                                            child:
+                                                                                controller.getUserDetailModel.value?.responseData?.profileImage != null
+                                                                                    ? CachedNetworkImage(
+                                                                                      imageUrl: controller.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                                                                      width: 60,
+                                                                                      height: 60,
+                                                                                      fit: BoxFit.cover,
+                                                                                    )
+                                                                                    : controller.userProfileImage.value?.path != null
+                                                                                    ? RoundedImageFileWidget(size: 60, imagePath: controller.userProfileImage.value)
+                                                                                    : BaseImageView(
+                                                                                      imageUrl: "",
+                                                                                      width: 60,
+                                                                                      height: 60,
+                                                                                      fontSize: 14,
+                                                                                      nameLetters:
+                                                                                          "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                                                                    ),
+                                                                          );
+                                                                        }),
+                                                                      ),
+                                                                      SizedBox(width: 10),
+                                                                      Expanded(
+                                                                        child: Text(
                                                                           "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                                                                           style: AppFonts.medium(16, AppColors.textBlack),
+                                                                          overflow: TextOverflow.ellipsis,
+                                                                          maxLines: 1,
                                                                         ),
-                                                                        SizedBox(width: 15),
-                                                                      ],
-                                                                    ),
-                                                                    Spacer(),
-                                                                    GestureDetector(
-                                                                      onTap: () async {
-                                                                        controller.setUserDetail();
-
-                                                                        showDialog(
-                                                                          context: context,
-                                                                          barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                          builder: (BuildContext context) {
-                                                                            return OrganizationUseEditDialog(
-                                                                              receiveParam: (p0) {
-                                                                                controller.updateUserDetail(p0);
-                                                                              },
-                                                                            ); // Our custom dialog
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                      child: SvgPicture.asset(ImagePath.edit, width: 26, height: 26, fit: BoxFit.cover),
-                                                                    ),
-                                                                    SizedBox(width: 10),
-                                                                    SizedBox(
-                                                                      width: 100,
-                                                                      child: CustomAnimatedButton(
-                                                                        text: "Logout",
-                                                                        onPressed: () async {
-                                                                          await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
-                                                                          await AppPreference.instance.removeKey(AppString.prefKeyToken);
-
-                                                                          await AppPreference.instance.removeKey("homePastPatientListSortingModel");
-                                                                          await AppPreference.instance.removeKey("homePatientListSortingModel");
-                                                                          await AppPreference.instance.removeKey("homeScheduleListSortingModel");
-
-                                                                          HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
-                                                                          HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
-                                                                          HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
-
-                                                                          print(homePatientListData);
-                                                                          print(homeScheduleListData);
-                                                                          print(homePastPatientData);
-                                                                          Get.delete<GlobalController>();
-                                                                          Get.offAllNamed(Routes.LOGIN);
-                                                                        },
-                                                                        height: 35,
-                                                                        isOutline: true,
-                                                                        enabledColor: AppColors.redText,
-                                                                        outlineColor: AppColors.redText,
-                                                                        enabledTextColor: AppColors.white,
-                                                                        outLineEnabledColor: AppColors.redText,
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                      GestureDetector(
+                                                                        onTap: () async {
+                                                                          controller.setUserDetail();
+                                                                          showDialog(
+                                                                            context: context,
+                                                                            barrierDismissible: true,
+                                                                            builder: (BuildContext context) {
+                                                                              return OrganizationUseEditDialog(
+                                                                                receiveParam: (p0) {
+                                                                                  controller.updateUserDetail(p0);
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                        child: SvgPicture.asset(ImagePath.edit, width: 26, height: 26),
+                                                                      ),
+                                                                      SizedBox(width: 10),
+                                                                      SizedBox(
+                                                                        width: 100,
+                                                                        child: CustomAnimatedButton(
+                                                                          text: "Logout",
+                                                                          onPressed: () async {
+                                                                            await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                                                                            await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                                                                            await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+                                                                            await AppPreference.instance.removeKey("homePatientListSortingModel");
+                                                                            await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+                                                                            Get.delete<GlobalController>();
+                                                                            Get.offAllNamed(Routes.LOGIN);
+                                                                          },
+                                                                          height: 35,
+                                                                          isOutline: true,
+                                                                          enabledColor: AppColors.redText,
+                                                                          outlineColor: AppColors.redText,
+                                                                          enabledTextColor: AppColors.white,
+                                                                          outLineEnabledColor: AppColors.redText,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                                 SizedBox(height: 20),
                                                                 Row(

@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:subqdocs/app/modules/sign_up/models/sign_up_models.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
 
-import '../../../../utils/Formetors.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
@@ -22,6 +18,7 @@ import '../controllers/sign_up_controller.dart';
 
 class SignUpView extends GetView<SignUpController> {
   SignUpView({super.key});
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isWidthLessThan428(BuildContext context) {
@@ -166,6 +163,8 @@ class SignUpView extends GetView<SignUpController> {
                               CheckNewUserModel checkNewUserModel = await controller.checkIsNewUser(email: controller.emailController.text);
 
                               if (checkNewUserModel.responseData ?? false) {
+                                await controller.joinWishlist();
+
                                 Get.toNamed(
                                   Routes.SIGN_UP_SET_PASSWORD,
                                   arguments: {

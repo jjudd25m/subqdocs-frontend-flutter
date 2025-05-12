@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 
 import '../../../../utils/Formetors.dart';
@@ -13,7 +12,6 @@ import '../../../../utils/validation_service.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../core/common/common_service.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/sign_up_set_password_controller.dart';
 
 class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
@@ -40,234 +38,198 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(
-                height: isSmallScreen ? 130 : 300,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: isPortrait ? 0 : -80,
-                      child: Image.asset(
-                        ImagePath.loginHeader,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: isSmallScreen ? 130 : 300, child: Stack(children: [Positioned(left: 0, right: 0, top: isPortrait ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: isPortrait ? null : 30,
-                  ),
-                  Text(
-                    "Lets Get Started",
-                    style: AppFonts.medium(24, AppColors.backgroundPurple),
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  Text(
-                    "Sign Up",
-                    style: AppFonts.medium(20, AppColors.textBlack),
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
+                  SizedBox(height: isPortrait ? null : 30),
+                  Text("Lets Get Started", style: AppFonts.medium(24, AppColors.backgroundPurple)),
+                  SizedBox(height: 24),
+                  Text("Sign Up", style: AppFonts.medium(20, AppColors.textBlack)),
+                  SizedBox(height: 24),
+                  SizedBox(height: 20),
+                  SizedBox(height: 0),
                   Obx(() {
                     return SizedBox(
                       width: isSmallScreen ? Get.width - 30 : 416,
                       child: TextFormFiledWidget(
-                          label: AppString.password,
-                          maxLines: 1,
-                          format: [NoSpaceTextFormatter()],
-                          hint: "Enter Password",
-                          visibility: controller.passwordVisible.value,
-                          controller: controller.passwordController,
-                          suffixIcon: controller.passwordVisible.value
-                              ? GestureDetector(
+                        label: AppString.password,
+                        maxLines: 1,
+                        format: [NoSpaceTextFormatter()],
+                        hint: "Enter Password",
+                        visibility: controller.passwordVisible.value,
+                        controller: controller.passwordController,
+                        suffixIcon:
+                            controller.passwordVisible.value
+                                ? GestureDetector(
                                   onTap: () {
                                     controller.changePasswordVisible();
                                   },
-                                  child: SvgPicture.asset(
-                                    ImagePath.eyeLogoOpen,
-                                    height: 5,
-                                    width: 5,
-                                  ),
+                                  child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 5, width: 5),
                                 )
-                              : GestureDetector(
+                                : GestureDetector(
                                   onTap: () {
                                     controller.changePasswordVisible();
                                   },
-                                  child: Icon(
-                                    CupertinoIcons.eye_slash_fill,
-                                    color: AppColors.textDarkGrey,
-                                  ),
+                                  child: Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                 ),
-                          onChanged: (p0) {
-                            controller.validatePassword(p0 ?? "");
-                          },
-                          checkValidation: (value) {
-                            return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
-                          }),
+                        onChanged: (p0) {
+                          controller.validatePassword(p0 ?? "");
+                        },
+                        checkValidation: (value) {
+                          return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
+                        },
+                      ),
                     );
                   }),
                   SizedBox(height: 15),
                   Obx(() {
                     return SizedBox(
                       width: isSmallScreen ? Get.width - 30 : 416,
-                      child: Column(children: [
-                        Row(
-                          spacing: 10,
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    controller.passwordValidation['length']!
-                                        ? ImagePath.passwordValidationTrue // Green check for valid
-                                        : ImagePath.passwordValidationFalse,
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "8-20 Characters",
-                                    style: AppFonts.regular(14, controller.passwordValidation['length']! ? AppColors.backgroundPurple : AppColors.textDarkGrey),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    controller.passwordValidation['number']!
-                                        ? ImagePath.passwordValidationTrue // Green check for valid
-                                        : ImagePath.passwordValidationFalse,
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "1 Number",
-                                    style: AppFonts.regular(14, controller.passwordValidation['number']! ? AppColors.backgroundPurple : AppColors.textDarkGrey),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ]),
-                    );
-                  }),
-                  SizedBox(height: 15),
-                  Obx(() {
-                    return SizedBox(
-                      width: isSmallScreen ? Get.width - 30 : 416,
-                      child: Column(children: [
-                        Row(
-                          spacing: 10,
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    controller.passwordValidation['letter']!
-                                        ? ImagePath.passwordValidationTrue // Green check for valid
-                                        : ImagePath.passwordValidationFalse,
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "1 Letter",
-                                    style: AppFonts.regular(14, controller.passwordValidation['letter']! ? AppColors.backgroundPurple : AppColors.textDarkGrey),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // SizedBox(
-                            //   width: 30,
-                            // ),
-                            Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
                                 child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  controller.passwordValidation['special']!
-                                      ? ImagePath.passwordValidationTrue // Green check for valid
-                                      : ImagePath.passwordValidationFalse,
-                                  height: 20,
-                                  width: 20,
+                                  children: [
+                                    SvgPicture.asset(
+                                      controller.passwordValidation['length']!
+                                          ? ImagePath
+                                              .passwordValidationTrue // Green check for valid
+                                          : ImagePath.passwordValidationFalse,
+                                      height: 20,
+                                      width: 20,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text("8-20 Characters", style: AppFonts.regular(14, controller.passwordValidation['length']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: 5,
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      controller.passwordValidation['number']!
+                                          ? ImagePath
+                                              .passwordValidationTrue // Green check for valid
+                                          : ImagePath.passwordValidationFalse,
+                                      height: 20,
+                                      width: 20,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text("1 Number", style: AppFonts.regular(14, controller.passwordValidation['number']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
+                                  ],
                                 ),
-                                Text(
-                                  "1 Special Character",
-                                  style: AppFonts.regular(14, controller.passwordValidation['special']! ? AppColors.backgroundPurple : AppColors.textDarkGrey),
-                                ),
-                              ],
-                            ))
-                          ],
-                        )
-                      ]),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   }),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 15),
+                  Obx(() {
+                    return SizedBox(
+                      width: isSmallScreen ? Get.width - 30 : 416,
+                      child: Column(
+                        children: [
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      controller.passwordValidation['letter']!
+                                          ? ImagePath
+                                              .passwordValidationTrue // Green check for valid
+                                          : ImagePath.passwordValidationFalse,
+                                      height: 20,
+                                      width: 20,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text("1 Letter", style: AppFonts.regular(14, controller.passwordValidation['letter']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
+                                  ],
+                                ),
+                              ),
+                              // SizedBox(
+                              //   width: 30,
+                              // ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      controller.passwordValidation['special']!
+                                          ? ImagePath
+                                              .passwordValidationTrue // Green check for valid
+                                          : ImagePath.passwordValidationFalse,
+                                      height: 20,
+                                      width: 20,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text("1 Special Character", style: AppFonts.regular(14, controller.passwordValidation['special']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 20),
                   Obx(() {
                     return SizedBox(
                       width: isSmallScreen ? Get.width - 30 : 416,
                       child: TextFormFiledWidget(
-                          label: "Confirm Password",
-                          format: [NoSpaceTextFormatter()],
-                          hint: "Enter confirm Password",
-                          maxLines: 1,
-                          visibility: controller.confirmPasswordVisible.value,
-                          controller: controller.confirmPasswordController,
-                          suffixIcon: controller.confirmPasswordVisible.value
-                              ? GestureDetector(
+                        label: "Confirm Password",
+                        format: [NoSpaceTextFormatter()],
+                        hint: "Enter confirm Password",
+                        maxLines: 1,
+                        visibility: controller.confirmPasswordVisible.value,
+                        controller: controller.confirmPasswordController,
+                        suffixIcon:
+                            controller.confirmPasswordVisible.value
+                                ? GestureDetector(
                                   onTap: () {
                                     controller.changeConfirmPasswordVisible();
                                   },
-                                  child: SvgPicture.asset(
-                                    ImagePath.eyeLogoOpen,
-                                    height: 5,
-                                    width: 5,
-                                  ),
+                                  child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 5, width: 5),
                                 )
-                              : GestureDetector(
+                                : GestureDetector(
                                   onTap: () {
                                     controller.changeConfirmPasswordVisible();
                                   },
-                                  child: Icon(
-                                    CupertinoIcons.eye_slash_fill,
-                                    color: AppColors.textDarkGrey,
-                                  ),
+                                  child: Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                 ),
-                          checkValidation: (value) {
-                            return Validation.conforimpasswordValidate(value, controller.passwordController.text);
-                          }),
+                        checkValidation: (value) {
+                          return Validation.conforimpasswordValidate(value, controller.passwordController.text);
+                        },
+                      ),
                     );
                   }),
+                  SizedBox(height: 20),
                   SizedBox(
-                    height: 42,
+                    width: isSmallScreen ? Get.width - 30 : 416,
+                    child: TextFormFiledWidget(
+                      isSuffixIconVisible: false,
+                      isFirst: true,
+                      label: "Enter the code",
+                      controller: controller.betaCodeController,
+                      // format: [NoSpaceLowercaseTextFormatter()],
+                      hint: "123456",
+                      onTap: () {
+                        // controller.emailController.clear();
+                      },
+                      suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                      // checkValidation: (value) {
+                      //   return Validation.emailValidateRequired(value);
+                      // },
+                    ),
                   ),
+                  SizedBox(height: 42),
                   Obx(() {
                     return SizedBox(
                       width: isSmallScreen ? Get.width - 30 : 416,
@@ -285,11 +247,9 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                       ),
                     );
                   }),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 30),
                 ],
-              )
+              ),
             ],
           ),
         ),

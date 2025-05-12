@@ -9,7 +9,7 @@ class DiagnosisModel {
   String? code; // optional code representing the diagnosis
   String? confidence; // optional confidence level for the diagnosis
   PopoverController popoverController = PopoverController();
-
+  final GlobalKey containerKey = GlobalKey();
   List<DiagnosisPossibleAlternatives>? diagnosisPossibleAlternatives; // optional list of alternative diagnoses
 
   DiagnosisModel({this.description, this.code, this.confidence, this.diagnosisPossibleAlternatives}); // constructor with named optional parameters
@@ -22,6 +22,7 @@ class SingleCellModel {
   String? unit; // optional unit related to the procedure
   String? modifiers; // optional modifiers for the procedure
   FocusNode focusNode = FocusNode();
+  FocusNode unitFocusNode = FocusNode();
   TextEditingController unitChargeTextfield = TextEditingController();
 
   List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives; // optional list of alternative procedures
@@ -44,6 +45,7 @@ class TableCellModel {
 class TableRowModel {
   List<TableCellModel> cells; // list of table cell models in the table row
   PopoverController popoverController = PopoverController();
+  final GlobalKey containerKey = GlobalKey();
 
   TableRowModel({required this.cells}); // constructor with required cells parameter
 }

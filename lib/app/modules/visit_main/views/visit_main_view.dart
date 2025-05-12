@@ -468,31 +468,31 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 children: [
                                   Text(textAlign: TextAlign.start, "Scheduled Visits", style: AppFonts.regular(16, AppColors.textBlack)),
                                   Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                      // color: AppColors.backgroundWhite,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(ImagePath.search, height: 14, width: 14),
-                                        SizedBox(width: 10),
-                                        SizedBox(
-                                          width: 194,
-                                          height: 25,
-                                          child: TextField(
-                                            maxLines: 1,
-                                            textAlignVertical: TextAlignVertical.center, // Centers the text vertically
-                                            decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
+                                  // Container(
+                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                  //   decoration: BoxDecoration(
+                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                  //     // color: AppColors.backgroundWhite,
+                                  //     borderRadius: BorderRadius.circular(8),
+                                  //   ),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       SvgPicture.asset(ImagePath.search, height: 14, width: 14),
+                                  //       SizedBox(width: 10),
+                                  //       SizedBox(
+                                  //         width: 194,
+                                  //         height: 25,
+                                  //         child: TextField(
+                                  //           maxLines: 1,
+                                  //           textAlignVertical: TextAlignVertical.center, // Centers the text vertically
+                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // SizedBox(width: 10),
+                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
                                 ],
                               ),
                               children: <Widget>[
@@ -669,31 +669,31 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     style: AppFonts.regular(16, AppColors.textBlack),
                                   ),
                                   Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                      // color: AppColors.backgroundWhite,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(ImagePath.search, height: 14, width: 14),
-                                        SizedBox(width: 10),
-                                        SizedBox(
-                                          width: 194,
-                                          height: 25,
-                                          child: TextField(
-                                            maxLines: 1,
-                                            textAlignVertical: TextAlignVertical.center, // Centers the text vertically
-                                            decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
+                                  // Container(
+                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                  //   decoration: BoxDecoration(
+                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                  //     // color: AppColors.backgroundWhite,
+                                  //     borderRadius: BorderRadius.circular(8),
+                                  //   ),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       SvgPicture.asset(ImagePath.search, height: 14, width: 14),
+                                  //       SizedBox(width: 10),
+                                  //       SizedBox(
+                                  //         width: 194,
+                                  //         height: 25,
+                                  //         child: TextField(
+                                  //           maxLines: 1,
+                                  //           textAlignVertical: TextAlignVertical.center, // Centers the text vertically
+                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // SizedBox(width: 10),
+                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
                                 ],
                               ),
                               children: <Widget>[
@@ -820,33 +820,33 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     },
                                   ),
                                   SizedBox(width: 10),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                      // color: AppColors.backgroundWhite,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(ImagePath.search, height: 25, width: 25),
-                                        SizedBox(width: 10),
-                                        SizedBox(
-                                          width: 120,
-                                          child: TextField(
-                                            controller: controller.searchController,
-                                            onChanged: (value) {
-                                              controller.getPatientAttachment();
-                                            },
-                                            maxLines: 1, //or null
-                                            decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
+                                  // Container(
+                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                  //   decoration: BoxDecoration(
+                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
+                                  //     // color: AppColors.backgroundWhite,
+                                  //     borderRadius: BorderRadius.circular(8),
+                                  //   ),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
+                                  //       SizedBox(width: 10),
+                                  //       SizedBox(
+                                  //         width: 120,
+                                  //         child: TextField(
+                                  //           controller: controller.searchController,
+                                  //           onChanged: (value) {
+                                  //             controller.getPatientAttachment();
+                                  //           },
+                                  //           maxLines: 1, //or null
+                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // SizedBox(width: 10),
+                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
                                 ],
                               ),
                               children: <Widget>[

@@ -146,8 +146,8 @@ class LoginView extends GetView<LoginController> {
                       Text("Don't have an account yet? ", style: AppFonts.medium(14, AppColors.textDarkGrey)),
                       GestureDetector(
                         onTap: () {
-                          // Get.toNamed(Routes.SIGN_UP);
-                          Get.toNamed(Routes.BETA_TESTER_CODE);
+                          Get.toNamed(Routes.SIGN_UP);
+                          // Get.toNamed(Routes.BETA_TESTER_CODE);
                         },
                         child: Text("Sign up now", style: AppFonts.medium(14, AppColors.backgroundPurple)),
                       ),
