@@ -1,3 +1,4 @@
+import 'package:easy_popover/easy_popover.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:subqdocs/app/modules/patient_info/model/patient_fullnote_model.dart';
 
@@ -7,6 +8,7 @@ class ImpresionAndPlanViewModel {
   String? title;
 
   String? htmlContent;
+  String? initialHtmlContent;
   HtmlEditorController htmlEditorController;
 
   List<SiblingIcd10>? siblingIcd10;
@@ -15,15 +17,39 @@ class ImpresionAndPlanViewModel {
 
   bool isEditing;
 
+  PopoverController popoverController = PopoverController();
 
-
-  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false , this.siblingIcd10 , this.siblingIcd10FullNote});
+  ImpresionAndPlanViewModel({
+    this.title,
+    this.htmlContent,
+    required this.htmlEditorController,
+    this.isEditing = false,
+    this.siblingIcd10,
+    this.siblingIcd10FullNote,
+    this.initialHtmlContent,
+  });
 
   Map<String, dynamic> toJson() {
-    return {'title': title ?? '', 'content': htmlContent ?? ''  ,'sibling_icd_10' :siblingIcd10 };
+    if (title == null) {
+      return {};
+      // Return an empty map if title is null
+    }
+    return {
+      'title': title ?? '',
+      'content': htmlContent ?? '',
+      'sibling_icd_10': siblingIcd10,
+    };
   }
 
   Map<String, dynamic> toJsonFullNote() {
-    return {'title': title ?? '', 'content': htmlContent ?? ''  ,'sibling_icd_10' :siblingIcd10FullNote };
+    if (title == null) {
+      return {};
+      // Return an empty map if title is null
+    }
+    return {
+      'title': title ?? '',
+      'content': htmlContent ?? '',
+      'sibling_icd_10': siblingIcd10FullNote,
+    };
   }
 }

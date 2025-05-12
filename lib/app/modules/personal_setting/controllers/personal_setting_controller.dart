@@ -250,6 +250,8 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> updateUserDetail(Map<String, dynamic> param) async {
+    Loader().showLoadingDialogForSimpleLoader();
+
     Map<String, List<File>> profileParams = {};
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
@@ -263,6 +265,9 @@ class PersonalSettingController extends GetxController {
 
     // try {
     dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+
+    Loader().stopLoader();
+
     print("updateUserDetail is $response");
 
     if (userProfileImage.value != null) {
@@ -290,6 +295,8 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> updateOrganization(Map<String, dynamic> param) async {
+    Loader().showLoadingDialogForSimpleLoader();
+
     Map<String, List<File>> profileParams = {};
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
@@ -302,21 +309,18 @@ class PersonalSettingController extends GetxController {
       }
     }
 
-    Loader().showLoadingDialogForSimpleLoader();
-
     try {
       dynamic response = await _personalSettingRepository.updateOrganization(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
       print("updateOrganization is $response");
-
+      Loader().stopLoader();
       getUserDetail();
       getOrganizationDetail();
       // Get.back();
     } catch (error) {
       // Get.back();
+      Loader().stopLoader();
       customPrint("userInvite catch error is $error");
     }
-
-    Loader().stopLoader();
   }
 
   Future<void> getUserRole() async {

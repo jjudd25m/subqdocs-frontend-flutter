@@ -444,7 +444,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                         .toList(),
                                                                 onItemSelected: (value, index) {
                                                                   // Navigator.pop(context);
-
+                                                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.close();
                                                                   if (value.description != "No data found") {
                                                                     print("called diagnosis");
 
@@ -463,6 +463,8 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                 },
                                                                 controller: widget.controller,
                                                                 onSearchItemSelected: (p0, p1) {
+                                                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.close();
+
                                                                   // Navigator.pop(context);
                                                                   setState(() {
                                                                     items[i].diagnosisModelList?[subIndex].code = p0;
@@ -596,6 +598,8 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                         .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
                                                                         .toList(),
                                                                 onItemSelected: (value, index) {
+                                                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.close();
+
                                                                   if (value.description != "No data found") {
                                                                     print("called diagnosis");
 
@@ -615,6 +619,8 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                 },
                                                                 controller: widget.controller,
                                                                 onSearchItemSelected: (p0, p1) {
+                                                                  widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].popoverController.close();
+
                                                                   // Navigator.pop(context);
                                                                   setState(() {
                                                                     items[i].diagnosisModelList?[subIndex].code = p0;

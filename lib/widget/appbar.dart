@@ -86,47 +86,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Image.asset(ImagePath.subqdocs_text_logo, width: 180, height: 55),
                 ),
                 Spacer(),
-                // Obx(() {
-                //   return SizedBox(
-                //     width: MediaQuery.of(context).size.width * 0.5,
-                //     child: Row(
-                //       children: [
-                //         Spacer(),
-                //         globalController.getUserDetailModel.value?.responseData?.id == -1
-                //             ? ClipRRect(borderRadius: BorderRadius.circular(25.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 50, width: 50))
-                //             : ClipRRect(
-                //               borderRadius: BorderRadius.circular(25.0),
-                //               child: BaseImageView(
-                //                 imageUrl: globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
-                //                 width: 50,
-                //                 height: 50,
-                //                 nameLetters: "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                //               ),
-                //             ),
-                //         SizedBox(width: 15),
-                //         Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: [
-                //             Text(
-                //               textAlign: TextAlign.left,
-                //               maxLines: 1,
-                //               // overflow: TextOverflow.ellipsis,
-                //               "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                //               style: AppFonts.medium(15, AppColors.textBlack),
-                //             ),
-                //             SizedBox(width: 10),
-                //             Text(textAlign: TextAlign.center, globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(13, AppColors.textGrey)),
-                //           ],
-                //         ),
-                //       ],
-                //     ),
-                //   );
-                // }),
                 Obx(() {
-                  return ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.5),
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
                     child: Row(
                       children: [
+                        Spacer(),
                         Spacer(),
                         globalController.getUserDetailModel.value?.responseData?.id == -1
                             ? ClipRRect(borderRadius: BorderRadius.circular(25.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 50, width: 50))
@@ -140,19 +105,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                             ),
                         SizedBox(width: 15),
-                        Flexible(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                                style: AppFonts.medium(15, AppColors.textBlack),
+                                textAlign: TextAlign.left,
+                                // maxLines: 1,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
+                                // overflow: TextOverflow.ellipsis,
+                                "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                style: AppFonts.medium(15, AppColors.textBlack),
                               ),
-                              SizedBox(height: 4),
-                              Text(globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(13, AppColors.textGrey)),
+                              SizedBox(width: 10),
+                              Text(textAlign: TextAlign.center, globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(13, AppColors.textGrey)),
                             ],
                           ),
                         ),
@@ -160,6 +128,45 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   );
                 }),
+                // Obx(() {
+                //   return ConstrainedBox(
+                //     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.5),
+                //     child: Row(
+                //       children: [
+                //         Spacer(),
+                //         Spacer(),
+                //         globalController.getUserDetailModel.value?.responseData?.id == -1
+                //             ? ClipRRect(borderRadius: BorderRadius.circular(25.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 50, width: 50))
+                //             : ClipRRect(
+                //               borderRadius: BorderRadius.circular(25.0),
+                //               child: BaseImageView(
+                //                 imageUrl: globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                //                 width: 50,
+                //                 height: 50,
+                //                 nameLetters: "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                //               ),
+                //             ),
+                //         SizedBox(width: 15),
+                //         Flexible(
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             mainAxisSize: MainAxisSize.max,
+                //             children: [
+                //               Text(
+                //                 "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                //                 style: AppFonts.medium(15, AppColors.textBlack),
+                //                 maxLines: 2,
+                //                 overflow: TextOverflow.ellipsis,
+                //               ),
+                //               SizedBox(height: 4),
+                //               Text(globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(13, AppColors.textGrey)),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   );
+                // }),
                 SizedBox(width: 20),
               ],
             ),

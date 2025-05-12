@@ -1,34 +1,59 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class InlineEditableText extends StatefulWidget {
-  final String initialText;
+class InlineEditingDropdown extends StatefulWidget {
+  String initialText;
   final Function(String) onSubmitted;
-  final Function(String) onChanged;
+  final Function(String, bool) onChanged;
+  final VoidCallback? toggle;
   final TextStyle? textStyle;
-  final FocusNode? focusNode;
 
-  const InlineEditableText({required this.initialText, required this.onSubmitted, required this.onChanged, this.textStyle, Key? key, this.focusNode}) : super(key: key);
+  InlineEditingDropdown({
+    required this.initialText,
+    required this.onSubmitted,
+    required this.onChanged,
+    this.toggle,
+    this.textStyle,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _InlineEditableTextState createState() => _InlineEditableTextState();
 }
 
-class _InlineEditableTextState extends State<InlineEditableText> {
+String cleanString(String input) {
+  // Remove leading numbers, periods, and spaces
+  String cleaned = input.replaceAll(RegExp(r'^\d+(\.\d+)*\s*'), '').trim();
+
+  // Return the cleaned string
+  return cleaned;
+}
+
+class _InlineEditableTextState extends State<InlineEditingDropdown> {
   late bool _isEditing;
   late TextEditingController _controller;
+  late FocusNode _focusNode;
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
     _isEditing = false;
     _controller = TextEditingController(text: widget.initialText);
-    // _focusNode = widget.focusNode ?? FocusNode();
+    _focusNode = FocusNode();
+
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus && _isEditing) {
+        _submitEdit();
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
-
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -36,7 +61,10 @@ class _InlineEditableTextState extends State<InlineEditableText> {
     setState(() {
       _isEditing = true;
     });
-    widget.onChanged("");
+    widget.toggle?.call();
+    Future.delayed(Duration(milliseconds: 100), () {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
   }
 
   void _submitEdit() {
@@ -55,13 +83,19 @@ class _InlineEditableTextState extends State<InlineEditableText> {
           width: textStyle.fontSize! * _controller.text.length * 0.6 + 20,
           child: TextField(
             onTap: () {
-              widget.onChanged("");
+              widget.toggle;
             },
+
             onChanged: (value) {
-              widget.onChanged(value);
+              timer?.cancel();
+              widget.onChanged(cleanString(value), false);
+
+              timer = Timer(const Duration(seconds: 5), () {
+                widget.onChanged(cleanString(value), true);
+              });
             },
             controller: _controller,
-
+            focusNode: _focusNode,
             autofocus: true,
             style: textStyle,
             maxLines: 2,
@@ -77,6 +111,9 @@ class _InlineEditableTextState extends State<InlineEditableText> {
             onSubmitted: (_) => _submitEdit(),
           ),
         )
-        : GestureDetector(onTap: _startEditing, child: Text(_controller.text, style: textStyle));
+        : GestureDetector(
+          onTap: _startEditing,
+          child: Text(_controller.text, style: textStyle),
+        );
   }
 }

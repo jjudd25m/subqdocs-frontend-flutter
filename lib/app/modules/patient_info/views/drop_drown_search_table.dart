@@ -63,7 +63,7 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
       child: KeyboardDismissOnTap(
         child: SingleChildScrollView(
           // controller: _scrollController,
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 2.0),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 2.5),
           child: Container(
             padding: const EdgeInsets.all(10),
             color: Colors.white,
@@ -248,157 +248,165 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      child: Container(
-        height: 250,
-        color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-              // height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: CustomSearchBar(
-                controller: searchController,
-                hintText: 'Search',
-                onChanged: (text) {
-                  print('Search text changed: $text');
-                  onSearch();
-                  _filterItems(searchController.text);
-                },
-                onSubmit: (text) {
-                  print('Submitted search: $text');
+      child: KeyboardDismissOnTap(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 2.5),
+          child: Container(
+            height: 250,
+            color: Colors.white,
+            child: Column(
+              children: [
+                Container(
+                  // height: 50,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: CustomSearchBar(
+                    controller: searchController,
+                    hintText: 'Search',
+                    onChanged: (text) {
+                      print('Search text changed: $text');
+                      page = 1;
+                      widget.icd10CodeList.clear();
+                      onSearch();
+                      _filterItems(searchController.text);
+                    },
+                    onSubmit: (text) {
+                      print('Submitted search: $text');
 
-                  setState(() {
-                    widget.icd10CodeList.clear();
-                    searchController.clear();
-                    isValid = false;
-                  });
-                  _filterItems(searchController.text);
-                  page = 1;
-                  onSearch();
-                  // Perform search operation here
-                },
-              ),
-            ),
-            // Text("count ${widget.icd10CodeList.length}"),
-            const SizedBox(height: 3),
-            Expanded(
-              child: NotificationListener<ScrollEndNotification>(
-                onNotification: (notification) {
-                  // // If user reaches the bottom and no data is being loaded
-                  if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading) {
-                    print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
-                    page = page + 1;
-                    getIcd10Code();
-                    // onLoadMore?.call(); // Call the onLoadMore function
-                  }
-                  return false; // Allow other notifications to propagate
-                },
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      if (isLoading) ...[
-                        SizedBox(height: 10),
-                        Center(child: CircularProgressIndicator(color: AppColors.textPurple, strokeWidth: 2)),
-                        SizedBox(height: 10),
-                      ] else ...[
-                        if (filteredItems.isNotEmpty || widget.icd10CodeList.isNotEmpty) ...[
-                          if (filteredItems.isNotEmpty) ...[
-                            SizedBox(height: 0),
-                            Padding(padding: const EdgeInsets.all(10), child: Row(children: [Text("Pin", style: AppFonts.regular(14, AppColors.black)), Spacer()])),
-                            SizedBox(height: 0),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: filteredItems.length,
-                                itemBuilder: (_, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      widget.onItemSelected(filteredItems[index], index);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: widget.items[index].isPin ? AppColors.dropdownicdCodeBackgroundColor.withValues(alpha: 0.5) : AppColors.clear,
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    TextSpan(text: "${filteredItems[index].code}", style: AppFonts.medium(14, AppColors.black)),
-                                                    TextSpan(text: ' (${filteredItems[index].description})', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)))]),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                          if (filteredItems.isNotEmpty) ...[SizedBox(height: 10), Divider(height: 0.5, thickness: 1)],
-                          if (widget.icd10CodeList.isNotEmpty) ...[
-                            SizedBox(height: 5),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                padding: EdgeInsets.zero,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: widget.icd10CodeList.length,
-                                itemBuilder: (_, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      widget.onSearchItemSelected(widget.icd10CodeList[index].code ?? "", widget.icd10CodeList[index].description ?? "");
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      child: Container(
-                                        // decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange : AppColors.clear, borderRadius: BorderRadius.circular(6)),
-                                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    TextSpan(text: "${widget.icd10CodeList[index].code}", style: AppFonts.medium(14, AppColors.black)),
-                                                    TextSpan(text: ' (${widget.icd10CodeList[index].description})', style: AppFonts.regular(14, AppColors.textDarkGrey)),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ], // Text("(${widget.icd10CodeList[index].code}) ${widget.icd10CodeList[index].description}", style: AppFonts.regular(12, AppColors.black)))],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ],
-                        if (filteredItems.isEmpty && widget.icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],
-                      ],
-                    ],
+                      setState(() {
+                        widget.icd10CodeList.clear();
+                        searchController.clear();
+                        isValid = false;
+                      });
+                      _filterItems(searchController.text);
+                      page = 1;
+                      onSearch();
+                      // Perform search operation here
+                    },
                   ),
                 ),
-              ),
+                // Text("count ${widget.icd10CodeList.length}"),
+                const SizedBox(height: 3),
+                Expanded(
+                  child: NotificationListener<ScrollEndNotification>(
+                    onNotification: (notification) {
+                      // // If user reaches the bottom and no data is being loaded
+                      if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading) {
+                        print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
+                        page = page + 1;
+                        getIcd10Code();
+                        // onLoadMore?.call(); // Call the onLoadMore function
+                      }
+                      return false; // Allow other notifications to propagate
+                    },
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          if (isLoading) ...[
+                            SizedBox(height: 10),
+                            Center(child: CircularProgressIndicator(color: AppColors.textPurple, strokeWidth: 2)),
+                            SizedBox(height: 10),
+                          ] else ...[
+                            if (filteredItems.isNotEmpty || widget.icd10CodeList.isNotEmpty) ...[
+                              if (filteredItems.isNotEmpty) ...[
+                                SizedBox(height: 0),
+                                Padding(padding: const EdgeInsets.all(10), child: Row(children: [Text("Pin", style: AppFonts.regular(14, AppColors.black)), Spacer()])),
+                                SizedBox(height: 0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: filteredItems.length,
+                                    itemBuilder: (_, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).unfocus(); // Removes focus and hides keyboard
+                                          widget.onItemSelected(filteredItems[index], index);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 5),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: widget.items[index].isPin ? AppColors.dropdownicdCodeBackgroundColor.withValues(alpha: 0.5) : AppColors.clear,
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(text: "${filteredItems[index].code}", style: AppFonts.medium(14, AppColors.black)),
+                                                        TextSpan(text: ' (${filteredItems[index].description})', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            // Text("(${filteredItems[index].code}) ${filteredItems[index].description}", style: AppFonts.regular(12, AppColors.black)))]),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                              if (filteredItems.isNotEmpty) ...[SizedBox(height: 10), Divider(height: 0.5, thickness: 1)],
+                              if (widget.icd10CodeList.isNotEmpty) ...[
+                                SizedBox(height: 5),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: widget.icd10CodeList.length,
+                                    itemBuilder: (_, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          widget.onSearchItemSelected(widget.icd10CodeList[index].code ?? "", widget.icd10CodeList[index].description ?? "");
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 5),
+                                          child: Container(
+                                            // decoration: BoxDecoration(color: widget.items[index].isPin ? AppColors.orange : AppColors.clear, borderRadius: BorderRadius.circular(6)),
+                                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(text: "${widget.icd10CodeList[index].code}", style: AppFonts.medium(14, AppColors.black)),
+                                                        TextSpan(text: ' (${widget.icd10CodeList[index].description})', style: AppFonts.regular(14, AppColors.textDarkGrey)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ], // Text("(${widget.icd10CodeList[index].code}) ${widget.icd10CodeList[index].description}", style: AppFonts.regular(12, AppColors.black)))],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ],
+                            if (filteredItems.isEmpty && widget.icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
