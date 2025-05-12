@@ -1,11 +1,11 @@
 import 'package:easy_popover/easy_popover.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:subqdocs/app/modules/patient_info/views/EditableViews/CommonContainer.dart';
 import 'package:subqdocs/utils/imagepath.dart';
+
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widgets/ContainerButton.dart';
@@ -13,7 +13,6 @@ import '../../../core/common/html_editor_container.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../controllers/patient_info_controller.dart';
 import '../model/impresion_and_plan_view_model.dart';
-import 'InlineEditableText.dart';
 import 'drop_drown_search_table.dart';
 import 'inline_editing_dropdown.dart';
 
@@ -31,7 +30,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
       child: _taskListSection(context),
     );
   }
-
 
   Widget _taskListSection(BuildContext context) {
     return Obx(() {
@@ -122,11 +120,10 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                     },
 
                                     onSubmitted: (String) {},
-                                    onChanged: (String   , isApiCall) {
-                                      model.title = String ;
+                                    onChanged: (String, isApiCall) {
+                                      model.title = String;
 
-
-                                      if(isApiCall) {
+                                      if (isApiCall) {
                                         controller
                                             .updateImpressionAndPlanFullNote();
                                       }
@@ -135,8 +132,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                     },
                                   ),
                                 ),
-
-
 
                                 GestureDetector(
                                   onTap: () {
@@ -248,7 +243,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                   ImpresionAndPlanViewModel(
                     htmlEditorController: HtmlEditorController(),
                     siblingIcd10: [],
-                    htmlContent: "<br> <br>",
+                    htmlContent: null,
                     isEditing: false,
                     siblingIcd10FullNote: [],
                     title: null,

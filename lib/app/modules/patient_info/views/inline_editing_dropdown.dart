@@ -3,18 +3,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class InlineEditingDropdown extends StatefulWidget {
-    String initialText;
+  String initialText;
   final Function(String) onSubmitted;
-  final Function(String ,bool) onChanged;
+  final Function(String, bool) onChanged;
   final VoidCallback? toggle;
   final TextStyle? textStyle;
 
-   InlineEditingDropdown({required this.initialText, required this.onSubmitted, required this.onChanged,  this.toggle ,  this.textStyle, Key? key  }) : super(key: key);
+  InlineEditingDropdown({
+    required this.initialText,
+    required this.onSubmitted,
+    required this.onChanged,
+    this.toggle,
+    this.textStyle,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _InlineEditableTextState createState() => _InlineEditableTextState();
 }
-
 
 String cleanString(String input) {
   // Remove leading numbers, periods, and spaces
@@ -23,7 +29,6 @@ String cleanString(String input) {
   // Return the cleaned string
   return cleaned;
 }
-
 
 class _InlineEditableTextState extends State<InlineEditingDropdown> {
   late bool _isEditing;
@@ -44,8 +49,6 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
       }
     });
   }
-
-
 
   @override
   void dispose() {
@@ -77,42 +80,40 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
 
     return _isEditing
         ? SizedBox(
-      width: textStyle.fontSize! * _controller.text.length * 0.6 + 20,
-      child: TextField
-        (
+          width: textStyle.fontSize! * _controller.text.length * 0.6 + 20,
+          child: TextField(
+            onTap: () {
+              widget.toggle;
+            },
 
-        onTap: () {
-          widget.toggle;
-        },
+            onChanged: (value) {
+              timer?.cancel();
+              widget.onChanged(cleanString(value), false);
 
-        onChanged: (value) {
-
-
-          timer?.cancel();
-          widget.onChanged(cleanString(value) ,false);
-
-          timer = Timer(const Duration(seconds: 5), () {
-            widget.onChanged(cleanString(value) , true);
-          });
-
-        },
-        controller: _controller,
-        focusNode: _focusNode,
-        autofocus: true,
-        style: textStyle,
-        maxLines: 2,
-        cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
-        decoration: const InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-        ),
-        onSubmitted: (_) => _submitEdit(),
-      ),
-    )
-        : GestureDetector(onTap: _startEditing, child: Text(_controller.text, style: textStyle));
+              timer = Timer(const Duration(seconds: 5), () {
+                widget.onChanged(cleanString(value), true);
+              });
+            },
+            controller: _controller,
+            focusNode: _focusNode,
+            autofocus: true,
+            style: textStyle,
+            maxLines: 2,
+            cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
+            decoration: const InputDecoration(
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+            ),
+            onSubmitted: (_) => _submitEdit(),
+          ),
+        )
+        : GestureDetector(
+          onTap: _startEditing,
+          child: Text(_controller.text, style: textStyle),
+        );
   }
 }

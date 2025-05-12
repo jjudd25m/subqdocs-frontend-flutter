@@ -217,22 +217,16 @@
 // }
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 
-import '../../../../../utils/app_colors.dart';
-import '../../../../../utils/app_fonts.dart';
-import '../../../../../utils/imagepath.dart';
 import '../../../../core/common/html_editor_container.dart';
-import '../../../visit_main/model/doctor_view_model.dart';
 import '../../controllers/patient_info_controller.dart';
-import '../../model/impresion_and_plan_view_model.dart';
 
 class PatientViewEditable extends StatelessWidget {
-  PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
+  PatientInfoController controller = Get.find<PatientInfoController>(
+    tag: Get.arguments["unique_tag"],
+  );
+
   PatientViewEditable({super.key});
 
   @override
@@ -249,16 +243,19 @@ class PatientViewEditable extends StatelessWidget {
         itemCount: controller.editableDataForPatientView.length,
         itemBuilder: (context, index) {
           return HtmlEditorViewWidget(
-
             padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-            heightOfTheEditableView: 500,
-            impresionAndPlanViewModel: controller.editableDataForPatientView[index],
+            heightOfTheEditableView: 700,
+            impresionAndPlanViewModel:
+                controller.editableDataForPatientView[index],
             onUpdateCallBack: (impressionModel, content) {
               controller.editableDataForPatientView[index] = impressionModel;
               controller.editableDataForPatientView.refresh();
               // controller.updateFullNote("medications_html", controller.editableDataForMedication);
               // controller.updateImpressionAndPlan();
-              controller.updatePatientView("patient_view_note_html", controller.editableDataForPatientView);
+              controller.updatePatientView(
+                "patient_view_note_html",
+                controller.editableDataForPatientView,
+              );
             },
             toggleCallBack: (impressionModel) {
               controller.resetImpressionAndPlanList();

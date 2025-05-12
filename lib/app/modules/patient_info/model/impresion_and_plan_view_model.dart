@@ -8,6 +8,7 @@ class ImpresionAndPlanViewModel {
   String? title;
 
   String? htmlContent;
+  String? initialHtmlContent;
   HtmlEditorController htmlEditorController;
 
   List<SiblingIcd10>? siblingIcd10;
@@ -18,13 +19,20 @@ class ImpresionAndPlanViewModel {
 
   PopoverController popoverController = PopoverController();
 
+  ImpresionAndPlanViewModel({
+    this.title,
+    this.htmlContent,
+    required this.htmlEditorController,
+    this.isEditing = false,
+    this.siblingIcd10,
+    this.siblingIcd10FullNote,
+    this.initialHtmlContent,
+  });
 
-
-  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false , this.siblingIcd10 , this.siblingIcd10FullNote});
   Map<String, dynamic> toJson() {
     if (title == null) {
- return {};
- // Return an empty map if title is null
+      return {};
+      // Return an empty map if title is null
     }
     return {
       'title': title ?? '',
@@ -34,13 +42,14 @@ class ImpresionAndPlanViewModel {
   }
 
   Map<String, dynamic> toJsonFullNote() {
-
-
     if (title == null) {
       return {};
       // Return an empty map if title is null
     }
-    return {'title': title ?? '', 'content': htmlContent ?? ''  ,'sibling_icd_10' :siblingIcd10FullNote };
-
+    return {
+      'title': title ?? '',
+      'content': htmlContent ?? '',
+      'sibling_icd_10': siblingIcd10FullNote,
+    };
   }
 }
