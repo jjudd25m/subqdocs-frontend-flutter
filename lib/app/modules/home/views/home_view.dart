@@ -16,7 +16,7 @@ import 'package:subqdocs/widgets/custom_button.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widgets/custom_animated_button.dart';
 import '../../../routes/app_pages.dart';
-import '../../patient_info/views/drop_drown_search_table.dart';
+import '../../patient_info/views/home_custom_search_bar.dart';
 import '../controllers/home_controller.dart';
 import 'home_patient_list_view.dart';
 

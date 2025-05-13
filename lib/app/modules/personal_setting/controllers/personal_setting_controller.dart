@@ -439,7 +439,7 @@ class PersonalSettingController extends GetxController {
               ),
               ListTile(
                 leading: Icon(Icons.delete),
-                title: Text('Remove Prodfile Image'),
+                title: Text('Remove Profile Image'),
                 onTap: () {
                   if (isUserProfile) {
                     userProfileImage.value = null;
