@@ -606,6 +606,16 @@ class _PatientInfoViewState extends State<PatientInfoView> {
     for (int rows = 0; rows < controller.tableModel.value!.rows.length; rows++) {
       for (int cols = 0; cols < controller.tableModel.value!.rows[rows].cells.length; cols++) {
         for (int newItems = 0; newItems < controller.tableModel.value!.rows[rows].cells[cols].items.length; newItems++) {
+          if (controller.tableModel.value!.rows[rows].cells[cols].items[newItems].unitFocusNode.hasFocus) {
+            print("unit found");
+            controller.tableModel.value!.rows[rows].cells[cols].items[newItems].unitFocusNode.unfocus();
+          }
+
+          if (controller.tableModel.value!.rows[rows].cells[cols].items[newItems].focusNode.hasFocus) {
+            print("focusnode found");
+            controller.tableModel.value!.rows[rows].cells[cols].items[newItems].focusNode.unfocus();
+          }
+
           for (int diag = 0; diag < (controller.tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
             controller.tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
           }
