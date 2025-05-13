@@ -9,6 +9,8 @@ class ImpresionAndPlanViewModel {
 
   String? htmlContent;
   String? initialHtmlContent;
+  String? toggleHtmlContent;
+
   HtmlEditorController htmlEditorController;
 
   List<SiblingIcd10>? siblingIcd10;
@@ -24,6 +26,7 @@ class ImpresionAndPlanViewModel {
     this.htmlContent,
     required this.htmlEditorController,
     this.isEditing = false,
+    this.toggleHtmlContent,
     this.siblingIcd10,
     this.siblingIcd10FullNote,
     this.initialHtmlContent,

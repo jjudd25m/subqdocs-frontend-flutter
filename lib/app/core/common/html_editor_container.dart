@@ -46,6 +46,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
 
   void onChangeContent(String? content) {
     widget.impresionAndPlanViewModel.htmlContent = content;
+    widget.impresionAndPlanViewModel.initialHtmlContent = content;
 
     timer?.cancel();
     timer = Timer(const Duration(seconds: 5), () {
@@ -63,13 +64,22 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
   void toggleEditing() async {
     if (widget.impresionAndPlanViewModel.isEditing) {
       // Save the updated HTML when exiting edit mode
-      String? updatedHtml =
-          await widget.impresionAndPlanViewModel.htmlEditorController.getText();
 
-      renderedHtml = updatedHtml ?? renderedHtml;
       widget.impresionAndPlanViewModel.isEditing = false;
+
+      widget.impresionAndPlanViewModel.toggleHtmlContent =
+          widget.impresionAndPlanViewModel.htmlContent;
+
+      widget.impresionAndPlanViewModel.initialHtmlContent =
+          widget.impresionAndPlanViewModel.htmlContent;
+
       widget.toggleCallBack(widget.impresionAndPlanViewModel);
     } else {
+      widget.impresionAndPlanViewModel.toggleHtmlContent =
+          widget.impresionAndPlanViewModel.htmlContent;
+
+      widget.impresionAndPlanViewModel.initialHtmlContent =
+          widget.impresionAndPlanViewModel.htmlContent;
       widget.impresionAndPlanViewModel.isEditing = true;
       widget.toggleCallBack(widget.impresionAndPlanViewModel);
     }
@@ -274,7 +284,25 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
 
   void _handelUndo() {
     //for redo
-    widget.impresionAndPlanViewModel.htmlEditorController.undo();
+    widget.impresionAndPlanViewModel.toggleHtmlContent;
+
+    if (!compareHtmlIgnoringQuotesAndSpaces(
+      widget.impresionAndPlanViewModel.toggleHtmlContent ?? "",
+      widget.impresionAndPlanViewModel.initialHtmlContent ?? "",
+    )) {
+      widget.impresionAndPlanViewModel.htmlEditorController.undo();
+    }
+  }
+
+  bool compareHtmlIgnoringQuotesAndSpaces(String html1, String html2) {
+    String normalize(String html) {
+      return html
+          .replaceAll(RegExp(r'\s+'), '') // Remove all whitespace
+          .replaceAll('"', "'") // Convert double quotes to single
+          .trim();
+    }
+
+    return normalize(html1) == normalize(html2);
   }
 
   void _handelRedo() {

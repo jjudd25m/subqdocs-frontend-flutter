@@ -98,6 +98,7 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
             focusNode: _focusNode,
             autofocus: true,
             style: textStyle,
+            minLines: 1,
             maxLines: 2,
             cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
             decoration: const InputDecoration(

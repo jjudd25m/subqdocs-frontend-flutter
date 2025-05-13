@@ -118,7 +118,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                                     ),
                                     initialText:
                                         "${index + 1} ${model.title ?? "Select Icd10 Code"}",
-                                    toggle: () {
+                                    toggle: () async {
                                       model.popoverController.toggle();
                                     },
 

@@ -6,8 +6,12 @@ class ImagePath {
   static const String eyeLogoOpen = 'assets/images/eye_icon_logo.svg';
   static const String rightCheck = 'assets/images/right_ok.svg';
   static const String drawer = 'assets/images/logo_drawer.svg';
-  static const String subqdocs_text_logo = 'assets/images/subqdocs_text_logo.png';
-  static const String subqdocs_text_logo_svg = 'assets/images/subqdocs_text_logo.svg';
+  static const String subqdocs_text_logo =
+      'assets/images/subqdocs_text_logo.png';
+  static const String subqdocs_app_bar_logo =
+      'assets/images/subqdocs_logo_appbar.svg';
+  static const String subqdocs_text_logo_svg =
+      'assets/images/subqdocs_text_logo.svg';
   static const String logo_signout = 'assets/images/logo_signout.svg';
   static const String avatar = 'assets/images/Avatar.svg';
   static const String logo_back = 'assets/images/logo_back.svg';
@@ -28,7 +32,8 @@ class ImagePath {
   static const String file_placeHolder1 = 'assets/images/file_paceholder.svg';
   static const String filter_icon = 'assets/images/filter_icon.svg';
 
-  static const String document_attchment = 'assets/images/document_attchment.svg';
+  static const String document_attchment =
+      'assets/images/document_attchment.svg';
   static const String image_attchment = 'assets/images/image_attchment.svg';
   static const String date_attchment = 'assets/images/date_attchment.svg';
   static const String attchment_check = 'assets/images/attchment_check.svg';
@@ -88,7 +93,8 @@ class ImagePath {
   static const String noVisitFound = 'assets/images/no_visite_found.svg';
   static const String scheduleDrawer = 'assets/images/schedule_drawer.svg';
   static const String pastDrawer = 'assets/images/past_drawer.svg';
-  static const String patiton_visit_drawer = 'assets/images/patiton_visit_drawer.svg';
+  static const String patiton_visit_drawer =
+      'assets/images/patiton_visit_drawer.svg';
   static const String calendar = 'assets/images/calendar.svg';
 
   // static const String delete_round = 'assets/images/delete_round.svg';
@@ -103,7 +109,8 @@ class ImagePath {
   static const String crossWithContainer = 'assets/images/cross_container.svg';
   static const String downArrow = 'assets/images/down_arrow.svg';
   static const String upArrowDropDown = 'assets/images/up_arrow_dropdwon.svg';
-  static const String downArrowDropDown = 'assets/images/down_arrow_dropdown.svg';
+  static const String downArrowDropDown =
+      'assets/images/down_arrow_dropdown.svg';
   static const String nameFilter = 'assets/images/name_filter.svg';
 
   // static const String edit = 'assets/images/edit_icon_light.svg';
@@ -117,8 +124,10 @@ class ImagePath {
   static const String textfield_clear_png = 'assets/images/textfield_clear.png';
   static const String subqdocs_white = 'assets/images/subqdocs_white.svg';
 
-  static const String passwordValidationTrue = 'assets/images/password_validation_true.svg';
-  static const String passwordValidationFalse = 'assets/images/password_validation_error.svg';
+  static const String passwordValidationTrue =
+      'assets/images/password_validation_true.svg';
+  static const String passwordValidationFalse =
+      'assets/images/password_validation_error.svg';
 
   static const String pin_icd = 'assets/images/pin_icd.svg';
 
