@@ -97,6 +97,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                     child: RefreshIndicator(
                       onRefresh: controller.onRefresh, // Trigger the refresh
                       child: SingleChildScrollView(
+                        controller: controller.scrollController,
                         physics: AlwaysScrollableScrollPhysics(),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -38,6 +38,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   // final KeyboardController keyboardController = Get.put(KeyboardController());
 
+
+  final ScrollController scrollController = ScrollController();
   final KeyboardController keyboardController = Get.put(KeyboardController());
 
   final GlobalController globalController = Get.find();

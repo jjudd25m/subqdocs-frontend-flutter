@@ -13,12 +13,14 @@ import '../controllers/patient_info_controller.dart';
 import '../model/icd10_code_list_model.dart';
 
 class DropDrownSearchTable extends StatefulWidget {
+
+  final GlobalKey? procedureContainerKey;
   final List<ProcedurePossibleAlternatives> items;
   final int tableRowIndex;
   final Function(ProcedurePossibleAlternatives, int) onItemSelected;
   final Function() onInitCallBack;
 
-  DropDrownSearchTable({Key? key, required this.items, required this.onItemSelected, required this.onInitCallBack, required this.tableRowIndex}) : super(key: key);
+  DropDrownSearchTable({Key? key,this.procedureContainerKey, required this.items, required this.onItemSelected, required this.onInitCallBack, required this.tableRowIndex}) : super(key: key);
 
   @override
   State<DropDrownSearchTable> createState() => _DropDrownSearchTableState();
@@ -56,7 +58,8 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
       child: KeyboardDismissOnTap(
         child: SingleChildScrollView(
           child: Container(
-            height: 250 + (MediaQuery.of(context).viewInsets.bottom / 2.5),
+            height: 250,
+            // height: 250 + (MediaQuery.of(context).viewInsets.bottom / 2.5),
             padding: const EdgeInsets.all(10),
             color: Colors.white,
             child: Column(
@@ -65,6 +68,19 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
                 SizedBox(
                   // height: 40,
                   child: CustomSearchBar(
+                    onTap: (value) {
+
+                      final context = widget.procedureContainerKey?.currentContext;
+                      if (context != null) {
+
+                        Scrollable.ensureVisible(
+                          context,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+
+                    },
                     controller: searchController,
                     hintText: 'Search',
                     onChanged: (text) {
@@ -140,6 +156,9 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
 }
 
 class DiagnosisDropDrownSearchTable extends StatefulWidget {
+
+  final GlobalKey? diagnosisContainerKey;
+
   PatientInfoController controller;
   final int tableRowIndex;
   final List<ProcedurePossibleAlternatives> items;
@@ -150,6 +169,7 @@ class DiagnosisDropDrownSearchTable extends StatefulWidget {
 
   DiagnosisDropDrownSearchTable({
     Key? key,
+     this.diagnosisContainerKey,
     required this.controller,
     required this.items,
     required this.onItemSelected,
@@ -236,7 +256,8 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
         child: SingleChildScrollView(
           // physics: const ClampingScrollPhysics(), // Add this
           child: Container(
-            height: 250 + (MediaQuery.of(context).viewInsets.bottom / 2.25),
+            height: 250,
+            // height: 250 + (MediaQuery.of(context).viewInsets.bottom / 2.25),
             color: Colors.white,
             child: Column(
               children: [
@@ -244,6 +265,17 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                   // height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: CustomSearchBar(
+                    onTap: (value) {
+                      final context = widget.diagnosisContainerKey?.currentContext;
+                      if (context != null) {
+
+                        Scrollable.ensureVisible(
+                          context,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
                     controller: searchController,
                     hintText: 'Search',
                     onChanged: (text) {

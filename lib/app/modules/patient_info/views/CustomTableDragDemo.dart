@@ -157,7 +157,55 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           onTap: () {
                             globalController.selectedRowIndex.value = -1;
                             setState(() {
+
+                              // widget.possibleDignosisProcedureTableModel.a
+
+
+                              List<DiagnosisModel>? diagnosisModelList = [];
+
+                              // for (DiagnosisModel mainList in widget.tableModel.rows[rowIndex].cells[0].items[0].diagnosisModelList ?? []) {
+
+                                for (DiagnosisModel diagnosisModel in widget.tableModel.rows[rowIndex].cells[1].items[0].diagnosisModelList ?? []) {
+                                  print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+
+                                  diagnosisModelList.add(
+                                    DiagnosisModel(
+                                      confidence: diagnosisModel.confidence,
+                                      code: diagnosisModel.code,
+                                      description: diagnosisModel.description,
+                                      diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+                                    ),
+                                  );
+                                }
+
+                              // }
+
+
+                              widget.possibleDignosisProcedureTableModel.rows.add(
+                                TableRowModel(
+                                  cells: [
+                                    TableCellModel(
+                                      items: [
+                                        SingleCellModel(
+                                          code: widget.tableModel.rows[rowIndex].cells[0].items[0].code,
+                                          unit: widget.tableModel.rows[rowIndex].cells[0].items[0].unit,
+                                          modifiers: widget.tableModel.rows[rowIndex].cells[0].items[0].modifiers,
+                                          description: widget.tableModel.rows[rowIndex].cells[0].items[0].description ?? "",
+                                          unitPrice: "0",
+                                          procedurePossibleAlternatives: widget.tableModel.rows[rowIndex].cells[0].items[0].procedurePossibleAlternatives,
+                                        ),
+                                      ],
+                                    ),
+                                    TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
+                                    TableCellModel(items: [SingleCellModel(unit: widget.tableModel.rows[rowIndex].cells[2].items[0].unit)]),
+                                    TableCellModel(items: [SingleCellModel(unitPrice: widget.tableModel.rows[rowIndex].cells[3].items[0].unitPrice)]),
+                                  ],
+                                ),
+                              );
+
                               widget.tableModel.rows.removeAt(rowIndex);
+                              calculateTotal();
+
                             });
                           },
                           child: Container(
@@ -213,6 +261,8 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                 }
 
                 if (colIndex == 1) {
+
+
                   closeAllPopOver();
                 }
 
@@ -370,6 +420,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                   // applyActionWidth: true,
                                                                   // contentWidth: (MediaQuery.of(context).size.width * 0.4),
                                                                   action: RichText(
+                                                                    key: items[i].diagnosisModelList?[subIndex].diagnosisContainerKey,
                                                                     text: TextSpan(
                                                                       children: [
                                                                         TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
@@ -378,6 +429,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     ),
                                                                   ),
                                                                   content: DiagnosisDropDrownSearchTable(
+                                                                    diagnosisContainerKey: items[i].diagnosisModelList![subIndex].diagnosisContainerKey,
                                                                     items:
                                                                         (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
                                                                             .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
@@ -413,6 +465,17 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       });
                                                                     },
                                                                     onInitCallBack: () {
+
+                                                                      // final context = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].diagnosisContainerKey.currentContext;
+                                                                      // if (context != null) {
+                                                                      //
+                                                                      //   Scrollable.ensureVisible(
+                                                                      //     context,
+                                                                      //     duration: Duration(milliseconds: 500),
+                                                                      //     curve: Curves.easeInOut,
+                                                                      //   );
+                                                                      // }
+
                                                                       for (int s = 0; s < widget.tableModel.rows.length; s++) {
                                                                         widget.tableModel.rows[s].popoverController.close();
                                                                       }
@@ -535,6 +598,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                   // applyActionWidth: true,
                                                                   // contentWidth: (MediaQuery.of(context).size.width * 0.4),
                                                                   action: RichText(
+                                                                    key: items[i].diagnosisModelList?[subIndex].diagnosisContainerKey,
                                                                     text: TextSpan(
                                                                       children: [
                                                                         TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
@@ -543,6 +607,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     ),
                                                                   ),
                                                                   content: DiagnosisDropDrownSearchTable(
+                                                                    diagnosisContainerKey: items[i].diagnosisModelList![subIndex].diagnosisContainerKey,
                                                                     items:
                                                                         (items[i].diagnosisModelList?[subIndex].diagnosisPossibleAlternatives ?? [])
                                                                             .map((item) => ProcedurePossibleAlternatives(code: item.code, description: item.description, isPin: item.isPin ?? false))
@@ -579,6 +644,17 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       });
                                                                     },
                                                                     onInitCallBack: () {
+
+                                                                      // final context = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].diagnosisContainerKey.currentContext;
+                                                                      // if (context != null) {
+                                                                      //
+                                                                      //   Scrollable.ensureVisible(
+                                                                      //     context,
+                                                                      //     duration: Duration(milliseconds: 500),
+                                                                      //     curve: Curves.easeInOut,
+                                                                      //   );
+                                                                      // }
+
                                                                       for (int s = 0; s < widget.tableModel.rows.length; s++) {
                                                                         widget.tableModel.rows[s].popoverController.close();
                                                                       }
@@ -707,6 +783,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 5),
                                     child: RichText(
+                                      key: items[i].procedureContainerKey,
                                       text: TextSpan(
                                         children: [
                                           (items[i].modifiers != "" && items[i].modifiers != null)
@@ -719,6 +796,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                   ),
                                 ),
                                 content: DropDrownSearchTable(
+                                  procedureContainerKey: items[i].procedureContainerKey,
                                   items: items[i].procedurePossibleAlternatives ?? [],
                                   onItemSelected: (value, index) {
                                     widget.tableModel.rows[row].popoverController.close();
@@ -740,6 +818,17 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                     });
                                   },
                                   onInitCallBack: () {
+
+                                    // final context = widget.tableModel.rows[row].cells[col].items[i].procedureContainerKey.currentContext;
+                                    // if (context != null) {
+                                    //
+                                    //   Scrollable.ensureVisible(
+                                    //     context,
+                                    //     duration: Duration(milliseconds: 500),
+                                    //     curve: Curves.easeInOut,
+                                    //   );
+                                    // }
+
                                     print("row $row col $col i $i");
 
                                     for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {

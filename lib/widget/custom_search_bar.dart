@@ -5,6 +5,7 @@ import '../utils/app_colors.dart';
 import '../utils/imagepath.dart';
 
 class CustomSearchBar extends StatefulWidget {
+  final ValueChanged<String>? onTap;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmit;
   final String hintText;
@@ -19,6 +20,7 @@ class CustomSearchBar extends StatefulWidget {
 
   const CustomSearchBar({
     Key? key,
+    this.onTap,
     this.onChanged,
     this.onSubmit,
     this.hintText = 'Search',
@@ -99,6 +101,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             child: Padding(
               padding: widget.padding ?? const EdgeInsets.symmetric(vertical: 2),
               child: TextField(
+                onTap: () {
+                  widget.onTap?.call("");
+                },
                 controller: _controller,
                 focusNode: _focusNode,
                 onSubmitted: _onSubmitted,
