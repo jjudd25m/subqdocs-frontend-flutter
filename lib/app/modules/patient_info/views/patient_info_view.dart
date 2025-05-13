@@ -93,7 +93,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                 Expanded(
                   child: Container(
                     color: AppColors.ScreenBackGround1,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: RefreshIndicator(
                       onRefresh: controller.onRefresh, // Trigger the refresh
                       child: SingleChildScrollView(
@@ -101,7 +101,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Obx(() {
                               return BreadcrumbWidget(
                                 breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
@@ -113,7 +113,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                 },
                               );
                             }),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Column(
                               children: <Widget>[
                                 Container(
@@ -121,7 +121,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                                   child: Padding(padding: const EdgeInsets.all(14), child: Text("Patient Visit Record", style: AppFonts.regular(17, AppColors.textBlack))),
                                 ),
-                                SizedBox(height: 15.0),
+                                const SizedBox(height: 15.0),
                                 Obx(() {
                                   return Theme(
                                     data: ThemeData(
@@ -147,7 +147,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               },
                                               child: Container(
                                                 color: AppColors.white,
-                                                padding: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
+                                                padding: const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0),
                                                 child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20),
                                               ),
                                             ),
@@ -162,7 +162,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 fontSize: 14,
                                               ),
                                             ),
-                                            SizedBox(width: 10),
+                                            const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -171,17 +171,17 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                   "${controller.patientData.value?.responseData?.patientFirstName ?? ""} ${controller.patientData.value?.responseData?.patientLastName ?? ""} ",
                                                   style: AppFonts.medium(16, AppColors.textBlack),
                                                 ),
-                                                SizedBox(width: 15),
+                                                const SizedBox(width: 15),
                                                 Text(textAlign: TextAlign.center, controller.patientData.value?.responseData?.patientId ?? "", style: AppFonts.regular(11, AppColors.textGrey)),
                                               ],
                                             ),
-                                            Spacer(),
+                                            const Spacer(),
                                           ],
                                         ),
                                       ),
                                       children: <Widget>[
                                         Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 20),
                                           child: Row(
@@ -189,7 +189,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               Column(
                                                 children: [
                                                   Text(textAlign: TextAlign.center, "Age", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  SizedBox(height: 6),
+                                                  const SizedBox(height: 6),
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     (controller.patientData.value?.responseData?.age.toString() ?? "") == "null"
@@ -199,19 +199,19 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                   ),
                                                 ],
                                               ),
-                                              Spacer(),
+                                              const Spacer(),
                                               Column(
                                                 children: [
                                                   Text(textAlign: TextAlign.center, "Gender", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  SizedBox(height: 6),
+                                                  const SizedBox(height: 6),
                                                   Text(textAlign: TextAlign.center, controller.patientData.value?.responseData?.gender ?? "N/A", style: AppFonts.regular(14, AppColors.textGrey)),
                                                 ],
                                               ),
-                                              Spacer(),
+                                              const Spacer(),
                                               Column(
                                                 children: [
                                                   Text(textAlign: TextAlign.center, "Visit Date & Time", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  SizedBox(height: 6),
+                                                  const SizedBox(height: 6),
                                                   Text(
                                                     textAlign: TextAlign.center,
                                                     formatDateTime(
@@ -222,12 +222,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                   ),
                                                 ],
                                               ),
-                                              Spacer(),
+                                              const Spacer(),
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(textAlign: TextAlign.start, "Medical Assistant", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  SizedBox(height: 6),
+                                                  const SizedBox(height: 6),
                                                   GestureDetector(
                                                     onLongPress: () {
                                                       CustomToastification().showToast("test");
@@ -286,12 +286,12 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(width: 30),
+                                              const SizedBox(width: 30),
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  SizedBox(height: 6),
+                                                  const SizedBox(height: 6),
                                                   PopupMenuButton<String>(
                                                     offset: const Offset(0, 8),
                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -348,22 +348,22 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(height: 20),
+                                        const SizedBox(height: 20),
                                       ],
                                     ),
                                   );
                                 }),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                                   child: Obx(() {
                                     return Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
                                       height: 45,
                                       child: SingleChildScrollView(
-                                        physics: BouncingScrollPhysics(),
+                                        physics: const BouncingScrollPhysics(),
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
                                           children: [
@@ -376,7 +376,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 isDoctorView: true,
                                                 text: " Power View ",
                                                 isOutline: true,
-                                                paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
                                                 enabledTextColor: controller.tabIndex.value == 0 ? AppColors.backgroundPurple : AppColors.textGrey,
                                                 enabledColor: controller.tabIndex.value == 0 ? AppColors.buttonPurpleLight : AppColors.clear,
@@ -392,7 +392,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 },
                                                 text: " Full Note ",
                                                 isOutline: true,
-                                                paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
                                                 enabledTextColor: controller.tabIndex.value == 3 ? AppColors.backgroundPurple : AppColors.textGrey,
                                                 enabledColor: controller.tabIndex.value == 3 ? AppColors.buttonPurpleLight : AppColors.clear,
@@ -408,7 +408,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 },
                                                 text: " Patient Note ",
                                                 isOutline: true,
-                                                paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
                                                 enabledTextColor: controller.tabIndex.value == 2 ? AppColors.backgroundPurple : AppColors.textGrey,
                                                 enabledColor: controller.tabIndex.value == 2 ? AppColors.buttonPurpleLight : AppColors.clear,
@@ -424,7 +424,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 },
                                                 text: " Full Transcript ",
                                                 isOutline: true,
-                                                paddingText: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                                paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                                 fontSize: 14,
                                                 enabledTextColor: controller.tabIndex.value == 1 ? AppColors.backgroundPurple : AppColors.textGrey,
                                                 enabledColor: controller.tabIndex.value == 1 ? AppColors.buttonPurpleLight : AppColors.clear,
@@ -438,24 +438,24 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                     );
                                   }),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Container(
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
                                   child: Obx(() {
                                     return Column(
                                       children: [
-                                        SizedBox(height: 20),
+                                        const SizedBox(height: 20),
                                         if (controller.tabIndex.value == 0) ...[DoctorView()],
                                         if (controller.tabIndex.value == 1) ...[FullTranscriptView()],
                                         if (controller.tabIndex.value == 2) ...[PatientView()],
                                         if (controller.tabIndex.value == 3) ...[FullNoteView()],
                                         if (controller.tabIndex.value == 6) ...[VisitDataView()],
-                                        SizedBox(height: 20),
+                                        const SizedBox(height: 20),
                                       ],
                                     );
                                   }),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                               ],
                             ),
                           ],
@@ -471,7 +471,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                     child: Container(
                       // color: AppColors.backgroundWhite,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Obx(() {
                         return Row(
                           spacing: 15,
@@ -493,7 +493,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
-                                                SizedBox(height: 10),
+                                                const SizedBox(height: 10),
                                                 Text(
                                                   textAlign: TextAlign.center,
                                                   "Digitally Signed by ${controller.patientData.value?.responseData?.doctorName}",
@@ -512,7 +512,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       Text(textAlign: TextAlign.center, "Amend Note", style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline)),
                                     ],
                                   ),
@@ -537,7 +537,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             SvgPicture.asset(ImagePath.add_photo, height: 30, width: 30),
-                                            SizedBox(height: 10),
+                                            const SizedBox(height: 10),
                                             Text(textAlign: TextAlign.center, "Add Photo or Document", style: AppFonts.medium(16, AppColors.textBlack)),
                                           ],
                                         ),
@@ -572,7 +572,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
-                                              SizedBox(height: 10),
+                                              const SizedBox(height: 10),
                                               Text(textAlign: TextAlign.center, "Sign and Finalize", style: AppFonts.medium(16, AppColors.textWhite)),
                                             ],
                                           ),

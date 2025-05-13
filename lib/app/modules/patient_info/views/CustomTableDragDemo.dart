@@ -88,111 +88,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
     );
   }
 
-  Widget _buildTableHeader() {
-    return Table(
-      border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
-      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
-      children: [
-        TableRow(
-          decoration: const BoxDecoration(color: AppColors.white),
-          children:
-              ['Procedure', 'Diagnosis', 'Units', 'Unit Charge'].map((col) {
-                return Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text(col, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)));
-              }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFooterRow() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(6), bottomLeft: Radius.circular(6)),
-        border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 92,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
-              decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
-              child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
-            ),
-          ),
-          Expanded(
-            flex: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Obx(() {
-                return Text("\$ ${widget.totalUnitCharge.toString()}", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black));
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNewProcedureAlternative() {
-    return Container(
-      decoration: BoxDecoration(color: AppColors.backgroundLightGrey, border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 100,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 15),
-                  child: Row(
-                    spacing: 10,
-                    children: [
-                      SizedBox(
-                        width: 200,
-                        child: CustomAnimatedButton(
-                          onPressed: () {
-                            _addRow();
-                          },
-                          height: 40,
-                          text: "+ New Procedure",
-                          enabledColor: AppColors.white,
-                          enabledTextColor: AppColors.textDarkGrey,
-                          isOutline: true,
-                          outlineColor: AppColors.textBlackDark.withValues(alpha: 0.5),
-                        ),
-                      ),
-                      if (widget.possibleDignosisProcedureTableModel.rows.isNotEmpty) ...[
-                        SizedBox(
-                          width: 200,
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              setState(() {
-                                widget.isPossibleAlternativeShow = !widget.isPossibleAlternativeShow;
-                              });
-                            },
-                            height: 40,
-                            text: "${widget.possibleDignosisProcedureTableModel.rows.length} Possible Additions",
-                            enabledColor: widget.isPossibleAlternativeShow ? AppColors.orange : AppColors.white,
-                            enabledTextColor: widget.isPossibleAlternativeShow ? AppColors.orangeText : AppColors.textDarkGrey,
-                            isOutline: true,
-                            outlineColor: AppColors.textBlackDark.withValues(alpha: 0.5),
-                          ),
-                        ),
-                      ],
-                      const Spacer(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (widget.isPossibleAlternativeShow) ...[buildPossibleAddition()],
-        ],
-      ),
-    );
-  }
-
   // A widget that builds a row with drag-and-drop functionality
   Widget _buildRow(int rowIndex) {
     return Obx(() {
@@ -892,6 +787,111 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       onAcceptWithDetails: (data) {
         print("outer onAccept data :- ${data}");
       },
+    );
+  }
+
+  Widget _buildTableHeader() {
+    return Table(
+      border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
+      children: [
+        TableRow(
+          decoration: const BoxDecoration(color: AppColors.white),
+          children:
+              ['Procedure', 'Diagnosis', 'Units', 'Unit Charge'].map((col) {
+                return Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text(col, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)));
+              }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooterRow() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(6), bottomLeft: Radius.circular(6)),
+        border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 92,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
+              decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
+              child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
+            ),
+          ),
+          Expanded(
+            flex: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Obx(() {
+                return Text("\$ ${widget.totalUnitCharge.toString()}", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black));
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNewProcedureAlternative() {
+    return Container(
+      decoration: BoxDecoration(color: AppColors.backgroundLightGrey, border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 100,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 15),
+                  child: Row(
+                    spacing: 10,
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: CustomAnimatedButton(
+                          onPressed: () {
+                            _addRow();
+                          },
+                          height: 40,
+                          text: "+ New Procedure",
+                          enabledColor: AppColors.white,
+                          enabledTextColor: AppColors.textDarkGrey,
+                          isOutline: true,
+                          outlineColor: AppColors.textBlackDark.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      if (widget.possibleDignosisProcedureTableModel.rows.isNotEmpty) ...[
+                        SizedBox(
+                          width: 200,
+                          child: CustomAnimatedButton(
+                            onPressed: () {
+                              setState(() {
+                                widget.isPossibleAlternativeShow = !widget.isPossibleAlternativeShow;
+                              });
+                            },
+                            height: 40,
+                            text: "${widget.possibleDignosisProcedureTableModel.rows.length} Possible Additions",
+                            enabledColor: widget.isPossibleAlternativeShow ? AppColors.orange : AppColors.white,
+                            enabledTextColor: widget.isPossibleAlternativeShow ? AppColors.orangeText : AppColors.textDarkGrey,
+                            isOutline: true,
+                            outlineColor: AppColors.textBlackDark.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ],
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (widget.isPossibleAlternativeShow) ...[buildPossibleAddition()],
+        ],
+      ),
     );
   }
 

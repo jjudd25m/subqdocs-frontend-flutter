@@ -234,6 +234,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
       color: AppColors.white,
       child: KeyboardDismissOnTap(
         child: SingleChildScrollView(
+          // physics: const ClampingScrollPhysics(), // Add this
           child: Container(
             height: 250 + (MediaQuery.of(context).viewInsets.bottom / 2.25),
             color: Colors.white,
