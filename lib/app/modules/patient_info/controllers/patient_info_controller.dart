@@ -614,6 +614,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
     for (var list in editableLists) {
       for (var element in list) {
+        element.toggleHtmlContent = element.htmlContent;
+        element.initialHtmlContent = element.htmlContent;
+
         element.isEditing = false;
       }
       list.refresh();
@@ -1504,10 +1507,23 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       // htmlEditorController.setText(patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "");
       editableDataForPatientView.add(
         ImpresionAndPlanViewModel(
-          htmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "",
+          htmlContent:
+              patientViewListModel
+                  .value
+                  ?.responseData
+                  ?.visitNoteDetails
+                  ?.patientViewNoteHtml ??
+              "",
           htmlEditorController: htmlEditorController,
           title: "",
           initialHtmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml,
+
+          toggleHtmlContent:
+              patientViewListModel
+                  .value
+                  ?.responseData
+                  ?.visitNoteDetails
+                  ?.patientViewNoteHtml,
         ),
       );
       editableDataForPatientView.refresh();
