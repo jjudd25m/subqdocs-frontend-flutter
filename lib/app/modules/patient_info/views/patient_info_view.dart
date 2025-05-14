@@ -55,8 +55,21 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      onDrawerChanged: (status) {
+        print("drawer status is :- ${status}");
+
+        if (status) {
+          closeAllProcedureDiagnosisPopover();
+        }
+      },
       resizeToAvoidBottomInset: false,
       onItemSelected: (index) async {
         if (index == 0) {

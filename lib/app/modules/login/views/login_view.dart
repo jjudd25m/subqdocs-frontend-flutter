@@ -76,7 +76,7 @@ class LoginView extends GetView<LoginController> {
                         visibility: controller.visiblity.value,
                         controller: controller.passwordController,
                         suffixIcon:
-                            controller.visiblity.value
+                            !controller.visiblity.value
                                 ? GestureDetector(
                                   onTap: () {
                                     controller.changeVisiblity();

@@ -21,12 +21,13 @@ import '../utils/app_fonts.dart';
 import '../utils/imagepath.dart';
 
 class BaseScreen extends StatelessWidget {
-  BaseScreen({super.key, required this.body, required this.globalKey, this.isVisibleModel = false, this.onItemSelected, this.onPlayCallBack, this.resizeToAvoidBottomInset});
+  BaseScreen({super.key, required this.body, required this.globalKey, this.isVisibleModel = false, this.onItemSelected, this.onDrawerChanged, this.onPlayCallBack, this.resizeToAvoidBottomInset});
 
   Widget body;
 
   final bool isVisibleModel;
   final Function(int index)? onItemSelected;
+  final Function(bool status)? onDrawerChanged;
   final GlobalKey<ScaffoldState> globalKey;
   final VoidCallback? onPlayCallBack;
 
@@ -41,6 +42,9 @@ class BaseScreen extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       key: globalKey,
       backgroundColor: AppColors.white,
+      onDrawerChanged: (isOpened) {
+        onDrawerChanged!(isOpened);
+      },
       drawer: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
         child: CustomDrawerView(

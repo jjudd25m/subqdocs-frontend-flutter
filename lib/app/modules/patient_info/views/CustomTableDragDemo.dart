@@ -157,29 +157,26 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           onTap: () {
                             globalController.selectedRowIndex.value = -1;
                             setState(() {
-
                               // widget.possibleDignosisProcedureTableModel.a
-
 
                               List<DiagnosisModel>? diagnosisModelList = [];
 
                               // for (DiagnosisModel mainList in widget.tableModel.rows[rowIndex].cells[0].items[0].diagnosisModelList ?? []) {
 
-                                for (DiagnosisModel diagnosisModel in widget.tableModel.rows[rowIndex].cells[1].items[0].diagnosisModelList ?? []) {
-                                  print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+                              for (DiagnosisModel diagnosisModel in widget.tableModel.rows[rowIndex].cells[1].items[0].diagnosisModelList ?? []) {
+                                print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
 
-                                  diagnosisModelList.add(
-                                    DiagnosisModel(
-                                      confidence: diagnosisModel.confidence,
-                                      code: diagnosisModel.code,
-                                      description: diagnosisModel.description,
-                                      diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
-                                    ),
-                                  );
-                                }
+                                diagnosisModelList.add(
+                                  DiagnosisModel(
+                                    confidence: diagnosisModel.confidence,
+                                    code: diagnosisModel.code,
+                                    description: diagnosisModel.description,
+                                    diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+                                  ),
+                                );
+                              }
 
                               // }
-
 
                               widget.possibleDignosisProcedureTableModel.rows.add(
                                 TableRowModel(
@@ -205,7 +202,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
                               widget.tableModel.rows.removeAt(rowIndex);
                               calculateTotal();
-
                             });
                           },
                           child: Container(
@@ -261,8 +257,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                 }
 
                 if (colIndex == 1) {
-
-
                   closeAllPopOver();
                 }
 
@@ -465,7 +459,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       });
                                                                     },
                                                                     onInitCallBack: () {
-
                                                                       // final context = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].diagnosisContainerKey.currentContext;
                                                                       // if (context != null) {
                                                                       //
@@ -644,7 +637,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       });
                                                                     },
                                                                     onInitCallBack: () {
-
                                                                       // final context = widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?[subIndex].diagnosisContainerKey.currentContext;
                                                                       // if (context != null) {
                                                                       //
@@ -711,10 +703,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                           onTap: () {
                                             closeAllPopOver();
 
-                                            if (widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.last.description != "select code") {
+                                            if (widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.isEmpty ?? false) {
                                               _addItemAtIndex(row, col, i);
                                             } else {
-                                              CustomToastification().showToast("Please select code then add new diagnosis code", type: ToastificationType.error);
+                                              if (widget.tableModel.rows[row].cells[col].items[i].diagnosisModelList?.last.description != "select code") {
+                                                _addItemAtIndex(row, col, i);
+                                              } else {
+                                                CustomToastification().showToast("Please select code then add new diagnosis code", type: ToastificationType.error);
+                                              }
                                             }
                                           },
                                           child: Row(
@@ -818,7 +814,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                     });
                                   },
                                   onInitCallBack: () {
-
                                     // final context = widget.tableModel.rows[row].cells[col].items[i].procedureContainerKey.currentContext;
                                     // if (context != null) {
                                     //

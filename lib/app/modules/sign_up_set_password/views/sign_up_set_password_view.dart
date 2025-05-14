@@ -60,7 +60,7 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                         visibility: controller.passwordVisible.value,
                         controller: controller.passwordController,
                         suffixIcon:
-                            controller.passwordVisible.value
+                            !controller.passwordVisible.value
                                 ? GestureDetector(
                                   onTap: () {
                                     controller.changePasswordVisible();
@@ -191,7 +191,7 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                         visibility: controller.confirmPasswordVisible.value,
                         controller: controller.confirmPasswordController,
                         suffixIcon:
-                            controller.confirmPasswordVisible.value
+                            !controller.confirmPasswordVisible.value
                                 ? GestureDetector(
                                   onTap: () {
                                     controller.changeConfirmPasswordVisible();
