@@ -178,27 +178,31 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
                               // }
 
-                              widget.possibleDignosisProcedureTableModel.rows.add(
-                                TableRowModel(
-                                  cells: [
-                                    TableCellModel(
-                                      items: [
-                                        SingleCellModel(
-                                          code: widget.tableModel.rows[rowIndex].cells[0].items[0].code,
-                                          unit: widget.tableModel.rows[rowIndex].cells[0].items[0].unit,
-                                          modifiers: widget.tableModel.rows[rowIndex].cells[0].items[0].modifiers,
-                                          description: widget.tableModel.rows[rowIndex].cells[0].items[0].description ?? "",
-                                          unitPrice: "0",
-                                          procedurePossibleAlternatives: widget.tableModel.rows[rowIndex].cells[0].items[0].procedurePossibleAlternatives,
-                                        ),
-                                      ],
-                                    ),
-                                    TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
-                                    TableCellModel(items: [SingleCellModel(unit: widget.tableModel.rows[rowIndex].cells[2].items[0].unit)]),
-                                    TableCellModel(items: [SingleCellModel(unitPrice: widget.tableModel.rows[rowIndex].cells[3].items[0].unitPrice)]),
-                                  ],
-                                ),
-                              );
+                              if (widget.tableModel.rows[rowIndex].cells[0].items[0].code != "0") {
+                                print("sgfgdfgdfg");
+
+                                widget.possibleDignosisProcedureTableModel.rows.add(
+                                  TableRowModel(
+                                    cells: [
+                                      TableCellModel(
+                                        items: [
+                                          SingleCellModel(
+                                            code: widget.tableModel.rows[rowIndex].cells[0].items[0].code,
+                                            unit: widget.tableModel.rows[rowIndex].cells[0].items[0].unit,
+                                            modifiers: widget.tableModel.rows[rowIndex].cells[0].items[0].modifiers,
+                                            description: widget.tableModel.rows[rowIndex].cells[0].items[0].description ?? "",
+                                            unitPrice: "0",
+                                            procedurePossibleAlternatives: widget.tableModel.rows[rowIndex].cells[0].items[0].procedurePossibleAlternatives,
+                                          ),
+                                        ],
+                                      ),
+                                      TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
+                                      TableCellModel(items: [SingleCellModel(unit: widget.tableModel.rows[rowIndex].cells[2].items[0].unit)]),
+                                      TableCellModel(items: [SingleCellModel(unitPrice: widget.tableModel.rows[rowIndex].cells[3].items[0].unitPrice)]),
+                                    ],
+                                  ),
+                                );
+                              }
 
                               widget.tableModel.rows.removeAt(rowIndex);
                               calculateTotal();

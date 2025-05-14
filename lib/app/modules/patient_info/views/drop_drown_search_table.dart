@@ -13,14 +13,13 @@ import '../controllers/patient_info_controller.dart';
 import '../model/icd10_code_list_model.dart';
 
 class DropDrownSearchTable extends StatefulWidget {
-
   final GlobalKey? procedureContainerKey;
   final List<ProcedurePossibleAlternatives> items;
   final int tableRowIndex;
   final Function(ProcedurePossibleAlternatives, int) onItemSelected;
   final Function() onInitCallBack;
 
-  DropDrownSearchTable({Key? key,this.procedureContainerKey, required this.items, required this.onItemSelected, required this.onInitCallBack, required this.tableRowIndex}) : super(key: key);
+  DropDrownSearchTable({Key? key, this.procedureContainerKey, required this.items, required this.onItemSelected, required this.onInitCallBack, required this.tableRowIndex}) : super(key: key);
 
   @override
   State<DropDrownSearchTable> createState() => _DropDrownSearchTableState();
@@ -69,17 +68,10 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
                   // height: 40,
                   child: CustomSearchBar(
                     onTap: (value) {
-
                       final context = widget.procedureContainerKey?.currentContext;
                       if (context != null) {
-
-                        Scrollable.ensureVisible(
-                          context,
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
+                        Scrollable.ensureVisible(context, duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
                       }
-
                     },
                     controller: searchController,
                     hintText: 'Search',
@@ -156,7 +148,6 @@ class _DropDrownSearchTableState extends State<DropDrownSearchTable> {
 }
 
 class DiagnosisDropDrownSearchTable extends StatefulWidget {
-
   final GlobalKey? diagnosisContainerKey;
 
   PatientInfoController controller;
@@ -169,7 +160,7 @@ class DiagnosisDropDrownSearchTable extends StatefulWidget {
 
   DiagnosisDropDrownSearchTable({
     Key? key,
-     this.diagnosisContainerKey,
+    this.diagnosisContainerKey,
     required this.controller,
     required this.items,
     required this.onItemSelected,
@@ -188,6 +179,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
   late List<ProcedurePossibleAlternatives> filteredItems = [];
   TextEditingController searchController = TextEditingController();
   bool isLoading = false;
+  bool isPaginationLoading = false;
   int page = 1;
   bool isValid = true;
   Timer? timer;
@@ -197,7 +189,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
     super.initState();
 
     filteredItems = List.from(widget.items);
-    getIcd10Code();
+    getIcd10Code(isShowLoading: true);
     widget.onInitCallBack();
   }
 
@@ -212,14 +204,23 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
     timer?.cancel();
     timer = Timer(const Duration(milliseconds: 500), () {
       page = 1;
-      getIcd10Code();
+      widget.icd10CodeList.clear();
+      getIcd10Code(isShowLoading: true);
     });
   }
 
-  Future<void> getIcd10Code() async {
-    setState(() {
-      isLoading = true;
-    });
+  Future<bool> getIcd10Code({bool isShowLoading = false, bool isShowPaginationLoading = false}) async {
+    if (isShowLoading) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+    if (isShowPaginationLoading) {
+      setState(() {
+        isPaginationLoading = true;
+      });
+    }
 
     Map<String, dynamic> param = {};
     param['page'] = page;
@@ -231,13 +232,23 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
 
     Icd10CodeListModel icd10codeListModel = await widget.controller.getIcd10CodeList(param);
 
-    setState(() {
-      isLoading = false;
-    });
+    if (isShowLoading) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    if (isShowPaginationLoading) {
+      setState(() {
+        isPaginationLoading = false;
+      });
+    }
 
     setState(() {
       widget.icd10CodeList.addAll(icd10codeListModel.responseData?.data ?? []);
     });
+
+    return true;
 
     // widget
   }
@@ -268,12 +279,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                     onTap: (value) {
                       final context = widget.diagnosisContainerKey?.currentContext;
                       if (context != null) {
-
-                        Scrollable.ensureVisible(
-                          context,
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
+                        Scrollable.ensureVisible(context, duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
                       }
                     },
                     controller: searchController,
@@ -309,7 +315,8 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                       if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading) {
                         print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
                         page = page + 1;
-                        getIcd10Code();
+                        // getIcd10Code();
+                        getIcd10Code(isShowPaginationLoading: true);
                       }
                       return false; // Allow other notifications to propagate
                     },
@@ -409,6 +416,11 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                                     },
                                   ),
                                 ),
+                                if (isPaginationLoading) ...[
+                                  const SizedBox(height: 10),
+                                  const Center(child: CircularProgressIndicator(color: AppColors.textPurple, strokeWidth: 2)),
+                                  const SizedBox(height: 10),
+                                ],
                               ],
                             ],
                             if (filteredItems.isEmpty && widget.icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],

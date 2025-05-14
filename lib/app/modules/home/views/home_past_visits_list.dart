@@ -27,21 +27,22 @@ class HomePastVisitsList extends GetView<HomeController> {
       child: Obx(() {
         return Column(
           children: [
-            if (controller.globalController.pastFilterListingModel.isNotEmpty)
-              CustomFilterListing(
-                items: controller.globalController.pastFilterListingModel,
-                onDeleteItem: (value) {
-                  controller.globalController.removePastFilter(keyName: value);
-                  controller.pastTriggeredIndexes.clear();
+            if (controller.pastVisitList.isNotEmpty)
+              if (controller.globalController.pastFilterListingModel.isNotEmpty)
+                CustomFilterListing(
+                  items: controller.globalController.pastFilterListingModel,
+                  onDeleteItem: (value) {
+                    controller.globalController.removePastFilter(keyName: value);
+                    controller.pastTriggeredIndexes.clear();
 
-                  controller.getPastVisitList();
-                },
-                oneClearAll: () {
-                  controller.globalController.removePastFilter();
-                  controller.pastTriggeredIndexes.clear();
-                  controller.getPastVisitList();
-                },
-              ),
+                    controller.getPastVisitList();
+                  },
+                  oneClearAll: () {
+                    controller.globalController.removePastFilter();
+                    controller.pastTriggeredIndexes.clear();
+                    controller.getPastVisitList();
+                  },
+                ),
             if (controller.globalController.pastFilterListingModel.isNotEmpty) SizedBox(height: 15),
             controller.pastVisitList.isEmpty
                 ? controller.isHomePastPatientListLoading.value
@@ -57,6 +58,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                           controller.getScheduleVisitList();
                           controller.getPatientList();
                         },
+                        buttonTitle: "Schedule Visit",
                         title: "Your Past Visit List is Empty",
                         description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
                       ),

@@ -11,16 +11,7 @@ class InlineEditingDropdown extends StatefulWidget {
 
   final FocusNode focusNode;
 
-  InlineEditingDropdown({
-    required this.initialText,
-    required this.onSubmitted,
-    required this.onChanged,
-    required this.focusNode,
-    this.toggle,
-    this.textStyle,
-
-    Key? key,
-  }) : super(key: key);
+  InlineEditingDropdown({required this.initialText, required this.onSubmitted, required this.onChanged, required this.focusNode, this.toggle, this.textStyle, Key? key}) : super(key: key);
 
   @override
   _InlineEditableTextState createState() => _InlineEditableTextState();
@@ -53,10 +44,15 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
     });
   }
 
+  void didUpdateWidget(covariant InlineEditingDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.text = widget.initialText;
+  }
+
   @override
   void dispose() {
     _controller.dispose();
-    widget.focusNode.dispose();
+    // widget.focusNode.dispose();
     super.dispose();
   }
 
@@ -65,9 +61,9 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
       _isEditing = true;
     });
     widget.toggle?.call();
-    Future.delayed(Duration(milliseconds: 100), () {
-      FocusScope.of(context).requestFocus(widget.focusNode);
-    });
+    // Future.delayed(Duration(milliseconds: 100), () {
+    //   FocusScope.of(context).requestFocus(widget.focusNode);
+    // });
   }
 
   void _submitEdit() {
@@ -115,9 +111,6 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
             onSubmitted: (_) => _submitEdit(),
           ),
         )
-        : GestureDetector(
-          onTap: _startEditing,
-          child: Text(_controller.text, style: textStyle),
-        );
+        : GestureDetector(onTap: _startEditing, child: Text(_controller.text, style: textStyle));
   }
 }

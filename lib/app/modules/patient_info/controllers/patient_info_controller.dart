@@ -38,7 +38,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   // final KeyboardController keyboardController = Get.put(KeyboardController());
 
-
   final ScrollController scrollController = ScrollController();
   final KeyboardController keyboardController = Get.put(KeyboardController());
 
@@ -1509,23 +1508,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       // htmlEditorController.setText(patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "");
       editableDataForPatientView.add(
         ImpresionAndPlanViewModel(
-          htmlContent:
-              patientViewListModel
-                  .value
-                  ?.responseData
-                  ?.visitNoteDetails
-                  ?.patientViewNoteHtml ??
-              "",
+          htmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml ?? "",
           htmlEditorController: htmlEditorController,
           title: "",
           initialHtmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml,
 
-          toggleHtmlContent:
-              patientViewListModel
-                  .value
-                  ?.responseData
-                  ?.visitNoteDetails
-                  ?.patientViewNoteHtml,
+          toggleHtmlContent: patientViewListModel.value?.responseData?.visitNoteDetails?.patientViewNoteHtml,
         ),
       );
       editableDataForPatientView.refresh();
@@ -1543,6 +1531,54 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   void loadPatientNotePDF(String visitID) async {
     var response = await _patientInfoRepository.loadPatientNotePDF(visitId);
+  }
+
+  Future<void> closeAllProcedureDiagnosisPopover() async {
+    for (int s = 0; s < tableModel.value!.rows.length; s++) {
+      tableModel.value!.rows[s].popoverController.close();
+    }
+
+    impressionAndPlanListFullNote.forEach((element) {
+      element.popoverController.close();
+    });
+
+    impressionAndPlanList.forEach((element) {
+      element.popoverController.close();
+    });
+
+    impressionAndPlanList.forEach((element) {
+      if (element.focusNode.hasFocus) {
+        print("unit found");
+        element.focusNode.unfocus();
+      }
+    });
+
+    impressionAndPlanListFullNote.forEach((element) {
+      if (element.focusNode.hasFocus) {
+        print("unit found");
+        element.focusNode.unfocus();
+      }
+    });
+
+    for (int rows = 0; rows < tableModel.value!.rows.length; rows++) {
+      for (int cols = 0; cols < tableModel.value!.rows[rows].cells.length; cols++) {
+        for (int newItems = 0; newItems < tableModel.value!.rows[rows].cells[cols].items.length; newItems++) {
+          if (tableModel.value!.rows[rows].cells[cols].items[newItems].unitFocusNode.hasFocus) {
+            print("unit found");
+            tableModel.value!.rows[rows].cells[cols].items[newItems].unitFocusNode.unfocus();
+          }
+
+          if (tableModel.value!.rows[rows].cells[cols].items[newItems].focusNode.hasFocus) {
+            print("focusnode found");
+            tableModel.value!.rows[rows].cells[cols].items[newItems].focusNode.unfocus();
+          }
+
+          for (int diag = 0; diag < (tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+            tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+          }
+        }
+      }
+    }
   }
 }
 

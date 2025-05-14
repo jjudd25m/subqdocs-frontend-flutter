@@ -9,10 +9,11 @@ import 'custom_animated_button.dart';
 class EmptyPatientScreen extends StatelessWidget {
   final String? title;
   final String? description;
+  final String? buttonTitle;
 
   final void Function()? onBtnPress;
 
-  const EmptyPatientScreen({super.key, this.title, this.description, this.onBtnPress});
+  const EmptyPatientScreen({super.key, this.title, this.description, this.onBtnPress, this.buttonTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -23,35 +24,17 @@ class EmptyPatientScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              ImagePath.patient_no_data,
-              width: 260,
-            ),
+            SvgPicture.asset(ImagePath.patient_no_data, width: 260),
             const SizedBox(height: 10),
-            Text(
-              textAlign: TextAlign.center,
-              title ?? " ",
-              style: AppFonts.medium(20, AppColors.textDarkGrey),
-            ),
+            Text(textAlign: TextAlign.center, title ?? " ", style: AppFonts.medium(20, AppColors.textDarkGrey)),
             const SizedBox(height: 15),
-            Text(
-              description ?? "",
-              style: AppFonts.regular(14, AppColors.textDarkGrey.withValues(alpha: 0.6)),
-              textAlign: TextAlign.center,
-            ),
+            Text(description ?? "", style: AppFonts.regular(14, AppColors.textDarkGrey.withValues(alpha: 0.6)), textAlign: TextAlign.center),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
                 width: 250,
-                child: CustomAnimatedButton(
-                  fontSize: 15,
-                  onPressed: onBtnPress,
-                  enabledTextColor: AppColors.textWhite,
-                  enabledColor: AppColors.textPurple,
-                  text: "Add New Patient",
-                  height: 45,
-                ),
+                child: CustomAnimatedButton(fontSize: 15, onPressed: onBtnPress, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.textPurple, text: "${buttonTitle}", height: 45),
               ),
             ),
           ],

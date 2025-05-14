@@ -100,7 +100,7 @@ class SignUpSetPasswordController extends GetxController {
         CustomToastification().showToast(signUpModel.message ?? "", type: ToastificationType.error);
       }
     } catch (error) {
-      Get.back();
+      // Get.back();
       isLoading.value = false;
       print("login catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);

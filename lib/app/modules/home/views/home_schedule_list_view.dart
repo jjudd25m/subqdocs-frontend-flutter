@@ -56,6 +56,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                           controller.getScheduleVisitList();
                           controller.getPatientList();
                         },
+                        buttonTitle: "Schedule Visit",
                         title: "Your Schedule Visits List is Empty",
                         description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
                       ),

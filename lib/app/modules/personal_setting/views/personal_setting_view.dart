@@ -75,7 +75,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                               padding: const EdgeInsets.all(15),
                               child: Container(
                                 width: double.infinity,
-                                decoration: BoxDecoration(color: Colors.transparent),
+                                decoration: const BoxDecoration(color: Colors.transparent),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -89,6 +89,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                         }
                                       },
                                     ),
+                                    SizedBox(height: 10),
                                     Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),

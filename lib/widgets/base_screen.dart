@@ -43,7 +43,9 @@ class BaseScreen extends StatelessWidget {
       key: globalKey,
       backgroundColor: AppColors.white,
       onDrawerChanged: (isOpened) {
-        onDrawerChanged!(isOpened);
+        if (onDrawerChanged != null) {
+          onDrawerChanged!(isOpened);
+        }
       },
       drawer: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),

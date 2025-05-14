@@ -192,152 +192,257 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               SizedBox(width: 5),
                                               if (controller.globalController.tabIndex.value != 0) ...[
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    if (controller.globalController.tabIndex.value == 1) {
-                                                      aweSideSheet(
-                                                        header: SizedBox(),
-                                                        footer: SizedBox(),
-                                                        showActions: false,
-                                                        backgroundColor: AppColors.white,
-                                                        barrierDismissible: true,
-                                                        showCloseButton: false,
-                                                        showBackButton: true,
-                                                        context: context,
-                                                        body: ScheduleListFilterBottomSheet(
-                                                          onTap: () {
-                                                            controller.getScheduleVisitList();
-                                                          },
+                                                if (controller.globalController.tabIndex.value == 1 && controller.scheduleVisitList.isNotEmpty) ...[
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      if (controller.globalController.tabIndex.value == 1) {
+                                                        aweSideSheet(
+                                                          header: SizedBox(),
+                                                          footer: SizedBox(),
+                                                          showActions: false,
+                                                          backgroundColor: AppColors.white,
+                                                          barrierDismissible: true,
+                                                          showCloseButton: false,
+                                                          showBackButton: true,
+                                                          context: context,
+                                                          body: ScheduleListFilterBottomSheet(
+                                                            onTap: () {
+                                                              controller.getScheduleVisitList();
+                                                            },
+                                                          ),
+                                                          sheetPosition: SheetPosition.right,
+                                                        ).then((value) {
+                                                          controller.getScheduleVisitList();
+                                                          print("value");
+                                                        });
+                                                      } else if (controller.globalController.tabIndex.value == 2) {
+                                                        aweSideSheet(
+                                                          header: SizedBox(),
+                                                          footer: SizedBox(),
+                                                          showActions: false,
+                                                          backgroundColor: AppColors.white,
+                                                          barrierDismissible: true,
+                                                          showCloseButton: false,
+                                                          showBackButton: true,
+                                                          context: context,
+                                                          body: PastPatientListFilterBottomSheet(
+                                                            onTap: () {
+                                                              controller.getPastVisitList(isFist: true);
+                                                            },
+                                                          ),
+                                                          sheetPosition: SheetPosition.right,
+                                                        ).then((value) {
+                                                          controller.getPastVisitList(isFist: true);
+                                                          print("value");
+                                                        });
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                          color: AppColors.textDarkGrey, // Border color
+                                                          width: 0.5,
                                                         ),
-                                                        sheetPosition: SheetPosition.right,
-                                                      ).then((value) {
-                                                        controller.getScheduleVisitList();
-                                                        print("value");
-                                                      });
-                                                    } else if (controller.globalController.tabIndex.value == 2) {
-                                                      aweSideSheet(
-                                                        header: SizedBox(),
-                                                        footer: SizedBox(),
-                                                        showActions: false,
-                                                        backgroundColor: AppColors.white,
-                                                        barrierDismissible: true,
-                                                        showCloseButton: false,
-                                                        showBackButton: true,
-                                                        context: context,
-                                                        body: PastPatientListFilterBottomSheet(
-                                                          onTap: () {
-                                                            controller.getPastVisitList(isFist: true);
-                                                          },
-                                                        ),
-                                                        sheetPosition: SheetPosition.right,
-                                                      ).then((value) {
-                                                        controller.getPastVisitList(isFist: true);
-                                                        print("value");
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    height: 40,
-                                                    width: 40,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      border: Border.all(
-                                                        color: AppColors.textDarkGrey, // Border color
-                                                        width: 0.5,
+                                                        borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                                                       ),
-                                                      borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
+                                                      child: Padding(padding: const EdgeInsets.all(10), child: SvgPicture.asset("assets/images/filter_logo.svg", width: 40, height: 40)),
                                                     ),
-                                                    child: Padding(padding: const EdgeInsets.all(10), child: SvgPicture.asset("assets/images/filter_logo.svg", width: 40, height: 40)),
+                                                  ),
+                                                ] else if (controller.globalController.tabIndex.value == 2 && controller.pastVisitList.isNotEmpty) ...[
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      if (controller.globalController.tabIndex.value == 1) {
+                                                        aweSideSheet(
+                                                          header: SizedBox(),
+                                                          footer: SizedBox(),
+                                                          showActions: false,
+                                                          backgroundColor: AppColors.white,
+                                                          barrierDismissible: true,
+                                                          showCloseButton: false,
+                                                          showBackButton: true,
+                                                          context: context,
+                                                          body: ScheduleListFilterBottomSheet(
+                                                            onTap: () {
+                                                              controller.getScheduleVisitList();
+                                                            },
+                                                          ),
+                                                          sheetPosition: SheetPosition.right,
+                                                        ).then((value) {
+                                                          controller.getScheduleVisitList();
+                                                          print("value");
+                                                        });
+                                                      } else if (controller.globalController.tabIndex.value == 2) {
+                                                        aweSideSheet(
+                                                          header: SizedBox(),
+                                                          footer: SizedBox(),
+                                                          showActions: false,
+                                                          backgroundColor: AppColors.white,
+                                                          barrierDismissible: true,
+                                                          showCloseButton: false,
+                                                          showBackButton: true,
+                                                          context: context,
+                                                          body: PastPatientListFilterBottomSheet(
+                                                            onTap: () {
+                                                              controller.getPastVisitList(isFist: true);
+                                                            },
+                                                          ),
+                                                          sheetPosition: SheetPosition.right,
+                                                        ).then((value) {
+                                                          controller.getPastVisitList(isFist: true);
+                                                          print("value");
+                                                        });
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        border: Border.all(
+                                                          color: AppColors.textDarkGrey, // Border color
+                                                          width: 0.5,
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
+                                                      ),
+                                                      child: Padding(padding: const EdgeInsets.all(10), child: SvgPicture.asset("assets/images/filter_logo.svg", width: 40, height: 40)),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
+                                              SizedBox(width: 10),
+                                              if (controller.globalController.tabIndex.value == 1 && controller.scheduleVisitList.isNotEmpty) ...[
+                                                SizedBox(
+                                                  height: 42,
+                                                  width: 180,
+                                                  child: HomeCustomSearchBar(
+                                                    controller: controller.searchController,
+                                                    hintText: 'Search',
+                                                    onChanged: (text) {
+                                                      controller.globalController.tabIndex.value == 0
+                                                          ? controller.getPatientList()
+                                                          : controller.globalController.tabIndex.value == 1
+                                                          ? controller.getScheduleVisitList()
+                                                          : controller.getPastVisitList();
+                                                    },
+                                                    onSubmit: (text) {
+                                                      print('Submitted search: $text');
+                                                    },
+                                                  ),
+                                                ),
+                                              ] else if (controller.globalController.tabIndex.value == 2 && controller.pastVisitList.isNotEmpty) ...[
+                                                SizedBox(
+                                                  height: 42,
+                                                  width: 180,
+                                                  child: HomeCustomSearchBar(
+                                                    controller: controller.searchController,
+                                                    hintText: 'Search',
+                                                    onChanged: (text) {
+                                                      controller.globalController.tabIndex.value == 0
+                                                          ? controller.getPatientList()
+                                                          : controller.globalController.tabIndex.value == 1
+                                                          ? controller.getScheduleVisitList()
+                                                          : controller.getPastVisitList();
+                                                    },
+                                                    onSubmit: (text) {
+                                                      print('Submitted search: $text');
+                                                    },
+                                                  ),
+                                                ),
+                                              ] else if (controller.globalController.tabIndex.value == 0) ...[
+                                                SizedBox(
+                                                  height: 42,
+                                                  width: 180,
+                                                  child: HomeCustomSearchBar(
+                                                    controller: controller.searchController,
+                                                    hintText: 'Search',
+                                                    onChanged: (text) {
+                                                      controller.globalController.tabIndex.value == 0
+                                                          ? controller.getPatientList()
+                                                          : controller.globalController.tabIndex.value == 1
+                                                          ? controller.getScheduleVisitList()
+                                                          : controller.getPastVisitList();
+                                                    },
+                                                    onSubmit: (text) {
+                                                      print('Submitted search: $text');
+                                                    },
                                                   ),
                                                 ),
                                               ],
                                               SizedBox(width: 10),
-                                              SizedBox(
-                                                height: 42,
-                                                width: 180,
-                                                child: HomeCustomSearchBar(
-                                                  controller: controller.searchController,
-                                                  hintText: 'Search',
-                                                  onChanged: (text) {
-                                                    controller.globalController.tabIndex.value == 0
-                                                        ? controller.getPatientList()
-                                                        : controller.globalController.tabIndex.value == 1
-                                                        ? controller.getScheduleVisitList()
-                                                        : controller.getPastVisitList();
-
-                                                    // print('Search text changed: $text');
-                                                    // onSearch();
-                                                    // _filterItems(searchController.text);
-                                                  },
-                                                  onSubmit: (text) {
-                                                    print('Submitted search: $text');
-
-                                                    // setState(() {
-                                                    //   widget.icd10CodeList.clear();
-                                                    //   searchController.clear();
-                                                    //   isValid = false;
-                                                    // });
-                                                    // _filterItems(searchController.text);
-                                                    // page = 1;
-                                                    // onSearch();
-                                                    // Perform search operation here
-                                                  },
-                                                ),
-                                              ),
                                               SizedBox(width: 10),
-                                              // Container(
-                                              //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                              //   decoration: BoxDecoration(
-                                              //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                              //     // color: AppColors.backgroundWhite,
-                                              //     borderRadius: BorderRadius.circular(8),
-                                              //   ),
-                                              //   child: Row(
-                                              //     children: [
-                                              //       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
-                                              //       SizedBox(width: 10),
-                                              //       SizedBox(
-                                              //         width: 130,
-                                              //         child: TextFormField(
-                                              //           controller: controller.searchController,
-                                              //           onChanged: (value) {
-                                              //             controller.globalController.tabIndex.value == 0
-                                              //                 ? controller.getPatientList()
-                                              //                 : controller.globalController.tabIndex.value == 1
-                                              //                 ? controller.getScheduleVisitList()
-                                              //                 : controller.getPastVisitList();
-                                              //           },
-                                              //           maxLines: 1, //or null
-                                              //
-                                              //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
-                                              //         ),
-                                              //       ),
-                                              //     ],
-                                              //   ),
-                                              // ),
-                                              SizedBox(width: 10),
-                                              Container(
-                                                width: 140,
-                                                child: CustomButton(
-                                                  hight: 40,
-                                                  navigate: () async {
-                                                    if (controller.globalController.tabIndex.value == 0) {
-                                                      await Get.toNamed(Routes.ADD_PATIENT);
-                                                      controller.patientList.clear();
-                                                      controller.getPatientList(isLoading: true);
-                                                      controller.getPastVisitList(isFist: true);
-                                                      controller.getScheduleVisitList(isFist: true);
-                                                    } else {
-                                                      await Get.toNamed(Routes.SCHEDULE_PATIENT);
+                                              if (controller.globalController.tabIndex.value == 1 && controller.scheduleVisitList.isNotEmpty) ...[
+                                                Container(
+                                                  width: 140,
+                                                  child: CustomButton(
+                                                    hight: 40,
+                                                    navigate: () async {
+                                                      if (controller.globalController.tabIndex.value == 0) {
+                                                        await Get.toNamed(Routes.ADD_PATIENT);
+                                                        controller.patientList.clear();
+                                                        controller.getPatientList(isLoading: true);
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
+                                                      } else {
+                                                        await Get.toNamed(Routes.SCHEDULE_PATIENT);
 
-                                                      controller.getPatientList();
-                                                      controller.getPastVisitList(isFist: true);
-                                                      controller.getScheduleVisitList(isFist: true);
-                                                    }
-                                                  },
-                                                  label: controller.globalController.tabIndex.value == 0 ? "Add Patient" : "Schedule Visit",
+                                                        controller.getPatientList();
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
+                                                      }
+                                                    },
+                                                    label: controller.globalController.tabIndex.value == 0 ? "Add Patient" : "Schedule Visit",
+                                                  ),
                                                 ),
-                                              ),
+                                              ] else if (controller.globalController.tabIndex.value == 2 && controller.pastVisitList.isNotEmpty) ...[
+                                                Container(
+                                                  width: 140,
+                                                  child: CustomButton(
+                                                    hight: 40,
+                                                    navigate: () async {
+                                                      if (controller.globalController.tabIndex.value == 0) {
+                                                        await Get.toNamed(Routes.ADD_PATIENT);
+                                                        controller.patientList.clear();
+                                                        controller.getPatientList(isLoading: true);
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
+                                                      } else {
+                                                        await Get.toNamed(Routes.SCHEDULE_PATIENT);
+
+                                                        controller.getPatientList();
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
+                                                      }
+                                                    },
+                                                    label: controller.globalController.tabIndex.value == 0 ? "Add Patient" : "Schedule Visit",
+                                                  ),
+                                                ),
+                                              ] else if (controller.globalController.tabIndex.value == 0) ...[
+                                                Container(
+                                                  width: 140,
+                                                  child: CustomButton(
+                                                    hight: 40,
+                                                    navigate: () async {
+                                                      if (controller.globalController.tabIndex.value == 0) {
+                                                        await Get.toNamed(Routes.ADD_PATIENT);
+                                                        controller.patientList.clear();
+                                                        controller.getPatientList(isLoading: true);
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
+                                                      } else {
+                                                        await Get.toNamed(Routes.SCHEDULE_PATIENT);
+
+                                                        controller.getPatientList();
+                                                        controller.getPastVisitList(isFist: true);
+                                                        controller.getScheduleVisitList(isFist: true);
+                                                      }
+                                                    },
+                                                    label: controller.globalController.tabIndex.value == 0 ? "Add Patient" : "Schedule Visit",
+                                                  ),
+                                                ),
+                                              ],
                                             ],
                                           ),
                                         );
