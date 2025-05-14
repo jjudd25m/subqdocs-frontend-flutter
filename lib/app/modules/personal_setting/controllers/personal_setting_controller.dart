@@ -437,28 +437,55 @@ class PersonalSettingController extends GetxController {
                   customPrint('Gallery selected');
                 },
               ),
-              ListTile(
-                leading: Icon(Icons.delete),
-                title: Text('Remove Profile Image'),
-                onTap: () {
-                  if (isUserProfile) {
-                    userProfileImage.value = null;
-                    getUserDetailModel.value?.responseData?.profileImage = null;
+              if (isUserProfile) ...[
+                if (getUserDetailModel.value?.responseData?.profileImage != null) ...[
+                  ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('Remove Profile Image'),
+                    onTap: () {
+                      if (isUserProfile) {
+                        userProfileImage.value = null;
+                        getUserDetailModel.value?.responseData?.profileImage = null;
 
-                    updateUserDetail({});
-                  } else {
-                    organizationProfileImage.value = null;
-                    getOrganizationDetailModel.value?.responseData?.profileImage = null;
+                        updateUserDetail({});
+                      } else {
+                        organizationProfileImage.value = null;
+                        getOrganizationDetailModel.value?.responseData?.profileImage = null;
 
-                    updateOrganization({});
-                  }
+                        updateOrganization({});
+                      }
+                      // pickProfileImage(isUserProfile);
+                      Navigator.pop(context);
+                      // Add your gallery picking logic here
+                      customPrint('Gallery selected');
+                    },
+                  ),
+                ],
+              ] else ...[
+                if (getOrganizationDetailModel.value?.responseData?.profileImage != null) ...[
+                  ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('Remove Profile Image'),
+                    onTap: () {
+                      if (isUserProfile) {
+                        userProfileImage.value = null;
+                        getUserDetailModel.value?.responseData?.profileImage = null;
 
-                  // pickProfileImage(isUserProfile);
-                  Navigator.pop(context);
-                  // Add your gallery picking logic here
-                  customPrint('Gallery selected');
-                },
-              ),
+                        updateUserDetail({});
+                      } else {
+                        organizationProfileImage.value = null;
+                        getOrganizationDetailModel.value?.responseData?.profileImage = null;
+
+                        updateOrganization({});
+                      }
+                      // pickProfileImage(isUserProfile);
+                      Navigator.pop(context);
+                      // Add your gallery picking logic here
+                      customPrint('Gallery selected');
+                    },
+                  ),
+                ],
+              ],
             ],
           ),
         );

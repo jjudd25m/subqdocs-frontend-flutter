@@ -10,8 +10,6 @@ import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/controllers/custom_drawer_controller.dart';
-import '../../home/controllers/home_controller.dart';
 import '../model/login_model.dart';
 import '../repository/login_repository.dart';
 
@@ -19,7 +17,7 @@ class LoginController extends GetxController {
   //TODO: Implement LoginController
 
   final LoginRepository _loginRepository = LoginRepository();
-  RxBool visiblity = RxBool(false);
+  RxBool visiblity = RxBool(true);
   RxBool isLoading = RxBool(false);
 
   RxBool isRememberMe = RxBool(false);
@@ -28,6 +26,7 @@ class LoginController extends GetxController {
   TextEditingController passwordController = TextEditingController();
 
   final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();

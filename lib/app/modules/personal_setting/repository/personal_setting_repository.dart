@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../sign_up_set_organization_info/models/SignUpOrganizationModel.dart';
@@ -15,7 +14,7 @@ class PersonalSettingRepository {
 
   Future<GetOrganizationDetailModel> getOrganizationDetail() async {
     var response = await ApiProvider.instance.callGet("organization");
-    customPrint("getUserDetail API  internal response $response");
+    customPrint("getOrganizationDetail API  internal response $response");
     return GetOrganizationDetailModel.fromJson(response);
   }
 
