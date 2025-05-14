@@ -64,8 +64,8 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                       showTrailingIcon: false,
                       collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                       title: Popover(
-                        key: UniqueKey(),
-
+                        key: ValueKey(model.popoverController),
+                        // key: UniqueKey(),
                         context,
                         controller: model.popoverController,
                         // controller: PopoverController(),

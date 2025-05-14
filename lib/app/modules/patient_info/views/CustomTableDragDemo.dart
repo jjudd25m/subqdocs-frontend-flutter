@@ -154,58 +154,78 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                         ),
                         const SizedBox(height: 5),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             globalController.selectedRowIndex.value = -1;
-                            setState(() {
-                              // widget.possibleDignosisProcedureTableModel.a
 
-                              List<DiagnosisModel>? diagnosisModelList = [];
+                            WidgetsBinding.instance.addPostFrameCallback((_) async {
+                              // if (widget.tableModel.rows[rowIndex].popoverController.opened) {
+                              widget.tableModel.rows[rowIndex].popoverController.close();
 
-                              // for (DiagnosisModel mainList in widget.tableModel.rows[rowIndex].cells[0].items[0].diagnosisModelList ?? []) {
-
-                              for (DiagnosisModel diagnosisModel in widget.tableModel.rows[rowIndex].cells[1].items[0].diagnosisModelList ?? []) {
-                                print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
-
-                                diagnosisModelList.add(
-                                  DiagnosisModel(
-                                    confidence: diagnosisModel.confidence,
-                                    code: diagnosisModel.code,
-                                    description: diagnosisModel.description,
-                                    diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
-                                  ),
-                                );
-                              }
-
+                              await Future.delayed(Duration(milliseconds: 100));
                               // }
 
-                              if (widget.tableModel.rows[rowIndex].cells[0].items[0].code != "0") {
-                                print("sgfgdfgdfg");
+                              setState(() {
+                                widget.tableModel.rows.removeAt(rowIndex);
+                              });
+                            });
 
-                                widget.possibleDignosisProcedureTableModel.rows.add(
-                                  TableRowModel(
-                                    cells: [
-                                      TableCellModel(
-                                        items: [
-                                          SingleCellModel(
-                                            code: widget.tableModel.rows[rowIndex].cells[0].items[0].code,
-                                            unit: widget.tableModel.rows[rowIndex].cells[0].items[0].unit,
-                                            modifiers: widget.tableModel.rows[rowIndex].cells[0].items[0].modifiers,
-                                            description: widget.tableModel.rows[rowIndex].cells[0].items[0].description ?? "",
-                                            unitPrice: "0",
-                                            procedurePossibleAlternatives: widget.tableModel.rows[rowIndex].cells[0].items[0].procedurePossibleAlternatives,
-                                          ),
-                                        ],
-                                      ),
-                                      TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
-                                      TableCellModel(items: [SingleCellModel(unit: widget.tableModel.rows[rowIndex].cells[2].items[0].unit)]),
-                                      TableCellModel(items: [SingleCellModel(unitPrice: widget.tableModel.rows[rowIndex].cells[3].items[0].unitPrice)]),
-                                    ],
-                                  ),
-                                );
-                              }
+                            List<DiagnosisModel>? diagnosisModelList = [];
 
-                              widget.tableModel.rows.removeAt(rowIndex);
-                              calculateTotal();
+                            // if (widget.tableModel.rows[rowIndex].cells[0].items[0].code != "0") {
+                            //   print("sgfgdfgdfg");
+                            //   for (DiagnosisModel diagnosisModel in widget.tableModel.rows[rowIndex].cells[1].items[0].diagnosisModelList ?? []) {
+                            //     print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+                            //
+                            //     if (diagnosisModel.popoverController.opened) {
+                            //       diagnosisModel.popoverController.close();
+                            //     }
+                            //
+                            //     diagnosisModelList.add(
+                            //       DiagnosisModel(
+                            //         confidence: diagnosisModel.confidence,
+                            //         code: diagnosisModel.code,
+                            //         description: diagnosisModel.description,
+                            //         diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+                            //       ),
+                            //     );
+                            //   }
+                            //   widget.possibleDignosisProcedureTableModel.rows.add(
+                            //     TableRowModel(
+                            //       cells: [
+                            //         TableCellModel(
+                            //           items: [
+                            //             SingleCellModel(
+                            //               code: widget.tableModel.rows[rowIndex].cells[0].items[0].code,
+                            //               unit: widget.tableModel.rows[rowIndex].cells[0].items[0].unit,
+                            //               modifiers: widget.tableModel.rows[rowIndex].cells[0].items[0].modifiers,
+                            //               description: widget.tableModel.rows[rowIndex].cells[0].items[0].description ?? "",
+                            //               unitPrice: "0",
+                            //               procedurePossibleAlternatives: widget.tableModel.rows[rowIndex].cells[0].items[0].procedurePossibleAlternatives,
+                            //             ),
+                            //           ],
+                            //         ),
+                            //         TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
+                            //         TableCellModel(items: [SingleCellModel(unit: widget.tableModel.rows[rowIndex].cells[2].items[0].unit)]),
+                            //         TableCellModel(items: [SingleCellModel(unitPrice: widget.tableModel.rows[rowIndex].cells[3].items[0].unitPrice)]),
+                            //       ],
+                            //     ),
+                            //   );
+                            //
+                            //
+                            //   // widget.tableModel.rows.removeAt(rowIndex);
+                            // }
+
+                            calculateTotal();
+
+                            setState(() {
+                              // if (widget.tableModel.rows[rowIndex].cells[2].items[0].unitFocusNode.hasFocus) {
+                              //   widget.tableModel.rows[rowIndex].cells[2].items[0].unitFocusNode.unfocus();
+                              // }
+                              //
+                              // if (widget.tableModel.rows[rowIndex].cells[3].items[0].focusNode.hasFocus) {
+                              //   widget.tableModel.rows[rowIndex].cells[3].items[0].focusNode.unfocus();
+                              // }
+                              // widget.possibleDignosisProcedureTableModel.a
                             });
                           },
                           child: Container(

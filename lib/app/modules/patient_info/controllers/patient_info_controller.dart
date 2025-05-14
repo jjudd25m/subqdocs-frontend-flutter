@@ -38,6 +38,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
 
   // final KeyboardController keyboardController = Get.put(KeyboardController());
 
+  RxBool isKeyboardVisible = RxBool(false);
+
   final ScrollController scrollController = ScrollController();
   final KeyboardController keyboardController = Get.put(KeyboardController());
 
@@ -182,6 +184,16 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       visitId = patientTranscriptUploadModel.responseData!.visitId.toString();
       getPatientDetails();
       customPrint("patientTranscriptUploadModel data is:- \n \n ${patientTranscriptUploadModel.toJson()}");
+    }
+  }
+
+  @override
+  void didChangeMetrics() {
+    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final isVisibleNow = bottomInset > 0.0;
+
+    if (isKeyboardVisible != isVisibleNow) {
+      isKeyboardVisible.value = isVisibleNow;
     }
   }
 

@@ -102,7 +102,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
           child: Obx(() {
             return Column(
               children: [
-                if (!controller.keyboardController.isKeyboardOpen.value) ...[CustomAppBar(drawerkey: _key)],
+                if (!controller.isKeyboardVisible.value) ...[CustomAppBar(drawerkey: _key)],
                 Expanded(
                   child: Container(
                     color: AppColors.ScreenBackGround1,
