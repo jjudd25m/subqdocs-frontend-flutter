@@ -108,7 +108,10 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                 SizedBox(width: 10),
 
                                 Expanded(
+                                  key: model.diagnosisContainerKey,
                                   child: InlineEditingDropdown(
+                                    focusNode: model.focusNode,
+
                                     textStyle: AppFonts.medium(
                                       16,
                                       AppColors.textPurple,
@@ -159,6 +162,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                             ),
                           ),
                           content: DiagnosisDropDrownSearchTable(
+                            diagnosisContainerKey: model.diagnosisContainerKey,
                             items:
                                 (model.siblingIcd10FullNote ?? []).map((e) {
                                   return ProcedurePossibleAlternatives(

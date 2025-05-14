@@ -1,4 +1,5 @@
 import 'package:easy_popover/easy_popover.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:subqdocs/app/modules/patient_info/model/patient_fullnote_model.dart';
 
@@ -17,9 +18,13 @@ class ImpresionAndPlanViewModel {
 
   List<SiblingIcd10FullNote>? siblingIcd10FullNote;
 
+  final GlobalKey diagnosisContainerKey = GlobalKey();
+
   bool isEditing;
 
   PopoverController popoverController = PopoverController();
+
+  FocusNode focusNode = FocusNode();
 
   ImpresionAndPlanViewModel({
     this.title,
