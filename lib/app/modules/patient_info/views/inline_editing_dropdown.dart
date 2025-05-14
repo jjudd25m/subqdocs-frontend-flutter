@@ -9,12 +9,16 @@ class InlineEditingDropdown extends StatefulWidget {
   final VoidCallback? toggle;
   final TextStyle? textStyle;
 
+  final FocusNode focusNode;
+
   InlineEditingDropdown({
     required this.initialText,
     required this.onSubmitted,
     required this.onChanged,
+    required this.focusNode,
     this.toggle,
     this.textStyle,
+
     Key? key,
   }) : super(key: key);
 
@@ -33,7 +37,7 @@ String cleanString(String input) {
 class _InlineEditableTextState extends State<InlineEditingDropdown> {
   late bool _isEditing;
   late TextEditingController _controller;
-  late FocusNode _focusNode;
+
   Timer? timer;
 
   @override
@@ -41,10 +45,9 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
     super.initState();
     _isEditing = false;
     _controller = TextEditingController(text: widget.initialText);
-    _focusNode = FocusNode();
 
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus && _isEditing) {
+    widget.focusNode?.addListener(() {
+      if (!widget.focusNode!.hasFocus && _isEditing) {
         _submitEdit();
       }
     });
@@ -53,7 +56,7 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
   @override
   void dispose() {
     _controller.dispose();
-    _focusNode.dispose();
+    widget.focusNode.dispose();
     super.dispose();
   }
 
@@ -63,7 +66,7 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
     });
     widget.toggle?.call();
     Future.delayed(Duration(milliseconds: 100), () {
-      FocusScope.of(context).requestFocus(_focusNode);
+      FocusScope.of(context).requestFocus(widget.focusNode);
     });
   }
 
@@ -95,7 +98,7 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
               });
             },
             controller: _controller,
-            focusNode: _focusNode,
+            focusNode: widget.focusNode,
             autofocus: true,
             style: textStyle,
             minLines: 1,

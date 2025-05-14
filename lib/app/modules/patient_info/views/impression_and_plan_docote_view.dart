@@ -111,7 +111,9 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                                 SvgPicture.asset(ImagePath.dragAndDrop),
                                 SizedBox(width: 10),
                                 Expanded(
+                                  key: model.diagnosisContainerKey,
                                   child: InlineEditingDropdown(
+                                    focusNode: model.focusNode,
                                     textStyle: AppFonts.medium(
                                       16,
                                       AppColors.textPurple,
@@ -159,6 +161,8 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                             ),
                           ),
                           content: DiagnosisDropDrownSearchTable(
+                            key: ValueKey(model.popoverController),
+                            diagnosisContainerKey: model.diagnosisContainerKey,
                             items:
                                 (model.siblingIcd10 ?? []).map((e) {
                                   return ProcedurePossibleAlternatives(
