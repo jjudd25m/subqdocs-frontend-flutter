@@ -187,6 +187,8 @@ class HomeController extends GetxController {
     super.onInit();
     Get.put(GlobalController());
 
+    print("home controller called");
+
     globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
 
     globalController.listenForUserNameUpdate();

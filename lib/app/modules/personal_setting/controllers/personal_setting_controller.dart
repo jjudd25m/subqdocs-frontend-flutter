@@ -103,6 +103,8 @@ class PersonalSettingController extends GetxController {
   void onInit() {
     super.onInit();
 
+    print("setting controller called");
+
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

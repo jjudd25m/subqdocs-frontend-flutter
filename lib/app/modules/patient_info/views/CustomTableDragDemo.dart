@@ -157,19 +157,90 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           onTap: () async {
                             globalController.selectedRowIndex.value = -1;
 
-                            WidgetsBinding.instance.addPostFrameCallback((_) async {
-                              // if (widget.tableModel.rows[rowIndex].popoverController.opened) {
-                              widget.tableModel.rows[rowIndex].popoverController.close();
+                            // WidgetsBinding.instance.addPostFrameCallback((_) async {
+                            //   // if (widget.tableModel.rows[rowIndex].popoverController.opened) {
+                            //   widget.tableModel.rows[rowIndex].popoverController.close();
+                            //
+                            //   // await Future.delayed(Duration(milliseconds: 100));
+                            //   // }
+                            //
+                            //   setState(() {
+                            //     widget.tableModel.rows.removeAt(rowIndex);
+                            //   });
+                            // });
 
-                              await Future.delayed(Duration(milliseconds: 100));
-                              // }
+                            // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                            //   try {
+                            //     // Close popover first
+                            //      widget.tableModel.rows[rowIndex].popoverController.close();
+                            //
+                            //     // Check if widget is still mounted
+                            //     if (!mounted) return;
+                            //
+                            //     // Remove the row
+                            //     setState(() {
+                            //       widget.tableModel.rows.removeAt(rowIndex);
+                            //     });
+                            //   } catch (e) {
+                            //     // Handle any errors
+                            //     debugPrint('Error removing row: $e');
+                            //   }
+                            // },);
 
-                              setState(() {
-                                widget.tableModel.rows.removeAt(rowIndex);
-                              });
-                            });
 
                             List<DiagnosisModel>? diagnosisModelList = [];
+
+                            TableRowModel tempdata = TableRowModel(cells: widget.tableModel.rows[rowIndex].cells);
+
+                            widget.tableModel.rows.removeAt(rowIndex);
+
+                            if (tempdata.cells[0].items[0].code != "0") {
+                              print("sgfgdfgdfg");
+                              for (DiagnosisModel diagnosisModel in tempdata.cells[1].items[0].diagnosisModelList ?? []) {
+                                // print("diagnosis aleternative:- ${diagnosisModel.diagnosisPossibleAlternatives?.length ?? 0}");
+
+                                if (diagnosisModel.popoverController.opened) {
+                                  diagnosisModel.popoverController.close();
+                                }
+
+                                diagnosisModelList.add(
+                                  DiagnosisModel(
+                                    confidence: diagnosisModel.confidence,
+                                    code: diagnosisModel.code,
+                                    description: diagnosisModel.description,
+                                    diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives,
+                                  ),
+                                );
+                              }
+                              widget.possibleDignosisProcedureTableModel.rows.add(
+                                TableRowModel(
+                                  cells: [
+                                    TableCellModel(
+                                      items: [
+                                        SingleCellModel(
+                                          code: tempdata.cells[0].items[0].code,
+                                          unit: tempdata.cells[0].items[0].unit,
+                                          modifiers: tempdata.cells[0].items[0].modifiers,
+                                          description: tempdata.cells[0].items[0].description ?? "",
+                                          unitPrice: "0",
+                                          procedurePossibleAlternatives: tempdata.cells[0].items[0].procedurePossibleAlternatives,
+                                        ),
+                                      ],
+                                    ),
+                                    TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
+                                    TableCellModel(items: [SingleCellModel(unit: tempdata.cells[2].items[0].unit)]),
+                                    TableCellModel(items: [SingleCellModel(unitPrice: tempdata.cells[3].items[0].unitPrice)]),
+                                  ],
+                                ),
+                              );
+
+                              // setState(() {
+
+                              // });
+
+                              // widget.tableModel.rows.removeAt(rowIndex);
+                            }
+
 
                             // if (widget.tableModel.rows[rowIndex].cells[0].items[0].code != "0") {
                             //   print("sgfgdfgdfg");
@@ -211,9 +282,13 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             //     ),
                             //   );
                             //
+                            //   // setState(() {
+                            //     widget.tableModel.rows.removeAt(rowIndex);
+                            //   // });
                             //
                             //   // widget.tableModel.rows.removeAt(rowIndex);
                             // }
+
 
                             calculateTotal();
 

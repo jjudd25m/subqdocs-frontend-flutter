@@ -85,12 +85,12 @@ class BaseScreen extends StatelessWidget {
                   Get.put(PersonalSettingController());
                 }
 
-                Get.toNamed(Routes.PERSONAL_SETTING);
-
                 globalController.breadcrumbHistory.clear();
                 globalController.addRoute(Routes.HOME);
                 globalController.addRoute(Routes.PERSONAL_SETTING);
                 globalKey.currentState!.closeDrawer();
+
+                Get.toNamed(Routes.PERSONAL_SETTING);
               }
             } else {
               if (index == 0) {
@@ -140,6 +140,9 @@ class BaseScreen extends StatelessWidget {
                   Get.until((route) => Get.currentRoute == Routes.HOME);
 
                   globalController.breadcrumbHistory.clear();
+
+                  await Future.delayed(const Duration(milliseconds: 100));
+
                   globalController.addRoute(Routes.HOME);
                   globalController.addRoute(Routes.PERSONAL_SETTING);
                   Get.toNamed(Routes.PERSONAL_SETTING);
