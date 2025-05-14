@@ -220,7 +220,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                     (widget.impresionAndPlanViewModel.htmlContent ?? "").isEmpty
                         ? "Note is Empty"
                         : widget.impresionAndPlanViewModel.htmlContent,
-                style: {"section": Style(fontSize: FontSize(14))},
+                style: {"section": Style(fontSize: FontSize(16))},
               ),
             ),
           ),
