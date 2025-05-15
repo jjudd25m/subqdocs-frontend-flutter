@@ -86,6 +86,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   Spacer(),
                   Spacer(),
+                  Spacer(),
                   globalController.getUserDetailModel.value?.responseData?.id == -1
                       ? ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 40, width: 40))
                       : ClipRRect(
