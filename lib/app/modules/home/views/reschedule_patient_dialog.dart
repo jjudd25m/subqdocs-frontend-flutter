@@ -1,5 +1,4 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +7,7 @@ import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
+
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/date_field.dart';
@@ -18,6 +18,7 @@ class ReschedulePatientDialog extends GetView<HomeController> {
   RxBool isLoading = RxBool(false);
   RxnString selectedVisitTimeValue = RxnString();
   DateTime? visitDate = DateTime.now();
+
   TextEditingController visitDateController = TextEditingController();
 
   RxList<String> generatedTime = RxList();
@@ -51,7 +52,9 @@ class ReschedulePatientDialog extends GetView<HomeController> {
     "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ]);
 
-  List<DateTime?> _singleDatePickerValueWithDefaultValue = [DateTime.now().add(const Duration(days: 0))];
+  List<DateTime?> _singleDatePickerValueWithDefaultValue = [
+    DateTime.now().add(const Duration(days: 0)),
+  ];
 
   final void Function(String, String) receiveParam;
 
@@ -70,7 +73,10 @@ class ReschedulePatientDialog extends GetView<HomeController> {
       elevation: 16,
       child: Obx(() {
         return Container(
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -81,17 +87,39 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(children: [Text("Visit Date", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      Row(
+                        children: [
+                          Text(
+                            "Visit Date",
+                            style: AppFonts.regular(14, AppColors.textBlack),
+                          ),
+                          Text(
+                            "*",
+                            style: AppFonts.regular(14, AppColors.redText),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 8),
                       Container(
                         height: 48,
                         padding: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5), color: Colors.white, borderRadius: BorderRadius.circular(6)),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.textDarkGrey.withValues(
+                              alpha: 0.5,
+                            ),
+                            width: 0.5,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
                         child: DateFormatField(
                           decoration: InputDecoration(
                             hintText: "02/23/2024",
                             border: InputBorder.none,
-                            suffixIconConstraints: BoxConstraints(maxHeight: 60),
+                            suffixIconConstraints: BoxConstraints(
+                              maxHeight: 60,
+                            ),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 print("hello world");
@@ -115,9 +143,22 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                           },
                         ),
                       ),
-                      if (isCalendarOpen.value) ...[buildSingleDatePickerWithValue()],
+                      if (isCalendarOpen.value) ...[
+                        buildSingleDatePickerWithValue(),
+                      ],
                       SizedBox(height: 5),
-                      Row(children: [Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      Row(
+                        children: [
+                          Text(
+                            "Visit Time",
+                            style: AppFonts.regular(14, AppColors.textBlack),
+                          ),
+                          Text(
+                            "*",
+                            style: AppFonts.regular(14, AppColors.redText),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 8),
                       Obx(() {
                         return BaseDropdown<String>(
@@ -152,44 +193,103 @@ class ReschedulePatientDialog extends GetView<HomeController> {
                             child: CustomAnimatedButton(
                               onPressed: () {
                                 if (selectedVisitTimeValue.value == null) {
-                                  CustomToastification().showToast("Please select Visit time", type: ToastificationType.error);
+                                  CustomToastification().showToast(
+                                    "Please select Visit time",
+                                    type: ToastificationType.error,
+                                  );
                                 } else {
-                                  bool isSameDate = visitDate != null && visitDate?.year == DateTime.now().year && visitDate?.month == DateTime.now().month && visitDate?.day == DateTime.now().day;
+                                  bool isSameDate =
+                                      visitDate != null &&
+                                      visitDate?.year == DateTime.now().year &&
+                                      visitDate?.month ==
+                                          DateTime.now().month &&
+                                      visitDate?.day == DateTime.now().day;
 
                                   if (isSameDate) {
-                                    DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                    DateTime firstTime =
+                                        DateFormat('hh:mm a')
+                                            .parse(
+                                              selectedVisitTimeValue.value ??
+                                                  "",
+                                            )
+                                            .toUtc(); // 10:30 AM to DateTime
 
                                     // Now format it to the hh:mm:ss format
-                                    String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
+                                    String formattedTime = DateFormat(
+                                      'HH:mm:ss',
+                                    ).format(firstTime);
 
-                                    DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
-                                    DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
+                                    DateFormat timeFormat = DateFormat(
+                                      'hh:mm a',
+                                    ); // 12-hour format with AM/PM
+                                    DateTime givenTime = timeFormat.parse(
+                                      selectedVisitTimeValue.value ?? "",
+                                    );
 
                                     // Combine current date with the given time
-                                    DateTime givenDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, givenTime.hour, givenTime.minute);
+                                    DateTime givenDateTime = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      givenTime.hour,
+                                      givenTime.minute,
+                                    );
 
                                     print("given time is :- ${givenDateTime}");
-                                    print("current time is :- ${DateTime.now()}");
+                                    print(
+                                      "current time is :- ${DateTime.now()}",
+                                    );
 
                                     // Compare the times
-                                    bool isAhead = givenDateTime.isAfter(DateTime.now());
+                                    bool isAhead = givenDateTime.isAfter(
+                                      DateTime.now(),
+                                    );
 
                                     if (isAhead) {
-                                      receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text.trim())));
+                                      receiveParam(
+                                        formattedTime,
+                                        DateFormat('yyyy-MM-dd').format(
+                                          DateFormat('MM/dd/yyyy').parse(
+                                            visitDateController.text.trim(),
+                                          ),
+                                        ),
+                                      );
                                       // controller.patientScheduleCreate(param: {});
                                       Get.back();
                                     } else {
-                                      print('Given time is not ahead of the current time.');
-                                      CustomToastification().showToast("Visit time must be in the future", type: ToastificationType.error);
+                                      print(
+                                        'Given time is not ahead of the current time.',
+                                      );
+                                      CustomToastification().showToast(
+                                        "Visit time must be in the future",
+                                        type: ToastificationType.error,
+                                      );
                                     }
                                   } else {
-                                    DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                    DateTime firstTime =
+                                        DateFormat('hh:mm a')
+                                            .parse(
+                                              selectedVisitTimeValue.value ??
+                                                  "",
+                                            )
+                                            .toUtc(); // 10:30 AM to DateTime
 
                                     // Now format it to the hh:mm:ss format
-                                    String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
+                                    String formattedTime = DateFormat(
+                                      'HH:mm:ss',
+                                    ).format(firstTime);
                                     print("visit time is $formattedTime");
-                                    print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
-                                    receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
+                                    print(
+                                      "visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}",
+                                    );
+                                    receiveParam(
+                                      formattedTime,
+                                      DateFormat('yyyy-MM-dd').format(
+                                        DateFormat(
+                                          'MM/dd/yyyy',
+                                        ).parse(visitDateController.text),
+                                      ),
+                                    );
                                     Get.back();
                                   }
                                 }
@@ -233,7 +333,8 @@ class ReschedulePatientDialog extends GetView<HomeController> {
               print("value is :- ${value.first}");
               visitDate = value.first;
               String padDayMonth(int value) => value.toString().padLeft(2, '0');
-              visitDateController.text = '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
+              visitDateController.text =
+                  '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
             },
             config: CalendarDatePicker2Config(firstDate: DateTime.now()),
           ),
@@ -245,7 +346,10 @@ class ReschedulePatientDialog extends GetView<HomeController> {
   List<String> generateTimeIntervals(DateTime startTime) {
     List<String> times = [];
 
-    bool isSameDate = startTime.year == DateTime.now().year && startTime.month == DateTime.now().month && startTime.day == DateTime.now().day;
+    bool isSameDate =
+        startTime.year == DateTime.now().year &&
+        startTime.month == DateTime.now().month &&
+        startTime.day == DateTime.now().day;
 
     // Get the current date and time
     DateTime currentTime = startTime;
@@ -260,20 +364,30 @@ class ReschedulePatientDialog extends GetView<HomeController> {
 
     // If we are exactly on a 15-minute boundary (e.g. 3:45 PM), start from the next interval
     if (remainingMinutes == 0) {
-      currentTime = currentTime.add(Duration(minutes: 15)); // Skip to next 15-minute mark
+      currentTime = currentTime.add(
+        Duration(minutes: 15),
+      ); // Skip to next 15-minute mark
     } else {
       // Otherwise, round up to the next 15-minute mark
       currentTime = currentTime.add(Duration(minutes: remainingMinutes));
     }
 
     // Set the end time to 11:45 PM of the current day
-    DateTime endOfDay = DateTime(currentTime.year, currentTime.month, currentTime.day, 23, 45);
+    DateTime endOfDay = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      23,
+      45,
+    );
 
     // Loop to add times from the adjusted current time up to 11:45 PM
     while (currentTime.isBefore(endOfDay.add(Duration(minutes: 15)))) {
       String formattedTime = formatTime(currentTime);
       times.add(formattedTime);
-      currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
+      currentTime = currentTime.add(
+        Duration(minutes: 15),
+      ); // Increment by 15 minutes
     }
     print(times);
     return times;
@@ -298,6 +412,10 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
   RxBool isCalendarOpen = RxBool(true);
 
   RxBool isLoading = RxBool(false);
+
+  RxBool isExpandedDoctor = RxBool(false);
+
+  RxBool isExpandedMedicalAssistant = RxBool(false);
   RxnString selectedVisitTimeValue = RxnString();
   DateTime? visitDate;
   TextEditingController visitDateController = TextEditingController();
@@ -333,11 +451,18 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
     "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ]);
 
-  List<DateTime?> _singleDatePickerValueWithDefaultValue = [DateTime.now().add(const Duration(days: 0))];
+  List<DateTime?> _singleDatePickerValueWithDefaultValue = [
+    DateTime.now().add(const Duration(days: 0)),
+  ];
 
   final void Function(String, String) receiveParam;
 
-  HomeReschedulePatientDialog({super.key, required this.visitDate, required this.selectedVisitTimeValue, required this.receiveParam});
+  HomeReschedulePatientDialog({
+    super.key,
+    required this.visitDate,
+    required this.selectedVisitTimeValue,
+    required this.receiveParam,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +476,10 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
       elevation: 16,
       child: Obx(() {
         return Container(
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -362,17 +490,39 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(children: [Text("Visit Date", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      Row(
+                        children: [
+                          Text(
+                            "Visit Date",
+                            style: AppFonts.regular(14, AppColors.textBlack),
+                          ),
+                          Text(
+                            "*",
+                            style: AppFonts.regular(14, AppColors.redText),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 8),
                       Container(
                         height: 48,
                         padding: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(border: Border.all(color: AppColors.textDarkGrey.withValues(alpha: 0.5), width: 0.5), color: Colors.white, borderRadius: BorderRadius.circular(6)),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.textDarkGrey.withValues(
+                              alpha: 0.5,
+                            ),
+                            width: 0.5,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
                         child: DateFormatField(
                           decoration: InputDecoration(
                             hintText: "02/23/2024",
                             border: InputBorder.none,
-                            suffixIconConstraints: BoxConstraints(maxHeight: 60),
+                            suffixIconConstraints: BoxConstraints(
+                              maxHeight: 60,
+                            ),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 print("hello world");
@@ -396,9 +546,22 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                           },
                         ),
                       ),
-                      if (isCalendarOpen.value) ...[buildSingleDatePickerWithValue()],
+                      if (isCalendarOpen.value) ...[
+                        buildSingleDatePickerWithValue(),
+                      ],
                       SizedBox(height: 5),
-                      Row(children: [Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                      Row(
+                        children: [
+                          Text(
+                            "Visit Time",
+                            style: AppFonts.regular(14, AppColors.textBlack),
+                          ),
+                          Text(
+                            "*",
+                            style: AppFonts.regular(14, AppColors.redText),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 8),
                       Obx(() {
                         return BaseDropdown<String>(
@@ -411,7 +574,167 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                           selectText: "11 PM",
                         );
                       }),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       "Select Doctor",
+                      //       style: AppFonts.regular(14, AppColors.textBlack),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(height: 8),
+                      // Obx(() {
+                      //   return ContainerDropdownView(
+                      //     icon: Padding(
+                      //       padding: const EdgeInsets.only(right: 7),
+                      //       child: Icon(
+                      //         Icons.keyboard_arrow_down_rounded,
+                      //         color: AppColors.textDarkGrey,
+                      //       ),
+                      //     ),
+                      //     key: UniqueKey(),
+                      //     onRemove: (name, index) {
+                      //       controller.globalController
+                      //           .removeDoctorFilterByIndex(index: index);
+                      //       controller.globalController.setDoctorModel();
+                      //     },
+                      //     selectedItem:
+                      //         controller
+                      //             .globalController
+                      //             .homePastPatientListSortingModel
+                      //             .value
+                      //             ?.selectedDoctorNames ??
+                      //         [],
+                      //     receiveParam: (isExpand) {
+                      //       isExpandedDoctor.value = isExpand;
+                      //     },
+                      //     name: "Select Doctor",
+                      //   );
+                      // }),
+                      // SizedBox(height: 10),
+                      // Obx(() {
+                      //   return isExpandedDoctor.value
+                      //       ? DropDownWithSearch(
+                      //         key: UniqueKey(),
+                      //         onChanged: (value, index, selectedId, name) {
+                      //           controller
+                      //               .globalController
+                      //               .selectedDoctorModel[index]
+                      //               .isSelected = !value;
+                      //           controller.globalController.selectedDoctorModel
+                      //               .refresh();
+                      //
+                      //           if (!value) {
+                      //             controller.globalController.saveDoctorFilter(
+                      //               selectedId: selectedId,
+                      //               name: name,
+                      //             );
+                      //           } else {
+                      //             controller.globalController
+                      //                 .removeDoctorFilter(
+                      //                   selectedId: selectedId,
+                      //                   name: name,
+                      //                 );
+                      //           }
+                      //           controller
+                      //               .globalController
+                      //               .homePastPatientListSortingModel
+                      //               .refresh();
+                      //
+                      //           controller.getPastVisitList();
+                      //         },
+                      //         receiveParam: (id) {},
+                      //         list:
+                      //             controller
+                      //                 .globalController
+                      //                 .selectedDoctorModel
+                      //                 .value,
+                      //         selectedId: 1,
+                      //       )
+                      //       : SizedBox();
+                      // }),
+                      // SizedBox(height: 10),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       "Select Medical Assistant",
+                      //       style: AppFonts.regular(14, AppColors.textBlack),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(height: 8),
+                      // Obx(() {
+                      //   return ContainerDropdownView(
+                      //     icon: Padding(
+                      //       padding: const EdgeInsets.only(right: 7),
+                      //       child: Icon(
+                      //         Icons.keyboard_arrow_down_rounded,
+                      //         color: AppColors.textDarkGrey,
+                      //       ),
+                      //     ),
+                      //     onRemove: (name, index) {
+                      //       controller.globalController
+                      //           .removeMedicalFilterByIndex(index: index);
+                      //
+                      //       controller.globalController.setMedicalModel();
+                      //     },
+                      //     selectedItem:
+                      //         controller
+                      //             .globalController
+                      //             .homePastPatientListSortingModel
+                      //             .value
+                      //             ?.selectedMedicationNames ??
+                      //         [],
+                      //     receiveParam: (isExpand) {
+                      //       isExpandedMedicalAssistant.value = isExpand;
+                      //     },
+                      //     name: "Select Medical Assistant",
+                      //   );
+                      // }),
+                      // SizedBox(height: 10),
+                      // Obx(() {
+                      //   return isExpandedMedicalAssistant.value
+                      //       ? DropDownWithSearch(
+                      //         key: UniqueKey(),
+                      //         onChanged: (value, index, selectedId, name) {
+                      //           controller
+                      //               .globalController
+                      //               .selectedMedicalModel[index]
+                      //               .isSelected = !value;
+                      //           controller.globalController.selectedMedicalModel
+                      //               .refresh();
+                      //
+                      //           if (!value) {
+                      //             controller.globalController.saveMedicalFilter(
+                      //               selectedId: selectedId,
+                      //               name: name,
+                      //             );
+                      //           } else {
+                      //             controller.globalController
+                      //                 .removeMedicalFilter(
+                      //                   selectedId: selectedId,
+                      //                   name: name,
+                      //                 );
+                      //           }
+                      //           controller
+                      //               .globalController
+                      //               .homePastPatientListSortingModel
+                      //               .refresh();
+                      //
+                      //           controller.getPastVisitList();
+                      //         },
+                      //         list:
+                      //             controller
+                      //                 .globalController
+                      //                 .selectedMedicalModel
+                      //                 .value,
+                      //         receiveParam: (int id) {},
+                      //         selectedId: 1,
+                      //       )
+                      //       : SizedBox();
+                      // }),
+                      // SizedBox(height: 10),
                       Row(
                         spacing: 10,
                         children: [
@@ -433,44 +756,103 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
                             child: CustomAnimatedButton(
                               onPressed: () {
                                 if (selectedVisitTimeValue.value == null) {
-                                  CustomToastification().showToast("Please select Visit time", type: ToastificationType.error);
+                                  CustomToastification().showToast(
+                                    "Please select Visit time",
+                                    type: ToastificationType.error,
+                                  );
                                 } else {
-                                  bool isSameDate = visitDate != null && visitDate?.year == DateTime.now().year && visitDate?.month == DateTime.now().month && visitDate?.day == DateTime.now().day;
+                                  bool isSameDate =
+                                      visitDate != null &&
+                                      visitDate?.year == DateTime.now().year &&
+                                      visitDate?.month ==
+                                          DateTime.now().month &&
+                                      visitDate?.day == DateTime.now().day;
 
                                   if (isSameDate) {
-                                    DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                    DateTime firstTime =
+                                        DateFormat('hh:mm a')
+                                            .parse(
+                                              selectedVisitTimeValue.value ??
+                                                  "",
+                                            )
+                                            .toUtc(); // 10:30 AM to DateTime
 
                                     // Now format it to the hh:mm:ss format
-                                    String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
+                                    String formattedTime = DateFormat(
+                                      'HH:mm:ss',
+                                    ).format(firstTime);
 
-                                    DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
-                                    DateTime givenTime = timeFormat.parse(selectedVisitTimeValue.value ?? "");
+                                    DateFormat timeFormat = DateFormat(
+                                      'hh:mm a',
+                                    ); // 12-hour format with AM/PM
+                                    DateTime givenTime = timeFormat.parse(
+                                      selectedVisitTimeValue.value ?? "",
+                                    );
 
                                     // Combine current date with the given time
-                                    DateTime givenDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, givenTime.hour, givenTime.minute);
+                                    DateTime givenDateTime = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      givenTime.hour,
+                                      givenTime.minute,
+                                    );
 
                                     print("given time is :- ${givenDateTime}");
-                                    print("current time is :- ${DateTime.now()}");
+                                    print(
+                                      "current time is :- ${DateTime.now()}",
+                                    );
 
                                     // Compare the times
-                                    bool isAhead = givenDateTime.isAfter(DateTime.now());
+                                    bool isAhead = givenDateTime.isAfter(
+                                      DateTime.now(),
+                                    );
 
                                     if (isAhead) {
-                                      receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text.trim())));
+                                      receiveParam(
+                                        formattedTime,
+                                        DateFormat('yyyy-MM-dd').format(
+                                          DateFormat('MM/dd/yyyy').parse(
+                                            visitDateController.text.trim(),
+                                          ),
+                                        ),
+                                      );
                                       // controller.patientScheduleCreate(param: {});
                                       Get.back();
                                     } else {
-                                      print('Given time is not ahead of the current time.');
-                                      CustomToastification().showToast("Visit time must be in the future", type: ToastificationType.error);
+                                      print(
+                                        'Given time is not ahead of the current time.',
+                                      );
+                                      CustomToastification().showToast(
+                                        "Visit time must be in the future",
+                                        type: ToastificationType.error,
+                                      );
                                     }
                                   } else {
-                                    DateTime firstTime = DateFormat('hh:mm a').parse(selectedVisitTimeValue.value ?? "").toUtc(); // 10:30 AM to DateTime
+                                    DateTime firstTime =
+                                        DateFormat('hh:mm a')
+                                            .parse(
+                                              selectedVisitTimeValue.value ??
+                                                  "",
+                                            )
+                                            .toUtc(); // 10:30 AM to DateTime
 
                                     // Now format it to the hh:mm:ss format
-                                    String formattedTime = DateFormat('HH:mm:ss').format(firstTime);
+                                    String formattedTime = DateFormat(
+                                      'HH:mm:ss',
+                                    ).format(firstTime);
                                     print("visit time is $formattedTime");
-                                    print("visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}");
-                                    receiveParam(formattedTime, DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text)));
+                                    print(
+                                      "visit date is :- ${DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text))}",
+                                    );
+                                    receiveParam(
+                                      formattedTime,
+                                      DateFormat('yyyy-MM-dd').format(
+                                        DateFormat(
+                                          'MM/dd/yyyy',
+                                        ).parse(visitDateController.text),
+                                      ),
+                                    );
                                     Get.back();
                                   }
                                 }
@@ -514,7 +896,8 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
               print("value is :- ${value.first}");
               visitDate = value.first;
               String padDayMonth(int value) => value.toString().padLeft(2, '0');
-              visitDateController.text = '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
+              visitDateController.text =
+                  '${padDayMonth(value.first.month)}/${padDayMonth(value.first.day)}/${value.first.year}';
             },
             config: CalendarDatePicker2Config(firstDate: DateTime.now()),
           ),
@@ -526,7 +909,10 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
   List<String> generateTimeIntervals(DateTime startTime) {
     List<String> times = [];
 
-    bool isSameDate = startTime.year == DateTime.now().year && startTime.month == DateTime.now().month && startTime.day == DateTime.now().day;
+    bool isSameDate =
+        startTime.year == DateTime.now().year &&
+        startTime.month == DateTime.now().month &&
+        startTime.day == DateTime.now().day;
 
     // Get the current date and time
     DateTime currentTime = startTime;
@@ -541,20 +927,30 @@ class HomeReschedulePatientDialog extends GetView<HomeController> {
 
     // If we are exactly on a 15-minute boundary (e.g. 3:45 PM), start from the next interval
     if (remainingMinutes == 0) {
-      currentTime = currentTime.add(Duration(minutes: 15)); // Skip to next 15-minute mark
+      currentTime = currentTime.add(
+        Duration(minutes: 15),
+      ); // Skip to next 15-minute mark
     } else {
       // Otherwise, round up to the next 15-minute mark
       currentTime = currentTime.add(Duration(minutes: remainingMinutes));
     }
 
     // Set the end time to 11:45 PM of the current day
-    DateTime endOfDay = DateTime(currentTime.year, currentTime.month, currentTime.day, 23, 45);
+    DateTime endOfDay = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      23,
+      45,
+    );
 
     // Loop to add times from the adjusted current time up to 11:45 PM
     while (currentTime.isBefore(endOfDay.add(Duration(minutes: 15)))) {
       String formattedTime = formatTime(currentTime);
       times.add(formattedTime);
-      currentTime = currentTime.add(Duration(minutes: 15)); // Increment by 15 minutes
+      currentTime = currentTime.add(
+        Duration(minutes: 15),
+      ); // Increment by 15 minutes
     }
     print(times);
     return times;

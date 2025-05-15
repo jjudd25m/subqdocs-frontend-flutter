@@ -77,7 +77,8 @@ class GlobalController extends GetxController {
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   final HomeRepository _homeRepository = HomeRepository();
 
-  final PersonalSettingRepository _personalSettingRepository = PersonalSettingRepository();
+  final PersonalSettingRepository _personalSettingRepository =
+      PersonalSettingRepository();
   static const ROLE_DOCTOR = "Doctor";
   static const ROLE_MEDICAL_ASSISTANT = "Medical Assistant";
 
@@ -98,13 +99,22 @@ class GlobalController extends GetxController {
 
   static const subqdocsChannel = MethodChannel('com.subqdocs/shared');
 
-  RxList<SelectedDoctorModel> selectedDoctorModel = RxList<SelectedDoctorModel>();
-  RxList<SelectedDoctorModel> selectedMedicalModel = RxList<SelectedDoctorModel>();
+  RxList<SelectedDoctorModel> selectedDoctorModel =
+      RxList<SelectedDoctorModel>();
+  RxList<SelectedDoctorModel> selectedMedicalModel =
+      RxList<SelectedDoctorModel>();
 
-  RxList<SelectedDoctorModel> selectedDoctorModelSchedule = RxList<SelectedDoctorModel>();
-  RxList<SelectedDoctorModel> selectedMedicalModelSchedule = RxList<SelectedDoctorModel>();
+  RxList<SelectedDoctorModel> selectedDoctorModelSchedule =
+      RxList<SelectedDoctorModel>();
+  RxList<SelectedDoctorModel> selectedMedicalModelSchedule =
+      RxList<SelectedDoctorModel>();
 
-  IOS7SiriWaveformController waveController = IOS7SiriWaveformController(amplitude: 0, color: Colors.red, frequency: 4, speed: 0.3);
+  IOS7SiriWaveformController waveController = IOS7SiriWaveformController(
+    amplitude: 0,
+    color: Colors.red,
+    frequency: 4,
+    speed: 0.3,
+  );
 
   double adjustYPosition(double yPosition, BuildContext context) {
     // Get the height of the screen
@@ -124,7 +134,12 @@ class GlobalController extends GetxController {
   }
 
   void reinitController() {
-    waveController = IOS7SiriWaveformController(amplitude: 0, color: AppColors.backgroundPurple, frequency: 3, speed: 0.9);
+    waveController = IOS7SiriWaveformController(
+      amplitude: 0,
+      color: AppColors.backgroundPurple,
+      frequency: 3,
+      speed: 0.9,
+    );
   }
 
   // below  all the function is for the recording model
@@ -133,7 +148,8 @@ class GlobalController extends GetxController {
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+      barrierDismissible: true,
+      // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return GlobleAttchmnets(); // Our custom dialog
       },
@@ -154,14 +170,28 @@ class GlobalController extends GetxController {
       Map<String, dynamic> param = {};
 
       param['role'] = ROLE_MEDICAL_ASSISTANT;
-      medicalListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
+      medicalListModel.value = await _homeRepository
+          .getDoctorsAndMedicalAssistant(param: param);
 
       if (medicalListModel.value?.responseType == "success") {
         selectedMedicalModel.clear();
         selectedMedicalModelSchedule.clear();
         medicalListModel.value?.responseData?.forEach((element) {
-          selectedMedicalModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
-          selectedMedicalModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+          selectedMedicalModel.add(
+            SelectedDoctorModel(
+              id: element.id,
+              name: element.name,
+              profileImage: element.profileImage,
+              isDeleted: element.deletedAt ?? false,
+            ),
+          );
+          selectedMedicalModelSchedule.add(
+            SelectedDoctorModel(
+              id: element.id,
+              name: element.name,
+              profileImage: element.profileImage,
+            ),
+          );
 
           setMedicalModel();
           setMedicalModelSchedule();
@@ -174,8 +204,14 @@ class GlobalController extends GetxController {
 
   Future<void> getUserDetail() async {
     try {
-      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-      getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
+      var loginData = LoginModel.fromJson(
+        jsonDecode(
+          AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+        ),
+      );
+      getUserDetailModel.value = await _personalSettingRepository.getUserDetail(
+        userId: loginData.responseData?.user?.id.toString() ?? "",
+      );
     } catch (e) {
       print(e);
     }
@@ -186,14 +222,28 @@ class GlobalController extends GetxController {
       Map<String, dynamic> param = {};
 
       param['role'] = ROLE_DOCTOR;
-      doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
+      doctorListModel.value = await _homeRepository
+          .getDoctorsAndMedicalAssistant(param: param);
 
       if (doctorListModel.value?.responseType == "success") {
         selectedDoctorModel.clear();
         selectedDoctorModelSchedule.clear();
         doctorListModel.value?.responseData?.forEach((element) {
-          selectedDoctorModel.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
-          selectedDoctorModelSchedule.add(SelectedDoctorModel(id: element.id, name: element.name, profileImage: element.profileImage));
+          selectedDoctorModel.add(
+            SelectedDoctorModel(
+              id: element.id,
+              name: element.name,
+              profileImage: element.profileImage,
+              isDeleted: element.deletedAt ?? false,
+            ),
+          );
+          selectedDoctorModelSchedule.add(
+            SelectedDoctorModel(
+              id: element.id,
+              name: element.name,
+              profileImage: element.profileImage,
+            ),
+          );
 
           setDoctorModel();
           setDoctorModelSchedule();
@@ -212,19 +262,28 @@ class GlobalController extends GetxController {
 
       param['status'] = status;
 
-      ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
+      ChangeStatusModel changeStatusModel = await visitMainRepository
+          .changeStatus(id: visitId.value, params: param);
 
       Loader().stopLoader();
       if (changeStatusModel.responseType == "success") {
         // Get.back();
         // Get.back();
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+        CustomToastification().showToast(
+          "${changeStatusModel.message}",
+          type: ToastificationType.success,
+        );
 
         if (Get.currentRoute == Routes.VISIT_MAIN) {
-          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).updateData();
+          Get.find<VisitMainController>(
+            tag: Get.arguments["unique_tag"],
+          ).updateData();
         }
       } else {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+        CustomToastification().showToast(
+          "${changeStatusModel.message}",
+          type: ToastificationType.error,
+        );
         // Get.back();
         // Get.back();
       }
@@ -250,8 +309,12 @@ class GlobalController extends GetxController {
       resumeRecording: recorderService.recordingStatus.value.toString(),
     );
 
-    print("footballGameLiveActivityModel is :- ${footballGameLiveActivityModel?.toMap()}");
-    final activityId = await liveActivitiesPlugin.createActivity(footballGameLiveActivityModel?.toMap() ?? {});
+    print(
+      "footballGameLiveActivityModel is :- ${footballGameLiveActivityModel?.toMap()}",
+    );
+    final activityId = await liveActivitiesPlugin.createActivity(
+      footballGameLiveActivityModel?.toMap() ?? {},
+    );
 
     liveActivitiesPlugin.activityUpdateStream.listen((event) {
       print("activityUpdateStream event is:- ${event}");
@@ -284,10 +347,18 @@ class GlobalController extends GetxController {
 
   Future<void> updatePauseResumeAudioWidget() async {
     if (recorderService.recordingStatus.value == 1) {
-      final data = FootballGameLiveActivityModel(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: recorderService.formattedRecordingTime, resumeRecording: "2");
+      final data = FootballGameLiveActivityModel(
+        userName: "${patientFirstName.value} ${patientLsatName.value}",
+        recordingTime: recorderService.formattedRecordingTime,
+        resumeRecording: "2",
+      );
       liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
     } else {
-      final data = FootballGameLiveActivityModel(userName: "${patientFirstName.value} ${patientLsatName.value}", recordingTime: recorderService.formattedRecordingTime, resumeRecording: "1");
+      final data = FootballGameLiveActivityModel(
+        userName: "${patientFirstName.value} ${patientLsatName.value}",
+        recordingTime: recorderService.formattedRecordingTime,
+        resumeRecording: "1",
+      );
       liveActivitiesPlugin.updateActivity(latestActivityId!, data.toMap());
     }
   }
@@ -297,7 +368,8 @@ class GlobalController extends GetxController {
       return;
     }
 
-    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+    final List<ConnectivityResult> connectivityResult =
+        await (Connectivity().checkConnectivity());
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
       customPrint("internet not available ");
@@ -305,9 +377,15 @@ class GlobalController extends GetxController {
       // loadingMessage.value = "Uploading Audio";
       Loader().showLoadingDialogForSimpleLoader();
 
-      Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
+      Uint8List audioBytes =
+          await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave = AudioFile(
+        audioData: audioBytes,
+        fileName: audioFile.path,
+        status: 'pending',
+        visitId: visitId.value,
+      );
 
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
@@ -317,28 +395,41 @@ class GlobalController extends GetxController {
 
       Get.back();
 
-      CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      CustomToastification().showToast(
+        "Audio saved locally. Will upload when internet is available.",
+        type: ToastificationType.success,
+      );
 
-      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+      List<AudioFile> audio =
+          await DatabaseHelper.instance.getPendingAudioFiles();
 
       for (var file in audio) {
-        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
+        customPrint(
+          "audio data is:-  ${file.visitId} ${file.fileName} ${file.id}",
+        );
       }
     } else {
       customPrint("internet available");
       // isLoading.value = true;
       // loadingMessage.value = "Uploading Audio";
       Loader().showLoadingDialogForSimpleLoader();
-      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+      var loginData = LoginModel.fromJson(
+        jsonDecode(
+          AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+        ),
+      );
 
       try {
-        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(
-          audioFile: audioFile,
-          token: loginData.responseData?.token ?? "",
-          patientVisitId: visitId.value,
-        );
+        PatientTranscriptUploadModel patientTranscriptUploadModel =
+            await visitMainRepository.uploadAudio(
+              audioFile: audioFile,
+              token: loginData.responseData?.token ?? "",
+              patientVisitId: visitId.value,
+            );
         Loader().stopLoader();
-        customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+        customPrint(
+          "audio upload response is :- ${patientTranscriptUploadModel.toJson()}",
+        );
 
         // isLoading.value = false;
 
@@ -353,14 +444,28 @@ class GlobalController extends GetxController {
           addRoute(Routes.HOME);
           // addRoute(Routes.PATIENT_INFO);
 
-          await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
+          await Get.toNamed(
+            Routes.PATIENT_INFO,
+            arguments: {
+              "trascriptUploadData": patientTranscriptUploadModel,
+              "unique_tag": DateTime.now().toString(),
+            },
+          );
         } else {
-          await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
+          await Get.toNamed(
+            Routes.PATIENT_INFO,
+            arguments: {
+              "trascriptUploadData": patientTranscriptUploadModel,
+              "unique_tag": DateTime.now().toString(),
+            },
+          );
         }
 
         if (Get.currentRoute == Routes.VISIT_MAIN) {
           // Get.find<VisitMainController>().getPatientDetails();
-          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+          Get.find<VisitMainController>(
+            tag: Get.arguments["unique_tag"],
+          ).getPatientDetails();
         }
       } catch (e) {
         print("Audio failed error is :- ${e}");
@@ -398,32 +503,53 @@ class GlobalController extends GetxController {
   Future<void> uploadAttachments() async {
     if (checkTotalSize()) {
       if (checkSingleSize()) {
-        CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
+        CustomToastification().showToast(
+          "File Size must not exceed 10 MB",
+          type: ToastificationType.error,
+        );
       } else {
         Get.back();
         Loader().showLoadingDialogForSimpleLoader();
-        var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+        var loginData = LoginModel.fromJson(
+          jsonDecode(
+            AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+          ),
+        );
 
         Map<String, List<File>> profileParams = {};
         if (list.isNotEmpty) {
           customPrint("profile is   available");
           // param['profile_image'] = profileImage.value;
-          profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+          profileParams['attachments'] =
+              list
+                  .map((model) => model.file)
+                  .toList()
+                  .whereType<File>()
+                  .toList();
         } else {
           customPrint("profile is not  available");
         }
-        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+        await visitMainRepository.uploadAttachments(
+          files: profileParams,
+          token: loginData.responseData?.token ?? "",
+          patientVisitId: patientId.value,
+        );
         list.clear();
         Get.back();
 
         if (Get.currentRoute == Routes.VISIT_MAIN) {
           // Get.find<VisitMainController>().getPatientAttachment();
 
-          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientAttachment();
+          Get.find<VisitMainController>(
+            tag: Get.arguments["unique_tag"],
+          ).getPatientAttachment();
         }
       }
     } else {
-      CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
+      CustomToastification().showToast(
+        " Total Files Size must not exceed 100 MB",
+        type: ToastificationType.error,
+      );
     }
   }
 
@@ -449,7 +575,9 @@ class GlobalController extends GetxController {
       list.clear();
     }
 
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(
+      fileType: FileType.custom,
+    );
 
     customPrint("media  file is  $fileList");
 
@@ -475,7 +603,9 @@ class GlobalController extends GetxController {
           // Truncate the name to 12 characters and add ellipsis
           _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
         } else {
-          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          _shortFileName = p.basename(
+            _fileName,
+          ); // Use the full name if it's already short
         }
         list.value.add(
           MediaListingModel(
@@ -498,12 +628,18 @@ class GlobalController extends GetxController {
     }
   }
 
-  Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
+  Future<void> captureImage(
+    BuildContext context, {
+    bool fromCamera = true,
+    bool clear = true,
+  }) async {
     if (clear) {
       list.clear();
     }
 
-    XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
+    XFile? image = await MediaPickerServices().pickImage(
+      fromCamera: fromCamera,
+    );
 
     customPrint("media  file is  $image");
 
@@ -525,9 +661,19 @@ class GlobalController extends GetxController {
         // Truncate the name to 12 characters and add ellipsis
         _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
       } else {
-        _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+        _shortFileName = p.basename(
+          _fileName,
+        ); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(
+        MediaListingModel(
+          file: file,
+          previewImage: null,
+          fileName: _shortFileName,
+          date: _formatDate(_pickDate),
+          Size: _filesizeString,
+        ),
+      );
     }
 
     list.refresh();
@@ -545,7 +691,10 @@ class GlobalController extends GetxController {
     int targetIndex = breadcrumbHistory.indexOf(targetRoute);
     if (targetIndex != -1) {
       // Pop screens above the target route
-      breadcrumbHistory.removeRange(targetIndex + 1, breadcrumbHistory.length); // Remove all screens above the target route
+      breadcrumbHistory.removeRange(
+        targetIndex + 1,
+        breadcrumbHistory.length,
+      ); // Remove all screens above the target route
       breadcrumbHistory.refresh();
       print('Popped screens above: $targetRoute');
       // closeFormState = 0;
@@ -559,7 +708,9 @@ class GlobalController extends GetxController {
 
   int getDoctorIdByName(String? name) {
     final doctor = selectedDoctorModel.firstWhereOrNull(
-      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      (doctor) =>
+          doctor.name != null &&
+          doctor.name!.toLowerCase().contains(name!.toLowerCase()),
       // Return null if no match is found
     );
 
@@ -569,7 +720,9 @@ class GlobalController extends GetxController {
 
   int getDoctorIdByNameSchedule(String? name) {
     final doctor = selectedDoctorModelSchedule.firstWhereOrNull(
-      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      (doctor) =>
+          doctor.name != null &&
+          doctor.name!.toLowerCase().contains(name!.toLowerCase()),
       // Return null if no match is found
     );
 
@@ -619,7 +772,9 @@ class GlobalController extends GetxController {
 
   int getMedicalIdByName(String? name) {
     final doctor = selectedMedicalModel.firstWhereOrNull(
-      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      (doctor) =>
+          doctor.name != null &&
+          doctor.name!.toLowerCase().contains(name!.toLowerCase()),
       // Return null if no match is found
     );
 
@@ -629,7 +784,9 @@ class GlobalController extends GetxController {
 
   int getMedicalIdByNameSchedule(String? name) {
     final doctor = selectedMedicalModelSchedule.firstWhereOrNull(
-      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      (doctor) =>
+          doctor.name != null &&
+          doctor.name!.toLowerCase().contains(name!.toLowerCase()),
       // Return null if no match is found
     );
 
@@ -652,7 +809,10 @@ class GlobalController extends GetxController {
 
   String getKeyByValue(String value) {
     // Iterate over the map and check for a match
-    return breadcrumbs.keys.firstWhere((key) => breadcrumbs[key] == value, orElse: () => 'Not Found');
+    return breadcrumbs.keys.firstWhere(
+      (key) => breadcrumbs[key] == value,
+      orElse: () => 'Not Found',
+    );
   }
 
   // Pop the last route from the stack
@@ -729,10 +889,13 @@ class GlobalController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+    HomePastPatientListSortingModel? homePastPatientData =
+        await AppPreference.instance.getHomePastPatientListSortingModel();
     if (homePastPatientData != null) {
       homePastPatientListSortingModel.value = homePastPatientData;
-      print("existing HomePastPatientListSortingModel:- ${homePastPatientData.toJson()}");
+      print(
+        "existing HomePastPatientListSortingModel:- ${homePastPatientData.toJson()}",
+      );
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['sortingPastPatient'] = sortingPastPatient;
@@ -746,14 +909,18 @@ class GlobalController extends GetxController {
 
       json['startDate'] = "";
       json['endDate'] = "";
-      homePastPatientListSortingModel.value = HomePastPatientListSortingModel.fromJson(json);
+      homePastPatientListSortingModel
+          .value = HomePastPatientListSortingModel.fromJson(json);
       print("first initialize homePastPatientListSortingModel :- $json");
     }
 
-    HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
+    HomePatientListSortingModel? homePatientListData =
+        await AppPreference.instance.getHomePatientListSortingModel();
     if (homePatientListData != null) {
       homePatientListSortingModel.value = homePatientListData;
-      print("existing HomePatientListSortingModel:- ${homePatientListData.toJson()}");
+      print(
+        "existing HomePatientListSortingModel:- ${homePatientListData.toJson()}",
+      );
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['sortingPatientList'] = sortingPatientList;
@@ -763,14 +930,19 @@ class GlobalController extends GetxController {
       json['selectedDateValue'] = [];
       json['startDate'] = "";
       json['endDate'] = "";
-      homePatientListSortingModel.value = HomePatientListSortingModel.fromJson(json);
+      homePatientListSortingModel.value = HomePatientListSortingModel.fromJson(
+        json,
+      );
       print("first initialize homePatientListSortingModel :- $json");
     }
 
-    HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
+    HomeScheduleListSortingModel? homeScheduleListData =
+        await AppPreference.instance.getHomeScheduleListSortingModel();
     if (homeScheduleListData != null) {
       homeScheduleListSortingModel.value = homeScheduleListData;
-      print("existing HomeScheduleListSortingModel:- ${homeScheduleListData.toJson()}");
+      print(
+        "existing HomeScheduleListSortingModel:- ${homeScheduleListData.toJson()}",
+      );
     } else {
       Map<String, dynamic> json = <String, dynamic>{};
       json['scheduleVisitSelectedSorting'] = scheduleVisitSelectedSorting;
@@ -782,7 +954,8 @@ class GlobalController extends GetxController {
       json['selectedMedicationId'] = [];
       json['selectedDoctorId'] = [];
       json['endDate'] = "";
-      homeScheduleListSortingModel.value = HomeScheduleListSortingModel.fromJson(json);
+      homeScheduleListSortingModel
+          .value = HomeScheduleListSortingModel.fromJson(json);
       print("first initialize homeScheduleListSortingModel :- $json");
     }
 
@@ -791,7 +964,9 @@ class GlobalController extends GetxController {
   }
 
   void setDoctorModel() {
-    var selectedDoctorIds = Set<int>.from(homePastPatientListSortingModel.value!.selectedDoctorId ?? []);
+    var selectedDoctorIds = Set<int>.from(
+      homePastPatientListSortingModel.value!.selectedDoctorId ?? [],
+    );
 
     // Loop through doctor models and mark them as selected if their ID exists in the set
     for (var doctorModel in selectedDoctorModel) {
@@ -800,7 +975,9 @@ class GlobalController extends GetxController {
   }
 
   void setDoctorModelSchedule() {
-    var selectedDoctorIds = Set<int>.from(homeScheduleListSortingModel.value!.selectedDoctorId ?? []);
+    var selectedDoctorIds = Set<int>.from(
+      homeScheduleListSortingModel.value!.selectedDoctorId ?? [],
+    );
 
     // Loop through doctor models and mark them as selected if their ID exists in the set
     for (var doctorModel in selectedDoctorModelSchedule) {
@@ -809,7 +986,9 @@ class GlobalController extends GetxController {
   }
 
   void setMedicalModel() {
-    var selectedMedicalIds = Set<int>.from(homePastPatientListSortingModel.value!.selectedMedicationId ?? []);
+    var selectedMedicalIds = Set<int>.from(
+      homePastPatientListSortingModel.value!.selectedMedicationId ?? [],
+    );
 
     // Loop through doctor models and mark them as selected if their ID exists in the set
     for (var medicalModel in selectedMedicalModel) {
@@ -818,7 +997,9 @@ class GlobalController extends GetxController {
   }
 
   void setMedicalModelSchedule() {
-    var selectedMedicalIds = Set<int>.from(homeScheduleListSortingModel.value!.selectedMedicationId ?? []);
+    var selectedMedicalIds = Set<int>.from(
+      homeScheduleListSortingModel.value!.selectedMedicationId ?? [],
+    );
 
     // Loop through doctor models and mark them as selected if their ID exists in the set
     for (var medicalModel in selectedMedicalModelSchedule) {
@@ -829,46 +1010,108 @@ class GlobalController extends GetxController {
   void setPastListingModel() {
     pastFilterListingModel.clear();
 
-    if ((homePastPatientListSortingModel.value?.selectedStatusIndex ?? []).isNotEmpty) {
-      pastFilterListingModel.add(FilterListingModel(filterName: "Status", filterValue: homePastPatientListSortingModel.value!.selectedStatusIndex!.join(",")));
+    if ((homePastPatientListSortingModel.value?.selectedStatusIndex ?? [])
+        .isNotEmpty) {
+      pastFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Status",
+          filterValue: homePastPatientListSortingModel
+              .value!
+              .selectedStatusIndex!
+              .join(","),
+        ),
+      );
     }
 
-    if ((homePastPatientListSortingModel.value?.selectedMedicationNames ?? []).isNotEmpty) {
-      pastFilterListingModel.add(FilterListingModel(filterName: "Medical Assistant", filterValue: homePastPatientListSortingModel.value!.selectedMedicationNames!.join(",")));
+    if ((homePastPatientListSortingModel.value?.selectedMedicationNames ?? [])
+        .isNotEmpty) {
+      pastFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Medical Assistant",
+          filterValue: homePastPatientListSortingModel
+              .value!
+              .selectedMedicationNames!
+              .join(","),
+        ),
+      );
     }
 
-    if ((homePastPatientListSortingModel.value?.selectedDoctorNames ?? []).isNotEmpty) {
-      pastFilterListingModel.add(FilterListingModel(filterName: "Doctor", filterValue: homePastPatientListSortingModel.value!.selectedDoctorNames!.join(",")));
+    if ((homePastPatientListSortingModel.value?.selectedDoctorNames ?? [])
+        .isNotEmpty) {
+      pastFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Doctor",
+          filterValue: homePastPatientListSortingModel
+              .value!
+              .selectedDoctorNames!
+              .join(","),
+        ),
+      );
     }
 
-    if ((homePastPatientListSortingModel.value?.startDate ?? "").isNotEmpty && (homePastPatientListSortingModel.value?.endDate ?? "").isNotEmpty) {
-      pastFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homePastPatientListSortingModel.value?.startDate} - ${homePastPatientListSortingModel.value?.endDate} "));
+    if ((homePastPatientListSortingModel.value?.startDate ?? "").isNotEmpty &&
+        (homePastPatientListSortingModel.value?.endDate ?? "").isNotEmpty) {
+      pastFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Visit Date",
+          filterValue:
+              "${homePastPatientListSortingModel.value?.startDate} - ${homePastPatientListSortingModel.value?.endDate} ",
+        ),
+      );
     }
   }
 
   void setScheduleListingModel() {
     scheduleFilterListingModel.clear();
 
-    if ((homeScheduleListSortingModel.value?.startDate ?? "").isNotEmpty && (homeScheduleListSortingModel.value?.endDate ?? "").isNotEmpty) {
-      scheduleFilterListingModel.add(FilterListingModel(filterName: "Visit Date", filterValue: "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} "));
+    if ((homeScheduleListSortingModel.value?.startDate ?? "").isNotEmpty &&
+        (homeScheduleListSortingModel.value?.endDate ?? "").isNotEmpty) {
+      scheduleFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Visit Date",
+          filterValue:
+              "${homeScheduleListSortingModel.value?.startDate} - ${homeScheduleListSortingModel.value?.endDate} ",
+        ),
+      );
     }
 
-    if ((homeScheduleListSortingModel.value?.selectedMedicationNames ?? []).isNotEmpty) {
-      scheduleFilterListingModel.add(FilterListingModel(filterName: "Medical Assistant", filterValue: homeScheduleListSortingModel.value!.selectedMedicationNames!.join(",")));
+    if ((homeScheduleListSortingModel.value?.selectedMedicationNames ?? [])
+        .isNotEmpty) {
+      scheduleFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Medical Assistant",
+          filterValue: homeScheduleListSortingModel
+              .value!
+              .selectedMedicationNames!
+              .join(","),
+        ),
+      );
     }
 
-    if ((homeScheduleListSortingModel.value?.selectedDoctorNames ?? []).isNotEmpty) {
-      scheduleFilterListingModel.add(FilterListingModel(filterName: "Doctor", filterValue: homeScheduleListSortingModel.value!.selectedDoctorNames!.join(",")));
+    if ((homeScheduleListSortingModel.value?.selectedDoctorNames ?? [])
+        .isNotEmpty) {
+      scheduleFilterListingModel.add(
+        FilterListingModel(
+          filterName: "Doctor",
+          filterValue: homeScheduleListSortingModel.value!.selectedDoctorNames!
+              .join(","),
+        ),
+      );
     }
   }
 
   void saveMedicalFilter({required int selectedId, required String name}) {
-    homePastPatientListSortingModel.value?.selectedMedicationId?.add(selectedId);
+    homePastPatientListSortingModel.value?.selectedMedicationId?.add(
+      selectedId,
+    );
     homePastPatientListSortingModel.value?.selectedMedicationNames?.add(name);
     saveHomePastPatientData();
   }
 
-  void saveMedicalFilterSchedule({required int selectedId, required String name}) {
+  void saveMedicalFilterSchedule({
+    required int selectedId,
+    required String name,
+  }) {
     homeScheduleListSortingModel.value?.selectedMedicationId?.add(selectedId);
     homeScheduleListSortingModel.value?.selectedMedicationNames?.add(name);
 
@@ -876,8 +1119,12 @@ class GlobalController extends GetxController {
   }
 
   void removeMedicalFilterByIndex({required int index}) {
-    homePastPatientListSortingModel.value?.selectedMedicationId?.removeAt(index);
-    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeAt(index);
+    homePastPatientListSortingModel.value?.selectedMedicationId?.removeAt(
+      index,
+    );
+    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeAt(
+      index,
+    );
 
     selectedMedicalModel.refresh();
     homePastPatientListSortingModel.refresh();
@@ -886,7 +1133,9 @@ class GlobalController extends GetxController {
 
   void removeMedicalFilterByIndexSchedule({required int index}) {
     homeScheduleListSortingModel.value?.selectedMedicationId?.removeAt(index);
-    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeAt(index);
+    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeAt(
+      index,
+    );
 
     selectedMedicalModelSchedule.refresh();
     homeScheduleListSortingModel.refresh();
@@ -924,7 +1173,10 @@ class GlobalController extends GetxController {
     saveHomePastPatientData();
   }
 
-  void saveDoctorFilterSchedule({required int selectedId, required String name}) {
+  void saveDoctorFilterSchedule({
+    required int selectedId,
+    required String name,
+  }) {
     homeScheduleListSortingModel.value?.selectedDoctorId?.add(selectedId);
     homeScheduleListSortingModel.value?.selectedDoctorNames?.add(name);
 
@@ -932,20 +1184,31 @@ class GlobalController extends GetxController {
   }
 
   void removeDoctorFilter({required int selectedId, required String name}) {
-    homePastPatientListSortingModel.value?.selectedDoctorId?.removeWhere((element) {
+    homePastPatientListSortingModel.value?.selectedDoctorId?.removeWhere((
+      element,
+    ) {
       return element == selectedId;
     });
-    homePastPatientListSortingModel.value?.selectedDoctorNames?.removeWhere((element) {
+    homePastPatientListSortingModel.value?.selectedDoctorNames?.removeWhere((
+      element,
+    ) {
       return element == name;
     });
     saveHomePastPatientData();
   }
 
-  void removeDoctorFilterSchedule({required int selectedId, required String name}) {
-    homeScheduleListSortingModel.value?.selectedDoctorId?.removeWhere((element) {
+  void removeDoctorFilterSchedule({
+    required int selectedId,
+    required String name,
+  }) {
+    homeScheduleListSortingModel.value?.selectedDoctorId?.removeWhere((
+      element,
+    ) {
       return element == selectedId;
     });
-    homeScheduleListSortingModel.value?.selectedDoctorNames?.removeWhere((element) {
+    homeScheduleListSortingModel.value?.selectedDoctorNames?.removeWhere((
+      element,
+    ) {
       return element == name;
     });
 
@@ -953,20 +1216,31 @@ class GlobalController extends GetxController {
   }
 
   void removeMedicalFilter({required int selectedId, required String name}) {
-    homePastPatientListSortingModel.value?.selectedMedicationId?.removeWhere((element) {
+    homePastPatientListSortingModel.value?.selectedMedicationId?.removeWhere((
+      element,
+    ) {
       return element == selectedId;
     });
-    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeWhere((element) {
-      return element == name;
-    });
+    homePastPatientListSortingModel.value?.selectedMedicationNames?.removeWhere(
+      (element) {
+        return element == name;
+      },
+    );
     saveHomePastPatientData();
   }
 
-  void removeMedicalFilterSchedule({required int selectedId, required String name}) {
-    homeScheduleListSortingModel.value?.selectedMedicationId?.removeWhere((element) {
+  void removeMedicalFilterSchedule({
+    required int selectedId,
+    required String name,
+  }) {
+    homeScheduleListSortingModel.value?.selectedMedicationId?.removeWhere((
+      element,
+    ) {
       return element == selectedId;
     });
-    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeWhere((element) {
+    homeScheduleListSortingModel.value?.selectedMedicationNames?.removeWhere((
+      element,
+    ) {
       return element == name;
     });
 
@@ -1050,16 +1324,22 @@ class GlobalController extends GetxController {
 
   Future<void> saveHomePastPatientData() async {
     setPastListingModel();
-    AppPreference.instance.setHomePastPatientListSortingModel(homePastPatientListSortingModel.value!);
+    AppPreference.instance.setHomePastPatientListSortingModel(
+      homePastPatientListSortingModel.value!,
+    );
   }
 
   Future<void> saveHomePatientListData() async {
-    AppPreference.instance.setHomePatientListSortingModel(homePatientListSortingModel.value!);
+    AppPreference.instance.setHomePatientListSortingModel(
+      homePatientListSortingModel.value!,
+    );
   }
 
   Future<void> saveHomeScheduleListData() async {
     setScheduleListingModel();
 
-    AppPreference.instance.setHomeScheduleListSortingModel(homeScheduleListSortingModel.value!);
+    AppPreference.instance.setHomeScheduleListSortingModel(
+      homeScheduleListSortingModel.value!,
+    );
   }
 }

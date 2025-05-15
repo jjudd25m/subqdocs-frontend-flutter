@@ -4,7 +4,12 @@ class MedicalDoctorModel {
   bool? toast;
   String? responseType;
 
-  MedicalDoctorModel({this.responseData, this.message, this.toast, this.responseType});
+  MedicalDoctorModel({
+    this.responseData,
+    this.message,
+    this.toast,
+    this.responseType,
+  });
 
   MedicalDoctorModel.fromJson(Map<String, dynamic> json) {
     if (json['responseData'] != null) {
@@ -34,13 +39,15 @@ class ResponseData {
   int? id;
   String? name;
   String? profileImage;
+  bool? deletedAt;
 
-  ResponseData({this.id, this.name, this.profileImage});
+  ResponseData({this.id, this.name, this.profileImage, this.deletedAt});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     profileImage = json['profile_image'];
+    deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +55,7 @@ class ResponseData {
     data['id'] = this.id;
     data['name'] = this.name;
     data['profile_image'] = this.profileImage;
+    data['deleted_at'] = this.deletedAt;
     return data;
   }
 }
