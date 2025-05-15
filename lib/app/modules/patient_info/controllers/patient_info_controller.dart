@@ -1533,16 +1533,25 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   }
 
   void loadDoctorviewPDF(String visitID) async {
-    var response = await _patientInfoRepository.loadDoctorviewPDF(visitId);
+    var response = await _patientInfoRepository.loadDoctorviewPDF(
+      visitId,
+      "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_doctorview_${patientData.value?.responseData?.visitTime}",
+    );
     // print("loadDoctorview PDF response:- ${response}");
   }
 
   void loadFullNotePDF(String visitID) async {
-    var response = await _patientInfoRepository.loadFullNotePDF(visitId);
+    var response = await _patientInfoRepository.loadFullNotePDF(
+      visitId,
+      "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_full_note_${patientData.value?.responseData?.visitTime}",
+    );
   }
 
   void loadPatientNotePDF(String visitID) async {
-    var response = await _patientInfoRepository.loadPatientNotePDF(visitId);
+    var response = await _patientInfoRepository.loadPatientNotePDF(
+      visitId,
+      "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_patient_note_${patientData.value?.responseData?.visitTime}",
+    );
   }
 
   Future<void> closeAllProcedureDiagnosisPopover() async {
@@ -1585,6 +1594,22 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
             tableModel.value!.rows[rows].cells[cols].items[newItems].focusNode.unfocus();
           }
 
+          for (int diag = 0; diag < (tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
+            tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> closeOnlyDoctorviewPopover() async {
+    for (int s = 0; s < tableModel.value!.rows.length; s++) {
+      tableModel.value!.rows[s].popoverController.close();
+    }
+
+    for (int rows = 0; rows < tableModel.value!.rows.length; rows++) {
+      for (int cols = 0; cols < tableModel.value!.rows[rows].cells.length; cols++) {
+        for (int newItems = 0; newItems < tableModel.value!.rows[rows].cells[cols].items.length; newItems++) {
           for (int diag = 0; diag < (tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
             tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
           }

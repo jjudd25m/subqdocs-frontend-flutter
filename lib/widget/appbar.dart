@@ -57,16 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               drawerkey.currentState!.openDrawer();
             },
-            child: Container(
-              color: AppColors.white,
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 17.0,
-                bottom: 17.0,
-                right: 12,
-              ),
-              child: SvgPicture.asset(ImagePath.drawer, height: 17, width: 23),
-            ),
+            child: Container(color: AppColors.white, padding: const EdgeInsets.only(left: 16.0, top: 17.0, bottom: 17.0, right: 12), child: SvgPicture.asset(ImagePath.drawer, height: 17, width: 23)),
           ),
           SizedBox(width: 0),
           GestureDetector(
@@ -82,15 +73,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Get.until((route) => Get.currentRoute == Routes.HOME);
                 globalController.breadcrumbHistory.clear();
 
-                Get.toNamed(
-                  Routes.HOME,
-                  arguments: {"tabIndex": globalController.tabIndex.value},
-                );
+                Get.toNamed(Routes.HOME, arguments: {"tabIndex": globalController.tabIndex.value});
               }
             },
-            child: Container(
-              child: SvgPicture.asset(ImagePath.subqdocs_app_bar_logo),
-            ),
+            child: Container(child: SvgPicture.asset(ImagePath.subqdocs_app_bar_logo)),
           ),
           Spacer(),
           Obx(() {
@@ -100,31 +86,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   Spacer(),
                   Spacer(),
-                  globalController.getUserDetailModel.value?.responseData?.id ==
-                          -1
-                      ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          fit: BoxFit.cover,
-                          ImagePath.user,
-                          height: 40,
-                          width: 40,
-                        ),
-                      )
+                  globalController.getUserDetailModel.value?.responseData?.id == -1
+                      ? ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 40, width: 40))
                       : ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: BaseImageView(
-                          imageUrl:
-                              globalController
-                                  .getUserDetailModel
-                                  .value
-                                  ?.responseData
-                                  ?.profileImage ??
-                              "",
+                          imageUrl: globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
                           width: 40,
                           height: 40,
-                          nameLetters:
-                              "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                          nameLetters: "${globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
                         ),
                       ),
                   SizedBox(width: 8),
@@ -144,16 +114,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           style: AppFonts.medium(14, AppColors.textBlack),
                         ),
 
-                        Text(
-                          textAlign: TextAlign.center,
-                          globalController
-                                  .getUserDetailModel
-                                  .value
-                                  ?.responseData
-                                  ?.degree ??
-                              "",
-                          style: AppFonts.regular(12, AppColors.textGrey),
-                        ),
+                        Text(textAlign: TextAlign.center, globalController.getUserDetailModel.value?.responseData?.degree ?? "", style: AppFonts.regular(12, AppColors.textGrey)),
                       ],
                     ),
                   ),

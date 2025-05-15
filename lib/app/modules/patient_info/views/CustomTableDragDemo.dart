@@ -105,11 +105,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
                 // closeAllPopOver();
 
-                if (fromRow != rowIndex) {
-                  setState(() {
-                    _swapRows(fromRow, rowIndex);
-                  });
-                }
+                print("from row :- ${fromRow}");
+                print("to row :- ${rowIndex}");
+
+                setState(() {
+                  _swapRows(fromRow, rowIndex);
+                });
 
                 Future.delayed(const Duration(milliseconds: 500), () {
                   calculateTotal();
@@ -144,6 +145,18 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             print("close popover start while drag");
                             closeAllPopOver();
                           },
+                          onDraggableCanceled: (velocity, offset) {
+                            print("onDraggableCanceled ${rowIndex}");
+                            // setState(() {});
+                            // globalController.selectedRowIndex.value = null;
+                            // globalController.selectedRowIndex.refresh();
+                          },
+                          // onDragCompleted: () {
+                          //   print("onDragCompleted");
+                          // },
+                          // onDragEnd: (details) {
+                          //   closeAllPopOver();
+                          // },
                           feedback: Material(color: AppColors.white, child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex)))),
                           child: Container(
                             margin: const EdgeInsets.all(5.0),
@@ -364,6 +377,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                 globalController.selectedRowIndex.value = rowIndex;
                 if (colIndex == 0) {
                   if (widget.tableModel.rows[rowIndex].popoverController.opened) {
+                    print(widget.tableModel.rows[rowIndex].popoverController);
                     widget.tableModel.rows[rowIndex].popoverController.close();
                   } else {
                     Future.delayed(const Duration(milliseconds: 250), () {
@@ -402,6 +416,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           width: double.maxFinite,
                           padding: const EdgeInsets.all(8),
                           child: TextFormField(
+                            controller: widget.tableModel.rows[row].cells[col].items[i].unitTextfield,
                             onTap: () {
                               closeAllPopOver();
                             },
@@ -411,7 +426,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                               // FilteringTextInputFormatter.digitsOnly, // First filter to digits only
                               OneToNineDigitsFormatter(), // Then apply our custom formatter
                             ],
-                            initialValue: "${widget.tableModel.rows[row].cells[col].items[i].unit}",
+                            // initialValue: "${widget.tableModel.rows[row].cells[col].items[i].unit}",
                             decoration: const InputDecoration(border: InputBorder.none),
                             focusNode: widget.tableModel.rows[row].cells[col].items[i].unitFocusNode,
                             onChanged: (value) {
@@ -434,6 +449,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           height: 100,
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            controller: widget.tableModel.rows[row].cells[col].items[i].unitChargeTextfield,
                             onTap: () {
                               closeAllPopOver();
                             },
@@ -442,7 +458,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                               FilteringTextInputFormatter.digitsOnly, // First filter to digits only
                               CurrencyInputFormatter(), // Then apply our custom formatter
                             ],
-                            initialValue: "${widget.tableModel.rows[row].cells[col].items[i].unitPrice}",
+                            // initialValue: "${widget.tableModel.rows[row].cells[col].items[i].unitPrice}",
                             decoration: const InputDecoration(border: InputBorder.none),
                             focusNode: widget.tableModel.rows[row].cells[col].items[i].focusNode,
                             onChanged: (value) {
@@ -490,6 +506,16 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                           children: List.generate(
                                             items[i].diagnosisModelList?.length ?? 0,
                                             (subIndex) => LongPressDraggable<Map<String, int>>(
+                                              // onDragCompleted: () {
+                                              //   print("onDragCompleted");
+                                              // },
+                                              onDraggableCanceled: (velocity, offset) {
+                                                print("onDraggableCanceled ${row}");
+                                                // setState(() {
+                                                // globalController.selectedRowIndex.value = null;
+                                                // globalController.selectedRowIndex.refresh();
+                                                // });
+                                              },
                                               data: {'row': row, 'col': col, 'itemIndex': i, 'subIndex': subIndex},
                                               feedback: IntrinsicHeight(
                                                 child: IntrinsicWidth(
@@ -569,6 +595,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       //     curve: Curves.easeInOut,
                                                                       //   );
                                                                       // }
+
+                                                                      widget.controller.impressionAndPlanListFullNote.forEach((element) {
+                                                                        element.popoverController.close();
+                                                                      });
+
+                                                                      widget.controller.impressionAndPlanList.forEach((element) {
+                                                                        element.popoverController.close();
+                                                                      });
 
                                                                       for (int s = 0; s < widget.tableModel.rows.length; s++) {
                                                                         widget.tableModel.rows[s].popoverController.close();
@@ -748,6 +782,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                       //   );
                                                                       // }
 
+                                                                      widget.controller.impressionAndPlanListFullNote.forEach((element) {
+                                                                        element.popoverController.close();
+                                                                      });
+
+                                                                      widget.controller.impressionAndPlanList.forEach((element) {
+                                                                        element.popoverController.close();
+                                                                      });
+
                                                                       for (int s = 0; s < widget.tableModel.rows.length; s++) {
                                                                         widget.tableModel.rows[s].popoverController.close();
                                                                       }
@@ -926,6 +968,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                     // }
 
                                     print("row $row col $col i $i");
+
+                                    widget.controller.impressionAndPlanListFullNote.forEach((element) {
+                                      element.popoverController.close();
+                                    });
+
+                                    widget.controller.impressionAndPlanList.forEach((element) {
+                                      element.popoverController.close();
+                                    });
 
                                     for (int rows = 0; rows < widget.tableModel.rows.length; rows++) {
                                       for (int cols = 0; cols < widget.tableModel.rows[rows].cells.length; cols++) {

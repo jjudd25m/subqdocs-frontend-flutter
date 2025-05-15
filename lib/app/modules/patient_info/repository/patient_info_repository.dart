@@ -138,7 +138,7 @@ class PatientInfoRepository {
   //   }
   // }
 
-  Future<void> loadPatientNotePDF(String visitID) async {
+  Future<void> loadPatientNotePDF(String visitID, String pdfName) async {
     Loader().showLoadingDialogForSimpleLoader();
 
     try {
@@ -146,7 +146,7 @@ class PatientInfoRepository {
       Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-patient-view-pdf?visit_id=$visitID", queryParameters: {});
 
       // Generate a filename
-      String fileName = 'patient_note_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      String fileName = '$pdfName.pdf';
 
       // Save to app's PDF folder
       String filePath = await savePdfToAppFolder(pdfBytes, fileName);
@@ -181,7 +181,7 @@ class PatientInfoRepository {
     }
   }
 
-  Future<void> loadFullNotePDF(String visitID) async {
+  Future<void> loadFullNotePDF(String visitID, String pdfName) async {
     Loader().showLoadingDialogForSimpleLoader();
 
     try {
@@ -189,7 +189,7 @@ class PatientInfoRepository {
       Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-notes?visit_id=$visitID", queryParameters: {});
 
       // Generate a filename
-      String fileName = 'full_note_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      String fileName = '$pdfName.pdf';
 
       // Save to app's PDF folder
       String filePath = await savePdfToAppFolder(pdfBytes, fileName);
@@ -224,7 +224,7 @@ class PatientInfoRepository {
     }
   }
 
-  Future<void> loadDoctorviewPDF(String visitID) async {
+  Future<void> loadDoctorviewPDF(String visitID, String pdfName) async {
     Loader().showLoadingDialogForSimpleLoader();
 
     try {
@@ -232,7 +232,7 @@ class PatientInfoRepository {
       Uint8List pdfBytes = await ApiProvider.instance.callGetDownloadPDF("download-doctors-view-pdf?visit_id=$visitID", queryParameters: {});
 
       // Generate a filename
-      String fileName = 'doctor_view_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      String fileName = '$pdfName.pdf';
 
       // Save to app's PDF folder
       String filePath = await savePdfToAppFolder(pdfBytes, fileName);

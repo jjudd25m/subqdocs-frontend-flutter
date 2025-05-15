@@ -27,6 +27,7 @@ class SingleCellModel {
   FocusNode unitFocusNode = FocusNode();
 
   final GlobalKey procedureContainerKey = GlobalKey();
+  TextEditingController unitTextfield = TextEditingController();
   TextEditingController unitChargeTextfield = TextEditingController();
 
   List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives; // optional list of alternative procedures
@@ -35,7 +36,10 @@ class SingleCellModel {
 
   String? unitPrice; // optional price per unit for the procedure
 
-  SingleCellModel({this.description, this.code, this.unit, this.modifiers, this.procedurePossibleAlternatives, this.unitPrice, this.diagnosisModelList}); // constructor with named optional parameters
+  SingleCellModel({this.description, this.code, this.unit, this.modifiers, this.procedurePossibleAlternatives, this.unitPrice, this.diagnosisModelList}) {
+    unitTextfield.text = unit ?? "0";
+    unitChargeTextfield.text = unitPrice ?? "\$0";
+  } // constructor with named optional parameters
 }
 
 // Model class representing a table cell containing a list of single cell items

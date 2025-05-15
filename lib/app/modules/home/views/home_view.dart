@@ -351,7 +351,7 @@ class HomeView extends GetView<HomeController> {
                                                     },
                                                   ),
                                                 ),
-                                              ] else if (controller.globalController.tabIndex.value == 0) ...[
+                                              ] else if (controller.globalController.tabIndex.value == 0 && controller.patientList.isNotEmpty) ...[
                                                 SizedBox(
                                                   height: 42,
                                                   width: 180,
