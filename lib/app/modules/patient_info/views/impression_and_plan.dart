@@ -148,6 +148,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                     },
                                   ),
                                   Container(),
+                                  Spacer(),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 0),
                                     child: Icon(
@@ -155,7 +156,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                       size: 40,
                                     ),
                                   ),
-                                  Spacer(),
+
                                   GestureDetector(
                                     onTap: () {
                                       controller.impressionAndPlanListFullNote
