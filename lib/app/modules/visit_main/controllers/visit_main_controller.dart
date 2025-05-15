@@ -62,7 +62,8 @@ class VisitMainController extends GetxController {
 
   final HomeRepository _homeRepository = HomeRepository();
 
-  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
+  final EditPatientDetailsRepository _editPatientDetailsRepository =
+      EditPatientDetailsRepository();
 
   RxBool isLoading = RxBool(false);
   RxString loadingMessage = RxString("");
@@ -111,7 +112,12 @@ class VisitMainController extends GetxController {
     });
     visitId.value = Get.arguments["visitId"];
     patientId.value = Get.arguments["patientId"];
-    pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
+    pageController = PageController(
+      initialPage: DateUtils.monthDelta(
+        DateTime(2000, 01, 01),
+        selectedDate?.firstOrNull ?? DateTime.now(),
+      ),
+    );
 
     if (visitId.value.isNotEmpty) {
       customPrint("visit id is :- $visitId");
@@ -132,7 +138,8 @@ class VisitMainController extends GetxController {
 
       handelInternetConnection();
 
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      List<AudioFile> pendingFiles =
+          await DatabaseHelper.instance.getPendingAudioFiles();
       customPrint("local audio is :- $pendingFiles");
     }
   }
@@ -148,12 +155,26 @@ class VisitMainController extends GetxController {
   //   var response = await _patientInfoRepository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
   // }
 
-  Future<void> updatePatientVisit(String keyName, List<ImpresionAndPlanViewModel> list, int? id) async {
-    if (id != null) var response = await visitMainRepository.updatePatientVisitView(id: id, params: buildParams(keyName, list));
+  Future<void> updatePatientVisit(
+    String keyName,
+    List<ImpresionAndPlanViewModel> list,
+    int? id,
+  ) async {
+    if (id != null)
+      var response = await visitMainRepository.updatePatientVisitView(
+        id: id,
+        params: buildParams(keyName, list),
+      );
   }
 
-  Future<void> updateFullNote(String keyName, List<ImpresionAndPlanViewModel> list) async {
-    var response = await visitMainRepository.updateFullNote(id: medicalRecords.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+  Future<void> updateFullNote(
+    String keyName,
+    List<ImpresionAndPlanViewModel> list,
+  ) async {
+    var response = await visitMainRepository.updateFullNote(
+      id: medicalRecords.value?.responseData?.id ?? 0,
+      params: buildParams(keyName, list),
+    );
   }
 
   String _formatDate(DateTime date) {
@@ -167,12 +188,18 @@ class VisitMainController extends GetxController {
     return "${sizeInMB.toStringAsFixed(2)} MB";
   }
 
-  Future<void> captureImage(BuildContext context, {bool fromCamera = true, bool clear = true}) async {
+  Future<void> captureImage(
+    BuildContext context, {
+    bool fromCamera = true,
+    bool clear = true,
+  }) async {
     if (clear) {
       list.clear();
     }
 
-    XFile? image = await MediaPickerServices().pickImage(fromCamera: fromCamera);
+    XFile? image = await MediaPickerServices().pickImage(
+      fromCamera: fromCamera,
+    );
 
     customPrint("media  file is  $image");
 
@@ -196,7 +223,9 @@ class VisitMainController extends GetxController {
         // Truncate the name to 12 characters and add ellipsis
         _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
       } else {
-        _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+        _shortFileName = p.basename(
+          _fileName,
+        ); // Use the full name if it's already short
       }
       list.value.add(
         MediaListingModel(
@@ -221,9 +250,11 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> updateData() async {
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
 
-    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {}
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ??
+        false) {}
   }
 
   double _formatFileSizeDouble(int bytes) {
@@ -259,22 +290,26 @@ class VisitMainController extends GetxController {
         var dateTime = selectedDate[i];
         if (selectedDate.length == 1) {
           // If there's only one date, set both startDate and endDate to the same value
-          startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+          startDate =
+              '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
           endDate = startDate;
         } else {
           if (i == 0) {
             // Set startDate to the first date
-            startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+            startDate =
+                '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
           } else {
             // Set endDate to the second date
-            endDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+            endDate =
+                '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
           }
         }
       }
     } else {
       // If no date is selected, set startDate and endDate to the current date
       DateTime dateTime = DateTime.now();
-      startDate = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+      startDate =
+          '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
       endDate = startDate; // Set both dates to the current date
     }
 
@@ -287,7 +322,9 @@ class VisitMainController extends GetxController {
       list.clear();
     }
 
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(
+      fileType: FileType.custom,
+    );
 
     customPrint("media  file is  ${fileList}");
 
@@ -317,7 +354,9 @@ class VisitMainController extends GetxController {
           // Truncate the name to 12 characters and add ellipsis
           _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
         } else {
-          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          _shortFileName = p.basename(
+            _fileName,
+          ); // Use the full name if it's already short
         }
         list.value.add(
           MediaListingModel(
@@ -348,7 +387,9 @@ class VisitMainController extends GetxController {
       list.clear();
     }
 
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(
+      fileType: FileType.custom,
+    );
 
     customPrint("media  file is  $fileList");
 
@@ -374,7 +415,9 @@ class VisitMainController extends GetxController {
           // Truncate the name to 12 characters and add ellipsis
           _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
         } else {
-          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          _shortFileName = p.basename(
+            _fileName,
+          ); // Use the full name if it's already short
         }
         list.value.add(
           MediaListingModel(
@@ -400,7 +443,8 @@ class VisitMainController extends GetxController {
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+      barrierDismissible: true,
+      // Allows dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return attachmentDailog(this); // Our custom dialog
       },
@@ -422,7 +466,10 @@ class VisitMainController extends GetxController {
     }
   }
 
-  String formatDateTime({required String firstDate, required String secondDate}) {
+  String formatDateTime({
+    required String firstDate,
+    required String secondDate,
+  }) {
     if (firstDate != "" && secondDate != "") {
       // Parse the first and second arguments to DateTime objects
       DateTime firstDateTime = DateTime.parse(firstDate);
@@ -432,7 +479,9 @@ class VisitMainController extends GetxController {
       String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
 
       // Format the second time (for hours and minutes with am/pm)
-      String formattedTime = DateFormat('h:mm a').format(secondDateTime.toLocal());
+      String formattedTime = DateFormat(
+        'h:mm a',
+      ).format(secondDateTime.toLocal());
 
       // Return the formatted string in the desired format
       return '$formattedDate $formattedTime';
@@ -467,7 +516,10 @@ class VisitMainController extends GetxController {
   void onClose() {
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.VISIT_MAIN) {
+    if (globalController.getKeyByValue(
+          globalController.breadcrumbHistory.last,
+        ) ==
+        Routes.VISIT_MAIN) {
       globalController.popRoute();
     }
   }
@@ -497,7 +549,8 @@ class VisitMainController extends GetxController {
 
       handelInternetConnection();
 
-      List<AudioFile> pendingFiles = await DatabaseHelper.instance.getPendingAudioFiles();
+      List<AudioFile> pendingFiles =
+          await DatabaseHelper.instance.getPendingAudioFiles();
       customPrint("local audio is :- $pendingFiles");
     }
   }
@@ -508,11 +561,19 @@ class VisitMainController extends GetxController {
     params["attachments"] = [id];
 
     customPrint("attch :- $params");
-    CommonResponse commonResponse = await visitMainRepository.deleteAttachments(params: params);
+    CommonResponse commonResponse = await visitMainRepository.deleteAttachments(
+      params: params,
+    );
     if (commonResponse.responseType == "success") {
-      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.success);
+      CustomToastification().showToast(
+        commonResponse.message ?? "",
+        type: ToastificationType.success,
+      );
     } else {
-      CustomToastification().showToast(commonResponse.message ?? "", type: ToastificationType.error);
+      CustomToastification().showToast(
+        commonResponse.message ?? "",
+        type: ToastificationType.error,
+      );
     }
     Get.back();
     Get.back();
@@ -520,7 +581,9 @@ class VisitMainController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final listener = InternetConnection().onStatusChange.listen((
+      InternetStatus status,
+    ) async {
       switch (status) {
         case InternetStatus.connected:
           onLine();
@@ -565,33 +628,54 @@ class VisitMainController extends GetxController {
   Future<void> uploadAttachments() async {
     if (checkTotalSize()) {
       if (checkSingleSize()) {
-        CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
+        CustomToastification().showToast(
+          "File Size must not exceed 10 MB",
+          type: ToastificationType.error,
+        );
       } else {
         Get.back();
         Loader().showLoadingDialogForSimpleLoader();
-        var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+        var loginData = LoginModel.fromJson(
+          jsonDecode(
+            AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+          ),
+        );
 
         Map<String, List<File>> profileParams = {};
         if (list.isNotEmpty) {
           customPrint("profile is   available");
           // param['profile_image'] = profileImage.value;
-          profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+          profileParams['attachments'] =
+              list
+                  .map((model) => model.file)
+                  .toList()
+                  .whereType<File>()
+                  .toList();
         } else {
           customPrint("profile is not  available");
         }
-        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+        await visitMainRepository.uploadAttachments(
+          files: profileParams,
+          token: loginData.responseData?.token ?? "",
+          patientVisitId: patientId.value,
+        );
         list.clear();
         Get.back();
         getPatientAttachment();
       }
     } else {
-      CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
+      CustomToastification().showToast(
+        " Total Files Size must not exceed 100 MB",
+        type: ToastificationType.error,
+      );
     }
   }
 
   Future<void> getVisitRecap() async {
     customPrint("patientID is :- ${patientId.value}");
-    visitRecapList.value = await visitMainRepository.getVisitRecap(id: patientId.value);
+    visitRecapList.value = await visitMainRepository.getVisitRecap(
+      id: patientId.value,
+    );
   }
 
   Future<void> getPatientAttachment() async {
@@ -617,30 +701,42 @@ class VisitMainController extends GetxController {
     print("param is :- $param");
 
     try {
-      PatientAttachmentListModel patientAttachmentData = await visitMainRepository.getPatientAttachment(id: patientId.value, param: param);
+      PatientAttachmentListModel patientAttachmentData =
+          await visitMainRepository.getPatientAttachment(
+            id: patientId.value,
+            param: param,
+          );
       patientAttachmentList.value = patientAttachmentData.responseData ?? [];
     } catch (error) {
       print("getPatientAttachment error is :- $error");
     }
-    customPrint("patientAttachmentList is:- count ${patientAttachmentList.length}");
+    customPrint(
+      "patientAttachmentList is:- count ${patientAttachmentList.length}",
+    );
     customPrint("patientAttachmentList is:- ${patientAttachmentList.toJson()}");
   }
 
   void updateDoctorView(int id) async {
     Map<String, dynamic> param = {};
-    Map<String, List<File>> profileParams = {};
+    // Map<String, List<File>> profileParams = {};
     if (id != -1) {
       param['doctor_id'] = id;
     }
 
-    if (patientId != "") {
-      param['patient_id'] = patientId;
-    }
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    // if (patientId != "") {
+    //   param['patient_id'] = patientId;
+    // }
+    // var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
     try {
-      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId.value, param: param, token: loginData.responseData?.token ?? "");
+      dynamic response = await _homeRepository.patientReScheduleVisit(
+        param: param,
+        visitId: visitId.value,
+      );
 
-      CustomToastification().showToast("Update Doctor Successfully", type: ToastificationType.success);
+      CustomToastification().showToast(
+        "Update Doctor Successfully",
+        type: ToastificationType.success,
+      );
     } catch (e) {
       CustomToastification().showToast("$e", type: ToastificationType.error);
     }
@@ -653,14 +749,16 @@ class VisitMainController extends GetxController {
       param['medical_assistant_id'] = id;
     }
 
-    if (patientId != "") {
-      param['patient_id'] = patientId;
-    }
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
     try {
-      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: patientId.value, param: param, token: loginData.responseData?.token ?? "");
+      dynamic response = await _homeRepository.patientReScheduleVisit(
+        param: param,
+        visitId: visitId.value,
+      );
 
-      CustomToastification().showToast("Update Medical Assistant Successfully", type: ToastificationType.success);
+      CustomToastification().showToast(
+        "Update Medical Assistant Successfully",
+        type: ToastificationType.success,
+      );
     } catch (e) {
       CustomToastification().showToast("$e", type: ToastificationType.error);
     }
@@ -672,20 +770,32 @@ class VisitMainController extends GetxController {
     }
 
     try {
-      patientData.value = await visitMainRepository.getPatientDetails(id: visitId.value);
+      patientData.value = await visitMainRepository.getPatientDetails(
+        id: visitId.value,
+      );
 
       setPatientEditableData();
       print("patientData age is :- ${patientData.value?.responseData?.age}");
 
       if (patientData.value?.responseData?.doctorId != null) {
-        doctorValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.doctorId ?? -1) ?? "";
+        doctorValue.value =
+            globalController.getDoctorNameById(
+              patientData.value?.responseData?.doctorId ?? -1,
+            ) ??
+            "";
       }
 
       if (patientData.value?.responseData?.medicalAssistantId != null) {
-        medicationValue.value = globalController.getMedicalNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "";
+        medicationValue.value =
+            globalController.getMedicalNameById(
+              patientData.value?.responseData?.medicalAssistantId ?? -1,
+            ) ??
+            "";
       }
 
-      print("visit status is :- ${patientData.value?.responseData?.visitStatus}");
+      print(
+        "visit status is :- ${patientData.value?.responseData?.visitStatus}",
+      );
 
       if (isLoading) {
         Get.back();
@@ -698,7 +808,11 @@ class VisitMainController extends GetxController {
   }
 
   Future<void> launchInAppWithBrowserOptions(Uri url) async {
-    if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView, browserConfiguration: const BrowserConfiguration(showTitle: true))) {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppBrowserView,
+      browserConfiguration: const BrowserConfiguration(showTitle: true),
+    )) {
       throw Exception('Could not launch $url');
     }
   }
@@ -741,29 +855,48 @@ class VisitMainController extends GetxController {
     }
   }
 
-  Future<void> patientReScheduleCreate({required Map<String, dynamic> param, required String visitId}) async {
+  Future<void> patientReScheduleCreate({
+    required Map<String, dynamic> param,
+    required String visitId,
+  }) async {
     customPrint("visit id :- $visitId");
-    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+    dynamic response = await _homeRepository.patientReScheduleVisit(
+      param: param,
+      visitId: visitId,
+    );
     customPrint("patientReScheduleCreate API  internal response $response");
-    CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    CustomToastification().showToast(
+      "Visit reschedule successfully",
+      type: ToastificationType.success,
+    );
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
     getPatientDetails();
   }
 
   Future<void> deletePatientVisit({required String id}) async {
-    var response = await ApiProvider.instance.callDelete(url: "patient/visit/delete/$id", data: {});
+    var response = await ApiProvider.instance.callDelete(
+      url: "patient/visit/delete/$id",
+      data: {},
+    );
     customPrint(response);
-    CustomToastification().showToast("Visit delete successfully", type: ToastificationType.success);
+    CustomToastification().showToast(
+      "Visit delete successfully",
+      type: ToastificationType.success,
+    );
 
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
 
-    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ??
+        false) {
       Get.back();
     }
   }
 
   Future<void> getMedicalRecords({required String id}) async {
-    medicalRecords.value = await _editPatientDetailsRepository.getMedicalRecords(id: patientId.value);
+    medicalRecords.value = await _editPatientDetailsRepository
+        .getMedicalRecords(id: patientId.value);
 
     setMedicalHistroeyEditableData();
     medicalRecords.refresh();
@@ -782,32 +915,64 @@ class VisitMainController extends GetxController {
       getPatientDetails(isLoading: isLoading);
     }
 
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
 
     // CustomToastification().showToast(" Internet Connected", type: ToastificationType.info);
   }
 
   void offLine() async {
-    var responseData = jsonDecode(AppPreference.instance.getString(AppString.offLineData));
+    var responseData = jsonDecode(
+      AppPreference.instance.getString(AppString.offLineData),
+    );
 
-    var visitRecapListResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitRecaps, visitId: visitId.value, responseData: responseData);
+    var visitRecapListResponse = fetchVisitDetails(
+      type: scheduleVisitsList,
+      modelType: visitRecaps,
+      visitId: visitId.value,
+      responseData: responseData,
+    );
 
-    var patientDetailsResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: visitMainData, visitId: visitId.value, responseData: responseData);
+    var patientDetailsResponse = fetchVisitDetails(
+      type: scheduleVisitsList,
+      modelType: visitMainData,
+      visitId: visitId.value,
+      responseData: responseData,
+    );
 
-    var scheduleVisitResponse = fetchVisitDetails(type: scheduleVisitsList, modelType: scheduledVisits, visitId: visitId.value, responseData: responseData);
+    var scheduleVisitResponse = fetchVisitDetails(
+      type: scheduleVisitsList,
+      modelType: scheduledVisits,
+      visitId: visitId.value,
+      responseData: responseData,
+    );
 
-    var medicalRecords1 = fetchVisitDetails(type: scheduleVisitsList, modelType: fullNoteOfLastVisit, visitId: visitId.value, responseData: responseData);
+    var medicalRecords1 = fetchVisitDetails(
+      type: scheduleVisitsList,
+      modelType: fullNoteOfLastVisit,
+      visitId: visitId.value,
+      responseData: responseData,
+    );
 
-    patientDetailModel.value = PatientDetailModel.fromJson(scheduleVisitResponse);
+    patientDetailModel.value = PatientDetailModel.fromJson(
+      scheduleVisitResponse,
+    );
 
     visitRecapList.value = VisitRecapListModel.fromJson(visitRecapListResponse);
 
-    patientData.value = VisitMainPatientDetails.fromJson(patientDetailsResponse);
+    patientData.value = VisitMainPatientDetails.fromJson(
+      patientDetailsResponse,
+    );
 
     medicalRecords.value = MedicalRecords.fromJson(medicalRecords1);
   }
 
-  Map<String, dynamic> fetchVisitDetails({required Map<String, dynamic> responseData, required String type, required String visitId, required String modelType}) {
+  Map<String, dynamic> fetchVisitDetails({
+    required Map<String, dynamic> responseData,
+    required String type,
+    required String visitId,
+    required String modelType,
+  }) {
     // Extract the correct visit list based on the type (scheduleVisitsList or pastPatientVisitsList)
     List<dynamic> visitList = responseData['responseData'][type];
 
@@ -822,8 +987,10 @@ class VisitMainController extends GetxController {
         var visitDetails = visit[visitKey];
 
         // Check for the value of the key that we need (e.g., scheduledVisits)
-        if (visitDetails['$modelType'] != null && visitDetails['$modelType'].isNotEmpty) {
-          responseDataResult = visitDetails['$modelType']; // Set the value to return
+        if (visitDetails['$modelType'] != null &&
+            visitDetails['$modelType'].isNotEmpty) {
+          responseDataResult =
+              visitDetails['$modelType']; // Set the value to return
         }
         break;
       }
@@ -839,7 +1006,12 @@ class VisitMainController extends GetxController {
         "response_type": "success",
       };
     } else {
-      return {"responseData": responseDataResult, "message": " Details Fetched Successfully", "toast": true, "response_type": "success"};
+      return {
+        "responseData": responseDataResult,
+        "message": " Details Fetched Successfully",
+        "toast": true,
+        "response_type": "success",
+      };
     }
   }
 
@@ -849,19 +1021,30 @@ class VisitMainController extends GetxController {
 
       param['status'] = status;
 
-      ChangeStatusModel changeStatusModel = await _homeRepository.changeStatus(id: visitId, params: param);
+      ChangeStatusModel changeStatusModel = await _homeRepository.changeStatus(
+        id: visitId,
+        params: param,
+      );
       if (changeStatusModel.responseType == "success") {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
+        CustomToastification().showToast(
+          "${changeStatusModel.message}",
+          type: ToastificationType.success,
+        );
       } else {
-        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
+        CustomToastification().showToast(
+          "${changeStatusModel.message}",
+          type: ToastificationType.error,
+        );
       }
     } catch (e) {
       CustomToastification().showToast("$e", type: ToastificationType.error);
     }
 
-    patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
+    patientDetailModel.value = await _editPatientDetailsRepository
+        .getPatientDetails(id: patientId.value);
 
-    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ?? false) {
+    if (patientDetailModel.value?.responseData?.scheduledVisits?.isEmpty ??
+        false) {
       Get.back();
     }
   }
@@ -871,8 +1054,18 @@ class VisitMainController extends GetxController {
       editableVisitSnapShot.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? "");
-      editableVisitSnapShot.add(ImpresionAndPlanViewModel(htmlContent: patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? "", htmlEditorController: htmlEditorController, title: ""));
+      htmlEditorController.setText(
+        patientData.value?.responseData?.visitSnapshot?.visitSnapshot ?? "",
+      );
+      editableVisitSnapShot.add(
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              patientData.value?.responseData?.visitSnapshot?.visitSnapshot ??
+              "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
+      );
       editableVisitSnapShot.refresh();
     }
 
@@ -880,14 +1073,31 @@ class VisitMainController extends GetxController {
       editablePersnoalNote.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(patientData.value?.responseData?.personalNote?.personalNote ?? "");
-      editablePersnoalNote.add(ImpresionAndPlanViewModel(htmlContent: patientData.value?.responseData?.personalNote?.personalNote ?? "", htmlEditorController: htmlEditorController, title: ""));
+      htmlEditorController.setText(
+        patientData.value?.responseData?.personalNote?.personalNote ?? "",
+      );
+      editablePersnoalNote.add(
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              patientData.value?.responseData?.personalNote?.personalNote ?? "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
+      );
       editablePersnoalNote.refresh();
     }
   }
 
   void resetImpressionAndPlanList() {
-    final editableLists = [editableVisitSnapShot, editablePersnoalNote, editableCancerHistory, editableMedicationHistory, editableSkinHistory, editableSocialHistory, editableAllergies];
+    final editableLists = [
+      editableVisitSnapShot,
+      editablePersnoalNote,
+      editableCancerHistory,
+      editableMedicationHistory,
+      editableSkinHistory,
+      editableSocialHistory,
+      editableAllergies,
+    ];
 
     for (var list in editableLists) {
       for (var element in list) {
@@ -898,61 +1108,155 @@ class VisitMainController extends GetxController {
   }
 
   void setMedicalHistroeyEditableData() {
-    if (medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml != null) {
+    if (medicalRecords
+            .value
+            ?.responseData
+            ?.fullNoteDetails
+            ?.cancerHistoryHtml !=
+        null) {
       editableCancerHistory.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
+      htmlEditorController.setText(
+        medicalRecords
+                .value
+                ?.responseData
+                ?.fullNoteDetails
+                ?.cancerHistoryHtml ??
+            "",
+      );
       editableCancerHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              medicalRecords
+                  .value
+                  ?.responseData
+                  ?.fullNoteDetails
+                  ?.cancerHistoryHtml ??
+              "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
       );
       editableCancerHistory.refresh();
     }
 
-    if (medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml != null) {
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml !=
+        null) {
       editableMedicationHistory.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
+      htmlEditorController.setText(
+        medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ??
+            "",
+      );
       editableMedicationHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              medicalRecords
+                  .value
+                  ?.responseData
+                  ?.fullNoteDetails
+                  ?.medicationsHtml ??
+              "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
       );
       editableMedicationHistory.refresh();
     }
 
-    if (medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
+    if (medicalRecords
+            .value
+            ?.responseData
+            ?.fullNoteDetails
+            ?.skinHistoryWithLocation !=
+        null) {
       editableSkinHistory.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
+      htmlEditorController.setText(
+        medicalRecords
+                .value
+                ?.responseData
+                ?.fullNoteDetails
+                ?.skinHistoryWithLocation ??
+            "",
+      );
       editableSkinHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""),
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              medicalRecords
+                  .value
+                  ?.responseData
+                  ?.fullNoteDetails
+                  ?.skinHistoryWithLocation ??
+              "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
       );
       editableSkinHistory.refresh();
     }
 
-    if (medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml != null) {
+    if (medicalRecords
+            .value
+            ?.responseData
+            ?.fullNoteDetails
+            ?.socialHistoryHtml !=
+        null) {
       editableSocialHistory.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
+      htmlEditorController.setText(
+        medicalRecords
+                .value
+                ?.responseData
+                ?.fullNoteDetails
+                ?.socialHistoryHtml ??
+            "",
+      );
       editableSocialHistory.add(
-        ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""),
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              medicalRecords
+                  .value
+                  ?.responseData
+                  ?.fullNoteDetails
+                  ?.socialHistoryHtml ??
+              "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
       );
       editableSocialHistory.refresh();
     }
 
-    if (medicalRecords.value?.responseData?.fullNoteDetails?.allergies != null) {
+    if (medicalRecords.value?.responseData?.fullNoteDetails?.allergies !=
+        null) {
       editableAllergies.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "");
-      editableAllergies.add(ImpresionAndPlanViewModel(htmlContent: medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+      htmlEditorController.setText(
+        medicalRecords.value?.responseData?.fullNoteDetails?.allergies ?? "",
+      );
+      editableAllergies.add(
+        ImpresionAndPlanViewModel(
+          htmlContent:
+              medicalRecords.value?.responseData?.fullNoteDetails?.allergies ??
+              "",
+          htmlEditorController: htmlEditorController,
+          title: "",
+        ),
+      );
       editableAllergies.refresh();
     }
   }
 
-  Map<String, String> buildParams(String keyName, List<ImpresionAndPlanViewModel> list) {
+  Map<String, String> buildParams(
+    String keyName,
+    List<ImpresionAndPlanViewModel> list,
+  ) {
     return {keyName: list.firstOrNull?.htmlContent ?? ""};
   }
 }

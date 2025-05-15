@@ -10,7 +10,13 @@ import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 
 class DropDownWithSearchPopup extends StatefulWidget {
-  DropDownWithSearchPopup({super.key, this.list, required this.receiveParam, required this.selectedId, required this.onChanged});
+  DropDownWithSearchPopup({
+    super.key,
+    this.list,
+    required this.receiveParam,
+    required this.selectedId,
+    required this.onChanged,
+  });
 
   final int selectedId;
 
@@ -22,7 +28,8 @@ class DropDownWithSearchPopup extends StatefulWidget {
   List<SelectedDoctorModel>? list;
 
   @override
-  State<DropDownWithSearchPopup> createState() => _DropDownWithSearchPopupState();
+  State<DropDownWithSearchPopup> createState() =>
+      _DropDownWithSearchPopupState();
 }
 
 class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
@@ -41,7 +48,14 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
       if (value.isEmpty) {
         widget.filteredList = List.from(widget.list ?? []);
       } else {
-        widget.filteredList = (widget.list ?? []).where((item) => item.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
+        widget.filteredList =
+            (widget.list ?? [])
+                .where(
+                  (item) =>
+                      item.name?.toLowerCase().contains(value.toLowerCase()) ??
+                      false,
+                )
+                .toList();
       }
     });
   }
@@ -61,7 +75,14 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(
+                    width: 1,
+                    color: AppColors.textfieldBorder,
+                  ),
+                  borderRadius: BorderRadius.circular(6),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -74,7 +95,14 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                           controller: searchController,
                           onChanged: filterList,
                           maxLines: 1, //or null
-                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+                          decoration:
+                              InputDecoration.collapsed(
+                                hintText: "Search",
+                                hintStyle: AppFonts.regular(
+                                  14,
+                                  AppColors.textGrey,
+                                ),
+                              ).copyWith(),
                         ),
                       ),
                     ],
@@ -89,45 +117,75 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              widget.onChanged(widget.list?[index].isSelected ?? false, index, widget.list?[index].id ?? -1, widget.list?[index].name ?? "");
-                              setState(() {});
-                            },
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(14),
-                                    child: BaseImageView(
-                                      height: 32,
-                                      width: 32,
-                                      nameLetters: widget.filteredList[index].name ?? "",
-                                      fontSize: 12,
-                                      imageUrl: widget.filteredList[index].profileImage ?? "",
+                    return widget.filteredList[index].isDeleted
+                        ? null
+                        : Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  widget.onChanged(
+                                    widget.list?[index].isSelected ?? false,
+                                    index,
+                                    widget.list?[index].id ?? -1,
+                                    widget.list?[index].name ?? "",
+                                  );
+                                  setState(() {});
+                                },
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(14),
+                                        child: BaseImageView(
+                                          height: 32,
+                                          width: 32,
+                                          nameLetters:
+                                              widget.filteredList[index].name ??
+                                              "",
+                                          fontSize: 12,
+                                          imageUrl:
+                                              widget
+                                                  .filteredList[index]
+                                                  .profileImage ??
+                                              "",
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(width: 10),
+                                    Flexible(
+                                      child: Text(
+                                        widget.filteredList[index].name ?? "",
+                                        style: AppFonts.medium(
+                                          14,
+                                          AppColors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 10),
-                                Flexible(child: Text(widget.filteredList[index].name ?? "", style: AppFonts.medium(14, AppColors.black))),
-                              ],
-                            ),
+                              ),
+                              SizedBox(height: 10),
+                              if (widget.filteredList.length != index + 1)
+                                Container(
+                                  color: AppColors.textfieldBorder,
+                                  height: 1,
+                                ),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          if (widget.filteredList.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
-                        ],
-                      ),
-                    );
+                        );
                   },
                   itemCount: widget.filteredList.length ?? 0,
                 ),
               )
-              : Center(child: Padding(padding: const EdgeInsets.all(8.0), child: Text("No Options"))),
+              : Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("No Options"),
+                ),
+              ),
         ],
       ),
     );
@@ -135,7 +193,13 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
 }
 
 class VisitRecapDropDownWithSearchPopup extends StatefulWidget {
-  VisitRecapDropDownWithSearchPopup({super.key, this.list, required this.receiveParam, required this.selectedId, required this.onChanged});
+  VisitRecapDropDownWithSearchPopup({
+    super.key,
+    this.list,
+    required this.receiveParam,
+    required this.selectedId,
+    required this.onChanged,
+  });
 
   final int selectedId;
 
@@ -149,10 +213,12 @@ class VisitRecapDropDownWithSearchPopup extends StatefulWidget {
   List<PastVisits>? list;
 
   @override
-  State<VisitRecapDropDownWithSearchPopup> createState() => _VisitRecapDropDownWithSearchPopupState();
+  State<VisitRecapDropDownWithSearchPopup> createState() =>
+      _VisitRecapDropDownWithSearchPopupState();
 }
 
-class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWithSearchPopup> {
+class _VisitRecapDropDownWithSearchPopupState
+    extends State<VisitRecapDropDownWithSearchPopup> {
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -167,7 +233,14 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
       if (value.isEmpty) {
         widget.filteredList = List.from(widget.list ?? []);
       } else {
-        widget.filteredList = (widget.list ?? []).where((item) => fullVisitRecapformatDate(firstDate: item.visitDate?.toLowerCase() ?? "").contains(value.toLowerCase())).toList();
+        widget.filteredList =
+            (widget.list ?? [])
+                .where(
+                  (item) => fullVisitRecapformatDate(
+                    firstDate: item.visitDate?.toLowerCase() ?? "",
+                  ).contains(value.toLowerCase()),
+                )
+                .toList();
       }
     });
   }
@@ -183,7 +256,11 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
             padding: const EdgeInsets.all(10),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                border: Border.all(width: 1, color: AppColors.textfieldBorder),
+                borderRadius: BorderRadius.circular(6),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -196,7 +273,14 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
                         controller: searchController,
                         onChanged: filterList,
                         maxLines: 1, //or null
-                        decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+                        decoration:
+                            InputDecoration.collapsed(
+                              hintText: "Search",
+                              hintStyle: AppFonts.regular(
+                                14,
+                                AppColors.textGrey,
+                              ),
+                            ).copyWith(),
                       ),
                     ),
                   ],
@@ -216,7 +300,9 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
                         children: [
                           GestureDetector(
                             onTap: () {
-                              widget.onChanged(widget.filteredList?[index].id ?? -1);
+                              widget.onChanged(
+                                widget.filteredList?[index].id ?? -1,
+                              );
                               // setState(() {});
                             },
                             child: Row(
@@ -235,12 +321,27 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
                                 //   ),
                                 // ),
                                 SizedBox(width: 10),
-                                Flexible(child: Text(fullVisitRecapformatDate(firstDate: widget.filteredList?[index].visitTime ?? ""), style: AppFonts.medium(14, AppColors.black))),
+                                Flexible(
+                                  child: Text(
+                                    fullVisitRecapformatDate(
+                                      firstDate:
+                                          widget
+                                              .filteredList?[index]
+                                              .visitTime ??
+                                          "",
+                                    ),
+                                    style: AppFonts.medium(14, AppColors.black),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                           SizedBox(height: 10),
-                          if (widget.filteredList?.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
+                          if (widget.filteredList?.length != index + 1)
+                            Container(
+                              color: AppColors.textfieldBorder,
+                              height: 1,
+                            ),
                         ],
                       ),
                     );
@@ -248,7 +349,12 @@ class _VisitRecapDropDownWithSearchPopupState extends State<VisitRecapDropDownWi
                   itemCount: widget.filteredList?.length ?? 0,
                 ),
               )
-              : Center(child: Padding(padding: const EdgeInsets.all(8.0), child: Text("No Options"))),
+              : Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("No Options"),
+                ),
+              ),
         ],
       ),
     );
