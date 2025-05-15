@@ -105,7 +105,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
 
                 // closeAllPopOver();
 
-                _swapRows(fromRow, rowIndex);
+                if (fromRow != rowIndex) {
+                  setState(() {
+                    _swapRows(fromRow, rowIndex);
+                  });
+                }
+
                 Future.delayed(const Duration(milliseconds: 500), () {
                   calculateTotal();
                 });
@@ -187,7 +192,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             //   }
                             // },);
 
-
                             List<DiagnosisModel>? diagnosisModelList = [];
 
                             TableRowModel tempdata = TableRowModel(cells: widget.tableModel.rows[rowIndex].cells);
@@ -241,7 +245,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                               // widget.tableModel.rows.removeAt(rowIndex);
                             }
 
-
                             // if (widget.tableModel.rows[rowIndex].cells[0].items[0].code != "0") {
                             //   print("sgfgdfgdfg");
                             //   for (DiagnosisModel diagnosisModel in widget.tableModel.rows[rowIndex].cells[1].items[0].diagnosisModelList ?? []) {
@@ -289,7 +292,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             //   // widget.tableModel.rows.removeAt(rowIndex);
                             // }
 
-
                             calculateTotal();
 
                             setState(() {
@@ -332,7 +334,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       defaultVerticalAlignment: TableCellVerticalAlignment.intrinsicHeight,
       // Border styling for the table
       border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1),
-      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
+      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.48), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.12)},
       children: [
         TableRow(
           children: List.generate(4, (colIndex) {
@@ -976,7 +978,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
   Widget _buildTableHeader() {
     return Table(
       border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1, borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
-      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
+      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.48), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.12)},
       children: [
         TableRow(
           decoration: const BoxDecoration(color: AppColors.white),
@@ -998,7 +1000,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       child: Row(
         children: [
           Expanded(
-            flex: 92,
+            flex: 90,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
               decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
@@ -1006,7 +1008,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
             ),
           ),
           Expanded(
-            flex: 10,
+            flex: 12,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               child: Obx(() {
@@ -1102,7 +1104,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
     return Table(
       // Border styling for the table
       border: TableBorder.all(color: AppColors.buttonBackgroundGrey, width: 1),
-      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.50), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.10)},
+      columnWidths: const {0: FractionColumnWidth(0.30), 1: FractionColumnWidth(0.48), 2: FractionColumnWidth(0.10), 3: FractionColumnWidth(0.12)},
       children: [
         TableRow(
           children: List.generate(4, (colIndex) {

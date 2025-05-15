@@ -3,6 +3,7 @@ import 'dart:io';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../sign_up_set_organization_info/models/SignUpOrganizationModel.dart';
+import '../model/delete_user_model.dart';
 import '../model/get_user_detail_model.dart';
 
 class PersonalSettingRepository {
@@ -60,9 +61,9 @@ class PersonalSettingRepository {
     return SignUpOrganizationModel.fromJson(response);
   }
 
-  // Future<SignUpOrganizationModel> deleteUserAccount({required String userId}) async {
-  //   var response = await ApiProvider.instance.callDelete("organization/update/$organizationId", {});
-  //   customPrint("organizationUpdate API  internal response $response");
-  //   return SignUpOrganizationModel.fromJson(response);
-  // }
+  Future<DeleteUserModel> deleteUserAccount({required String userId}) async {
+    var response = await ApiProvider.instance.callDelete(url: 'user/delete/$userId', data: {});
+    customPrint("deleteUserAccount API  internal response $response");
+    return DeleteUserModel.fromJson(response);
+  }
 }

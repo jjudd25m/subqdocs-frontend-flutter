@@ -21,6 +21,7 @@ import '../../../core/common/common_service.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../routes/app_pages.dart';
 import '../../patient_profile/widgets/common_patient_data.dart';
+import '../../visit_main/views/delete_image_dialog.dart';
 import '../controllers/personal_setting_controller.dart';
 import '../model/get_user_detail_model.dart';
 import 'invite_user_dialog.dart';
@@ -337,6 +338,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         GestureDetector(
                                                                           onTap: () async {
                                                                             controller.setUserDetail();
+                                                                            controller.setUserDetail();
                                                                             showDialog(
                                                                               context: context,
                                                                               barrierDismissible: true,
@@ -407,13 +409,19 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         child: CustomAnimatedButton(
                                                                           text: "Delete Account",
                                                                           onPressed: () async {
-                                                                            // await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
-                                                                            // await AppPreference.instance.removeKey(AppString.prefKeyToken);
-                                                                            // await AppPreference.instance.removeKey("homePastPatientListSortingModel");
-                                                                            // await AppPreference.instance.removeKey("homePatientListSortingModel");
-                                                                            // await AppPreference.instance.removeKey("homeScheduleListSortingModel");
-                                                                            // Get.delete<GlobalController>();
-                                                                            // Get.offAllNamed(Routes.LOGIN);
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                                                              builder: (BuildContext context) {
+                                                                                return DeletePatientDialog(
+                                                                                  title: "Are you sure want to delete account",
+                                                                                  onDelete: () {
+                                                                                    controller.deleteAccount();
+                                                                                  },
+                                                                                  header: "Delete account",
+                                                                                ); // Our custom dialog
+                                                                              },
+                                                                            );
                                                                           },
                                                                           height: 35,
                                                                           isOutline: true,

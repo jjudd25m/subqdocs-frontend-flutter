@@ -156,7 +156,6 @@ class DiagnosisDropDrownSearchTable extends StatefulWidget {
   final Function(ProcedurePossibleAlternatives, int) onItemSelected;
   final Function(String, String) onSearchItemSelected;
   final Function() onInitCallBack;
-  List<Icd10CodeData> icd10CodeList = [];
 
   DiagnosisDropDrownSearchTable({
     Key? key,
@@ -183,6 +182,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
   int page = 1;
   bool isValid = true;
   Timer? timer;
+  List<Icd10CodeData> icd10CodeList = [];
 
   @override
   void initState() {
@@ -204,23 +204,20 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
     timer?.cancel();
     timer = Timer(const Duration(milliseconds: 500), () {
       page = 1;
-      widget.icd10CodeList.clear();
+      icd10CodeList.clear();
       getIcd10Code(isShowLoading: true);
     });
   }
 
   Future<bool> getIcd10Code({bool isShowLoading = false, bool isShowPaginationLoading = false}) async {
     if (isShowLoading) {
-      setState(() {
-        isLoading = true;
-      });
+      isLoading = true;
     }
 
     if (isShowPaginationLoading) {
-      setState(() {
-        isPaginationLoading = true;
-      });
+      isPaginationLoading = true;
     }
+    setState(() {});
 
     Map<String, dynamic> param = {};
     param['page'] = page;
@@ -233,20 +230,16 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
     Icd10CodeListModel icd10codeListModel = await widget.controller.getIcd10CodeList(param);
 
     if (isShowLoading) {
-      setState(() {
-        isLoading = false;
-      });
+      isLoading = false;
     }
 
     if (isShowPaginationLoading) {
-      setState(() {
-        isPaginationLoading = false;
-      });
+      isPaginationLoading = false;
     }
 
-    setState(() {
-      widget.icd10CodeList.addAll(icd10codeListModel.responseData?.data ?? []);
-    });
+    icd10CodeList.addAll(icd10codeListModel.responseData?.data ?? []);
+
+    setState(() {});
 
     return true;
 
@@ -287,21 +280,24 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                     onChanged: (text) {
                       print('Search text changed: $text');
                       page = 1;
-                      widget.icd10CodeList.clear();
+                      icd10CodeList.clear();
                       onSearch();
                       _filterItems(searchController.text);
                     },
                     onSubmit: (text) {
                       print('Submitted search: $text');
 
-                      setState(() {
-                        widget.icd10CodeList.clear();
-                        searchController.clear();
-                        isValid = false;
-                      });
-                      _filterItems(searchController.text);
-                      page = 1;
-                      onSearch();
+                      if (text.isNotEmpty) {
+                        setState(() {
+                          icd10CodeList.clear();
+                          searchController.clear();
+                          isValid = false;
+                        });
+                        _filterItems(searchController.text);
+                        page = 1;
+                        onSearch();
+                      }
+
                       // Perform search operation here
                     },
                   ),
@@ -329,7 +325,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                             const Center(child: CircularProgressIndicator(color: AppColors.textPurple, strokeWidth: 2)),
                             const SizedBox(height: 10),
                           ] else ...[
-                            if (filteredItems.isNotEmpty || widget.icd10CodeList.isNotEmpty) ...[
+                            if (filteredItems.isNotEmpty || icd10CodeList.isNotEmpty) ...[
                               if (filteredItems.isNotEmpty) ...[
                                 const SizedBox(height: 0),
                                 Padding(padding: const EdgeInsets.all(10), child: Row(children: [Text("Pin", style: AppFonts.regular(14, AppColors.black)), const Spacer()])),
@@ -378,7 +374,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                                 ),
                               ],
                               if (filteredItems.isNotEmpty) ...[const SizedBox(height: 10), const Divider(height: 0.5, thickness: 1)],
-                              if (widget.icd10CodeList.isNotEmpty) ...[
+                              if (icd10CodeList.isNotEmpty) ...[
                                 const SizedBox(height: 5),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -386,11 +382,11 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: widget.icd10CodeList.length,
+                                    itemCount: icd10CodeList.length,
                                     itemBuilder: (_, index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          widget.onSearchItemSelected(widget.icd10CodeList[index].code ?? "", widget.icd10CodeList[index].description ?? "");
+                                          widget.onSearchItemSelected(icd10CodeList[index].code ?? "", icd10CodeList[index].description ?? "");
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -402,8 +398,8 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                                                   child: RichText(
                                                     text: TextSpan(
                                                       children: [
-                                                        TextSpan(text: "${widget.icd10CodeList[index].code}", style: AppFonts.medium(14, AppColors.black)),
-                                                        TextSpan(text: ' (${widget.icd10CodeList[index].description})', style: AppFonts.regular(14, AppColors.textDarkGrey)),
+                                                        TextSpan(text: "${icd10CodeList[index].code}", style: AppFonts.medium(14, AppColors.black)),
+                                                        TextSpan(text: ' (${icd10CodeList[index].description})', style: AppFonts.regular(14, AppColors.textDarkGrey)),
                                                       ],
                                                     ),
                                                   ),
@@ -423,7 +419,7 @@ class _DiagnosisDropDrownSearchTableState extends State<DiagnosisDropDrownSearch
                                 ],
                               ],
                             ],
-                            if (filteredItems.isEmpty && widget.icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],
+                            if (filteredItems.isEmpty && icd10CodeList.isEmpty) ...[Text("No data found!", textAlign: TextAlign.start, style: AppFonts.regular(14, AppColors.textDarkGrey))],
                           ],
                         ],
                       ),

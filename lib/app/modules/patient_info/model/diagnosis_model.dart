@@ -29,7 +29,6 @@ class SingleCellModel {
   final GlobalKey procedureContainerKey = GlobalKey();
   TextEditingController unitChargeTextfield = TextEditingController();
 
-
   List<ProcedurePossibleAlternatives>? procedurePossibleAlternatives; // optional list of alternative procedures
 
   List<DiagnosisModel>? diagnosisModelList; // optional list of associated diagnoses
@@ -51,7 +50,6 @@ class TableRowModel {
   List<TableCellModel> cells; // list of table cell models in the table row
   PopoverController popoverController = PopoverController();
   final GlobalKey containerKey = GlobalKey();
-
 
   TableRowModel({required this.cells}); // constructor with required cells parameter
 }
@@ -122,6 +120,7 @@ class TableModel {
 
   void swapRows(int fromRowIndex, int toRowIndex) {
     print("it's me swapRows");
+
     final row = rows.removeAt(fromRowIndex);
     rows.insert(toRowIndex, row);
   }

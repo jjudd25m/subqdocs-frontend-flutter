@@ -18,6 +18,7 @@ import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../login/model/login_model.dart';
+import '../model/delete_user_model.dart';
 import '../model/get_user_detail_model.dart';
 import '../model/update_user_response_model.dart';
 import '../model/us_state_city_model.dart';
@@ -345,6 +346,21 @@ class PersonalSettingController extends GetxController {
     // } catch (error) {
     //   customPrint("login catch error is $error");
     // }
+  }
+
+  Future<void> deleteAccount() async {
+    DeleteUserModel response = await _personalSettingRepository.deleteUserAccount(userId: globalController.getUserDetailModel.value?.responseData?.id.toString() ?? "");
+    if (response.responseType == "success") {
+      await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+      await AppPreference.instance.removeKey(AppString.prefKeyToken);
+      await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+      await AppPreference.instance.removeKey("homePatientListSortingModel");
+      await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+      Get.delete<GlobalController>();
+      Get.offAllNamed(Routes.LOGIN);
+    } else {
+      CustomToastification().showToast(response.message ?? "", type: ToastificationType.error);
+    }
   }
 
   Future<void> updateRoleAndAdminControll(String userId, String role, bool isAdmin, int rowIndex) async {
