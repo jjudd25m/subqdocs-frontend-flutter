@@ -80,9 +80,9 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 20, right: 0),
                           child: Row(
                             children: [
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               SvgPicture.asset(ImagePath.dragAndDrop),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
 
                               Expanded(
                                 key: model.diagnosisContainerKey,

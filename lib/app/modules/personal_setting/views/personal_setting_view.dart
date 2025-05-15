@@ -373,8 +373,57 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             outLineEnabledColor: AppColors.redText,
                                                                           ),
                                                                         ),
+                                                                        // SizedBox(width: 10),
+                                                                        // SizedBox(
+                                                                        //   width: 150,
+                                                                        //   child: CustomAnimatedButton(
+                                                                        //     text: "Delete Account",
+                                                                        //     onPressed: () async {
+                                                                        //       // await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                                                                        //       // await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                                                                        //       // await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+                                                                        //       // await AppPreference.instance.removeKey("homePatientListSortingModel");
+                                                                        //       // await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+                                                                        //       // Get.delete<GlobalController>();
+                                                                        //       // Get.offAllNamed(Routes.LOGIN);
+                                                                        //     },
+                                                                        //     height: 35,
+                                                                        //     isOutline: true,
+                                                                        //     enabledColor: AppColors.redText,
+                                                                        //     outlineColor: AppColors.redText,
+                                                                        //     enabledTextColor: AppColors.white,
+                                                                        //     outLineEnabledColor: AppColors.redText,
+                                                                        //   ),
+                                                                        // ),
                                                                       ],
                                                                     ),
+                                                                  ),
+                                                                  SizedBox(height: 10),
+                                                                  Row(
+                                                                    children: [
+                                                                      Spacer(),
+                                                                      SizedBox(
+                                                                        width: 150,
+                                                                        child: CustomAnimatedButton(
+                                                                          text: "Delete Account",
+                                                                          onPressed: () async {
+                                                                            // await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                                                                            // await AppPreference.instance.removeKey(AppString.prefKeyToken);
+                                                                            // await AppPreference.instance.removeKey("homePastPatientListSortingModel");
+                                                                            // await AppPreference.instance.removeKey("homePatientListSortingModel");
+                                                                            // await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+                                                                            // Get.delete<GlobalController>();
+                                                                            // Get.offAllNamed(Routes.LOGIN);
+                                                                          },
+                                                                          height: 35,
+                                                                          isOutline: true,
+                                                                          enabledColor: AppColors.redText,
+                                                                          outlineColor: AppColors.redText,
+                                                                          enabledTextColor: AppColors.white,
+                                                                          outLineEnabledColor: AppColors.redText,
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                   SizedBox(height: 20),
                                                                   Row(
@@ -389,7 +438,9 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                                     children: [
-                                                                      Expanded(child: CommonPatientData(label: "First Name", data: controller.getUserDetailModel.value?.responseData?.firstName ?? "-")),
+                                                                      Expanded(
+                                                                        child: CommonPatientData(label: "First Name", data: controller.getUserDetailModel.value?.responseData?.firstName ?? "-"),
+                                                                      ),
                                                                       Expanded(child: CommonPatientData(label: "Last Name", data: controller.getUserDetailModel.value?.responseData?.lastName ?? "-")),
                                                                       Expanded(child: SizedBox()),
                                                                       Expanded(child: SizedBox()),
@@ -402,7 +453,10 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     children: [
                                                                       Expanded(
-                                                                        child: CommonPatientData(label: "Organization", data: controller.getUserDetailModel.value?.responseData?.organizationName ?? "-"),
+                                                                        child: CommonPatientData(
+                                                                          label: "Organization",
+                                                                          data: controller.getUserDetailModel.value?.responseData?.organizationName ?? "-",
+                                                                        ),
                                                                       ),
                                                                       Expanded(child: SizedBox()),
                                                                       Expanded(child: SizedBox()),
@@ -512,7 +566,10 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         child: CommonPatientData(label: "Taxonomy Code", data: controller.getUserDetailModel.value?.responseData?.taxonomyCode ?? "-"),
                                                                       ),
                                                                       Expanded(
-                                                                        child: CommonPatientData(label: "Specialization", data: controller.getUserDetailModel.value?.responseData?.specialization ?? "-"),
+                                                                        child: CommonPatientData(
+                                                                          label: "Specialization",
+                                                                          data: controller.getUserDetailModel.value?.responseData?.specialization ?? "-",
+                                                                        ),
                                                                       ),
                                                                       Expanded(child: SizedBox()),
                                                                     ],
@@ -539,7 +596,9 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                         shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                                         backgroundColor: AppColors.backgroundWhite,
                                                         collapsedBackgroundColor: AppColors.backgroundWhite,
-                                                        title: Row(children: [Text(textAlign: TextAlign.center, "Organization Management", style: AppFonts.regular(16, AppColors.textBlack)), Spacer()]),
+                                                        title: Row(
+                                                          children: [Text(textAlign: TextAlign.center, "Organization Management", style: AppFonts.regular(16, AppColors.textBlack)), Spacer()],
+                                                        ),
                                                         children: <Widget>[
                                                           Padding(
                                                             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),

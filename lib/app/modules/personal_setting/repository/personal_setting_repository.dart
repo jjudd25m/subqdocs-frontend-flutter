@@ -59,4 +59,10 @@ class PersonalSettingRepository {
     customPrint("organizationUpdate API  internal response $response");
     return SignUpOrganizationModel.fromJson(response);
   }
+
+  // Future<SignUpOrganizationModel> deleteUserAccount({required String userId}) async {
+  //   var response = await ApiProvider.instance.callDelete("organization/update/$organizationId", {});
+  //   customPrint("organizationUpdate API  internal response $response");
+  //   return SignUpOrganizationModel.fromJson(response);
+  // }
 }
