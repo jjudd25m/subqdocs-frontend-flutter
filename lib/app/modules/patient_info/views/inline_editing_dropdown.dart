@@ -8,10 +8,20 @@ class InlineEditingDropdown extends StatefulWidget {
   final Function(String, bool) onChanged;
   final VoidCallback? toggle;
   final TextStyle? textStyle;
+  final double? width;
 
   final FocusNode focusNode;
 
-  InlineEditingDropdown({required this.initialText, required this.onSubmitted, required this.onChanged, required this.focusNode, this.toggle, this.textStyle, Key? key}) : super(key: key);
+  InlineEditingDropdown({
+    required this.initialText,
+    this.width = 300,
+    required this.onSubmitted,
+    required this.onChanged,
+    required this.focusNode,
+    this.toggle,
+    this.textStyle,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _InlineEditableTextState createState() => _InlineEditableTextState();
@@ -77,40 +87,38 @@ class _InlineEditableTextState extends State<InlineEditingDropdown> {
   Widget build(BuildContext context) {
     final textStyle = widget.textStyle ?? TextStyle(fontSize: 18);
 
-    return _isEditing
-        ? SizedBox(
-          width: textStyle.fontSize! * _controller.text.length * 0.6 + 20,
-          child: TextField(
-            onTap: () {
-              widget.toggle;
-            },
+    return SizedBox(
+      width: widget.width,
+      child: TextField(
+        onTap: () {
+          widget.toggle;
+        },
 
-            onChanged: (value) {
-              timer?.cancel();
-              widget.onChanged(cleanString(value), false);
+        onChanged: (value) {
+          timer?.cancel();
+          widget.onChanged(cleanString(value), false);
 
-              timer = Timer(const Duration(seconds: 5), () {
-                widget.onChanged(cleanString(value), true);
-              });
-            },
-            controller: _controller,
-            focusNode: widget.focusNode,
-            autofocus: true,
-            style: textStyle,
-            minLines: 1,
-            maxLines: 2,
-            cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
-            decoration: const InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-            ),
-            onSubmitted: (_) => _submitEdit(),
-          ),
-        )
-        : GestureDetector(onTap: _startEditing, child: Text(_controller.text, style: textStyle));
+          timer = Timer(const Duration(seconds: 5), () {
+            widget.onChanged(cleanString(value), true);
+          });
+        },
+        controller: _controller,
+        focusNode: widget.focusNode,
+        autofocus: true,
+        style: textStyle,
+        minLines: 1,
+        maxLines: 4,
+        cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
+        decoration: const InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.zero,
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+        ),
+        onSubmitted: (_) => _submitEdit(),
+      ),
+    );
   }
 }
