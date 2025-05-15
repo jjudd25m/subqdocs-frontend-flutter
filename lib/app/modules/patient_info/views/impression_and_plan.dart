@@ -112,40 +112,43 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                   SvgPicture.asset(ImagePath.dragAndDrop),
                                   const SizedBox(width: 10),
 
-                                  InlineEditingDropdown(
-                                    focusNode: model.focusNode,
-                                    key: ValueKey(model.popoverController),
+                                  IntrinsicWidth(
+                                    key: model.diagnosisContainerKey,
+                                    child: InlineEditingDropdown(
+                                      focusNode: model.focusNode,
+                                      key: ValueKey(model.popoverController),
 
-                                    textStyle: AppFonts.medium(
-                                      16,
-                                      AppColors.textPurple,
+                                      textStyle: AppFonts.medium(
+                                        16,
+                                        AppColors.textPurple,
+                                      ),
+                                      initialText:
+                                          "${index + 1} ${model.title ?? "Select Icd10 Code"}",
+                                      toggle: () {
+                                        // controller
+                                        //     .closeAllProcedureDiagnosisPopover();
+                                        //
+                                        // // controller.impressionAndPlanListFullNote.forEach((element) {
+                                        // //   element.popoverController.close();
+                                        // // });
+                                        //
+                                        // // model.popoverController.open();
+                                        // controller.resetImpressionAndPlanList();
+                                        // model.popoverController.toggle();
+                                      },
+
+                                      onSubmitted: (String) {},
+                                      onChanged: (String, isApiCall) {
+                                        model.title = String;
+
+                                        if (isApiCall) {
+                                          controller
+                                              .updateImpressionAndPlanFullNote();
+                                        }
+
+                                        // popoverController.open();
+                                      },
                                     ),
-                                    initialText:
-                                        "${index + 1} ${model.title ?? "Select Icd10 Code"}",
-                                    toggle: () {
-                                      // controller
-                                      //     .closeAllProcedureDiagnosisPopover();
-                                      //
-                                      // // controller.impressionAndPlanListFullNote.forEach((element) {
-                                      // //   element.popoverController.close();
-                                      // // });
-                                      //
-                                      // // model.popoverController.open();
-                                      // controller.resetImpressionAndPlanList();
-                                      // model.popoverController.toggle();
-                                    },
-
-                                    onSubmitted: (String) {},
-                                    onChanged: (String, isApiCall) {
-                                      model.title = String;
-
-                                      if (isApiCall) {
-                                        controller
-                                            .updateImpressionAndPlanFullNote();
-                                      }
-
-                                      // popoverController.open();
-                                    },
                                   ),
                                   Container(),
                                   Spacer(),
