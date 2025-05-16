@@ -5,6 +5,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
+
 import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widgets/base_dropdown.dart';
@@ -25,13 +26,25 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
       child: Form(
         key: controller.formKey,
         child: Container(
-          constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .80),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          constraints: BoxConstraints(
+            maxHeight: Get.height * .80,
+            maxWidth: Get.width * .80,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Column(
             children: [
               Container(
                 width: double.infinity,
-                decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundPurple,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
                 // color: AppColors.backgroundPurple,
                 child: Padding(
                   padding: const EdgeInsets.all(0),
@@ -39,13 +52,29 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Personal Setting", style: AppFonts.medium(14, Colors.white))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
+                        child: Text(
+                          "Personal Setting",
+                          style: AppFonts.medium(14, Colors.white),
+                        ),
+                      ),
                       Spacer(),
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Container(padding: EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          color: AppColors.clear,
+                          child: SvgPicture.asset(
+                            "assets/images/cross_white.svg",
+                            width: 15,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -63,7 +92,19 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                         child: Column(
                           spacing: 10,
                           children: [
-                            Row(children: [Text(textAlign: TextAlign.center, "Personal Information", style: AppFonts.medium(16, AppColors.backgroundPurple)), Spacer()]),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Personal Information",
+                                  style: AppFonts.medium(
+                                    16,
+                                    AppColors.backgroundPurple,
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
                             SizedBox(height: 5),
                             Row(
                               spacing: 15,
@@ -74,14 +115,20 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     label: "First Name",
                                     isValid: controller.isValid.value,
                                     // isImportant: true,
-                                    controller: controller.userFirstNameController,
+                                    controller:
+                                        controller.userFirstNameController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "John",
                                     onTap: () {
-                                      controller.userFirstNameController.clear();
+                                      controller.userFirstNameController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                     checkValidation: (value) {
                                       return Validation.requiredFiled(value);
                                     },
@@ -93,14 +140,19 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     label: "Last Name",
                                     isValid: controller.isValid.value,
                                     // isImportant: true,
-                                    controller: controller.userLastNameController,
+                                    controller:
+                                        controller.userLastNameController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "John",
                                     onTap: () {
                                       controller.userLastNameController.clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                     checkValidation: (value) {
                                       return Validation.requiredFiled(value);
                                     },
@@ -117,14 +169,22 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     label: "Organization",
                                     isValid: controller.isValid.value,
                                     // isImportant: true,
-                                    controller: controller.userOrganizationNameNameController,
+                                    controller:
+                                        controller
+                                            .userOrganizationNameNameController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "SubQDocs",
                                     onTap: () {
-                                      controller.userOrganizationNameNameController.clear();
+                                      controller
+                                          .userOrganizationNameNameController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                     checkValidation: (value) {
                                       return Validation.requiredFiled(value);
                                     },
@@ -133,7 +193,19 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               ],
                             ),
                             SizedBox(height: 5),
-                            Row(children: [Text(textAlign: TextAlign.center, "Contact", style: AppFonts.medium(16, AppColors.backgroundPurple)), Spacer()]),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Contact",
+                                  style: AppFonts.medium(
+                                    16,
+                                    AppColors.backgroundPurple,
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
                             SizedBox(height: 5),
                             Row(
                               children: [
@@ -149,9 +221,15 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     onTap: () {
                                       controller.userEmailController.clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                     checkValidation: (value) {
-                                      return Validation.emailValidateRequired(value);
+                                      return Validation.emailValidateRequired(
+                                        value,
+                                      );
                                     },
                                   ),
                                 ),
@@ -162,41 +240,86 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                    format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
+                                    format: [
+                                      MaskTextInputFormatter(
+                                        mask: "+1 (###) ###-####",
+                                      ),
+                                    ],
                                     label: "Phone Number",
-                                    controller: controller.userPhoneNumberController,
+                                    controller:
+                                        controller.userPhoneNumberController,
                                     isValid: true,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     type: TextInputType.number,
                                     hint: "123456789",
                                     onTap: () {
-                                      controller.userPhoneNumberController.clear();
+                                      controller.userPhoneNumberController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             SizedBox(height: 5),
-                            Row(children: [Text(textAlign: TextAlign.center, "Address", style: AppFonts.medium(16, AppColors.backgroundPurple)), Spacer()]),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Address",
+                                  style: AppFonts.medium(
+                                    16,
+                                    AppColors.backgroundPurple,
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
                             SizedBox(height: 5),
                             Row(
                               spacing: 15,
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Row(children: [Text("Country", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Country",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
+                                          Text(
+                                            "*",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.redText,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       SizedBox(height: 8),
                                       Obx(() {
                                         return BaseDropdown<String>(
                                           valueAsString: (value) => value ?? "",
                                           items: controller.countryOption,
-                                          selectedValue: controller.selectedCountryValue.value,
+                                          selectedValue:
+                                              controller
+                                                  .selectedCountryValue
+                                                  .value,
                                           onChanged: (value) {
-                                            controller.selectedCountryValue.value = value;
+                                            controller
+                                                .selectedCountryValue
+                                                .value = value;
                                           },
                                           selectText: "United States",
                                         );
@@ -206,32 +329,70 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Row(children: [Text("State", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "State",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
+                                          Text(
+                                            "*",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.redText,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       SizedBox(height: 8),
                                       Obx(() {
                                         return BaseDropdown<String>(
                                           valueAsString: (value) => value ?? "",
                                           items: controller.userStateOption,
-                                          selectedValue: controller.userSelectedStateValue.value,
+                                          selectedValue:
+                                              controller
+                                                  .userSelectedStateValue
+                                                  .value,
                                           onChanged: (value) {
-                                            controller.userSelectedStateValue.value = value;
+                                            controller
+                                                .userSelectedStateValue
+                                                .value = value;
 
                                             print("state is:- ${value}");
 
-                                            List<String> cityList = controller.statesCities.firstWhere((element) => element.state == value).cities;
+                                            List<String> cityList =
+                                                controller.statesCities
+                                                    .firstWhere(
+                                                      (element) =>
+                                                          element.state ==
+                                                          value,
+                                                    )
+                                                    .cities;
 
                                             print("city is :- ${cityList}");
 
                                             if (cityList.isNotEmpty) {
                                               print("city list if");
-                                              controller.userCityOption.value = cityList;
-                                              controller.userSelectedCityValue.value = controller.userCityOption.first;
+                                              controller.userCityOption.value =
+                                                  cityList;
+                                              controller
+                                                  .userSelectedCityValue
+                                                  .value = controller
+                                                      .userCityOption
+                                                      .first;
                                             } else {
                                               print("city list else");
-                                              controller.userSelectedCityValue.value = "";
-                                              controller.userCityOption.value = [];
+                                              controller
+                                                  .userSelectedCityValue
+                                                  .value = "";
+                                              controller.userCityOption.value =
+                                                  [];
                                             }
                                           },
                                           // selectText: "United States",
@@ -247,17 +408,40 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Row(children: [Text("City", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "City",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
+                                          Text(
+                                            "*",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.redText,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       SizedBox(height: 8),
                                       Obx(() {
                                         return BaseDropdown<String>(
                                           valueAsString: (value) => value ?? "",
                                           items: controller.userCityOption,
-                                          selectedValue: controller.userSelectedCityValue.value,
+                                          selectedValue:
+                                              controller
+                                                  .userSelectedCityValue
+                                                  .value,
                                           onChanged: (value) {
-                                            controller.userSelectedCityValue.value = value;
+                                            controller
+                                                .userSelectedCityValue
+                                                .value = value;
                                           },
                                           // selectText: "United States",
                                         );
@@ -271,14 +455,20 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     label: "Postal code",
                                     // maxLength: 5,
                                     isValid: controller.isValid.value,
-                                    controller: controller.userPostalCodeController,
+                                    controller:
+                                        controller.userPostalCodeController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userPostalCodeController.clear();
+                                      controller.userPostalCodeController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -290,21 +480,39 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     label: "Street name",
                                     isValid: controller.isValid.value,
                                     // isImportant: true,
-                                    controller: controller.userStreetNameController,
+                                    controller:
+                                        controller.userStreetNameController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userStreetNameController.clear();
+                                      controller.userStreetNameController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             SizedBox(height: 20),
                             // Practitioner Details
-                            Row(children: [Text(textAlign: TextAlign.center, "Practitioner Details", style: AppFonts.medium(16, AppColors.backgroundPurple)), Spacer()]),
+                            Row(
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  "Practitioner Details",
+                                  style: AppFonts.medium(
+                                    16,
+                                    AppColors.backgroundPurple,
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
                             SizedBox(height: 5),
                             Row(
                               spacing: 15,
@@ -314,14 +522,20 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     format: [CustomTextInputFormatter()],
                                     label: "Title",
                                     isValid: controller.isValid.value,
-                                    controller: controller.userPractitionerController,
+                                    controller:
+                                        controller.userPractitionerController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userPractitionerController.clear();
+                                      controller.userPractitionerController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
@@ -329,14 +543,22 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     format: [MedicalLicenseNumberFormatter()],
                                     label: "Medical License Number",
                                     isValid: controller.isValid.value,
-                                    controller: controller.userMedicalLicenseNumberController,
+                                    controller:
+                                        controller
+                                            .userMedicalLicenseNumberController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userMedicalLicenseNumberController.clear();
+                                      controller
+                                          .userMedicalLicenseNumberController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -348,24 +570,37 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                   child: TextFormFiledWidget(
                                     //format: [NoSpaceTextFormatter()],
                                     suffixIcon: Icon(Icons.calendar_month),
+                                    format: [DateInputFormatter()],
                                     label: "License Expiry Date",
-                                    readOnly: true,
+
                                     // isImportant: true,
-                                    controller: controller.userLicenseExpiryDateController,
+                                    controller:
+                                        controller
+                                            .userLicenseExpiryDateController,
                                     onTap: () async {
                                       final picked = await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime.now(),
-                                        lastDate: DateTime.now().add(Duration(days: 1000)),
+                                        lastDate: DateTime.now().add(
+                                          Duration(days: 1000),
+                                        ),
                                         builder: (context, child) {
                                           return Theme(
                                             data: ThemeData.light().copyWith(
                                               cardColor: AppColors.white,
-                                              primaryColor: AppColors.backgroundPurple,
-                                              hintColor: AppColors.backgroundPurple,
-                                              colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                              primaryColor:
+                                                  AppColors.backgroundPurple,
+                                              hintColor:
+                                                  AppColors.backgroundPurple,
+                                              colorScheme: ColorScheme.light(
+                                                primary:
+                                                    AppColors.backgroundPurple,
+                                              ),
+                                              buttonTheme: ButtonThemeData(
+                                                textTheme:
+                                                    ButtonTextTheme.primary,
+                                              ),
                                             ),
                                             child: child!,
                                           );
@@ -373,9 +608,13 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                       );
                                       if (picked != null) {
                                         String inputText;
-                                        String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                        inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                        controller.userLicenseExpiryDateController.text = inputText;
+                                        String padDayMonth(int value) =>
+                                            value.toString().padLeft(2, '0');
+                                        inputText =
+                                            '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                        controller
+                                            .userLicenseExpiryDateController
+                                            .text = inputText;
                                       }
                                     },
                                     hint: "mm/dd/yyyy",
@@ -387,14 +626,22 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     label: "National Provider Identifier",
                                     // maxLength: 5,
                                     isValid: controller.isValid.value,
-                                    controller: controller.userNationalProviderIdentifierController,
+                                    controller:
+                                        controller
+                                            .userNationalProviderIdentifierController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userNationalProviderIdentifierController.clear();
+                                      controller
+                                          .userNationalProviderIdentifierController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -407,28 +654,40 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     format: [TaxonomyCodeFormatter()],
                                     label: "Taxonomy Code",
                                     isValid: controller.isValid.value,
-                                    controller: controller.userTaxonomyCodeController,
+                                    controller:
+                                        controller.userTaxonomyCodeController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userTaxonomyCodeController.clear();
+                                      controller.userTaxonomyCodeController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
                                   child: TextFormFiledWidget(
                                     label: "Specialization",
                                     isValid: controller.isValid.value,
-                                    controller: controller.userSpecializationController,
+                                    controller:
+                                        controller.userSpecializationController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
                                     onTap: () {
-                                      controller.userSpecializationController.clear();
+                                      controller.userSpecializationController
+                                          .clear();
                                     },
-                                    suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                    suffixIcon: Icon(
+                                      Icons.highlight_remove,
+                                      color: AppColors.textDarkGrey,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -465,57 +724,122 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                           if (controller.formKey.currentState!.validate()) {
                             Map<String, dynamic> param = {};
 
-                            param['first_name'] = controller.userFirstNameController.text;
-                            param['last_name'] = controller.userLastNameController.text;
-                            param['organization_name'] = controller.userOrganizationNameNameController.text;
-                            param['email'] = controller.userEmailController.text;
+                            param['first_name'] =
+                                controller.userFirstNameController.text;
+                            param['last_name'] =
+                                controller.userLastNameController.text;
+                            param['organization_name'] =
+                                controller
+                                    .userOrganizationNameNameController
+                                    .text;
+                            param['email'] =
+                                controller.userEmailController.text;
 
-                            if (controller.extractDigits(controller.userPhoneNumberController.text).isNotEmpty) {
-                              param['contact_no'] = controller.extractDigits(controller.userPhoneNumberController.text);
+                            if (controller
+                                .extractDigits(
+                                  controller.userPhoneNumberController.text,
+                                )
+                                .isNotEmpty) {
+                              param['contact_no'] = controller.extractDigits(
+                                controller.userPhoneNumberController.text,
+                              );
                             }
 
-                            if (controller.selectedCountryValue.value?.isNotEmpty ?? false) {
-                              param['country'] = controller.selectedCountryValue.value;
+                            if (controller
+                                    .selectedCountryValue
+                                    .value
+                                    ?.isNotEmpty ??
+                                false) {
+                              param['country'] =
+                                  controller.selectedCountryValue.value;
                             }
 
-                            if (controller.userSelectedStateValue.value?.isNotEmpty ?? false) {
-                              param['state'] = controller.userSelectedStateValue.value;
+                            if (controller
+                                    .userSelectedStateValue
+                                    .value
+                                    ?.isNotEmpty ??
+                                false) {
+                              param['state'] =
+                                  controller.userSelectedStateValue.value;
                             }
 
-                            if (controller.userSelectedCityValue.value?.isNotEmpty ?? false) {
-                              param['city'] = controller.userSelectedCityValue.value;
+                            if (controller
+                                    .userSelectedCityValue
+                                    .value
+                                    ?.isNotEmpty ??
+                                false) {
+                              param['city'] =
+                                  controller.userSelectedCityValue.value;
                             }
 
-                            if (controller.userStreetNameController.text.isNotEmpty) {
-                              param['street_name'] = controller.userStreetNameController.text;
+                            if (controller
+                                .userStreetNameController
+                                .text
+                                .isNotEmpty) {
+                              param['street_name'] =
+                                  controller.userStreetNameController.text;
                             }
 
-                            if (controller.userPostalCodeController.text.isNotEmpty) {
-                              param['postal_code'] = controller.userPostalCodeController.text;
+                            if (controller
+                                .userPostalCodeController
+                                .text
+                                .isNotEmpty) {
+                              param['postal_code'] =
+                                  controller.userPostalCodeController.text;
                             }
 
-                            if (controller.userPractitionerController.text.isNotEmpty) {
-                              param['title'] = controller.userPractitionerController.text;
+                            if (controller
+                                .userPractitionerController
+                                .text
+                                .isNotEmpty) {
+                              param['title'] =
+                                  controller.userPractitionerController.text;
                             }
 
-                            if (controller.userMedicalLicenseNumberController.text.isNotEmpty) {
-                              param['medical_license_number'] = controller.userMedicalLicenseNumberController.text;
+                            if (controller
+                                .userMedicalLicenseNumberController
+                                .text
+                                .isNotEmpty) {
+                              param['medical_license_number'] =
+                                  controller
+                                      .userMedicalLicenseNumberController
+                                      .text;
                             }
 
-                            if (controller.userLicenseExpiryDateController.text.isNotEmpty) {
-                              param['license_expiry_date'] = controller.userLicenseExpiryDateController.text;
+                            if (controller
+                                .userLicenseExpiryDateController
+                                .text
+                                .isNotEmpty) {
+                              param['license_expiry_date'] =
+                                  controller
+                                      .userLicenseExpiryDateController
+                                      .text;
                             }
 
-                            if (controller.userNationalProviderIdentifierController.text.isNotEmpty) {
-                              param['national_provider_identifier'] = controller.userNationalProviderIdentifierController.text;
+                            if (controller
+                                .userNationalProviderIdentifierController
+                                .text
+                                .isNotEmpty) {
+                              param['national_provider_identifier'] =
+                                  controller
+                                      .userNationalProviderIdentifierController
+                                      .text;
                             }
 
-                            if (controller.userTaxonomyCodeController.text.isNotEmpty) {
-                              param['taxonomy_code'] = controller.userTaxonomyCodeController.text;
+                            if (controller
+                                .userTaxonomyCodeController
+                                .text
+                                .isNotEmpty) {
+                              param['taxonomy_code'] =
+                                  controller.userTaxonomyCodeController.text;
                             }
 
-                            if (controller.userSpecializationController.text.isNotEmpty) {
-                              param['specialization'] = controller.userSpecializationController.text;
+                            if (controller
+                                .userSpecializationController
+                                .text
+                                .isNotEmpty) {
+                              param['specialization'] =
+                                  controller.userSpecializationController.text;
                             }
 
                             print("user edit param is :- ${param}");

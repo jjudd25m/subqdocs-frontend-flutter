@@ -88,8 +88,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   String visitId = "";
   String patientId = "";
 
-  RxString doctorValue = RxString("select Doctor");
-  RxString medicationValue = RxString("select M.A");
+  RxString doctorValue = RxString("N/A");
+  RxString medicationValue = RxString("N/A");
   RxList<ImpresionAndPlanViewModel> impressionAndPlanList = RxList();
   RxList<ImpresionAndPlanViewModel> impressionAndPlanListFullNote = RxList();
 
@@ -2029,10 +2029,37 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
 
     for (int rows = 0; rows < tableModel.value!.rows.length; rows++) {
-      for (int cols = 0; cols < tableModel.value!.rows[rows].cells.length; cols++) {
-        for (int newItems = 0; newItems < tableModel.value!.rows[rows].cells[cols].items.length; newItems++) {
-          for (int diag = 0; diag < (tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
-            tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+      for (
+        int cols = 0;
+        cols < tableModel.value!.rows[rows].cells.length;
+        cols++
+      ) {
+        for (
+          int newItems = 0;
+          newItems < tableModel.value!.rows[rows].cells[cols].items.length;
+          newItems++
+        ) {
+          for (
+            int diag = 0;
+            diag <
+                (tableModel
+                        .value!
+                        .rows[rows]
+                        .cells[cols]
+                        .items[newItems]
+                        .diagnosisModelList
+                        ?.length ??
+                    0);
+            diag++
+          ) {
+            tableModel
+                .value!
+                .rows[rows]
+                .cells[cols]
+                .items[newItems]
+                .diagnosisModelList?[diag]
+                .popoverController
+                .close();
           }
         }
       }

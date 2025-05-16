@@ -18,6 +18,7 @@ import '../../../../utils/validation_service.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
+import '../../../../widget/time_slot_selected.dart';
 import '../../../../widgets/ContainerButton.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_textfiled.dart';
@@ -67,7 +68,11 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                   child: Container(
                     color: AppColors.ScreenBackGround,
                     child: Padding(
-                      padding: EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
+                      padding: EdgeInsets.only(
+                        top: Dimen.margin20,
+                        right: Dimen.margin16,
+                        left: Dimen.margin16,
+                      ),
                       child: ListView(
                         physics: BouncingScrollPhysics(),
                         padding: EdgeInsets.zero,
@@ -75,10 +80,19 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                           // SizedBox(height: 10),
                           Obx(() {
                             return BreadcrumbWidget(
-                              breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                              breadcrumbHistory:
+                                  controller
+                                      .globalController
+                                      .breadcrumbHistory
+                                      .value,
                               onBack: (breadcrumb) {
-                                controller.globalController.popUntilRoute(breadcrumb);
-                                while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                controller.globalController.popUntilRoute(
+                                  breadcrumb,
+                                );
+                                while (Get.currentRoute !=
+                                    controller.globalController.getKeyByValue(
+                                      breadcrumb,
+                                    )) {
                                   Get.back(); // Pop the current screen
                                 }
                               },
@@ -88,7 +102,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                           Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(Dimen.margin16),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: AppColors.white,
+                            ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -98,10 +115,21 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       onTap: () {
                                         Get.back();
                                       },
-                                      child: SvgPicture.asset(ImagePath.arrowLeft, fit: BoxFit.cover, width: Dimen.margin24, height: Dimen.margin24),
+                                      child: SvgPicture.asset(
+                                        ImagePath.arrowLeft,
+                                        fit: BoxFit.cover,
+                                        width: Dimen.margin24,
+                                        height: Dimen.margin24,
+                                      ),
                                     ),
                                     SizedBox(width: Dimen.margin8),
-                                    Text("Patient Details", style: AppFonts.regular(18, AppColors.textBlack)),
+                                    Text(
+                                      "Patient Details",
+                                      style: AppFonts.regular(
+                                        18,
+                                        AppColors.textBlack,
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(height: Dimen.margin24),
@@ -109,33 +137,68 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   return Row(
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius: BorderRadius.circular(
+                                          100,
+                                        ),
                                         child:
-                                            controller.profileImageUrl.value != null
-                                                ? CachedNetworkImage(imageUrl: controller.profileImageUrl.value ?? "", width: 60, height: 60, fit: BoxFit.cover)
-                                                : controller.profileImage.value?.path != null
-                                                ? RoundedImageFileWidget(size: 60, imagePath: controller.profileImage.value)
+                                            controller.profileImageUrl.value !=
+                                                    null
+                                                ? CachedNetworkImage(
+                                                  imageUrl:
+                                                      controller
+                                                          .profileImageUrl
+                                                          .value ??
+                                                      "",
+                                                  width: 60,
+                                                  height: 60,
+                                                  fit: BoxFit.cover,
+                                                )
+                                                : controller
+                                                        .profileImage
+                                                        .value
+                                                        ?.path !=
+                                                    null
+                                                ? RoundedImageFileWidget(
+                                                  size: 60,
+                                                  imagePath:
+                                                      controller
+                                                          .profileImage
+                                                          .value,
+                                                )
                                                 : BaseImageView(
                                                   imageUrl: "",
                                                   width: 60,
                                                   height: 60,
                                                   fontSize: 14,
-                                                  nameLetters: "${controller.firstNameController.text} ${controller.lastNameController.text}",
+                                                  nameLetters:
+                                                      "${controller.firstNameController.text} ${controller.lastNameController.text}",
                                                 ),
                                       ),
                                       PopupMenuButton<String>(
                                         offset: const Offset(0, 8),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
+                                        ),
                                         color: AppColors.white,
                                         position: PopupMenuPosition.under,
                                         padding: EdgeInsetsDirectional.zero,
                                         menuPadding: EdgeInsetsDirectional.zero,
                                         onSelected: (value) {},
                                         style: const ButtonStyle(
-                                          padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
-                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          maximumSize: WidgetStatePropertyAll(Size.zero),
-                                          visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                                          padding: WidgetStatePropertyAll(
+                                            EdgeInsetsDirectional.zero,
+                                          ),
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                          maximumSize: WidgetStatePropertyAll(
+                                            Size.zero,
+                                          ),
+                                          visualDensity: VisualDensity(
+                                            horizontal: 0,
+                                            vertical: 0,
+                                          ),
                                         ),
                                         itemBuilder:
                                             (context) => [
@@ -145,12 +208,29 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                   controller.pickProfileImage();
                                                 },
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                        left: 10,
+                                                        right: 20,
+                                                        top: 10,
+                                                        bottom: 10,
+                                                      ),
                                                   child: Row(
                                                     children: [
-                                                      Icon(Icons.file_copy_sharp, color: AppColors.textDarkGrey),
+                                                      Icon(
+                                                        Icons.file_copy_sharp,
+                                                        color:
+                                                            AppColors
+                                                                .textDarkGrey,
+                                                      ),
                                                       SizedBox(width: 10),
-                                                      Text("Pick From Files", style: AppFonts.regular(16, AppColors.textBlack)),
+                                                      Text(
+                                                        "Pick From Files",
+                                                        style: AppFonts.regular(
+                                                          16,
+                                                          AppColors.textBlack,
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -159,47 +239,134 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                 // value: "",
                                                 padding: EdgeInsets.zero,
                                                 onTap: () async {
-                                                  controller.captureProfileImage();
+                                                  controller
+                                                      .captureProfileImage();
                                                 },
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                    Container(
+                                                      width: double.infinity,
+                                                      height: 1,
+                                                      color:
+                                                          AppColors
+                                                              .appbarBorder,
+                                                    ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                      child: Row(children: [Icon(CupertinoIcons.camera), SizedBox(width: 10), Text("Take A Photo", style: AppFonts.regular(16, AppColors.textBlack))]),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 20,
+                                                            top: 10,
+                                                            bottom: 10,
+                                                          ),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            CupertinoIcons
+                                                                .camera,
+                                                          ),
+                                                          SizedBox(width: 10),
+                                                          Text(
+                                                            "Take A Photo",
+                                                            style:
+                                                                AppFonts.regular(
+                                                                  16,
+                                                                  AppColors
+                                                                      .textBlack,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                              if((controller.profileImageUrl.value != null && controller.profileImageUrl.value != "") || controller.profileImage.value != null)...[
+                                              if ((controller
+                                                              .profileImageUrl
+                                                              .value !=
+                                                          null &&
+                                                      controller
+                                                              .profileImageUrl
+                                                              .value !=
+                                                          "") ||
+                                                  controller
+                                                          .profileImage
+                                                          .value !=
+                                                      null) ...[
                                                 PopupMenuItem(
                                                   // value: "",
                                                   padding: EdgeInsets.zero,
                                                   onTap: () async {
-                                                    controller.profileImageUrl.value = null;
-                                                    controller.profileImage.value = null;
+                                                    controller
+                                                        .profileImageUrl
+                                                        .value = null;
+                                                    controller
+                                                        .profileImage
+                                                        .value = null;
                                                     // controller.captureProfileImage();
                                                   },
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                      Container(
+                                                        width: double.infinity,
+                                                        height: 1,
+                                                        color:
+                                                            AppColors
+                                                                .appbarBorder,
+                                                      ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-                                                        child: Row(children: [Icon(CupertinoIcons.camera), SizedBox(width: 10), Text("Remove photo", style: AppFonts.regular(16, AppColors.textBlack))]),
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              left: 10,
+                                                              right: 20,
+                                                              top: 10,
+                                                              bottom: 10,
+                                                            ),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              CupertinoIcons
+                                                                  .camera,
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                            Text(
+                                                              "Remove photo",
+                                                              style: AppFonts.regular(
+                                                                16,
+                                                                AppColors
+                                                                    .textBlack,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
-                                                )
+                                                ),
                                               ],
                                             ],
                                         child: Row(
                                           children: [
                                             SizedBox(width: 12.5),
-                                            SvgPicture.asset(ImagePath.edit, width: 26, height: 26, fit: BoxFit.cover),
+                                            SvgPicture.asset(
+                                              ImagePath.edit,
+                                              width: 26,
+                                              height: 26,
+                                              fit: BoxFit.cover,
+                                            ),
                                             SizedBox(width: 8),
-                                            Text("Edit Profile Image", style: AppFonts.regular(14, AppColors.textDarkGrey)),
+                                            Text(
+                                              "Edit Profile Image",
+                                              style: AppFonts.regular(
+                                                14,
+                                                AppColors.textDarkGrey,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -217,15 +384,28 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         isValid: true,
                                         isSuffixIconVisible: false,
                                         isFirst: true,
-                                        format: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')), LengthLimitingTextInputFormatter(15)],
-                                        controller: controller.patientIdController,
+                                        format: [
+                                          FilteringTextInputFormatter.allow(
+                                            RegExp(r'[a-zA-Z0-9]'),
+                                          ),
+                                          LengthLimitingTextInputFormatter(15),
+                                        ],
+                                        controller:
+                                            controller.patientIdController,
                                         hint: "123",
                                         onTap: () {
-                                          controller.patientIdController.clear();
+                                          controller.patientIdController
+                                              .clear();
                                         },
-                                        suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
                                         checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
+                                          return Validation.requiredFiled(
+                                            value,
+                                          );
                                         },
                                       ),
                                     ),
@@ -238,14 +418,22 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         format: [CustomTextInputFormatter()],
                                         // isImportant: true,
                                         isValid: true,
-                                        controller: controller.firstNameController,
+                                        controller:
+                                            controller.firstNameController,
                                         hint: "Don",
                                         onTap: () {
-                                          controller.firstNameController.clear();
+                                          controller.firstNameController
+                                              .clear();
                                         },
-                                        suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
                                         checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
+                                          return Validation.requiredFiled(
+                                            value,
+                                          );
                                         },
                                       ),
                                     ),
@@ -257,10 +445,16 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         label: "Middle Name",
                                         format: [CustomTextInputFormatter()],
                                         onTap: () {
-                                          controller.middleNameController.clear();
+                                          controller.middleNameController
+                                              .clear();
                                         },
-                                        suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                        controller: controller.middleNameController,
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
+                                        controller:
+                                            controller.middleNameController,
                                         hint: "Joseph",
                                       ),
                                     ),
@@ -277,41 +471,76 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         isSuffixIconVisible: false,
                                         isFirst: true,
                                         // isImportant: true,
-                                        controller: controller.lastNameController,
+                                        controller:
+                                            controller.lastNameController,
                                         onTap: () {
                                           controller.lastNameController.clear();
                                         },
-                                        suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                        suffixIcon: Icon(
+                                          Icons.highlight_remove,
+                                          color: AppColors.textDarkGrey,
+                                          size: 25,
+                                        ),
                                         hint: "Jones",
                                         checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
+                                          return Validation.requiredFiled(
+                                            value,
+                                          );
                                         },
                                       ),
                                     ),
                                     SizedBox(width: Dimen.margin10),
                                     Expanded(
                                       child: TextFormFiledWidget(
+                                        checkValidation: (value) {
+                                          return Validation.birthDateValidation(
+                                            value,
+                                            isRequired: true,
+                                          );
+                                        },
                                         suffixIcon: Icon(Icons.calendar_month),
+
                                         label: "Date of birth",
-                                        format: [NoSpaceTextFormatter()],
+                                        format: [DateInputFormatter()],
                                         isValid: true,
-                                        readOnly: true,
+
                                         // isImportant: true,
                                         controller: controller.dobController,
                                         onTap: () async {
                                           final picked = await showDatePicker(
                                             context: context,
-                                            initialDate: controller.selectedDOBDate.value ?? DateTime.now().subtract(Duration(days: 400)),
-                                            firstDate: DateTime.now().subtract(Duration(days: 36700)),
-                                            lastDate: DateTime.now().subtract(Duration(days: 400)),
+                                            initialDate:
+                                                controller
+                                                    .selectedDOBDate
+                                                    .value ??
+                                                DateTime.now().subtract(
+                                                  Duration(days: 400),
+                                                ),
+                                            firstDate: DateTime.now().subtract(
+                                              Duration(days: 36700),
+                                            ),
+                                            lastDate: DateTime.now().subtract(
+                                              Duration(days: 400),
+                                            ),
                                             builder: (context, child) {
                                               return Theme(
                                                 data: ThemeData.light().copyWith(
                                                   cardColor: AppColors.white,
-                                                  primaryColor: AppColors.backgroundPurple,
-                                                  hintColor: AppColors.backgroundPurple,
-                                                  colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                  primaryColor:
+                                                      AppColors
+                                                          .backgroundPurple,
+                                                  hintColor:
+                                                      AppColors
+                                                          .backgroundPurple,
+                                                  colorScheme: ColorScheme.light(
+                                                    primary:
+                                                        AppColors
+                                                            .backgroundPurple,
+                                                  ),
+                                                  buttonTheme: ButtonThemeData(
+                                                    textTheme:
+                                                        ButtonTextTheme.primary,
+                                                  ),
                                                 ),
                                                 child: child!,
                                               );
@@ -320,32 +549,49 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           if (picked != null) {
                                             String inputText;
 
-                                            controller.selectedDOBDate.value = picked;
-                                            String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                            inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                            controller.dobController.text = inputText;
+                                            controller.selectedDOBDate.value =
+                                                picked;
+                                            String padDayMonth(int value) =>
+                                                value.toString().padLeft(
+                                                  2,
+                                                  '0',
+                                                );
+                                            inputText =
+                                                '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                            controller.dobController.text =
+                                                inputText;
                                           }
                                         },
                                         hint: "mm/dd/yyyy",
-                                        checkValidation: (value) {
-                                          return Validation.requiredFiled(value);
-                                        },
                                       ),
                                     ),
                                     SizedBox(width: Dimen.margin10),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text("Sex", style: AppFonts.regular(14, AppColors.textBlack)),
+                                          Text(
+                                            "Sex",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
                                           SizedBox(height: 8),
                                           Obx(() {
                                             return BaseDropdown<String>(
-                                              valueAsString: (value) => value ?? "",
+                                              valueAsString:
+                                                  (value) => value ?? "",
                                               items: controller.sex,
-                                              selectedValue: controller.selectedSexValue.value,
+                                              selectedValue:
+                                                  controller
+                                                      .selectedSexValue
+                                                      .value,
                                               onChanged: (value) {
-                                                controller.selectedSexValue.value = value;
+                                                controller
+                                                    .selectedSexValue
+                                                    .value = value;
                                               },
                                               selectText: "Male",
                                             );
@@ -365,53 +611,105 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               isSuffixIconVisible: false,
                                               isValid: true,
                                               isFirst: true,
-                                              format: [NoSpaceLowercaseTextFormatter()],
+                                              format: [
+                                                NoSpaceLowercaseTextFormatter(),
+                                              ],
                                               label: "Email Address",
-                                              controller: controller.emailAddressController,
+                                              controller:
+                                                  controller
+                                                      .emailAddressController,
                                               hint: "donjones@example.com",
                                               onTap: () {
-                                                controller.emailAddressController.clear();
+                                                controller
+                                                    .emailAddressController
+                                                    .clear();
                                               },
-                                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
+                                              ),
                                               checkValidation: (value) {
-                                                return Validation.emailValidateRequired(value);
+                                                return Validation.emailValidateRequired(
+                                                  value,
+                                                );
                                               },
                                             ),
                                           ),
                                           SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: TextFormFiledWidget(
-                                              format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
+                                              format: [
+                                                MaskTextInputFormatter(
+                                                  mask: "+1 (###) ###-####",
+                                                ),
+                                              ],
                                               label: "Contact Number",
-                                              controller: controller.contactNumberController,
+                                              controller:
+                                                  controller
+                                                      .contactNumberController,
                                               isValid: true,
                                               isSuffixIconVisible: false,
                                               isFirst: true,
                                               type: TextInputType.number,
                                               hint: "123456789",
                                               onTap: () {
-                                                controller.emailAddressController.clear();
+                                                controller
+                                                    .emailAddressController
+                                                    .clear();
                                               },
-                                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
+                                              ),
                                               checkValidation: (value) {
-                                                return Validation.phoneValidate(value, isRequired: true);
+                                                return Validation.phoneValidate(
+                                                  value,
+                                                  isRequired: true,
+                                                );
                                               },
                                             ),
                                           ),
                                           SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Row(children: [Text("Doctor Name", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "Doctor Name",
+                                                      style: AppFonts.regular(
+                                                        14,
+                                                        AppColors.textBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                                 SizedBox(height: 8),
                                                 Obx(() {
                                                   return BaseDropdown<String>(
-                                                    valueAsString: (value) => value ?? "",
-                                                    items: controller.globalController.selectedDoctorModel.map((model) => model.name).toList(),
-                                                    selectedValue: controller.selectedDoctorValue.value,
+                                                    valueAsString:
+                                                        (value) => value ?? "",
+                                                    items:
+                                                        controller
+                                                            .globalController
+                                                            .selectedDoctorModel
+                                                            .map(
+                                                              (model) =>
+                                                                  model.name,
+                                                            )
+                                                            .toList(),
+                                                    selectedValue:
+                                                        controller
+                                                            .selectedDoctorValue
+                                                            .value,
                                                     onChanged: (value) {
-                                                      controller.selectedDoctorValue.value = value;
+                                                      controller
+                                                          .selectedDoctorValue
+                                                          .value = value;
                                                     },
                                                     selectText: "Select Doctor",
                                                   );
@@ -428,16 +726,28 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                               isSuffixIconVisible: false,
                                               isValid: true,
                                               isFirst: true,
-                                              format: [NoSpaceLowercaseTextFormatter()],
+                                              format: [
+                                                NoSpaceLowercaseTextFormatter(),
+                                              ],
                                               label: "Email Address",
-                                              controller: controller.emailAddressController,
+                                              controller:
+                                                  controller
+                                                      .emailAddressController,
                                               hint: "donjones@example.com",
                                               onTap: () {
-                                                controller.emailAddressController.clear();
+                                                controller
+                                                    .emailAddressController
+                                                    .clear();
                                               },
-                                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
+                                              ),
                                               checkValidation: (value) {
-                                                return Validation.emailValidateRequired(value);
+                                                return Validation.emailValidateRequired(
+                                                  value,
+                                                );
                                               },
                                             ),
                                           ),
@@ -446,18 +756,28 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                             child: TextFormFiledWidget(
                                               format: [PlusTextFormatter()],
                                               label: "Contact Number",
-                                              controller: controller.contactNumberController,
+                                              controller:
+                                                  controller
+                                                      .contactNumberController,
                                               isValid: true,
                                               isSuffixIconVisible: false,
                                               isFirst: true,
                                               type: TextInputType.number,
                                               hint: "123456789",
                                               onTap: () {
-                                                controller.contactNumberController.clear();
+                                                controller
+                                                    .contactNumberController
+                                                    .clear();
                                               },
-                                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                              suffixIcon: Icon(
+                                                Icons.highlight_remove,
+                                                color: AppColors.textDarkGrey,
+                                                size: 25,
+                                              ),
                                               checkValidation: (value) {
-                                                return Validation.phoneValidate(value);
+                                                return Validation.phoneValidate(
+                                                  value,
+                                                );
                                               },
                                             ),
                                           ),
@@ -472,17 +792,42 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         children: [
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Row(children: [Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "Medical Assistant",
+                                                      style: AppFonts.regular(
+                                                        14,
+                                                        AppColors.textBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                                 SizedBox(height: 8),
                                                 Obx(() {
                                                   return BaseDropdown<String>(
-                                                    valueAsString: (value) => value ?? "",
-                                                    items: controller.globalController.selectedMedicalModel.map((model) => model.name).toList(),
-                                                    selectedValue: controller.selectedMedicalValue.value,
+                                                    valueAsString:
+                                                        (value) => value ?? "",
+                                                    items:
+                                                        controller
+                                                            .globalController
+                                                            .selectedMedicalModel
+                                                            .map(
+                                                              (model) =>
+                                                                  model.name,
+                                                            )
+                                                            .toList(),
+                                                    selectedValue:
+                                                        controller
+                                                            .selectedMedicalValue
+                                                            .value,
                                                     onChanged: (value) {
-                                                      controller.selectedMedicalValue.value = value;
+                                                      controller
+                                                          .selectedMedicalValue
+                                                          .value = value;
                                                     },
                                                     selectText: "Select M.A",
                                                   );
@@ -493,26 +838,54 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: TextFormFiledWidget(
-                                              suffixIcon: Icon(Icons.calendar_month),
+                                              checkValidation: (value) {
+                                                return Validation.visitDateValidation(
+                                                  value,
+                                                  isRequired: true,
+                                                );
+                                              },
+
+                                              suffixIcon: Icon(
+                                                Icons.calendar_month,
+                                              ),
                                               label: "Visit Date",
-                                              format: [NoSpaceTextFormatter()],
-                                              readOnly: true,
+                                              format: [DateInputFormatter()],
+
                                               // isImportant: true,
-                                              controller: controller.visitDateController,
+                                              controller:
+                                                  controller
+                                                      .visitDateController,
                                               onTap: () async {
                                                 final picked = await showDatePicker(
                                                   context: context,
                                                   initialDate: DateTime.now(),
                                                   firstDate: DateTime.now(),
-                                                  lastDate: DateTime.now().add(Duration(days: 1000)),
+                                                  lastDate: DateTime.now().add(
+                                                    Duration(days: 1000),
+                                                  ),
                                                   builder: (context, child) {
                                                     return Theme(
                                                       data: ThemeData.light().copyWith(
-                                                        cardColor: AppColors.white,
-                                                        primaryColor: AppColors.backgroundPurple,
-                                                        hintColor: AppColors.backgroundPurple,
-                                                        colorScheme: ColorScheme.light(primary: AppColors.backgroundPurple),
-                                                        buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                                        cardColor:
+                                                            AppColors.white,
+                                                        primaryColor:
+                                                            AppColors
+                                                                .backgroundPurple,
+                                                        hintColor:
+                                                            AppColors
+                                                                .backgroundPurple,
+                                                        colorScheme:
+                                                            ColorScheme.light(
+                                                              primary:
+                                                                  AppColors
+                                                                      .backgroundPurple,
+                                                            ),
+                                                        buttonTheme:
+                                                            ButtonThemeData(
+                                                              textTheme:
+                                                                  ButtonTextTheme
+                                                                      .primary,
+                                                            ),
                                                       ),
                                                       child: child!,
                                                     );
@@ -520,9 +893,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                                 );
                                                 if (picked != null) {
                                                   String inputText;
-                                                  String padDayMonth(int value) => value.toString().padLeft(2, '0');
-                                                  inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                                  controller.visitDateController.text = inputText;
+                                                  String padDayMonth(
+                                                    int value,
+                                                  ) => value.toString().padLeft(
+                                                    2,
+                                                    '0',
+                                                  );
+                                                  inputText =
+                                                      '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                                  controller
+                                                      .visitDateController
+                                                      .text = inputText;
                                                 }
                                               },
                                               hint: "mm/dd/yyyy",
@@ -531,19 +912,57 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           SizedBox(width: Dimen.margin10),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text("Visit Time", style: AppFonts.regular(14, AppColors.textBlack)),
+                                                Text(
+                                                  "Visit Time",
+                                                  style: AppFonts.regular(
+                                                    14,
+                                                    AppColors.textBlack,
+                                                  ),
+                                                ),
                                                 SizedBox(height: 8),
+
+                                                // Obx(() {
+                                                //   return BaseDropdown<String>(
+                                                //     valueAsString:
+                                                //         (value) => value ?? "",
+                                                //     items: controller.visitTime,
+                                                //     selectedValue:
+                                                //         controller
+                                                //             .selectedVisitTimeValue
+                                                //             .value,
+                                                //     onChanged: (value) {
+                                                //       controller
+                                                //           .selectedVisitTimeValue
+                                                //           .value = value;
+                                                //     },
+                                                //     selectText: "11 PM",
+                                                //   );
+                                                // }),
                                                 Obx(() {
-                                                  return BaseDropdown<String>(
-                                                    valueAsString: (value) => value ?? "",
-                                                    items: controller.visitTime,
-                                                    selectedValue: controller.selectedVisitTimeValue.value,
-                                                    onChanged: (value) {
-                                                      controller.selectedVisitTimeValue.value = value;
+                                                  return TimeSlotTypeAhead(
+                                                    key: UniqueKey(),
+                                                    prefixIcon: Icon(
+                                                      Icons
+                                                          .keyboard_arrow_down_rounded,
+                                                      color:
+                                                          AppColors
+                                                              .textDarkGrey,
+                                                    ),
+                                                    timeSlotSuggestions:
+                                                        controller.visitTime,
+                                                    onSelected: (String value) {
+                                                      controller
+                                                          .selectedVisitTimeValue
+                                                          .value = value;
                                                     },
-                                                    selectText: "11 PM",
+                                                    selectedValue:
+                                                        controller
+                                                            .selectedVisitTimeValue
+                                                            .value ??
+                                                        "Select Visit Time ",
                                                   );
                                                 }),
                                               ],
@@ -570,7 +989,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       // Show border
                                       textColor: AppColors.backgroundPurple,
                                       // Custom text color
-                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 11,
+                                        horizontal: 12,
+                                      ),
                                       // Custom padding
                                       radius: 6, // Custom border radius
                                     ),
@@ -584,13 +1006,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       text: 'Save',
                                       borderColor: AppColors.backgroundPurple,
                                       // Custom border color
-                                      backgroundColor: AppColors.backgroundPurple,
+                                      backgroundColor:
+                                          AppColors.backgroundPurple,
                                       // Custom background color
                                       needBorder: false,
                                       // Show border
                                       textColor: AppColors.white,
                                       // Custom text color
-                                      padding: EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 11,
+                                        horizontal: 12,
+                                      ),
                                       // Custom padding
                                       radius: 6, // Custom border radius
                                     ),

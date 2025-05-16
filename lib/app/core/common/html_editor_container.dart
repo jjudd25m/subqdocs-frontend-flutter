@@ -130,6 +130,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                   gridViewVerticalSpacing: 0,
                   toolbarPosition: ToolbarPosition.aboveEditor,
                   dropdownBackgroundColor: Colors.white,
+                  dropdownIcon: SizedBox(),
 
                   customToolbarButtons: [
                     IconButton(
@@ -198,7 +199,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                     // const OtherButtons(fullscreen: false, codeview: true, undo: false, redo: false, help: false, copy: false, paste: false),
                     // const InsertButtons(video: false, audio: false, table: false, hr: false, otherFile: false),
                   ],
-                  customToolbarInsertionIndices: [1],
+                  customToolbarInsertionIndices: [2, 3, 4],
                   toolbarType: ToolbarType.nativeScrollable,
                 ),
 

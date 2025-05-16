@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:subqdocs/utils/app_colors.dart';
-import 'package:subqdocs/widgets/custom_textfiled.dart';
 
+import '../utils/no_space_lowercase.dart';
 import 'formater.dart';
 
 /// [type1] => 02/11/22
@@ -68,6 +67,7 @@ class DateFormatField extends StatefulWidget {
   /// TextEditingController for the date format field
   /// This is used to control the input text
   final TextEditingController? controller;
+
   @override
   State<DateFormatField> createState() => _DateFormatFieldState();
 }
@@ -127,7 +127,8 @@ class _DateFormatFieldState extends State<DateFormatField> {
       String inputText;
       switch (widget.type) {
         case DateFormatType.type2:
-          inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+          inputText =
+              '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
           break;
       }
       setState(() {
@@ -140,7 +141,7 @@ class _DateFormatFieldState extends State<DateFormatField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: true,
+      inputFormatters: [DateInputFormatter()],
       controller: _dobFormater,
       onTap: () {
         _dobFormater.selection = TextSelection.fromPosition(

@@ -2,7 +2,10 @@ import 'package:flutter/services.dart';
 
 class NoSpaceLowercaseTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Remove spaces and convert to lowercase
     String newText = newValue.text.replaceAll(' ', '').toLowerCase();
 
@@ -24,9 +27,15 @@ class NoSpaceLowercaseTextFormatter extends TextInputFormatter {
 
 class CustomTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Filter the input to allow only letters (both lowercase and uppercase)
-    String newText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z]'), ''); // Allow only letters (A-Z, a-z)
+    String newText = newValue.text.replaceAll(
+      RegExp(r'[^a-zA-Z]'),
+      '',
+    ); // Allow only letters (A-Z, a-z)
 
     // Calculate the new cursor position (keeping it as close as possible to the old position)
     int newCursorPosition = newValue.selection.baseOffset;
@@ -46,7 +55,10 @@ class CustomTextInputFormatter extends TextInputFormatter {
 
 class PostalCodeFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Define a regex pattern that allows only 5 digits
     final regex = RegExp(r'^[0-9]{0,5}$');
 
@@ -62,7 +74,10 @@ class PostalCodeFormatter extends TextInputFormatter {
 
 class MedicalLicenseNumberFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Allow only alphanumeric characters (A-Z, a-z, 0-9) and restrict to a maximum of 9 characters.
     String filtered = newValue.text.replaceAll(RegExp('[^a-zA-Z0-9]'), '');
 
@@ -79,7 +94,10 @@ class MedicalLicenseNumberFormatter extends TextInputFormatter {
 
 class NpiFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Allow only digits (0-9) and restrict to a maximum of 10 digits
     String filtered = newValue.text.replaceAll(RegExp('[^0-9]'), '');
 
@@ -97,7 +115,10 @@ class NpiFormatter extends TextInputFormatter {
 
 class TaxonomyCodeFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Allow only alphanumeric characters (0-9, A-Z, a-z)
     String filtered = newValue.text.replaceAll(RegExp('[^a-zA-Z0-9]'), '');
 
@@ -109,6 +130,38 @@ class TaxonomyCodeFormatter extends TextInputFormatter {
     return TextEditingValue(
       text: filtered,
       selection: TextSelection.collapsed(offset: filtered.length),
+    );
+  }
+}
+
+class DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Remove all non-digit characters
+    String digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+
+    // Limit to 8 digits (MMDDYYYY)
+    if (digitsOnly.length > 8) {
+      digitsOnly = digitsOnly.substring(0, 8);
+    }
+
+    final buffer = StringBuffer();
+    int selectionIndex = digitsOnly.length;
+
+    for (int i = 0; i < digitsOnly.length; i++) {
+      buffer.write(digitsOnly[i]);
+      if ((i == 1 || i == 3) && i != digitsOnly.length - 1) {
+        buffer.write('/');
+        selectionIndex++;
+      }
+    }
+
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: selectionIndex),
     );
   }
 }

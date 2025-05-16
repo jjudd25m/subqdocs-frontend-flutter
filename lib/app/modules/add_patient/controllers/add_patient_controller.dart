@@ -43,7 +43,8 @@ class AddPatientController extends GetxController {
   TextEditingController lastNameController = TextEditingController();
 
   TextEditingController selectedDoctorController = TextEditingController();
-  TextEditingController selectedMedicalAssistantController = TextEditingController();
+  TextEditingController selectedMedicalAssistantController =
+      TextEditingController();
 
   TextEditingController dobController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
@@ -67,29 +68,29 @@ class AddPatientController extends GetxController {
 
   List<String> visitTime = [
     "12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM",
-    "01:00 AM", "01:15 AM", "01:30 AM", "01:45 AM",
-    "02:00 AM", "02:15 AM", "02:30 AM", "02:45 AM",
-    "03:00 AM", "03:15 AM", "03:30 AM", "03:45 AM",
-    "04:00 AM", "04:15 AM", "04:30 AM", "04:45 AM",
-    "05:00 AM", "05:15 AM", "05:30 AM", "05:45 AM",
-    "06:00 AM", "06:15 AM", "06:30 AM", "06:45 AM",
-    "07:00 AM", "07:15 AM", "07:30 AM", "07:45 AM",
-    "08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM",
-    "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM",
+    "1:00 AM", "1:15 AM", "1:30 AM", "1:45 AM",
+    "2:00 AM", "2:15 AM", "2:30 AM", "2:45 AM",
+    "3:00 AM", "3:15 AM", "3:30 AM", "3:45 AM",
+    "4:00 AM", "4:15 AM", "4:30 AM", "4:45 AM",
+    "5:00 AM", "5:15 AM", "5:30 AM", "5:45 AM",
+    "6:00 AM", "6:15 AM", "6:30 AM", "6:45 AM",
+    "7:00 AM", "7:15 AM", "7:30 AM", "7:45 AM",
+    "8:00 AM", "8:15 AM", "8:30 AM", "8:45 AM",
+    "9:00 AM", "9:15 AM", "9:30 AM", "9:45 AM",
     "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM",
     "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM",
 
     // PM times
     "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM",
-    "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM",
-    "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM",
-    "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM",
-    "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM",
-    "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM",
-    "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM",
-    "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM",
-    "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM",
-    "09:00 PM", "09:15 PM", "09:30 PM", "09:45 PM",
+    "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM",
+    "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM",
+    "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM",
+    "4:00 PM", "4:15 PM", "4:30 PM", "4:45 PM",
+    "5:00 PM", "5:15 PM", "5:30 PM", "5:45 PM",
+    "6:00 PM", "6:15 PM", "6:30 PM", "6:45 PM",
+    "7:00 PM", "7:15 PM", "7:30 PM", "7:45 PM",
+    "8:00 PM", "8:15 PM", "8:30 PM", "8:45 PM",
+    "9:00 PM", "9:15 PM", "9:30 PM", "9:45 PM",
     "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
     "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM",
   ];
@@ -109,16 +110,17 @@ class AddPatientController extends GetxController {
     DateTime now = DateTime.now();
 
     int minutes = now.minute;
-    int roundedMinutes = ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
+    int roundedMinutes =
+        ((minutes + 14) ~/ 15) * 15; // Adding 14 ensures rounding up
 
     if (roundedMinutes == 60) {
       now = now.add(Duration(minutes: 60 - minutes));
-      now = DateTime(now.year, now.month, now.day, now.hour + 1, 0);
+      now = DateTime(now.year, now.month, now.day, now.hour, 0);
     } else {
       now = DateTime(now.year, now.month, now.day, now.hour, roundedMinutes);
     }
 
-    final DateFormat formatter = DateFormat('hh:mm a');
+    final DateFormat formatter = DateFormat('h:mm a');
     return formatter.format(now);
   }
 
@@ -128,7 +130,9 @@ class AddPatientController extends GetxController {
     super.onReady();
 
     if (Get.currentRoute == Routes.SCHEDULE_PATIENT) {
-      visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
+      visitDateController.text = DateFormat(
+        'MM/dd/yyyy',
+      ).format(DateTime.now());
     }
   }
 
@@ -137,8 +141,14 @@ class AddPatientController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.ADD_PATIENT ||
-        globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.SCHEDULE_PATIENT) {
+    if (globalController.getKeyByValue(
+              globalController.breadcrumbHistory.last,
+            ) ==
+            Routes.ADD_PATIENT ||
+        globalController.getKeyByValue(
+              globalController.breadcrumbHistory.last,
+            ) ==
+            Routes.SCHEDULE_PATIENT) {
       globalController.popRoute();
     }
   }
@@ -165,6 +175,7 @@ class AddPatientController extends GetxController {
         isAddPatient.value = false;
         globalController.addRouteInit(Routes.SCHEDULE_PATIENT);
         selectedVisitTimeValue.value = getNextRoundedTime();
+        selectedVisitTimeValue.refresh();
       }
     });
     contactNumberController.text = "+1 ";
@@ -217,7 +228,10 @@ class AddPatientController extends GetxController {
   void addImage() {
     if (checkTotalSize()) {
       if (checkSingleSize()) {
-        CustomToastification().showToast("File Size must not exceed 10 MB", type: ToastificationType.error);
+        CustomToastification().showToast(
+          "File Size must not exceed 10 MB",
+          type: ToastificationType.error,
+        );
       } else {
         selectedList.clear();
 
@@ -225,7 +239,10 @@ class AddPatientController extends GetxController {
         Get.back();
       }
     } else {
-      CustomToastification().showToast(" Total Files Size must not exceed 100 MB", type: ToastificationType.error);
+      CustomToastification().showToast(
+        " Total Files Size must not exceed 100 MB",
+        type: ToastificationType.error,
+      );
     }
   }
 
@@ -235,7 +252,9 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> pickFiles() async {
-    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(fileType: FileType.custom);
+    List<PlatformFile>? fileList = await MediaPickerServices().pickAllFiles(
+      fileType: FileType.custom,
+    );
 
     customPrint("media  file is  $fileList");
 
@@ -263,7 +282,9 @@ class AddPatientController extends GetxController {
           // Truncate the name to 12 characters and add ellipsis
           _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
         } else {
-          _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+          _shortFileName = p.basename(
+            _fileName,
+          ); // Use the full name if it's already short
         }
         list.value.add(
           MediaListingModel(
@@ -292,7 +313,9 @@ class AddPatientController extends GetxController {
   }
 
   Future<void> pickProfileImage() async {
-    XFile? pickedImage = await MediaPickerServices().pickImage(fromCamera: false);
+    XFile? pickedImage = await MediaPickerServices().pickImage(
+      fromCamera: false,
+    );
 
     if (pickedImage != null) {
       profileImage.value = File(pickedImage.path);
@@ -325,7 +348,9 @@ class AddPatientController extends GetxController {
         // Truncate the name to 12 characters and add ellipsis
         _shortFileName = p.basename(_fileName).substring(0, 12) + '...';
       } else {
-        _shortFileName = p.basename(_fileName); // Use the full name if it's already short
+        _shortFileName = p.basename(
+          _fileName,
+        ); // Use the full name if it's already short
       }
       list.value.add(
         MediaListingModel(
@@ -379,13 +404,17 @@ class AddPatientController extends GetxController {
     }
     if (contactNumberController.text != "") {
       if (extractDigits(contactNumberController.text.trim()) != "") {
-        param['contact_no'] = extractDigits(contactNumberController.text.trim());
+        param['contact_no'] = extractDigits(
+          contactNumberController.text.trim(),
+        );
       }
     }
     param['last_name'] = lastNameController.text;
 
     if (dobController.text != "") {
-      param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+      param['date_of_birth'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(DateFormat('MM/dd/yyyy').parse(dobController.text));
     }
 
     param['gender'] = selectedSexValue.value;
@@ -395,18 +424,26 @@ class AddPatientController extends GetxController {
     }
 
     if (visitDateController.text != "") {
-      param['visit_date'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
+      param['visit_date'] = DateFormat(
+        'yyyy-MM-dd',
+      ).format(DateFormat('MM/dd/yyyy').parse(visitDateController.text));
     }
 
     if (selectedDoctorValue.value != null && selectedDoctorValue.value != "") {
       if (globalController.getDoctorIdByName(selectedDoctorValue.value) != -1) {
-        param['doctor_id'] = globalController.getDoctorIdByName(selectedDoctorValue.value);
+        param['doctor_id'] = globalController.getDoctorIdByName(
+          selectedDoctorValue.value,
+        );
       }
     }
 
-    if (selectedMedicalValue.value != null && selectedMedicalValue.value != "") {
-      if (globalController.getMedicalIdByName(selectedMedicalValue.value) != -1) {
-        param['medical_assistant_id'] = globalController.getMedicalIdByName(selectedMedicalValue.value);
+    if (selectedMedicalValue.value != null &&
+        selectedMedicalValue.value != "") {
+      if (globalController.getMedicalIdByName(selectedMedicalValue.value) !=
+          -1) {
+        param['medical_assistant_id'] = globalController.getMedicalIdByName(
+          selectedMedicalValue.value,
+        );
       }
     }
 
@@ -416,7 +453,8 @@ class AddPatientController extends GetxController {
     customPrint(selectedVisitTimeValue.value);
 
     if (time != null) {
-      DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
+      DateTime firstTime =
+          DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime
 
       // Now format it to the hh:mm:ss format
       String formattedTime = DateFormat('HH:mm:ss').format(firstTime.toUtc());
@@ -430,14 +468,29 @@ class AddPatientController extends GetxController {
 
     customPrint("param is :- $param");
 
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    var loginData = LoginModel.fromJson(
+      jsonDecode(
+        AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+      ),
+    );
 
     try {
-      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
-      customPrint("_addPatientRepository response is ${addPatientModel.toJson()} ");
-      await uploadAttachments(addPatientModel.responseData?.id.toString() ?? "");
+      AddPatientModel addPatientModel = await _addPatientRepository.addPatient(
+        param: param,
+        files: profileParams,
+        token: loginData.responseData?.token ?? "",
+      );
+      customPrint(
+        "_addPatientRepository response is ${addPatientModel.toJson()} ",
+      );
+      await uploadAttachments(
+        addPatientModel.responseData?.id.toString() ?? "",
+      );
       isLoading.value = false;
-      CustomToastification().showToast("Patient added successfully", type: ToastificationType.success);
+      CustomToastification().showToast(
+        "Patient added successfully",
+        type: ToastificationType.success,
+      );
 
       if (isSaveAddAnother.value == false) {
         Get.back();
@@ -454,24 +507,40 @@ class AddPatientController extends GetxController {
       Get.back();
       isLoading.value = false;
       customPrint("_addPatientRepository catch error is $error");
-      CustomToastification().showToast("$error", type: ToastificationType.error);
+      CustomToastification().showToast(
+        "$error",
+        type: ToastificationType.error,
+      );
     }
   }
 
   Future<bool> uploadAttachments(String patientId) async {
     Loader().showLoadingDialogForSimpleLoader();
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    var loginData = LoginModel.fromJson(
+      jsonDecode(
+        AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+      ),
+    );
 
     Map<String, List<File>> profileParams = {};
     if (selectedList.isNotEmpty) {
       customPrint("profile is   available");
-      profileParams['attachments'] = selectedList.map((model) => model.file).toList().whereType<File>().toList();
+      profileParams['attachments'] =
+          selectedList
+              .map((model) => model.file)
+              .toList()
+              .whereType<File>()
+              .toList();
     } else {
       customPrint("profile is not  available");
     }
 
     try {
-      await _addPatientRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId);
+      await _addPatientRepository.uploadAttachments(
+        files: profileParams,
+        token: loginData.responseData?.token ?? "",
+        patientVisitId: patientId,
+      );
       selectedList.clear();
       Get.back();
     } catch (e) {
@@ -505,14 +574,20 @@ class AddPatientController extends GetxController {
     emailAddressController.text = "";
   }
 
-  void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {
+  void showVisitDateCupertinoDatePicker(
+    BuildContext context,
+    TextEditingController control,
+  ) {
     DateTime _selectedDate = DateTime.now();
 
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
+          title: Text(
+            "Pick a Date",
+            style: AppFonts.medium(16, AppColors.black),
+          ),
           actions: <Widget>[
             Container(
               height: 400,
@@ -524,8 +599,12 @@ class AddPatientController extends GetxController {
                   _selectedDate = newDate;
                   // Update the TextField with selected date
 
-                  String formattedDate = DateFormat('MM/dd/yyyy').format(_selectedDate);
-                  String strDate = DateFormat('yyyy-MM-ddTHH:mm:ss.sssZ').format(_selectedDate);
+                  String formattedDate = DateFormat(
+                    'MM/dd/yyyy',
+                  ).format(_selectedDate);
+                  String strDate = DateFormat(
+                    'yyyy-MM-ddTHH:mm:ss.sssZ',
+                  ).format(_selectedDate);
 
                   if (control == dobController) {
                     dob.value = strDate;

@@ -476,7 +476,7 @@ class VisitMainController extends GetxController {
       DateTime secondDateTime = DateTime.parse(secondDate);
 
       // Format the first date (for month/day/year format)
-      String formattedDate = DateFormat('MM/dd/yyyy').format(firstDateTime);
+      String formattedDate = DateFormat('MM/dd').format(firstDateTime);
 
       // Format the second time (for hours and minutes with am/pm)
       String formattedTime = DateFormat(
