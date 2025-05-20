@@ -23,6 +23,11 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.setSelectedIndexByTheScreen();
+    });
+
+    print("hello is the model called its the time");
     return Drawer(
       width: 321,
       backgroundColor: Colors.white,
@@ -37,48 +42,92 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
               child: Column(
                 children: [
                   SizedBox(height: 45),
-                  Row(
-                    children: [
-                      SizedBox(width: 20),
-                      controller.globalController.getUserDetailModel.value?.responseData?.id == -1
-                          ? ClipRRect(borderRadius: BorderRadius.circular(20.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 40, width: 40))
-                          : ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: BaseImageView(
-                              imageUrl: controller.globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
-                              width: 40,
-                              height: 40,
-                              nameLetters:
-                                  "${controller.globalController.getUserDetailModel.value?.responseData?.firstName?.trim() ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName?.trim() ?? ""}",
+                  Obx(() {
+                    return Row(
+                      children: [
+                        SizedBox(width: 20),
+                        controller
+                                    .globalController
+                                    .getUserDetailModel
+                                    .value
+                                    ?.responseData
+                                    ?.id ==
+                                -1
+                            ? ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.asset(
+                                fit: BoxFit.cover,
+                                ImagePath.user,
+                                height: 40,
+                                width: 40,
+                              ),
+                            )
+                            : ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: BaseImageView(
+                                imageUrl:
+                                    controller
+                                        .globalController
+                                        .getUserDetailModel
+                                        .value
+                                        ?.responseData
+                                        ?.profileImage ??
+                                    "",
+                                width: 40,
+                                height: 40,
+                                nameLetters:
+                                    "${controller.globalController.getUserDetailModel.value?.responseData?.firstName?.trim() ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName?.trim() ?? ""}",
+                              ),
+                            ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                // maxLines: 2,
+                                "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                style: AppFonts.medium(
+                                  14,
+                                  AppColors.textBlackDark,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                controller
+                                        .globalController
+                                        .getUserDetailModel
+                                        .value
+                                        ?.responseData
+                                        ?.degree ??
+                                    "",
+                                // Dummy email
+                                style: AppFonts.medium(
+                                  12,
+                                  AppColors.textDarkGrey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            color: AppColors.white,
+                            padding: EdgeInsets.all(15),
+                            child: SvgPicture.asset(
+                              ImagePath.crossWithContainer,
+                              height: 30,
+                              width: 30,
                             ),
                           ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              // maxLines: 2,
-                              "${controller.globalController.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName ?? ""}",
-                              style: AppFonts.medium(14, AppColors.textBlackDark),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              controller.globalController.getUserDetailModel.value?.responseData?.degree ?? "", // Dummy email
-                              style: AppFonts.medium(12, AppColors.textDarkGrey),
-                            ),
-                          ],
                         ),
-                      ),
-                      // Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(color: AppColors.white, padding: EdgeInsets.all(15), child: SvgPicture.asset(ImagePath.crossWithContainer, height: 30, width: 30)),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  }),
                   SizedBox(height: 16),
                 ],
               ),
@@ -102,13 +151,29 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                 await onItemSelected!(index);
                               },
                               child: DrawerItem(
-                                isSelected: controller.drawerItemModelList.value[index].isSelected ?? false,
-                                itemName: controller.drawerItemModelList.value[index].drawerItemTitle ?? "",
-                                iconPath: controller.drawerItemModelList.value[index].drawerIconPath ?? "", // Add any dummy icon path here
+                                isSelected:
+                                    controller
+                                        .drawerItemModelList
+                                        .value[index]
+                                        .isSelected ??
+                                    false,
+                                itemName:
+                                    controller
+                                        .drawerItemModelList
+                                        .value[index]
+                                        .drawerItemTitle ??
+                                    "",
+                                iconPath:
+                                    controller
+                                        .drawerItemModelList
+                                        .value[index]
+                                        .drawerIconPath ??
+                                    "", // Add any dummy icon path here
                               ),
                             );
                           },
-                          itemCount: controller.drawerItemModelList.value.length,
+                          itemCount:
+                              controller.drawerItemModelList.value.length,
                         );
                       }),
                     ],
@@ -121,16 +186,30 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
             SizedBox(height: 18.5),
             GestureDetector(
               onTap: () async {
-                await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
+                await AppPreference.instance.removeKey(
+                  AppString.prefKeyUserLoginData,
+                );
                 await AppPreference.instance.removeKey(AppString.prefKeyToken);
 
-                await AppPreference.instance.removeKey("homePastPatientListSortingModel");
-                await AppPreference.instance.removeKey("homePatientListSortingModel");
-                await AppPreference.instance.removeKey("homeScheduleListSortingModel");
+                await AppPreference.instance.removeKey(
+                  "homePastPatientListSortingModel",
+                );
+                await AppPreference.instance.removeKey(
+                  "homePatientListSortingModel",
+                );
+                await AppPreference.instance.removeKey(
+                  "homeScheduleListSortingModel",
+                );
 
-                HomePatientListSortingModel? homePatientListData = await AppPreference.instance.getHomePatientListSortingModel();
-                HomeScheduleListSortingModel? homeScheduleListData = await AppPreference.instance.getHomeScheduleListSortingModel();
-                HomePastPatientListSortingModel? homePastPatientData = await AppPreference.instance.getHomePastPatientListSortingModel();
+                HomePatientListSortingModel? homePatientListData =
+                    await AppPreference.instance
+                        .getHomePatientListSortingModel();
+                HomeScheduleListSortingModel? homeScheduleListData =
+                    await AppPreference.instance
+                        .getHomeScheduleListSortingModel();
+                HomePastPatientListSortingModel? homePastPatientData =
+                    await AppPreference.instance
+                        .getHomePastPatientListSortingModel();
 
                 print(homePatientListData);
                 print(homeScheduleListData);
@@ -141,7 +220,8 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
               child: Row(
                 children: [
                   SizedBox(width: 35),
-                  Icon(Icons.logout, color: AppColors.textDarkGrey), // Dummy logout icon
+                  Icon(Icons.logout, color: AppColors.textDarkGrey),
+                  // Dummy logout icon
                   SizedBox(width: 10.5),
                   Text(
                     "Logout", // Dummy string
@@ -155,7 +235,8 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Version: ${controller.version} (${controller.buildNumber})', // Dummy email
+                  'Version: ${controller.version} (${controller.buildNumber})',
+                  // Dummy email
                   style: AppFonts.medium(12, AppColors.textDarkGrey),
                 ),
               ],

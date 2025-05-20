@@ -28,13 +28,17 @@ class PersonalSettingController extends GetxController {
   //TODO: Implement PersonalSettingController
 
   RxInt tabIndex = RxInt(0);
-  final PersonalSettingRepository _personalSettingRepository = PersonalSettingRepository();
+  final PersonalSettingRepository _personalSettingRepository =
+      PersonalSettingRepository();
 
   Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
   Rxn<GetUserRolesModel> userRolesModel = Rxn<GetUserRolesModel>();
-  Rxn<GetUserOrganizationListModel> filterGetUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
-  Rxn<GetUserOrganizationListModel> getUserOrganizationListModel = Rxn<GetUserOrganizationListModel>();
-  Rxn<GetOrganizationDetailModel> getOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
+  Rxn<GetUserOrganizationListModel> filterGetUserOrganizationListModel =
+      Rxn<GetUserOrganizationListModel>();
+  Rxn<GetUserOrganizationListModel> getUserOrganizationListModel =
+      Rxn<GetUserOrganizationListModel>();
+  Rxn<GetOrganizationDetailModel> getOrganizationDetailModel =
+      Rxn<GetOrganizationDetailModel>();
   Rxn<LoginModel> loginData = Rxn<LoginModel>();
 
   final GlobalController globalController = Get.find();
@@ -43,21 +47,28 @@ class PersonalSettingController extends GetxController {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
 
-  TextEditingController organizationNoOfProvidersController = TextEditingController();
+  TextEditingController organizationNoOfProvidersController =
+      TextEditingController();
   TextEditingController organizationNameController = TextEditingController();
   TextEditingController organizationEmailController = TextEditingController();
-  TextEditingController organizationPhoneNumberController = TextEditingController();
-  TextEditingController organizationAddress1Controller = TextEditingController();
-  TextEditingController organizationAddress2Controller = TextEditingController();
-  TextEditingController organizationStreetNameController = TextEditingController();
+  TextEditingController organizationPhoneNumberController =
+      TextEditingController();
+  TextEditingController organizationAddress1Controller =
+      TextEditingController();
+  TextEditingController organizationAddress2Controller =
+      TextEditingController();
+  TextEditingController organizationStreetNameController =
+      TextEditingController();
   TextEditingController organizationCityController = TextEditingController();
   TextEditingController organizationStateController = TextEditingController();
-  TextEditingController organizationPostalCodeController = TextEditingController();
+  TextEditingController organizationPostalCodeController =
+      TextEditingController();
   TextEditingController organizationCountryController = TextEditingController();
 
   TextEditingController userFirstNameController = TextEditingController();
   TextEditingController userLastNameController = TextEditingController();
-  TextEditingController userOrganizationNameNameController = TextEditingController();
+  TextEditingController userOrganizationNameNameController =
+      TextEditingController();
   TextEditingController userEmailController = TextEditingController();
   TextEditingController userPhoneNumberController = TextEditingController();
   TextEditingController userStreetNameController = TextEditingController();
@@ -67,9 +78,12 @@ class PersonalSettingController extends GetxController {
   TextEditingController userCountryController = TextEditingController();
 
   TextEditingController userPractitionerController = TextEditingController();
-  TextEditingController userMedicalLicenseNumberController = TextEditingController();
-  TextEditingController userLicenseExpiryDateController = TextEditingController();
-  TextEditingController userNationalProviderIdentifierController = TextEditingController();
+  TextEditingController userMedicalLicenseNumberController =
+      TextEditingController();
+  TextEditingController userLicenseExpiryDateController =
+      TextEditingController();
+  TextEditingController userNationalProviderIdentifierController =
+      TextEditingController();
   TextEditingController userTaxonomyCodeController = TextEditingController();
   TextEditingController userSpecializationController = TextEditingController();
 
@@ -106,20 +120,26 @@ class PersonalSettingController extends GetxController {
 
     print("setting controller called");
 
-    loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    loginData.value = LoginModel.fromJson(
+      jsonDecode(
+        AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+      ),
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      globalController.addRouteInit(Routes.PERSONAL_SETTING);
-
       loadStateCityData().then((data) {
         statesCities.value = data;
         userStateOption = statesCities.map((state) => state.state).toList();
         userSelectedStateValue.value = userStateOption.first;
 
-        organizationStateOption = statesCities.map((state) => state.state).toList();
+        organizationStateOption =
+            statesCities.map((state) => state.state).toList();
         organizationSelectedStateValue.value = organizationStateOption.first;
 
-        List<String> cityList = statesCities.firstWhere((element) => element.state == "Montana").cities;
+        List<String> cityList =
+            statesCities
+                .firstWhere((element) => element.state == "Montana")
+                .cities;
 
         print("montana city is:- $cityList");
       });
@@ -136,14 +156,19 @@ class PersonalSettingController extends GetxController {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(globalController.breadcrumbHistory.last) == Routes.PERSONAL_SETTING) {
+    if (globalController.getKeyByValue(
+          globalController.breadcrumbHistory.last,
+        ) ==
+        Routes.PERSONAL_SETTING) {
       globalController.popRoute();
     }
   }
 
   Future<List<StateCityModel>> loadStateCityData() async {
     // Load the JSON file from assets
-    String jsonString = await rootBundle.loadString('assets/states_cities.json');
+    String jsonString = await rootBundle.loadString(
+      'assets/states_cities.json',
+    );
 
     // Decode the JSON data
     Map<String, dynamic> jsonData = json.decode(jsonString);
@@ -156,7 +181,8 @@ class PersonalSettingController extends GetxController {
 
   Future<void> getOrganizationDetail() async {
     // try {
-    getOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
+    getOrganizationDetailModel.value =
+        await _personalSettingRepository.getOrganizationDetail();
     setOrganizationData();
     // } catch (error) {
     //   customPrint("login catch error is $error");
@@ -179,23 +205,36 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> setOrganizationData() async {
-    organizationNameController.text = getOrganizationDetailModel.value?.responseData?.name ?? "";
-    organizationEmailController.text = getOrganizationDetailModel.value?.responseData?.email ?? "";
+    organizationNameController.text =
+        getOrganizationDetailModel.value?.responseData?.name ?? "";
+    organizationEmailController.text =
+        getOrganizationDetailModel.value?.responseData?.email ?? "";
 
-    organizationPhoneNumberController.text = formatPhoneNumber(getOrganizationDetailModel.value?.responseData?.contactNo ?? "");
+    organizationPhoneNumberController.text = formatPhoneNumber(
+      getOrganizationDetailModel.value?.responseData?.contactNo ?? "",
+    );
 
-    organizationAddress1Controller.text = getOrganizationDetailModel.value?.responseData?.address1 ?? "";
-    organizationAddress2Controller.text = getOrganizationDetailModel.value?.responseData?.address2 ?? "";
-    organizationStreetNameController.text = getOrganizationDetailModel.value?.responseData?.streetName ?? "";
-    organizationCityController.text = getOrganizationDetailModel.value?.responseData?.city ?? "";
-    organizationStateController.text = getOrganizationDetailModel.value?.responseData?.state ?? "";
-    organizationPostalCodeController.text = getOrganizationDetailModel.value?.responseData?.postalCode ?? "";
-    organizationCountryController.text = getOrganizationDetailModel.value?.responseData?.country ?? "";
+    organizationAddress1Controller.text =
+        getOrganizationDetailModel.value?.responseData?.address1 ?? "";
+    organizationAddress2Controller.text =
+        getOrganizationDetailModel.value?.responseData?.address2 ?? "";
+    organizationStreetNameController.text =
+        getOrganizationDetailModel.value?.responseData?.streetName ?? "";
+    organizationCityController.text =
+        getOrganizationDetailModel.value?.responseData?.city ?? "";
+    organizationStateController.text =
+        getOrganizationDetailModel.value?.responseData?.state ?? "";
+    organizationPostalCodeController.text =
+        getOrganizationDetailModel.value?.responseData?.postalCode ?? "";
+    organizationCountryController.text =
+        getOrganizationDetailModel.value?.responseData?.country ?? "";
   }
 
   Future<void> getUserDetail() async {
     // try {
-    getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.value?.responseData?.user?.id.toString() ?? "");
+    getUserDetailModel.value = await _personalSettingRepository.getUserDetail(
+      userId: loginData.value?.responseData?.user?.id.toString() ?? "",
+    );
 
     // getUserDetailModel.value?.responseData?.isAdmin = true;
 
@@ -207,33 +246,56 @@ class PersonalSettingController extends GetxController {
 
   Future<void> setUserDetail() async {
     print("user data:- ${getUserDetailModel.value?.responseData?.toJson()}");
-    userOrganizationNameNameController.text = getUserDetailModel.value?.responseData?.organizationName ?? "";
-    userFirstNameController.text = getUserDetailModel.value?.responseData?.firstName ?? "";
-    userLastNameController.text = getUserDetailModel.value?.responseData?.lastName ?? "";
-    userEmailController.text = getUserDetailModel.value?.responseData?.email ?? "";
-    userPhoneNumberController.text = formatPhoneNumber(getUserDetailModel.value?.responseData?.contactNo ?? "");
-    userStreetNameController.text = getUserDetailModel.value?.responseData?.streetName ?? "";
-    userCityController.text = getUserDetailModel.value?.responseData?.city ?? "";
-    userStateController.text = getUserDetailModel.value?.responseData?.state ?? "";
-    userPostalCodeController.text = getUserDetailModel.value?.responseData?.postalCode ?? "";
-    userCountryController.text = getUserDetailModel.value?.responseData?.country ?? "";
+    userOrganizationNameNameController.text =
+        getUserDetailModel.value?.responseData?.organizationName ?? "";
+    userFirstNameController.text =
+        getUserDetailModel.value?.responseData?.firstName ?? "";
+    userLastNameController.text =
+        getUserDetailModel.value?.responseData?.lastName ?? "";
+    userEmailController.text =
+        getUserDetailModel.value?.responseData?.email ?? "";
+    userPhoneNumberController.text = formatPhoneNumber(
+      getUserDetailModel.value?.responseData?.contactNo ?? "",
+    );
+    userStreetNameController.text =
+        getUserDetailModel.value?.responseData?.streetName ?? "";
+    userCityController.text =
+        getUserDetailModel.value?.responseData?.city ?? "";
+    userStateController.text =
+        getUserDetailModel.value?.responseData?.state ?? "";
+    userPostalCodeController.text =
+        getUserDetailModel.value?.responseData?.postalCode ?? "";
+    userCountryController.text =
+        getUserDetailModel.value?.responseData?.country ?? "";
 
-    userPractitionerController.text = getUserDetailModel.value?.responseData?.title ?? "";
-    userMedicalLicenseNumberController.text = getUserDetailModel.value?.responseData?.medicalLicenseNumber ?? "";
+    userPractitionerController.text =
+        getUserDetailModel.value?.responseData?.title ?? "";
+    userMedicalLicenseNumberController.text =
+        getUserDetailModel.value?.responseData?.medicalLicenseNumber ?? "";
 
     if (getUserDetailModel.value?.responseData?.licenseExpiryDate != null) {
       // userLicenseExpiryDateController.text = getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "";
-      userLicenseExpiryDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.parse(getUserDetailModel.value?.responseData?.licenseExpiryDate ?? ""));
+      userLicenseExpiryDateController.text = DateFormat('MM/dd/yyyy').format(
+        DateTime.parse(
+          getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "",
+        ),
+      );
     }
 
-    userNationalProviderIdentifierController.text = getUserDetailModel.value?.responseData?.nationalProviderIdentifier?.toString() ?? "";
-    userTaxonomyCodeController.text = getUserDetailModel.value?.responseData?.taxonomyCode ?? "";
-    userSpecializationController.text = getUserDetailModel.value?.responseData?.specialization ?? "";
+    userNationalProviderIdentifierController.text =
+        getUserDetailModel.value?.responseData?.nationalProviderIdentifier
+            ?.toString() ??
+        "";
+    userTaxonomyCodeController.text =
+        getUserDetailModel.value?.responseData?.taxonomyCode ?? "";
+    userSpecializationController.text =
+        getUserDetailModel.value?.responseData?.specialization ?? "";
   }
 
   Future<void> userInvite(Map<String, dynamic> param) async {
     try {
-      InvitedUserResponseModel response = await _personalSettingRepository.userInvite(param: param);
+      InvitedUserResponseModel response = await _personalSettingRepository
+          .userInvite(param: param);
 
       emailAddressController.text = "";
       firstNameController.text = "";
@@ -256,7 +318,11 @@ class PersonalSettingController extends GetxController {
     Loader().showLoadingDialogForSimpleLoader();
 
     Map<String, List<File>> profileParams = {};
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    var loginData = LoginModel.fromJson(
+      jsonDecode(
+        AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+      ),
+    );
 
     if (userProfileImage.value != null) {
       profileParams['user_image'] = [userProfileImage.value!];
@@ -267,7 +333,11 @@ class PersonalSettingController extends GetxController {
     }
 
     // try {
-    dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+    dynamic response = await _personalSettingRepository.updateUserDetail(
+      param: param,
+      files: profileParams,
+      token: loginData.responseData?.token ?? "",
+    );
 
     Loader().stopLoader();
 
@@ -278,21 +348,34 @@ class PersonalSettingController extends GetxController {
       globalController.getMedicalAssistance();
     }
 
-    UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
+    UpdateUserResponseModel updateUserResponseModel =
+        UpdateUserResponseModel.fromJson(response);
 
-    CustomToastification().showToast(updateUserResponseModel.message ?? "", type: ToastificationType.success);
+    CustomToastification().showToast(
+      updateUserResponseModel.message ?? "",
+      type: ToastificationType.success,
+    );
 
     getUserDetail();
     globalController.getUserDetail();
 
     if (updateUserResponseModel.responseData?.token != null) {
-      String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
+      String loginKey = AppPreference.instance.getString(
+        AppString.prefKeyUserLoginData,
+      );
       if (loginKey.isNotEmpty) {
         LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginKey));
-        loginModel.responseData?.token = updateUserResponseModel.responseData?.token;
+        loginModel.responseData?.token =
+            updateUserResponseModel.responseData?.token;
 
-        AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
-        await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginModel.toJson()));
+        AppPreference.instance.setString(
+          loginModel.responseData?.token ?? "",
+          AppString.prefKeyToken,
+        );
+        await AppPreference.instance.setString(
+          AppString.prefKeyUserLoginData,
+          json.encode(loginModel.toJson()),
+        );
       }
     }
   }
@@ -301,19 +384,28 @@ class PersonalSettingController extends GetxController {
     Loader().showLoadingDialogForSimpleLoader();
 
     Map<String, List<File>> profileParams = {};
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    var loginData = LoginModel.fromJson(
+      jsonDecode(
+        AppPreference.instance.getString(AppString.prefKeyUserLoginData),
+      ),
+    );
 
     if (organizationProfileImage.value != null) {
       customPrint("profile is   available");
       profileParams['org_image'] = [organizationProfileImage.value!];
     } else {
-      if (getOrganizationDetailModel.value?.responseData?.profileImage == null) {
+      if (getOrganizationDetailModel.value?.responseData?.profileImage ==
+          null) {
         param['isDeleteProfileImage'] = true;
       }
     }
 
     try {
-      dynamic response = await _personalSettingRepository.updateOrganization(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      dynamic response = await _personalSettingRepository.updateOrganization(
+        param: param,
+        files: profileParams,
+        token: loginData.responseData?.token ?? "",
+      );
       print("updateOrganization is $response");
       Loader().stopLoader();
       getUserDetail();
@@ -339,8 +431,12 @@ class PersonalSettingController extends GetxController {
     Loader().showLoadingDialogForSimpleLoader();
 
     // try {
-    getUserOrganizationListModel.value = await _personalSettingRepository.getUserByOrganization();
-    filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
+    getUserOrganizationListModel.value =
+        await _personalSettingRepository.getUserByOrganization();
+    filterGetUserOrganizationListModel
+        .value = GetUserOrganizationListModel.fromJson(
+      getUserOrganizationListModel.toJson(),
+    );
 
     Get.back();
     // } catch (error) {
@@ -349,7 +445,13 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> deleteAccount() async {
-    DeleteUserModel response = await _personalSettingRepository.deleteUserAccount(userId: globalController.getUserDetailModel.value?.responseData?.id.toString() ?? "");
+    DeleteUserModel response = await _personalSettingRepository
+        .deleteUserAccount(
+          userId:
+              globalController.getUserDetailModel.value?.responseData?.id
+                  .toString() ??
+              "",
+        );
     if (response.responseType == "success") {
       await AppPreference.instance.removeKey(AppString.prefKeyUserLoginData);
       await AppPreference.instance.removeKey(AppString.prefKeyToken);
@@ -359,11 +461,19 @@ class PersonalSettingController extends GetxController {
       Get.delete<GlobalController>();
       Get.offAllNamed(Routes.LOGIN);
     } else {
-      CustomToastification().showToast(response.message ?? "", type: ToastificationType.error);
+      CustomToastification().showToast(
+        response.message ?? "",
+        type: ToastificationType.error,
+      );
     }
   }
 
-  Future<void> updateRoleAndAdminControll(String userId, String role, bool isAdmin, int rowIndex) async {
+  Future<void> updateRoleAndAdminControll(
+    String userId,
+    String role,
+    bool isAdmin,
+    int rowIndex,
+  ) async {
     Map<String, dynamic> param = {};
     param["user_id"] = userId;
     param["role"] = role;
@@ -371,24 +481,40 @@ class PersonalSettingController extends GetxController {
 
     // Loader().showLoadingDialogForSimpleLoader();
     // try {
-    UpdateRoleAndAdminResponseModel updateRoleAndAdminResponseData = await _personalSettingRepository.updateRoleAndAdminControl(param: param);
+    UpdateRoleAndAdminResponseModel updateRoleAndAdminResponseData =
+        await _personalSettingRepository.updateRoleAndAdminControl(
+          param: param,
+        );
 
-    print("UpdateRoleAndAdminResponseModel response:- ${updateRoleAndAdminResponseData.toJson()}");
+    print(
+      "UpdateRoleAndAdminResponseModel response:- ${updateRoleAndAdminResponseData.toJson()}",
+    );
 
-    if (updateRoleAndAdminResponseData.responseType?.toLowerCase() == "success") {
-      getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin = isAdmin;
+    if (updateRoleAndAdminResponseData.responseType?.toLowerCase() ==
+        "success") {
+      getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin =
+          isAdmin;
       getUserOrganizationListModel.value?.responseData?[rowIndex].role = role;
 
-      filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
+      filterGetUserOrganizationListModel
+          .value = GetUserOrganizationListModel.fromJson(
+        getUserOrganizationListModel.toJson(),
+      );
       filterGetUserOrganizationListModel.refresh();
 
       getUserOrganizationListModel.refresh();
       globalController.getDoctorsFilter();
       globalController.getMedicalAssistance();
 
-      CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.success);
+      CustomToastification().showToast(
+        updateRoleAndAdminResponseData.message ?? "",
+        type: ToastificationType.success,
+      );
     } else {
-      CustomToastification().showToast(updateRoleAndAdminResponseData.message ?? "", type: ToastificationType.error);
+      CustomToastification().showToast(
+        updateRoleAndAdminResponseData.message ?? "",
+        type: ToastificationType.error,
+      );
     }
   }
 
@@ -410,7 +536,9 @@ class PersonalSettingController extends GetxController {
   }
 
   Future<void> pickProfileImage(bool isUserProfile) async {
-    XFile? pickedImage = await MediaPickerServices().pickImage(fromCamera: false);
+    XFile? pickedImage = await MediaPickerServices().pickImage(
+      fromCamera: false,
+    );
 
     if (isUserProfile) {
       if (pickedImage != null) {
@@ -456,19 +584,24 @@ class PersonalSettingController extends GetxController {
                 },
               ),
               if (isUserProfile) ...[
-                if (getUserDetailModel.value?.responseData?.profileImage != null) ...[
+                if (getUserDetailModel.value?.responseData?.profileImage !=
+                    null) ...[
                   ListTile(
                     leading: Icon(Icons.delete),
                     title: Text('Remove Profile Image'),
                     onTap: () {
                       if (isUserProfile) {
                         userProfileImage.value = null;
-                        getUserDetailModel.value?.responseData?.profileImage = null;
+                        getUserDetailModel.value?.responseData?.profileImage =
+                            null;
 
                         updateUserDetail({});
                       } else {
                         organizationProfileImage.value = null;
-                        getOrganizationDetailModel.value?.responseData?.profileImage = null;
+                        getOrganizationDetailModel
+                            .value
+                            ?.responseData
+                            ?.profileImage = null;
 
                         updateOrganization({});
                       }
@@ -480,19 +613,27 @@ class PersonalSettingController extends GetxController {
                   ),
                 ],
               ] else ...[
-                if (getOrganizationDetailModel.value?.responseData?.profileImage != null) ...[
+                if (getOrganizationDetailModel
+                        .value
+                        ?.responseData
+                        ?.profileImage !=
+                    null) ...[
                   ListTile(
                     leading: Icon(Icons.delete),
                     title: Text('Remove Profile Image'),
                     onTap: () {
                       if (isUserProfile) {
                         userProfileImage.value = null;
-                        getUserDetailModel.value?.responseData?.profileImage = null;
+                        getUserDetailModel.value?.responseData?.profileImage =
+                            null;
 
                         updateUserDetail({});
                       } else {
                         organizationProfileImage.value = null;
-                        getOrganizationDetailModel.value?.responseData?.profileImage = null;
+                        getOrganizationDetailModel
+                            .value
+                            ?.responseData
+                            ?.profileImage = null;
 
                         updateOrganization({});
                       }

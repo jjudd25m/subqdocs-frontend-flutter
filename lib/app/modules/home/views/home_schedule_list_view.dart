@@ -27,7 +27,10 @@ class HomeScheduleListView extends GetView<HomeController> {
       child: Obx(() {
         return Column(
           children: [
-            if (controller.globalController.scheduleFilterListingModel.isNotEmpty)
+            if (controller
+                .globalController
+                .scheduleFilterListingModel
+                .isNotEmpty)
               CustomFilterListing(
                 items: controller.globalController.scheduleFilterListingModel,
                 oneClearAll: () {
@@ -36,20 +39,34 @@ class HomeScheduleListView extends GetView<HomeController> {
                   controller.getScheduleVisitList();
                 },
                 onDeleteItem: (value) {
-                  controller.globalController.removeScheduleFilter(keyName: value);
+                  controller.globalController.removeScheduleFilter(
+                    keyName: value,
+                  );
                   controller.scheduleTriggeredIndexes.clear();
                   controller.getScheduleVisitList();
                 },
               ),
-            if (controller.globalController.scheduleFilterListingModel.isNotEmpty) SizedBox(height: 15),
+            if (controller
+                .globalController
+                .scheduleFilterListingModel
+                .isNotEmpty)
+              SizedBox(height: 15),
             controller.scheduleVisitList.isEmpty
                 ? controller.isHomeScheduleListLoading.value
-                    ? const Padding(padding: EdgeInsets.symmetric(vertical: 150, horizontal: 10), child: Center(child: CircularProgressIndicator()))
+                    ? const Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 150,
+                        horizontal: 10,
+                      ),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
                     : Padding(
                       padding: const EdgeInsets.all(10),
                       child: EmptyPatientScreen(
                         onBtnPress: () async {
-                          controller.globalController.addRoute(Routes.ADD_PATIENT);
+                          controller.globalController.addRoute(
+                            Routes.ADD_PATIENT,
+                          );
                           final result = await Get.toNamed(Routes.ADD_PATIENT);
 
                           controller.getPastVisitList();
@@ -58,7 +75,8 @@ class HomeScheduleListView extends GetView<HomeController> {
                         },
                         buttonTitle: "Schedule Visit",
                         title: "Your Schedule Visits List is Empty",
-                        description: "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
+                        description:
+                            "Start by adding your first patient to manage appointments, view medical history, and keep track of visits—all in one place",
                       ),
                     )
                 : Expanded(
@@ -67,24 +85,45 @@ class HomeScheduleListView extends GetView<HomeController> {
                       controller.getScheduleVisitList(isFist: true);
                       print("refresh schedule list view");
                     },
-                    scrollController: controller.scrollControllerSchedulePatientList,
+                    scrollController:
+                        controller.scrollControllerSchedulePatientList,
                     physics: AlwaysScrollableScrollPhysics(),
                     rows: _getTableRows(controller.scheduleVisitList),
-                    cellBuilder: (context, rowIndex, colIndex, cellData, profileImage) {
+                    cellBuilder: (
+                      context,
+                      rowIndex,
+                      colIndex,
+                      cellData,
+                      profileImage,
+                    ) {
                       return colIndex == 0
                           ? Row(
                             children: [
-                              ClipRRect(borderRadius: BorderRadius.circular(14), child: BaseImageView(imageUrl: profileImage, height: 28, width: 28, nameLetters: cellData, fontSize: 12)),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(14),
+                                child: BaseImageView(
+                                  imageUrl: profileImage,
+                                  height: 28,
+                                  width: 28,
+                                  nameLetters: cellData,
+                                  fontSize: 12,
+                                ),
+                              ),
                               SizedBox(width: 10),
                               Flexible(
                                 child: Text(
                                   cellData,
                                   maxLines: 2,
                                   textAlign: TextAlign.start,
-                                  style: AppFonts.regular(14, AppColors.textDarkGrey),
+                                  style: AppFonts.regular(
+                                    14,
+                                    AppColors.textDarkGrey,
+                                  ),
                                   softWrap: true,
                                   // Allows text to wrap
-                                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                  overflow:
+                                      TextOverflow
+                                          .ellipsis, // Adds ellipsis if text overflows
                                 ),
                               ),
                             ],
@@ -92,30 +131,49 @@ class HomeScheduleListView extends GetView<HomeController> {
                           : colIndex == 6
                           ? PopupMenuButton<String>(
                             offset: const Offset(0, 8),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
                             color: AppColors.white,
                             position: PopupMenuPosition.under,
                             padding: EdgeInsetsDirectional.zero,
                             menuPadding: EdgeInsetsDirectional.zero,
                             onSelected: (value) {},
                             style: const ButtonStyle(
-                              padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero),
+                              padding: WidgetStatePropertyAll(
+                                EdgeInsetsDirectional.zero,
+                              ),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               maximumSize: WidgetStatePropertyAll(Size.zero),
-                              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                              visualDensity: VisualDensity(
+                                horizontal: 0,
+                                vertical: 0,
+                              ),
                             ),
                             itemBuilder:
                                 (context) => [
                                   PopupMenuItem(
                                     padding: EdgeInsets.zero,
                                     onTap: () async {
-                                      customPrint("visite is is ${controller.scheduleVisitList[rowIndex].visitId.toString()}");
-                                      controller.globalController.addRoute(Routes.PATIENT_PROFILE);
+                                      customPrint(
+                                        "visite is is ${controller.scheduleVisitList[rowIndex].visitId.toString()}",
+                                      );
+                                      controller.globalController.addRoute(
+                                        Routes.PATIENT_PROFILE,
+                                      );
                                       await Get.toNamed(
                                         Routes.PATIENT_PROFILE,
                                         arguments: {
-                                          "patientData": controller.scheduleVisitList[rowIndex].id.toString(),
-                                          "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
+                                          "patientData":
+                                              controller
+                                                  .scheduleVisitList[rowIndex]
+                                                  .id
+                                                  .toString(),
+                                          "visitId":
+                                              controller
+                                                  .scheduleVisitList[rowIndex]
+                                                  .visitId
+                                                  .toString(),
                                           "fromSchedule": false,
                                         },
                                       );
@@ -123,23 +181,46 @@ class HomeScheduleListView extends GetView<HomeController> {
                                       controller.getScheduleVisitList();
                                     },
                                     value: "",
-                                    child: Padding(padding: const EdgeInsets.all(8.0), child: Text("View Patient", style: AppFonts.regular(14, AppColors.textBlack))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "View Patient",
+                                        style: AppFonts.regular(
+                                          14,
+                                          AppColors.textBlack,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   PopupMenuItem(
                                     padding: EdgeInsets.zero,
                                     value: "",
                                     onTap: () async {
-                                      controller.globalController.addRoute(Routes.VISIT_MAIN);
+                                      controller.globalController.addRoute(
+                                        Routes.VISIT_MAIN,
+                                      );
                                       dynamic response = await Get.toNamed(
                                         Routes.VISIT_MAIN,
                                         arguments: {
-                                          "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
-                                          "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
-                                          "unique_tag": DateTime.now().toString(),
+                                          "visitId":
+                                              controller
+                                                  .scheduleVisitList[rowIndex]
+                                                  .visitId
+                                                  .toString(),
+                                          "patientId":
+                                              controller
+                                                  .scheduleVisitList[rowIndex]
+                                                  .id
+                                                  .toString(),
+                                          "unique_tag":
+                                              DateTime.now().toString(),
                                         },
                                       );
 
-                                      controller.globalController.isStartTranscript.refresh();
+                                      controller
+                                          .globalController
+                                          .isStartTranscript
+                                          .refresh();
 
                                       print("back from response");
 
@@ -148,10 +229,24 @@ class HomeScheduleListView extends GetView<HomeController> {
                                       controller.getPatientList();
                                     },
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
-                                        Padding(padding: const EdgeInsets.all(8.0), child: Text("Start Visit", style: AppFonts.regular(14, AppColors.textBlack))),
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Start Visit",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -159,32 +254,75 @@ class HomeScheduleListView extends GetView<HomeController> {
                                     padding: EdgeInsets.zero,
                                     value: "",
                                     onTap: () async {
-                                      print("visit time is :- ${controller.scheduleVisitList[rowIndex].visitTime}");
-                                      DateTime visitdate = DateTime.parse(controller.scheduleVisitList[rowIndex].visitTime ?? "");
-                                      DateTime visitTimeS = DateTime.parse(controller.scheduleVisitList[rowIndex].visitTime ?? ""); // Parsing the string to DateTime
+                                      print(
+                                        "visit time is :- ${controller.scheduleVisitList[rowIndex].visitTime}",
+                                      );
+                                      DateTime visitdate = DateTime.parse(
+                                        controller
+                                                .scheduleVisitList[rowIndex]
+                                                .visitTime ??
+                                            "",
+                                      );
+                                      DateTime visitTimeS = DateTime.parse(
+                                        controller
+                                                .scheduleVisitList[rowIndex]
+                                                .visitTime ??
+                                            "",
+                                      ); // Parsing the string to DateTime
                                       // Formatting to "hh:mm a" format
-                                      String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
+                                      String formattedTime = DateFormat(
+                                        'hh:mm a',
+                                      ).format(visitTimeS.toLocal());
 
                                       showDialog(
                                         context: context,
-                                        barrierDismissible: true, // Allows dismissing the dialog by tapping outside
+                                        barrierDismissible: true,
+                                        // Allows dismissing the dialog by tapping outside
                                         builder: (BuildContext context) {
                                           return HomeReschedulePatientDialog(
                                             receiveParam: (p0, p1) {
-                                              customPrint("p0 is $p0 p1 is $p1");
-                                              controller.patientReScheduleCreate(param: {"visit_date": p1, "visit_time": p0}, visitId: controller.scheduleVisitList[rowIndex].visitId.toString());
+                                              customPrint(
+                                                "p0 is $p0 p1 is $p1",
+                                              );
+                                              controller.patientReScheduleCreate(
+                                                param: {
+                                                  "visit_date": p1,
+                                                  "visit_time": p0,
+                                                },
+                                                visitId:
+                                                    controller
+                                                        .scheduleVisitList[rowIndex]
+                                                        .visitId
+                                                        .toString(),
+                                              );
                                             },
                                             visitDate: visitdate,
-                                            selectedVisitTimeValue: RxnString(formattedTime),
+                                            selectedVisitTimeValue: RxnString(
+                                              formattedTime,
+                                            ),
                                           ); // Our custom dialog
                                         },
                                       );
                                     },
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
-                                        Padding(padding: const EdgeInsets.all(8.0), child: Text("Reschedule", style: AppFonts.regular(14, AppColors.textBlack))),
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Reschedule",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -200,7 +338,13 @@ class HomeScheduleListView extends GetView<HomeController> {
                                           // return SizedBox();
                                           return DeleteScheduleVisit(
                                             onDelete: () {
-                                              controller.changeStatus("Cancelled", controller.scheduleVisitList[rowIndex].visitId.toString());
+                                              controller.changeStatus(
+                                                "Cancelled",
+                                                controller
+                                                    .scheduleVisitList[rowIndex]
+                                                    .visitId
+                                                    .toString(),
+                                              );
                                               // controller.deletePatientVisit(id: controller.scheduleVisitList[rowIndex].visitId.toString());
                                             },
                                           );
@@ -208,25 +352,54 @@ class HomeScheduleListView extends GetView<HomeController> {
                                       );
                                     },
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
-                                        Padding(padding: const EdgeInsets.all(8.0), child: Text("Cancel Visit", style: AppFonts.regular(14, AppColors.textBlack))),
+                                        Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: AppColors.appbarBorder,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Cancel Visit",
+                                            style: AppFonts.regular(
+                                              14,
+                                              AppColors.textBlack,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ],
                             child: Container(
                               color: AppColors.white,
-                              child: Padding(padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3), child: SvgPicture.asset("assets/images/logo_threedots.svg", width: 20, height: 20)),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 3,
+                                  vertical: 3,
+                                ),
+                                child: SvgPicture.asset(
+                                  "assets/images/logo_threedots.svg",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
                             ),
                           )
                           : Text(
                             cellData,
-                            textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                            textAlign:
+                                colIndex == 0
+                                    ? TextAlign.start
+                                    : TextAlign.center,
                             style: AppFonts.regular(14, AppColors.textDarkGrey),
                             softWrap: true, // Allows text to wrap
-                            overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                            overflow:
+                                TextOverflow
+                                    .ellipsis, // Adds ellipsis if text overflows
                           );
                     },
                     columnCount: 7,
@@ -238,8 +411,12 @@ class HomeScheduleListView extends GetView<HomeController> {
                       dynamic response = await Get.toNamed(
                         Routes.VISIT_MAIN,
                         arguments: {
-                          "visitId": controller.scheduleVisitList[rowIndex].visitId.toString(),
-                          "patientId": controller.scheduleVisitList[rowIndex].id.toString(),
+                          "visitId":
+                              controller.scheduleVisitList[rowIndex].visitId
+                                  .toString(),
+                          "patientId":
+                              controller.scheduleVisitList[rowIndex].id
+                                  .toString(),
                           "unique_tag": DateTime.now().toString(),
                         },
                       );
@@ -257,11 +434,22 @@ class HomeScheduleListView extends GetView<HomeController> {
                       controller.getScheduleVisitListFetchMore();
                     },
                     headerBuilder: (context, colIndex) {
-                      List<String> headers = ['Patient Name', 'Visit Date & Time', 'Provider', 'Age', "Gender", "Previous Visits", "Action"];
+                      List<String> headers = [
+                        'Patient Name',
+                        'Visit Date & Time',
+                        'Provider',
+                        'Age',
+                        "Gender",
+                        "Previous Visits",
+                        "Action",
+                      ];
                       return GestureDetector(
                         onTap: () {
                           if (colIndex != 6) {
-                            controller.scheduleSorting(cellData: headers[colIndex], colIndex: colIndex);
+                            controller.scheduleSorting(
+                              cellData: headers[colIndex],
+                              colIndex: colIndex,
+                            );
                           }
                         },
                         child: Obx(() {
@@ -269,22 +457,48 @@ class HomeScheduleListView extends GetView<HomeController> {
                             color: AppColors.backgroundWhite,
                             height: 40,
                             child: Row(
-                              mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                              mainAxisAlignment:
+                                  colIndex == 0
+                                      ? MainAxisAlignment.start
+                                      : MainAxisAlignment.center,
                               children: [
                                 Text(
                                   headers[colIndex],
-                                  textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                  textAlign:
+                                      colIndex == 0
+                                          ? TextAlign.start
+                                          : TextAlign.center,
                                   style: AppFonts.medium(12, AppColors.black),
                                   softWrap: true, // Allows text to wrap
-                                  overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                  overflow:
+                                      TextOverflow
+                                          .ellipsis, // Adds ellipsis if text overflows
                                 ),
-                                colIndex == controller.globalController.homeScheduleListSortingModel.value?.colIndex &&
-                                        controller.globalController.homeScheduleListSortingModel.value!.isAscending &&
-                                        colIndex != 5
+                                colIndex ==
+                                            controller
+                                                .globalController
+                                                .homeScheduleListSortingModel
+                                                .value
+                                                ?.colIndex &&
+                                        controller
+                                            .globalController
+                                            .homeScheduleListSortingModel
+                                            .value!
+                                            .isAscending &&
+                                        colIndex != 6
                                     ? Icon(CupertinoIcons.down_arrow, size: 15)
-                                    : colIndex == controller.globalController.homeScheduleListSortingModel.value?.colIndex &&
-                                        !controller.globalController.homeScheduleListSortingModel.value!.isAscending &&
-                                        colIndex != 5
+                                    : colIndex ==
+                                            controller
+                                                .globalController
+                                                .homeScheduleListSortingModel
+                                                .value
+                                                ?.colIndex &&
+                                        !controller
+                                            .globalController
+                                            .homeScheduleListSortingModel
+                                            .value!
+                                            .isAscending &&
+                                        colIndex != 6
                                     ? Icon(CupertinoIcons.up_arrow, size: 15)
                                     : SizedBox(),
                               ],
@@ -313,21 +527,30 @@ class HomeScheduleListView extends GetView<HomeController> {
       String formatedDateTime = "";
 
       if (patient.appointmentTime != null && patient.visitDate != null) {
-        DateTime dateTime = DateTime.parse(patient.appointmentTime ?? "").toLocal();
+        DateTime dateTime =
+            DateTime.parse(patient.appointmentTime ?? "").toLocal();
         DateTime formatdateLocal = DateTime.parse(patient.visitDate ?? "");
 
-        formatedDateTime = "${DateFormat('MM/dd').format(formatdateLocal)} ${DateFormat('h:mm a').format(dateTime)}";
+        formatedDateTime =
+            "${DateFormat('MM/dd').format(formatdateLocal)} ${DateFormat('h:mm a').format(dateTime)}";
       }
 
       rows.add([
         "${patient.firstName} ${patient.lastName}",
-        formatedDateTime, // Last Visit Date// Patient Name
-        patient.doctorName?.trim() == "" ? 'N/A' : "Dr. ${patient.doctorName}" ?? "",
-        patient.age != null ? patient.age.toString() : "N/A", // Age
-        patient.gender.toString()[0], // Gender
-        patient.previousVisitCount.toString(), // Previous Visits
+        formatedDateTime,
+        // Last Visit Date// Patient Name
+        patient.doctorName?.trim() == ""
+            ? 'N/A'
+            : "Dr. ${patient.doctorName}" ?? "",
+        patient.age != null ? patient.age.toString() : "N/A",
+        // Age
+        patient.gender.toString()[0],
+        // Gender
+        patient.previousVisitCount.toString(),
+        // Previous Visits
         "Action",
-        patient.profileImage ?? "", // Action (could be a button or some interaction)
+        patient.profileImage ?? "",
+        // Action (could be a button or some interaction)
       ]);
     }
     return rows;

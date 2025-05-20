@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subqdocs/app/modules/custom_drawer/Models/drawer_model.dart';
+import 'package:subqdocs/app/routes/app_pages.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../core/common/global_controller.dart';
@@ -18,11 +19,42 @@ class CustomDrawerController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Add New Visit", drawerIconPath: ImagePath.calendar, routePath: ""));
-    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Scheduled Visits", drawerIconPath: ImagePath.scheduleDrawer, routePath: ""));
-    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Past Visits", drawerIconPath: ImagePath.pastDrawer, routePath: ""));
-    drawerItemModelList.add(DrawerItemModel(isSelected: true, drawerItemTitle: "Patient Visits", drawerIconPath: ImagePath.patiton_visit_drawer, routePath: ""));
-    drawerItemModelList.add(DrawerItemModel(drawerItemTitle: "Settings", drawerIconPath: ImagePath.settingsDrawer, routePath: ""));
+    drawerItemModelList.add(
+      DrawerItemModel(
+        drawerItemTitle: "Add New Visit",
+        drawerIconPath: ImagePath.calendar,
+        routePath: "",
+      ),
+    );
+    drawerItemModelList.add(
+      DrawerItemModel(
+        drawerItemTitle: "Scheduled Visits",
+        drawerIconPath: ImagePath.scheduleDrawer,
+        routePath: "",
+      ),
+    );
+    drawerItemModelList.add(
+      DrawerItemModel(
+        drawerItemTitle: "Past Visits",
+        drawerIconPath: ImagePath.pastDrawer,
+        routePath: "",
+      ),
+    );
+    drawerItemModelList.add(
+      DrawerItemModel(
+        isSelected: true,
+        drawerItemTitle: "Patient Visits",
+        drawerIconPath: ImagePath.patiton_visit_drawer,
+        routePath: "",
+      ),
+    );
+    drawerItemModelList.add(
+      DrawerItemModel(
+        drawerItemTitle: "Settings",
+        drawerIconPath: ImagePath.settingsDrawer,
+        routePath: "",
+      ),
+    );
 
     final info = await PackageInfo.fromPlatform();
     version.value = info.version;
@@ -41,6 +73,30 @@ class CustomDrawerController extends GetxController {
   }
 
   void increment() => count.value++;
+
+  void setSelectedIndexByTheScreen() {
+    drawerItemModelList.forEach((element) {
+      element.isSelected = false;
+    });
+
+    if (Get.currentRoute == Routes.HOME) {
+      drawerItemModelList[globalController.tabIndex.value == 0
+              ? 3
+              : globalController.tabIndex.value]
+          .isSelected = true;
+    }
+
+    if (Get.currentRoute == Routes.ADD_PATIENT ||
+        Get.currentRoute == Routes.SCHEDULE_PATIENT) {
+      drawerItemModelList[0].isSelected = true;
+    }
+
+    if (Get.currentRoute == Routes.PERSONAL_SETTING) {
+      drawerItemModelList[4].isSelected = true;
+    }
+
+    drawerItemModelList.refresh();
+  }
 
   void changeSelected(int index) {
     print(" selected index is the  $index");
