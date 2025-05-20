@@ -637,13 +637,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-
-    if (globalController.getKeyByValue(
-          globalController.breadcrumbHistory.last,
-        ) ==
-        Routes.PATIENT_INFO) {
-      globalController.popRoute();
-    }
   }
 
   void resetImpressionAndPlanList() {
@@ -2029,10 +2022,37 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     }
 
     for (int rows = 0; rows < tableModel.value!.rows.length; rows++) {
-      for (int cols = 0; cols < tableModel.value!.rows[rows].cells.length; cols++) {
-        for (int newItems = 0; newItems < tableModel.value!.rows[rows].cells[cols].items.length; newItems++) {
-          for (int diag = 0; diag < (tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?.length ?? 0); diag++) {
-            tableModel.value!.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
+      for (
+        int cols = 0;
+        cols < tableModel.value!.rows[rows].cells.length;
+        cols++
+      ) {
+        for (
+          int newItems = 0;
+          newItems < tableModel.value!.rows[rows].cells[cols].items.length;
+          newItems++
+        ) {
+          for (
+            int diag = 0;
+            diag <
+                (tableModel
+                        .value!
+                        .rows[rows]
+                        .cells[cols]
+                        .items[newItems]
+                        .diagnosisModelList
+                        ?.length ??
+                    0);
+            diag++
+          ) {
+            tableModel
+                .value!
+                .rows[rows]
+                .cells[cols]
+                .items[newItems]
+                .diagnosisModelList?[diag]
+                .popoverController
+                .close();
           }
         }
       }

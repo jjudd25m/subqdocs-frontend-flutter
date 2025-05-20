@@ -70,6 +70,15 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      onPopCallBack: () {
+        if (controller.globalController.getKeyByValue(
+              controller.globalController.breadcrumbHistory.last,
+            ) ==
+            Routes.PATIENT_INFO) {
+          controller.globalController.popRoute();
+        }
+      },
+
       onDrawerChanged: (status) {
         print("drawer status is :- ${status}");
 
