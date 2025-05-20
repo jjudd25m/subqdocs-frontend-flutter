@@ -77,6 +77,8 @@ class EditPatentDetailsController extends GetxController {
 
   List<String> sex = ["Female", "Male"];
   List<String> patientType = ["New Patient", "Old Patient"];
+  RxBool isExistingPatient = RxBool(false);
+  RxnString selectedPatientTypeValue = RxnString("New Patient");
 
   String patientId = "";
   String visitId = "";

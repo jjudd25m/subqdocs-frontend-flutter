@@ -35,15 +35,39 @@ class BaseDropdown<T> extends StatelessWidget {
       child: DropdownButton2<T>(
         isExpanded: true,
         selectedItemBuilder: (context) {
-          return items.map((item) => DropdownMenuItem(value: item, child: Text(valueAsString(item), maxLines: 2, style: AppFonts.regular(fontSize ?? 14, AppColors.textBlack)))).toList();
+          return items
+              .map(
+                (item) => DropdownMenuItem(
+                  value: item,
+                  child: Text(
+                    valueAsString(item),
+                    maxLines: 2,
+                    style: AppFonts.regular(
+                      fontSize ?? 14,
+                      AppColors.textBlack,
+                    ),
+                  ),
+                ),
+              )
+              .toList();
         },
-        hint: Text(selectText ?? 'Select...', style: AppFonts.regular(14, AppColors.textDarkGrey)),
+        hint: Text(
+          selectText ?? 'Select...',
+          style: AppFonts.regular(14, AppColors.textDarkGrey),
+        ),
         items:
             items
                 .map(
                   (item) => DropdownMenuItem(
                     value: item,
-                    child: Padding(padding: const EdgeInsets.symmetric(vertical: 2), child: Text(valueAsString(item), maxLines: 2, style: AppFonts.regular(14, AppColors.textBlack))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Text(
+                        valueAsString(item),
+                        maxLines: 2,
+                        style: AppFonts.regular(16, AppColors.textBlack),
+                      ),
+                    ),
                   ),
                 )
                 .toList(),
@@ -52,11 +76,29 @@ class BaseDropdown<T> extends StatelessWidget {
         onChanged: onChanged,
         buttonStyleData: ButtonStyleData(
           padding: EdgeInsets.only(right: 5),
-          height: 50,
-          decoration: decoration ?? BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(5), border: Border.all(color: AppColors.imageBannerGrayBorder, width: 1)),
+          height: 48.5,
+
+          decoration:
+              decoration ??
+              BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: AppColors.textDarkGrey, width: 0.5),
+              ),
         ),
-        iconStyleData: const IconStyleData(icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textDarkGrey)),
-        dropdownStyleData: DropdownStyleData(maxHeight: Dimen.margin200, decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(10))),
+        iconStyleData: const IconStyleData(
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: AppColors.textDarkGrey,
+          ),
+        ),
+        dropdownStyleData: DropdownStyleData(
+          maxHeight: Dimen.margin200,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
         menuItemStyleData: MenuItemStyleData(
           height: Dimen.margin40,
           padding: const EdgeInsets.symmetric(horizontal: 10),

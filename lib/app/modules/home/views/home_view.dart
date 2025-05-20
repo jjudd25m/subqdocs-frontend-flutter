@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_side_sheet/Enums/sheet_position.dart';
 import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,8 @@ class HomeView extends GetView<HomeController> {
   GlobalKey<FormState> formKeyTo = GlobalKey<FormState>();
 
   DateTimeRange? selectedDateRange;
+
+  Timer? timer;
 
   @override
   Widget build(BuildContext context) {
