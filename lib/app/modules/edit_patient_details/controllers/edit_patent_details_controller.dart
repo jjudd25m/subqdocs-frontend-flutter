@@ -198,7 +198,7 @@ class EditPatentDetailsController extends GetxController {
 
     // Parse the date string to a DateTime object
 
-    if (isFromSchedule.value) {
+    if (patientDetailModel.responseData?.visitTime != null) {
       customPrint(
         " at the time of the get the time  ${patientDetailModel.responseData?.visitTime} ",
       );
@@ -215,7 +215,7 @@ class EditPatentDetailsController extends GetxController {
       visitDateController.text = visitformattedDate;
     }
 
-    if (isFromSchedule.value) {
+    if (patientDetailModel.responseData?.visitTime != null) {
       DateTime visitTimeS = DateTime.parse(
         patientDetailModel.responseData?.visitTime ?? "",
       ); // Parsing the string to DateTime

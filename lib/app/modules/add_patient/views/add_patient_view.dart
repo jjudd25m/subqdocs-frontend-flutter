@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:path/path.dart' as p;
 import 'package:subqdocs/widget/appbar.dart';
+import 'package:subqdocs/widget/container_addpatient_dropdown.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 
 import '../../../../utils/FileOpener.dart';
@@ -27,6 +28,7 @@ import '../../../../widgets/custom_textfiled.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/logger.dart';
 import '../../../routes/app_pages.dart';
+import '../../home/views/drop_down_with_search_popup.dart';
 import '../../visit_main/views/delete_image_dialog.dart';
 import '../controllers/add_patient_controller.dart';
 import '../widgets/custom_dailog.dart';
@@ -579,7 +581,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                       child: Row(
                                         children: [
                                           Text(
-                                            "Basic Detail",
+                                            "Personal Information",
                                             style: AppFonts.medium(
                                               14,
                                               AppColors.textPurple,
@@ -1056,347 +1058,593 @@ class AddPatientView extends GetView<AddPatientController> {
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: Dimen.margin16,
                                       ),
-                                      child: Row(
-                                        spacing: 10,
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                PopupMenuButton<String>(
-                                                  offset: const Offset(0, 8),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          6,
-                                                        ),
-                                                  ),
-                                                  color: AppColors.white,
-                                                  position:
-                                                      PopupMenuPosition.under,
-                                                  padding:
-                                                      EdgeInsetsDirectional
-                                                          .zero,
-                                                  menuPadding:
-                                                      EdgeInsetsDirectional
-                                                          .zero,
-                                                  onSelected: (value) {},
-                                                  style: const ButtonStyle(
-                                                    padding:
-                                                        WidgetStatePropertyAll(
+                                      child: Obx(() {
+                                        return Row(
+                                          spacing: 10,
+                                          children: [
+                                            // Expanded(
+                                            //   child: Column(
+                                            //     crossAxisAlignment:
+                                            //         CrossAxisAlignment.start,
+                                            //     children: [
+                                            //       PopupMenuButton<String>(
+                                            //         offset: const Offset(0, 8),
+                                            //         shape: RoundedRectangleBorder(
+                                            //           borderRadius:
+                                            //               BorderRadius.circular(
+                                            //                 6,
+                                            //               ),
+                                            //         ),
+                                            //         color: AppColors.white,
+                                            //         position:
+                                            //             PopupMenuPosition.under,
+                                            //         padding:
+                                            //             EdgeInsetsDirectional
+                                            //                 .zero,
+                                            //         menuPadding:
+                                            //             EdgeInsetsDirectional
+                                            //                 .zero,
+                                            //         onSelected: (value) {},
+                                            //         style: const ButtonStyle(
+                                            //           padding:
+                                            //               WidgetStatePropertyAll(
+                                            //                 EdgeInsetsDirectional
+                                            //                     .zero,
+                                            //               ),
+                                            //           tapTargetSize:
+                                            //               MaterialTapTargetSize
+                                            //                   .shrinkWrap,
+                                            //           maximumSize:
+                                            //               WidgetStatePropertyAll(
+                                            //                 Size.zero,
+                                            //               ),
+                                            //           visualDensity:
+                                            //               VisualDensity(
+                                            //                 horizontal: 0,
+                                            //                 vertical: 0,
+                                            //               ),
+                                            //         ),
+                                            //         itemBuilder:
+                                            //             (context) => [
+                                            //               for (var item
+                                            //                   in controller
+                                            //                       .globalController
+                                            //                       .selectedDoctorModel)
+                                            //                 PopupMenuItem(
+                                            //                   padding:
+                                            //                       EdgeInsets.zero,
+                                            //                   onTap: () async {
+                                            //                     controller
+                                            //                         .selectedDoctorController
+                                            //                         .text = item
+                                            //                             .name ??
+                                            //                         "";
+                                            //                     controller
+                                            //                         .selectedDoctorValue
+                                            //                         .value = item
+                                            //                             .name;
+                                            //                   },
+                                            //                   // value: "",
+                                            //                   child: SizedBox(
+                                            //                     width: 225,
+                                            //                     child: Padding(
+                                            //                       padding:
+                                            //                           const EdgeInsets.all(
+                                            //                             8.0,
+                                            //                           ),
+                                            //                       child: Row(
+                                            //                         children: [
+                                            //                           ClipRRect(
+                                            //                             borderRadius:
+                                            //                                 BorderRadius.circular(
+                                            //                                   14,
+                                            //                                 ),
+                                            //                             child: BaseImageView(
+                                            //                               height:
+                                            //                                   32,
+                                            //                               width:
+                                            //                                   32,
+                                            //                               nameLetters:
+                                            //                                   item.name ??
+                                            //                                   "",
+                                            //                               fontSize:
+                                            //                                   12,
+                                            //                               imageUrl:
+                                            //                                   item.profileImage ??
+                                            //                                   "",
+                                            //                             ),
+                                            //                           ),
+                                            //                           const SizedBox(
+                                            //                             width: 10,
+                                            //                           ),
+                                            //                           Expanded(
+                                            //                             child: Text(
+                                            //                               item.name ??
+                                            //                                   "",
+                                            //                               style: AppFonts.regular(
+                                            //                                 14,
+                                            //                                 AppColors
+                                            //                                     .textBlack,
+                                            //                               ),
+                                            //                               maxLines:
+                                            //                                   2,
+                                            //                               overflow:
+                                            //                                   TextOverflow.ellipsis,
+                                            //                             ),
+                                            //                           ),
+                                            //                         ],
+                                            //                       ),
+                                            //                     ),
+                                            //                   ),
+                                            //
+                                            //                   // SizedBox(
+                                            //                   //   width: 225,
+                                            //                   //   child: Padding(
+                                            //                   //     padding: const EdgeInsets.all(8.0),
+                                            //                   //     child: Row(
+                                            //                   //       children: [
+                                            //                   //         ClipRRect(
+                                            //                   //           borderRadius: BorderRadius.circular(14),
+                                            //                   //           child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
+                                            //                   //         ),
+                                            //                   //         const SizedBox(width: 10),
+                                            //                   //         Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
+                                            //                   //       ],
+                                            //                   //     ),
+                                            //                   //   ),
+                                            //                   // ),
+                                            //                 ),
+                                            //             ],
+                                            //         child: IgnorePointer(
+                                            //           child: TextFormFiledWidget(
+                                            //             label: "Doctor Name",
+                                            //             controller:
+                                            //                 controller
+                                            //                     .selectedDoctorController,
+                                            //             isSuffixIconVisible: true,
+                                            //             isFirst: true,
+                                            //             hint: "Dr. Jones",
+                                            //             suffixIcon:
+                                            //                 SvgPicture.asset(
+                                            //                   ImagePath
+                                            //                       .down_arrow,
+                                            //                   height: 15,
+                                            //                   width: 15,
+                                            //                 ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            // ),
+                                            if (!controller.isAddPatient.value)
+                                              Expanded(
+                                                child: Column(
+                                                  children: [
+                                                    PopupMenuButton<String>(
+                                                      offset: const Offset(
+                                                        0,
+                                                        8,
+                                                      ),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              6,
+                                                            ),
+                                                      ),
+                                                      color: AppColors.white,
+                                                      position:
+                                                          PopupMenuPosition
+                                                              .under,
+                                                      padding:
                                                           EdgeInsetsDirectional
                                                               .zero,
-                                                        ),
-                                                    tapTargetSize:
-                                                        MaterialTapTargetSize
-                                                            .shrinkWrap,
-                                                    maximumSize:
-                                                        WidgetStatePropertyAll(
-                                                          Size.zero,
-                                                        ),
-                                                    visualDensity:
-                                                        VisualDensity(
-                                                          horizontal: 0,
-                                                          vertical: 0,
-                                                        ),
-                                                  ),
-                                                  itemBuilder:
-                                                      (context) => [
-                                                        for (var item
-                                                            in controller
-                                                                .globalController
-                                                                .selectedDoctorModel)
-                                                          PopupMenuItem(
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            onTap: () async {
-                                                              controller
-                                                                  .selectedDoctorController
-                                                                  .text = item
-                                                                      .name ??
-                                                                  "";
-                                                              controller
-                                                                  .selectedDoctorValue
-                                                                  .value = item
-                                                                      .name;
-                                                            },
-                                                            // value: "",
-                                                            child: SizedBox(
-                                                              width: 225,
+                                                      menuPadding:
+                                                          EdgeInsetsDirectional
+                                                              .zero,
+                                                      onSelected: (value) {},
+                                                      style: const ButtonStyle(
+                                                        padding:
+                                                            WidgetStatePropertyAll(
+                                                              EdgeInsetsDirectional
+                                                                  .zero,
+                                                            ),
+                                                        tapTargetSize:
+                                                            MaterialTapTargetSize
+                                                                .shrinkWrap,
+                                                        maximumSize:
+                                                            WidgetStatePropertyAll(
+                                                              Size.zero,
+                                                            ),
+                                                        visualDensity:
+                                                            VisualDensity(
+                                                              horizontal: 0,
+                                                              vertical: 0,
+                                                            ),
+                                                      ),
+                                                      itemBuilder:
+                                                          (context) => [
+                                                            PopupMenuItem(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              onTap:
+                                                                  () async {},
+                                                              value: "",
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets.all(
-                                                                      8.0,
+                                                                      0,
                                                                     ),
-                                                                child: Row(
-                                                                  children: [
-                                                                    ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            14,
-                                                                          ),
-                                                                      child: BaseImageView(
-                                                                        height:
-                                                                            32,
-                                                                        width:
-                                                                            32,
-                                                                        nameLetters:
-                                                                            item.name ??
-                                                                            "",
-                                                                        fontSize:
-                                                                            12,
-                                                                        imageUrl:
-                                                                            item.profileImage ??
-                                                                            "",
-                                                                      ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                        item.name ??
-                                                                            "",
-                                                                        style: AppFonts.regular(
-                                                                          14,
-                                                                          AppColors
-                                                                              .textBlack,
-                                                                        ),
-                                                                        maxLines:
-                                                                            2,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
+                                                                child: Container(
+                                                                  width: 165,
+                                                                  child: DropDownWithSearchPopup(
+                                                                    key:
+                                                                        UniqueKey(),
+                                                                    onChanged: (
+                                                                      value,
+                                                                      index,
+                                                                      selectedId,
+                                                                      name,
+                                                                    ) {
+                                                                      print(
+                                                                        "print the doctor view ",
+                                                                      );
+                                                                      controller
+                                                                          .selectedDoctorValue
+                                                                          .value = name;
+                                                                      controller
+                                                                          .selectedDoctorValue
+                                                                          .refresh();
 
-                                                            // SizedBox(
-                                                            //   width: 225,
-                                                            //   child: Padding(
-                                                            //     padding: const EdgeInsets.all(8.0),
-                                                            //     child: Row(
-                                                            //       children: [
-                                                            //         ClipRRect(
-                                                            //           borderRadius: BorderRadius.circular(14),
-                                                            //           child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
-                                                            //         ),
-                                                            //         const SizedBox(width: 10),
-                                                            //         Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
-                                                            //       ],
-                                                            //     ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                      ],
-                                                  child: IgnorePointer(
-                                                    child: TextFormFiledWidget(
-                                                      label: "Doctor Name",
-                                                      controller:
-                                                          controller
-                                                              .selectedDoctorController,
-                                                      isSuffixIconVisible: true,
-                                                      isFirst: true,
-                                                      hint: "Dr. Jones",
-                                                      suffixIcon:
-                                                          SvgPicture.asset(
-                                                            ImagePath
-                                                                .down_arrow,
-                                                            height: 15,
-                                                            width: 15,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                PopupMenuButton<String>(
-                                                  offset: const Offset(0, 8),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          6,
-                                                        ),
-                                                  ),
-                                                  color: AppColors.white,
-                                                  position:
-                                                      PopupMenuPosition.under,
-                                                  padding:
-                                                      EdgeInsetsDirectional
-                                                          .zero,
-                                                  menuPadding:
-                                                      EdgeInsetsDirectional
-                                                          .zero,
-                                                  onSelected: (value) {},
-                                                  style: const ButtonStyle(
-                                                    padding:
-                                                        WidgetStatePropertyAll(
-                                                          EdgeInsetsDirectional
-                                                              .zero,
-                                                        ),
-                                                    tapTargetSize:
-                                                        MaterialTapTargetSize
-                                                            .shrinkWrap,
-                                                    maximumSize:
-                                                        WidgetStatePropertyAll(
-                                                          Size.zero,
-                                                        ),
-                                                    visualDensity:
-                                                        VisualDensity(
-                                                          horizontal: 0,
-                                                          vertical: 0,
-                                                        ),
-                                                  ),
-                                                  itemBuilder:
-                                                      (context) => [
-                                                        for (var item
-                                                            in controller
-                                                                .globalController
-                                                                .selectedMedicalModel)
-                                                          // PopupMenuItem(
-                                                          //   padding: EdgeInsets.zero,
-                                                          //   onTap: () async {
-                                                          //     controller.selectedMedicalAssistantController.text = item.name ?? "";
-                                                          //     controller.selectedMedicalValue.value = item.name;
-                                                          //   },
-                                                          //   // value: "",
-                                                          //   child: SizedBox(
-                                                          //     width: 225,
-                                                          //     child: Padding(
-                                                          //       padding: const EdgeInsets.all(8.0),
-                                                          //       child: Row(
-                                                          //         children: [
-                                                          //           ClipRRect(
-                                                          //             borderRadius: BorderRadius.circular(14),
-                                                          //             child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
-                                                          //           ),
-                                                          //           const SizedBox(width: 10),
-                                                          //           Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
-                                                          //         ],
-                                                          //       ),
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
-                                                          PopupMenuItem(
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            onTap: () async {
-                                                              controller
-                                                                  .selectedMedicalAssistantController
-                                                                  .text = item
-                                                                      .name ??
-                                                                  "";
-                                                              controller
-                                                                  .selectedMedicalValue
-                                                                  .value = item
-                                                                      .name;
-                                                            },
-                                                            child: SizedBox(
-                                                              width: 225,
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets.all(
-                                                                      8.0,
-                                                                    ),
-                                                                child: Row(
-                                                                  children: [
-                                                                    ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            14,
-                                                                          ),
-                                                                      child: BaseImageView(
-                                                                        height:
-                                                                            32,
-                                                                        width:
-                                                                            32,
-                                                                        nameLetters:
-                                                                            item.name ??
-                                                                            "",
-                                                                        fontSize:
-                                                                            12,
-                                                                        imageUrl:
-                                                                            item.profileImage ??
-                                                                            "",
-                                                                      ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                        item.name ??
-                                                                            "",
-                                                                        style: AppFonts.regular(
-                                                                          14,
-                                                                          AppColors
-                                                                              .textBlack,
-                                                                        ),
-                                                                        maxLines:
-                                                                            2,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                      Get.back();
+                                                                    },
+                                                                    list:
+                                                                        controller
+                                                                            .globalController
+                                                                            .selectedDoctorModel
+                                                                            .value,
+                                                                    receiveParam:
+                                                                        (
+                                                                          String
+                                                                          value,
+                                                                        ) {},
+                                                                    selectedId:
+                                                                        1,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                      ],
-                                                  child: IgnorePointer(
-                                                    child: TextFormFiledWidget(
-                                                      label:
-                                                          "Medical Assistant",
-                                                      controller:
-                                                          controller
-                                                              .selectedMedicalAssistantController,
-                                                      isSuffixIconVisible: true,
-                                                      isFirst: true,
-                                                      hint: "Jones",
-                                                      suffixIcon:
-                                                          SvgPicture.asset(
-                                                            ImagePath
-                                                                .down_arrow,
-                                                            height: 15,
-                                                            width: 15,
-                                                          ),
+                                                          ],
+                                                      child: Column(
+                                                        children: [
+                                                          Obx(() {
+                                                            return ContainerDropdownViewPopUpFiled(
+                                                              receiveParam:
+                                                                  (isExpand) {},
+
+                                                              label:
+                                                                  "Doctor Name",
+
+                                                              name:
+                                                                  controller
+                                                                      .selectedDoctorValue
+                                                                      .value ??
+                                                                  "Select Doctor",
+                                                            );
+                                                          }),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                                // Row(children: [Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack))]),
-                                                // const SizedBox(height: 8),
-                                                // Obx(() {
-                                                //   return BaseDropdown<String>(
-                                                //     valueAsString: (value) => value ?? "",
-                                                //     items:
-                                                //         controller.globalController.selectedMedicalModel.map((model) => model.name).toList().isNotEmpty
-                                                //             ? controller.globalController.selectedMedicalModel.map((model) => model.name).toList()
-                                                //             : ["No options"],
-                                                //     selectedValue: controller.selectedMedicalValue.value,
-                                                //     onChanged: (value) {
-                                                //       if (value != "No options") {
-                                                //         controller.selectedMedicalValue.value = value;
-                                                //       }
-                                                //     },
-                                                //     selectText: "select Medical..",
-                                                //   );
-                                                // }),
-                                              ],
-                                            ),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
+                                              ),
+                                            if (!controller.isAddPatient.value)
+                                              Expanded(
+                                                child: Column(
+                                                  children: [
+                                                    PopupMenuButton<String>(
+                                                      offset: const Offset(
+                                                        0,
+                                                        8,
+                                                      ),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              6,
+                                                            ),
+                                                      ),
+                                                      color: AppColors.white,
+                                                      position:
+                                                          PopupMenuPosition
+                                                              .under,
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .zero,
+                                                      menuPadding:
+                                                          EdgeInsetsDirectional
+                                                              .zero,
+                                                      onSelected: (value) {},
+                                                      style: const ButtonStyle(
+                                                        padding:
+                                                            WidgetStatePropertyAll(
+                                                              EdgeInsetsDirectional
+                                                                  .zero,
+                                                            ),
+                                                        tapTargetSize:
+                                                            MaterialTapTargetSize
+                                                                .shrinkWrap,
+                                                        maximumSize:
+                                                            WidgetStatePropertyAll(
+                                                              Size.zero,
+                                                            ),
+                                                        visualDensity:
+                                                            VisualDensity(
+                                                              horizontal: 0,
+                                                              vertical: 0,
+                                                            ),
+                                                      ),
+                                                      itemBuilder:
+                                                          (context) => [
+                                                            PopupMenuItem(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              onTap:
+                                                                  () async {},
+                                                              value: "",
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets.all(
+                                                                      0,
+                                                                    ),
+                                                                child: Container(
+                                                                  width: 165,
+                                                                  child: DropDownWithSearchPopup(
+                                                                    key:
+                                                                        UniqueKey(),
+                                                                    onChanged: (
+                                                                      value,
+                                                                      index,
+                                                                      selectedId,
+                                                                      name,
+                                                                    ) {
+                                                                      print(
+                                                                        "print the doctor view ",
+                                                                      );
+                                                                      controller
+                                                                          .selectedMedicalValue
+                                                                          .value = name;
+                                                                      controller
+                                                                          .selectedMedicalValue
+                                                                          .refresh();
+
+                                                                      Get.back();
+                                                                    },
+                                                                    list:
+                                                                        controller
+                                                                            .globalController
+                                                                            .selectedMedicalModel
+                                                                            .value,
+                                                                    receiveParam:
+                                                                        (
+                                                                          String
+                                                                          value,
+                                                                        ) {},
+                                                                    selectedId:
+                                                                        1,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                      child: Column(
+                                                        children: [
+                                                          Obx(() {
+                                                            return ContainerDropdownViewPopUpFiled(
+                                                              receiveParam:
+                                                                  (isExpand) {},
+
+                                                              label:
+                                                                  "Medical Assistant",
+
+                                                              name:
+                                                                  controller
+                                                                      .selectedMedicalValue
+                                                                      .value ??
+                                                                  "select Medical Assistant",
+                                                            );
+                                                          }),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            // Expanded(
+                                            //   child: Column(
+                                            //     crossAxisAlignment:
+                                            //         CrossAxisAlignment.start,
+                                            //     children: [
+                                            //       PopupMenuButton<String>(
+                                            //         offset: const Offset(0, 8),
+                                            //         shape: RoundedRectangleBorder(
+                                            //           borderRadius:
+                                            //               BorderRadius.circular(
+                                            //                 6,
+                                            //               ),
+                                            //         ),
+                                            //         color: AppColors.white,
+                                            //         position:
+                                            //             PopupMenuPosition.under,
+                                            //         padding:
+                                            //             EdgeInsetsDirectional
+                                            //                 .zero,
+                                            //         menuPadding:
+                                            //             EdgeInsetsDirectional
+                                            //                 .zero,
+                                            //         onSelected: (value) {},
+                                            //         style: const ButtonStyle(
+                                            //           padding:
+                                            //               WidgetStatePropertyAll(
+                                            //                 EdgeInsetsDirectional
+                                            //                     .zero,
+                                            //               ),
+                                            //           tapTargetSize:
+                                            //               MaterialTapTargetSize
+                                            //                   .shrinkWrap,
+                                            //           maximumSize:
+                                            //               WidgetStatePropertyAll(
+                                            //                 Size.zero,
+                                            //               ),
+                                            //           visualDensity:
+                                            //               VisualDensity(
+                                            //                 horizontal: 0,
+                                            //                 vertical: 0,
+                                            //               ),
+                                            //         ),
+                                            //         itemBuilder:
+                                            //             (context) => [
+                                            //               for (var item
+                                            //                   in controller
+                                            //                       .globalController
+                                            //                       .selectedMedicalModel)
+                                            //                 // PopupMenuItem(
+                                            //                 //   padding: EdgeInsets.zero,
+                                            //                 //   onTap: () async {
+                                            //                 //     controller.selectedMedicalAssistantController.text = item.name ?? "";
+                                            //                 //     controller.selectedMedicalValue.value = item.name;
+                                            //                 //   },
+                                            //                 //   // value: "",
+                                            //                 //   child: SizedBox(
+                                            //                 //     width: 225,
+                                            //                 //     child: Padding(
+                                            //                 //       padding: const EdgeInsets.all(8.0),
+                                            //                 //       child: Row(
+                                            //                 //         children: [
+                                            //                 //           ClipRRect(
+                                            //                 //             borderRadius: BorderRadius.circular(14),
+                                            //                 //             child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""),
+                                            //                 //           ),
+                                            //                 //           const SizedBox(width: 10),
+                                            //                 //           Text(item.name ?? "", style: AppFonts.regular(14, AppColors.textBlack)),
+                                            //                 //         ],
+                                            //                 //       ),
+                                            //                 //     ),
+                                            //                 //   ),
+                                            //                 // ),
+                                            //                 PopupMenuItem(
+                                            //                   padding:
+                                            //                       EdgeInsets.zero,
+                                            //                   onTap: () async {
+                                            //                     controller
+                                            //                         .selectedMedicalAssistantController
+                                            //                         .text = item
+                                            //                             .name ??
+                                            //                         "";
+                                            //                     controller
+                                            //                         .selectedMedicalValue
+                                            //                         .value = item
+                                            //                             .name;
+                                            //                   },
+                                            //                   child: SizedBox(
+                                            //                     width: 225,
+                                            //                     child: Padding(
+                                            //                       padding:
+                                            //                           const EdgeInsets.all(
+                                            //                             8.0,
+                                            //                           ),
+                                            //                       child: Row(
+                                            //                         children: [
+                                            //                           ClipRRect(
+                                            //                             borderRadius:
+                                            //                                 BorderRadius.circular(
+                                            //                                   14,
+                                            //                                 ),
+                                            //                             child: BaseImageView(
+                                            //                               height:
+                                            //                                   32,
+                                            //                               width:
+                                            //                                   32,
+                                            //                               nameLetters:
+                                            //                                   item.name ??
+                                            //                                   "",
+                                            //                               fontSize:
+                                            //                                   12,
+                                            //                               imageUrl:
+                                            //                                   item.profileImage ??
+                                            //                                   "",
+                                            //                             ),
+                                            //                           ),
+                                            //                           const SizedBox(
+                                            //                             width: 10,
+                                            //                           ),
+                                            //                           Expanded(
+                                            //                             child: Text(
+                                            //                               item.name ??
+                                            //                                   "",
+                                            //                               style: AppFonts.regular(
+                                            //                                 14,
+                                            //                                 AppColors
+                                            //                                     .textBlack,
+                                            //                               ),
+                                            //                               maxLines:
+                                            //                                   2,
+                                            //                               overflow:
+                                            //                                   TextOverflow.ellipsis,
+                                            //                             ),
+                                            //                           ),
+                                            //                         ],
+                                            //                       ),
+                                            //                     ),
+                                            //                   ),
+                                            //                 ),
+                                            //             ],
+                                            //         child: IgnorePointer(
+                                            //           child: TextFormFiledWidget(
+                                            //             label:
+                                            //                 "Medical Assistant",
+                                            //             controller:
+                                            //                 controller
+                                            //                     .selectedMedicalAssistantController,
+                                            //             isSuffixIconVisible: true,
+                                            //             isFirst: true,
+                                            //             hint: "Jones",
+                                            //             suffixIcon:
+                                            //                 SvgPicture.asset(
+                                            //                   ImagePath
+                                            //                       .down_arrow,
+                                            //                   height: 15,
+                                            //                   width: 15,
+                                            //                 ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //       // Row(children: [Text("Medical Assistant", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                            //       // const SizedBox(height: 8),
+                                            //       // Obx(() {
+                                            //       //   return BaseDropdown<String>(
+                                            //       //     valueAsString: (value) => value ?? "",
+                                            //       //     items:
+                                            //       //         controller.globalController.selectedMedicalModel.map((model) => model.name).toList().isNotEmpty
+                                            //       //             ? controller.globalController.selectedMedicalModel.map((model) => model.name).toList()
+                                            //       //             : ["No options"],
+                                            //       //     selectedValue: controller.selectedMedicalValue.value,
+                                            //       //     onChanged: (value) {
+                                            //       //       if (value != "No options") {
+                                            //       //         controller.selectedMedicalValue.value = value;
+                                            //       //       }
+                                            //       //     },
+                                            //       //     selectText: "select Medical..",
+                                            //       //   );
+                                            //       // }),
+                                            //     ],
+                                            //   ),
+                                            // ),
+                                            Spacer(),
+                                          ],
+                                        );
+                                      }),
                                     ),
                                     // SizedBox(height: Dimen.margin16),
                                     // Obx(() {

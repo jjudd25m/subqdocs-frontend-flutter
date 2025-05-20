@@ -68,7 +68,12 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(
+              left: 10,
+              right: 5,
+              top: 8,
+              bottom: 8,
+            ),
             child: GestureDetector(
               onTap: () {
                 // FocusScope.of(context).requestFocus(searchController.);
@@ -76,7 +81,6 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
                   border: Border.all(
                     width: 1,
                     color: AppColors.textfieldBorder,
@@ -90,7 +94,7 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
                       const SizedBox(width: 5),
                       SizedBox(
-                        width: 90,
+                        width: 100,
                         child: TextFormField(
                           controller: searchController,
                           onChanged: filterList,

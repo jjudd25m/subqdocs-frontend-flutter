@@ -638,12 +638,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
     // TODO: implement onClose
     super.onClose();
 
-    if (globalController.getKeyByValue(
-          globalController.breadcrumbHistory.last,
-        ) ==
-        Routes.PATIENT_INFO) {
-      globalController.popRoute();
-    }
+    // if (globalController.getKeyByValue(
+    //       globalController.breadcrumbHistory.last,
+    //     ) ==
+    //     Routes.PATIENT_INFO) {
+    //   globalController.popRoute();
+    // }
   }
 
   void resetImpressionAndPlanList() {

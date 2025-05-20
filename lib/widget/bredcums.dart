@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 
@@ -15,7 +13,12 @@ class BreadcrumbWidget extends StatelessWidget {
 
   final void Function(String) onBack;
 
-  BreadcrumbWidget({required this.breadcrumbHistory, required this.onBack});
+  BreadcrumbWidget({
+    super.key,
+    required this.breadcrumbHistory,
+    required this.onBack,
+  });
+
   @override
   Widget build(BuildContext context) {
     // Get the current route from GetX
@@ -36,6 +39,7 @@ class BreadcrumbWidget extends StatelessWidget {
 
     // We will use a ListView to display the breadcrumb
     return Wrap(
+      key: UniqueKey(),
       children:
           breadcrumbHistory.map((breadcrumb) {
             bool isLast = breadcrumb == breadcrumbHistory.last;
@@ -51,10 +55,23 @@ class BreadcrumbWidget extends StatelessWidget {
                             globalController.breadcrumbHistory.refresh();
                             onBack(breadcrumb);
                           },
-                  child: Text(breadcrumb, style: AppFonts.regular(14, isLast ? AppColors.textBlack : AppColors.textGrey)),
+                  child: Text(
+                    breadcrumb,
+                    style: AppFonts.regular(
+                      14,
+                      isLast ? AppColors.textBlack : AppColors.textGrey,
+                    ),
+                  ),
                 ),
                 SizedBox(width: 10),
-                if (!isLast) Text(">", style: AppFonts.regular(14, isLast ? AppColors.textBlack : AppColors.textGrey)),
+                if (!isLast)
+                  Text(
+                    ">",
+                    style: AppFonts.regular(
+                      14,
+                      isLast ? AppColors.textBlack : AppColors.textGrey,
+                    ),
+                  ),
                 SizedBox(width: 10),
               ],
             );

@@ -42,7 +42,9 @@ class AddPatientController extends GetxController {
   TextEditingController middleNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
 
-  TextEditingController selectedDoctorController = TextEditingController();
+  // TextEditingController selectedDoctorController = TextEditingController();
+  // RxnString selectedDoctorController = RxnString();
+
   TextEditingController selectedMedicalAssistantController =
       TextEditingController();
 
