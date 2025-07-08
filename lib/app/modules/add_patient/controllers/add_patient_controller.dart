@@ -324,7 +324,7 @@ class AddPatientController extends GetxController {
         } else {
           customPrint("profile is not  available");
         }
-        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: editId.value);
+        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: editId.value, params: {});
         listOldPatient.clear();
         Get.back();
         getPatientAttachment(editId.value);

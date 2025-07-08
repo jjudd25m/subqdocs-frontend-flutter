@@ -26,9 +26,11 @@ class PatientView extends StatelessWidget {
           //     Center(child: Column(children: [const SizedBox(height: 90), Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isPatientViewLoadText.value)])),
           //   ],
           // ] else ...[
-          if (controller.patientViewListModel.value?.responseType == "error") ...[
-            Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(controller.patientFullNoteModel.value?.message ?? "No data found", textAlign: TextAlign.start, style: AppFonts.medium(14, AppColors.textBlack)))),
-          ] else if (controller.patientViewListModel.value?.responseData?.status?.toLowerCase() == "failure") ...[
+          // if (controller.patientViewListModel.value?.responseType == "error") ...[
+          //   Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(controller.patientFullNoteModel.value?.message ?? "No data found", textAlign: TextAlign.start, style: AppFonts.medium(14, AppColors.textBlack)))),
+          // ] else
+          //
+          if (controller.patientViewListModel.value?.responseData?.status?.toLowerCase() == "failure") ...[
             Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(controller.patientViewListModel.value?.responseData?.message ?? "No data found", textAlign: TextAlign.start, style: AppFonts.medium(14, AppColors.textBlack)))),
           ] else ...[
             Column(

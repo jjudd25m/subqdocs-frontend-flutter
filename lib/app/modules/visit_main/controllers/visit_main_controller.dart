@@ -581,7 +581,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
         } else {
           customPrint("profile is not  available");
         }
-        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value);
+        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId.value, params: {});
         list.clear();
         Get.back();
         getPatientAttachment();

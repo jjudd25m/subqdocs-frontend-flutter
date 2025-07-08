@@ -27,9 +27,11 @@ class DoctorView extends StatelessWidget {
           // if (controller.isDoctorViewLoading.value || controller.doctorViewList.value?.responseData == null) ...[
           //   Center(child: Column(children: [Lottie.asset('assets/lottie/loader.json', width: 200, height: 200, fit: BoxFit.fill), Text(controller.isDoctorViewLoadText.value)])),
           // ] else ...[
-          if (controller.doctorViewList.value?.responseType == "error") ...[
-            Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(controller.doctorViewList.value?.message ?? "No data found", textAlign: TextAlign.start, style: AppFonts.medium(14, AppColors.textBlack)))),
-          ] else if (controller.doctorViewList.value?.responseData?.status?.toLowerCase() == "failure") ...[
+          // if (controller.doctorViewList.value?.responseType == "error") ...[
+          //   Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(controller.doctorViewList.value?.message ?? "No data found", textAlign: TextAlign.start, style: AppFonts.medium(14, AppColors.textBlack)))),
+          // ] else
+          //
+          if (controller.doctorViewList.value?.responseData?.status?.toLowerCase() == "failure") ...[
             Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(controller.doctorViewList.value?.responseData?.message ?? "No data found", textAlign: TextAlign.start, style: AppFonts.medium(14, AppColors.textBlack)))),
           ] else ...[
             Padding(

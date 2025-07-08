@@ -70,6 +70,47 @@ import 'package:subqdocs/app/modules/patient_info/model/patient_fullnote_model.d
 
 import '../../visit_main/model/doctor_view_model.dart';
 
+// class ImpresionAndPlanViewModel {
+//   String? title;
+//
+//   String? htmlContent;
+//   String? initialHtmlContent;
+//   String? toggleHtmlContent;
+//
+//   HtmlEditorController htmlEditorController;
+//
+//   List<SiblingIcd10>? siblingIcd10;
+//
+//   List<SiblingIcd10FullNote>? siblingIcd10FullNote;
+//
+//   final GlobalKey diagnosisContainerKey = GlobalKey();
+//
+//   bool isEditing;
+//
+//   PopoverController popoverController = PopoverController();
+//   SlidableController? slidableController;
+//
+//   FocusNode focusNode = FocusNode();
+//
+//   ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController});
+//
+//   Map<String, dynamic> toJson() {
+//     if (title == null) {
+//       return {};
+//       // Return an empty map if title is null
+//     }
+//     return {'title': title ?? '', 'content': htmlContent ?? '', 'sibling_icd_10': siblingIcd10};
+//   }
+//
+//   Map<String, dynamic> toJsonFullNote() {
+//     if (title == null) {
+//       return {};
+//       // Return an empty map if title is null
+//     }
+//     return {'title': title ?? '', 'content': htmlContent ?? '', 'sibling_icd_10': siblingIcd10FullNote};
+//   }
+// }
+
 class ImpresionAndPlanViewModel {
   String? title;
 
@@ -92,14 +133,16 @@ class ImpresionAndPlanViewModel {
 
   FocusNode focusNode = FocusNode();
 
-  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController});
+  List<Attachments>? attachments;
+
+  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController, this.attachments});
 
   Map<String, dynamic> toJson() {
     if (title == null) {
       return {};
       // Return an empty map if title is null
     }
-    return {'title': title ?? '', 'content': htmlContent ?? '', 'sibling_icd_10': siblingIcd10};
+    return {'title': title ?? '', 'content': htmlContent ?? '', 'sibling_icd_10': siblingIcd10, 'attachments': attachments};
   }
 
   Map<String, dynamic> toJsonFullNote() {
@@ -107,6 +150,6 @@ class ImpresionAndPlanViewModel {
       return {};
       // Return an empty map if title is null
     }
-    return {'title': title ?? '', 'content': htmlContent ?? '', 'sibling_icd_10': siblingIcd10FullNote};
+    return {'title': title ?? '', 'content': htmlContent ?? '', 'sibling_icd_10': siblingIcd10FullNote, 'attachments': attachments};
   }
 }

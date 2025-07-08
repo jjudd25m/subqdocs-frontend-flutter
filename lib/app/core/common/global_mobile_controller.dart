@@ -102,4 +102,25 @@ class GlobalMobileController extends GetxController {
       return false;
     }
   }
+
+  String formatTimeToHHMMSS(String timeStr) {
+    if (timeStr.isNotEmpty && timeStr != "") {
+      final parts = timeStr.split(':').map(int.parse).toList();
+      Duration duration;
+      if (parts.length == 2) {
+        duration = Duration(minutes: parts[0], seconds: parts[1]);
+      } else if (parts.length == 3) {
+        duration = Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
+      } else {
+        return "00:00:00";
+      }
+      final hh = (duration.inHours).toString().padLeft(2, '0');
+      final mm = (duration.inMinutes.remainder(60)).toString().padLeft(2, '0');
+      final ss = (duration.inSeconds.remainder(60)).toString().padLeft(2, '0');
+
+      return '$hh:$mm:$ss';
+    } else {
+      return "";
+    }
+  }
 }

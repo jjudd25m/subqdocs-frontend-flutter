@@ -13,6 +13,13 @@ import '../model/visit_main_model.dart';
 import '../model/visit_recap_list_model.dart';
 
 class VisitMainRepository {
+  Future<void> uploadAttachments({required Map<String, List<File>> files, required String token, required String patientVisitId, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPostMultiPartDioListOfFiles(url: "patient/attachments/$patientVisitId", params: params, files: files, token: token);
+
+    customPrint("uploadAttachments API response :- $response");
+    customPrint(response);
+  }
+
   Future<PatientTranscriptUploadModel> uploadAudio({required File audioFile, required String token, required String patientVisitId}) async {
     String? mimeType = lookupMimeType(audioFile.path);
 
@@ -22,12 +29,12 @@ class VisitMainRepository {
     return PatientTranscriptUploadModel.fromJson(response);
   }
 
-  Future<void> uploadAttachments({required Map<String, List<File>> files, required String token, required String patientVisitId}) async {
-    var response = await ApiProvider.instance.callPostMultiPartDioListOfFiles(url: "patient/attachments/$patientVisitId", params: {}, files: files, token: token);
-
-    customPrint("uploadAttachments API response :- $response");
-    customPrint(response);
-  }
+  // Future<void> uploadAttachments({required Map<String, List<File>> files, required String token, required String patientVisitId}) async {
+  //   var response = await ApiProvider.instance.callPostMultiPartDioListOfFiles(url: "patient/attachments/$patientVisitId", params: {}, files: files, token: token);
+  //
+  //   customPrint("uploadAttachments API response :- $response");
+  //   customPrint(response);
+  // }
 
   Future<CommonResponse> deleteAttachments({required Map<String, List<int>> params}) async {
     var response = await ApiProvider.instance.callDelete(url: "patient/attachments", data: params);

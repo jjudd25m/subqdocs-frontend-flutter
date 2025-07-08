@@ -30,8 +30,6 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
     });
   }
 
-  //
-  // Widget _taskListSection() {
   Widget _taskListSection(BuildContext context) {
     return Obx(() {
       return Column(
@@ -54,7 +52,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                 final model = controller.impressionAndPlanList[index];
                 return Padding(
                   key: ValueKey(index),
-                  padding: const EdgeInsets.only(bottom: 5),
+                  padding: const EdgeInsets.only(bottom: 5, top: 5),
                   child: Theme(
                     // Required for ReorderableListView
                     data: ThemeData(
@@ -66,16 +64,16 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                         key: ValueKey(model),
                         controller: model.slidableController,
                         startActionPane: ActionPane(
-                          motion: ScrollMotion(),
-                          extentRatio: 0.06,
+                          motion: const ScrollMotion(),
+                          extentRatio: MediaQuery.orientationOf(context) == Orientation.portrait ? 0.06 : 0.04,
                           children: [
                             Container(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.2)), color: AppColors.backgroundPurple.withValues(alpha: 0.1)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   GestureDetector(
                                     // onTap: () {
                                     //   controller.resetImpressionAndPlanList();
@@ -83,7 +81,7 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                                     // },
                                     child: SvgPicture.asset(ImagePath.dragAndDrop),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   GestureDetector(
                                     onTap: () {
                                       controller.impressionAndPlanList.insert(index + 1, ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null));
@@ -91,14 +89,14 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                                     },
                                     child: SvgPicture.asset(ImagePath.plus),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   GestureDetector(
                                     onTap: () {
                                       controller.impressionAndPlanList.removeAt(index);
                                       controller.impressionAndPlanList.refresh();
                                       controller.updateImpressionAndPlan();
                                     },
-                                    child: SvgPicture.asset(ImagePath.trash, colorFilter: ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
+                                    child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
                                   ),
                                 ],
                               ),
@@ -117,7 +115,6 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                             childrenPadding: const EdgeInsets.all(0),
                             collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                             shape: OutlineInputBorder(borderSide: BorderSide(color: AppColors.textGrey.withValues(alpha: 0.2)), borderRadius: BorderRadius.circular(8)),
-                            // backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                             showTrailingIcon: false,
                             collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                             title: Popover(
@@ -267,19 +264,6 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
               }),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          //   child: ContainerButton(
-          //     backgroundColor: AppColors.white,
-          //     textColor: AppColors.black,
-          //     borderColor: AppColors.appbarBorder,
-          //     onPressed: () {
-          //       controller.impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null));
-          //       controller.impressionAndPlanList.refresh();
-          //     },
-          //     text: " + Add Section ",
-          //   ),
-          // ),
         ],
       );
     });

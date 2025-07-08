@@ -613,6 +613,22 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   }
 
   void showSignFinalizeAutheticateViewDialog() {
+    SignFinalizeAuthenticateViewController con = Get.put(SignFinalizeAuthenticateViewController());
+    con.visitId = controller.visitId;
+
+    print("doctor name:- ${controller.patientData.value?.responseData?.doctorName}");
+    print("doctorId:- ${controller.patientData.value?.responseData?.doctorId}");
+    con.selectedDoctorValueModel = Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
+    con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
+
+    print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
+
+    print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
+
+    con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
+
+    con.setThirdParty(controller.patientData.value?.responseData?.thirdPartyId ?? "");
+
     showGeneralDialog(
       context: Get.context!,
       barrierDismissible: true,
@@ -620,21 +636,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       barrierColor: Colors.black.withValues(alpha: 0.5),
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, animation1, animation2) {
-        // SignFinalizeAuthenticateViewController con = SignFinalizeAuthenticateViewController();
-
-        SignFinalizeAuthenticateViewController con = Get.put(SignFinalizeAuthenticateViewController());
-        con.visitId = controller.visitId;
-        con.selectedDoctorValueModel = Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
-        con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
-
-        print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
-
-        print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
-
-        con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
-
-        con.setThirdParty(controller.patientData.value?.responseData?.thirdPartyId ?? "");
-
         return ScaleTransition(
           scale: CurvedAnimation(parent: animation1, curve: Curves.fastOutSlowIn),
           child: FadeTransition(
@@ -663,6 +664,19 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   }
 
   void showDoctorToDoctorSignFinalizeAutheticateViewDialog() {
+    DoctorToDoctorSignFinalizeAuthenticateViewController con = Get.put(DoctorToDoctorSignFinalizeAuthenticateViewController());
+    con.visitId = controller.visitId;
+    con.selectedDoctorValueModel = Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
+    con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
+
+    print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
+
+    print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
+
+    con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
+
+    con.setThirdParty(controller.patientData.value?.responseData?.thirdPartyId ?? "");
+
     showGeneralDialog(
       context: Get.context!,
       barrierDismissible: true,
@@ -670,23 +684,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       barrierColor: Colors.black.withValues(alpha: 0.5),
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, animation1, animation2) {
-        // DoctorToDoctorSignFinalizeAuthenticateViewController con = DoctorToDoctorSignFinalizeAuthenticateViewController();
-
-        DoctorToDoctorSignFinalizeAuthenticateViewController con = Get.put(DoctorToDoctorSignFinalizeAuthenticateViewController());
-
-        con.visitId = controller.visitId;
-        con.selectedDoctorValueModel = Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
-        con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
-
-        print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
-
-        print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
-
-        con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
-
-        con.setThirdParty(controller.patientData.value?.responseData?.thirdPartyId ?? "");
-        // controller.selectedDoctorId;
-
         return ScaleTransition(
           scale: CurvedAnimation(parent: animation1, curve: Curves.fastOutSlowIn),
           child: FadeTransition(
@@ -809,278 +806,3 @@ class _CustomSearchDropdownState<T extends SelectedDoctorModel> extends State<Cu
     });
   }
 }
-
-// class CustomSearchDropdown<T extends SelectedDoctorModel> extends StatefulWidget {
-//   final List<T> items;
-//   final String currentValue;
-//   final Function(T value, int index, int selectedId, String name) onChanged;
-//   final int selectedId;
-//   final ScrollController scrollController;
-//   final double? dropdownWidth; // Optional explicit width
-//
-//   const CustomSearchDropdown({Key? key, required this.items, required this.currentValue, required this.onChanged, required this.selectedId, required this.scrollController, this.dropdownWidth}) : super(key: key);
-//
-//   @override
-//   _CustomSearchDropdownState<T> createState() => _CustomSearchDropdownState<T>();
-// }
-//
-// class _CustomSearchDropdownState<T extends SelectedDoctorModel> extends State<CustomSearchDropdown<T>> {
-//   final LayerLink _layerLink = LayerLink();
-//   OverlayEntry? _overlayEntry;
-//   bool _isDropdownOpen = false;
-//   double _dropdownPosition = 0;
-//
-//   @override
-//   void dispose() {
-//     _removeOverlay();
-//     widget.scrollController.removeListener(_updateDropdownPosition);
-//     super.dispose();
-//   }
-//
-//   void _removeOverlay() {
-//     widget.scrollController.removeListener(_updateDropdownPosition);
-//     _overlayEntry?.remove();
-//     _overlayEntry = null;
-//     _isDropdownOpen = false;
-//   }
-//
-//   void _toggleDropdown() async {
-//     if (_isDropdownOpen) {
-//       _removeOverlay();
-//     } else {
-//       final renderBox = context.findRenderObject() as RenderBox;
-//       final offset = renderBox.localToGlobal(Offset.zero);
-//       final screenHeight = MediaQuery.of(context).size.height;
-//       final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-//
-//       _dropdownPosition = offset.dy + renderBox.size.height;
-//       final availableHeight = screenHeight - _dropdownPosition - keyboardHeight - 16;
-//
-//       _showOverlay(availableHeight);
-//     }
-//   }
-//
-//   void _showOverlay(double maxHeight) {
-//     final renderBox = context.findRenderObject() as RenderBox;
-//     final size = renderBox.size;
-//     final screenWidth = MediaQuery.of(context).size.width;
-//     final position = renderBox.localToGlobal(Offset.zero);
-//
-//     // Calculate width based on priority:
-//     // 1. Explicit dropdownWidth if provided
-//     // 2. Trigger button width (size.width)
-//     // 3. Minimum of 200 logical pixels
-//     final dropdownWidth = widget.dropdownWidth ?? size.width;
-//     final constrainedWidth = dropdownWidth.clamp(200.0, screenWidth - 32); // Ensure reasonable bounds
-//
-//     _overlayEntry = OverlayEntry(
-//       builder:
-//           (context) => Stack(
-//             children: [
-//               // Background tap area
-//               Positioned.fill(child: GestureDetector(behavior: HitTestBehavior.translucent, onTap: _removeOverlay)),
-//               // Dropdown content
-//               Positioned(
-//                 left: position.dx,
-//                 top: _dropdownPosition,
-//                 child: Material(
-//                   elevation: 4,
-//                   borderRadius: BorderRadius.circular(6),
-//                   child: Container(
-//                     width: constrainedWidth,
-//                     constraints: BoxConstraints(maxHeight: maxHeight),
-//                     child: SingleChildScrollView(
-//                       physics: const ClampingScrollPhysics(),
-//                       child: SizedBox(
-//                         width: constrainedWidth, // Ensure inner content matches width
-//                         child: DropDownWithSearchPopup(
-//                           key: UniqueKey(),
-//                           onChanged: (value, index, selectedId, name) {
-//                             widget.onChanged(value as T, index, selectedId, name);
-//                             _removeOverlay();
-//                           },
-//                           list: widget.items,
-//                           receiveParam: (String value) {},
-//                           selectedId: widget.selectedId,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//     );
-//
-//     Overlay.of(context)?.insert(_overlayEntry!);
-//     setState(() {
-//       _isDropdownOpen = true;
-//     });
-//
-//     widget.scrollController.addListener(_updateDropdownPosition);
-//   }
-//
-//   void _updateDropdownPosition() {
-//     if (_overlayEntry != null && _isDropdownOpen) {
-//       final renderBox = context.findRenderObject() as RenderBox;
-//       final offset = renderBox.localToGlobal(Offset.zero);
-//       _dropdownPosition = offset.dy + renderBox.size.height;
-//       _overlayEntry?.markNeedsBuild();
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return CompositedTransformTarget(
-//       link: _layerLink,
-//       child: GestureDetector(
-//         onTap: _toggleDropdown,
-//         child: Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-//           decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(4)),
-//           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(widget.currentValue, style: const TextStyle(fontSize: 14)), Icon(_isDropdownOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: Colors.grey)]),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// if ((controller.patientData.value?.responseData?.doctorId == controller.loginData.value?.responseData?.user?.id) || (controller.patientData.value?.responseData?.doctorId == null)) {
-//   showDialog(
-//     context: context,
-//     barrierDismissible: true,
-//     builder: (BuildContext context) {
-//       return ConfirmFinalizeDialog(
-//         onDelete: () {
-//           Map<String, dynamic> param = {};
-//           param['status'] = "Finalized";
-//
-//           controller.changeStatus(param);
-//         },
-//       );
-//     },
-//   );
-// } else {
-//   showDoctorToDoctorSignFinalizeAutheticateViewDialog();
-// }
-
-// if (controller.loginData.value?.responseData?.user?.role != "doctor") {
-//   dynamic encounterModel = await controller.hasEncounter(id: controller.visitId);
-//
-//   if (encounterModel["response_type"] == "Failure") {
-//     Map<String, dynamic> responseData = encounterModel["responseData"];
-//
-//     String modeMedUrl = responseData["url"];
-//     showDialog(
-//       context: context,
-//       barrierDismissible: true,
-//       builder: (BuildContext context) {
-//         return HasEncounterDialog(
-//           onCounter: () async {
-//             final url = modeMedUrl;
-//             if (await canLaunchUrl(Uri.parse(url))) {
-//               await launchUrl(Uri.parse(url));
-//               Get.back();
-//             } else {
-//               throw 'Could not launch $url';
-//             }
-//           },
-//         );
-//       },
-//     );
-//   } else {
-//     showDialog(
-//       context: context,
-//       barrierDismissible: true,
-//       builder: (BuildContext context) {
-//         return ConfirmFinalizeDialog(
-//           onDelete: () {
-//             showDoctorToDoctorSignFinalizeAutheticateViewDialog();
-//           },
-//         );
-//       },
-//     );
-//   }
-// } else {
-//   if (controller.loginData.value?.responseData?.user?.id == controller.patientData.value?.responseData?.doctorId) {
-//     dynamic encounterModel = await controller.hasEncounter(id: controller.visitId);
-//
-//     if (encounterModel["response_type"] == "Failure") {
-//       Map<String, dynamic> responseData = encounterModel["responseData"];
-//
-//       String modeMedUrl = responseData["url"];
-//       showDialog(
-//         context: context,
-//         barrierDismissible: true,
-//         builder: (BuildContext context) {
-//           return HasEncounterDialog(
-//             onCounter: () async {
-//               final url = modeMedUrl;
-//               if (await canLaunchUrl(Uri.parse(url))) {
-//                 await launchUrl(Uri.parse(url));
-//                 Get.back();
-//               } else {
-//                 throw 'Could not launch $url';
-//               }
-//             },
-//           );
-//         },
-//       );
-//     } else {
-//       showDialog(
-//         context: context,
-//         barrierDismissible: true,
-//         builder: (BuildContext context) {
-//           return ConfirmFinalizeDialog(
-//             onDelete: () {
-//               showDoctorToDoctorSignFinalizeAutheticateViewDialog();
-//             },
-//           );
-//         },
-//       );
-//     }
-//   } else {
-//     if (controller.loginData.value?.responseData?.user?.role != "doctor") {
-//       showDialog(
-//         context: context,
-//         barrierDismissible: true,
-//         builder: (BuildContext context) {
-//           return ConfirmFinalizeDialog(
-//             onDelete: () {
-//               showDoctorToDoctorSignFinalizeAutheticateViewDialog();
-//             },
-//           );
-//         },
-//       );
-//     } else {
-//       CustomToastification().showToast("You don't have permission to finalize this visit!", type: ToastificationType.error);
-//     }
-//   }
-// }
-
-// dynamic encounterModel = await controller.hasEncounter(id: controller.visitId);
-//
-// if (encounterModel["response_type"] == "Failure") {
-//   Map<String, dynamic> responseData = encounterModel["responseData"];
-//
-//   String modeMedUrl = responseData["url"];
-//   showDialog(
-//     context: context,
-//     barrierDismissible: true,
-//     builder: (BuildContext context) {
-//       return HasEncounterDialog(
-//         onCounter: () async {
-//           final url = modeMedUrl;
-//           if (await canLaunchUrl(Uri.parse(url))) {
-//             await launchUrl(Uri.parse(url));
-//             Get.back();
-//           } else {
-//             throw 'Could not launch $url';
-//           }
-//         },
-//       );
-//     },
-//   );
-// } else {
-//   showDoctorToDoctorSignFinalizeAutheticateViewDialog();
-// }

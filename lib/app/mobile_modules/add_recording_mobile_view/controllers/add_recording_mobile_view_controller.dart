@@ -140,7 +140,7 @@ class AddRecordingMobileViewController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
     }
 
     list.refresh();
@@ -206,7 +206,7 @@ class AddRecordingMobileViewController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
       }
 
       list.refresh();
@@ -253,7 +253,7 @@ class AddRecordingMobileViewController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
       }
     });
     list.refresh();
@@ -311,14 +311,25 @@ class AddRecordingMobileViewController extends GetxController {
         var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
         Map<String, List<File>> profileParams = {};
+        Map<String, dynamic> params = {};
+        bool shouldAdd = true;
         if (list.isNotEmpty) {
           customPrint("profile is   available");
           // param['profile_image'] = profileImage.value;
           profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+          for (int i = 0; i < list.length; i++) {
+            params['timestamp_$i'] = list[i].time;
+            if (list[i].time == "00:00:00") {
+              shouldAdd = false;
+            }
+          }
+          if (shouldAdd) {
+            params['visit_id'] = visitId;
+          }
         } else {
           customPrint("profile is not  available");
         }
-        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId);
+        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: patientId, params: params);
         list.clear();
         Get.back();
         // getPatientAttachment();

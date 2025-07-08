@@ -60,69 +60,13 @@ class GlobalController extends GetxController {
   RxList<String> connectedMic = RxList();
   RxString selectedMic = RxString("");
 
-  Future<void> startMicListening() async {
-    await platform.invokeMethod('startAudioRouteListening');
-    setupEventListener();
-    await getActiveMicrophoneName();
-  }
-
-  void setupEventListener() {
-    eventSubscription = eventChannel.receiveBroadcastStream().listen(
-      (event) async {
-        customPrint(" Received event from iOS: $event");
-        if (event == 'audioDevicesChanged') {
-          await getConnectedInputDevices();
-        } else if (event == "bluetoothAudioDevicesChanged") {
-          await getActiveMicrophoneName();
-        }
-      },
-      onError: (error) {
-        customPrint(" EventChannel error: $error");
-      },
-    );
-  }
-
-  Future<void> stopMicListening() async {
-    await platform.invokeMethod('stopAudioRouteListening');
-    eventSubscription?.cancel();
-  }
-
-  Future<void> getConnectedInputDevices() async {
-    try {
-      final List devices = await platform.invokeMethod('getAudioInputDevices');
-      connectedMic.value = devices.cast<String>();
-
-      connectedMic.refresh();
-      customPrint(devices);
-    } on PlatformException catch (e) {
-      customPrint("Failed to get audio devices: '${e.message}'.");
-    }
-  }
-
-  Future<bool> setPreferredAudioInput(String portName) async {
-    try {
-      final bool result = await platform.invokeMethod('setPreferredAudioInput', portName);
-      customPrint(result);
-      return result;
-    } on PlatformException catch (e) {
-      customPrint('Error setting preferred input: $e');
-      return false;
-    }
-  }
-
-  Future<void> getActiveMicrophoneName() async {
-    final String result = await platform.invokeMethod('getActiveMicrophoneName');
-    customPrint(result);
-    selectedMic.value = result;
-  }
-
   RxList<AudioWaveBar> samples = RxList([]);
 
   // var breadcrumbHistory = <String>[];
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = true;
+  bool isProd = false;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 
@@ -488,14 +432,26 @@ class GlobalController extends GetxController {
         var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
         Map<String, List<File>> profileParams = {};
+        Map<String, dynamic> params = {};
+        bool shouldAdd = true;
         if (list.isNotEmpty) {
           customPrint("profile is   available");
           // param['profile_image'] = profileImage.value;
           profileParams['attachments'] = list.map((model) => model.file).toList().whereType<File>().toList();
+          for (int i = 0; i < list.length; i++) {
+            params['timestamp_$i'] = list[i].time;
+            if (list[i].time == "00:00:00") {
+              shouldAdd = false;
+            }
+          }
+          if (shouldAdd) {
+            params['visit_id'] = visitId.value;
+          }
+          customPrint("visit_id: ${visitId.value} + patient_id: ${attachmentId.value}");
         } else {
           customPrint("profile is not  available");
         }
-        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: attachmentId.value);
+        await visitMainRepository.uploadAttachments(files: profileParams, token: loginData.responseData?.token ?? "", patientVisitId: attachmentId.value, params: params);
         list.clear();
         Get.back();
 
@@ -927,6 +883,62 @@ class GlobalController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     print("global controller close");
+  }
+
+  Future<void> startMicListening() async {
+    await platform.invokeMethod('startAudioRouteListening');
+    setupEventListener();
+    await getActiveMicrophoneName();
+  }
+
+  void setupEventListener() {
+    eventSubscription = eventChannel.receiveBroadcastStream().listen(
+      (event) async {
+        customPrint(" Received event from iOS: $event");
+        if (event == 'audioDevicesChanged') {
+          await getConnectedInputDevices();
+        } else if (event == "bluetoothAudioDevicesChanged") {
+          await getActiveMicrophoneName();
+        }
+      },
+      onError: (error) {
+        customPrint(" EventChannel error: $error");
+      },
+    );
+  }
+
+  Future<void> stopMicListening() async {
+    await platform.invokeMethod('stopAudioRouteListening');
+    eventSubscription?.cancel();
+  }
+
+  Future<void> getConnectedInputDevices() async {
+    try {
+      final List devices = await platform.invokeMethod('getAudioInputDevices');
+      connectedMic.value = devices.cast<String>();
+
+      connectedMic.refresh();
+      customPrint(devices);
+    } on PlatformException catch (e) {
+      customPrint("Failed to get audio devices: '${e.message}'.");
+    }
+  }
+
+  Future<bool> setPreferredAudioInput(String portName) async {
+    try {
+      final bool result = await platform.invokeMethod('setPreferredAudioInput', portName);
+      customPrint(result);
+      return result;
+    } on PlatformException catch (e) {
+      customPrint('Error setting preferred input: $e');
+      return false;
+    }
+  }
+
+  Future<void> getActiveMicrophoneName() async {
+    final String result = await platform.invokeMethod('getActiveMicrophoneName');
+    customPrint(result);
+    selectedMic.value = result;
   }
 
   void setDoctorModel() {

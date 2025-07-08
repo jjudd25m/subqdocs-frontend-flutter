@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:easy_popover/easy_popover.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html;
@@ -41,7 +42,7 @@ import '../model/transcript_list_model.dart';
 import '../repository/patient_info_repository.dart';
 import '../views/confirm_finalize_dialog.dart';
 
-class PatientInfoController extends GetxController with WidgetsBindingObserver {
+class PatientInfoController extends GetxController with WidgetsBindingObserver, GetTickerProviderStateMixin {
   //TODO: Implement PatientInfoController
 
   // final KeyboardController keyboardController = Get.put(KeyboardController());
@@ -101,6 +102,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   PopoverController doctorPopoverController = PopoverController();
   RxString doctorValue = RxString("N/A");
   RxString medicationValue = RxString("N/A");
+
+  Rxn<PatientFullNoteResponseData> patientFullNoteResponseData = Rxn();
+
+  RxBool isFullNoteAttachment = RxBool(false);
   RxList<ImpresionAndPlanViewModel> impressionAndPlanList = RxList();
   RxList<ImpresionAndPlanViewModel> impressionAndPlanListFullNote = RxList();
 
@@ -114,7 +119,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   RxList<ImpresionAndPlanViewModel> editableDataForPatientView = RxList();
   RxList<ImpresionAndPlanViewModel> editableDataHpiView = RxList();
   RxList<ImpresionAndPlanViewModel> editableChiefView = RxList();
-
+  RxList<Attachments> generalAttachments = <Attachments>[].obs;
   Rxn<VisitMainPatientDetails> patientData = Rxn();
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
 
@@ -857,18 +862,153 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
         Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
 
         impressionAndPlanListFullNote.clear();
+        if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.isImageGenerated ?? false) {
+          socketService.socket.on("PhotoMetaDataStatus", (data) {
+            var res = data as Map<String, dynamic>;
+            String status = res["status"];
+            String message = res["message"];
 
-        for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
-          HtmlEditorController htmlEditorController = HtmlEditorController();
+            if (status.toLowerCase() == "success") {
+              Map<String, dynamic> responseData = res["responseData"];
+              patientFullNoteResponseData.value = PatientFullNoteResponseData.fromJson(responseData);
+              Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+              // log("messages: ${patientFullNoteResponseData.value?.toJson()}");
 
-          impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10));
+              patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+            }
+            for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+              HtmlEditorController htmlEditorController = HtmlEditorController();
+              customPrint("message:attach ${impressionsAndPlan.attachments}");
+              customPrint("message:attach ${impressionsAndPlan.title}");
+              customPrint("message:attach ${impressionsAndPlan.content}");
+              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
+            }
+          });
+        } else {
+          for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+            HtmlEditorController htmlEditorController = HtmlEditorController();
+
+            impressionAndPlanListFullNote.add(
+              ImpresionAndPlanViewModel(
+                htmlContent: impressionsAndPlan.content ?? "",
+                htmlEditorController: htmlEditorController,
+                title: impressionsAndPlan.title,
+                siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
+                slidableController: SlidableController(this),
+                // attachments: [
+                //   Attachments(
+                //     id: 1863,
+                //     fileName: "SubQDocs 1.png",
+                //     filePath:
+                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179060-SubQDocs%201.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=c012ba5bb09ba2be169aaaccedf81de92105ad40bfd28f3f5c7b129de5e6ab9c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                //     fileType: "image/png",
+                //     fileSize: 107386,
+                //     uploadedBy: 201,
+                //     uploadedAt: "2025-07-02T08:49:39.346Z",
+                //     visitId: 9014,
+                //     patientId: 1489,
+                //     isActive: false,
+                //     timestamp: "00:00:47",
+                //     createdAt: "2025-07-02T08:49:39.346Z",
+                //     updatedAt: "2025-07-02T08:49:39.346Z",
+                //     deletedAt: null,
+                //   ),
+                //   Attachments(
+                //     id: 1860,
+                //     fileName: "kajal.jpg",
+                //     filePath:
+                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179055-kajal.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=2a724179bce52e7303577f4e307ffe37edd8b508c8e646dbd61b04d5dfb1e77c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                //     fileType: "image/jpeg",
+                //     fileSize: 29980,
+                //     uploadedBy: 201,
+                //     uploadedAt: "2025-07-02T08:49:39.298Z",
+                //     visitId: 9014,
+                //     patientId: 1489,
+                //     isActive: false,
+                //     timestamp: "00:00:20",
+                //     createdAt: "2025-07-02T08:49:39.298Z",
+                //     updatedAt: "2025-07-02T08:49:39.298Z",
+                //     deletedAt: null,
+                //   ),
+                //   Attachments(
+                //     id: 1862,
+                //     fileName: "background.jpg",
+                //     filePath:
+                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179055-background.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=ade146f6ba73cdce808c5760fcc950eb54b43bf79fa745fdfe0466218d861feb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                //     fileType: "image/jpeg",
+                //     fileSize: 1752623,
+                //     uploadedBy: 201,
+                //     uploadedAt: "2025-07-02T08:49:39.334Z",
+                //     visitId: 9014,
+                //     patientId: 1489,
+                //     isActive: false,
+                //     timestamp: "00:00:14",
+                //     createdAt: "2025-07-02T08:49:39.334Z",
+                //     updatedAt: "2025-07-02T08:49:39.334Z",
+                //     deletedAt: null,
+                //   ),
+                //   Attachments(
+                //     id: 1861,
+                //     fileName: "Avatar.png",
+                //     filePath:
+                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179053-Avatar.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=52cf804afb395c3b5cbb9c137376d265f608dab8ffca28c4883f6e6ae57fd490&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                //     fileType: "image/png",
+                //     fileSize: 1449,
+                //     uploadedBy: 201,
+                //     uploadedAt: "2025-07-02T08:49:39.313Z",
+                //     visitId: 9014,
+                //     patientId: 1489,
+                //     isActive: false,
+                //     timestamp: "00:00:14",
+                //     createdAt: "2025-07-02T08:49:39.313Z",
+                //     updatedAt: "2025-07-02T08:49:39.313Z",
+                //     deletedAt: null,
+                //   ),
+                //   Attachments(
+                //     id: 1865,
+                //     fileName: "out side (1).png",
+                //     filePath:
+                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179059-out%20side%20%281%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=30c9cdb3e8cdeabc6ecb8be1049c65eb4f4a05a2e07e24ee882a29a9859793f8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                //     fileType: "image/png",
+                //     fileSize: 2083214,
+                //     uploadedBy: 201,
+                //     uploadedAt: "2025-07-02T08:49:39.433Z",
+                //     visitId: 9014,
+                //     patientId: 1489,
+                //     isActive: false,
+                //     timestamp: "00:00:32",
+                //     createdAt: "2025-07-02T08:49:39.433Z",
+                //     updatedAt: "2025-07-02T08:49:39.433Z",
+                //     deletedAt: null,
+                //   ),
+                // ],
+                attachments: impressionsAndPlan.attachments ?? [],
+              ),
+            );
+          }
         }
 
         impressionAndPlanListFullNote.refresh();
       }
+
+      // if (status.toLowerCase() == "success") {
+      //   Map<String, dynamic> responseData = res["responseData"];
+      //   Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+      //   patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+      //
+      //   impressionAndPlanListFullNote.clear();
+      //
+      //   for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+      //     HtmlEditorController htmlEditorController = HtmlEditorController();
+      //
+      //     impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10));
+      //   }
+      //
+      //   impressionAndPlanListFullNote.refresh();
+      // }
     });
   }
 
@@ -1436,7 +1576,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
   Future<void> updateImpressionAndPlan() async {
     Map<String, List<dynamic>> params = {};
 
-    params["impressions_and_plan"] = impressionAndPlanList.map((item) => item.toJson()).where((map) => map.isNotEmpty).toList();
+    params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJsonFullNote()).where((map) => map.isNotEmpty).toList();
+    if (isFullNoteAttachment.value) {
+      params["impressions_and_plan_attachments"] = [];
+    }
     customPrint(params);
     try {
       var response = await _patientInfoRepository.updateImpressionAndPlan(id: doctorViewList.value?.responseData?.id ?? 0, params: params);
@@ -2137,6 +2280,22 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver {
             tableModel.value?.rows[rows].cells[cols].items[newItems].diagnosisModelList?[diag].popoverController.close();
           }
         }
+      }
+    }
+  }
+
+  Future<void> updateImpressionAndPlanFullNoteAttachmentName(String? title, int? id) async {
+    Map<String, dynamic> params = {};
+
+    if ((title ?? "").isNotEmpty) {
+      params["file_name"] = title;
+      customPrint(params);
+
+      try {
+        var response = await _patientInfoRepository.updateImpressionAndPlanFullNoteAttachmentName(id: id ?? 0, params: params);
+        customPrint("messages:ImpressionAttachment $response");
+      } catch (e) {
+        customPrint(e);
       }
     }
   }

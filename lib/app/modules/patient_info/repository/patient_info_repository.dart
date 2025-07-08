@@ -156,6 +156,12 @@ class PatientInfoRepository {
     return CheckDoctorPinExpiredModel.fromJson(response);
   }
 
+  Future<dynamic> updateImpressionAndPlanFullNoteAttachmentName({required int id, required Map<String, dynamic> params}) async {
+    var response = await ApiProvider.instance.callPut("patient-visit/update-attachment/$id", params);
+    customPrint("getPatientView API  internal response $response");
+    return response;
+  }
+
   // Future<void> loadDoctorviewPDF(String visitID) async {
   //   try {
   //     // Call the API to get the PDF bytes directly

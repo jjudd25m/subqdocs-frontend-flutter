@@ -145,19 +145,6 @@ class PersonalSettingController extends GetxController {
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // loadStateCityData().then((data) {
-      //   statesCities.value = data;
-      //   userStateOption = statesCities.map((state) => state.state).toList()..sort();
-      //   userSelectedStateValue.value = userStateOption.first;
-      //
-      //   organizationStateOption = statesCities.map((state) => state.state).toList();
-      //   organizationSelectedStateValue.value = organizationStateOption.first;
-      //
-      //   List<String> cityList = statesCities.firstWhere((element) => element.state == "Montana").cities;
-      //
-      //   customPrint("montana city is:- $cityList");
-      // });
-
       getOrganizationDetail();
       getUserDetail();
       getUserByOrganization();
@@ -197,17 +184,40 @@ class PersonalSettingController extends GetxController {
     }
   }
 
+  // void initialSetup() {
+  //   tabIndex.value = 0;
+  //
+  //   userInviteSearchController.clear();
+  //
+  //   loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  //
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     getOrganizationDetail();
+  //     getUserDetail();
+  //     getUserByOrganization();
+  //     getUserRole();
+  //     getAvailablePatientVisitTypes();
+  //     getEmaConfig();
+  //     //
+  //     // _startSyncTimer();
+  //     // forceSyncSocketSetup();
+  //   });
+  // }
+
   void forceSyncSocketSetup() {
     if (globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false) {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       socketService.socket.emit("EMA_user_joined", [loginData.responseData?.user?.id]);
 
+      // socketService.socket.off("force_sync_completed");
+      // socketService.socket.off("force_sync_started");
+
       socketService.socket.on("force_sync_completed", (data) {
         var res = data as Map<String, dynamic>;
         String message = res["message"];
         _fetchSyncLog();
-        CustomToastification().showToast(message, type: ToastificationType.success);
+        // CustomToastification().showToast(message, type: ToastificationType.success);
         customPrint("---------------------------------------------");
         customPrint("force_sync_completed status is :- $res");
         // forceSyncLogModel.value?.responseData?.isSyncing = false;
@@ -219,7 +229,7 @@ class PersonalSettingController extends GetxController {
         customPrint("---------------------------------------------");
         customPrint("force_sync_started status is :- $res");
         _fetchSyncLog();
-        CustomToastification().showToast(message, type: ToastificationType.info);
+        // CustomToastification().showToast(message, type: ToastificationType.info);
         // forceSyncLogModel.value?.responseData?.isSyncing = true;
       });
     }
@@ -262,7 +272,7 @@ class PersonalSettingController extends GetxController {
     Map<String, dynamic> response = await _personalSettingRepository.forceSyncUpdate();
     Loader().stopLoader();
     _fetchSyncLog();
-    CustomToastification().showToast(response['message'], type: ToastificationType.success);
+    // CustomToastification().showToast(response['message'], type: ToastificationType.success);
   }
 
   Future<void> saveEmaConfig(Map<String, dynamic> param) async {

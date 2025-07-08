@@ -90,8 +90,9 @@ class PatientInfoMobileViewController extends GetxController {
   RxList<ImpresionAndPlanViewModel> editableDataForPatientView = RxList();
   RxList<ImpresionAndPlanViewModel> editableDataHpiView = RxList();
   RxList<ImpresionAndPlanViewModel> editableChiefView = RxList();
-
+  RxList<Attachments> generalAttachments = <Attachments>[].obs;
   Rxn<LoginModel> loginData = Rxn();
+  RxBool isFullNoteAttachment = RxBool(false);
 
   @override
   Future<void> onInit() async {
@@ -1300,5 +1301,21 @@ class PatientInfoMobileViewController extends GetxController {
         getPatientDetails();
       }
     });
+  }
+
+  Future<void> updateImpressionAndPlanFullNoteAttachmentName(String? title, int? id) async {
+    Map<String, dynamic> params = {};
+
+    if ((title ?? "").isNotEmpty) {
+      params["file_name"] = title;
+      customPrint(params);
+
+      try {
+        var response = await repository.updateImpressionAndPlanFullNoteAttachmentName(id: id ?? 0, params: params);
+        customPrint("messages:ImpressionAttachment $response");
+      } catch (e) {
+        customPrint(e);
+      }
+    }
   }
 }
