@@ -11,12 +11,15 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../utils/no_space_lowercase.dart';
+import '../../../../utils/validation_service.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/base_dropdown2.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
+import '../../../../widgets/custom_textfiled.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/common_service.dart';
 import '../../../core/common/global_controller.dart';
@@ -681,6 +684,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             // controller.selectedAppointmentTypeValue.value,
 
                                                                             if (controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label != null) {
+                                                                              print("-------fbdesfjudgsf");
                                                                               controller.updateOrganization({
                                                                                 "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
                                                                                 "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
@@ -1047,6 +1051,27 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
             ),
           ),
         )
+        : colIndex == 1
+        ? cellData == "N/A"
+            ? GestureDetector(
+              onTap: () {
+                showEmailDialog(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id ?? 0, context, controller);
+              },
+              child: Text(
+                "+ Provide Email",
+                textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                style: AppFonts.regular(14, AppColors.textPurple),
+                softWrap: true, // Allows text to wrap
+                overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+              ),
+            )
+            : Text(
+              cellData,
+              textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+              style: AppFonts.regular(14, AppColors.textDarkGrey),
+              softWrap: true, // Allows text to wrap
+              overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+            )
         : Text(
           cellData,
           textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
@@ -1118,4 +1143,82 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
       },
     );
   }
+}
+
+void showEmailDialog(int userId, BuildContext context, PersonalSettingController controller) {
+  final emailController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        surfaceTintColor: AppColors.white,
+        backgroundColor: AppColors.white,
+        title: const Text("Send user invitation"),
+        content: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      TextFormFiledWidget(
+                        isSuffixIconVisible: false,
+                        isFirst: true,
+                        label: AppString.emailAddress,
+                        controller: emailController,
+                        format: [NoSpaceLowercaseTextFormatter()],
+                        hint: AppString.emailPlaceHolder,
+                        onTap: () {
+                          emailController.clear();
+                        },
+                        suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                        checkValidation: (value) {
+                          return Validation.emailValidateRequired(value);
+                        },
+                      ),
+                      // TextFormField(
+                      //   controller: emailController,
+                      //   decoration: InputDecoration(hintText: 'example@domain.com', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter an email address';
+                      //     }
+                      //     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                      //       return 'Please enter a valid email address';
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text("CANCEL"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text("OK"),
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                controller.activeUser({"user_id": userId, "email": emailController.text});
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

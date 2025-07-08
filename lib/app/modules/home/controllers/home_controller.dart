@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
@@ -268,6 +267,7 @@ class HomeController extends GetxController {
     scrollControllerSchedulePatientList.addListener(_onScrollSchedulePatientList);
 
     getOrganizationDetail();
+    getUserDetail();
   }
 
   @override
@@ -319,6 +319,12 @@ class HomeController extends GetxController {
         // customPrint("patient_sync_started status is :- $res");
       });
     }
+  }
+
+  Future<void> getUserDetail() async {
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+    globalController.getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
   }
 
   Future<void> getOrganizationDetail() async {

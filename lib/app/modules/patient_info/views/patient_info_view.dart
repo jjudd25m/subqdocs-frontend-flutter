@@ -217,7 +217,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [Text(textAlign: TextAlign.center, "Medical Assistant", style: AppFonts.regular(12, AppColors.textBlack)), const SizedBox(height: 6), Text(textAlign: TextAlign.center, controller.medicationValue.value ?? "N/A", style: AppFonts.regular(14, AppColors.textGrey))]),
                                               const Spacer(),
                                               IgnorePointer(
-                                                ignoring: controller.patientData.value?.responseData?.thirdPartyId != null,
+                                                ignoring: controller.patientData.value?.responseData?.thirdPartyId != null || controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized",
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [

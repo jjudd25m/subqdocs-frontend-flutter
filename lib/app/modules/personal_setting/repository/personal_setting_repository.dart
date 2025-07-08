@@ -114,4 +114,10 @@ class PersonalSettingRepository {
       // return {"message": "Something went wrong"};
     }
   }
+
+  Future<DefaultResponseModel> activeUser(Map<String, dynamic> param) async {
+    var response = await ApiProvider.instance.callPost("user/activate", params: param);
+    // customPrint("activeUser API  internal response $response");
+    return DefaultResponseModel.fromJson(response);
+  }
 }

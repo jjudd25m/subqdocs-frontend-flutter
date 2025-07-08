@@ -15,6 +15,10 @@ import 'app_preferences.dart';
 import 'logger.dart';
 
 class GlobalMobileController extends GetxController {
+  RxnString selectedLanguageValue = RxnString("English");
+  List<String> languageList = ["English", "Muti Language"];
+  RxBool isDropdownOpen = RxBool(false);
+
   Rxn<GetOrganizationDetailModel> getEMAOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
 
   static const platform = MethodChannel('com.subqdocs/shared');

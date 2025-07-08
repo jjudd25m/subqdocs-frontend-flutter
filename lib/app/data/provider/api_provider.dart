@@ -120,6 +120,7 @@ class ApiProvider {
   Future<Map<String, dynamic>> callPut(String url, Map<String, dynamic> params) async {
     if (kDebugMode) {
       customPrint(UrlProvider.baseUrl + url);
+      print("param:- ${params}");
     }
     try {
       var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 3000));

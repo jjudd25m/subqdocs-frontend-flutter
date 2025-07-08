@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/base_screen_mobile.dart';
 import 'package:subqdocs/widgets/custom_tab_button.dart';
@@ -100,6 +102,33 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     spacing: 15,
                     children: [
+                      PullDownButton(
+                        routeTheme: const PullDownMenuRouteTheme(backgroundColor: AppColors.white),
+                        itemBuilder:
+                            (context) => [
+                              PullDownMenuItem.selectable(
+                                title: 'English',
+                                selected: controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == false ? true : false,
+                                onTap: () async {
+                                  controller.globalController.selectedLanguageValue.value = "English";
+                                  controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
+                                },
+                              ),
+                              PullDownMenuItem.selectable(
+                                selected: controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == true ? true : false,
+                                title: 'Multi Language',
+                                onTap: () async {
+                                  controller.globalController.selectedLanguageValue.value = "Multi Language";
+                                  controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
+                                },
+                              ),
+                            ],
+                        buttonBuilder:
+                            (context, showMenu) =>
+                                CupertinoButton(onPressed: showMenu, padding: EdgeInsets.zero, child: Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${controller.globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)])),
+
+                        // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
+                      ),
                       Center(
                         child: Stack(
                           alignment: Alignment.center,

@@ -236,6 +236,16 @@ class PersonalSettingController extends GetxController {
     }
   }
 
+  void activeUser(Map<String, dynamic> param) async {
+    DefaultResponseModel model = await _personalSettingRepository.activeUser(param);
+
+    if (model.responseType == "success") {
+      getUserByOrganization();
+    } else {
+      CustomToastification().showToast(model.message ?? "", type: ToastificationType.error);
+    }
+  }
+
   void _startSyncTimer() {
     // Call immediately first time
     // Then set up periodic timer
@@ -512,16 +522,26 @@ class PersonalSettingController extends GetxController {
     customPrint("param is :- $param");
 
     try {
-      dynamic response = await _personalSettingRepository.updateOrganization(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+      Map<String, dynamic> res = await _personalSettingRepository.updateOrganization(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
+
+      DefaultResponseModel response = DefaultResponseModel.fromJson(res);
       customPrint("updateOrganization is $response");
-      Loader().stopLoader();
-      getUserDetail();
-      getOrganizationDetail();
+
+      if (response.responseType == "error") {
+        Loader().stopLoader();
+        CustomToastification().showToast(response.message ?? "", type: ToastificationType.error);
+      } else {
+        Loader().stopLoader();
+        getUserDetail();
+        getOrganizationDetail();
+      }
+
       // Get.back();
-    } catch (error) {
+    } catch (e) {
       // Get.back();
       Loader().stopLoader();
-      customPrint("userInvite catch error is $error");
+      CustomToastification().showToast(e.toString() ?? "", type: ToastificationType.error);
+      customPrint("userInvite catch error is ${e.toString()}");
     }
   }
 

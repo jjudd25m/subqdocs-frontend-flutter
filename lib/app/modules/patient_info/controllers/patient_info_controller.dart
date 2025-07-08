@@ -135,6 +135,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     try {
       patientData.value = await _visitMainRepository.getPatientDetails(param: param);
 
+      print("visit type:- ${patientData.value?.responseData?.visitStatus}");
+
       customPrint("patient data is :- ${patientData.toJson()}");
 
       if (patientData.value?.responseData?.doctorId != null) {
@@ -884,14 +886,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
               customPrint("message:attach ${impressionsAndPlan.attachments}");
               customPrint("message:attach ${impressionsAndPlan.title}");
               customPrint("message:attach ${impressionsAndPlan.content}");
-              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "",
-                htmlEditorController: htmlEditorController,
-                title: impressionsAndPlan.title,
-                siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
-                slidableController: SlidableController(this),
-                attachments: impressionsAndPlan.attachments ?? []
-
-              ));
+              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
             }
           });
         } else {
@@ -905,94 +900,94 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
                 title: impressionsAndPlan.title,
                 siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
                 slidableController: SlidableController(this),
-                // attachments: [
-                //   Attachments(
-                //     id: 1863,
-                //     fileName: "SubQDocs 1.png",
-                //     filePath:
-                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179060-SubQDocs%201.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=c012ba5bb09ba2be169aaaccedf81de92105ad40bfd28f3f5c7b129de5e6ab9c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-                //     fileType: "image/png",
-                //     fileSize: 107386,
-                //     uploadedBy: 201,
-                //     uploadedAt: "2025-07-02T08:49:39.346Z",
-                //     visitId: 9014,
-                //     patientId: 1489,
-                //     isActive: false,
-                //     timestamp: "00:00:47",
-                //     createdAt: "2025-07-02T08:49:39.346Z",
-                //     updatedAt: "2025-07-02T08:49:39.346Z",
-                //     deletedAt: null,
-                //   ),
-                //   Attachments(
-                //     id: 1860,
-                //     fileName: "kajal.jpg",
-                //     filePath:
-                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179055-kajal.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=2a724179bce52e7303577f4e307ffe37edd8b508c8e646dbd61b04d5dfb1e77c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-                //     fileType: "image/jpeg",
-                //     fileSize: 29980,
-                //     uploadedBy: 201,
-                //     uploadedAt: "2025-07-02T08:49:39.298Z",
-                //     visitId: 9014,
-                //     patientId: 1489,
-                //     isActive: false,
-                //     timestamp: "00:00:20",
-                //     createdAt: "2025-07-02T08:49:39.298Z",
-                //     updatedAt: "2025-07-02T08:49:39.298Z",
-                //     deletedAt: null,
-                //   ),
-                //   Attachments(
-                //     id: 1862,
-                //     fileName: "background.jpg",
-                //     filePath:
-                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179055-background.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=ade146f6ba73cdce808c5760fcc950eb54b43bf79fa745fdfe0466218d861feb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-                //     fileType: "image/jpeg",
-                //     fileSize: 1752623,
-                //     uploadedBy: 201,
-                //     uploadedAt: "2025-07-02T08:49:39.334Z",
-                //     visitId: 9014,
-                //     patientId: 1489,
-                //     isActive: false,
-                //     timestamp: "00:00:14",
-                //     createdAt: "2025-07-02T08:49:39.334Z",
-                //     updatedAt: "2025-07-02T08:49:39.334Z",
-                //     deletedAt: null,
-                //   ),
-                //   Attachments(
-                //     id: 1861,
-                //     fileName: "Avatar.png",
-                //     filePath:
-                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179053-Avatar.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=52cf804afb395c3b5cbb9c137376d265f608dab8ffca28c4883f6e6ae57fd490&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-                //     fileType: "image/png",
-                //     fileSize: 1449,
-                //     uploadedBy: 201,
-                //     uploadedAt: "2025-07-02T08:49:39.313Z",
-                //     visitId: 9014,
-                //     patientId: 1489,
-                //     isActive: false,
-                //     timestamp: "00:00:14",
-                //     createdAt: "2025-07-02T08:49:39.313Z",
-                //     updatedAt: "2025-07-02T08:49:39.313Z",
-                //     deletedAt: null,
-                //   ),
-                //   Attachments(
-                //     id: 1865,
-                //     fileName: "out side (1).png",
-                //     filePath:
-                //         "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179059-out%20side%20%281%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=30c9cdb3e8cdeabc6ecb8be1049c65eb4f4a05a2e07e24ee882a29a9859793f8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-                //     fileType: "image/png",
-                //     fileSize: 2083214,
-                //     uploadedBy: 201,
-                //     uploadedAt: "2025-07-02T08:49:39.433Z",
-                //     visitId: 9014,
-                //     patientId: 1489,
-                //     isActive: false,
-                //     timestamp: "00:00:32",
-                //     createdAt: "2025-07-02T08:49:39.433Z",
-                //     updatedAt: "2025-07-02T08:49:39.433Z",
-                //     deletedAt: null,
-                //   ),
-                // ],
-                attachments: impressionsAndPlan.attachments ?? [],
+                attachments: [
+                  Attachments(
+                    id: 1863,
+                    fileName: "SubQDocs 1.png",
+                    filePath:
+                        "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179060-SubQDocs%201.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=c012ba5bb09ba2be169aaaccedf81de92105ad40bfd28f3f5c7b129de5e6ab9c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                    fileType: "image/png",
+                    fileSize: 107386,
+                    uploadedBy: 201,
+                    uploadedAt: "2025-07-02T08:49:39.346Z",
+                    visitId: 9014,
+                    patientId: 1489,
+                    isActive: false,
+                    timestamp: "00:00:47",
+                    createdAt: "2025-07-02T08:49:39.346Z",
+                    updatedAt: "2025-07-02T08:49:39.346Z",
+                    deletedAt: null,
+                  ),
+                  Attachments(
+                    id: 1860,
+                    fileName: "kajal.jpg",
+                    filePath:
+                        "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179055-kajal.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=2a724179bce52e7303577f4e307ffe37edd8b508c8e646dbd61b04d5dfb1e77c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                    fileType: "image/jpeg",
+                    fileSize: 29980,
+                    uploadedBy: 201,
+                    uploadedAt: "2025-07-02T08:49:39.298Z",
+                    visitId: 9014,
+                    patientId: 1489,
+                    isActive: false,
+                    timestamp: "00:00:20",
+                    createdAt: "2025-07-02T08:49:39.298Z",
+                    updatedAt: "2025-07-02T08:49:39.298Z",
+                    deletedAt: null,
+                  ),
+                  Attachments(
+                    id: 1862,
+                    fileName: "background.jpg",
+                    filePath:
+                        "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179055-background.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=ade146f6ba73cdce808c5760fcc950eb54b43bf79fa745fdfe0466218d861feb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                    fileType: "image/jpeg",
+                    fileSize: 1752623,
+                    uploadedBy: 201,
+                    uploadedAt: "2025-07-02T08:49:39.334Z",
+                    visitId: 9014,
+                    patientId: 1489,
+                    isActive: false,
+                    timestamp: "00:00:14",
+                    createdAt: "2025-07-02T08:49:39.334Z",
+                    updatedAt: "2025-07-02T08:49:39.334Z",
+                    deletedAt: null,
+                  ),
+                  Attachments(
+                    id: 1861,
+                    fileName: "Avatar.png",
+                    filePath:
+                        "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179053-Avatar.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=52cf804afb395c3b5cbb9c137376d265f608dab8ffca28c4883f6e6ae57fd490&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                    fileType: "image/png",
+                    fileSize: 1449,
+                    uploadedBy: 201,
+                    uploadedAt: "2025-07-02T08:49:39.313Z",
+                    visitId: 9014,
+                    patientId: 1489,
+                    isActive: false,
+                    timestamp: "00:00:14",
+                    createdAt: "2025-07-02T08:49:39.313Z",
+                    updatedAt: "2025-07-02T08:49:39.313Z",
+                    deletedAt: null,
+                  ),
+                  Attachments(
+                    id: 1865,
+                    fileName: "out side (1).png",
+                    filePath:
+                        "https://subqdocs-local-bucket.s3.us-east-2.amazonaws.com/uploads/attachments/1489-1751446179059-out%20side%20%281%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3RYC52MVG2KLA3OE%2F20250702%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20250702T084939Z&X-Amz-Expires=604800&X-Amz-Signature=30c9cdb3e8cdeabc6ecb8be1049c65eb4f4a05a2e07e24ee882a29a9859793f8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+                    fileType: "image/png",
+                    fileSize: 2083214,
+                    uploadedBy: 201,
+                    uploadedAt: "2025-07-02T08:49:39.433Z",
+                    visitId: 9014,
+                    patientId: 1489,
+                    isActive: false,
+                    timestamp: "00:00:32",
+                    createdAt: "2025-07-02T08:49:39.433Z",
+                    updatedAt: "2025-07-02T08:49:39.433Z",
+                    deletedAt: null,
+                  ),
+                ],
+                // attachments: impressionsAndPlan.attachments ?? [],
               ),
             );
           }
@@ -1802,7 +1797,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         HtmlEditorController htmlEditorController = HtmlEditorController();
         // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,attachments: impressionsAndPlan.attachments ?? []));
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, attachments: impressionsAndPlan.attachments ?? []));
       }
 
       impressionAndPlanListFullNote.refresh();

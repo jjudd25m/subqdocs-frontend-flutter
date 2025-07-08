@@ -1114,8 +1114,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         controller.globalController.startAudioWidget();
                                         controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                         controller.globalController.getConnectedInputDevices();
-                                        await controller.globalController.recorderService.startRecording(context);
-                                        controller.updateData();
+                                        // await controller.globalController.recorderService.startRecording(context);
+                                        // controller.updateData();
                                       } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
                                         // Handle permission denial here
 

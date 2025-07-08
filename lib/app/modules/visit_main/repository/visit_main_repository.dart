@@ -1,7 +1,12 @@
 import 'dart:io';
 
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:mime/mime.dart';
 
+import '../../../../widget/device_detection.dart';
+import '../../../core/common/global_controller.dart';
+import '../../../core/common/global_mobile_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../models/ChangeModel.dart';
@@ -21,11 +26,23 @@ class VisitMainRepository {
   }
 
   Future<PatientTranscriptUploadModel> uploadAudio({required File audioFile, required String token, required String patientVisitId}) async {
+    final GlobalController globalController = Get.find();
+    final GlobalMobileController globalMobileController = Get.find();
+
+    String deviceType = await getDeviceType(Get.context!);
+    bool is_multi_language_preference = false;
+
+    if (deviceType == 'iPad') {
+      is_multi_language_preference = globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+    } else {
+      is_multi_language_preference = globalMobileController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+    }
+
     String? mimeType = lookupMimeType(audioFile.path);
 
     customPrint("uploadAudio :- $patientVisitId");
 
-    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {}, {"audio": audioFile}, mimeType ?? "", token);
+    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {"isMulti": is_multi_language_preference}, {"audio": audioFile}, mimeType ?? "", token);
     return PatientTranscriptUploadModel.fromJson(response);
   }
 

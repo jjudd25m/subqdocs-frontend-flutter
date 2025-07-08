@@ -134,8 +134,9 @@ class ImpresionAndPlanViewModel {
   FocusNode focusNode = FocusNode();
 
   List<Attachments>? attachments;
+  bool? isOpened = false;
 
-  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController, this.attachments});
+  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController, this.attachments, this.isOpened = false});
 
   Map<String, dynamic> toJson() {
     if (title == null) {

@@ -52,6 +52,8 @@ import 'app_preferences.dart';
 import 'logger.dart';
 
 class GlobalController extends GetxController {
+  // Rxn<GetUserDetailModel> getUserDetailModel = Rxn<GetUserDetailModel>();
+
   Rxn<GetOrganizationDetailModel> getEMAOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
 
   RxnString selectedLanguageValue = RxnString("English");
@@ -70,7 +72,7 @@ class GlobalController extends GetxController {
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = true;
+  bool isProd = false;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 

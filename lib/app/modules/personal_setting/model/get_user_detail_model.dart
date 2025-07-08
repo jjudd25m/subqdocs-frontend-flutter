@@ -57,6 +57,7 @@ class ResponseData {
   String? updatedAt;
   String? deletedAt;
   String? organizationName;
+  bool? is_multi_language_preference;
 
   ResponseData({
     this.id,
@@ -89,6 +90,7 @@ class ResponseData {
     this.updatedAt,
     this.deletedAt,
     this.organizationName,
+    this.is_multi_language_preference,
   });
 
   ResponseData.fromJson(Map<String, dynamic> json) {
@@ -123,6 +125,7 @@ class ResponseData {
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
     organizationName = json['organization_name'];
+    is_multi_language_preference = json['is_multi_language_preference'];
   }
 
   Map<String, dynamic> toJson() {
@@ -158,6 +161,7 @@ class ResponseData {
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
     data['organization_name'] = organizationName;
+    data['is_multi_language_preference'] = is_multi_language_preference;
     return data;
   }
 }

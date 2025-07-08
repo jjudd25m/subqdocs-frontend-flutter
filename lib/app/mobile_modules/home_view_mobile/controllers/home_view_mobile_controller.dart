@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -7,12 +9,15 @@ import 'package:toastification/toastification.dart';
 
 import '../../../../utils/Loader.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../modules/add_patient/repository/add_patient_repository.dart';
 import '../../../modules/home/model/patient_list_model.dart';
 import '../../../modules/home/model/schedule_visit_list_model.dart';
 import '../../../modules/home/repository/home_repository.dart';
+import '../../../modules/login/model/login_model.dart';
 import '../../../modules/personal_setting/repository/personal_setting_repository.dart';
 import '../../../routes/app_pages.dart';
 import '../../add_recording_mobile_view/model/add_mobile_patient_model.dart';
@@ -95,6 +100,12 @@ class HomeViewMobileController extends GetxController {
     } catch (e) {
       customPrint("error on get OrganizationDetail :- $e");
     }
+  }
+
+  Future<void> getUserDetail() async {
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+    globalController.getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
   }
 
   Future<void> getPastVisitList({String? sortingName = "", bool isFist = false}) async {

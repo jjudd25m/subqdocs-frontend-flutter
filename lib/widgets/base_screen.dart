@@ -247,16 +247,18 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                           (context) => [
                                             PullDownMenuItem.selectable(
                                               title: 'English',
-                                              selected: globalController.selectedLanguageValue.value == "English" ? true : false,
+                                              selected: globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == false ? true : false,
                                               onTap: () async {
                                                 globalController.selectedLanguageValue.value = "English";
+                                                globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
                                               },
                                             ),
                                             PullDownMenuItem.selectable(
-                                              selected: globalController.selectedLanguageValue.value != "English" ? true : false,
+                                              selected: globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == true ? true : false,
                                               title: 'Multi Language',
                                               onTap: () async {
                                                 globalController.selectedLanguageValue.value = "Multi Language";
+                                                globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
                                               },
                                             ),
                                           ],
