@@ -14,7 +14,9 @@ import '../../../../widgets/custom_textfiled.dart';
 import '../controllers/personal_setting_controller.dart';
 
 class IntegrateEmaDialog extends GetView<PersonalSettingController> {
-  final void Function(Map<String, dynamic>) receiveParam;
+  // final void Function(Map<String, dynamic>) receiveParam;
+  final void Function(bool) receiveParam;
+
   RxBool visiblity = RxBool(true);
 
   IntegrateEmaDialog({super.key, required this.receiveParam});
@@ -267,32 +269,34 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                         ],
                       ),
                       SizedBox(height: 0),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(children: [Text("Appointment Type", style: AppFonts.regular(14, AppColors.textBlack))]),
-                                const SizedBox(height: 8),
-                                Obx(() {
-                                  return BaseDropdown2<String>(
-                                    direction: VerticalDirection.up,
-                                    controller: TextEditingController(),
-                                    valueAsString: (value) => value ?? "",
-                                    items: controller.getAvailableVisitTypes.value?.responseData?.map((e) => e.display ?? "").toList() ?? [],
-                                    selectedValue: controller.selectedAppointmentTypeValue.value,
-                                    onChanged: (value) {
-                                      controller.selectedAppointmentTypeValue.value = value;
-                                    },
-                                    selectText: "Male",
-                                  );
-                                }),
-                              ],
+                      if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(children: [Text("Appointment Type", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                  const SizedBox(height: 8),
+                                  Obx(() {
+                                    return BaseDropdown2<String>(
+                                      direction: VerticalDirection.up,
+                                      controller: TextEditingController(),
+                                      valueAsString: (value) => value ?? "",
+                                      items: controller.getAvailableVisitTypes.value?.responseData?.map((e) => e.display ?? "").toList() ?? [],
+                                      selectedValue: controller.selectedAppointmentTypeValue.value,
+                                      onChanged: (value) {
+                                        controller.selectedAppointmentTypeValue.value = value;
+                                      },
+                                      selectText: controller.selectedAppointmentTypeValue.value,
+                                    );
+                                  }),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -314,23 +318,48 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                           SizedBox(
                             width: 100,
                             child: CustomButton(
-                              navigate: () {
+                              navigate: () async {
                                 if (controller.formKey.currentState!.validate()) {
-                                  String appointmentValue = controller.getAvailableVisitTypes.value!.responseData!.firstWhere((element) => element.display == controller.selectedAppointmentTypeValue.value).code ?? "";
+                                  Map<String, dynamic> response = Map<String, dynamic>();
 
-                                  final response = {
-                                    "vendor": "MODMED",
-                                    "appointment_type": {"label": controller.selectedAppointmentTypeValue.value, "value": appointmentValue},
-                                    "ema_configs": [
-                                      {"key": "base_url", "value": controller.emaBaseUrlController.text},
-                                      {"key": "api_key", "value": controller.emaAPIKeyController.text},
-                                      {"key": "api_username", "value": controller.emaAPIUsernameController.text},
-                                      {"key": "api_password", "value": controller.emaAPIPasswordController.text},
-                                    ],
-                                  };
+                                  if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) {
+                                    String appointmentValue = controller.getAvailableVisitTypes.value?.responseData?.firstWhere((element) => element.display == controller.selectedAppointmentTypeValue.value).code ?? "";
+                                    response = {
+                                      "vendor": "MODMED",
+                                      "appointment_type": {"label": controller.selectedAppointmentTypeValue.value, "value": appointmentValue},
+                                      "ema_configs": [
+                                        {"key": "base_url", "value": controller.emaBaseUrlController.text},
+                                        {"key": "api_key", "value": controller.emaAPIKeyController.text},
+                                        {"key": "api_username", "value": controller.emaAPIUsernameController.text},
+                                        {"key": "api_password", "value": controller.emaAPIPasswordController.text},
+                                      ],
+                                    };
+                                  } else {
+                                    response = {
+                                      "vendor": "MODMED",
+                                      // "appointment_type": {"label": controller.selectedAppointmentTypeValue.value, "value": appointmentValue},
+                                      "ema_configs": [
+                                        {"key": "base_url", "value": controller.emaBaseUrlController.text},
+                                        {"key": "api_key", "value": controller.emaAPIKeyController.text},
+                                        {"key": "api_username", "value": controller.emaAPIUsernameController.text},
+                                        {"key": "api_password", "value": controller.emaAPIPasswordController.text},
+                                      ],
+                                    };
+                                  }
 
-                                  receiveParam(response);
+                                  // receiveParam(response);
+
+                                  bool data = await controller.saveEmaConfig(response);
+                                  // receiveParam(data);
                                   Navigator.pop(context);
+
+                                  if (data) {
+                                    final model = controller.globalController.getEMAOrganizationDetailModel.value?.responseData;
+                                    if (model?.has_ema_configs == true && model?.appointmentType == null) {
+                                      // showAppointmentTypeDialog(context);
+                                      receiveParam(true);
+                                    }
+                                  }
                                 }
                               },
                               label: "Save",

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 import 'package:record/record.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
@@ -203,7 +204,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                           globalController.valueOfy.value = y;
                         },
                         width: !globalController.isExpandRecording.value ? 388 : 388,
-                        height: !globalController.isExpandRecording.value ? 66 : 480,
+                        height: !globalController.isExpandRecording.value ? 66 : 564,
                         config: DraggableFloatWidgetBaseConfig(initPositionXInLeft: false, isFullScreen: false, valueOfTheX: globalController.valueOfx.value, valueOfThey: globalController.valueOfy.value, initPositionYInTop: false, initPositionYMarginBorder: 0),
                         child: Material(
                           borderRadius: BorderRadius.circular(12),
@@ -240,6 +241,58 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                       ),
                                     ),
                                     const SizedBox(height: 12),
+                                    PullDownButton(
+                                      routeTheme: const PullDownMenuRouteTheme(backgroundColor: AppColors.white),
+                                      itemBuilder:
+                                          (context) => [
+                                            PullDownMenuItem.selectable(
+                                              title: 'English',
+                                              selected: globalController.selectedLanguageValue.value == "English" ? true : false,
+                                              onTap: () async {
+                                                globalController.selectedLanguageValue.value = "English";
+                                              },
+                                            ),
+                                            PullDownMenuItem.selectable(
+                                              selected: globalController.selectedLanguageValue.value != "English" ? true : false,
+                                              title: 'Multi Language',
+                                              onTap: () async {
+                                                globalController.selectedLanguageValue.value = "Multi Language";
+                                              },
+                                            ),
+                                          ],
+                                      buttonBuilder:
+                                          (context, showMenu) =>
+                                              CupertinoButton(onPressed: showMenu, padding: EdgeInsets.zero, child: Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)])),
+
+                                      // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
+                                    ),
+                                    SizedBox(height: 20),
+                                    // Obx(() {
+                                    //   return BaseDropdown2<String>(
+                                    //     direction: VerticalDirection.up,
+                                    //     controller: TextEditingController(),
+                                    //     valueAsString: (value) => value ?? "",
+                                    //     items: globalController.languageList,
+                                    //     selectedValue: globalController.selectedLanguageValue.value,
+                                    //     onChanged: (value) {
+                                    //       globalController.selectedLanguageValue.value = value;
+                                    //     },
+                                    //     selectText: globalController.selectedLanguageValue.value,
+                                    //   );
+                                    // }),
+                                    // Container(
+                                    //   color: AppColors.white,
+                                    //   width: 200,
+                                    //   height: 68,
+                                    //   child: Column(
+                                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                                    //     children: [
+                                    //       // Row(children: [Text("Language", style: AppFonts.regular(14, AppColors.textBlack))]),
+                                    //       // const SizedBox(height: 8),
+                                    //
+                                    //     ],
+                                    //   ),
+                                    // ),
                                     if (globalController.recorderService.recordingStatus.value == 1) ...[
                                       Text(textAlign: TextAlign.center, "Transcription in progress", style: AppFonts.regular(17, AppColors.textBlack)),
                                     ] else if (globalController.recorderService.recordingStatus.value == 2) ...[
@@ -731,5 +784,21 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  Widget _buildDropdownOption(String language) {
+    return GestureDetector(
+      onTap: () => selectLanguage(language),
+      child: Obx(() => Container(width: 200, padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
+    );
+  }
+
+  void selectLanguage(String language) {
+    globalController.selectedLanguageValue.value = language; // Update the selected language
+    globalController.isDropdownOpen.value = false; // Close the dropdown
+  }
+
+  void toggleDropdown() {
+    globalController.isDropdownOpen.toggle(); // Flips between true/false
   }
 }

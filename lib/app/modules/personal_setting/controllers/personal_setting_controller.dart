@@ -171,6 +171,7 @@ class PersonalSettingController extends GetxController {
     customPrint("on ready call ");
     _startSyncTimer();
     forceSyncSocketSetup();
+    getAvailablePatientVisitTypes();
   }
 
   @override
@@ -264,6 +265,8 @@ class PersonalSettingController extends GetxController {
 
   Future<void> getAvailablePatientVisitTypes() async {
     getAvailableVisitTypes.value = await _personalSettingRepository.getAvailableVisitTypes();
+
+    print("getAvailablePatientVisitTypes :- ${getAvailableVisitTypes.value}");
     // selectedAppointmentTypeValue.value = getAvailableVisitTypes.value?.responseData?.first.display;
   }
 
@@ -275,20 +278,26 @@ class PersonalSettingController extends GetxController {
     // CustomToastification().showToast(response['message'], type: ToastificationType.success);
   }
 
-  Future<void> saveEmaConfig(Map<String, dynamic> param) async {
+  Future<bool> saveEmaConfig(Map<String, dynamic> param) async {
     Loader().showLoadingDialogForSimpleLoader();
     Map<String, dynamic> response = await _personalSettingRepository.saveEmaConfig(param);
 
     if (response["response_type"] != "Failure") {
       CustomToastification().showToast(response['message'], type: ToastificationType.success);
 
-      getOrganizationDetail();
+      getAvailablePatientVisitTypes();
+      await getOrganizationDetail();
+
+      Loader().stopLoader();
+      return true;
     } else {
+      Loader().stopLoader();
       CustomToastification().showToast(response['message'], type: ToastificationType.error);
+      return false;
     }
 
-    Loader().stopLoader();
-    getEmaConfig();
+    // Loader().stopLoader();
+    // getEmaConfig();
   }
 
   Future<void> getEmaConfig() async {

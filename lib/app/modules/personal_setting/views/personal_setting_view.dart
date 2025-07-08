@@ -14,6 +14,7 @@ import '../../../../utils/imagepath.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/fileImage.dart';
+import '../../../../widgets/base_dropdown2.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../core/common/app_preferences.dart';
@@ -581,8 +582,21 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                                                         builder: (BuildContext context) {
                                                                           return IntegrateEmaDialog(
-                                                                            receiveParam: (param) {
-                                                                              controller.saveEmaConfig(param);
+                                                                            receiveParam: (param) async {
+                                                                              // controller.saveEmaConfig(param);
+
+                                                                              // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                              //   Navigator.of(context).pop();
+                                                                              // });
+                                                                              //
+                                                                              // // Navigator.of(context).pop(); // Close the dialog
+                                                                              //
+                                                                              // if (response) {
+                                                                              //   final model = controller.globalController.getEMAOrganizationDetailModel.value?.responseData;
+                                                                              //   if (model?.has_ema_configs == true && model?.appointmentType == null) {
+                                                                              //     showAppointmentTypeDialog(context);
+                                                                              //   }
+                                                                              // }
                                                                             },
                                                                           );
                                                                         },
@@ -607,10 +621,25 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         showDialog(
                                                                           context: context,
                                                                           barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                          builder: (BuildContext context) {
+                                                                          builder: (BuildContext ctx) {
                                                                             return IntegrateEmaDialog(
-                                                                              receiveParam: (param) {
-                                                                                controller.saveEmaConfig(param);
+                                                                              receiveParam: (param) async {
+                                                                                if (param) {
+                                                                                  showAppointmentTypeDialog(ctx);
+                                                                                }
+
+                                                                                // bool response = await controller.saveEmaConfig(param);
+
+                                                                                // Navigator.of(context).pop();
+
+                                                                                // Navigator.of(context).pop(); // Close the dialog
+
+                                                                                // if (response) {
+                                                                                //   final model = controller.globalController.getEMAOrganizationDetailModel.value?.responseData;
+                                                                                //   if (model?.has_ema_configs == true && model?.appointmentType == null) {
+                                                                                //     showAppointmentTypeDialog(context);
+                                                                                //   }
+                                                                                // }
                                                                               },
                                                                             );
                                                                           },
@@ -650,51 +679,26 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                           onChanged: (bool value) {
                                                                             controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration = !(controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false);
                                                                             // controller.selectedAppointmentTypeValue.value,
-                                                                            controller.updateOrganization({
-                                                                              "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
-                                                                              "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
-                                                                            });
+
+                                                                            if (controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label != null) {
+                                                                              controller.updateOrganization({
+                                                                                "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
+                                                                                "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
+                                                                              });
+                                                                            } else {
+                                                                              controller.updateOrganization({
+                                                                                "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
+                                                                                // "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
+                                                                              });
+                                                                            }
                                                                           },
-                                                                          // Optional: activeColor changes the switch color when on
                                                                           activeTrackColor: AppColors.textPurple,
                                                                         ),
-                                                                        // Text(data ?? "", style: AppFonts.regular(14, AppColors.textDarkGrey)),
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  // Expanded(child: CommonPatientData(label: "EMA Integration", data: controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration.toString() ?? "-")),
-                                                                  // Expanded(child: CommonPatientData(label: "Address 1", data: controller.getOrganizationDetailModel.value?.responseData?.address1 ?? "-")),
-                                                                  // Expanded(child: CommonPatientData(label: "Address 2", data: controller.getOrganizationDetailModel.value?.responseData?.address2 ?? "-")),
                                                                   Expanded(child: CommonPatientData(label: "Appointment Type", data: controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "-")),
                                                                   Expanded(child: CommonPatientData(label: "Base url", data: controller.emaBaseUrlController.text)),
-                                                                  // Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: Row(children: [Text(textAlign: TextAlign.center, "Force Sync", style: AppFonts.medium(16, AppColors.backgroundPurple)), Spacer()])),
-                                                                  // const SizedBox(height: 10),
-
-                                                                  //   const Spacer(),
-                                                                  //   const SizedBox(height: 20),
-                                                                  // ] else ...[
-                                                                  //   const Expanded(child: SizedBox()),
-                                                                  // ],
-                                                                  // if (controller.getOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) ...[
-                                                                  //   GestureDetector(
-                                                                  //     onTap: () async {
-                                                                  //       showDialog(
-                                                                  //         context: context,
-                                                                  //         barrierDismissible: true, // Allows dismissing the dialog by tapping outside
-                                                                  //         builder: (BuildContext context) {
-                                                                  //           return IntegrateEmaDialog(
-                                                                  //             receiveParam: (param) {
-                                                                  //               controller.saveEmaConfig(param);
-                                                                  //             },
-                                                                  //           );
-                                                                  //         },
-                                                                  //       );
-                                                                  //     },
-                                                                  //     child: SvgPicture.asset(ImagePath.edit, width: 26, height: 26),
-                                                                  //   ),
-                                                                  // ] else ...[
-                                                                  //   const Expanded(child: SizedBox()),
-                                                                  // ],
                                                                 ],
                                                               ),
                                                             ),
@@ -1050,5 +1054,68 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
           softWrap: true, // Allows text to wrap
           overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
         );
+  }
+
+  void showAppointmentTypeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          surfaceTintColor: AppColors.white,
+          backgroundColor: AppColors.white,
+          title: const Text("Select Appointment Type"),
+          content: SingleChildScrollView(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(children: [Text("Appointment Type", style: AppFonts.regular(14, AppColors.textBlack))]),
+                      const SizedBox(height: 8),
+                      Obx(() {
+                        return BaseDropdown2<String>(
+                          direction: VerticalDirection.up,
+                          controller: TextEditingController(),
+                          valueAsString: (value) => value ?? "",
+                          items: controller.getAvailableVisitTypes.value?.responseData?.map((e) => e.display ?? "").toList() ?? [],
+                          selectedValue: controller.selectedAppointmentTypeValue.value,
+                          onChanged: (value) {
+                            controller.selectedAppointmentTypeValue.value = value;
+                          },
+                          selectText: controller.selectedAppointmentTypeValue.value,
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("CANCEL"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                String appointmentValue = controller.getAvailableVisitTypes.value?.responseData?.firstWhere((element) => element.display == controller.selectedAppointmentTypeValue.value).code ?? "";
+
+                // Handle OK button press
+                Navigator.of(context).pop();
+
+                controller.updateOrganization({
+                  "is_ema_integration": true,
+                  "appointment_type": {"label": controller.selectedAppointmentTypeValue.value ?? "", "value": appointmentValue},
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -54,6 +54,10 @@ import 'logger.dart';
 class GlobalController extends GetxController {
   Rxn<GetOrganizationDetailModel> getEMAOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
 
+  RxnString selectedLanguageValue = RxnString("English");
+  List<String> languageList = ["English", "Muti Language"];
+  RxBool isDropdownOpen = RxBool(false);
+
   static const platform = MethodChannel('com.subqdocs/shared');
   static const EventChannel eventChannel = EventChannel('com.subqdocs/audioEvents');
   StreamSubscription? eventSubscription;
@@ -66,7 +70,7 @@ class GlobalController extends GetxController {
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = false;
+  bool isProd = true;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 
