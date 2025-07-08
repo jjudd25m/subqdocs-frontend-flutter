@@ -307,7 +307,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                           targetList.insert(dropIndex, attachment);
                                           controller.generalAttachments.removeAt(fromImageIndex);
                                         } else {
-                                          // From Expansion Tile → Expansion Tile
+                                          // From another list
                                           targetList.insert(dropIndex, attachment);
                                           controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
                                         }
@@ -319,55 +319,60 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                       },
                                       builder: (context, candidateData, rejectedData) {
                                         if (model.attachments == null || model.attachments!.isEmpty) {
-                                          return SizedBox(width: double.infinity, height: 100, child: Container());
+                                          return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("No Attachments")));
                                         }
-                                        return Wrap(
-                                          spacing: 8,
-                                          runSpacing: 8,
-                                          children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
-                                            return LongPressDraggable<Map<String, dynamic>>(
-                                              data: {'attachment': model.attachments?[imageIndex], 'fromListIndex': index, 'fromImageIndex': imageIndex, 'isGeneral': false},
-                                              feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, dragging: true)),
-                                              childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index)),
-                                              child: DragTarget<Map<String, dynamic>>(
-                                                onWillAcceptWithDetails: (data) => true,
-                                                onAcceptWithDetails: (details) {
-                                                  final draggedImage = details.data['attachment'];
-                                                  final fromListIndex = details.data['fromListIndex'];
-                                                  final fromImageIndex = details.data['fromImageIndex'];
-                                                  final isGeneral = details.data['isGeneral'] ?? false;
-                                                  int insertIndex = imageIndex;
-                                                  final dropIndex = _getDropIndex(context, details.offset, model.attachments ?? []);
-                                                  if (isGeneral) {
-                                                    // Coming from general images
-                                                    if (model.attachments == null) {
-                                                      model.attachments = [];
+                                        return Container(
+                                          width: double.infinity,
+                                          margin: EdgeInsets.only(top: 10),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                          child: Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
+                                            children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
+                                              return LongPressDraggable<Map<String, dynamic>>(
+                                                data: {'attachment': model.attachments?[imageIndex], 'fromListIndex': index, 'fromImageIndex': imageIndex, 'isGeneral': false},
+                                                feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, dragging: true)),
+                                                childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index)),
+                                                child: DragTarget<Map<String, dynamic>>(
+                                                  onWillAcceptWithDetails: (data) => true,
+                                                  onAcceptWithDetails: (details) {
+                                                    final draggedImage = details.data['attachment'];
+                                                    final fromListIndex = details.data['fromListIndex'];
+                                                    final fromImageIndex = details.data['fromImageIndex'];
+                                                    final isGeneral = details.data['isGeneral'] ?? false;
+                                                    int insertIndex = imageIndex;
+                                                    final dropIndex = _getDropIndex(context, details.offset, model.attachments ?? []);
+                                                    if (isGeneral) {
+                                                      // Coming from general images
+                                                      if (model.attachments == null) {
+                                                        model.attachments = [];
+                                                      }
+                                                      model.attachments!.insert(insertIndex, draggedImage);
+                                                      controller.generalAttachments.removeAt(fromImageIndex);
+                                                    } else if (fromListIndex == index) {
+                                                      if (fromImageIndex < imageIndex) {
+                                                        insertIndex -= 1;
+                                                      }
+                                                      final attachments = List<Attachments?>.from(model.attachments ?? []);
+                                                      attachments.removeAt(fromImageIndex);
+                                                      attachments.insert(insertIndex, draggedImage);
+                                                      model.attachments = attachments.cast<Attachments>();
+                                                    } else {
+                                                      controller.impressionAndPlanListFullNote[index].attachments?.insert(insertIndex, draggedImage);
+                                                      controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
                                                     }
-                                                    model.attachments!.insert(insertIndex, draggedImage);
-                                                    controller.generalAttachments.removeAt(fromImageIndex);
-                                                  } else if (fromListIndex == index) {
-                                                    if (fromImageIndex < imageIndex) {
-                                                      insertIndex -= 1;
-                                                    }
-                                                    final attachments = List<Attachments?>.from(model.attachments ?? []);
-                                                    attachments.removeAt(fromImageIndex);
-                                                    attachments.insert(insertIndex, draggedImage);
-                                                    model.attachments = attachments.cast<Attachments>();
-                                                  } else {
-                                                    controller.impressionAndPlanListFullNote[index].attachments?.insert(insertIndex, draggedImage);
-                                                    controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
-                                                  }
-                                                  controller.impressionAndPlanListFullNote.refresh();
-                                                  controller.generalAttachments.refresh();
-                                                  controller.isFullNoteAttachment.value = true;
-                                                  controller.updateImpressionAndPlanFullNote();
-                                                },
-                                                builder: (context, candidateData, rejectedData) {
-                                                  return _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index);
-                                                },
-                                              ),
-                                            );
-                                          }),
+                                                    controller.impressionAndPlanListFullNote.refresh();
+                                                    controller.generalAttachments.refresh();
+                                                    controller.isFullNoteAttachment.value = true;
+                                                    controller.updateImpressionAndPlanFullNote();
+                                                  },
+                                                  builder: (context, candidateData, rejectedData) {
+                                                    return _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index);
+                                                  },
+                                                ),
+                                              );
+                                            }),
+                                          ),
                                         );
                                       },
                                     ),
@@ -380,46 +385,51 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                               SizedBox(height: 10),
                               Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
                               const SizedBox(height: 16),
-                              Container(
-                                margin: EdgeInsets.only(top: 10),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                                padding: EdgeInsets.only(left: 15, right: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(alignment: Alignment.topLeft, child: Text("General Images", style: AppFonts.medium(14, AppColors.black))),
-                                    SizedBox(height: 8),
-                                    DragTarget<Map<String, dynamic>>(
-                                      onWillAcceptWithDetails: (data) => true,
-                                      onAcceptWithDetails: (details) {
-                                        final attachment = details.data['attachment'];
-                                        final fromListIndex = details.data['fromListIndex'];
-                                        final fromImageIndex = details.data['fromImageIndex'];
-                                        final isGeneral = details.data['isGeneral'] ?? false;
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15, right: 10),
+                                child: Align(alignment: Alignment.topLeft,child: Text("General Images", style: AppFonts.medium(14, AppColors.black))),
+                              ),
+                              SizedBox(height: 8),
+                              DragTarget<Map<String, dynamic>>(
+                                onWillAcceptWithDetails: (data) => true,
+                                onAcceptWithDetails: (details) {
+                                  final attachment = details.data['attachment'];
+                                  final fromListIndex = details.data['fromListIndex'];
+                                  final fromImageIndex = details.data['fromImageIndex'];
+                                  final isGeneral = details.data['isGeneral'] ?? false;
 
-                                        final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments);
+                                  final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments);
 
-                                        if (isGeneral) {
-                                          // Reordering within general images
+                                  if (isGeneral) {
+                                    // Reordering within general images
 
-                                          controller.generalAttachments.removeAt(fromImageIndex);
-                                          controller.generalAttachments.insert(dropIndex, attachment);
-                                        } else {
-                                          // Coming from expansion tile attachments
-                                          controller.generalAttachments.insert(dropIndex, attachment);
-                                          controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
-                                        }
+                                    controller.generalAttachments.removeAt(fromImageIndex);
+                                    controller.generalAttachments.insert(dropIndex, attachment);
+                                  } else {
+                                    // Coming from expansion tile attachments
+                                    controller.generalAttachments.insert(dropIndex, attachment);
+                                    controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
+                                  }
 
-                                        controller.impressionAndPlanListFullNote.refresh();
-                                        controller.generalAttachments.refresh();
-                                        controller.isFullNoteAttachment.value = true;
-                                        controller.updateImpressionAndPlanFullNote();
-                                      },
-                                      builder: (context, candidateData, rejectedData) {
-                                        if (controller.generalAttachments.isEmpty) {
-                                          return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
-                                        }
-                                        return Wrap(
+                                  controller.impressionAndPlanListFullNote.refresh();
+                                  controller.generalAttachments.refresh();
+                                  controller.isFullNoteAttachment.value = true;
+                                  controller.updateImpressionAndPlanFullNote();
+                                },
+                                builder: (context, candidateData, rejectedData) {
+                                  if (controller.generalAttachments.isEmpty) {
+                                    return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
+                                  }
+                                  return Container(
+                                    width: double.infinity,
+                                    margin: EdgeInsets.only(top: 10),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                    padding: EdgeInsets.only(left: 15, right: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+
+                                        Wrap(
                                           spacing: 8,
                                           runSpacing: 8,
                                           children: List.generate(controller.generalAttachments.length, (imageIndex) {
@@ -466,11 +476,11 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                               ),
                                             );
                                           }),
-                                        );
-                                      },
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  );
+                                },
                               ),
                             ],
                           ],
@@ -513,8 +523,8 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
   Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, {bool dragging = false}) {
     return Container(
       // key: ValueKey(attachment.id),
-      width: 200,
-      height: 200,
+      width: Get.width / 4,
+      height: Get.width / 4,
       decoration: BoxDecoration(color: dragging ? AppColors.tableItem : Colors.grey[300], borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
