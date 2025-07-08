@@ -884,7 +884,14 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
               customPrint("message:attach ${impressionsAndPlan.attachments}");
               customPrint("message:attach ${impressionsAndPlan.title}");
               customPrint("message:attach ${impressionsAndPlan.content}");
-              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
+              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "",
+                htmlEditorController: htmlEditorController,
+                title: impressionsAndPlan.title,
+                siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
+                slidableController: SlidableController(this),
+                attachments: impressionsAndPlan.attachments ?? []
+
+              ));
             }
           });
         } else {
@@ -1795,7 +1802,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         HtmlEditorController htmlEditorController = HtmlEditorController();
         // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10));
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,attachments: impressionsAndPlan.attachments ?? []));
       }
 
       impressionAndPlanListFullNote.refresh();
