@@ -643,7 +643,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
         HtmlEditorController htmlEditorController = HtmlEditorController();
         // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,attachments: impressionsAndPlan.attachments ?? []));
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,attachments: impressionsAndPlan.attachments ?? [],slidableController: SlidableController(this)));
       }
 
       impressionAndPlanListFullNote.refresh();
@@ -1074,7 +1074,9 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
     Map<String, List<dynamic>> params = {};
 
     params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJsonFullNote()).where((map) => map.isNotEmpty).toList();
-
+    if (isFullNoteAttachment.value) {
+      params["impressions_and_plan_attachments"] = generalAttachments.value.map((attachment) => attachment.toJson()).toList();
+    }
     print(params);
 
     try {
@@ -1319,6 +1321,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
 
               ));
             }
+            generalAttachments.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
           });
         } else {
           for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
