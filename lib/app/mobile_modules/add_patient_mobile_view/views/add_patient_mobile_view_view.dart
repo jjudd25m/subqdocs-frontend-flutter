@@ -229,7 +229,16 @@ class AddPatientMobileViewView extends GetView<AddPatientMobileViewController> {
                                       firstDate: DateTime.now().subtract(const Duration(days: 36700)),
                                       lastDate: DateTime.now().subtract(const Duration(days: 400)),
                                       builder: (context, child) {
-                                        return Theme(data: ThemeData.light().copyWith(cardColor: AppColors.white, primaryColor: AppColors.backgroundPurple, hintColor: AppColors.backgroundPurple, colorScheme: const ColorScheme.light(primary: AppColors.backgroundPurple), buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary)), child: child!);
+                                        return Theme(
+                                          data: ThemeData.light().copyWith(
+                                            cardColor: AppColors.white,
+                                            primaryColor: AppColors.backgroundPurple,
+                                            hintColor: AppColors.backgroundPurple,
+                                            colorScheme: const ColorScheme.light(primary: AppColors.backgroundPurple),
+                                            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                                          ),
+                                          child: child!,
+                                        );
                                       },
                                     );
                                     if (picked != null) {

@@ -208,7 +208,9 @@ class AddPatientMobileViewController extends GetxController {
   }
 
   void setUi(PatientListData? value) {
-    patientId.text = value?.patientId.toString() ?? "";
+    if (value?.patientId != null) {
+      patientId.text = value?.patientId.toString() ?? "";
+    }
     editId.value = value?.id.toString() ?? "";
     firstNameController.text = value?.firstName ?? "";
     lastNameController.text = value?.lastName ?? "";
@@ -231,6 +233,8 @@ class AddPatientMobileViewController extends GetxController {
       dobController.text = formattedDate;
       customPrint("dob is :- $formattedDate");
     }
+
+    formKey.currentState?.validate(); // Thi
   }
 
   @override

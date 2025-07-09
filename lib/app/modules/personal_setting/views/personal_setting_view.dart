@@ -16,7 +16,7 @@ import '../../../../utils/validation_service.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/fileImage.dart';
-import '../../../../widgets/base_dropdown2.dart';
+import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_table.dart';
 import '../../../../widgets/custom_textfiled.dart';
@@ -230,12 +230,25 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                 ? CachedNetworkImage(imageUrl: controller.getUserDetailModel.value?.responseData?.profileImage ?? "", width: 60, height: 60, fit: BoxFit.cover)
                                                                                 : controller.userProfileImage.value?.path != null
                                                                                 ? RoundedImageFileWidget(size: 60, imagePath: controller.userProfileImage.value)
-                                                                                : BaseImageView(imageUrl: "", width: 60, height: 60, fontSize: 14, nameLetters: "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}"),
+                                                                                : BaseImageView(
+                                                                                  imageUrl: "",
+                                                                                  width: 60,
+                                                                                  height: 60,
+                                                                                  fontSize: 14,
+                                                                                  nameLetters: "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                                                                ),
                                                                       );
                                                                     }),
                                                                   ),
                                                                   const SizedBox(width: 10),
-                                                                  Expanded(child: Text("${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}", style: AppFonts.medium(16, AppColors.textBlack), overflow: TextOverflow.ellipsis, maxLines: 1)),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      "${controller.getUserDetailModel.value?.responseData?.firstName ?? ""} ${controller.getUserDetailModel.value?.responseData?.lastName ?? ""}",
+                                                                      style: AppFonts.medium(16, AppColors.textBlack),
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                      maxLines: 1,
+                                                                    ),
+                                                                  ),
                                                                   GestureDetector(
                                                                     onTap: () async {
                                                                       controller.setUserDetail();
@@ -323,8 +336,18 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                 children: [
-                                                                  Expanded(child: CommonPatientData(label: "License Expiry Date", data: (controller.getUserDetailModel.value?.responseData?.licenseExpiryDate?.isNotEmpty ?? false) ? DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "")) : "-")),
-                                                                  Expanded(child: CommonPatientData(label: "National Provider Identifier", data: controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier != null ? controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString() : "-")),
+                                                                  Expanded(
+                                                                    child: CommonPatientData(
+                                                                      label: "License Expiry Date",
+                                                                      data: (controller.getUserDetailModel.value?.responseData?.licenseExpiryDate?.isNotEmpty ?? false) ? DateFormat('MM/dd/yyyy').format(DateTime.parse(controller.getUserDetailModel.value?.responseData?.licenseExpiryDate ?? "")) : "-",
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: CommonPatientData(
+                                                                      label: "National Provider Identifier",
+                                                                      data: controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier != null ? controller.getUserDetailModel.value?.responseData?.nationalProviderIdentifier.toString() : "-",
+                                                                    ),
+                                                                  ),
                                                                   Expanded(child: CommonPatientData(label: "Taxonomy Code", data: controller.getUserDetailModel.value?.responseData?.taxonomyCode ?? "-")),
 
                                                                   const Expanded(child: SizedBox()),
@@ -456,7 +479,10 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                   }),
                                                                 ),
                                                                 const SizedBox(width: 10),
-                                                                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(textAlign: TextAlign.center, controller.getOrganizationDetailModel.value?.responseData?.name ?? "-", style: AppFonts.medium(16, AppColors.textBlack)), const SizedBox(width: 15)]),
+                                                                Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [Text(textAlign: TextAlign.center, controller.getOrganizationDetailModel.value?.responseData?.name ?? "-", style: AppFonts.medium(16, AppColors.textBlack)), const SizedBox(width: 15)],
+                                                                ),
                                                                 const Spacer(),
                                                                 GestureDetector(
                                                                   onTap: () async {
@@ -492,7 +518,12 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                             child: Row(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [Expanded(child: CommonPatientData(label: "Name", data: controller.getOrganizationDetailModel.value?.responseData?.name ?? "-")), const Expanded(child: SizedBox()), const Expanded(child: SizedBox()), const Expanded(child: SizedBox())],
+                                                              children: [
+                                                                Expanded(child: CommonPatientData(label: "Name", data: controller.getOrganizationDetailModel.value?.responseData?.name ?? "-")),
+                                                                const Expanded(child: SizedBox()),
+                                                                const Expanded(child: SizedBox()),
+                                                                const Expanded(child: SizedBox()),
+                                                              ],
                                                             ),
                                                           ),
                                                           const SizedBox(height: 20),
@@ -647,8 +678,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             );
                                                                           },
                                                                         );
-
-                                                                        // controller.forceSyncUpdate();
                                                                       },
                                                                       text: "Integrate EMA",
                                                                       height: 40,
@@ -712,7 +741,11 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                               child: Row(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                children: [Expanded(child: CommonPatientData(label: "Api key", data: controller.emaAPIKeyController.text)), Expanded(child: CommonPatientData(label: "Api username", data: controller.emaAPIUsernameController.text)), Expanded(child: CommonPatientData(label: "Api password", data: controller.emaAPIPasswordController.text))],
+                                                                children: [
+                                                                  Expanded(child: CommonPatientData(label: "Api key", data: controller.emaAPIKeyController.text)),
+                                                                  Expanded(child: CommonPatientData(label: "Api username", data: controller.emaAPIUsernameController.text)),
+                                                                  Expanded(child: CommonPatientData(label: "Api password", data: controller.emaAPIPasswordController.text)),
+                                                                ],
                                                               ),
                                                             ),
                                                             const SizedBox(height: 20),
@@ -811,7 +844,12 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                           child: Column(
                                                                             crossAxisAlignment: CrossAxisAlignment.center,
                                                                             mainAxisAlignment: MainAxisAlignment.center,
-                                                                            children: [SvgPicture.asset(ImagePath.patient_no_data, width: 260), const SizedBox(height: 10), Text(textAlign: TextAlign.center, "No data found", style: AppFonts.medium(20, AppColors.textDarkGrey)), const SizedBox(height: 20)],
+                                                                            children: [
+                                                                              SvgPicture.asset(ImagePath.patient_no_data, width: 260),
+                                                                              const SizedBox(height: 10),
+                                                                              Text(textAlign: TextAlign.center, "No data found", style: AppFonts.medium(20, AppColors.textDarkGrey)),
+                                                                              const SizedBox(height: 20),
+                                                                            ],
                                                                           ),
                                                                         ),
                                                                       )
@@ -1047,7 +1085,13 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
             decoration: BoxDecoration(color: (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText.withValues(alpha: 0.2) : AppColors.textPurple.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              child: Text((controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? "Suspended" : "Active", maxLines: 2, overflow: TextOverflow.visible, textAlign: TextAlign.center, style: AppFonts.medium(13, (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText : AppColors.textPurple)),
+              child: Text(
+                (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? "Suspended" : "Active",
+                maxLines: 2,
+                overflow: TextOverflow.visible,
+                textAlign: TextAlign.center,
+                style: AppFonts.medium(13, (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText : AppColors.textPurple),
+              ),
             ),
           ),
         )
@@ -1085,64 +1129,201 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          surfaceTintColor: AppColors.white,
-          backgroundColor: AppColors.white,
-          title: const Text("Select Appointment Type"),
-          content: SingleChildScrollView(
-            child: Row(
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 16,
+          child: Container(
+            constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .50),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(children: [Text("Appointment Type", style: AppFonts.regular(14, AppColors.textBlack))]),
-                      const SizedBox(height: 8),
-                      Obx(() {
-                        return BaseDropdown2<String>(
-                          direction: VerticalDirection.up,
-                          controller: TextEditingController(),
-                          valueAsString: (value) => value ?? "",
-                          items: controller.getAvailableVisitTypes.value?.responseData?.map((e) => e.display ?? "").toList() ?? [],
-                          selectedValue: controller.selectedAppointmentTypeValue.value,
-                          onChanged: (value) {
-                            controller.selectedAppointmentTypeValue.value = value;
+                Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Select Appointment Type", style: AppFonts.medium(14, Colors.white))),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
                           },
-                          selectText: controller.selectedAppointmentTypeValue.value,
-                        );
-                      }),
+                          child: Container(padding: const EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [Text("Appointment Type", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
+                                const SizedBox(height: 8),
+                                Obx(() {
+                                  return BaseDropdown<String>(
+                                    valueAsString: (value) => value ?? "",
+                                    items: controller.getAvailableVisitTypes.value?.responseData?.map((e) => e.display ?? "").toList() ?? [],
+                                    selectedValue: controller.selectedAppointmentTypeValue.value,
+                                    onChanged: (value) {
+                                      controller.selectedAppointmentTypeValue.value = value;
+                                    },
+                                    selectText: controller.selectedAppointmentTypeValue.value,
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: CustomButton(
+                              navigate: () {
+                                Navigator.pop(context);
+                              },
+                              label: "Cancel",
+                              backGround: Colors.white,
+                              isTrue: false,
+                              textColor: AppColors.backgroundPurple,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          SizedBox(
+                            width: 100,
+                            child: CustomButton(
+                              navigate: () {
+                                String appointmentValue = controller.getAvailableVisitTypes.value?.responseData?.firstWhere((element) => element.display == controller.selectedAppointmentTypeValue.value).code ?? "";
+
+                                Navigator.of(context).pop();
+
+                                controller.updateOrganization({
+                                  "is_ema_integration": true,
+                                  "appointment_type": {"label": controller.selectedAppointmentTypeValue.value ?? "", "value": appointmentValue},
+                                });
+                              },
+                              label: "OK",
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("CANCEL"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                String appointmentValue = controller.getAvailableVisitTypes.value?.responseData?.firstWhere((element) => element.display == controller.selectedAppointmentTypeValue.value).code ?? "";
-
-                // Handle OK button press
-                Navigator.of(context).pop();
-
-                controller.updateOrganization({
-                  "is_ema_integration": true,
-                  "appointment_type": {"label": controller.selectedAppointmentTypeValue.value ?? "", "value": appointmentValue},
-                });
-              },
-            ),
-          ],
         );
       },
     );
   }
+
+  // void showAppointmentTypeDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         surfaceTintColor: AppColors.white,
+  //         backgroundColor: AppColors.white,
+  //         title: const Text("Select Appointment Type"),
+  //         content: SingleChildScrollView(
+  //           child: Row(
+  //             children: [
+  //               Expanded(
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Row(
+  //                       children: [
+  //                         Text(
+  //                           "Appointment Type",
+  //                           style: AppFonts.regular(14, AppColors.textBlack),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     const SizedBox(height: 8),
+  //                     Obx(() {
+  //                       return BaseDropdown2<String>(
+  //                         direction: VerticalDirection.up,
+  //                         controller: TextEditingController(),
+  //                         valueAsString: (value) => value ?? "",
+  //                         items:
+  //                             controller
+  //                                 .getAvailableVisitTypes
+  //                                 .value
+  //                                 ?.responseData
+  //                                 ?.map((e) => e.display ?? "")
+  //                                 .toList() ??
+  //                             [],
+  //                         selectedValue:
+  //                             controller.selectedAppointmentTypeValue.value,
+  //                         onChanged: (value) {
+  //                           controller.selectedAppointmentTypeValue.value =
+  //                               value;
+  //                         },
+  //                         selectText:
+  //                             controller.selectedAppointmentTypeValue.value,
+  //                       );
+  //                     }),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text("CANCEL"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: const Text("OK"),
+  //             onPressed: () {
+  //               String appointmentValue =
+  //                   controller.getAvailableVisitTypes.value?.responseData
+  //                       ?.firstWhere(
+  //                         (element) =>
+  //                             element.display ==
+  //                             controller.selectedAppointmentTypeValue.value,
+  //                       )
+  //                       .code ??
+  //                   "";
+  //
+  //               // Handle OK button press
+  //               Navigator.of(context).pop();
+  //
+  //               controller.updateOrganization({
+  //                 "is_ema_integration": true,
+  //                 "appointment_type": {
+  //                   "label":
+  //                       controller.selectedAppointmentTypeValue.value ?? "",
+  //                   "value": appointmentValue,
+  //                 },
+  //               });
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 void showEmailDialog(int userId, BuildContext context, PersonalSettingController controller) {
@@ -1152,48 +1333,95 @@ void showEmailDialog(int userId, BuildContext context, PersonalSettingController
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        surfaceTintColor: AppColors.white,
-        backgroundColor: AppColors.white,
-        title: const Text("Send user invitation"),
-        content: SingleChildScrollView(
+      return Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 16,
+        child: Container(
+          constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .50),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: Form(
             key: formKey,
-            child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
+                Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Send user invitation", style: AppFonts.medium(14, Colors.white))),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(padding: const EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 8),
-                      TextFormFiledWidget(
-                        isSuffixIconVisible: false,
-                        isFirst: true,
-                        label: AppString.emailAddress,
-                        controller: emailController,
-                        format: [NoSpaceLowercaseTextFormatter()],
-                        hint: AppString.emailPlaceHolder,
-                        onTap: () {
-                          emailController.clear();
-                        },
-                        suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                        checkValidation: (value) {
-                          return Validation.emailValidateRequired(value);
-                        },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormFiledWidget(
+                              format: [NoSpaceLowercaseTextFormatter()],
+                              label: AppString.emailAddress,
+                              controller: emailController,
+                              isValid: controller.isValid.value,
+                              isSuffixIconVisible: false,
+                              isFirst: true,
+                              hint: AppString.emailPlaceHolder,
+                              onTap: () {
+                                emailController.clear();
+                              },
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                              checkValidation: (value) {
+                                return Validation.emailValidateRequired(value);
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      // TextFormField(
-                      //   controller: emailController,
-                      //   decoration: InputDecoration(hintText: 'example@domain.com', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter an email address';
-                      //     }
-                      //     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      //       return 'Please enter a valid email address';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: CustomButton(
+                              navigate: () {
+                                Navigator.pop(context);
+                              },
+                              label: "Cancel",
+                              backGround: Colors.white,
+                              isTrue: false,
+                              textColor: AppColors.backgroundPurple,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          SizedBox(
+                            width: 100,
+                            child: CustomButton(
+                              navigate: () {
+                                if (formKey.currentState?.validate() ?? false) {
+                                  controller.activeUser({"user_id": userId, "email": emailController.text});
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                              label: "OK",
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -1201,24 +1429,85 @@ void showEmailDialog(int userId, BuildContext context, PersonalSettingController
             ),
           ),
         ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text("CANCEL"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text("OK"),
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                controller.activeUser({"user_id": userId, "email": emailController.text});
-                Navigator.of(context).pop();
-              }
-            },
-          ),
-        ],
       );
     },
   );
 }
+
+// void showEmailDialog(int userId, BuildContext context, PersonalSettingController controller) {
+//   final emailController = TextEditingController();
+//   final formKey = GlobalKey<FormState>();
+//
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         surfaceTintColor: AppColors.white,
+//         backgroundColor: AppColors.white,
+//         title: const Text("Send user invitation"),
+//         content: SingleChildScrollView(
+//           child: Form(
+//             key: formKey,
+//             child: Row(
+//               children: [
+//                 Expanded(
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       const SizedBox(height: 8),
+//                       TextFormFiledWidget(
+//                         isSuffixIconVisible: false,
+//                         isFirst: true,
+//                         label: AppString.emailAddress,
+//                         controller: emailController,
+//                         format: [NoSpaceLowercaseTextFormatter()],
+//                         hint: AppString.emailPlaceHolder,
+//                         onTap: () {
+//                           emailController.clear();
+//                         },
+//                         suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+//                         checkValidation: (value) {
+//                           return Validation.emailValidateRequired(value);
+//                         },
+//                       ),
+//                       // TextFormField(
+//                       //   controller: emailController,
+//                       //   decoration: InputDecoration(hintText: 'example@domain.com', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+//                       //   validator: (value) {
+//                       //     if (value == null || value.isEmpty) {
+//                       //       return 'Please enter an email address';
+//                       //     }
+//                       //     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+//                       //       return 'Please enter a valid email address';
+//                       //     }
+//                       //     return null;
+//                       //   },
+//                       // ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//         actions: <Widget>[
+//           TextButton(
+//             child: const Text("CANCEL"),
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//           ),
+//           TextButton(
+//             child: const Text("OK"),
+//             onPressed: () {
+//               if (formKey.currentState?.validate() ?? false) {
+//                 controller.activeUser({"user_id": userId, "email": emailController.text});
+//                 Navigator.of(context).pop();
+//               }
+//             },
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }

@@ -11,6 +11,7 @@ import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../widgets/cupertino_delete_alert.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../visit_main/model/doctor_view_model.dart';
@@ -166,41 +167,68 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                               globalController.selectedRowIndex.refresh();
                             },
                             feedback: Material(color: AppColors.white, child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex, true)))),
-                            child: Container(margin: const EdgeInsets.all(5.0), decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white, boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3))]), child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35)),
+                            child: Container(
+                              margin: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white, boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3))]),
+                              child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35),
+                            ),
                           ),
                           const SizedBox(height: 5),
                           GestureDetector(
                             onTap: () async {
-                              globalController.selectedRowIndex.value = -1;
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => DeleteConfirmationDialog(
+                                      title: "Alert!",
+                                      description: "Are you sure you want to delete this item?",
+                                      onDeletePressed: () {
+                                        // Your delete logic here
 
-                              List<DiagnosisModel>? diagnosisModelList = [];
+                                        globalController.selectedRowIndex.value = -1;
 
-                              TableRowModel tempdata = TableRowModel(cells: widget.tableModel.rows[rowIndex].cells);
+                                        List<DiagnosisModel>? diagnosisModelList = [];
 
-                              widget.tableModel.rows.removeAt(rowIndex);
+                                        TableRowModel tempdata = TableRowModel(cells: widget.tableModel.rows[rowIndex].cells);
 
-                              if (tempdata.cells[0].items[0].code != "0") {
-                                customPrint("sgfgdfgdfg");
-                                for (DiagnosisModel diagnosisModel in tempdata.cells[1].items[0].diagnosisModelList ?? []) {
-                                  if (diagnosisModel.popoverController.opened) {
-                                    diagnosisModel.popoverController.close();
-                                  }
+                                        widget.tableModel.rows.removeAt(rowIndex);
 
-                                  diagnosisModelList.add(DiagnosisModel(confidence: diagnosisModel.confidence, code: diagnosisModel.code, description: diagnosisModel.description, diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives));
-                                }
-                                widget.possibleDignosisProcedureTableModel.rows.add(
-                                  TableRowModel(
-                                    cells: [
-                                      TableCellModel(items: [SingleCellModel(code: tempdata.cells[0].items[0].code, unit: tempdata.cells[0].items[0].unit, modifiers: tempdata.cells[0].items[0].modifiers, description: tempdata.cells[0].items[0].description ?? "", unitPrice: "0", procedurePossibleAlternatives: tempdata.cells[0].items[0].procedurePossibleAlternatives)]),
-                                      TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
-                                      TableCellModel(items: [SingleCellModel(unit: tempdata.cells[2].items[0].unit)]),
-                                      TableCellModel(items: [SingleCellModel(unitPrice: tempdata.cells[3].items[0].unitPrice)]),
-                                    ],
-                                  ),
-                                );
-                              }
-                              calculateTotal();
-                              setState(() {});
+                                        if (tempdata.cells[0].items[0].code != "0") {
+                                          customPrint("sgfgdfgdfg");
+                                          for (DiagnosisModel diagnosisModel in tempdata.cells[1].items[0].diagnosisModelList ?? []) {
+                                            if (diagnosisModel.popoverController.opened) {
+                                              diagnosisModel.popoverController.close();
+                                            }
+
+                                            diagnosisModelList.add(DiagnosisModel(confidence: diagnosisModel.confidence, code: diagnosisModel.code, description: diagnosisModel.description, diagnosisPossibleAlternatives: diagnosisModel.diagnosisPossibleAlternatives));
+                                          }
+                                          widget.possibleDignosisProcedureTableModel.rows.add(
+                                            TableRowModel(
+                                              cells: [
+                                                TableCellModel(
+                                                  items: [
+                                                    SingleCellModel(
+                                                      code: tempdata.cells[0].items[0].code,
+                                                      unit: tempdata.cells[0].items[0].unit,
+                                                      modifiers: tempdata.cells[0].items[0].modifiers,
+                                                      description: tempdata.cells[0].items[0].description ?? "",
+                                                      unitPrice: "0",
+                                                      procedurePossibleAlternatives: tempdata.cells[0].items[0].procedurePossibleAlternatives,
+                                                    ),
+                                                  ],
+                                                ),
+                                                TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
+                                                TableCellModel(items: [SingleCellModel(unit: tempdata.cells[2].items[0].unit)]),
+                                                TableCellModel(items: [SingleCellModel(unitPrice: tempdata.cells[3].items[0].unitPrice)]),
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                        calculateTotal();
+                                        setState(() {});
+                                      },
+                                    ),
+                              );
                             },
                             child: Container(
                               margin: const EdgeInsets.all(5.0),
@@ -430,7 +458,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     contentWidth: MediaQuery.of(context).size.width * 0.4,
                                                                     action: RichText(
                                                                       key: isDrag ? null : items[i].diagnosisModelList?[subIndex].diagnosisContainerKey,
-                                                                      text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]),
+                                                                      text: TextSpan(
+                                                                        children: [
+                                                                          TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                                          TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                                        ],
+                                                                      ),
                                                                     ),
                                                                     content: DiagnosisDropDrownSearchTable(
                                                                       diagnosisContainerKey: items[i].diagnosisModelList![subIndex].diagnosisContainerKey,
@@ -501,16 +534,29 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                           ),
                                                           const SizedBox(width: 10),
                                                           Obx(() {
-                                                            return (widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null) ? GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)) : SizedBox.shrink();
+                                                            return (widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null)
+                                                                ? GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30))
+                                                                : SizedBox.shrink();
                                                           }),
                                                           const SizedBox(width: 3),
                                                           GestureDetector(
                                                             onTap: () {
-                                                              _deleteItem(row, col, i, subIndex);
+                                                              showDialog(
+                                                                context: context,
+                                                                builder:
+                                                                    (context) => DeleteConfirmationDialog(
+                                                                      title: "Alert!",
+                                                                      description: "Are you sure you want to delete this item?",
+                                                                      onDeletePressed: () {
+                                                                        _deleteItem(row, col, i, subIndex);
 
-                                                              Future.delayed(const Duration(milliseconds: 500), () {
-                                                                calculateTotal();
-                                                              });
+                                                                        Future.delayed(const Duration(milliseconds: 500), () {
+                                                                          calculateTotal();
+                                                                        });
+                                                                        // Your delete logic here
+                                                                      },
+                                                                    ),
+                                                              );
                                                             },
                                                             child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
                                                           ),
@@ -591,7 +637,12 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     contentWidth: MediaQuery.of(context).size.width * 0.4,
                                                                     action: RichText(
                                                                       key: isDrag ? null : items[i].diagnosisModelList?[subIndex].diagnosisContainerKey,
-                                                                      text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]),
+                                                                      text: TextSpan(
+                                                                        children: [
+                                                                          TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
+                                                                          TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
+                                                                        ],
+                                                                      ),
                                                                     ),
                                                                     content: DiagnosisDropDrownSearchTable(
                                                                       diagnosisContainerKey: items[i].diagnosisModelList![subIndex].diagnosisContainerKey,
@@ -669,11 +720,28 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                             return !(widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null)
                                                                 ? GestureDetector(
                                                                   onTap: () {
-                                                                    _deleteItem(row, col, i, subIndex);
+                                                                    showDialog(
+                                                                      context: context,
+                                                                      builder:
+                                                                          (context) => DeleteConfirmationDialog(
+                                                                            title: "Alert!",
+                                                                            description: "Are you sure you want to delete this item?",
+                                                                            onDeletePressed: () {
+                                                                              _deleteItem(row, col, i, subIndex);
 
-                                                                    Future.delayed(const Duration(milliseconds: 500), () {
-                                                                      calculateTotal();
-                                                                    });
+                                                                              Future.delayed(const Duration(milliseconds: 500), () {
+                                                                                calculateTotal();
+                                                                              });
+                                                                              // Your delete logic here
+                                                                            },
+                                                                          ),
+                                                                    );
+
+                                                                    // _deleteItem(row, col, i, subIndex);
+                                                                    //
+                                                                    // Future.delayed(const Duration(milliseconds: 500), () {
+                                                                    //   calculateTotal();
+                                                                    // });
                                                                   },
                                                                   child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
                                                                 )
@@ -792,7 +860,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                           applyActionWidth: false,
                                           alignment: PopoverAlignment.rightTop,
                                           contentWidth: MediaQuery.of(context).size.width * 0.4,
-                                          action: Text((items[i].modifiers != "" && items[i].modifiers != null) ? items[i].modifiers ?? "+ Modifier" : "+ Modifier", style: (items[i].modifiers != "" && items[i].modifiers != null) ? AppFonts.semiBold(14, AppColors.black) : AppFonts.regular(14, AppColors.black)),
+                                          action: Text(
+                                            (items[i].modifiers != "" && items[i].modifiers != null) ? items[i].modifiers ?? "+ Modifier" : "+ Modifier",
+                                            style: (items[i].modifiers != "" && items[i].modifiers != null) ? AppFonts.semiBold(14, AppColors.black) : AppFonts.regular(14, AppColors.black),
+                                          ),
 
                                           content: ModifierDropDrownSearchTable(
                                             procedureContainerKey: items[i].procedureContainerKey,
@@ -966,7 +1037,14 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       decoration: BoxDecoration(borderRadius: const BorderRadius.only(bottomRight: Radius.circular(6), bottomLeft: Radius.circular(6)), border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
       child: Row(
         children: [
-          Expanded(flex: 90, child: Container(padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8), decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))), child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)))),
+          Expanded(
+            flex: 90,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
+              decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
+              child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
+            ),
+          ),
           Expanded(
             flex: 12,
             child: Container(
@@ -1111,7 +1189,13 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                             margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                             child: Row(
                               children: [
-                                Expanded(child: RichText(text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]))),
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           );
@@ -1193,7 +1277,13 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
           procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
         }
 
-        final procedure1 = createProcedure(code: row.cells.first.items[0].code ?? "", description: row.cells.first.items[0].description ?? "", shortDescription: row.cells.first.items[0].shortDescription ?? "", modifier: row.cells.first.items[0].modifiers ?? "", possibleAlternatives: procedureListPossibleAlternatives);
+        final procedure1 = createProcedure(
+          code: row.cells.first.items[0].code ?? "",
+          description: row.cells.first.items[0].description ?? "",
+          shortDescription: row.cells.first.items[0].shortDescription ?? "",
+          modifier: row.cells.first.items[0].modifiers ?? "",
+          possibleAlternatives: procedureListPossibleAlternatives,
+        );
 
         for (DiagnosisModel item in row.cells[1].items[0].diagnosisModelList ?? []) {
           List<Map<String, String>> diagnosisListListPossibleAlternatives = [];

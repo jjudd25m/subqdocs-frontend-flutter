@@ -67,7 +67,12 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                 ? ClipRRect(borderRadius: BorderRadius.circular(20.0), child: Image.asset(fit: BoxFit.cover, ImagePath.user, height: 40, width: 40))
                                 : ClipRRect(
                                   borderRadius: BorderRadius.circular(25.0),
-                                  child: BaseImageView(imageUrl: controller.globalController.getUserDetailModel.value?.responseData?.profileImage ?? "", width: 40, height: 40, nameLetters: "${controller.globalController.getUserDetailModel.value?.responseData?.firstName?.trim() ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName?.trim() ?? ""}"),
+                                  child: BaseImageView(
+                                    imageUrl: controller.globalController.getUserDetailModel.value?.responseData?.profileImage ?? "",
+                                    width: 40,
+                                    height: 40,
+                                    nameLetters: "${controller.globalController.getUserDetailModel.value?.responseData?.firstName?.trim() ?? ""} ${controller.globalController.getUserDetailModel.value?.responseData?.lastName?.trim() ?? ""}",
+                                  ),
                                 ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -81,7 +86,7 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    controller.globalController.getUserDetailModel.value?.responseData?.degree ?? "",
+                                    controller.globalController.getUserDetailModel.value?.responseData?.title ?? "",
                                     // Dummy email
                                     style: AppFonts.medium(12, AppColors.textDarkGrey),
                                   ),

@@ -11,6 +11,7 @@ import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
+import '../../../../widgets/cupertino_delete_alert.dart';
 import '../../../core/common/html_editor_container.dart';
 import '../../../core/common/logger.dart';
 import '../../visit_main/model/doctor_view_model.dart';
@@ -90,9 +91,21 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.impressionAndPlanListFullNote.removeAt(index);
-                                    controller.impressionAndPlanListFullNote.refresh();
-                                    controller.updateImpressionAndPlanFullNote();
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (context) => DeleteConfirmationDialog(
+                                            title: "Alert",
+                                            description: "Are you sure you want to delete this Impression and Plan?",
+                                            onDeletePressed: () {
+                                              // Your delete logic here
+
+                                              controller.impressionAndPlanListFullNote.removeAt(index);
+                                              controller.impressionAndPlanListFullNote.refresh();
+                                              controller.updateImpressionAndPlanFullNote();
+                                            },
+                                          ),
+                                    );
                                   },
                                   child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
                                 ),
@@ -332,7 +345,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                               }
                                               return Container(
                                                 width: double.infinity,
-                                                margin: EdgeInsets.only(top: 10),
+                                                margin: const EdgeInsets.only(top: 10),
                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
                                                 child: Wrap(
                                                   spacing: 8,
@@ -405,11 +418,11 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                   ),
 
                                   if (controller.impressionAndPlanListFullNote.length - 1 == index) ...[
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
                                     const SizedBox(height: 16),
                                     Padding(padding: const EdgeInsets.only(left: 15, right: 10), child: Align(alignment: Alignment.topLeft, child: Text("General Images", style: AppFonts.medium(14, AppColors.black)))),
-                                    SizedBox(height: 8),
+                                    const SizedBox(height: 8),
                                     DragTarget<Map<String, dynamic>>(
                                       onWillAcceptWithDetails: (data) => true,
                                       onAcceptWithDetails: (details) {
@@ -420,11 +433,13 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
                                         final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments);
 
+                                        print("is from is from isGeneral $isGeneral");
+
                                         if (isGeneral) {
                                           // Reordering within general images
 
-                                          controller.generalAttachments.removeAt(fromImageIndex);
                                           controller.generalAttachments.insert(dropIndex, attachment);
+                                          controller.generalAttachments.removeAt(fromImageIndex);
                                         } else {
                                           // Coming from expansion tile attachments
                                           controller.generalAttachments.insert(dropIndex, attachment);
@@ -438,13 +453,13 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                       },
                                       builder: (context, candidateData, rejectedData) {
                                         if (controller.generalAttachments.isEmpty) {
-                                          return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
+                                          return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
                                         }
                                         return Container(
                                           width: double.infinity,
-                                          margin: EdgeInsets.only(top: 10),
+                                          margin: const EdgeInsets.only(top: 10),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                                          padding: EdgeInsets.only(left: 15, right: 10),
+                                          padding: const EdgeInsets.only(left: 15, right: 10),
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
@@ -491,6 +506,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
                                                         final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments);
                                                         int insertIndex = imageIndex;
+                                                        print("List.generate is from isGeneral");
                                                         if (isGeneral) {
                                                           // Reordering within general images
                                                           if (fromImageIndex < imageIndex) {
@@ -582,6 +598,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                     textStyle: AppFonts.medium(16, AppColors.textPurple),
                     initialText: "${attachment.fileName?.split(".").first}",
                     toggle: () {},
+                    maxLines: 2,
                     onSubmitted: (_) {},
                     onChanged: (title, isApiCall) {
                       attachment.fileName = title;

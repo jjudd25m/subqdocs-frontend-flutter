@@ -9,6 +9,7 @@ import 'package:subqdocs/app/modules/patient_info/views/EditableViews/CommonCont
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
+import '../../../../widgets/cupertino_delete_alert.dart';
 import '../../../core/common/html_editor_container.dart';
 import '../../../core/common/logger.dart';
 import '../../visit_main/model/doctor_view_model.dart';
@@ -90,9 +91,20 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                               const SizedBox(height: 10),
                               GestureDetector(
                                 onTap: () {
-                                  controller.impressionAndPlanList.removeAt(index);
-                                  controller.impressionAndPlanList.refresh();
-                                  controller.updateImpressionAndPlan();
+                                  showDialog(
+                                    context: context,
+                                    builder:
+                                        (context) => DeleteConfirmationDialog(
+                                          title: "Alert!",
+                                          description: "Are you sure you want to delete this Impression and Plan?",
+                                          onDeletePressed: () {
+                                            // Your delete logic here
+                                            controller.impressionAndPlanList.removeAt(index);
+                                            controller.impressionAndPlanList.refresh();
+                                            controller.updateImpressionAndPlan();
+                                          },
+                                        ),
+                                  );
                                 },
                                 child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
                               ),
@@ -115,170 +127,174 @@ class ImpressionAndPlanDoctorView extends StatelessWidget {
                             controller.impressionAndPlanListFullNote.refresh();
                           }
                           customPrint("message:SlidableState  ${model.isOpened?.value}");
-
                         });
-                        return Obx(
-                         () {
-                            return GestureDetector(
-                              onTap: () {
-                                model.slidableController?.openStartActionPane();
-                              },
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(maxWidth: model.isOpened?.value ?? false ? MediaQuery.orientationOf(context) == Orientation.portrait ? MediaQuery.of(context).size.width * 0.85 : MediaQuery.of(context).size.width * 0.9 : MediaQuery.of(context).size.width),
-                                child: ExpansionTile(
-                                  initiallyExpanded: true,
-                                  enabled: false,
-                                  tilePadding: const EdgeInsets.only(right: 20, bottom: 0),
-                                  visualDensity: const VisualDensity(vertical: -4),
-                                  childrenPadding: const EdgeInsets.all(0),
-                                  collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-                                  shape: OutlineInputBorder(borderSide: BorderSide(color: AppColors.textGrey.withValues(alpha: 0.2)), borderRadius: BorderRadius.circular(8)),
-                                  showTrailingIcon: false,
-                                  collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                  title: Popover(
-                                    key: ValueKey(model.popoverController),
-                                    // key: UniqueKey(),
-                                    context,
-                                    controller: model.popoverController,
-                                    // controller: PopoverController(),
-                                    borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                                    scrollEnabled: true,
-                                    hideArrow: true,
-                                    alignment: PopoverAlignment.leftTop,
+                        return Obx(() {
+                          return GestureDetector(
+                            onTap: () {
+                              model.slidableController?.openStartActionPane();
+                            },
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    model.isOpened?.value ?? false
+                                        ? MediaQuery.orientationOf(context) == Orientation.portrait
+                                            ? MediaQuery.of(context).size.width * 0.85
+                                            : MediaQuery.of(context).size.width * 0.9
+                                        : MediaQuery.of(context).size.width,
+                              ),
+                              child: ExpansionTile(
+                                initiallyExpanded: true,
+                                enabled: false,
+                                tilePadding: const EdgeInsets.only(right: 20, bottom: 0),
+                                visualDensity: const VisualDensity(vertical: -4),
+                                childrenPadding: const EdgeInsets.all(0),
+                                collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+                                shape: OutlineInputBorder(borderSide: BorderSide(color: AppColors.textGrey.withValues(alpha: 0.2)), borderRadius: BorderRadius.circular(8)),
+                                showTrailingIcon: false,
+                                collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
+                                title: Popover(
+                                  key: ValueKey(model.popoverController),
+                                  // key: UniqueKey(),
+                                  context,
+                                  controller: model.popoverController,
+                                  // controller: PopoverController(),
+                                  borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                                  scrollEnabled: true,
+                                  hideArrow: true,
+                                  alignment: PopoverAlignment.leftTop,
 
-                                    applyActionWidth: false,
-                                    contentWidth: 500,
-                                    action: GestureDetector(
-                                      onTap: () {
-                                        controller.resetImpressionAndPlanList();
-                                        model.popoverController.toggle();
-                                        model.slidableController?.openStartActionPane();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 20, right: 0),
-                                        child: Row(
-                                          children: [
-                                            const SizedBox(width: 5),
-                                            // SvgPicture.asset(ImagePath.dragAndDrop),
-                                            // const SizedBox(width: 10),
-                                            Expanded(
-                                              child: IntrinsicWidth(
-                                                key: model.diagnosisContainerKey,
-                                                child: InlineEditingDropdown(
-                                                  width: 500,
-                                                  key: ValueKey(model.popoverController),
-                                                  focusNode: model.focusNode,
-                                                  textStyle: AppFonts.medium(16, AppColors.textPurple),
-                                                  initialText: "${index + 1} ${model.title ?? "Select Icd10 Code"}",
-                                                  toggle: () async {
-                                                    // controller
-                                                    //     .closeAllProcedureDiagnosisPopover();
-                                                    //
-                                                    // // controller.impressionAndPlanList.forEach((element) {
-                                                    // //   element.popoverController.close();
-                                                    // // });
-                                                    // controller.resetImpressionAndPlanList();
-                                                    //
-                                                    // Future.delayed(
-                                                    //   Duration(milliseconds: 200),
-                                                    // ).then((value) {
-                                                    //   model.popoverController.toggle();
-                                                    // });
-                                                  },
-                                                  onTap: () {
-                                                    model.slidableController?.openStartActionPane();
-                                                  },
-                                                  onSubmitted: (_) {},
-                                                  onChanged: (title, isApiCall) {
-                                                    model.title = title;
+                                  applyActionWidth: false,
+                                  contentWidth: 500,
+                                  action: GestureDetector(
+                                    onTap: () {
+                                      controller.resetImpressionAndPlanList();
+                                      model.popoverController.toggle();
+                                      model.slidableController?.openStartActionPane();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 20, right: 0),
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 5),
+                                          // SvgPicture.asset(ImagePath.dragAndDrop),
+                                          // const SizedBox(width: 10),
+                                          Expanded(
+                                            child: IntrinsicWidth(
+                                              key: model.diagnosisContainerKey,
+                                              child: InlineEditingDropdown(
+                                                width: 500,
+                                                key: ValueKey(model.popoverController),
+                                                focusNode: model.focusNode,
+                                                textStyle: AppFonts.medium(16, AppColors.textPurple),
+                                                initialText: "${index + 1} ${model.title ?? "Select Icd10 Code"}",
+                                                toggle: () async {
+                                                  // controller
+                                                  //     .closeAllProcedureDiagnosisPopover();
+                                                  //
+                                                  // // controller.impressionAndPlanList.forEach((element) {
+                                                  // //   element.popoverController.close();
+                                                  // // });
+                                                  // controller.resetImpressionAndPlanList();
+                                                  //
+                                                  // Future.delayed(
+                                                  //   Duration(milliseconds: 200),
+                                                  // ).then((value) {
+                                                  //   model.popoverController.toggle();
+                                                  // });
+                                                },
+                                                onTap: () {
+                                                  model.slidableController?.openStartActionPane();
+                                                },
+                                                onSubmitted: (_) {},
+                                                onChanged: (title, isApiCall) {
+                                                  model.title = title;
 
-                                                    if (isApiCall) {
-                                                      controller.updateImpressionAndPlan();
-                                                    }
+                                                  if (isApiCall) {
+                                                    controller.updateImpressionAndPlan();
+                                                  }
 
-                                                    // popoverController.open();
-                                                  },
-                                                ),
+                                                  // popoverController.open();
+                                                },
                                               ),
                                             ),
-                                            // const Spacer(),
-                                            // Container(),
-                                            const Align(alignment: Alignment.centerRight, child: Padding(padding: EdgeInsets.only(right: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40))),
-                                            // GestureDetector(
-                                            //   onTap: () {
-                                            //     controller.impressionAndPlanList.removeAt(index);
-                                            //     controller.impressionAndPlanList.refresh();
-                                            //     controller.updateImpressionAndPlan();
-                                            //   },
-                                            //   child: Container(child: Padding(padding: const EdgeInsets.only(left: 20, right: 5), child: SvgPicture.asset(ImagePath.delete_black))),
-                                            // ),
-                                            // Drag icon
-                                          ],
-                                        ),
+                                          ),
+                                          // const Spacer(),
+                                          // Container(),
+                                          const Align(alignment: Alignment.centerRight, child: Padding(padding: EdgeInsets.only(right: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40))),
+                                          // GestureDetector(
+                                          //   onTap: () {
+                                          //     controller.impressionAndPlanList.removeAt(index);
+                                          //     controller.impressionAndPlanList.refresh();
+                                          //     controller.updateImpressionAndPlan();
+                                          //   },
+                                          //   child: Container(child: Padding(padding: const EdgeInsets.only(left: 20, right: 5), child: SvgPicture.asset(ImagePath.delete_black))),
+                                          // ),
+                                          // Drag icon
+                                        ],
                                       ),
-                                    ),
-                                    content: DiagnosisDropDrownSearchTable(
-                                      key: ValueKey(model.popoverController),
-                                      diagnosisContainerKey: model.diagnosisContainerKey,
-                                      items:
-                                          (model.siblingIcd10 ?? []).map((e) {
-                                            return ProcedurePossibleAlternatives(code: e.code, description: e.name, isPin: true);
-                                          }).toList(),
-
-                                      onItemSelected: (value, _) {
-                                        model.popoverController.close();
-                                        customPrint("called ");
-
-                                        controller.impressionAndPlanList[index].title = "${value.description} (${value.code})";
-                                        controller.impressionAndPlanList.refresh();
-                                        controller.updateImpressionAndPlan();
-                                      },
-                                      controller: controller,
-                                      onSearchItemSelected: (p0, p1) {
-                                        model.popoverController.close();
-                                        controller.impressionAndPlanList[index].title = "$p1 ($p0)";
-                                        controller.impressionAndPlanList.refresh();
-                                        controller.updateImpressionAndPlan();
-                                      },
-                                      onInitCallBack: () {},
-                                      tableRowIndex: -1,
                                     ),
                                   ),
-                                  children: <Widget>[
-                                    Container(
-                                      color: AppColors.white,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          model.slidableController?.openStartActionPane();
-                                          // Slidable.of(context)?.openStartActionPane();
+                                  content: DiagnosisDropDrownSearchTable(
+                                    key: ValueKey(model.popoverController),
+                                    diagnosisContainerKey: model.diagnosisContainerKey,
+                                    items:
+                                        (model.siblingIcd10 ?? []).map((e) {
+                                          return ProcedurePossibleAlternatives(code: e.code, description: e.name, isPin: true);
+                                        }).toList(),
+
+                                    onItemSelected: (value, _) {
+                                      model.popoverController.close();
+                                      customPrint("called ");
+
+                                      controller.impressionAndPlanList[index].title = "${value.description} (${value.code})";
+                                      controller.impressionAndPlanList.refresh();
+                                      controller.updateImpressionAndPlan();
+                                    },
+                                    controller: controller,
+                                    onSearchItemSelected: (p0, p1) {
+                                      model.popoverController.close();
+                                      controller.impressionAndPlanList[index].title = "$p1 ($p0)";
+                                      controller.impressionAndPlanList.refresh();
+                                      controller.updateImpressionAndPlan();
+                                    },
+                                    onInitCallBack: () {},
+                                    tableRowIndex: -1,
+                                  ),
+                                ),
+                                children: <Widget>[
+                                  Container(
+                                    color: AppColors.white,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        model.slidableController?.openStartActionPane();
+                                        // Slidable.of(context)?.openStartActionPane();
+                                      },
+                                      child: HtmlEditorViewWidget(
+                                        heightOfTheEditableView: 500,
+                                        isBorder: false,
+                                        padding: const EdgeInsets.only(left: 40, right: 10),
+                                        impresionAndPlanViewModel: model,
+                                        onUpdateCallBack: (impressionModel, content) {
+                                          controller.impressionAndPlanList[index] = impressionModel;
+                                          controller.impressionAndPlanList.refresh();
+                                          controller.updateImpressionAndPlan();
                                         },
-                                        child: HtmlEditorViewWidget(
-                                          heightOfTheEditableView: 500,
-                                          isBorder: false,
-                                          padding: const EdgeInsets.only(left: 40, right: 10),
-                                          impresionAndPlanViewModel: model,
-                                          onUpdateCallBack: (impressionModel, content) {
-                                            controller.impressionAndPlanList[index] = impressionModel;
-                                            controller.impressionAndPlanList.refresh();
-                                            controller.updateImpressionAndPlan();
-                                          },
-                                          toggleCallBack: (impressionModel) {
-                                            controller.closeAllProcedureDiagnosisPopover();
-                                            controller.resetImpressionAndPlanList();
-                                            impressionModel.isEditing = true;
-                                            controller.impressionAndPlanList[index] = impressionModel;
-                                            controller.impressionAndPlanList.refresh();
-                                          },
-                                        ),
+                                        toggleCallBack: (impressionModel) {
+                                          controller.closeAllProcedureDiagnosisPopover();
+                                          controller.resetImpressionAndPlanList();
+                                          impressionModel.isEditing = true;
+                                          controller.impressionAndPlanList[index] = impressionModel;
+                                          controller.impressionAndPlanList.refresh();
+                                        },
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          }
-                        );
-                      }
+                            ),
+                          );
+                        });
+                      },
                     ),
                   ),
                 ),

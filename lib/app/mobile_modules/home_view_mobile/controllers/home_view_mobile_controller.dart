@@ -74,6 +74,8 @@ class HomeViewMobileController extends GetxController {
     globalController.getUserDetail();
     handelInternetConnection();
 
+    await getLatestBuild();
+
     scrollControllerPatientList.addListener(_onScrollPatientList);
     scrollControllerPastPatientList.addListener(_onScrollPastPatientList);
     scrollControllerSchedulePatientList.addListener(_onScrollSchedulePatientList);
@@ -88,6 +90,25 @@ class HomeViewMobileController extends GetxController {
     super.onReady();
 
     initialDataFetch();
+  }
+
+  Future<void> getLatestBuild() async {
+    final info = await PackageInfo.fromPlatform();
+
+    customPrint(info.version);
+    LatestBuildModel latestBuildModel = await _homeRepository.checkLatestBuild();
+
+    String latestBuild = latestBuildModel.responseData?.dataValues?.versionNumber ?? "1.0";
+    customPrint("Latest build :- $latestBuild");
+    String currentBuild = info.version;
+    customPrint("Current build:- $currentBuild");
+    customPrint(isVersionGreater(latestBuild, currentBuild));
+    if (isVersionGreater(latestBuild, currentBuild)) {
+      customPrint("inside update");
+      showIOSForceUpdateDialog(Get.context!, latestBuildModel.responseData?.dataValues?.versionSummary ?? "");
+    } else {
+      customPrint("outside update");
+    }
   }
 
   Future<void> getOrganizationDetail() async {
