@@ -65,6 +65,7 @@
 import 'package:easy_popover/easy_popover.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:subqdocs/app/modules/patient_info/model/patient_fullnote_model.dart';
 
@@ -134,9 +135,10 @@ class ImpresionAndPlanViewModel {
   FocusNode focusNode = FocusNode();
 
   List<Attachments>? attachments;
-  bool? isOpened = false;
+  List<Attachments>? generalAttachments;
+  RxBool? isOpened = RxBool(false);
 
-  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController, this.attachments, this.isOpened = false});
+  ImpresionAndPlanViewModel({this.title, this.htmlContent, required this.htmlEditorController, this.isEditing = false, this.toggleHtmlContent, this.siblingIcd10, this.siblingIcd10FullNote, this.initialHtmlContent, this.slidableController, this.attachments,this.generalAttachments});
 
   Map<String, dynamic> toJson() {
     if (title == null) {

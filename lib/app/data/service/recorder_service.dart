@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:subqdocs/app/models/audio_wave.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../utils/app_colors.dart';
 import '../../../widgets/customPermission.dart';
@@ -38,6 +39,7 @@ class RecorderService {
 
   /// Start Recording
   Future<bool> startRecording(BuildContext context) async {
+    WakelockPlus.enable();
     final GlobalController globalController = Get.find();
     log("log: start recording");
     if (await audioRecorder.hasPermission()) {
@@ -96,12 +98,13 @@ class RecorderService {
     recordingTime.value = 0;
     // Update the recording status to "Stopped"
     recordingStatus.value = 0;
-
+    WakelockPlus.disable();
     return recordFile;
   }
 
   /// Resume Recording
   Future<void> resumeRecording() async {
+    WakelockPlus.enable();
     waves.resume();
     log("log: resume recording");
     await audioRecorder.resume();
@@ -114,6 +117,7 @@ class RecorderService {
 
   /// Pause Recording
   Future<void> pauseRecording() async {
+    WakelockPlus.disable();
     waves.pause();
     log("log: pause recording");
     await audioRecorder.pause();

@@ -108,8 +108,8 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                             final rawValue = model.slidableController?.animation.value ?? 0;
                             final isOpen = rawValue > _openThreshold;
                             // Explicit boolean conversion
-                            if (isOpen != model.isOpened) {
-                              model.isOpened = isOpen; // No need for cast, isOpen is already bool
+                            if (isOpen != model.isOpened?.value) {
+                              model.isOpened?.value = isOpen; // No need for cast, isOpen is already bool
                               controller.impressionAndPlanListFullNote.refresh();
                             }
                           });
@@ -119,7 +119,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                               // Slidable.of(context)?.openStartActionPane();
                             },
                             child: ConstrainedBox(
-                              constraints: BoxConstraints(maxWidth: model.isOpened == true ? (MediaQuery.orientationOf(context) == Orientation.portrait ? MediaQuery.of(context).size.width * 0.85 : MediaQuery.of(context).size.width * 0.895) : MediaQuery.of(context).size.width),
+                              constraints: BoxConstraints(maxWidth: model.isOpened?.value ?? false ? MediaQuery.orientationOf(context) == Orientation.portrait ? MediaQuery.of(context).size.width * 0.85 : MediaQuery.of(context).size.width * 0.9 : MediaQuery.of(context).size.width),
                               child: ExpansionTile(
                                 enabled: false,
                                 initiallyExpanded: true,
@@ -400,7 +400,10 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                     SizedBox(height: 10),
                                     Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
                                     const SizedBox(height: 16),
-                                    Padding(padding: const EdgeInsets.only(left: 15, right: 10), child: Align(alignment: Alignment.topLeft, child: Text("General Images", style: AppFonts.medium(14, AppColors.black)))),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15, right: 10),
+                                      child: Align(alignment: Alignment.topLeft,child: Text("General Images", style: AppFonts.medium(14, AppColors.black))),
+                                    ),
                                     SizedBox(height: 8),
                                     DragTarget<Map<String, dynamic>>(
                                       onWillAcceptWithDetails: (data) => true,
@@ -498,7 +501,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                               ),
                             ),
                           );
-                        },
+                        }
                       ),
                     ),
                   ),

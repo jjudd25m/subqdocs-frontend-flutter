@@ -82,113 +82,30 @@ class PersonalSettingMobileViewView extends GetView<PersonalSettingMobileViewCon
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.clear),
-      child: Obx(() {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.clear),
-          height: 70,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  spacing: 24,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildTab(key: controller.tabKeys[0], text: 'Personal Setting', index: 0, controller: controller),
-                    // _buildTab(key: controller.tabKeys[1], text: 'Change Password', index: 1, controller: controller),
-                    _buildTab(key: controller.tabKeys[1], text: 'More Documents', index: 2, controller: controller),
-                  ],
-                ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.clear),
+        height: 70,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 24,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildTab(key: controller.tabKeys[0], text: 'Personal Setting', index: 0, controller: controller),
+                  // _buildTab(key: controller.tabKeys[1], text: 'Change Password', index: 1, controller: controller),
+                  _buildTab(key: controller.tabKeys[1], text: 'More Documents', index: 2, controller: controller),
+                ],
               ),
-
-              // SingleChildScrollView(
-              //   physics: const BouncingScrollPhysics(),
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     spacing: 24,
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       GestureDetector(
-              //         onTap: () {
-              //           controller.tabIndex.value = 0;
-              //         },
-              //         child: Column(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             Padding(padding: const EdgeInsets.only(bottom: 12.0), child: Text('Personal Setting', style: TextStyle(color: controller.tabIndex.value == 0 ? AppColors.textPurple : AppColors.textDarkGrey, fontWeight: FontWeight.w500))),
-              //             Container(
-              //               height: 3.0,
-              //               width: _getTextWidth('Personal Setting', const TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0)),
-              //               decoration: BoxDecoration(color: controller.tabIndex.value == 0 ? AppColors.textPurple : Colors.transparent, borderRadius: BorderRadius.circular(1.5)),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //       GestureDetector(
-              //         onTap: () {
-              //           controller.tabIndex.value = 1;
-              //         },
-              //         child: Column(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             Padding(padding: const EdgeInsets.only(bottom: 12.0), child: Text('Organization Management', style: TextStyle(color: controller.tabIndex.value == 1 ? AppColors.textPurple : AppColors.textDarkGrey, fontWeight: FontWeight.w500))),
-              //             Container(
-              //               height: 3.0,
-              //               width: _getTextWidth('Organization Management', const TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0)),
-              //               decoration: BoxDecoration(color: controller.tabIndex.value == 1 ? AppColors.textPurple : Colors.transparent, borderRadius: BorderRadius.circular(1.5)),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //       GestureDetector(
-              //         onTap: () {
-              //           controller.tabIndex.value = 2;
-              //         },
-              //         child: Column(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             Padding(padding: const EdgeInsets.only(bottom: 12.0), child: Text('User Management', style: TextStyle(color: controller.tabIndex.value == 2 ? AppColors.textPurple : AppColors.textDarkGrey, fontWeight: FontWeight.w500))),
-              //             Container(
-              //               height: 3.0,
-              //               width: _getTextWidth('User Management', const TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0)),
-              //               decoration: BoxDecoration(color: controller.tabIndex.value == 2 ? AppColors.textPurple : Colors.transparent, borderRadius: BorderRadius.circular(1.5)),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //       GestureDetector(
-              //         onTap: () {
-              //           controller.tabIndex.value = 3;
-              //         },
-              //         child: Column(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             Padding(padding: const EdgeInsets.only(bottom: 12.0), child: Text('Change Password', style: TextStyle(color: controller.tabIndex.value == 3 ? AppColors.textPurple : AppColors.textDarkGrey, fontWeight: FontWeight.w500))),
-              //             Container(
-              //               height: 3.0,
-              //               width: _getTextWidth('Change Password', const TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0)),
-              //               decoration: BoxDecoration(color: controller.tabIndex.value == 3 ? AppColors.textPurple : Colors.transparent, borderRadius: BorderRadius.circular(1.5)),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              Container(height: 2.0, width: double.infinity, decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.backgroundPurple.withOpacity(0.1))),
-            ],
-          ),
-
-          // SingleChildScrollView(
-          //   physics: const BouncingScrollPhysics(),
-          //   scrollDirection: Axis.horizontal,
-          //   child: Row(spacing: 10, children: [_buildTabButton(index: 0, label: "Personal Setting"), _buildTabButton(index: 1, label: "Organization Management"), _buildTabButton(index: 2, label: "User Management"), _buildTabButton(index: 3, label: "Change Password")]),
-          // ),
-        );
-      }),
+            ),
+            Container(height: 2.0, width: double.infinity, decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: AppColors.backgroundPurple.withOpacity(0.1))),
+          ],
+        ),
+      ),
     );
   }
 

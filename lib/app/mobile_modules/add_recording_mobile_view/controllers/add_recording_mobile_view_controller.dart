@@ -13,7 +13,6 @@ import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:subqdocs/app/core/common/global_mobile_controller.dart';
 import 'package:toastification/toastification.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
@@ -51,7 +50,7 @@ class AddRecordingMobileViewController extends GetxController {
     patientId = Get.arguments["patientId"];
     visitId = Get.arguments["visitId"];
 
-    WakelockPlus.enable();
+    // WakelockPlus.enable();
   }
 
   @override
@@ -59,7 +58,7 @@ class AddRecordingMobileViewController extends GetxController {
     // TODO: implement dispose
     super.dispose();
 
-    WakelockPlus.disable();
+    // WakelockPlus.disable();
   }
 
   Future<void> submitAudio(File audioFile) async {

@@ -116,7 +116,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                               ),
                               PullDownMenuItem.selectable(
                                 selected: controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == true ? true : false,
-                                title: 'Multi Language',
+                                title: 'Multi language',
                                 onTap: () async {
                                   controller.globalController.selectedLanguageValue.value = "Multi Language";
                                   controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
@@ -124,10 +124,14 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                               ),
                             ],
                         buttonBuilder:
-                            (context, showMenu) =>
-                                CupertinoButton(onPressed: showMenu, padding: EdgeInsets.zero, child: Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${controller.globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)])),
-
-                        // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
+                            (context, showMenu) => CupertinoButton(
+                              onPressed: showMenu,
+                              padding: EdgeInsets.zero,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [Text('Transcription in ${(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                              ),
+                            ),
                       ),
                       Center(
                         child: Stack(
@@ -286,14 +290,6 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                                 }
                               }),
                               const SizedBox(height: 10),
-                              // Display corresponding text based on the status
-                              // Obx(() {
-                              //   if (controller.recorderService.recordingStatus.value == 1) {
-                              //     return Text(textAlign: TextAlign.center, "Pause", style: AppFonts.medium(17, AppColors.textGrey));
-                              //   } else {
-                              //     return Text(textAlign: TextAlign.center, "Resume", style: AppFonts.medium(17, AppColors.textGrey));
-                              //   }
-                              // }),
                             ],
                           ),
                         ),

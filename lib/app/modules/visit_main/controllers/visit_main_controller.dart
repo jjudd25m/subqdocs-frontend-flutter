@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../services/media_picker_services.dart';
 import '../../../../utils/Loader.dart';
@@ -121,7 +120,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
 
     patientId.value = Get.arguments["patientId"];
 
-    WakelockPlus.enable();
+    // WakelockPlus.enable();
     pageController = PageController(initialPage: DateUtils.monthDelta(DateTime(2000, 01, 01), selectedDate?.firstOrNull ?? DateTime.now()));
 
     if (visitId.value.isNotEmpty) {
@@ -472,7 +471,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
     // TODO: implement dispose
     super.dispose();
 
-    WakelockPlus.disable();
+    // WakelockPlus.disable();
   }
 
   Future<void> onRefresh() async {

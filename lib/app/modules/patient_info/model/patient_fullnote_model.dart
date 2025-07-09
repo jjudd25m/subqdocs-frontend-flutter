@@ -431,6 +431,7 @@ class FullNoteDetails {
   String? reviewOfSystem;
   String? exam;
   List<ImpressionsAndPlan>? impressionsAndPlan;
+  List<Attachments>? impressionsAndPlanAttachments;
   bool? isImageGenerated;
   FullNoteError? error;
 
@@ -463,6 +464,14 @@ class FullNoteDetails {
       });
     }
     isImageGenerated = json['is_image_generated'];
+    customPrint("message ${json['impressions_and_plan_attachments']}");
+    if (json['impressions_and_plan_attachments'] != null) {
+      impressionsAndPlanAttachments = <Attachments>[];
+      json['impressions_and_plan_attachments'].forEach((v) {
+        customPrint("messages: attachment $v");
+        impressionsAndPlanAttachments!.add(Attachments.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -489,7 +498,9 @@ class FullNoteDetails {
       data['impressions_and_plan'] = impressionsAndPlan!.map((v) => v.toJson()).toList();
     }
     data['is_image_generated'] = isImageGenerated;
-
+    if (impressionsAndPlanAttachments != null) {
+      data['impressions_and_plan_attachments'] = impressionsAndPlanAttachments!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -584,7 +595,6 @@ class ImpressionsAndPlan {
       });
     }
     content = json['content'];
-    customPrint("messages: attachment $json");
     if (json['attachments'] != null) {
       attachments = <Attachments>[];
       json['attachments'].forEach((v) {
@@ -773,9 +783,10 @@ class Attachments {
   String? createdAt;
   String? updatedAt;
   dynamic deletedAt;
+  String? icdCode;
   FocusNode focusNode = FocusNode();
 
-  Attachments({this.id, this.fileName, this.filePath, this.fileType, this.fileSize, this.uploadedBy, this.uploadedAt, this.visitId, this.patientId, this.isActive, this.timestamp, this.createdAt, this.updatedAt, this.deletedAt});
+  Attachments({this.id, this.fileName, this.filePath, this.fileType, this.fileSize, this.uploadedBy, this.uploadedAt, this.visitId, this.patientId, this.isActive, this.timestamp, this.createdAt, this.updatedAt, this.deletedAt,this.icdCode});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -792,6 +803,7 @@ class Attachments {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    icdCode = json['icd_code'];
   }
 
   Map<String, dynamic> toJson() {
@@ -810,6 +822,7 @@ class Attachments {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['icd_code'] = icdCode;
     return data;
   }
 }

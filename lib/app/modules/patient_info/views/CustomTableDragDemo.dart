@@ -572,7 +572,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                     return Container(
                                                       margin: const EdgeInsets.symmetric(vertical: 5),
                                                       decoration: BoxDecoration(color: candidateData.isNotEmpty ? Colors.blue.withOpacity(0.1) : AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
-                                                      padding: const EdgeInsets.all(6.0),
+                                                      padding: const EdgeInsets.all(4.0),
                                                       child: Row(
                                                         children: [
                                                           Container(
@@ -953,7 +953,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
         TableRow(
           decoration: const BoxDecoration(color: AppColors.white),
           children:
-              ['Procedure', 'Diagnosis', 'Units'].map((col) {
+              ['E&M / Procedure (CPT) codes', 'Diagnosis', 'Units'].map((col) {
                 return Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), child: Text(col, textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)));
               }).toList(),
         ),
@@ -1095,10 +1095,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
         children: List.generate(items.length, (i) {
           final GlobalKey _procedureGestureKey = GlobalKey();
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            padding: EdgeInsets.zero,
             child:
                 (col == 2)
-                    ? IgnorePointer(child: InlineEditableText(onChanged: (p0) {}, initialText: "${items[i].unit}", textStyle: AppFonts.regular(14, AppColors.textGreyTable), onSubmitted: (newText) {}))
+                    ? IgnorePointer(child: Padding(padding: const EdgeInsets.all(8.0), child: InlineEditableText(onChanged: (p0) {}, initialText: "${items[i].unit}", textStyle: AppFonts.regular(14, AppColors.black), onSubmitted: (newText) {})))
                     : (col == 3)
                     ? IgnorePointer(child: InlineEditableText(onChanged: (p0) {}, initialText: "${items[i].unitPrice}", textStyle: AppFonts.regular(14, AppColors.textGreyTable), onSubmitted: (newText) {}))
                     : isDiagnosis
@@ -1108,6 +1108,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           return Container(
                             decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
                             padding: const EdgeInsets.all(6.0),
+                            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                             child: Row(
                               children: [
                                 Expanded(child: RichText(text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]))),
