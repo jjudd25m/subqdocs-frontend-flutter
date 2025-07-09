@@ -643,12 +643,17 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
         HtmlEditorController htmlEditorController = HtmlEditorController();
         // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,attachments: impressionsAndPlan.attachments ?? [],slidableController: SlidableController(this)));
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, attachments: impressionsAndPlan.attachments ?? [], slidableController: SlidableController(this)));
       }
 
       impressionAndPlanListFullNote.refresh();
     }
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments != null) {
+      generalAttachments.clear();
 
+      generalAttachments.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
+      generalAttachments.refresh();
+    }
     if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
       editableDataForSkinHistory.clear();
 
@@ -730,6 +735,102 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       editableChiefView.refresh();
     }
   }
+
+  // void setImpressionAndPlanListPatientView() {
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan != null) {
+  //     impressionAndPlanListFullNote.clear();
+  //
+  //     for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+  //       HtmlEditorController htmlEditorController = HtmlEditorController();
+  //       // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
+  //
+  //       impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,attachments: impressionsAndPlan.attachments ?? [],slidableController: SlidableController(this)));
+  //     }
+  //
+  //     impressionAndPlanListFullNote.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
+  //     editableDataForSkinHistory.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
+  //     editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForSkinHistory.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml != null) {
+  //     editableDataForCancerHistory.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
+  //     editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForCancerHistory.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml != null) {
+  //     editableDataForSocialHistory.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
+  //     editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForSocialHistory.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml != null) {
+  //     editableDataForMedication.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
+  //     editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForMedication.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies != null) {
+  //     editableDataForAllergies.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "");
+  //     editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForAllergies.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem != null) {
+  //     editableDataForReviewOfSystems.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText("""   """ ?? "");
+  //     editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForReviewOfSystems.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam != null) {
+  //     editableDataForExam.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "");
+  //     editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForExam.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi != null) {
+  //     editableDataHpiView.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "");
+  //     editableDataHpiView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataHpiView.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain != null) {
+  //     editableChiefView.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "");
+  //     editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableChiefView.refresh();
+  //   }
+  // }
 
   Future<void> getPatientNoteData() async {
     try {
@@ -1312,14 +1413,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
               customPrint("message:attach ${impressionsAndPlan.attachments}");
               customPrint("message:attach ${impressionsAndPlan.title}");
               customPrint("message:attach ${impressionsAndPlan.content}");
-              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "",
-                  htmlEditorController: htmlEditorController,
-                  title: impressionsAndPlan.title,
-                  siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
-                  slidableController: SlidableController(this),
-                  attachments: impressionsAndPlan.attachments ?? []
-
-              ));
+              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
             }
             generalAttachments.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
           });

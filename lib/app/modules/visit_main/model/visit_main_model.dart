@@ -47,8 +47,32 @@ class ResponseData {
   List<PastVisit>? pastVisitsList;
   PersonalNote? personalNote;
   VisitSnapshot? visitSnapshot;
+  String? finalize_date_time;
 
-  ResponseData({this.visitId, this.visitDate, this.visitTime, this.visitStatus, this.id, this.patientId, this.patientFirstName, this.patientMiddleName, this.patientLastName, this.profileImage, this.age, this.gender, this.doctorName, this.medicalAssistantName, this.doctorId, this.medicalAssistantId, this.attachments, this.pastVisitsList, this.personalNote, this.visitSnapshot, this.thirdPartyId});
+  ResponseData({
+    this.visitId,
+    this.visitDate,
+    this.visitTime,
+    this.finalize_date_time,
+    this.visitStatus,
+    this.id,
+    this.patientId,
+    this.patientFirstName,
+    this.patientMiddleName,
+    this.patientLastName,
+    this.profileImage,
+    this.age,
+    this.gender,
+    this.doctorName,
+    this.medicalAssistantName,
+    this.doctorId,
+    this.medicalAssistantId,
+    this.attachments,
+    this.pastVisitsList,
+    this.personalNote,
+    this.visitSnapshot,
+    this.thirdPartyId,
+  });
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     visitId = json['visit_id'];
@@ -69,6 +93,7 @@ class ResponseData {
     doctorId = json['doctor_id'];
     medicalAssistantId = json['medical_assistant_id'];
     attachments = json['attachments'] ?? [];
+    finalize_date_time = json['finalize_date_time'];
 
     if (json['pastVisitsList'] != null) {
       pastVisitsList = <PastVisit>[];
@@ -102,6 +127,7 @@ class ResponseData {
     data['doctor_id'] = doctorId;
     data['medical_assistant_id'] = medicalAssistantId;
     data['attachments'] = attachments;
+    data['finalize_date_time'] = finalize_date_time;
     if (pastVisitsList != null) {
       data['pastVisitsList'] = pastVisitsList!.map((v) => v.toJson()).toList();
     }

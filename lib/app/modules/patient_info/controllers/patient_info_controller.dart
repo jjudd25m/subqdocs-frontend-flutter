@@ -45,6 +45,8 @@ import '../views/confirm_finalize_dialog.dart';
 class PatientInfoController extends GetxController with WidgetsBindingObserver, GetTickerProviderStateMixin {
   //TODO: Implement PatientInfoController
 
+  final isDragging = false.obs;
+
   // final KeyboardController keyboardController = Get.put(KeyboardController());
 
   RxBool isKeyboardVisible = RxBool(false);
@@ -889,14 +891,17 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
               customPrint("message:attach ${impressionsAndPlan.attachments}");
               customPrint("message:attach ${impressionsAndPlan.title}");
               customPrint("message:attach ${impressionsAndPlan.content}");
-              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "",
-                htmlEditorController: htmlEditorController,
-                title: impressionsAndPlan.title,
-                siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
-                slidableController: SlidableController(this),
-                attachments: impressionsAndPlan.attachments ?? [],
-                // generalAttachments: patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? []
-              ));
+              impressionAndPlanListFullNote.add(
+                ImpresionAndPlanViewModel(
+                  htmlContent: impressionsAndPlan.content ?? "",
+                  htmlEditorController: htmlEditorController,
+                  title: impressionsAndPlan.title,
+                  siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
+                  slidableController: SlidableController(this),
+                  attachments: impressionsAndPlan.attachments ?? [],
+                  // generalAttachments: patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? []
+                ),
+              );
             }
             generalAttachments.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
           });
@@ -1784,21 +1789,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     });
   }
 
-  void setImpressionAndPlanList() {
-    if (doctorViewList.value?.responseData?.impressionsAndPlan != null) {
-      impressionAndPlanList.clear();
-
-      for (var impressionsAndPlan in doctorViewList.value!.responseData!.impressionsAndPlan!) {
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
-
-        impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10: impressionsAndPlan.siblingIcd10,slidableController: SlidableController(this)));
-      }
-
-      impressionAndPlanList.refresh();
-    }
-  }
-
   void setImpressionAndPlanListPatientView() {
     if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan != null) {
       impressionAndPlanListFullNote.clear();
@@ -1807,10 +1797,16 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         HtmlEditorController htmlEditorController = HtmlEditorController();
         // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
 
-        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, attachments: impressionsAndPlan.attachments ?? []));
+        impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, attachments: impressionsAndPlan.attachments ?? [], slidableController: SlidableController(this)));
       }
 
       impressionAndPlanListFullNote.refresh();
+    }
+    if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments != null) {
+      generalAttachments.clear();
+
+      generalAttachments.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
+      generalAttachments.refresh();
     }
 
     if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
@@ -1894,6 +1890,117 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       editableChiefView.refresh();
     }
   }
+
+  void setImpressionAndPlanList() {
+    if (doctorViewList.value?.responseData?.impressionsAndPlan != null) {
+      impressionAndPlanList.clear();
+
+      for (var impressionsAndPlan in doctorViewList.value!.responseData!.impressionsAndPlan!) {
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
+
+        impressionAndPlanList.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this)));
+      }
+
+      impressionAndPlanList.refresh();
+    }
+  }
+
+  // void setImpressionAndPlanListPatientView() {
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan != null) {
+  //     impressionAndPlanListFullNote.clear();
+  //
+  //     for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+  //       HtmlEditorController htmlEditorController = HtmlEditorController();
+  //       // htmlEditorController.setText(ImpressionsAndPlan.content ?? "");
+  //
+  //       impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, attachments: impressionsAndPlan.attachments ?? []));
+  //     }
+  //
+  //     impressionAndPlanListFullNote.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation != null) {
+  //     editableDataForSkinHistory.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "");
+  //     editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForSkinHistory.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml != null) {
+  //     editableDataForCancerHistory.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "");
+  //     editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForCancerHistory.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml != null) {
+  //     editableDataForSocialHistory.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "");
+  //     editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForSocialHistory.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml != null) {
+  //     editableDataForMedication.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "");
+  //     editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForMedication.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies != null) {
+  //     editableDataForAllergies.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "");
+  //     editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForAllergies.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem != null) {
+  //     editableDataForReviewOfSystems.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText("""   """ ?? "");
+  //     editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForReviewOfSystems.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam != null) {
+  //     editableDataForExam.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "");
+  //     editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataForExam.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi != null) {
+  //     editableDataHpiView.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "");
+  //     editableDataHpiView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableDataHpiView.refresh();
+  //   }
+  //
+  //   if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain != null) {
+  //     editableChiefView.clear();
+  //
+  //     HtmlEditorController htmlEditorController = HtmlEditorController();
+  //     // htmlEditorController.setText(patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "");
+  //     editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
+  //     editableChiefView.refresh();
+  //   }
+  // }
 
   Map<String, String> buildParams(String keyName, List<ImpresionAndPlanViewModel> list) {
     return {keyName: list.firstOrNull?.htmlContent ?? ""};
@@ -2335,6 +2442,26 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           }
         }
       }
+    }
+  }
+
+  void updateLists() {
+    impressionAndPlanListFullNote.refresh();
+    generalAttachments.refresh();
+    isFullNoteAttachment.value = true;
+    updateImpressionAndPlanFullNote();
+  }
+
+  bool isValidIndex(int index, List list) => index >= 0 && index < list.length;
+
+  void safeInsert(List list, dynamic item, int index) {
+    index = index.clamp(0, list.length);
+    list.insert(index, item);
+  }
+
+  void safeRemoveAt(List list, int index) {
+    if (isValidIndex(index, list)) {
+      list.removeAt(index);
     }
   }
 }

@@ -455,7 +455,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 SvgPicture.asset(ImagePath.signature, height: 30, width: 30),
                                                 const SizedBox(height: 10),
                                                 Text(textAlign: TextAlign.center, "Digitally Signed by Dr.${controller.patientData.value?.responseData?.doctorName}", style: AppFonts.medium(16, AppColors.textWhite)),
-                                                Text(textAlign: TextAlign.center, formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""), style: AppFonts.medium(16, AppColors.textWhite)),
+                                                Text(textAlign: TextAlign.center, formatDateTime(firstDate: controller.patientData.value?.responseData?.finalize_date_time ?? "", secondDate: controller.patientData.value?.responseData?.finalize_date_time ?? ""), style: AppFonts.medium(16, AppColors.textWhite)),
                                               ],
                                             ),
                                           ],
