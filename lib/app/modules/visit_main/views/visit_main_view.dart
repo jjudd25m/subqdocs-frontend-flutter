@@ -149,7 +149,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       ],
                                     ),
                                     const Spacer(),
-
                                     GestureDetector(
                                       onTap: () async {
                                         final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientId.value, "visitId": controller.visitId.value, "fromSchedule": true});
@@ -193,7 +192,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         children: [
                                           Text(textAlign: TextAlign.start, "Medical Assistant", style: AppFonts.regular(12, AppColors.textBlack)),
                                           const SizedBox(height: 6),
-
                                           if (controller.visitId.value != "null")
                                             PopupMenuButton<String>(
                                               offset: const Offset(0, 8),
@@ -233,7 +231,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                   ],
                                               child: IntrinsicWidth(child: ContainerDropdownViewPopUp(receiveParam: (isExpand) {}, name: controller.medicationValue.value)),
                                             ),
-
                                           if (controller.visitId.value == "null") const Text(textAlign: TextAlign.center, "-"),
                                         ],
                                       ),
@@ -248,9 +245,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           children: [
                                             Text(textAlign: TextAlign.center, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
                                             const SizedBox(height: 6),
-
                                             if (controller.visitId.value == "null") const Text(textAlign: TextAlign.center, "-"),
-
                                             if (controller.visitId.value != "null")
                                               PopupMenuButton<String>(
                                                 offset: const Offset(0, 8),
@@ -314,11 +309,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 childrenPadding: const EdgeInsets.all(0),
                                 collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
-                                title: Row(children: [Text(textAlign: TextAlign.center, "Next Visit Snapshot", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
-                                children: <Widget>[controller.editableVisitSnapShot.isEmpty ? patientMedicalHistoryEmptyWidget("No visit snapshot found") : VisitSnapShotEditbale(controller: controller), const SizedBox(height: 10)],
+                                title: Row(children: [Text(textAlign: TextAlign.center, "Patient Summery", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
+                                children: <Widget>[controller.editableVisitSnapShot.isEmpty ? patientMedicalHistoryEmptyWidget("Patient summery found") : VisitSnapShotEditbale(controller: controller), const SizedBox(height: 10)],
                               ),
                             ),
                           if (controller.visitId.value != "null") const SizedBox(height: 10.0),
@@ -355,7 +349,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 tilePadding: const EdgeInsets.only(left: 16, right: 16),
                                 collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
                                 title: Row(children: [Text(textAlign: TextAlign.center, "Patient Medical History", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
@@ -379,7 +372,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                             child: ExpansionTile(
                               initiallyExpanded: true,
                               childrenPadding: const EdgeInsets.all(0),
-
                               tilePadding: const EdgeInsets.only(left: 16, right: 16),
                               collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
@@ -675,12 +667,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                             ),
                             child: ExpansionTile(
                               initiallyExpanded: true,
-
                               tilePadding: const EdgeInsets.only(left: 16, right: 16),
                               childrenPadding: const EdgeInsets.all(0),
                               collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
-
                               backgroundColor: AppColors.backgroundWhite,
                               collapsedBackgroundColor: AppColors.backgroundWhite,
                               title: Row(
@@ -999,7 +989,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                           Expanded(
                             child: PopupMenuButton<String>(
                               offset: const Offset(0, -290),
-
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                               color: AppColors.white,
                               position: PopupMenuPosition.under,
@@ -1114,8 +1103,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         controller.globalController.startAudioWidget();
                                         controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                         controller.globalController.getConnectedInputDevices();
-                                        // await controller.globalController.recorderService.startRecording(context);
-                                        // controller.updateData();
+                                        await controller.globalController.recorderService.startRecording(context);
+                                        controller.updateData();
                                       } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
                                         // Handle permission denial here
 

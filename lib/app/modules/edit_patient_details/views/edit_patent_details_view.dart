@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -67,11 +66,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                     child: Container(
                       color: AppColors.ScreenBackGround,
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: Dimen.margin20,
-                          right: Dimen.margin16,
-                          left: Dimen.margin16,
-                        ),
+                        padding: const EdgeInsets.only(top: Dimen.margin20, right: Dimen.margin16, left: Dimen.margin16),
                         child: ListView(
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
@@ -80,19 +75,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             // SizedBox(height: 10),
                             Obx(() {
                               return BreadcrumbWidget(
-                                breadcrumbHistory:
-                                    controller
-                                        .globalController
-                                        .breadcrumbHistory
-                                        .value,
+                                breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
                                 onBack: (breadcrumb) {
-                                  controller.globalController.popUntilRoute(
-                                    breadcrumb,
-                                  );
-                                  while (Get.currentRoute !=
-                                      controller.globalController.getKeyByValue(
-                                        breadcrumb,
-                                      )) {
+                                  controller.globalController.popUntilRoute(breadcrumb);
+                                  while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
                                     Get.back(); // Pop the current screen
                                   }
                                 },
@@ -102,10 +88,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.all(Dimen.margin16),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: AppColors.white,
-                              ),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: AppColors.white),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -115,21 +98,10 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         onTap: () {
                                           Get.back();
                                         },
-                                        child: SvgPicture.asset(
-                                          ImagePath.arrowLeft,
-                                          fit: BoxFit.cover,
-                                          width: Dimen.margin24,
-                                          height: Dimen.margin24,
-                                        ),
+                                        child: SvgPicture.asset(ImagePath.arrowLeft, fit: BoxFit.cover, width: Dimen.margin24, height: Dimen.margin24),
                                       ),
                                       const SizedBox(width: Dimen.margin8),
-                                      Text(
-                                        "Patient Details",
-                                        style: AppFonts.regular(
-                                          18,
-                                          AppColors.textBlack,
-                                        ),
-                                      ),
+                                      Text("Patient Details", style: AppFonts.regular(18, AppColors.textBlack)),
                                     ],
                                   ),
                                   const SizedBox(height: Dimen.margin24),
@@ -137,315 +109,119 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     return Row(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            100,
-                                          ),
+                                          borderRadius: BorderRadius.circular(100),
                                           child:
-                                              controller
-                                                          .profileImageUrl
-                                                          .value !=
-                                                      null
-                                                  ? CachedNetworkImage(
-                                                    imageUrl:
-                                                        controller
-                                                            .profileImageUrl
-                                                            .value ??
-                                                        "",
-                                                    width: 60,
-                                                    height: 60,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                  : controller
-                                                          .profileImage
-                                                          .value
-                                                          ?.path !=
-                                                      null
-                                                  ? RoundedImageFileWidget(
-                                                    size: 60,
-                                                    imagePath:
-                                                        controller
-                                                            .profileImage
-                                                            .value,
-                                                  )
-                                                  : BaseImageView(
-                                                    imageUrl: "",
-                                                    width: 60,
-                                                    height: 60,
-                                                    fontSize: 14,
-                                                    nameLetters:
-                                                        "${controller.firstNameController.text} ${controller.lastNameController.text}",
-                                                  ),
+                                              controller.profileImageUrl.value != null
+                                                  ? CachedNetworkImage(imageUrl: controller.profileImageUrl.value ?? "", width: 60, height: 60, fit: BoxFit.cover)
+                                                  : controller.profileImage.value?.path != null
+                                                  ? RoundedImageFileWidget(size: 60, imagePath: controller.profileImage.value)
+                                                  : BaseImageView(imageUrl: "", width: 60, height: 60, fontSize: 14, nameLetters: "${controller.firstNameController.text} ${controller.lastNameController.text}"),
                                         ),
                                         PopupMenuButton<String>(
                                           offset: const Offset(0, 8),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                           color: AppColors.white,
                                           position: PopupMenuPosition.under,
                                           padding: EdgeInsetsDirectional.zero,
-                                          menuPadding:
-                                              EdgeInsetsDirectional.zero,
+                                          menuPadding: EdgeInsetsDirectional.zero,
                                           onSelected: (value) {},
-                                          style: const ButtonStyle(
-                                            padding: WidgetStatePropertyAll(
-                                              EdgeInsetsDirectional.zero,
-                                            ),
-                                            tapTargetSize:
-                                                MaterialTapTargetSize
-                                                    .shrinkWrap,
-                                            maximumSize: WidgetStatePropertyAll(
-                                              Size.zero,
-                                            ),
-                                            visualDensity: VisualDensity(
-                                              horizontal: 0,
-                                              vertical: 0,
-                                            ),
-                                          ),
+                                          style: const ButtonStyle(padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero), tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
                                           itemBuilder:
                                               (context) => [
                                                 PopupMenuItem(
                                                   padding: EdgeInsets.zero,
                                                   onTap: () {
-                                                    controller
-                                                        .pickProfileImage();
+                                                    controller.pickProfileImage();
                                                   },
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          left: 10,
-                                                          right: 20,
-                                                          top: 10,
-                                                          bottom: 10,
-                                                        ),
-                                                    child: Row(
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.file_copy_sharp,
-                                                          color:
-                                                              AppColors
-                                                                  .textDarkGrey,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Pick From Files",
-                                                          style:
-                                                              AppFonts.regular(
-                                                                16,
-                                                                AppColors
-                                                                    .textBlack,
-                                                              ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                                  child: Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(Icons.file_copy_sharp, color: AppColors.textDarkGrey), const SizedBox(width: 10), Text("Pick From Files", style: AppFonts.regular(16, AppColors.textBlack))])),
                                                 ),
                                                 PopupMenuItem(
                                                   // value: "",
                                                   padding: EdgeInsets.zero,
                                                   onTap: () async {
-                                                    controller
-                                                        .captureProfileImage();
+                                                    controller.captureProfileImage();
                                                   },
                                                   child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Container(
-                                                        width: double.infinity,
-                                                        height: 1,
-                                                        color:
-                                                            AppColors
-                                                                .appbarBorder,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                              left: 10,
-                                                              right: 20,
-                                                              top: 10,
-                                                              bottom: 10,
-                                                            ),
-                                                        child: Row(
-                                                          children: [
-                                                            const Icon(
-                                                              CupertinoIcons
-                                                                  .camera,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Text(
-                                                              "Take A Photo",
-                                                              style: AppFonts.regular(
-                                                                16,
-                                                                AppColors
-                                                                    .textBlack,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                      Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                      Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(CupertinoIcons.camera), const SizedBox(width: 10), Text("Take A Photo", style: AppFonts.regular(16, AppColors.textBlack))])),
                                                     ],
                                                   ),
                                                 ),
-                                                if ((controller
-                                                                .profileImageUrl
-                                                                .value !=
-                                                            null &&
-                                                        controller
-                                                                .profileImageUrl
-                                                                .value !=
-                                                            "") ||
-                                                    controller
-                                                            .profileImage
-                                                            .value !=
-                                                        null) ...[
+                                                if ((controller.profileImageUrl.value != null && controller.profileImageUrl.value != "") || controller.profileImage.value != null) ...[
                                                   PopupMenuItem(
                                                     // value: "",
                                                     padding: EdgeInsets.zero,
                                                     onTap: () async {
-                                                      controller
-                                                          .profileImageUrl
-                                                          .value = null;
-                                                      controller
-                                                          .profileImage
-                                                          .value = null;
+                                                      controller.profileImageUrl.value = null;
+                                                      controller.profileImage.value = null;
                                                       // controller.captureProfileImage();
                                                     },
                                                     child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Container(
-                                                          width:
-                                                              double.infinity,
-                                                          height: 1,
-                                                          color:
-                                                              AppColors
-                                                                  .appbarBorder,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets.only(
-                                                                left: 10,
-                                                                right: 20,
-                                                                top: 10,
-                                                                bottom: 10,
-                                                              ),
-                                                          child: Row(
-                                                            children: [
-                                                              const Icon(
-                                                                CupertinoIcons
-                                                                    .camera,
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                              Text(
-                                                                "Remove photo",
-                                                                style: AppFonts.regular(
-                                                                  16,
-                                                                  AppColors
-                                                                      .textBlack,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
+                                                        Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                        Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(CupertinoIcons.camera), const SizedBox(width: 10), Text("Remove photo", style: AppFonts.regular(16, AppColors.textBlack))])),
                                                       ],
                                                     ),
                                                   ),
                                                 ],
                                               ],
-                                          child: Row(
-                                            children: [
-                                              const SizedBox(width: 12.5),
-                                              SvgPicture.asset(
-                                                ImagePath.edit,
-                                                width: 26,
-                                                height: 26,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                "Edit Profile Image",
-                                                style: AppFonts.regular(
-                                                  14,
-                                                  AppColors.textDarkGrey,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                          child: Row(children: [const SizedBox(width: 12.5), SvgPicture.asset(ImagePath.edit, width: 26, height: 26, fit: BoxFit.cover), const SizedBox(width: 8), Text("Edit Profile Image", style: AppFonts.regular(14, AppColors.textDarkGrey))]),
                                         ),
                                       ],
                                     );
                                   }),
                                   const SizedBox(height: Dimen.margin16),
                                   const SizedBox(height: Dimen.margin16),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Basic Detail",
-                                        style: AppFonts.medium(
-                                          14,
-                                          AppColors.textPurple,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  Row(children: [Text("Basic Detail", style: AppFonts.medium(14, AppColors.textPurple))]),
                                   const SizedBox(height: Dimen.margin16),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormFiledWidget(
-                                          label: "Patient Id ",
-                                          type: TextInputType.number,
-                                          readOnly: true,
-                                          isValid: true,
-                                          isSuffixIconVisible: false,
-                                          isFirst: true,
-                                          format: [
-                                            FilteringTextInputFormatter.allow(
-                                              RegExp(r'[a-zA-Z0-9]'),
-                                            ),
-                                            LengthLimitingTextInputFormatter(
-                                              15,
-                                            ),
-                                          ],
-                                          controller:
-                                              controller.patientIdController,
-                                          hint: "123",
-                                          onTap: () {
-                                            controller.patientIdController
-                                                .clear();
-                                          },
-                                          suffixIcon: const Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
-                                          checkValidation: (value) {
-                                            return Validation.requiredFiled(
-                                              value,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(width: Dimen.margin10),
-                                      const Spacer(),
-                                      const SizedBox(width: Dimen.margin10),
-                                      const Spacer(),
-
-                                      const SizedBox(width: Dimen.margin10),
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     Expanded(
+                                  //       child: TextFormFiledWidget(
+                                  //         label: "Patient Id ",
+                                  //         type: TextInputType.number,
+                                  //         readOnly: true,
+                                  //         isValid: true,
+                                  //         isSuffixIconVisible: false,
+                                  //         isFirst: true,
+                                  //         format: [
+                                  //           FilteringTextInputFormatter.allow(
+                                  //             RegExp(r'[a-zA-Z0-9]'),
+                                  //           ),
+                                  //           LengthLimitingTextInputFormatter(
+                                  //             15,
+                                  //           ),
+                                  //         ],
+                                  //         controller:
+                                  //             controller.patientIdController,
+                                  //         hint: "123",
+                                  //         onTap: () {
+                                  //           controller.patientIdController
+                                  //               .clear();
+                                  //         },
+                                  //         suffixIcon: const Icon(
+                                  //           Icons.highlight_remove,
+                                  //           color: AppColors.textDarkGrey,
+                                  //           size: 25,
+                                  //         ),
+                                  //         checkValidation: (value) {
+                                  //           return Validation.requiredFiled(
+                                  //             value,
+                                  //           );
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(width: Dimen.margin10),
+                                  //     const Spacer(),
+                                  //     const SizedBox(width: Dimen.margin10),
+                                  //     const Spacer(),
+                                  //
+                                  //     const SizedBox(width: Dimen.margin10),
+                                  //   ],
+                                  // ),
                                   const SizedBox(height: Dimen.margin16),
                                   Row(
                                     children: [
@@ -457,22 +233,14 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           format: [CustomTextInputFormatter()],
                                           // isImportant: true,
                                           isValid: true,
-                                          controller:
-                                              controller.firstNameController,
-                                          hint: "Don",
+                                          controller: controller.firstNameController,
+                                          hint: "",
                                           onTap: () {
-                                            controller.firstNameController
-                                                .clear();
+                                            controller.firstNameController.clear();
                                           },
-                                          suffixIcon: const Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
+                                          suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                                           checkValidation: (value) {
-                                            return Validation.requiredFiled(
-                                              value,
-                                            );
+                                            return Validation.requiredFiled(value);
                                           },
                                         ),
                                       ),
@@ -484,17 +252,11 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           label: "Middle Name",
                                           format: [CustomTextInputFormatter()],
                                           onTap: () {
-                                            controller.middleNameController
-                                                .clear();
+                                            controller.middleNameController.clear();
                                           },
-                                          suffixIcon: const Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
-                                          controller:
-                                              controller.middleNameController,
-                                          hint: "Joseph",
+                                          suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                          controller: controller.middleNameController,
+                                          hint: "",
                                         ),
                                       ),
                                       const SizedBox(width: Dimen.margin10),
@@ -506,22 +268,14 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                           isSuffixIconVisible: false,
                                           isFirst: true,
                                           // isImportant: true,
-                                          controller:
-                                              controller.lastNameController,
+                                          controller: controller.lastNameController,
                                           onTap: () {
-                                            controller.lastNameController
-                                                .clear();
+                                            controller.lastNameController.clear();
                                           },
-                                          suffixIcon: const Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
-                                          hint: "Jones",
+                                          suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                          hint: "",
                                           checkValidation: (value) {
-                                            return Validation.requiredFiled(
-                                              value,
-                                            );
+                                            return Validation.requiredFiled(value);
                                           },
                                         ),
                                       ),
@@ -529,100 +283,42 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                   ),
                                   const SizedBox(height: Dimen.margin16),
                                   const SizedBox(height: Dimen.margin16),
-                                  const Divider(
-                                    color: AppColors.backgroundLightGrey,
-                                    thickness: 1.0,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Personal Information",
-                                        style: AppFonts.medium(
-                                          14,
-                                          AppColors.textPurple,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  const Divider(color: AppColors.backgroundLightGrey, thickness: 1.0),
+                                  Row(children: [Text("Personal Information", style: AppFonts.medium(14, AppColors.textPurple))]),
                                   const SizedBox(height: Dimen.margin16),
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
                                         child: TextFormFiledWidget(
-                                          checkValidation: (value) {
-                                            return Validation.birthDateValidation(
-                                              value,
-                                              isRequired: true,
-                                            );
-                                          },
-                                          suffixIcon: const Icon(
-                                            Icons.calendar_month,
-                                          ),
+                                          // checkValidation: (value) {
+                                          //   return Validation.birthDateValidation(value, isRequired: true);
+                                          // },
+                                          suffixIcon: const Icon(Icons.calendar_month),
 
                                           label: "Date of birth",
                                           format: [DateInputFormatter()],
-                                          isValid: true,
+                                          // isValid: true,
 
                                           // isImportant: true,
                                           controller: controller.dobController,
                                           onTap: () async {
                                             final picked = await showDatePicker(
                                               context: context,
-                                              initialDate:
-                                                  controller
-                                                      .selectedDOBDate
-                                                      .value ??
-                                                  DateTime.now().subtract(
-                                                    const Duration(days: 400),
-                                                  ),
-                                              firstDate: DateTime.now()
-                                                  .subtract(
-                                                    const Duration(days: 36700),
-                                                  ),
-                                              lastDate: DateTime.now().subtract(
-                                                const Duration(days: 400),
-                                              ),
+                                              initialDate: controller.selectedDOBDate.value ?? DateTime.now().subtract(const Duration(days: 400)),
+                                              firstDate: DateTime.now().subtract(const Duration(days: 36700)),
+                                              lastDate: DateTime.now().subtract(const Duration(days: 400)),
                                               builder: (context, child) {
-                                                return Theme(
-                                                  data: ThemeData.light().copyWith(
-                                                    cardColor: AppColors.white,
-                                                    primaryColor:
-                                                        AppColors
-                                                            .backgroundPurple,
-                                                    hintColor:
-                                                        AppColors
-                                                            .backgroundPurple,
-                                                    colorScheme:
-                                                        const ColorScheme.light(
-                                                          primary:
-                                                              AppColors
-                                                                  .backgroundPurple,
-                                                        ),
-                                                    buttonTheme:
-                                                        const ButtonThemeData(
-                                                          textTheme:
-                                                              ButtonTextTheme
-                                                                  .primary,
-                                                        ),
-                                                  ),
-                                                  child: child!,
-                                                );
+                                                return Theme(data: ThemeData.light().copyWith(cardColor: AppColors.white, primaryColor: AppColors.backgroundPurple, hintColor: AppColors.backgroundPurple, colorScheme: const ColorScheme.light(primary: AppColors.backgroundPurple), buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary)), child: child!);
                                               },
                                             );
                                             if (picked != null) {
                                               String inputText;
 
-                                              controller.selectedDOBDate.value =
-                                                  picked;
-                                              String padDayMonth(int value) =>
-                                                  value.toString().padLeft(
-                                                    2,
-                                                    '0',
-                                                  );
-                                              inputText =
-                                                  '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
-                                              controller.dobController.text =
-                                                  inputText;
+                                              controller.selectedDOBDate.value = picked;
+                                              String padDayMonth(int value) => value.toString().padLeft(2, '0');
+                                              inputText = '${padDayMonth(picked.month)}/${padDayMonth(picked.day)}/${picked.year}';
+                                              controller.dobController.text = inputText;
                                             }
                                           },
                                           hint: "mm/dd/yyyy",
@@ -631,30 +327,17 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       const SizedBox(width: Dimen.margin10),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              "Sex",
-                                              style: AppFonts.regular(
-                                                14,
-                                                AppColors.textBlack,
-                                              ),
-                                            ),
+                                            Text("Sex", style: AppFonts.regular(14, AppColors.textBlack)),
                                             const SizedBox(height: 8),
                                             Obx(() {
                                               return BaseDropdown<String>(
-                                                valueAsString:
-                                                    (value) => value ?? "",
+                                                valueAsString: (value) => value ?? "",
                                                 items: controller.sex,
-                                                selectedValue:
-                                                    controller
-                                                        .selectedSexValue
-                                                        .value,
+                                                selectedValue: controller.selectedSexValue.value,
                                                 onChanged: (value) {
-                                                  controller
-                                                      .selectedSexValue
-                                                      .value = value;
+                                                  controller.selectedSexValue.value = value;
                                                 },
                                                 selectText: "Male",
                                               );
@@ -666,29 +349,19 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                       Expanded(
                                         child: TextFormFiledWidget(
                                           isSuffixIconVisible: false,
-                                          isValid: true,
+                                          // isValid: true,
                                           isFirst: true,
-                                          format: [
-                                            NoSpaceLowercaseTextFormatter(),
-                                          ],
+                                          format: [NoSpaceLowercaseTextFormatter()],
                                           label: "Email Address",
-                                          controller:
-                                              controller.emailAddressController,
+                                          controller: controller.emailAddressController,
                                           hint: "donjones@example.com",
                                           onTap: () {
-                                            controller.emailAddressController
-                                                .clear();
+                                            controller.emailAddressController.clear();
                                           },
-                                          suffixIcon: const Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
-                                          checkValidation: (value) {
-                                            return Validation.emailValidateRequired(
-                                              value,
-                                            );
-                                          },
+                                          suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                          // checkValidation: (value) {
+                                          //   return Validation.emailValidateRequired(value);
+                                          // },
                                         ),
                                       ),
                                     ],
@@ -698,35 +371,21 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                     children: [
                                       Expanded(
                                         child: TextFormFiledWidget(
-                                          format: [
-                                            MaskTextInputFormatter(
-                                              mask: "+1 (###) ###-####",
-                                            ),
-                                          ],
+                                          format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
                                           label: "Contact Number",
-                                          controller:
-                                              controller
-                                                  .contactNumberController,
-                                          isValid: true,
+                                          controller: controller.contactNumberController,
+                                          // isValid: true,
                                           isSuffixIconVisible: false,
                                           isFirst: true,
                                           type: TextInputType.number,
                                           hint: "123456789",
                                           onTap: () {
-                                            controller.emailAddressController
-                                                .clear();
+                                            controller.emailAddressController.clear();
                                           },
-                                          suffixIcon: const Icon(
-                                            Icons.highlight_remove,
-                                            color: AppColors.textDarkGrey,
-                                            size: 25,
-                                          ),
-                                          checkValidation: (value) {
-                                            return Validation.phoneValidate(
-                                              value,
-                                              isRequired: true,
-                                            );
-                                          },
+                                          suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                                          // checkValidation: (value) {
+                                          //   return Validation.phoneValidate(value, isRequired: true);
+                                          // },
                                         ),
                                       ),
                                       const SizedBox(width: Dimen.margin10),
@@ -752,35 +411,27 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
                                         // Show border
                                         textColor: AppColors.backgroundPurple,
                                         // Custom text color
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 11,
-                                          horizontal: 12,
-                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 12),
                                         // Custom padding
                                         radius: 6, // Custom border radius
                                       ),
                                       const SizedBox(width: 8),
                                       ContainerButton(
                                         onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
+                                          if (_formKey.currentState!.validate()) {
                                             controller.addPatient();
                                           }
                                         },
                                         text: 'Save',
                                         borderColor: AppColors.backgroundPurple,
                                         // Custom border colorqq
-                                        backgroundColor:
-                                            AppColors.backgroundPurple,
+                                        backgroundColor: AppColors.backgroundPurple,
                                         // Custom background color
                                         needBorder: false,
                                         // Show border
                                         textColor: AppColors.white,
                                         // Custom text color
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 11,
-                                          horizontal: 12,
-                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 12),
                                         // Custom padding
                                         radius: 6, // Custom border radius
                                       ),

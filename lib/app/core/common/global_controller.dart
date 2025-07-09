@@ -72,7 +72,7 @@ class GlobalController extends GetxController {
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = false;
+  bool isProd = true;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 
@@ -371,6 +371,14 @@ class GlobalController extends GetxController {
       try {
         PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId.value);
         Loader().stopLoader();
+
+        LoginModel loginInfo = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+        loginInfo.responseData?.user?.is_multi_language_preference = getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+
+        await AppPreference.instance.setString(AppString.prefKeyUserLoginData, json.encode(loginInfo.toJson()));
+
+        // getUserDetail();
         customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
 
         // isLoading.value = false;

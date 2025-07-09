@@ -221,8 +221,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                    const SizedBox(height: 6),
+                                                    // Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
+                                                    // const SizedBox(height: 6),
                                                     Popover(
                                                       key: ValueKey(controller.doctorPopoverController),
                                                       context,
@@ -233,14 +233,21 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                                       applyActionWidth: false,
                                                       alignment: PopoverAlignment.bottomCenter,
                                                       contentWidth: 170,
-                                                      action: SizedBox(
-                                                        width: 170,
-                                                        child: ContainerDropdownViewPopUp(
-                                                          receiveParam: (isExpand) {
-                                                            // isExpandedMedicalAssistant.value = isExpand;
-                                                          },
-                                                          name: controller.doctorValue.value,
-                                                        ),
+                                                      action: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
+                                                          const SizedBox(height: 6),
+                                                          SizedBox(
+                                                            width: 170,
+                                                            child: ContainerDropdownViewPopUp(
+                                                              receiveParam: (isExpand) {
+                                                                // isExpandedMedicalAssistant.value = isExpand;
+                                                              },
+                                                              name: controller.doctorValue.value,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                       content: Padding(
                                                         padding: const EdgeInsets.all(0),
@@ -627,6 +634,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
 
     con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
 
+    con.setDoctor(Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null)));
+
     con.setThirdParty(controller.patientData.value?.responseData?.thirdPartyId ?? "");
 
     showGeneralDialog(
@@ -675,6 +684,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
 
     con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
 
+    con.setDoctor(Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null)));
     con.setThirdParty(controller.patientData.value?.responseData?.thirdPartyId ?? "");
 
     showGeneralDialog(

@@ -204,7 +204,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                           globalController.valueOfy.value = y;
                         },
                         width: !globalController.isExpandRecording.value ? 388 : 388,
-                        height: !globalController.isExpandRecording.value ? 66 : 564,
+                        height: !globalController.isExpandRecording.value ? 66 : 550,
                         config: DraggableFloatWidgetBaseConfig(initPositionXInLeft: false, isFullScreen: false, valueOfTheX: globalController.valueOfx.value, valueOfThey: globalController.valueOfy.value, initPositionYInTop: false, initPositionYMarginBorder: 0),
                         child: Material(
                           borderRadius: BorderRadius.circular(12),
@@ -255,7 +255,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                             ),
                                             PullDownMenuItem.selectable(
                                               selected: globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == true ? true : false,
-                                              title: 'Multi Language',
+                                              title: 'Multi language',
                                               onTap: () async {
                                                 globalController.selectedLanguageValue.value = "Multi Language";
                                                 globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
@@ -263,12 +263,19 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                             ),
                                           ],
                                       buttonBuilder:
-                                          (context, showMenu) =>
-                                              CupertinoButton(onPressed: showMenu, padding: EdgeInsets.zero, child: Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)])),
+                                          (context, showMenu) => CupertinoButton(
+                                            onPressed: showMenu,
+                                            padding: EdgeInsets.zero,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                                            ),
+                                          ),
 
                                       // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
                                     ),
                                     SizedBox(height: 20),
+
                                     // Obx(() {
                                     //   return BaseDropdown2<String>(
                                     //     direction: VerticalDirection.up,
@@ -295,6 +302,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                     //     ],
                                     //   ),
                                     // ),
+                                    // const SizedBox(height: 16),
+                                    globalController.samples.isNotEmpty ? const AudioWave(animation: false, key: ValueKey("wave"), height: 30, width: 110, spacing: 2.5, animationLoop: 0) : const SizedBox(height: 30),
+                                    const SizedBox(height: 17),
                                     if (globalController.recorderService.recordingStatus.value == 1) ...[
                                       Text(textAlign: TextAlign.center, "Transcription in progress", style: AppFonts.regular(17, AppColors.textBlack)),
                                     ] else if (globalController.recorderService.recordingStatus.value == 2) ...[
@@ -302,11 +312,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                     ] else ...[
                                       const Text(" "),
                                     ],
-
                                     const SizedBox(height: 16),
-
-                                    globalController.samples.isNotEmpty ? const AudioWave(animation: false, key: ValueKey("wave"), height: 30, width: 110, spacing: 2.5, animationLoop: 0) : const SizedBox(height: 30),
-                                    const SizedBox(height: 17),
                                     Row(
                                       spacing: 35,
                                       mainAxisAlignment: MainAxisAlignment.center,

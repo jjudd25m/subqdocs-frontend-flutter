@@ -63,6 +63,14 @@ class SignFinalizeAuthenticateViewController extends GetxController {
     doctorList.refresh();
   }
 
+  void setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) {
+    selectedDoctorValueModel = doctorData;
+
+    selectedDoctorValue.value = selectedDoctorValueModel.value?.name;
+
+    print("doctor name:- ${selectedDoctorValue.value}");
+  }
+
   void setThirdParty(String thirdParty) {
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 

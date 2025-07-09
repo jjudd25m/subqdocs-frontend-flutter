@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/custom_button.dart';
+import 'package:subqdocs/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/imagepath.dart';
 import '../../../../utils/validation_service.dart';
@@ -280,6 +282,7 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                                   const SizedBox(height: 8),
                                   Obx(() {
                                     return BaseDropdown2<String>(
+                                      isRequired: false,
                                       direction: VerticalDirection.up,
                                       controller: TextEditingController(),
                                       valueAsString: (value) => value ?? "",
@@ -321,6 +324,15 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                               navigate: () async {
                                 if (controller.formKey.currentState!.validate()) {
                                   Map<String, dynamic> response = Map<String, dynamic>();
+
+                                  print("appointment val:- ${controller.selectedAppointmentTypeValue.value}");
+
+                                  if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) {
+                                    if (controller.selectedAppointmentTypeValue.value == null) {
+                                      CustomToastification().showToast("Appointment type is require", type: ToastificationType.error);
+                                      return;
+                                    }
+                                  }
 
                                   if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) {
                                     String appointmentValue = controller.getAvailableVisitTypes.value?.responseData?.firstWhere((element) => element.display == controller.selectedAppointmentTypeValue.value).code ?? "";

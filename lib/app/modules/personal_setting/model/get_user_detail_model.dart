@@ -417,7 +417,7 @@ class UpdateRoleAndAdminResponseData {
   String? title;
   String? medicalLicenseNumber;
   String? licenseExpiryDate;
-  String? nationalProviderIdentifier;
+  dynamic nationalProviderIdentifier;
   String? taxonomyCode;
   String? specialization;
   String? createdAt;

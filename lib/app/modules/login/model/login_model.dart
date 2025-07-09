@@ -58,8 +58,9 @@ class User {
   String? createdAt;
   String? updatedAt;
   dynamic deletedAt;
+  bool? is_multi_language_preference;
 
-  User({this.id, this.email, this.firstName, this.lastName, this.password, this.secret2fa, this.profileImage, this.createdAt, this.updatedAt, this.deletedAt, this.role});
+  User({this.id, this.email, this.firstName, this.lastName, this.is_multi_language_preference, this.password, this.secret2fa, this.profileImage, this.createdAt, this.updatedAt, this.deletedAt, this.role});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -72,6 +73,7 @@ class User {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    is_multi_language_preference = json['is_multi_language_preference'];
     role = json['role'];
   }
 
@@ -87,6 +89,7 @@ class User {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['is_multi_language_preference'] = is_multi_language_preference;
     data['role'] = role;
     return data;
   }

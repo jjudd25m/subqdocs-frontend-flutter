@@ -134,7 +134,7 @@ class _BaseDropdown2State<T> extends State<BaseDropdown2<T>> {
                       // To reserve error space when no error,
                       // you can add a transparent helperText of the same height:
                       helperText: ' ',
-                      hintText: widget.valueAsString(widget.selectedValue).isEmpty ? "Select..." : widget.valueAsString(widget.selectedValue),
+                      hintText: widget.valueAsString(widget.selectedValue).isEmpty ? "Select" : widget.valueAsString(widget.selectedValue),
                       hintStyle: widget.valueAsString(widget.selectedValue).isEmpty ? AppFonts.regular(14, AppColors.textDarkGrey) : AppFonts.regular(14, AppColors.textBlack),
                       contentPadding: const EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),

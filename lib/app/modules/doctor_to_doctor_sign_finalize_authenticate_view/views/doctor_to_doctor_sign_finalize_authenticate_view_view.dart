@@ -130,7 +130,7 @@ class DoctorToDoctorSignFinalizeAuthenticateView extends GetView<DoctorToDoctorS
                           ),
                         ),
                         const SizedBox(height: 10),
-                        if (controller.selectedDoctorValueModel.value?.id != controller.loginData.value?.responseData?.user?.id) ...[
+                        if ((controller.selectedDoctorValueModel.value?.id != controller.loginData.value?.responseData?.user?.id) && (controller.selectedDoctorValue.value?.trim() != "")) ...[
                           Row(
                             children: [
                               Expanded(

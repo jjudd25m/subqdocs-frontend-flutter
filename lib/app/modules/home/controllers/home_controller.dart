@@ -325,6 +325,8 @@ class HomeController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     globalController.getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
+
+    print("lanavuge :- ${globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false}");
   }
 
   Future<void> getOrganizationDetail() async {

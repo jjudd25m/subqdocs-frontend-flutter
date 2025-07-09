@@ -341,13 +341,19 @@ class EditPatentDetailsController extends GetxController {
       param['middle_name'] = middleNameController.text;
     }
     param['last_name'] = lastNameController.text;
-    param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+
+    if (dobController.text != "") {
+      param['date_of_birth'] = DateFormat('yyyy-MM-dd').format(DateFormat('MM/dd/yyyy').parse(dobController.text));
+    }
 
     param['gender'] = selectedSexValue.value;
     if (emailAddressController.text != "") {
       param['email'] = emailAddressController.text;
     }
-    if (contactNumberController.text != "") {
+
+    print("contact_no is :- ${contactNumberController.text}");
+
+    if (contactNumberController.text.trim() != "+1") {
       param['contact_no'] = extractDigits(contactNumberController.text.trim());
     }
 
@@ -396,10 +402,12 @@ class EditPatentDetailsController extends GetxController {
 
       isLoading.value = false;
       customPrint("_editPatientDetailsRepository response is $response ");
-      Get.back();
+      Loader().stopLoader();
+      // Get.back();
       Get.back(result: 1);
     } catch (error) {
-      Get.back();
+      // Get.back();
+      Loader().stopLoader();
       isLoading.value = false;
       customPrint("_addPatientRepository catch error is $error");
       CustomToastification().showToast("$error", type: ToastificationType.error);
