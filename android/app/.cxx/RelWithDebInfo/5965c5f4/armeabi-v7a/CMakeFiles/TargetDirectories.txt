@@ -1,0 +1,2 @@
+C:/Users/Mihir Rajpopat/StudioProjects/subqdocs-frontend-flutter/android/app/.cxx/RelWithDebInfo/5965c5f4/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Mihir Rajpopat/StudioProjects/subqdocs-frontend-flutter/android/app/.cxx/RelWithDebInfo/5965c5f4/armeabi-v7a/CMakeFiles/rebuild_cache.dir
