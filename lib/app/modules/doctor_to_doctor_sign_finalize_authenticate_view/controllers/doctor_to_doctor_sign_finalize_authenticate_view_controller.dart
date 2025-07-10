@@ -48,6 +48,10 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
 
     isDisableView = !(isThirdParty.isNotEmpty);
 
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   getDoctorList();
+    // });
+
     // print("isAccessible :- $isDisableView");
   }
 
@@ -55,7 +59,20 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    getDoctorList();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Loader().showLoadingDialogForSimpleLoader();
+
+      try {
+        GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
+        doctorList.value = doctorListByRole.responseData ?? [];
+        doctorList.refresh();
+        // Loader().stopLoader();
+      } catch (e) {
+        // Loader().stopLoader();
+        CustomToastification().showToast(e.toString(), type: ToastificationType.error);
+      }
+    });
 
     print("visit id:- $visitId");
   }
@@ -65,7 +82,7 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
     userPinVisibility.refresh();
   }
 
-  void setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) {
+  Future<void> setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) async {
     selectedDoctorValueModel = doctorData;
 
     selectedDoctorValue.value = selectedDoctorValueModel.value?.name;
@@ -73,12 +90,16 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
     print("doctor name:- ${selectedDoctorValue.value}");
   }
 
-  void setThirdParty(String thirdParty) {
+  Future<void> setThirdParty(String thirdParty) async {
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     isDisableView = (thirdParty.isNotEmpty);
 
     print("setThirdParty :- $isDisableView");
+
+    // GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
+    // doctorList.value = doctorListByRole.responseData ?? [];
+    // doctorList.refresh();
 
     // print("login id:- ${loginData.value?.responseData?.user?.id}");
     // print("doctor id:- ${selectedDoctorValueModel.value?.id}");

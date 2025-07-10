@@ -230,6 +230,8 @@ class GlobalController extends GetxController {
       param['role'] = ROLE_DOCTOR;
       doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
 
+      print("doctor list is:- ${doctorListModel.value?.toJson()}");
+
       if (doctorListModel.value?.responseType == "success") {
         selectedDoctorModel.clear();
         selectedDoctorModelSchedule.clear();

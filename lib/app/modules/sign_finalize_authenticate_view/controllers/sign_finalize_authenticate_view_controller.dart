@@ -44,10 +44,24 @@ class SignFinalizeAuthenticateViewController extends GetxController {
   }
 
   @override
-  void onReady() {
+  Future<void> onReady() async {
     // TODO: implement onReady
     super.onReady();
-    getDoctorList();
+    // getDoctorList();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Loader().showLoadingDialogForSimpleLoader();
+
+      try {
+        GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
+        doctorList.value = doctorListByRole.responseData ?? [];
+        doctorList.refresh();
+        // Loader().stopLoader();
+      } catch (e) {
+        // Loader().stopLoader();
+        CustomToastification().showToast(e.toString(), type: ToastificationType.error);
+      }
+    });
 
     print("visit id:- $visitId");
   }
@@ -57,16 +71,20 @@ class SignFinalizeAuthenticateViewController extends GetxController {
     userPinVisibility.refresh();
   }
 
-  void getDoctorList() async {
-    GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-    doctorList.value = doctorListByRole.responseData ?? [];
-    doctorList.refresh();
-  }
+  // void getDoctorList() async {
+  //   GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
+  //   doctorList.value = doctorListByRole.responseData ?? [];
+  //   doctorList.refresh();
+  // }
 
-  void setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) {
+  Future<void> setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) async {
     selectedDoctorValueModel = doctorData;
 
     selectedDoctorValue.value = selectedDoctorValueModel.value?.name;
+
+    // GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
+    // doctorList.value = doctorListByRole.responseData ?? [];
+    // doctorList.refresh();
 
     print("doctor name:- ${selectedDoctorValue.value}");
   }

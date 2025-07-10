@@ -250,7 +250,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               selected: globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == false ? true : false,
                                               onTap: () async {
                                                 globalController.selectedLanguageValue.value = "English";
-                                                globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
+                                                globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = false;
                                               },
                                             ),
                                             PullDownMenuItem.selectable(
@@ -258,7 +258,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               title: 'Multi language',
                                               onTap: () async {
                                                 globalController.selectedLanguageValue.value = "Multi Language";
-                                                globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
+                                                globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = true;
                                               },
                                             ),
                                           ],

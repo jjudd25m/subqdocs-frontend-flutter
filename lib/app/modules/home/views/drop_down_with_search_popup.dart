@@ -10,46 +10,37 @@ import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
 
 class DropDownWithSearchPopup extends StatefulWidget {
-  DropDownWithSearchPopup({super.key, this.list, this.searchScrollKey, required this.receiveParam, required this.selectedId, required this.onChanged});
+  DropDownWithSearchPopup({super.key, required this.receiveParam, required this.selectedId, required this.onChanged, this.searchScrollKey, this.list});
 
   final int selectedId;
-
   final void Function(String) receiveParam;
   final void Function(bool, int, int, String) onChanged;
   final GlobalKey? searchScrollKey;
-  List<SelectedDoctorModel> filteredList = [];
-
-  List<SelectedDoctorModel>? list;
+  final List<SelectedDoctorModel>? list;
 
   @override
   State<DropDownWithSearchPopup> createState() => _DropDownWithSearchPopupState();
 }
 
 class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
-  TextEditingController searchController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
+  final FocusNode searchFocusNode = FocusNode();
 
-  final searchFocusNode = FocusNode(); // Add this
+  List<SelectedDoctorModel> filteredList = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    print("initial state called");
-    widget.filteredList = List.from(widget.list ?? []);
-    print("initState count:- ${widget.filteredList.length}");
+    filteredList = List.from(widget.list ?? []);
+    print("DropDown initState: ${filteredList.length} items loaded");
   }
 
   void filterList(String value) {
     setState(() {
-      print("filterList called");
-      print("valye is :- ${value.isEmpty}");
       if (value.isEmpty) {
-        widget.filteredList = List.from(widget.list ?? []);
-        print("empty count:- ${widget.filteredList.length}");
+        filteredList = List.from(widget.list ?? []);
       } else {
-        widget.filteredList = (widget.list ?? []).where((item) => item.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
-        print("non empty count:- ${widget.filteredList.length}");
+        filteredList = (widget.list ?? []).where((item) => item.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
       }
     });
   }
@@ -60,13 +51,12 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
       color: AppColors.white,
       child: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(),
         child: Column(
           children: [
+            // Search Box
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 5, top: 8, bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -76,21 +66,18 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                       const SizedBox(width: 5),
                       Expanded(
                         child: TextFormField(
+                          controller: searchController,
+                          focusNode: searchFocusNode,
                           onTap: () {
                             final context = widget.searchScrollKey?.currentContext;
                             if (context != null) {
                               Scrollable.ensureVisible(context, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
                             }
-
                             filterList(searchController.text);
-                            // FocusScope.of(context!).requestFocus(FocusNode());
                           },
-                          controller: searchController,
                           onChanged: filterList,
-                          focusNode: searchFocusNode,
                           maxLines: 1,
-                          //or null
-                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+                          decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
                         ),
                       ),
                     ],
@@ -98,47 +85,181 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
                 ),
               ),
             ),
-            widget.filteredList.isNotEmpty
-                ? Container(
-                  constraints: const BoxConstraints(maxHeight: 250),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          widget.onChanged(widget.filteredList[index].isSelected ?? false, index, widget.filteredList[index].id ?? -1, widget.filteredList[index].name ?? "");
-                          setState(() {});
-                        },
-                        child: Container(
-                          color: AppColors.white,
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Padding(padding: const EdgeInsets.only(left: 10), child: ClipRRect(borderRadius: BorderRadius.circular(14), child: BaseImageView(height: 32, width: 32, nameLetters: widget.filteredList[index].name ?? "", fontSize: 12, imageUrl: widget.filteredList[index].profileImage ?? ""))),
-                                  const SizedBox(width: 10),
-                                  Expanded(child: Container(color: AppColors.white, child: Text(widget.filteredList[index].name ?? "", maxLines: 2, overflow: TextOverflow.ellipsis, style: AppFonts.medium(14, AppColors.black)))),
-                                ],
-                              ),
-                              const SizedBox(height: 5),
-                              const SizedBox(height: 10),
-                              if (widget.filteredList.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
-                            ],
-                          ),
+
+            // Filtered List or No Options
+            if (filteredList.isNotEmpty)
+              Container(
+                constraints: const BoxConstraints(maxHeight: 250),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final item = filteredList[index];
+                    return GestureDetector(
+                      onTap: () {
+                        widget.onChanged(item.isSelected ?? false, index, item.id ?? -1, item.name ?? "");
+                        setState(() {}); // Optional, only needed if UI reflects selection
+                      },
+                      child: Container(
+                        color: AppColors.white,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Padding(padding: const EdgeInsets.only(left: 10), child: ClipRRect(borderRadius: BorderRadius.circular(14), child: BaseImageView(height: 32, width: 32, nameLetters: item.name ?? "", fontSize: 12, imageUrl: item.profileImage ?? ""))),
+                                const SizedBox(width: 10),
+                                Expanded(child: Text(item.name ?? "", maxLines: 2, overflow: TextOverflow.ellipsis, style: AppFonts.medium(14, AppColors.black))),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            if (index < filteredList.length - 1) Container(color: AppColors.textfieldBorder, height: 1),
+                          ],
                         ),
-                      );
-                    },
-                    itemCount: widget.filteredList.length ?? 0,
-                  ),
-                )
-                : const Center(child: Padding(padding: EdgeInsets.all(8.0), child: Text("No Options"))),
+                      ),
+                    );
+                  },
+                ),
+              )
+            else
+              const Center(child: Padding(padding: EdgeInsets.all(8.0), child: Text("No Options"))),
           ],
         ),
       ),
     );
   }
 }
+
+// class DropDownWithSearchPopup extends StatefulWidget {
+//   DropDownWithSearchPopup({super.key, this.list, this.searchScrollKey, required this.receiveParam, required this.selectedId, required this.onChanged});
+//
+//   final int selectedId;
+//
+//   final void Function(String) receiveParam;
+//   final void Function(bool, int, int, String) onChanged;
+//   final GlobalKey? searchScrollKey;
+//   List<SelectedDoctorModel> filteredList = [];
+//
+//   List<SelectedDoctorModel>? list;
+//
+//   @override
+//   State<DropDownWithSearchPopup> createState() => _DropDownWithSearchPopupState();
+// }
+//
+// class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
+//   TextEditingController searchController = TextEditingController();
+//
+//   final searchFocusNode = FocusNode(); // Add this
+//
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//
+//     print("initial state called");
+//     widget.filteredList = List.from(widget.list ?? []);
+//     print("initState count:- ${widget.filteredList.length}");
+//   }
+//
+//   void filterList(String value) {
+//     setState(() {
+//       print("filterList called");
+//       print("valye is :- ${value.isEmpty}");
+//       if (value.isEmpty) {
+//         widget.filteredList = List.from(widget.list ?? []);
+//         print("empty count:- ${widget.filteredList.length}");
+//       } else {
+//         widget.filteredList = (widget.list ?? []).where((item) => item.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
+//         print("non empty count:- ${widget.filteredList.length}");
+//       }
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       color: AppColors.white,
+//       child: Container(
+//         width: double.infinity,
+//         decoration: const BoxDecoration(),
+//         child: Column(
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.only(left: 10, right: 5, top: 8, bottom: 8),
+//               child: Container(
+//                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+//                 decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Row(
+//                     children: [
+//                       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
+//                       const SizedBox(width: 5),
+//                       Expanded(
+//                         child: TextFormField(
+//                           onTap: () {
+//                             final context = widget.searchScrollKey?.currentContext;
+//                             if (context != null) {
+//                               Scrollable.ensureVisible(context, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+//                             }
+//
+//                             filterList(searchController.text);
+//                             // FocusScope.of(context!).requestFocus(FocusNode());
+//                           },
+//                           controller: searchController,
+//                           onChanged: filterList,
+//                           focusNode: searchFocusNode,
+//                           maxLines: 1,
+//                           //or null
+//                           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)).copyWith(),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             widget.filteredList.isNotEmpty
+//                 ? Container(
+//                   constraints: const BoxConstraints(maxHeight: 250),
+//                   child: ListView.builder(
+//                     shrinkWrap: true,
+//                     itemBuilder: (context, index) {
+//                       return GestureDetector(
+//                         onTap: () {
+//                           widget.onChanged(widget.filteredList[index].isSelected ?? false, index, widget.filteredList[index].id ?? -1, widget.filteredList[index].name ?? "");
+//                           setState(() {});
+//                         },
+//                         child: Container(
+//                           color: AppColors.white,
+//                           child: Column(
+//                             children: [
+//                               const SizedBox(height: 10),
+//                               Row(
+//                                 children: [
+//                                   Padding(padding: const EdgeInsets.only(left: 10), child: ClipRRect(borderRadius: BorderRadius.circular(14), child: BaseImageView(height: 32, width: 32, nameLetters: widget.filteredList[index].name ?? "", fontSize: 12, imageUrl: widget.filteredList[index].profileImage ?? ""))),
+//                                   const SizedBox(width: 10),
+//                                   Expanded(child: Container(color: AppColors.white, child: Text(widget.filteredList[index].name ?? "", maxLines: 2, overflow: TextOverflow.ellipsis, style: AppFonts.medium(14, AppColors.black)))),
+//                                 ],
+//                               ),
+//                               const SizedBox(height: 5),
+//                               const SizedBox(height: 10),
+//                               if (widget.filteredList.length != index + 1) Container(color: AppColors.textfieldBorder, height: 1),
+//                             ],
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                     itemCount: widget.filteredList.length ?? 0,
+//                   ),
+//                 )
+//                 : const Center(child: Padding(padding: EdgeInsets.all(8.0), child: Text("No Options"))),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class VisitRecapDropDownWithSearchPopup extends StatefulWidget {
   VisitRecapDropDownWithSearchPopup({super.key, this.list, required this.receiveParam, required this.selectedId, required this.onChanged});

@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subqdocs/app/core/common/global_mobile_controller.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../utils/Loader.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_string.dart';
+import '../../../../widgets/app_update_dialog.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../modules/add_patient/repository/add_patient_repository.dart';
+import '../../../modules/home/model/latest_build_model.dart';
 import '../../../modules/home/model/patient_list_model.dart';
 import '../../../modules/home/model/schedule_visit_list_model.dart';
 import '../../../modules/home/repository/home_repository.dart';
@@ -67,14 +70,12 @@ class HomeViewMobileController extends GetxController {
   RxList<PatientListData> patientList = RxList<PatientListData>();
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
 
     Get.put(GlobalMobileController());
     globalController.getUserDetail();
     handelInternetConnection();
-
-    await getLatestBuild();
 
     scrollControllerPatientList.addListener(_onScrollPatientList);
     scrollControllerPastPatientList.addListener(_onScrollPastPatientList);
@@ -83,6 +84,7 @@ class HomeViewMobileController extends GetxController {
     showClearButton.value = false;
 
     getOrganizationDetail();
+    getLatestBuild();
   }
 
   @override
@@ -109,6 +111,28 @@ class HomeViewMobileController extends GetxController {
     } else {
       customPrint("outside update");
     }
+  }
+
+  bool isVersionGreater(String version1, String version2) {
+    return compareVersions(version1, version2) > 0;
+  }
+
+  int compareVersions(String version1, String version2) {
+    // Split version numbers into parts
+    final v1Parts = version1.split('.').map((e) => int.tryParse(e) ?? 0).toList();
+    final v2Parts = version2.split('.').map((e) => int.tryParse(e) ?? 0).toList();
+
+    // Make both parts the same length by padding with zeros
+    while (v1Parts.length < v2Parts.length) v1Parts.add(0);
+    while (v2Parts.length < v1Parts.length) v2Parts.add(0);
+
+    // Compare each part
+    for (int i = 0; i < v1Parts.length; i++) {
+      if (v1Parts[i] > v2Parts[i]) return 1;
+      if (v1Parts[i] < v2Parts[i]) return -1;
+    }
+
+    return 0; // versions are equal
   }
 
   Future<void> getOrganizationDetail() async {

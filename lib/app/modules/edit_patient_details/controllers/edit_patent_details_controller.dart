@@ -111,18 +111,18 @@ class EditPatentDetailsController extends GetxController {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globalController.addRouteInit(Routes.EDIT_PATENT_DETAILS);
+
+      customPrint("edit patient list  ${Get.arguments["patientData"]}");
+
+      patientId = Get.arguments["patientData"];
+      visitId = Get.arguments["visitId"];
+      isFromSchedule.value = Get.arguments["fromSchedule"];
+
+      isFromSchedule.refresh();
+      contactNumberController.text = "+1";
+
+      getPatient(patientId, visitId);
     });
-
-    customPrint("edit patient list  ${Get.arguments["patientData"]}");
-
-    patientId = Get.arguments["patientData"];
-    visitId = Get.arguments["visitId"];
-    isFromSchedule.value = Get.arguments["fromSchedule"];
-
-    isFromSchedule.refresh();
-    contactNumberController.text = "+1";
-
-    getPatient(patientId, visitId);
   }
 
   @override
@@ -142,73 +142,81 @@ class EditPatentDetailsController extends GetxController {
       param['visit_id'] = visitId;
     }
 
-    patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id, param: param);
-    firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
-    middleNameController.text = patientDetailModel.responseData?.middleName ?? "";
-    lastNameController.text = patientDetailModel.responseData?.lastName ?? "";
-    selectedSexValue.value = patientDetailModel.responseData?.gender;
-    profileImageUrl.value = patientDetailModel.responseData?.profileImage;
-    patientIdController.text = patientDetailModel.responseData?.patientId ?? "";
-    emailAddressController.text = patientDetailModel.responseData?.email ?? "";
-    contactNumberController.text = formatPhoneNumber(patientDetailModel.responseData?.contactNumber ?? "");
+    Loader().showLoadingDialogForSimpleLoader();
 
-    if (patientDetailModel.responseData?.doctorId != null) {
-      selectedDoctorValue.value = globalController.getDoctorNameById(patientDetailModel.responseData?.doctorId ?? -1);
-    }
+    try {
+      patientDetailModel = await _editPatientDetailsRepository.getPatient(id: id, param: param);
+      Loader().stopLoader();
+      firstNameController.text = patientDetailModel.responseData?.firstName ?? "";
+      middleNameController.text = patientDetailModel.responseData?.middleName ?? "";
+      lastNameController.text = patientDetailModel.responseData?.lastName ?? "";
+      selectedSexValue.value = patientDetailModel.responseData?.gender;
+      profileImageUrl.value = patientDetailModel.responseData?.profileImage;
+      patientIdController.text = patientDetailModel.responseData?.patientId ?? "";
+      emailAddressController.text = patientDetailModel.responseData?.email ?? "";
+      contactNumberController.text = formatPhoneNumber(patientDetailModel.responseData?.contactNumber ?? "");
 
-    if (patientDetailModel.responseData?.medicalAssistantId != null) {
-      selectedMedicalValue.value = globalController.getDoctorNameById(patientDetailModel.responseData?.medicalAssistantId ?? -1);
-    }
+      if (patientDetailModel.responseData?.doctorId != null) {
+        selectedDoctorValue.value = globalController.getDoctorNameById(patientDetailModel.responseData?.doctorId ?? -1);
+      }
 
-    customPrint("patientid:- ${patientDetailModel.responseData?.patientId}");
+      if (patientDetailModel.responseData?.medicalAssistantId != null) {
+        selectedMedicalValue.value = globalController.getDoctorNameById(patientDetailModel.responseData?.medicalAssistantId ?? -1);
+      }
 
-    customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
-
-    // Parse the date string to a DateTime object
-
-    if (patientDetailModel.responseData?.dateOfBirth != null) {
-      DateTime dateTime = DateTime.parse(patientDetailModel.responseData?.dateOfBirth ?? "").toLocal();
-
-      // Create a DateFormat to format the date
-      DateFormat dateFormat = DateFormat('MM/dd/yyyy');
-
-      // Format the DateTime object to the desired format
-      String formattedDate = dateFormat.format(dateTime);
-
-      dobController.text = formattedDate;
-      customPrint("dob is :- $formattedDate");
+      customPrint("patientid:- ${patientDetailModel.responseData?.patientId}");
 
       customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
+
+      // Parse the date string to a DateTime object
+
+      if (patientDetailModel.responseData?.dateOfBirth != null) {
+        DateTime dateTime = DateTime.parse(patientDetailModel.responseData?.dateOfBirth ?? "").toLocal();
+
+        // Create a DateFormat to format the date
+        DateFormat dateFormat = DateFormat('MM/dd/yyyy');
+
+        // Format the DateTime object to the desired format
+        String formattedDate = dateFormat.format(dateTime);
+
+        dobController.text = formattedDate;
+        customPrint("dob is :- $formattedDate");
+
+        customPrint("dob is :- ${patientDetailModel.responseData?.dateOfBirth}");
+      }
+
+      // Parse the date string to a DateTime object
+
+      if (patientDetailModel.responseData?.visitTime != null) {
+        customPrint(" at the time of the get the time  ${patientDetailModel.responseData?.visitTime} ");
+        DateTime visitdateTime = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "");
+
+        // Create a DateFormat to format the date
+        DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
+
+        // Format the DateTime object to the desired format
+        String visitformattedDate = visitdateFormat.format(visitdateTime);
+
+        visitDateController.text = visitformattedDate;
+      }
+
+      if (patientDetailModel.responseData?.visitTime != null) {
+        DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
+
+        // Formatting to "hh:mm a" format
+        String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
+
+        customPrint("visitformattedTime is:- $formattedTime");
+
+        selectedVisitTimeValue.value = formattedTime;
+        selectedVisitTimeValue.refresh();
+      }
+
+      selectedSexValue.value = patientDetailModel.responseData?.gender ?? "";
+    } catch (e) {
+      Loader().stopLoader();
+      CustomToastification().showToast("$e", type: ToastificationType.error);
     }
-
-    // Parse the date string to a DateTime object
-
-    if (patientDetailModel.responseData?.visitTime != null) {
-      customPrint(" at the time of the get the time  ${patientDetailModel.responseData?.visitTime} ");
-      DateTime visitdateTime = DateTime.parse(patientDetailModel.responseData?.visitTime ?? "");
-
-      // Create a DateFormat to format the date
-      DateFormat visitdateFormat = DateFormat('MM/dd/yyyy');
-
-      // Format the DateTime object to the desired format
-      String visitformattedDate = visitdateFormat.format(visitdateTime);
-
-      visitDateController.text = visitformattedDate;
-    }
-
-    if (patientDetailModel.responseData?.visitTime != null) {
-      DateTime visitTimeS = DateTime.parse(patientDetailModel.responseData?.visitTime ?? ""); // Parsing the string to DateTime
-
-      // Formatting to "hh:mm a" format
-      String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
-
-      customPrint("visitformattedTime is:- $formattedTime");
-
-      selectedVisitTimeValue.value = formattedTime;
-      selectedVisitTimeValue.refresh();
-    }
-
-    selectedSexValue.value = patientDetailModel.responseData?.gender ?? "";
   }
 
   void showVisitDateCupertinoDatePicker(BuildContext context, TextEditingController control) {

@@ -152,8 +152,8 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                     child: GestureDetector(
                                       onTap: () {
                                         controller.resetImpressionAndPlanList();
-                                        model.popoverController.toggle();
-                                        model.slidableController?.openStartActionPane();
+                                        // model.popoverController.toggle();
+                                        // model.slidableController?.openStartActionPane();
                                       },
                                       child: Row(
                                         children: [
@@ -187,7 +187,15 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                           ),
                                           // Container(),
                                           // Spacer(),
-                                          const Icon(Icons.arrow_drop_down_sharp, size: 40),
+                                          InkResponse(
+                                            radius: 20, // Large touch radius
+                                            onTap: () {
+                                              controller.resetImpressionAndPlanList();
+                                              model.popoverController.toggle();
+                                              model.slidableController?.openStartActionPane();
+                                            },
+                                            child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40)),
+                                          ),
                                           //
                                           // GestureDetector(
                                           //   onTap: () {
@@ -326,8 +334,8 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                   children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
                                                     return LongPressDraggable<Map<String, dynamic>>(
                                                       data: {'attachment': model.attachments?[imageIndex], 'fromListIndex': index, 'fromImageIndex': imageIndex, 'isGeneral': false},
-                                                      feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, dragging: true)),
-                                                      childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index)),
+                                                      feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false, dragging: true)),
+                                                      childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false)),
                                                       child: DragTarget<Map<String, dynamic>>(
                                                         onWillAcceptWithDetails: (data) => true,
                                                         onAcceptWithDetails: (details) {
@@ -362,7 +370,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                           controller.updateImpressionAndPlanFullNote();
                                                         },
                                                         builder: (context, candidateData, rejectedData) {
-                                                          return _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index);
+                                                          return _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false);
                                                         },
                                                       ),
                                                     );
@@ -430,8 +438,8 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                       'fromImageIndex': imageIndex,
                                                       'isGeneral': true, // Mark as from general container
                                                     },
-                                                    feedback: Material(elevation: 4.0, child: _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index, dragging: true)),
-                                                    childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index)),
+                                                    feedback: Material(elevation: 4.0, child: _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index, true, dragging: true)),
+                                                    childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index, true)),
                                                     child: DragTarget<Map<String, dynamic>>(
                                                       onWillAcceptWithDetails: (data) => true,
                                                       onAcceptWithDetails: (details) {
@@ -461,7 +469,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                         controller.updateImpressionAndPlanFullNote();
                                                       },
                                                       builder: (context, candidateData, rejectedData) {
-                                                        return _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index);
+                                                        return _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index, true);
                                                       },
                                                     ),
                                                   );
@@ -503,7 +511,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
     });
   }
 
-  Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, {bool dragging = false}) {
+  Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, bool isGeneral, {bool dragging = false}) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Container(
@@ -537,7 +545,15 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                      if (isGeneral) {
+                        controller.generalAttachments.removeAt(imageIndex);
+                      } else {
+                        controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                      }
+
+                      controller.impressionAndPlanListFullNote.refresh();
+                      controller.generalAttachments.refresh();
+
                       controller.impressionAndPlanListFullNote.refresh();
                       controller.isFullNoteAttachment.value = false;
                       controller.updateImpressionAndPlanFullNote();

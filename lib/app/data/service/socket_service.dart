@@ -14,23 +14,23 @@ class SocketService {
         .build(),
   );
 
-// IO.Socket socket = IO.io(WebUri(dotenv.get("SOCKET_STAGE_URL", fallback: "")).toString(), IO.OptionBuilder().setTransports(['websocket']).build());
-//
-// IO.Socket openAISocket = IO.io(
-//   WebUri(dotenv.get("SOCKET_STAGE_URL", fallback: "")).toString(), // Replace with your VITE_REACT_APP_API_URL
-//   IO.OptionBuilder()
-//       .setTransports(['websocket'])
-//       .setPath('/status-socket') // <-- This is crucial!
-//       .build(),
-// );
+  // IO.Socket socket = IO.io(WebUri(dotenv.get("SOCKET_STAGE_URL", fallback: "")).toString(), IO.OptionBuilder().setTransports(['websocket']).build());
+  //
+  // IO.Socket openAISocket = IO.io(
+  //   WebUri(dotenv.get("SOCKET_STAGE_URL", fallback: "")).toString(), // Replace with your VITE_REACT_APP_API_URL
+  //   IO.OptionBuilder()
+  //       .setTransports(['websocket'])
+  //       .setPath('/status-socket') // <-- This is crucial!
+  //       .build(),
+  // );
 
-// IO.Socket socket = IO.io(WebUri(dotenv.get("SOCKET_PROD_URL", fallback: "")).toString(), IO.OptionBuilder().setTransports(['websocket']).build());
-//
-// IO.Socket openAISocket = IO.io(
-//   WebUri(dotenv.get("SOCKET_PROD_URL", fallback: "")).toString(), // Replace with your VITE_REACT_APP_API_URL
-//   IO.OptionBuilder()
-//       .setTransports(['websocket'])
-//       .setPath('/status-socket') // <-- This is crucial!
-//       .build(),
-// );
+  // IO.Socket socket = IO.io(WebUri(dotenv.get("SOCKET_PROD_URL", fallback: "")).toString(), IO.OptionBuilder().setTransports(['websocket']).build());
+  //
+  // IO.Socket openAISocket = IO.io(
+  //   WebUri(dotenv.get("SOCKET_PROD_URL", fallback: "")).toString(), // Replace with your VITE_REACT_APP_API_URL
+  //   IO.OptionBuilder()
+  //       .setTransports(['websocket'])
+  //       .setPath('/status-socket') // <-- This is crucial!
+  //       .build(),
+  // );
 }

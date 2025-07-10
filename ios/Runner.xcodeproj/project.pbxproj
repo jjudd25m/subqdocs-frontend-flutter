@@ -614,10 +614,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.stage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs Stage Development 2";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs Development";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -711,10 +711,10 @@
 				MARKETING_VERSION = 1.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.stage.subqdocsrecording;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.app.subqdocsrecording;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "subQdocs Stage dev audio widget";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs dev Audio Development";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -759,10 +759,10 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.2;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.stage.subqdocsrecording;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.app.subqdocsrecording;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "subQdocs Stage dev audio widget";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs dev Audio Development";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -805,10 +805,10 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.2;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.stage.subqdocsrecording;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.app.subqdocsrecording;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "subQdocs Stage dev audio widget";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs dev Audio Development";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -950,10 +950,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.stage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs Stage Development 2";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs Development";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -985,10 +985,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.stage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subqdocs.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs Stage Development 2";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SubQDocs Development";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

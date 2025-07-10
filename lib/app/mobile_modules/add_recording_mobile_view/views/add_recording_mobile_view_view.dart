@@ -111,7 +111,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                                 selected: controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference == false ? true : false,
                                 onTap: () async {
                                   controller.globalController.selectedLanguageValue.value = "English";
-                                  controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
+                                  controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = false;
                                 },
                               ),
                               PullDownMenuItem.selectable(
@@ -119,7 +119,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                                 title: 'Multi language',
                                 onTap: () async {
                                   controller.globalController.selectedLanguageValue.value = "Multi Language";
-                                  controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = !(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false);
+                                  controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference = true;
                                 },
                               ),
                             ],

@@ -469,7 +469,10 @@ class FullNoteDetails {
       impressionsAndPlanAttachments = <Attachments>[];
       json['impressions_and_plan_attachments'].forEach((v) {
         customPrint("messages: attachment $v");
-        impressionsAndPlanAttachments!.add(Attachments.fromJson(v));
+
+        if (v != null) {
+          impressionsAndPlanAttachments!.add(Attachments.fromJson(v));
+        }
       });
     }
   }
@@ -786,7 +789,7 @@ class Attachments {
   String? icdCode;
   FocusNode focusNode = FocusNode();
 
-  Attachments({this.id, this.fileName, this.filePath, this.fileType, this.fileSize, this.uploadedBy, this.uploadedAt, this.visitId, this.patientId, this.isActive, this.timestamp, this.createdAt, this.updatedAt, this.deletedAt,this.icdCode});
+  Attachments({this.id, this.fileName, this.filePath, this.fileType, this.fileSize, this.uploadedBy, this.uploadedAt, this.visitId, this.patientId, this.isActive, this.timestamp, this.createdAt, this.updatedAt, this.deletedAt, this.icdCode});
 
   Attachments.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -98,14 +98,16 @@ class PatientInfoRepository {
   }
 
   Future<PatientFullNoteModel> getFullNote({required String id}) async {
-    try {
-      var response = await ApiProvider.instance.callGet("full-note/$id");
-      customPrint("getFullNote API  internal response $response");
-      return PatientFullNoteModel.fromJson(response);
-    } catch (e) {
-      customPrint("getFullNote API  internal response $e");
-      return PatientFullNoteModel(message: "$e", responseType: "error", responseData: null);
-    }
+    // try {
+    var response = await ApiProvider.instance.callGet("full-note/$id");
+    customPrint("getFullNote API  internal response $response");
+    PatientFullNoteModel res = PatientFullNoteModel.fromJson(response);
+    return res;
+    // return PatientFullNoteModel.fromJson(response);
+    // } catch (e) {
+    //   customPrint("getFullNote API  internal response $e");
+    //   return PatientFullNoteModel(message: "$e", responseType: "error", responseData: null);
+    // }
   }
 
   Future<DoctorViewModel> getDoctorNote({required String id}) async {

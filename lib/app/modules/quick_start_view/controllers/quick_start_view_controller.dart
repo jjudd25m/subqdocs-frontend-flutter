@@ -249,6 +249,8 @@ class QuickStartViewController extends GetxController {
       dobController.text = formattedDate;
       customPrint("dob is :- $formattedDate");
     }
+
+    formKey.currentState?.validate(); // Thi
   }
 
   @override

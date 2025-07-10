@@ -170,8 +170,8 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                       child: GestureDetector(
                                         onTap: () {
                                           controller.resetImpressionAndPlanList();
-                                          model.popoverController.toggle();
-                                          model.slidableController?.openStartActionPane();
+                                          // model.popoverController.toggle();
+                                          // model.slidableController?.openStartActionPane();
                                         },
                                         child: Row(
                                           children: [
@@ -224,7 +224,15 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                            const Align(alignment: Alignment.centerRight, child: Padding(padding: EdgeInsets.only(right: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40))),
+                                            InkResponse(
+                                              radius: 20, // Large touch radius
+                                              onTap: () {
+                                                controller.resetImpressionAndPlanList();
+                                                model.popoverController.toggle();
+                                                model.slidableController?.openStartActionPane();
+                                              },
+                                              child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40)),
+                                            ),
                                             //
                                             // GestureDetector(
                                             //   onTap: () {
@@ -327,7 +335,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                               if (isGeneral) {
                                                 // From General Images → Expansion Tile
                                                 targetList.insert(dropIndex, attachment);
-                                                controller.generalAttachments.removeAt(fromImageIndex);
+                                                controller.generalAttachments?.removeAt(fromImageIndex);
                                               } else {
                                                 // From another list
                                                 targetList.insert(dropIndex, attachment);
@@ -335,7 +343,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                               }
 
                                               controller.impressionAndPlanListFullNote.refresh();
-                                              controller.generalAttachments.refresh();
+                                              controller.generalAttachments?.refresh();
                                               controller.isFullNoteAttachment.value = true;
                                               controller.updateImpressionAndPlanFullNote();
                                             },
@@ -357,16 +365,16 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                       onDraggableCanceled: (velocity, offset) {
                                                         print("LongPressDraggable onDraggableCanceled");
                                                         controller.impressionAndPlanListFullNote.refresh();
-                                                        controller.generalAttachments.refresh();
+                                                        controller.generalAttachments?.refresh();
                                                         controller.updateImpressionAndPlanFullNote();
                                                       },
                                                       onDragEnd: (details) {
                                                         controller.impressionAndPlanListFullNote.refresh();
-                                                        controller.generalAttachments.refresh();
+                                                        controller.generalAttachments?.refresh();
                                                       },
                                                       data: {'attachment': model.attachments?[imageIndex], 'fromListIndex': index, 'fromImageIndex': imageIndex, 'isGeneral': false},
-                                                      feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, dragging: true)),
-                                                      childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index)),
+                                                      feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false, dragging: true)),
+                                                      childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false)),
                                                       child: DragTarget<Map<String, dynamic>>(
                                                         onWillAcceptWithDetails: (data) => true,
                                                         onAcceptWithDetails: (details) {
@@ -382,7 +390,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                               model.attachments = [];
                                                             }
                                                             model.attachments!.insert(insertIndex, draggedImage);
-                                                            controller.generalAttachments.removeAt(fromImageIndex);
+                                                            controller.generalAttachments?.removeAt(fromImageIndex);
                                                           } else if (fromListIndex == index) {
                                                             if (fromImageIndex < imageIndex) {
                                                               insertIndex -= 1;
@@ -397,12 +405,12 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                             controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
                                                           }
                                                           controller.impressionAndPlanListFullNote.refresh();
-                                                          controller.generalAttachments.refresh();
+                                                          controller.generalAttachments?.refresh();
                                                           controller.isFullNoteAttachment.value = true;
                                                           controller.updateImpressionAndPlanFullNote();
                                                         },
                                                         builder: (context, candidateData, rejectedData) {
-                                                          return _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index);
+                                                          return _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false);
                                                         },
                                                       ),
                                                     );
@@ -431,28 +439,28 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                         final fromImageIndex = details.data['fromImageIndex'];
                                         final isGeneral = details.data['isGeneral'] ?? false;
 
-                                        final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments);
+                                        final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments ?? []);
 
                                         print("is from is from isGeneral $isGeneral");
 
                                         if (isGeneral) {
                                           // Reordering within general images
 
-                                          controller.generalAttachments.insert(dropIndex, attachment);
-                                          controller.generalAttachments.removeAt(fromImageIndex);
+                                          controller.generalAttachments?.insert(dropIndex, attachment);
+                                          controller.generalAttachments?.removeAt(fromImageIndex);
                                         } else {
                                           // Coming from expansion tile attachments
-                                          controller.generalAttachments.insert(dropIndex, attachment);
+                                          controller.generalAttachments?.insert(dropIndex, attachment);
                                           controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
                                         }
 
                                         controller.impressionAndPlanListFullNote.refresh();
-                                        controller.generalAttachments.refresh();
+                                        controller.generalAttachments?.refresh();
                                         controller.isFullNoteAttachment.value = true;
                                         controller.updateImpressionAndPlanFullNote();
                                       },
                                       builder: (context, candidateData, rejectedData) {
-                                        if (controller.generalAttachments.isEmpty) {
+                                        if (controller.generalAttachments?.isEmpty ?? false) {
                                           return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
                                         }
                                         return Container(
@@ -466,7 +474,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                               Wrap(
                                                 spacing: 8,
                                                 runSpacing: 8,
-                                                children: List.generate(controller.generalAttachments.length, (imageIndex) {
+                                                children: List.generate(controller.generalAttachments?.length ?? 0, (imageIndex) {
                                                   return LongPressDraggable<Map<String, dynamic>>(
                                                     hitTestBehavior: HitTestBehavior.translucent,
                                                     // Add this
@@ -475,7 +483,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
                                                       WidgetsBinding.instance.addPostFrameCallback((_) {
                                                         controller.impressionAndPlanListFullNote.refresh();
-                                                        controller.generalAttachments.refresh();
+                                                        controller.generalAttachments?.refresh();
                                                         controller.updateImpressionAndPlanFullNote();
                                                       });
 
@@ -486,16 +494,16 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                     onDragEnd: (details) {
                                                       print("LongPressDraggable onDragEnd 1");
                                                       controller.impressionAndPlanListFullNote.refresh();
-                                                      controller.generalAttachments.refresh();
+                                                      controller.generalAttachments?.refresh();
                                                     },
                                                     data: {
-                                                      'attachment': controller.generalAttachments[imageIndex],
+                                                      'attachment': controller.generalAttachments?[imageIndex],
                                                       'fromListIndex': index,
                                                       'fromImageIndex': imageIndex,
                                                       'isGeneral': true, // Mark as from general container
                                                     },
-                                                    feedback: Material(elevation: 4.0, child: _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index, dragging: true)),
-                                                    childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index)),
+                                                    feedback: Material(elevation: 4.0, child: _imageContainer(controller.generalAttachments?[imageIndex] ?? Attachments(), context, imageIndex, index, true, dragging: true)),
+                                                    childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(controller.generalAttachments?[imageIndex] ?? Attachments(), context, imageIndex, index, true)),
                                                     child: DragTarget<Map<String, dynamic>>(
                                                       onWillAcceptWithDetails: (data) => true,
                                                       onAcceptWithDetails: (details) {
@@ -504,7 +512,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                         final isGeneral = details.data['isGeneral'] ?? false;
                                                         final fromListIndex = details.data['fromListIndex'];
 
-                                                        final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments);
+                                                        final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments ?? []);
                                                         int insertIndex = imageIndex;
                                                         print("List.generate is from isGeneral");
                                                         if (isGeneral) {
@@ -512,21 +520,21 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                           if (fromImageIndex < imageIndex) {
                                                             insertIndex -= 1;
                                                           }
-                                                          controller.generalAttachments.removeAt(fromImageIndex);
-                                                          controller.generalAttachments.insert(insertIndex, draggedImage);
+                                                          controller.generalAttachments?.removeAt(fromImageIndex);
+                                                          controller.generalAttachments?.insert(insertIndex, draggedImage);
                                                         } else {
                                                           // Coming from expansion tile
-                                                          controller.generalAttachments.insert(insertIndex, draggedImage);
+                                                          controller.generalAttachments?.insert(insertIndex, draggedImage);
                                                           controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
                                                         }
 
                                                         controller.impressionAndPlanListFullNote.refresh();
-                                                        controller.generalAttachments.refresh();
+                                                        controller.generalAttachments?.refresh();
                                                         controller.isFullNoteAttachment.value = true;
                                                         controller.updateImpressionAndPlanFullNote();
                                                       },
                                                       builder: (context, candidateData, rejectedData) {
-                                                        return _imageContainer(controller.generalAttachments[imageIndex], context, imageIndex, index);
+                                                        return _imageContainer(controller.generalAttachments?[imageIndex] ?? Attachments(), context, imageIndex, index, true);
                                                       },
                                                     ),
                                                   );
@@ -578,7 +586,7 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
     });
   }
 
-  Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, {bool dragging = false}) {
+  Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, bool isGeneral, {bool dragging = false}) {
     return Container(
       // key: ValueKey(attachment.id),
       width: Get.width / 4,
@@ -611,8 +619,14 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () {
-                    controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                    if (isGeneral) {
+                      controller.generalAttachments?.removeAt(imageIndex);
+                    } else {
+                      controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                    }
+
                     controller.impressionAndPlanListFullNote.refresh();
+                    controller.generalAttachments?.refresh();
                     controller.isFullNoteAttachment.value = false;
                     controller.updateImpressionAndPlanFullNote();
                   },
