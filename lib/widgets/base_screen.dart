@@ -310,7 +310,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                     ] else if (globalController.recorderService.recordingStatus.value == 2) ...[
                                       Text(textAlign: TextAlign.center, "Transcription is paused", style: AppFonts.regular(17, AppColors.textBlack)),
                                     ] else ...[
-                                      const Text(" "),
+                                      Text(textAlign: TextAlign.center, "Transcription not started", style: AppFonts.regular(17, AppColors.textBlack)),
                                     ],
                                     const SizedBox(height: 16),
                                     Row(

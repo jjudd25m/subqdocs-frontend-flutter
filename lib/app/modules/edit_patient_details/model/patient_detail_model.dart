@@ -113,7 +113,7 @@ class ScheduledVisits {
   String? visitDate;
   String? visitTime;
   int? doctorId;
-  Null? medicalAssistantId;
+  int? medicalAssistantId;
   int? id;
   String? thirdPartyId;
   String? doctorName;

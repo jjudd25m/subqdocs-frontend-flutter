@@ -21,6 +21,7 @@ import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
 import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/copyModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
@@ -55,6 +56,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
   final ScrollController scrollController = ScrollController();
   final KeyboardController keyboardController = Get.put(KeyboardController());
+  Rxn<SelectedDoctorModel> selectedDoctorValueModel = Rxn();
+  TextEditingController doctorController = TextEditingController();
+  FocusNode doctorFocusNode = FocusNode();
 
   final GlobalController globalController = Get.find();
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();

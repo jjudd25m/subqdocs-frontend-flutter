@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/app/modules/personal_setting/views/personal_info_tab.dart';
+import 'package:subqdocs/app/modules/personal_setting/views/user_management_tab.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/custom_animated_button.dart';
 
@@ -33,6 +35,7 @@ import '../model/get_user_detail_model.dart';
 import 'integrate_ema_dialog.dart';
 import 'invite_user_dialog.dart';
 import 'organization_edit_dialog.dart';
+import 'organization_management_tab.dart';
 import 'organization_use_edit_dialog.dart';
 
 class PersonalSettingView extends GetView<PersonalSettingController> {
@@ -1187,6 +1190,143 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
     );
   }
 }
+// class PersonalSettingView extends GetView<PersonalSettingController> {
+//   final GlobalKey<ScaffoldState> _key = GlobalKey();
+//
+//   PersonalSettingView({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     _handleRouteInit();
+//
+//     return BaseScreen(onItemSelected: _handleDrawerItemSelected, body: _buildMainContent(), globalKey: _key);
+//   }
+//
+//   void _handleRouteInit() {
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       if (controller.globalController.breadcrumbHistory.last != controller.globalController.breadcrumbs[Routes.PERSONAL_SETTING]) {
+//         controller.globalController.addRouteInit(Routes.PERSONAL_SETTING);
+//       }
+//     });
+//   }
+//
+//   Future<void> _handleDrawerItemSelected(int index) async {
+//     _key.currentState?.closeDrawer();
+//     switch (index) {
+//       case 0:
+//         await Get.toNamed(Routes.ADD_PATIENT);
+//         break;
+//       case 1:
+//         Get.offAllNamed(Routes.HOME, arguments: {"tabIndex": 1});
+//         break;
+//       case 2:
+//         Get.toNamed(Routes.HOME, arguments: {"tabIndex": 2});
+//         break;
+//       case 3:
+//         Get.toNamed(Routes.HOME, arguments: {"tabIndex": 0});
+//         break;
+//     }
+//   }
+//
+//   Widget _buildMainContent() {
+//     return PopScope(
+//       canPop: true,
+//       onPopInvokedWithResult: (didPop, result) {
+//         if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PERSONAL_SETTING) {
+//           controller.globalController.popRoute();
+//         }
+//       },
+//       child: GestureDetector(
+//         onTap: removeFocus,
+//         child: SafeArea(
+//           child: Container(
+//             color: AppColors.ScreenBackGround,
+//             child: Obx(() {
+//               return Column(children: [CustomAppBar(drawerkey: _key), Expanded(child: _buildContentBody())]);
+//             }),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildContentBody() {
+//     return Container(
+//       width: double.infinity,
+//       color: AppColors.ScreenBackGround,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Expanded(child: Padding(padding: const EdgeInsets.all(15), child: Container(width: double.infinity, decoration: const BoxDecoration(color: Colors.transparent), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const SizedBox(height: 10), _buildTabSelector(), const SizedBox(height: 20), Expanded(child: _buildSelectedTabContent())])))),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   Widget _buildTabSelector() {
+//     return Container(
+//       width: double.infinity,
+//       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
+//       child: Obx(() {
+//         return Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+//           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
+//           height: 70,
+//           child: SingleChildScrollView(
+//             physics: const BouncingScrollPhysics(),
+//             scrollDirection: Axis.horizontal,
+//             child: Row(
+//               children: [
+//                 _buildTabButton(text: "Personal Settings", index: 0),
+//                 if (controller.getUserDetailModel.value?.responseData?.isAdmin ?? false) _buildTabButton(text: "Organization Management", index: 1),
+//                 if (controller.getUserDetailModel.value?.responseData?.isAdmin ?? false)
+//                   _buildTabButton(
+//                     text: "User Management",
+//                     index: 2,
+//                     onPressed: () {
+//                       controller.resetUserManagementFilters();
+//                     },
+//                   ),
+//               ],
+//             ),
+//           ),
+//         );
+//       }),
+//     );
+//   }
+//
+//   Widget _buildTabButton({required String text, required int index, VoidCallback? onPressed}) {
+//     final isSelected = controller.tabIndex.value == index;
+//     return IntrinsicWidth(
+//       child: CustomAnimatedButton(
+//         onPressed: onPressed ?? () => controller.tabIndex.value = index,
+//         text: text,
+//         isOutline: true,
+//         paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+//         fontSize: 14,
+//         enabledTextColor: isSelected ? AppColors.backgroundPurple : AppColors.textGrey,
+//         enabledColor: isSelected ? AppColors.buttonPurpleLight : AppColors.clear,
+//         outLineEnabledColor: AppColors.textGrey,
+//         outlineColor: isSelected ? AppColors.backgroundPurple : AppColors.clear,
+//       ),
+//     );
+//   }
+//
+//   Widget _buildSelectedTabContent() {
+//     return Obx(() {
+//       switch (controller.tabIndex.value) {
+//         case 0:
+//           return PersonalInfoTab(controller: controller);
+//         case 1:
+//           return OrganizationManagementTab(controller: controller);
+//         case 2:
+//           return UserManagementTab(controller: controller);
+//         default:
+//           return const SizedBox();
+//       }
+//     });
+//   }
+// }
 
 void showEmailDialog(int userId, BuildContext context, PersonalSettingController controller) {
   final emailController = TextEditingController();

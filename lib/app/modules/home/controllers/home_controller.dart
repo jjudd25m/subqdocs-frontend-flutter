@@ -102,18 +102,7 @@ class HomeController extends GetxController {
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
   List<DateTime> selectedValue = [];
-  Map<String, String> nameToIdMap = {
-    "Patient Name": "first_name",
-    "Visit Date": "appointmentTime",
-    "Visit Date & Time": "appointmentTime",
-    "Last Visit Date": "lastVisitDate",
-    "Age": "age",
-    "Gender": "gender",
-    "Previous": "previousVisitCount",
-    "Previous Visits": "previousVisitCount",
-    "Status": "status",
-    "Provider": 'doctorName',
-  };
+  Map<String, String> nameToIdMap = {"Patient Name": "first_name", "Visit Date": "appointmentTime", "Visit Date & Time": "appointmentTime", "Last Visit Date": "lastVisitDate", "Age": "age", "Gender": "gender", "Previous": "previousVisitCount", "Previous Visits": "previousVisitCount", "Status": "status", "Provider": 'doctorName'};
   RxBool isInternetConnected = RxBool(true);
 
   var pagePatient = 1;
@@ -223,8 +212,6 @@ class HomeController extends GetxController {
     Get.put(GlobalController());
     await getLatestBuild();
     customPrint("home controller called");
-
-    ;
 
     globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
 
@@ -1337,11 +1324,7 @@ class HomeController extends GetxController {
       } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
         // Handle permission denial here
 
-        showDialog(
-          barrierDismissible: false,
-          context: Get.context!,
-          builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true),
-        );
+        showDialog(barrierDismissible: false, context: Get.context!, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
       }
     }
   }

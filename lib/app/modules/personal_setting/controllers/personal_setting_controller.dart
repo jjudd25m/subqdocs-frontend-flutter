@@ -749,4 +749,34 @@ class PersonalSettingController extends GetxController {
       },
     );
   }
+
+  void resetUserManagementFilters() {
+    userInviteSearchController.text = "";
+    // Reset to original data
+    filterGetUserOrganizationListModel.value?.responseData = List.from(getUserOrganizationListModel.value?.responseData ?? []);
+
+    if (filterGetUserOrganizationListModel.value?.responseData != getUserOrganizationListModel.value?.responseData) {
+      filterGetUserOrganizationListModel.refresh();
+    }
+  }
+
+  void filterUsers(String value) {
+    if (value.isNotEmpty) {
+      filterGetUserOrganizationListModel.value?.responseData =
+          getUserOrganizationListModel.value?.responseData?.where((element) {
+            String userName = (element.name?.trim().toLowerCase() ?? "").trim().toLowerCase();
+            String userEmail = (element.email?.trim().toLowerCase() ?? "").trim().toLowerCase();
+            return (userName.contains(value) || userEmail.contains(value));
+          }).toList();
+
+      filterGetUserOrganizationListModel.refresh();
+    } else {
+      // Reset to original data when no filter value
+      filterGetUserOrganizationListModel.value?.responseData = List.from(getUserOrganizationListModel.value?.responseData ?? []);
+
+      if (filterGetUserOrganizationListModel.value?.responseData != getUserOrganizationListModel.value?.responseData) {
+        filterGetUserOrganizationListModel.refresh();
+      }
+    }
+  }
 }

@@ -23,8 +23,7 @@ class PatientProfileMobileViewController extends GetxController {
   ];
 
   final HomeRepository _homeRepository = HomeRepository();
-  final EditPatientDetailsRepository _editPatientDetailsRepository =
-      EditPatientDetailsRepository();
+  final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
   final GlobalMobileController globalController = Get.find();
   Rxn<PatientDetailModel> patientDetailModel = Rxn();
 
@@ -48,8 +47,7 @@ class PatientProfileMobileViewController extends GetxController {
     Loader().showLoadingDialogForSimpleLoader();
 
     try {
-      PatientDetailModel localPatientDetailModel =
-          await _editPatientDetailsRepository.getPatientDetails(id: id);
+      PatientDetailModel localPatientDetailModel = await _editPatientDetailsRepository.getPatientDetails(id: id);
       Loader().stopLoader();
       print("PatientDetailModel :- ${localPatientDetailModel.toJson()}");
 
@@ -57,10 +55,8 @@ class PatientProfileMobileViewController extends GetxController {
       print("patientDetailModel-----:- ${patientDetailModel.value?.toJson()}");
     } catch (e) {
       Loader().stopLoader();
-      CustomToastification().showToast(
-        e.toString(),
-        type: ToastificationType.error,
-      );
+      print(e);
+      CustomToastification().showToast(e.toString(), type: ToastificationType.error);
     }
   }
 
@@ -120,20 +116,13 @@ class PatientProfileMobileViewController extends GetxController {
 
       param['status'] = status;
 
-      ChangeStatusModel changeStatusModel = await _editPatientDetailsRepository
-          .changeStatus(id: strVisitId, params: param);
+      ChangeStatusModel changeStatusModel = await _editPatientDetailsRepository.changeStatus(id: strVisitId, params: param);
       Loader().stopLoader();
       if (changeStatusModel.responseType == "success") {
-        CustomToastification().showToast(
-          "${changeStatusModel.message}",
-          type: ToastificationType.success,
-        );
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.success);
         getPatient(patientId);
       } else {
-        CustomToastification().showToast(
-          "${changeStatusModel.message}",
-          type: ToastificationType.error,
-        );
+        CustomToastification().showToast("${changeStatusModel.message}", type: ToastificationType.error);
       }
     } catch (e) {
       Loader().stopLoader();
@@ -141,19 +130,10 @@ class PatientProfileMobileViewController extends GetxController {
     }
   }
 
-  Future<void> reScheduleVisit({
-    required Map<String, dynamic> param,
-    required String visitId,
-  }) async {
-    dynamic response = await _homeRepository.patientReScheduleVisit(
-      param: param,
-      visitId: visitId,
-    );
+  Future<void> reScheduleVisit({required Map<String, dynamic> param, required String visitId}) async {
+    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
     customPrint("patientReScheduleCreate API  internal response $response");
-    CustomToastification().showToast(
-      "Visit reschedule successfully",
-      type: ToastificationType.success,
-    );
+    CustomToastification().showToast("Visit reschedule successfully", type: ToastificationType.success);
     getPatient(patientId);
   }
 }

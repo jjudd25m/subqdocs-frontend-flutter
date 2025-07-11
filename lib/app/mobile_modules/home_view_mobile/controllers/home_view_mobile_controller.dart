@@ -84,7 +84,7 @@ class HomeViewMobileController extends GetxController {
     showClearButton.value = false;
 
     getOrganizationDetail();
-    getLatestBuild();
+    // getLatestBuild();
   }
 
   @override

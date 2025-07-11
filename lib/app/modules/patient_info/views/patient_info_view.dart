@@ -21,12 +21,12 @@ import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widget/custom_animated_button.dart';
+import '../../../../widgets/base_dropdown2.dart';
 import '../../../core/common/logger.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/controllers/doctor_to_doctor_sign_finalize_authenticate_view_controller.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/views/doctor_to_doctor_sign_finalize_authenticate_view_view.dart';
-import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../../sign_finalize_authenticate_view/views/sign_finalize_authenticate_view_view.dart';
 import '../controllers/patient_info_controller.dart';
@@ -44,6 +44,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   PatientInfoController controller = Get.find<PatientInfoController>(tag: Get.arguments["unique_tag"]);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final ScrollController scrollController = ScrollController();
 
   String formatDateTime({required String firstDate, required String secondDate}) {
     if (firstDate != "" && secondDate != "") {
@@ -110,6 +111,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
         child: GestureDetector(
           onTap: () {
             customPrint("called main GestureDetector");
+
+            controller.doctorFocusNode.unfocus();
             controller.closeAllProcedureDiagnosisPopover();
             // FocusScope.of(context).unfocus();
             controller.resetImpressionAndPlanList();
@@ -194,98 +197,103 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                       children: <Widget>[
                                         Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
                                         const SizedBox(height: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                                          child: Row(
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Text(textAlign: TextAlign.center, "Age", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  const SizedBox(height: 6),
-                                                  Text(textAlign: TextAlign.center, (controller.patientData.value?.responseData?.age.toString() ?? "") == "null" ? "N/A" : controller.patientData.value?.responseData?.age.toString() ?? "", style: AppFonts.regular(14, AppColors.textGrey)),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              Column(children: [Text(textAlign: TextAlign.center, "Gender", style: AppFonts.regular(12, AppColors.textBlack)), const SizedBox(height: 6), Text(textAlign: TextAlign.center, controller.patientData.value?.responseData?.gender ?? "N/A", style: AppFonts.regular(14, AppColors.textGrey))]),
-                                              const Spacer(),
-                                              Column(
-                                                children: [
-                                                  Text(textAlign: TextAlign.center, "Visit Date & Time", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                  const SizedBox(height: 6),
-                                                  Text(textAlign: TextAlign.center, formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "-", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""), style: AppFonts.regular(14, AppColors.textGrey)),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [Text(textAlign: TextAlign.center, "Medical Assistant", style: AppFonts.regular(12, AppColors.textBlack)), const SizedBox(height: 6), Text(textAlign: TextAlign.center, controller.medicationValue.value ?? "N/A", style: AppFonts.regular(14, AppColors.textGrey))]),
-                                              const Spacer(),
-                                              IgnorePointer(
-                                                ignoring: controller.patientData.value?.responseData?.thirdPartyId != null || controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized",
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                        Container(
+                                          // color: AppColors.greenPastVisit,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Row(
+                                              children: [
+                                                Column(
                                                   children: [
-                                                    // Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                    // const SizedBox(height: 6),
-                                                    Popover(
-                                                      key: ValueKey(controller.doctorPopoverController),
-                                                      context,
-                                                      controller: controller.doctorPopoverController,
-                                                      borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                                                      scrollEnabled: true,
-                                                      hideArrow: true,
-                                                      applyActionWidth: false,
-                                                      alignment: PopoverAlignment.bottomCenter,
-                                                      contentWidth: 170,
-                                                      action: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
-                                                            const SizedBox(height: 6),
-                                                            SizedBox(
-                                                              width: 170,
-                                                              child: ContainerDropdownViewPopUp(
-                                                                receiveParam: (isExpand) {
-                                                                  // isExpandedMedicalAssistant.value = isExpand;
-                                                                },
-                                                                name: controller.doctorValue.value,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      content: Padding(
-                                                        padding: const EdgeInsets.all(0),
-                                                        child: SizedBox(
-                                                          width: 160,
-                                                          // height: 309,
-                                                          child: DropDownWithSearchPopup(
-                                                            // key: UniqueKey(),
-                                                            // key: controller.doctorSearchBarKey,
-                                                            searchScrollKey: controller.doctorSearchBarKey,
-                                                            onChanged: (value, index, selectedId, name) {
-                                                              print("print the doctor view ");
-
-                                                              controller.doctorPopoverController.close();
-                                                              controller.doctorValue.value = name;
-                                                              // Get.back();
-                                                              controller.updateDoctorView(selectedId);
-                                                            },
-                                                            list: controller.globalController.selectedDoctorModel.value,
-                                                            receiveParam: (String value) {},
-                                                            selectedId: 1,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    Text(textAlign: TextAlign.center, "Age", style: AppFonts.regular(12, AppColors.textBlack)),
+                                                    const SizedBox(height: 6),
+                                                    Text(textAlign: TextAlign.center, (controller.patientData.value?.responseData?.age.toString() ?? "") == "null" ? "N/A" : controller.patientData.value?.responseData?.age.toString() ?? "", style: AppFonts.regular(14, AppColors.textGrey)),
                                                   ],
                                                 ),
-                                              ),
-                                              const SizedBox(width: 20),
-                                            ],
+                                                const Spacer(),
+                                                Column(children: [Text(textAlign: TextAlign.center, "Gender", style: AppFonts.regular(12, AppColors.textBlack)), const SizedBox(height: 6), Text(textAlign: TextAlign.center, controller.patientData.value?.responseData?.gender ?? "N/A", style: AppFonts.regular(14, AppColors.textGrey))]),
+                                                const Spacer(),
+                                                Column(
+                                                  children: [
+                                                    Text(textAlign: TextAlign.center, "Visit Date & Time", style: AppFonts.regular(12, AppColors.textBlack)),
+                                                    const SizedBox(height: 6),
+                                                    Text(textAlign: TextAlign.center, formatDateTime(firstDate: controller.patientData.value?.responseData?.visitDate ?? "-", secondDate: controller.patientData.value?.responseData?.visitTime ?? ""), style: AppFonts.regular(14, AppColors.textGrey)),
+                                                  ],
+                                                ),
+                                                const Spacer(),
+                                                Column(crossAxisAlignment: CrossAxisAlignment.center, children: [Text(textAlign: TextAlign.center, "Medical Assistant", style: AppFonts.regular(12, AppColors.textBlack)), const SizedBox(height: 6), Text(textAlign: TextAlign.center, controller.medicationValue.value ?? "N/A", style: AppFonts.regular(14, AppColors.textGrey))]),
+                                                const Spacer(),
+                                                IgnorePointer(
+                                                  ignoring: controller.patientData.value?.responseData?.thirdPartyId != null || controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized",
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      SizedBox(height: 10),
+                                                      Text(textAlign: TextAlign.start, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
+                                                      Obx(() {
+                                                        return BaseDropdown2<SelectedDoctorModel>(
+                                                          isRequired: true,
+                                                          width: 170,
+                                                          height: 50,
+                                                          focusNode: controller.doctorFocusNode,
+                                                          inputDecoration: InputDecoration(
+                                                            suffixIcon: const Padding(padding: EdgeInsets.all(0), child: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textDarkGrey)),
+                                                            fillColor: AppColors.white,
+                                                            filled: true,
+                                                            errorStyle: const TextStyle(height: 1),
+                                                            errorMaxLines: 1,
+                                                            helperText: ' ',
+                                                            hintText: controller.doctorValue.value.isEmpty ? "Select" : controller.doctorValue.value,
+                                                            hintStyle: controller.doctorValue.value.isEmpty ? AppFonts.regular(14, AppColors.textDarkGrey) : AppFonts.regular(14, AppColors.textBlack),
+
+                                                            contentPadding: const EdgeInsets.all(0),
+                                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                          ),
+                                                          direction: VerticalDirection.up,
+                                                          controller: controller.doctorController,
+                                                          scrollController: scrollController,
+                                                          valueAsString: (p) => p?.name ?? "",
+                                                          items: controller.globalController.selectedDoctorModel.toList(),
+                                                          selectedValue: controller.selectedDoctorValueModel.value,
+                                                          itemBuilder: (model) {
+                                                            return Container(
+                                                              color: Colors.white,
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  Padding(padding: const EdgeInsets.only(left: 10), child: ClipRRect(borderRadius: BorderRadius.circular(14), child: BaseImageView(height: 32, width: 32, nameLetters: model.name ?? "", fontSize: 12, imageUrl: model.profileImage ?? ""))),
+                                                                  const SizedBox(width: 10),
+                                                                  Expanded(child: Container(color: AppColors.white, child: Text(model.name ?? "", style: AppFonts.medium(14, AppColors.black)))),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                          onChanged: (model) {
+                                                            controller.doctorValue.value = model?.name ?? "";
+
+                                                            // controller.selectedDoctorValueModel.value = model;
+
+                                                            // controller.selectedDoctorValue.value = model?.name ?? "";
+
+                                                            controller.doctorValue.refresh();
+                                                            // controller.selectedDoctorValueModel.refresh();
+                                                          },
+                                                          selectText: controller.doctorValue.value,
+                                                          isSearchable: true,
+                                                        );
+                                                      }),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 20),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        const SizedBox(height: 20),
+                                        const SizedBox(height: 10),
                                       ],
                                     ),
                                   );

@@ -44,6 +44,11 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               onReorder: (oldIndex, newIndex) {
+                for (var item in controller.impressionAndPlanListFullNote) {
+                  item.slidableController?.close();
+                  item.isOpened?.value = false;
+                }
+
                 controller.resetImpressionAndPlanList();
                 if (newIndex > oldIndex) newIndex -= 1;
                 final item = controller.impressionAndPlanListFullNote.removeAt(oldIndex);
@@ -118,6 +123,11 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                         builder: (context) {
                           const _openThreshold = 0.03;
                           model.slidableController?.animation.addListener(() {
+                            if (model.slidableController?.animation.status == AnimationStatus.dismissed) {
+                              model.isOpened?.value = false;
+                              return;
+                            }
+
                             final rawValue = model.slidableController?.animation.value ?? 0;
                             final isOpen = rawValue > _openThreshold;
                             // Explicit boolean conversion

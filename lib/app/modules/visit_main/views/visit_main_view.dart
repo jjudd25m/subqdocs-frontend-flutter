@@ -24,6 +24,7 @@ import '../../../../widget/bredcums.dart';
 import '../../../../widgets/customPermission.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
+import '../../../models/audio_wave.dart';
 import '../../../routes/app_pages.dart';
 import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
@@ -441,6 +442,17 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 controller.globalController.startAudioWidget();
                                                                 controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                                                 controller.globalController.getConnectedInputDevices();
+
+                                                                controller.globalController.samples.assignAll(
+                                                                  List.generate(
+                                                                    30,
+                                                                    (index) => AudioWaveBar(
+                                                                      heightFactor: 0.4, // Creates a repeating pattern
+                                                                      color: AppColors.backgroundPurple,
+                                                                    ),
+                                                                  ),
+                                                                );
+
                                                                 await controller.globalController.recorderService.startRecording(context);
                                                               } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
                                                                 showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
@@ -513,138 +525,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                   ),
                                                 ],
                                               ),
-                                              // Row(
-                                              //   children: [
-                                              //     Expanded(child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, controller.visitDate(controller.patientDetailModel.value?.responseData!.scheduledVisits?[index].visitDate), style: AppFonts.regular(14, AppColors.textGrey))),
-                                              //     const SizedBox(width: 15),
-                                              //     Expanded(child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, controller.visitTime(controller.patientDetailModel.value?.responseData!.scheduledVisits?[index].visitTime), style: AppFonts.regular(14, AppColors.textGrey))),
-                                              //     // Spacer(),
-                                              //     const SizedBox(width: 5),
-                                              //     const Spacer(),
-                                              //
-                                              //     Row(
-                                              //       children: [
-                                              //         GestureDetector(
-                                              //           onTap: () async {
-                                              //             if (controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() != controller.visitId.value) {
-                                              //               customPrint("print");
-                                              //               // Get.back();
-                                              //               controller.globalController.breadcrumbHistory.removeLast();
-                                              //
-                                              //               controller.globalController.addRoute(Routes.VISIT_MAIN);
-                                              //               Get.toNamed(Routes.VISIT_MAIN, preventDuplicates: false, arguments: {"visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString(), "patientId": controller.patientId.value, "unique_tag": DateTime.now().toString()})?.then((value) => Get.back());
-                                              //             } else {
-                                              //               if (controller.globalController.visitId.isNotEmpty) {
-                                              //                 CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
-                                              //               } else {
-                                              //                 if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
-                                              //                   controller.globalController.isStartTranscript.value = true;
-                                              //                   controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
-                                              //                   controller.globalController.attachmentId.value = controller.patientId.value;
-                                              //                   controller.globalController.patientLsatName.value = controller.patientData.value.responseData?.patientLastName ?? "";
-                                              //                   controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
-                                              //                   controller.globalController.patientLsatName.value = controller.patientData.value.responseData?.patientLastName ?? "";
-                                              //
-                                              //                   controller.globalController.valueOfx.value = 0;
-                                              //                   controller.globalController.valueOfy.value = 0;
-                                              //
-                                              //                   controller.globalController.visitId = controller.visitId;
-                                              //                   controller.globalController.patientId = controller.patientId;
-                                              //
-                                              //                   controller.globalController.changeStatus("In-Room");
-                                              //                   // If not recording, start the recording
-                                              //                   controller.globalController.startAudioWidget();
-                                              //                   controller.globalController.recorderService.audioRecorder = AudioRecorder();
-                                              //                   controller.globalController.getConnectedInputDevices();
-                                              //                   await controller.globalController.recorderService.startRecording(context);
-                                              //                 } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
-                                              //                   // Handle permission denial here
-                                              //
-                                              //                   showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
-                                              //                 }
-                                              //               }
-                                              //               // CustomToastification().showToast("Visit Already Opened", type: ToastificationType.info);
-                                              //             }
-                                              //           },
-                                              //           child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, (controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() != controller.visitId.value) ? "Start visit now" : "Start Transcribing", style: AppFonts.regular(14, AppColors.backgroundPurple)),
-                                              //         ),
-                                              //
-                                              //         const SizedBox(width: 30),
-                                              //         GestureDetector(
-                                              //           onTap: () {
-                                              //             DateTime visitdate = DateTime.parse(controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].visitTime ?? "");
-                                              //             DateTime visitTimeS = DateTime.parse(controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].visitTime ?? ""); // Parsing the string to DateTime
-                                              //             // Formatting to "hh:mm a" format
-                                              //             String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
-                                              //
-                                              //             controller.isConnected.value
-                                              //                 ? showDialog(
-                                              //                   context: context,
-                                              //                   barrierDismissible: true,
-                                              //                   // Allows dismissing the dialog by tapping outside
-                                              //                   builder: (BuildContext context) {
-                                              //                     return HomeReschedulePatientDialog(
-                                              //                       receiveParam: (p0, p1, doctorId, medicalId) {
-                                              //                         customPrint("p0 is $p0 p1 is $p1");
-                                              //
-                                              //                         Map<String, dynamic> param = {};
-                                              //
-                                              //                         param['visit_date'] = p1;
-                                              //                         param['visit_time'] = p0;
-                                              //
-                                              //                         if (doctorId != -1) {
-                                              //                           param['doctor_id'] = doctorId;
-                                              //                         }
-                                              //
-                                              //                         if (medicalId != -1) {
-                                              //                           param['medical_assistant_id'] = medicalId;
-                                              //                         }
-                                              //
-                                              //                         controller.patientReScheduleCreate(param: param, visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
-                                              //                       },
-                                              //                       visitDate: Rxn(visitdate),
-                                              //                       selectedDoctorValueSchedule: null,
-                                              //
-                                              //                       selectedMedicalValueSchedule: null,
-                                              //
-                                              //                       selectedVisitTimeValue: RxnString(formattedTime),
-                                              //                     ); // Our custom dialog
-                                              //                   },
-                                              //                 )
-                                              //                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
-                                              //           },
-                                              //           child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Reschedule", style: AppFonts.regular(14, AppColors.backgroundPurple)),
-                                              //         ),
-                                              //         const SizedBox(width: 30),
-                                              //         GestureDetector(
-                                              //           onTap: () {
-                                              //             controller.isConnected.value
-                                              //                 ? showDialog(
-                                              //                   context: context,
-                                              //                   barrierDismissible: true,
-                                              //                   builder: (BuildContext context) {
-                                              //                     // return SizedBox();
-                                              //                     return DeleteScheduleVisit(
-                                              //                       onDelete: () {
-                                              //                         controller.changeStatus("Cancelled", controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "");
-                                              //
-                                              //                         // controller.globalController.changeStatus("Cancelled");
-                                              //
-                                              //                         // controller.deletePatientVisit(
-                                              //                         //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() ?? "");
-                                              //                       },
-                                              //                     );
-                                              //                   },
-                                              //                 )
-                                              //                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
-                                              //           },
-                                              //           child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Cancel visit", style: AppFonts.regular(14, AppColors.backgroundPurple)),
-                                              //         ),
-                                              //         const SizedBox(width: 60),
-                                              //       ],
-                                              //     ),
-                                              //   ],
-                                              // ),
                                               const SizedBox(height: 10),
                                               if (index != 7) ...[const Divider(height: 1, color: AppColors.appbarBorder)],
                                             ],
@@ -673,37 +553,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                               backgroundColor: AppColors.backgroundWhite,
                               collapsedBackgroundColor: AppColors.backgroundWhite,
-                              title: Row(
-                                children: [
-                                  Text(textAlign: TextAlign.start, "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)", style: AppFonts.regular(16, AppColors.textBlack)),
-                                  const Spacer(),
-                                  // Container(
-                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                  //   decoration: BoxDecoration(
-                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                  //     // color: AppColors.backgroundWhite,
-                                  //     borderRadius: BorderRadius.circular(8),
-                                  //   ),
-                                  //   child: Row(
-                                  //     children: [
-                                  //       SvgPicture.asset(ImagePath.search, height: 14, width: 14),
-                                  //       SizedBox(width: 10),
-                                  //       SizedBox(
-                                  //         width: 194,
-                                  //         height: 25,
-                                  //         child: TextField(
-                                  //           maxLines: 1,
-                                  //           textAlignVertical: TextAlignVertical.center, // Centers the text vertically
-                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // SizedBox(width: 10),
-                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
-                                ],
-                              ),
+                              title: Row(children: [Text(textAlign: TextAlign.start, "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -812,33 +662,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     },
                                   ),
                                   const SizedBox(width: 10),
-                                  // Container(
-                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                  //   decoration: BoxDecoration(
-                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                  //     // color: AppColors.backgroundWhite,
-                                  //     borderRadius: BorderRadius.circular(8),
-                                  //   ),
-                                  //   child: Row(
-                                  //     children: [
-                                  //       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
-                                  //       SizedBox(width: 10),
-                                  //       SizedBox(
-                                  //         width: 120,
-                                  //         child: TextField(
-                                  //           controller: controller.searchController,
-                                  //           onChanged: (value) {
-                                  //             controller.getPatientAttachment();
-                                  //           },
-                                  //           maxLines: 1, //or null
-                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // SizedBox(width: 10),
-                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
                                 ],
                               ),
                               children: <Widget>[
@@ -1103,6 +926,17 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         controller.globalController.startAudioWidget();
                                         controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                         controller.globalController.getConnectedInputDevices();
+
+                                        controller.globalController.samples.assignAll(
+                                          List.generate(
+                                            30,
+                                            (index) => AudioWaveBar(
+                                              heightFactor: 0.4, // Creates a repeating pattern
+                                              color: AppColors.backgroundPurple,
+                                            ),
+                                          ),
+                                        );
+
                                         await controller.globalController.recorderService.startRecording(context);
                                         controller.updateData();
                                       } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
@@ -1135,9 +969,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 style: AppFonts.medium(16, AppColors.textWhite),
                                               );
                                             }),
-                                            // SvgPicture.asset(ImagePath.ai_white, height: 30, width: 30),
-                                            // SizedBox(height: 10),
-                                            // Text(textAlign: TextAlign.center, "Start Transcribing", style: AppFonts.medium(16, AppColors.textWhite)),
                                           ],
                                         ),
                                       ],

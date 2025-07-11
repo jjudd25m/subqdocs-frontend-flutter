@@ -41,6 +41,7 @@ class RecorderService {
   Future<bool> startRecording(BuildContext context) async {
     WakelockPlus.enable();
     final GlobalController globalController = Get.find();
+    globalController.samples.clear();
     log("log: start recording");
     if (await audioRecorder.hasPermission()) {
       Directory dir = await getApplicationCacheDirectory();
