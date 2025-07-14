@@ -275,7 +275,7 @@ class MobileRecorderService {
       String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
 
       await audioRecorder.start(const RecordConfig(), path: "${dir.path}/$filename");
-
+      globalController.startMicListening();
       // waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
       //   // globalController.waveController.amplitude = (amp.current / 100).clamp(0.01, 1.0);
       //   final db = amp.current ?? -160;

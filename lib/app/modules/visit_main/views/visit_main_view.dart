@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_side_sheet/Enums/sheet_position.dart';
 import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -440,7 +442,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             if (controller.globalController.visitId.isNotEmpty) {
                                                               CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                                             } else {
-                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
+                                                              final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
                                                                 controller.globalController.isStartTranscript.value = true;
                                                                 controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
                                                                 controller.globalController.attachmentId.value = controller.patientId.value;
@@ -465,7 +468,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 );
 
                                                                 await controller.globalController.recorderService.startRecording(context);
-                                                              } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+                                                              } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
                                                                 showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
                                                               }
                                                             }
@@ -912,7 +915,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     if (controller.globalController.visitId.isNotEmpty) {
                                       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                     } else {
-                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
+                                      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
                                         controller.globalController.isStartTranscript.value = true;
 
                                         // controller.globalController.patientId.value = controller.patientId.value;
@@ -950,7 +954,7 @@ class _VisitMainViewState extends State<VisitMainView> {
 
                                         await controller.globalController.recorderService.startRecording(context);
                                         controller.updateData();
-                                      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+                                      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
                                         // Handle permission denial here
 
                                         showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));

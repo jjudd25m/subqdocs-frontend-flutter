@@ -84,9 +84,10 @@ class AddRecordingMobileViewController extends GetxController {
   }
 
   Future<void> checkAudioRecordPermission() async {
-    if (await recorderService.audioRecorder.hasPermission()) {
+    final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+    if (await recorderService.audioRecorder.hasPermission() && btGranted) {
       recorderService.startRecording(Get.context!);
-    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
       showDialog(
