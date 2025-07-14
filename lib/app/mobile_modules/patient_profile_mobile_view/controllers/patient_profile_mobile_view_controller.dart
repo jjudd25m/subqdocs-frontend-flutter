@@ -49,10 +49,8 @@ class PatientProfileMobileViewController extends GetxController {
     try {
       PatientDetailModel localPatientDetailModel = await _editPatientDetailsRepository.getPatientDetails(id: id);
       Loader().stopLoader();
-      print("PatientDetailModel :- ${localPatientDetailModel.toJson()}");
 
       patientDetailModel.value = localPatientDetailModel;
-      print("patientDetailModel-----:- ${patientDetailModel.value?.toJson()}");
     } catch (e) {
       Loader().stopLoader();
       print(e);

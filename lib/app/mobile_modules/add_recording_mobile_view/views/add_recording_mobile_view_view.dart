@@ -129,7 +129,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                               padding: EdgeInsets.zero,
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                children: [Text('Transcription in ${(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                                children: [Text('Transcription in ${(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: const TextStyle(fontSize: 16)), const SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
                               ),
                             ),
                       ),

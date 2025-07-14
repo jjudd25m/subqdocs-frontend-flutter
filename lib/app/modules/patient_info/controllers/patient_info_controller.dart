@@ -141,8 +141,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     try {
       patientData.value = await _visitMainRepository.getPatientDetails(param: param);
 
-      print("visit type:- ${patientData.value?.responseData?.visitStatus}");
-
       customPrint("patient data is :- ${patientData.toJson()}");
 
       if (patientData.value?.responseData?.doctorId != null) {
@@ -1460,7 +1458,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     transcriptListModel.value = await _patientInfoRepository.getTranscript(id: visitId);
     // if (/**/transcriptListModel.value?.responseData != null) {
     transcriptList.value = transcriptListModel.value?.responseData?.cleanedTranscript?.responseData ?? [];
-    print("transctipt data :- ${transcriptListModel.value?.message}");
     getPatientDetails();
     // }
 

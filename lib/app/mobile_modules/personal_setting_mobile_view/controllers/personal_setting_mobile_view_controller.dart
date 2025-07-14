@@ -268,13 +268,11 @@ class PersonalSettingMobileViewController extends GetxController {
         param['isDeleteProfileImage'] = true;
       }
     }
-    print("user loader start");
     Loader().showLoadingDialogForSimpleLoader();
     try {
       dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
 
       Loader().stopLoader();
-      print("updateUserDetail is $response");
       UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
 
       CustomToastification().showToast(updateUserResponseModel.message ?? "", type: ToastificationType.success);

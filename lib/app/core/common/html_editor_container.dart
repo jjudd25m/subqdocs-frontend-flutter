@@ -176,9 +176,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                   onChangeContent: (content) {
                     onChangeContent(content);
                   },
-                  onScroll: () {
-                    print("demo  is the called ");
-                  },
+                  onScroll: () {},
                   onInit: () {
                     widget.impresionAndPlanViewModel.htmlEditorController.setFullScreen();
                   },

@@ -286,7 +286,6 @@ class HomeController extends GetxController {
     if (globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false) {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      print("inside patientSyncSocketSetup");
       socketService.socket.emit("EMA_user_joined", [loginData.responseData?.user?.id]);
 
       socketService.socket.on("patient_sync_started", (data) {
@@ -323,8 +322,6 @@ class HomeController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     globalController.getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
-
-    print("lanavuge :- ${globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false}");
   }
 
   Future<void> getOrganizationDetail() async {
@@ -332,8 +329,6 @@ class HomeController extends GetxController {
       globalController.getEMAOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
 
       patientSyncSocketSetup();
-      print("isEmaIntegration is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration}");
-      print("has_ema_configs is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs}");
     } catch (e) {
       customPrint("error on get OrganizationDetail :- $e");
     }
@@ -485,8 +480,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
-    print("getScheduleVisitList called");
-
     scheduleVisitList.clear();
 
     pageSchedule = 1;

@@ -10,7 +10,7 @@ class GetEmaConfigModel {
     if (json['responseData'] != null) {
       responseData = <GetEmaConfigResponseData>[];
       json['responseData'].forEach((v) {
-        responseData!.add(new GetEmaConfigResponseData.fromJson(v));
+        responseData!.add(GetEmaConfigResponseData.fromJson(v));
       });
     }
     message = json['message'];

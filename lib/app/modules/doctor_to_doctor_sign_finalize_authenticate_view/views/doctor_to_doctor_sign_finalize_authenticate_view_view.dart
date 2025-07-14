@@ -14,15 +14,11 @@ import '../../../../widgets/base_dropdown2.dart';
 import '../../../../widgets/custom_tab_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
 import '../../../../widgets/custom_toastification.dart';
-import '../../patient_info/model/get_doctor_list_by_role_model.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../controllers/doctor_to_doctor_sign_finalize_authenticate_view_controller.dart';
 
 class DoctorToDoctorSignFinalizeAuthenticateView extends GetView<DoctorToDoctorSignFinalizeAuthenticateViewController> {
-  // DoctorToDoctorSignFinalizeAuthenticateViewController controller;
-
   DoctorToDoctorSignFinalizeAuthenticateView({super.key});
-
-  // DoctorToDoctorSignFinalizeAuthenticateView({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +81,7 @@ class DoctorToDoctorSignFinalizeAuthenticateView extends GetView<DoctorToDoctorS
                                       const SizedBox(height: 8),
                                     ],
                                     Obx(() {
-                                      return BaseDropdown2<GetDoctorListByRoleResponseData>(
+                                      return BaseDropdown2<SelectedDoctorModel>(
                                         isRequired: true,
                                         fillColor: AppColors.clear,
                                         direction: VerticalDirection.up,
@@ -147,13 +143,13 @@ class DoctorToDoctorSignFinalizeAuthenticateView extends GetView<DoctorToDoctorS
                                         !controller.userPinVisibility.value
                                             ? GestureDetector(
                                               onTap: () {
-                                                controller.changeUserPinVisiblity();
+                                                controller.changeUserPinVisibility();
                                               },
                                               child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 5, width: 5),
                                             )
                                             : GestureDetector(
                                               onTap: () {
-                                                controller.changeUserPinVisiblity();
+                                                controller.changeUserPinVisibility();
                                               },
                                               child: const Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                             ),

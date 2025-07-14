@@ -137,8 +137,6 @@ class HomeScheduleListView extends GetView<HomeController> {
                                           barrierDismissible: true,
                                           // Allows dismissing the dialog by tapping outside
                                           builder: (BuildContext context) {
-                                            print("medical record is :- ${controller.globalController.selectedMedicalModel.value}");
-
                                             return HomeReschedulePatientDialog(
                                               receiveParam: (p0, p1, doctorId, medicalId) {
                                                 customPrint("p0 is $p0 p1 is $p1");

@@ -451,8 +451,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
                                         final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments ?? []);
 
-                                        print("is from is from isGeneral $isGeneral");
-
                                         if (isGeneral) {
                                           // Reordering within general images
 
@@ -489,8 +487,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                     hitTestBehavior: HitTestBehavior.translucent,
                                                     // Add this
                                                     onDraggableCanceled: (velocity, offset) {
-                                                      print("LongPressDraggable onDraggableCanceled 1");
-
                                                       WidgetsBinding.instance.addPostFrameCallback((_) {
                                                         controller.impressionAndPlanListFullNote.refresh();
                                                         controller.generalAttachments?.refresh();
@@ -502,7 +498,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                       // controller.updateImpressionAndPlanFullNote();
                                                     },
                                                     onDragEnd: (details) {
-                                                      print("LongPressDraggable onDragEnd 1");
                                                       controller.impressionAndPlanListFullNote.refresh();
                                                       controller.generalAttachments?.refresh();
                                                     },

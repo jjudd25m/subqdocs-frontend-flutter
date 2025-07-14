@@ -1798,7 +1798,7 @@ class SiblingIcd10 {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['code'] = code;
     data['name'] = name;
     return data;
@@ -1826,7 +1826,7 @@ class ImpressionsAndPlan {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['title'] = title;
 
     if (siblingIcd10 != null) {

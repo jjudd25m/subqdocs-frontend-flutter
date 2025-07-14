@@ -21,9 +21,11 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
+import '../../../../widgets/base_dropdown2.dart';
 import '../../../../widgets/customPermission.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/audio_wave.dart';
 import '../../../routes/app_pages.dart';
 import '../../home/views/container_view_dropdown.dart';
@@ -50,7 +52,7 @@ class VisitMainView extends StatefulWidget {
 
 class _VisitMainViewState extends State<VisitMainView> {
   VisitMainController controller = Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]);
-
+  final ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
@@ -244,47 +246,56 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Text(textAlign: TextAlign.center, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
+                                            Text("Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
                                             const SizedBox(height: 6),
                                             if (controller.visitId.value == "null") const Text(textAlign: TextAlign.center, "-"),
                                             if (controller.visitId.value != "null")
-                                              PopupMenuButton<String>(
-                                                offset: const Offset(0, 8),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                                color: AppColors.white,
-                                                position: PopupMenuPosition.under,
-                                                padding: EdgeInsetsDirectional.zero,
-                                                menuPadding: EdgeInsetsDirectional.zero,
-                                                onSelected: (value) {},
-                                                style: const ButtonStyle(padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero), tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                                                itemBuilder:
-                                                    (context) => [
-                                                      PopupMenuItem(
-                                                        padding: EdgeInsets.zero,
-                                                        onTap: () async {},
-                                                        value: "",
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(0),
-                                                          child: SizedBox(
-                                                            width: 165,
-                                                            child: DropDownWithSearchPopup(
-                                                              key: UniqueKey(),
-                                                              onChanged: (value, index, selectedId, name) {
-                                                                customPrint("print the doctor view ");
-
-                                                                controller.doctorValue.value = name;
-                                                                Get.back();
-                                                                controller.updateDoctorView(selectedId);
-                                                              },
-                                                              list: controller.globalController.selectedDoctorModel.toList(),
-                                                              receiveParam: (String value) {},
-                                                              selectedId: 1,
-                                                            ),
-                                                          ),
+                                              SizedBox(
+                                                height: 25,
+                                                child: Obx(() {
+                                                  return BaseDropdown2<SelectedDoctorModel>(
+                                                    isRequired: true,
+                                                    width: 170,
+                                                    focusNode: controller.doctorFocusNode,
+                                                    controller: controller.doctorController,
+                                                    scrollController: scrollController,
+                                                    direction: VerticalDirection.down,
+                                                    inputDecoration: InputDecoration(
+                                                      suffixIcon: const Padding(padding: EdgeInsets.all(0), child: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textDarkGrey)),
+                                                      fillColor: AppColors.white,
+                                                      filled: true,
+                                                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                                      hintText: controller.doctorValue.value.isEmpty ? "Select" : controller.doctorValue.value,
+                                                      hintStyle: controller.doctorValue.value.isEmpty ? AppFonts.regular(14, AppColors.textDarkGrey) : AppFonts.regular(14, AppColors.textBlack),
+                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                    ),
+                                                    valueAsString: (SelectedDoctorModel? model) => model?.name ?? "",
+                                                    items: controller.globalController.selectedDoctorModel.toList(),
+                                                    selectedValue: controller.selectedDoctorValueModel.value,
+                                                    itemBuilder: (p0) {
+                                                      return Container(
+                                                        color: Colors.white,
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Padding(padding: const EdgeInsets.only(left: 10), child: ClipRRect(borderRadius: BorderRadius.circular(16), child: BaseImageView(height: 32, width: 32, nameLetters: p0.name ?? "", fontSize: 12, imageUrl: p0.profileImage ?? ""))),
+                                                            const SizedBox(width: 10),
+                                                            Expanded(child: Container(color: AppColors.white, child: Text(p0.name ?? "", style: AppFonts.medium(14, AppColors.black)))),
+                                                          ],
                                                         ),
-                                                      ),
-                                                    ],
-                                                child: IntrinsicWidth(child: ContainerDropdownViewPopUp(receiveParam: (isExpand) {}, name: controller.doctorValue.value)),
+                                                      );
+                                                    },
+                                                    onChanged: (SelectedDoctorModel? model) {
+                                                      controller.doctorValue.value = model?.name ?? "";
+                                                      controller.doctorValue.refresh();
+                                                      controller.updateDoctorView(model?.id ?? -1);
+                                                    },
+                                                    selectText: controller.doctorValue.value,
+                                                    isSearchable: true,
+                                                  );
+                                                }),
                                               ),
                                           ],
                                         ),

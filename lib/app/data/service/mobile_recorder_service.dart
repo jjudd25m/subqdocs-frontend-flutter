@@ -292,7 +292,6 @@ class MobileRecorderService {
 
         double normalized = ((amp.current - minDb) / (maxDb - minDb)).clamp(0.0, 1.0);
         // final normalized = ((amp.current + 130) / 130).clamp(0.0, 1.0);
-        print(normalized);
         log(amp.current.toString());
 
         if (globalController.samples.length >= 30) {

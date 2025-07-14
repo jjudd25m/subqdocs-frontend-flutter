@@ -10,6 +10,7 @@ import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../login/model/login_model.dart';
 import '../../patient_info/model/check_doctor_pin_expired_model.dart';
 import '../../patient_info/model/get_doctor_list_by_role_model.dart';
@@ -23,10 +24,10 @@ class SignFinalizeAuthenticateViewController extends GetxController {
   RxBool userPinVisibility = RxBool(true);
   final ScrollController scrollController = ScrollController();
   RxnString selectedDoctorValue = RxnString();
-  Rxn<GetDoctorListByRoleResponseData> selectedDoctorValueModel = Rxn();
+  Rxn<SelectedDoctorModel> selectedDoctorValueModel = Rxn();
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();
 
-  RxList<GetDoctorListByRoleResponseData> doctorList = RxList();
+  RxList<SelectedDoctorModel> doctorList = RxList();
   Rxn<CheckDoctorPinExpiredModel> checkPinResponse = Rxn();
   final GlobalController globalController = Get.find();
 
@@ -47,23 +48,6 @@ class SignFinalizeAuthenticateViewController extends GetxController {
   Future<void> onReady() async {
     // TODO: implement onReady
     super.onReady();
-    // getDoctorList();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Loader().showLoadingDialogForSimpleLoader();
-
-      try {
-        GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-        doctorList.value = doctorListByRole.responseData ?? [];
-        doctorList.refresh();
-        // Loader().stopLoader();
-      } catch (e) {
-        // Loader().stopLoader();
-        CustomToastification().showToast(e.toString(), type: ToastificationType.error);
-      }
-    });
-
-    print("visit id:- $visitId");
   }
 
   void changeUserPinVisiblity() {
@@ -71,44 +55,22 @@ class SignFinalizeAuthenticateViewController extends GetxController {
     userPinVisibility.refresh();
   }
 
-  // void getDoctorList() async {
-  //   GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-  //   doctorList.value = doctorListByRole.responseData ?? [];
-  //   doctorList.refresh();
-  // }
-
-  Future<void> setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) async {
+  Future<void> setDoctor(Rxn<SelectedDoctorModel> doctorData) async {
     selectedDoctorValueModel = doctorData;
-
     selectedDoctorValue.value = selectedDoctorValueModel.value?.name;
-
-    // GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-    // doctorList.value = doctorListByRole.responseData ?? [];
-    // doctorList.refresh();
-
-    print("doctor name:- ${selectedDoctorValue.value}");
+    doctorList = globalController.selectedDoctorModel;
   }
 
   void setThirdParty(String thirdParty) {
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     isAccessible = (thirdParty.isNotEmpty);
-
-    print("setThirdParty :- $isAccessible");
-
-    print("login id:- ${loginData.value?.responseData?.user?.id}");
-    print("doctor id:- ${selectedDoctorValueModel.value?.id}");
-
-    print("login id same as doctor :- ${selectedDoctorValueModel.value?.id == loginData.value?.responseData?.user?.id}");
   }
 
   Future<void> checkDoctorPIN(String doctorId) async {
     try {
       checkPinResponse.value = await _patientInfoRepository.checkDoctorPIN(doctorId);
-      print("response of checkPinResponse :- ${checkPinResponse.toJson()}");
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   Future<void> changeStatus() async {

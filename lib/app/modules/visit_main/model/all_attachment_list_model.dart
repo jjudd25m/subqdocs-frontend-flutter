@@ -104,21 +104,21 @@ class FileAttachment {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['file_name'] = this.fileName;
-    data['file_path'] = this.filePath;
-    data['file_type'] = this.fileType;
-    data['file_size'] = this.fileSize;
-    data['uploaded_by'] = this.uploadedBy;
-    data['uploaded_at'] = this.uploadedAt;
-    data['visit_id'] = this.visitId;
-    data['patient_id'] = this.patientId;
-    data['is_active'] = this.isActive;
-    data['timestamp'] = this.timestamp;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['file_name'] = fileName;
+    data['file_path'] = filePath;
+    data['file_type'] = fileType;
+    data['file_size'] = fileSize;
+    data['uploaded_by'] = uploadedBy;
+    data['uploaded_at'] = uploadedAt;
+    data['visit_id'] = visitId;
+    data['patient_id'] = patientId;
+    data['is_active'] = isActive;
+    data['timestamp'] = timestamp;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
     return data;
   }
 }

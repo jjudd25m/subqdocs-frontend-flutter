@@ -8,6 +8,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_fonts.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/empty_patient_mobile_screen.dart';
+import '../../../../app/core/common/logger.dart';
 
 class MobilePastPatientListView extends GetView<HomeViewMobileController> {
   const MobilePastPatientListView({super.key});
@@ -31,17 +32,17 @@ class MobilePastPatientListView extends GetView<HomeViewMobileController> {
                     controller.pagePast = 1;
 
                     controller.getPastVisitList();
-                    print("refresh patient list view");
+                    customPrint("refresh patient list view");
                   },
                   child: NotificationListener<ScrollEndNotification>(
                     onNotification: (notification) {
                       if (notification.metrics.atEdge) {
-                        print("notification.metrics.atEdge");
+                        customPrint("notification.metrics.atEdge");
                       }
 
                       // If user reaches the bottom and no data is being loaded
                       if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !controller.isLoading.value) {
-                        print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
+                        customPrint("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
 
                         controller.getPastVisitListFetchMore();
                       }
@@ -169,7 +170,7 @@ class MobilePastPatientListView extends GetView<HomeViewMobileController> {
                     width: 120,
                     child: CustomAnimatedButton(
                       onPressed: () {
-                        print("patient id :- ${controller.pastVisitList[rowIndex].id}");
+                        customPrint("patient id :- ${controller.pastVisitList[rowIndex].id}");
                         controller.createVisit(controller.pastVisitList[rowIndex].id ?? 0);
                       },
                       height: 40,

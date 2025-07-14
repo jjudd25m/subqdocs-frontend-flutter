@@ -116,8 +116,6 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       }
     }
 
-    print("visit status ${patientData.value?.responseData?.visitStatus}");
-
     super.onInit();
   }
 
@@ -1297,7 +1295,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
         Map<String, dynamic> responseData = res["responseData"];
         Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
         patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        print("patientFullNoteModel:- ${patientFullNoteModel.toJson()}");
+
         HtmlEditorController htmlEditorController = HtmlEditorController();
         editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
         editableDataForSocialHistory.refresh();
@@ -1314,7 +1312,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
         Map<String, dynamic> responseData = res["responseData"];
         Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
         patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        print("patientFullNoteModel:- ${patientFullNoteModel.toJson()}");
+
         HtmlEditorController htmlEditorController = HtmlEditorController();
         editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
         editableDataForCancerHistory.refresh();

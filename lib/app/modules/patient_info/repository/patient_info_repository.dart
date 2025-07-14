@@ -148,10 +148,10 @@ class PatientInfoRepository {
     return GetModifierCodeModel.fromJson(response);
   }
 
-  Future<GetDoctorListByRoleModel> getDoctorByRole() async {
-    var response = await ApiProvider.instance.callGet("getUsersByRole", queryParameters: {'role': 'Doctor'});
-    return GetDoctorListByRoleModel.fromJson(response);
-  }
+  // Future<GetDoctorListByRoleModel> getDoctorByRole() async {
+  //   var response = await ApiProvider.instance.callGet("getUsersByRole", queryParameters: {'role': 'Doctor'});
+  //   return GetDoctorListByRoleModel.fromJson(response);
+  // }
 
   Future<CheckDoctorPinExpiredModel> checkDoctorPIN(String doctorId) async {
     var response = await ApiProvider.instance.callGet("user/getUserPin/$doctorId", queryParameters: {});

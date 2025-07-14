@@ -230,8 +230,6 @@ class GlobalController extends GetxController {
       param['role'] = ROLE_DOCTOR;
       doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
 
-      print("doctor list is:- ${doctorListModel.value?.toJson()}");
-
       if (doctorListModel.value?.responseType == "success") {
         selectedDoctorModel.clear();
         selectedDoctorModelSchedule.clear();
@@ -255,9 +253,6 @@ class GlobalController extends GetxController {
       Map<String, dynamic> param = {};
 
       param['status'] = status;
-
-      print("pram is:- $param");
-      print("visit id for quick is ${visitId.value} ");
 
       ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
 
@@ -861,9 +856,7 @@ class GlobalController extends GetxController {
       customPrint('global openAISocket socket connected');
     });
 
-    socketService.openAISocket.onConnectError((data) {
-      print("connection openAISocket error :- ${data}");
-    });
+    socketService.openAISocket.onConnectError((data) {});
 
     socketService.openAISocket.on('disconnect', (_) {
       customPrint('global openAISocket Socket disconnected');
@@ -891,14 +884,12 @@ class GlobalController extends GetxController {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    print("global controller disponse");
   }
 
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    print("global controller close");
   }
 
   Future<void> startMicListening() async {

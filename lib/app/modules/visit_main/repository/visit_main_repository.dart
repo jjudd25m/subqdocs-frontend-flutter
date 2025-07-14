@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:mime/mime.dart';
 
 import '../../../../widget/device_detection.dart';
@@ -80,18 +79,15 @@ class VisitMainRepository {
   }
 
   Future<PatientAttachmentListModel> getPatientAttachment({required String id, required Map<String, dynamic> param}) async {
-    print("inside getPatientAttachment");
     try {
       var response = await ApiProvider.instance.callGet("patient/attachments/$id", queryParameters: param);
       customPrint("getPatientAttachment API internal response $response");
 
       PatientAttachmentListModel testing = PatientAttachmentListModel.fromJson(response);
-      print("testing :- ${testing.toJson()}");
 
       return testing;
       // return PatientAttachmentListModel.fromJson(response);
     } catch (e) {
-      print("getPatientAttachment catch ${e.toString()}");
       return PatientAttachmentListModel.fromJson({});
     }
   }
@@ -102,7 +98,6 @@ class VisitMainRepository {
       customPrint("getAllPatientAttachment API internal response $response");
       return AllAttachmentListModel.fromJson(response);
     } catch (e) {
-      print("---getAllPatientAttachment:- ${e}");
       return AllAttachmentListModel.fromJson({});
     }
   }
@@ -114,7 +109,6 @@ class VisitMainRepository {
   }
 
   Future<ChangeStatusModel> changeStatus({required String id, required Map<String, dynamic> params}) async {
-    print("changeStatus param:- $params and id:- $id");
     var response = await ApiProvider.instance.callPut("patient/updateVisitStatus/$id", params);
     customPrint("changeStatus API  internal response $response");
     return ChangeStatusModel.fromJson(response);

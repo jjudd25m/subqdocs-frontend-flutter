@@ -223,7 +223,6 @@ class QuickStartViewController extends GetxController {
   }
 
   void setUi(PatientListData? value) {
-    print("PatientListData :- ${value?.toJson()}");
     if (value?.patientId != null) {
       patientId.text = value?.patientId.toString() ?? "";
     }

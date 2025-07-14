@@ -289,20 +289,6 @@ class PersonalSettingMobileViewView extends GetView<PersonalSettingMobileViewCon
                               );
                             },
                           );
-
-                          // showDialog(
-                          //   context: context,
-                          //   barrierDismissible: true,
-                          //   builder: (BuildContext context) {
-                          //     return OrganizationUseEditDialog(
-                          //       receiveParam: (p0) {
-                          //         Future.delayed(const Duration(milliseconds: 200)).then((value) {
-                          //           controller.updateUserDetail(p0);
-                          //         });
-                          //       },
-                          //     );
-                          //   },
-                          // );
                         },
                         child: SvgPicture.asset(ImagePath.edit, width: 26, height: 26),
                       ),

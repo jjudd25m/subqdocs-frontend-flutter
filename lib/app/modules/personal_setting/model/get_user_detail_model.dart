@@ -239,7 +239,7 @@ class GetOrganizationDetailResponseData {
     employeesCount = json['employeesCount'];
     isEmaIntegration = json['is_ema_integration'];
     has_ema_configs = json['has_ema_configs'];
-    appointmentType = json['appointment_type'] != null ? new AppointmentType.fromJson(json['appointment_type']) : null;
+    appointmentType = json['appointment_type'] != null ? AppointmentType.fromJson(json['appointment_type']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -262,10 +262,10 @@ class GetOrganizationDetailResponseData {
     data['deleted_at'] = deletedAt;
     data['organization_name'] = organization_name;
     data['employeesCount'] = employeesCount;
-    data['is_ema_integration'] = this.isEmaIntegration;
+    data['is_ema_integration'] = isEmaIntegration;
     data['has_ema_configs'] = has_ema_configs;
-    if (this.appointmentType != null) {
-      data['appointment_type'] = this.appointmentType!.toJson();
+    if (appointmentType != null) {
+      data['appointment_type'] = appointmentType!.toJson();
     }
     return data;
   }
@@ -283,9 +283,9 @@ class AppointmentType {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['label'] = this.label;
-    data['value'] = this.value;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['label'] = label;
+    data['value'] = value;
     return data;
   }
 }
@@ -588,7 +588,7 @@ class InvitedUserResponseData {
   int? organizationId;
   String? updatedAt;
   String? createdAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   InvitedUserResponseData({this.id, this.fromUser, this.toUser, this.isAdmin, this.status, this.role, this.organizationId, this.updatedAt, this.createdAt, this.deletedAt});
 

@@ -23,6 +23,7 @@ import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalRecords.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
@@ -40,6 +41,10 @@ import '../views/attachmentDailog.dart';
 
 class VisitMainController extends GetxController with WidgetsBindingObserver {
   //TODO: Implement VisitMainController
+
+  Rxn<SelectedDoctorModel> selectedDoctorValueModel = Rxn();
+  TextEditingController doctorController = TextEditingController();
+  FocusNode doctorFocusNode = FocusNode();
 
   RxBool isKeyboardVisible = RxBool(false);
   PageController pageController = PageController();

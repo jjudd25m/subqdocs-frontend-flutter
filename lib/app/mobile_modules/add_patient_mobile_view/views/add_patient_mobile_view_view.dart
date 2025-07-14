@@ -99,8 +99,6 @@ class AddPatientMobileViewView extends GetView<AddPatientMobileViewController> {
                             },
 
                             onChanged: (value) {
-                              print("seach val:- ${value?.toJson()}");
-
                               controller.searchController.text = "${value?.firstName ?? ""} ${value?.lastName ?? ""}";
                               controller.setUi(value);
                               controller.searchText.value = value;
@@ -229,16 +227,7 @@ class AddPatientMobileViewView extends GetView<AddPatientMobileViewController> {
                                       firstDate: DateTime.now().subtract(const Duration(days: 36700)),
                                       lastDate: DateTime.now().subtract(const Duration(days: 400)),
                                       builder: (context, child) {
-                                        return Theme(
-                                          data: ThemeData.light().copyWith(
-                                            cardColor: AppColors.white,
-                                            primaryColor: AppColors.backgroundPurple,
-                                            hintColor: AppColors.backgroundPurple,
-                                            colorScheme: const ColorScheme.light(primary: AppColors.backgroundPurple),
-                                            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                                          ),
-                                          child: child!,
-                                        );
+                                        return Theme(data: ThemeData.light().copyWith(cardColor: AppColors.white, primaryColor: AppColors.backgroundPurple, hintColor: AppColors.backgroundPurple, colorScheme: const ColorScheme.light(primary: AppColors.backgroundPurple), buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary)), child: child!);
                                       },
                                     );
                                     if (picked != null) {
@@ -294,14 +283,8 @@ class AddPatientMobileViewView extends GetView<AddPatientMobileViewController> {
               onPressed: () {
                 if (controller.formKey.currentState!.validate()) {
                   if (controller.editId.value.isEmpty) {
-                    print("---------------------------");
-                    print("add patient");
-                    print("---------------------------");
                     controller.addPatient();
                   } else {
-                    print("---------------------------");
-                    print("create visit");
-                    print("---------------------------");
                     controller.createVisit(int.parse(controller.editId.value));
                   }
                 }

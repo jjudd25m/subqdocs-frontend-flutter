@@ -67,16 +67,16 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                       key: ValueKey(model),
                       controller: model.slidableController,
                       startActionPane: ActionPane(
-                        motion: ScrollMotion(),
+                        motion: const ScrollMotion(),
                         extentRatio: 0.11,
                         children: [
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.2)), color: AppColors.backgroundPurple.withValues(alpha: 0.1)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   // onTap: () {
                                   //   controller.resetImpressionAndPlanList();
@@ -84,7 +84,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   // },
                                   child: SvgPicture.asset(ImagePath.dragAndDrop),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
                                     controller.impressionAndPlanListFullNote.insert(index + 1, ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null));
@@ -93,14 +93,14 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   },
                                   child: SvgPicture.asset(ImagePath.plus),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
                                     controller.impressionAndPlanListFullNote.removeAt(index);
                                     controller.impressionAndPlanListFullNote.refresh();
                                     controller.updateImpressionAndPlanFullNote();
                                   },
-                                  child: SvgPicture.asset(ImagePath.trash, colorFilter: ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
+                                  child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
                                 ),
                               ],
                             ),
@@ -204,7 +204,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                               model.popoverController.toggle();
                                               model.slidableController?.openStartActionPane();
                                             },
-                                            child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40)),
+                                            child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: const Icon(Icons.arrow_drop_down_sharp, size: 40)),
                                           ),
                                           //
                                           // GestureDetector(
@@ -278,9 +278,9 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                             },
                                           ),
                                         ),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Padding(padding: const EdgeInsets.only(left: 15, right: 10), child: Text("Add Attachments", style: AppFonts.medium(14, Colors.black))),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 15, right: 10),
                                           child: DragTarget<Map<String, dynamic>>(
@@ -332,11 +332,11 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                             },
                                             builder: (context, candidateData, rejectedData) {
                                               if (model.attachments == null || model.attachments!.isEmpty) {
-                                                return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("No Attachments")));
+                                                return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("No Attachments")));
                                               }
                                               return Container(
                                                 width: double.infinity,
-                                                margin: EdgeInsets.only(top: 10),
+                                                margin: const EdgeInsets.only(top: 10),
                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
                                                 child: Wrap(
                                                   spacing: 8,
@@ -394,11 +394,11 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                     ),
                                   ),
                                   if (controller.impressionAndPlanListFullNote.length - 1 == index) ...[
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
                                     const SizedBox(height: 16),
                                     Padding(padding: const EdgeInsets.only(left: 15, right: 10), child: Align(alignment: Alignment.topLeft, child: Text("General Images", style: AppFonts.medium(14, AppColors.black)))),
-                                    SizedBox(height: 8),
+                                    const SizedBox(height: 8),
                                     DragTarget<Map<String, dynamic>>(
                                       onWillAcceptWithDetails: (data) => true,
                                       onAcceptWithDetails: (details) {
@@ -427,13 +427,13 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                       },
                                       builder: (context, candidateData, rejectedData) {
                                         if (controller.generalAttachments.isEmpty) {
-                                          return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
+                                          return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
                                         }
                                         return Container(
                                           width: double.infinity,
-                                          margin: EdgeInsets.only(top: 10),
+                                          margin: const EdgeInsets.only(top: 10),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                                          padding: EdgeInsets.only(left: 15, right: 10),
+                                          padding: const EdgeInsets.only(left: 15, right: 10),
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [

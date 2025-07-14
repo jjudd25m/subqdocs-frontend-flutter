@@ -385,7 +385,7 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                         navigate: () {
                           if (controller.formKey.currentState!.validate()) {
                             // if (controller.organizationSelectedCityValue.value?.isNotEmpty ?? true) {
-                            Map<String, dynamic> param = Map<String, dynamic>();
+                            Map<String, dynamic> param = <String, dynamic>{};
 
                             param["name"] = controller.organizationNameController.text;
 

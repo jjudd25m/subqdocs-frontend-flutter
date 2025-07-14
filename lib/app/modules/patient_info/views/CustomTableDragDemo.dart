@@ -61,8 +61,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
   void initState() {
     super.initState();
 
-    print("loader response:- ${widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null}");
-
     customPrint("tableModel is ${widget.tableModel.rows.length}");
     customPrint("possibleDignosisProcedureTableModel is ${widget.possibleDignosisProcedureTableModel.rows.length}");
     calculateTotalOnly();
@@ -78,9 +76,6 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
   void didUpdateWidget(covariant NestedDraggableTable oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
-    print("NestedDraggableTable updated");
-    print("loader status:- ${(widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null)}");
   }
 
   @override
@@ -167,11 +162,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                               globalController.selectedRowIndex.refresh();
                             },
                             feedback: Material(color: AppColors.white, child: Opacity(opacity: 1, child: Container(width: MediaQuery.of(context).size.width - 50, child: _buildRowContent(rowIndex, true)))),
-                            child: Container(
-                              margin: const EdgeInsets.all(5.0),
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white, boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3))]),
-                              child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35),
-                            ),
+                            child: Container(margin: const EdgeInsets.all(5.0), decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.white, boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3))]), child: SvgPicture.asset(ImagePath.drag_button, height: 35, width: 35)),
                           ),
                           const SizedBox(height: 5),
                           GestureDetector(
@@ -205,18 +196,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                           widget.possibleDignosisProcedureTableModel.rows.add(
                                             TableRowModel(
                                               cells: [
-                                                TableCellModel(
-                                                  items: [
-                                                    SingleCellModel(
-                                                      code: tempdata.cells[0].items[0].code,
-                                                      unit: tempdata.cells[0].items[0].unit,
-                                                      modifiers: tempdata.cells[0].items[0].modifiers,
-                                                      description: tempdata.cells[0].items[0].description ?? "",
-                                                      unitPrice: "0",
-                                                      procedurePossibleAlternatives: tempdata.cells[0].items[0].procedurePossibleAlternatives,
-                                                    ),
-                                                  ],
-                                                ),
+                                                TableCellModel(items: [SingleCellModel(code: tempdata.cells[0].items[0].code, unit: tempdata.cells[0].items[0].unit, modifiers: tempdata.cells[0].items[0].modifiers, description: tempdata.cells[0].items[0].description ?? "", unitPrice: "0", procedurePossibleAlternatives: tempdata.cells[0].items[0].procedurePossibleAlternatives)]),
                                                 TableCellModel(items: [SingleCellModel(diagnosisModelList: diagnosisModelList)]),
                                                 TableCellModel(items: [SingleCellModel(unit: tempdata.cells[2].items[0].unit)]),
                                                 TableCellModel(items: [SingleCellModel(unitPrice: tempdata.cells[3].items[0].unitPrice)]),
@@ -458,12 +438,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     contentWidth: MediaQuery.of(context).size.width * 0.4,
                                                                     action: RichText(
                                                                       key: isDrag ? null : items[i].diagnosisModelList?[subIndex].diagnosisContainerKey,
-                                                                      text: TextSpan(
-                                                                        children: [
-                                                                          TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                                                          TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                                        ],
-                                                                      ),
+                                                                      text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]),
                                                                     ),
                                                                     content: DiagnosisDropDrownSearchTable(
                                                                       diagnosisContainerKey: items[i].diagnosisModelList![subIndex].diagnosisContainerKey,
@@ -534,9 +509,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                           ),
                                                           const SizedBox(width: 10),
                                                           Obx(() {
-                                                            return (widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null)
-                                                                ? GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30))
-                                                                : SizedBox.shrink();
+                                                            return (widget.controller.isDoctorViewLoading.value || widget.controller.doctorViewList.value?.responseData == null) ? GestureDetector(onTap: () => _addItemAtIndex(row, col, i), child: SvgPicture.asset(ImagePath.plus_icon_table, width: 30, height: 30)) : const SizedBox.shrink();
                                                           }),
                                                           const SizedBox(width: 3),
                                                           GestureDetector(
@@ -637,12 +610,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                     contentWidth: MediaQuery.of(context).size.width * 0.4,
                                                                     action: RichText(
                                                                       key: isDrag ? null : items[i].diagnosisModelList?[subIndex].diagnosisContainerKey,
-                                                                      text: TextSpan(
-                                                                        children: [
-                                                                          TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)),
-                                                                          TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable)),
-                                                                        ],
-                                                                      ),
+                                                                      text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]),
                                                                     ),
                                                                     content: DiagnosisDropDrownSearchTable(
                                                                       diagnosisContainerKey: items[i].diagnosisModelList![subIndex].diagnosisContainerKey,
@@ -745,7 +713,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                                                   },
                                                                   child: SvgPicture.asset(ImagePath.delete_table_icon, width: 30, height: 30),
                                                                 )
-                                                                : SizedBox.shrink();
+                                                                : const SizedBox.shrink();
                                                           }),
                                                         ],
                                                       ),
@@ -860,10 +828,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                                           applyActionWidth: false,
                                           alignment: PopoverAlignment.rightTop,
                                           contentWidth: MediaQuery.of(context).size.width * 0.4,
-                                          action: Text(
-                                            (items[i].modifiers != "" && items[i].modifiers != null) ? items[i].modifiers ?? "+ Modifier" : "+ Modifier",
-                                            style: (items[i].modifiers != "" && items[i].modifiers != null) ? AppFonts.semiBold(14, AppColors.black) : AppFonts.regular(14, AppColors.black),
-                                          ),
+                                          action: Text((items[i].modifiers != "" && items[i].modifiers != null) ? items[i].modifiers ?? "+ Modifier" : "+ Modifier", style: (items[i].modifiers != "" && items[i].modifiers != null) ? AppFonts.semiBold(14, AppColors.black) : AppFonts.regular(14, AppColors.black)),
 
                                           content: ModifierDropDrownSearchTable(
                                             procedureContainerKey: items[i].procedureContainerKey,
@@ -1037,14 +1002,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
       decoration: BoxDecoration(borderRadius: const BorderRadius.only(bottomRight: Radius.circular(6), bottomLeft: Radius.circular(6)), border: Border.all(color: AppColors.buttonBackgroundGrey, width: 1)),
       child: Row(
         children: [
-          Expanded(
-            flex: 90,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
-              decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))),
-              child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)),
-            ),
-          ),
+          Expanded(flex: 90, child: Container(padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8), decoration: const BoxDecoration(border: Border(right: BorderSide(color: AppColors.buttonBackgroundGrey, width: 1))), child: Text("Total", textAlign: TextAlign.left, style: AppFonts.medium(14, AppColors.black)))),
           Expanded(
             flex: 12,
             child: Container(
@@ -1186,16 +1144,10 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
                           return Container(
                             decoration: BoxDecoration(color: AppColors.tableItem, borderRadius: BorderRadius.circular(6)),
                             padding: const EdgeInsets.all(6.0),
-                            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                            margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
                             child: Row(
                               children: [
-                                Expanded(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))],
-                                    ),
-                                  ),
-                                ),
+                                Expanded(child: RichText(text: TextSpan(children: [TextSpan(text: " ${items[i].diagnosisModelList?[subIndex].code} ", style: AppFonts.semiBold(14, AppColors.black)), TextSpan(text: '${items[i].diagnosisModelList?[subIndex].description}', style: AppFonts.regular(14, AppColors.textGreyTable))]))),
                               ],
                             ),
                           );
@@ -1277,13 +1229,7 @@ class NestedDraggableTableState extends State<NestedDraggableTable> {
           procedureListPossibleAlternatives.add({'code': procedurePossibleAlternatives.code ?? "", 'description': procedurePossibleAlternatives.description ?? ""});
         }
 
-        final procedure1 = createProcedure(
-          code: row.cells.first.items[0].code ?? "",
-          description: row.cells.first.items[0].description ?? "",
-          shortDescription: row.cells.first.items[0].shortDescription ?? "",
-          modifier: row.cells.first.items[0].modifiers ?? "",
-          possibleAlternatives: procedureListPossibleAlternatives,
-        );
+        final procedure1 = createProcedure(code: row.cells.first.items[0].code ?? "", description: row.cells.first.items[0].description ?? "", shortDescription: row.cells.first.items[0].shortDescription ?? "", modifier: row.cells.first.items[0].modifiers ?? "", possibleAlternatives: procedureListPossibleAlternatives);
 
         for (DiagnosisModel item in row.cells[1].items[0].diagnosisModelList ?? []) {
           List<Map<String, String>> diagnosisListListPossibleAlternatives = [];

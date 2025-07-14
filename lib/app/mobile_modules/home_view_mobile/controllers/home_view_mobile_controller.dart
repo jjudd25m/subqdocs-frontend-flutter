@@ -140,8 +140,8 @@ class HomeViewMobileController extends GetxController {
       globalController.getEMAOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
 
       // patientSyncSocketSetup();
-      print("isEmaIntegration is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration}");
-      print("has_ema_configs is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs}");
+      customPrint("isEmaIntegration is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration}");
+      customPrint("has_ema_configs is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs}");
     } catch (e) {
       customPrint("error on get OrganizationDetail :- $e");
     }
@@ -275,9 +275,9 @@ class HomeViewMobileController extends GetxController {
     if (currentIndex != 0 && (currentIndex - 50) % 100 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
-      // print("scroll is needed ${currentIndex}");
+      // customPrint("scroll is needed ${currentIndex}");
     } else {
-      // print("scroll is  not needed.  ${currentIndex}");
+      // customPrint("scroll is  not needed.  ${currentIndex}");
     }
   }
 
@@ -291,9 +291,9 @@ class HomeViewMobileController extends GetxController {
       pastTriggeredIndexes.add(currentIndex); // Mark as triggered
       getPastVisitListFetchMore();
 
-      // print("scroll is needed $currentIndex");
+      // customPrint("scroll is needed $currentIndex");
     } else {
-      // print("scroll is  not needed.  $currentIndex");
+      // customPrint("scroll is  not needed.  $currentIndex");
     }
   }
 
@@ -307,9 +307,9 @@ class HomeViewMobileController extends GetxController {
       scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
       getScheduleVisitListFetchMore();
 
-      // print("scroll is needed $currentIndex");
+      // customPrint("scroll is needed $currentIndex");
     } else {
-      // print("scroll is  not needed.  $currentIndex");
+      // customPrint("scroll is  not needed.  $currentIndex");
     }
   }
 
@@ -333,7 +333,7 @@ class HomeViewMobileController extends GetxController {
   Future<void> getScheduleVisitListFetchMore() async {
     int? totalCount = scheduleVisitListModel.value?.responseData?.totalCount ?? 0;
     if (scheduleVisitList.length < totalCount) {
-      print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
+      customPrint("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
       noMoreDataSchedulePatientList.value = false;
       Map<String, dynamic> param = {};
@@ -420,7 +420,7 @@ class HomeViewMobileController extends GetxController {
     int? totalCount = pastVisitListModel.value?.responseData?.totalCount ?? 0;
 
     if (pastVisitList.length < totalCount) {
-      print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
+      customPrint("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
       noMoreDataPastPatientList.value = false;
 

@@ -35,25 +35,25 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
           constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .80),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
               Container(
                 width: 360,
-                decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+                decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Integrate EMA", style: AppFonts.medium(14, Colors.white))),
-                      Spacer(),
+                      const Spacer(),
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
                           // controller.list.clear();
                         },
-                        child: Container(padding: EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
+                        child: Container(padding: const EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
                       ),
                     ],
                   ),
@@ -74,7 +74,7 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(children: [Text("EMA Vendor", style: AppFonts.regular(14, AppColors.textBlack))]),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Obx(() {
                                   return BaseDropdown<String>(
                                     valueAsString: (value) => value ?? "",
@@ -107,7 +107,7 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                               onTap: () {
                                 controller.emaBaseUrlController.clear();
                               },
-                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                               checkValidation: (value) {
                                 return Validation.requiredFiled(value);
                               },
@@ -191,7 +191,7 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                               onTap: () {
                                 controller.emaAPIKeyController.clear();
                               },
-                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                               checkValidation: (value) {
                                 return Validation.requiredFiled(value);
                               },
@@ -233,7 +233,7 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                               onTap: () {
                                 controller.emaAPIUsernameController.clear();
                               },
-                              suffixIcon: Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                               checkValidation: (value) {
                                 return Validation.requiredFiled(value);
                               },
@@ -263,14 +263,14 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                                           onTap: () {
                                             changeVisiblity();
                                           },
-                                          child: Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
+                                          child: const Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                         ),
                               );
                             }),
                           ),
                         ],
                       ),
-                      SizedBox(height: 0),
+                      const SizedBox(height: 0),
                       if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) ...[
                         Row(
                           children: [
@@ -300,7 +300,7 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                           ],
                         ),
                       ],
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -317,15 +317,13 @@ class IntegrateEmaDialog extends GetView<PersonalSettingController> {
                               textColor: AppColors.backgroundPurple,
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           SizedBox(
                             width: 100,
                             child: CustomButton(
                               navigate: () async {
                                 if (controller.formKey.currentState!.validate()) {
-                                  Map<String, dynamic> response = Map<String, dynamic>();
-
-                                  print("appointment val:- ${controller.selectedAppointmentTypeValue.value}");
+                                  Map<String, dynamic> response = <String, dynamic>{};
 
                                   if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) {
                                     if (controller.selectedAppointmentTypeValue.value == null) {

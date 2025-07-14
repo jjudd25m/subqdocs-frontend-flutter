@@ -31,18 +31,13 @@ class MobilePatientListView extends GetView<HomeViewMobileController> {
                     controller.pagePatient = 1;
 
                     controller.getPatientList();
-                    print("refresh patient list view");
                   },
                   child: NotificationListener<ScrollEndNotification>(
                     onNotification: (notification) {
-                      if (notification.metrics.atEdge) {
-                        print("notification.metrics.atEdge");
-                      }
+                      if (notification.metrics.atEdge) {}
 
                       // If user reaches the bottom and no data is being loaded
                       if (notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !controller.isLoading.value) {
-                        print("notification.metrics.extentBefore == notification.metrics.maxScrollExtent && !isLoading");
-
                         controller.getPatientListFetchMore();
                       }
                       return false; // Allow other notifications to propagate

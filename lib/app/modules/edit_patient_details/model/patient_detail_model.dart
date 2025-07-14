@@ -133,15 +133,15 @@ class ScheduledVisits {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visit_date'] = this.visitDate;
-    data['visit_time'] = this.visitTime;
-    data['doctor_id'] = this.doctorId;
-    data['medical_assistant_id'] = this.medicalAssistantId;
-    data['id'] = this.id;
-    data['third_party_id'] = this.thirdPartyId;
-    data['doctorName'] = this.doctorName;
-    data['medicalAssistantName'] = this.medicalAssistantName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visit_date'] = visitDate;
+    data['visit_time'] = visitTime;
+    data['doctor_id'] = doctorId;
+    data['medical_assistant_id'] = medicalAssistantId;
+    data['id'] = id;
+    data['third_party_id'] = thirdPartyId;
+    data['doctorName'] = doctorName;
+    data['medicalAssistantName'] = medicalAssistantName;
     return data;
   }
 }

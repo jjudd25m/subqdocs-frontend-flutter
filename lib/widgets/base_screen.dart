@@ -200,8 +200,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                       DraggableFloatWidget(
                         // key: UniqueKey(),
                         receiveParam: (x, y) {
-                          globalController.valueOfx.value = x;
-                          globalController.valueOfy.value = y;
+                          final buildContext = widget.globalKey.currentContext ?? context;
+                          globalController.valueOfx.value = globalController.snapXToEdge(x, buildContext);
+                          globalController.valueOfy.value = globalController.adjustYPosition(y, buildContext);
                         },
                         width: !globalController.isExpandRecording.value ? 388 : 388,
                         height: !globalController.isExpandRecording.value ? 66 : 550,
@@ -231,9 +232,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                           GestureDetector(
                                             onTap: () {
                                               globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
-
-                                              print(" when the view is expanded  value of the y ${globalController.valueOfy}");
-                                              print(" when the view is expanded  value of the x ${globalController.valueOfx}");
+                                              final buildContext = widget.globalKey.currentContext ?? context;
+                                              globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, buildContext);
+                                              globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, buildContext);
                                             },
                                             child: SvgPicture.asset(globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording, height: 30, width: 30),
                                           ),
@@ -268,13 +269,13 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                             padding: EdgeInsets.zero,
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
-                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: const TextStyle(fontSize: 16)), const SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
                                             ),
                                           ),
 
                                       // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
                                     ),
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
 
                                     // Obx(() {
                                     //   return BaseDropdown2<String>(
@@ -764,11 +765,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         GestureDetector(
                                           onTap: () {
                                             globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
-
-                                            print(" when the view is non expanded  value of the y ${globalController.valueOfy}");
-                                            print(" when the view is non  expanded  value of the x ${globalController.valueOfx}");
-
-                                            globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, context);
+                                            final buildContext = widget.globalKey.currentContext ?? context;
+                                            globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, buildContext);
+                                            globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, buildContext);
                                           },
                                           child: SvgPicture.asset(ImagePath.expand_recording, height: 30, width: 30),
                                         ),
@@ -797,7 +796,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
   Widget _buildDropdownOption(String language) {
     return GestureDetector(
       onTap: () => selectLanguage(language),
-      child: Obx(() => Container(width: 200, padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
+      child: Obx(() => Container(width: 200, padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
     );
   }
 

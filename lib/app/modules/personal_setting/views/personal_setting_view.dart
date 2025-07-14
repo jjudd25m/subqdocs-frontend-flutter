@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:subqdocs/app/modules/personal_setting/views/personal_info_tab.dart';
-import 'package:subqdocs/app/modules/personal_setting/views/user_management_tab.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/custom_animated_button.dart';
 
@@ -35,7 +33,6 @@ import '../model/get_user_detail_model.dart';
 import 'integrate_ema_dialog.dart';
 import 'invite_user_dialog.dart';
 import 'organization_edit_dialog.dart';
-import 'organization_management_tab.dart';
 import 'organization_use_edit_dialog.dart';
 
 class PersonalSettingView extends GetView<PersonalSettingController> {

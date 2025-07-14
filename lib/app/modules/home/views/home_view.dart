@@ -743,7 +743,6 @@ class HomeView extends GetView<HomeController> {
       controller.globalController.visitId.refresh();
 
       // controller.update();
-      print("popup closed");
     });
   }
 
