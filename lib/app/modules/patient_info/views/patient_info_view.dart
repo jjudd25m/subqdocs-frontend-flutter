@@ -451,6 +451,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             controller.doctorFocusNode.unfocus();
             controller.closeAllProcedureDiagnosisPopover();
             controller.resetImpressionAndPlanList();
+            controller.selectedDoctorValueModel.value?.name = controller.doctorValue.value;
           },
           child: Obx(() {
             return Column(

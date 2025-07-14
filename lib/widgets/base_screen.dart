@@ -200,9 +200,8 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                       DraggableFloatWidget(
                         // key: UniqueKey(),
                         receiveParam: (x, y) {
-                          final buildContext = widget.globalKey.currentContext ?? context;
-                          globalController.valueOfx.value = globalController.snapXToEdge(x, buildContext);
-                          globalController.valueOfy.value = globalController.adjustYPosition(y, buildContext);
+                          globalController.valueOfx.value = x;
+                          globalController.valueOfy.value = y;
                         },
                         width: !globalController.isExpandRecording.value ? 388 : 388,
                         height: !globalController.isExpandRecording.value ? 66 : 550,
