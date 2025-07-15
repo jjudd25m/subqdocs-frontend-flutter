@@ -916,6 +916,7 @@ class GlobalController extends GetxController {
         if (event == 'audioDevicesChanged') {
           await getConnectedInputDevices();
         } else if (event == "bluetoothAudioDevicesChanged") {
+          await getConnectedInputDevices();
           await getActiveMicrophoneName();
         }
       },
