@@ -268,13 +268,17 @@ class MobileRecorderService {
   /// Start Recording
   Future<bool> startRecording(BuildContext context) async {
     WakelockPlus.enable();
+    final btMic = await audioRecorder.hasPermission();
+
     final GlobalMobileController globalController = Get.find();
     log("log: start recording");
-    if (await audioRecorder.hasPermission()) {
+    final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+    if (btMic && btGranted) {
       Directory dir = await getApplicationCacheDirectory();
       String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
 
       await audioRecorder.start(const RecordConfig(), path: "${dir.path}/$filename");
+      globalController.startMicListening();
 
       // waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
       //   // globalController.waveController.amplitude = (amp.current / 100).clamp(0.01, 1.0);
@@ -306,7 +310,7 @@ class MobileRecorderService {
       _startTimer();
 
       return true;
-    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
       showDialog(

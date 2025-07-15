@@ -192,7 +192,7 @@ class _PatientInfoMobileViewState extends State<PatientInfoMobileView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: SingleChildScrollView(
                             controller: controller.scrollController,

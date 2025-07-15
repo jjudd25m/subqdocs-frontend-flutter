@@ -660,7 +660,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                     backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                     collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                                     collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                    title: Container(child: Row(children: [const SizedBox(width: 10), Text(textAlign: TextAlign.center, "Attachments", style: AppFonts.medium(16, AppColors.textBlack))])),
+                                                    title: Row(children: [const SizedBox(width: 10), Text(textAlign: TextAlign.center, "Attachments", style: AppFonts.medium(16, AppColors.textBlack))]),
                                                     children: <Widget>[
                                                       Obx(() {
                                                         return Container(
@@ -677,7 +677,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                           scrollDirection: Axis.horizontal,
                                                                           padding: const EdgeInsets.only(top: 20),
                                                                           itemBuilder: (context, index) {
-                                                                            return Container(
+                                                                            return SizedBox(
                                                                               height: 200,
                                                                               width: 140,
                                                                               child: Column(
@@ -754,7 +754,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                       }),
                                                                     ),
                                                                   )
-                                                                  : Padding(padding: const EdgeInsets.symmetric(vertical: 20), child: Container(width: double.infinity, height: 200, child: const Center(child: Text("Attachments Not available")))),
+                                                                  : const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: SizedBox(width: double.infinity, height: 200, child: Center(child: Text("Attachments Not available")))),
                                                         );
                                                       }),
                                                     ],
@@ -781,7 +781,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                   backgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
                                                   collapsedShape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                                   collapsedBackgroundColor: AppColors.backgroundPurple.withValues(alpha: 0.2),
-                                                  title: Container(child: Row(children: [const SizedBox(width: 10), Text(textAlign: TextAlign.center, "Attachments", style: AppFonts.medium(16, AppColors.textBlack))])),
+                                                  title: Row(children: [const SizedBox(width: 10), Text(textAlign: TextAlign.center, "Attachments", style: AppFonts.medium(16, AppColors.textBlack))]),
                                                   children: <Widget>[
                                                     Obx(() {
                                                       return Container(
@@ -799,7 +799,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                         scrollDirection: Axis.horizontal,
                                                                         padding: const EdgeInsets.only(top: 20),
                                                                         itemBuilder: (context, index) {
-                                                                          return Container(
+                                                                          return SizedBox(
                                                                             height: 200,
                                                                             width: 140,
                                                                             child: Column(
@@ -901,7 +901,7 @@ class AddPatientView extends GetView<AddPatientController> {
                                                                     }),
                                                                   ),
                                                                 )
-                                                                : Container(width: double.infinity, height: 200, child: const Center(child: Text("Attachments Not available"))),
+                                                                : const SizedBox(width: double.infinity, height: 200, child: Center(child: Text("Attachments Not available"))),
                                                       );
                                                     }),
                                                   ],

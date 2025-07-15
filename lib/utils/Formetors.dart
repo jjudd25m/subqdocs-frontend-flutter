@@ -53,7 +53,7 @@ class PhoneNumberInputFormatter extends TextInputFormatter {
     if (digits.isEmpty) return '';
 
     String result = '';
-    if (digits.length > 0) {
+    if (digits.isNotEmpty) {
       result += '(${digits.substring(0, digits.length > 3 ? 3 : digits.length)})';
     }
     if (digits.length > 3) {
@@ -64,8 +64,8 @@ class PhoneNumberInputFormatter extends TextInputFormatter {
     }
 
     // After 1 digit is entered, prepend +1
-    if (digits.length > 0) {
-      result = '+1 ' + result;
+    if (digits.isNotEmpty) {
+      result = '+1 $result';
     }
 
     return result;

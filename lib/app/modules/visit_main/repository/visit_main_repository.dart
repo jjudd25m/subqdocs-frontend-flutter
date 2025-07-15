@@ -29,19 +29,19 @@ class VisitMainRepository {
     final GlobalMobileController globalMobileController = Get.find();
 
     String deviceType = await getDeviceType(Get.context!);
-    bool is_multi_language_preference = false;
+    bool isMultiLanguagePreference = false;
 
     if (deviceType == 'iPad') {
-      is_multi_language_preference = globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+      isMultiLanguagePreference = globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
     } else {
-      is_multi_language_preference = globalMobileController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+      isMultiLanguagePreference = globalMobileController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
     }
 
     String? mimeType = lookupMimeType(audioFile.path);
 
     customPrint("uploadAudio :- $patientVisitId");
 
-    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {"isMulti": is_multi_language_preference}, {"audio": audioFile}, mimeType ?? "", token);
+    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {"isMulti": isMultiLanguagePreference}, {"audio": audioFile}, mimeType ?? "", token);
     return PatientTranscriptUploadModel.fromJson(response);
   }
 

@@ -30,7 +30,7 @@ class FullNoteCommonContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       // padding: const EdgeInsets.symmetric(horizontal: 0),
       // decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)), color: AppColors.white, border: Border.all(color: AppColors.backgroundPurple.withAlpha(50), width: 1)),

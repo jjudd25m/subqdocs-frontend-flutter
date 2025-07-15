@@ -91,7 +91,7 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   width: 360,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -113,7 +113,6 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
                             lastDate: DateTime.now().add(const Duration(days: 365)),
                             onComplete: (date) {
                               if (date != null) {
-                                print("completed data is $date");
                                 visitDate = date;
                                 _singleDatePickerValueWithDefaultValue.value = [date];
 

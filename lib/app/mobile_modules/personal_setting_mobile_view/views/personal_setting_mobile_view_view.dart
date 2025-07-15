@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
+
 // import 'package:intl/intl.dart';
 import 'package:subqdocs/app/mobile_modules/personal_setting_mobile_view/views/user_edit_dialog_mobile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -248,7 +249,7 @@ class PersonalSettingMobileViewView extends GetView<PersonalSettingMobileViewCon
             Obx(() {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   // Takes all available width
                   child: Row(

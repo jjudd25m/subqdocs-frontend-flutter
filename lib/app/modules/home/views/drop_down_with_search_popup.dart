@@ -32,7 +32,6 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
   void initState() {
     super.initState();
     filteredList = List.from(widget.list ?? []);
-    print("DropDown initState: ${filteredList.length} items loaded");
   }
 
   void filterList(String value) {
@@ -49,7 +48,7 @@ class _DropDownWithSearchPopupState extends State<DropDownWithSearchPopup> {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         child: Column(
           children: [

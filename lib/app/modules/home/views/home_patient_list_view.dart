@@ -32,7 +32,7 @@ class HomePatientListView extends GetView<HomeController> {
                   child: EmptyPatientScreen(
                     onBtnPress: () async {
                       controller.globalController.addRoute(Routes.ADD_PATIENT);
-                      final result = await Get.toNamed(Routes.ADD_PATIENT);
+                      final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
                       controller.getPastVisitList(isFist: true);
                       controller.getScheduleVisitList();
@@ -140,7 +140,7 @@ class HomePatientListView extends GetView<HomeController> {
                     // if (rowIndex != 0) {
 
                     controller.globalController.addRoute(Routes.VISIT_MAIN);
-                    dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.patientList[rowIndex].visitId.toString(), "patientId": controller.patientList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
+                    dynamic _ = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.patientList[rowIndex].visitId.toString(), "patientId": controller.patientList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
                     controller.getPatientList();
                     customPrint("back from response");
                     // controller.globalController.addRoute(Routes.PATIENT_PROFILE);
@@ -182,9 +182,8 @@ class HomePatientListView extends GetView<HomeController> {
                     title: 'Medical record',
                     onTap: () async {
                       controller.globalController.addRoute(Routes.VISIT_MAIN);
-                      dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.patientList[rowIndex].visitId.toString(), "patientId": controller.patientList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
+                      dynamic _ = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.patientList[rowIndex].visitId.toString(), "patientId": controller.patientList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
                       controller.getPatientList();
-                      print("back from response");
                     },
                   ),
                 ],
@@ -193,9 +192,8 @@ class HomePatientListView extends GetView<HomeController> {
                     title: 'Medical record',
                     onTap: () async {
                       controller.globalController.addRoute(Routes.VISIT_MAIN);
-                      dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": "null", "patientId": controller.patientList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
+                      dynamic _ = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": "null", "patientId": controller.patientList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
                       controller.getPatientList();
-                      print("back from response");
                     },
                   ),
                 ],

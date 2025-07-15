@@ -178,21 +178,11 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                               },
                             ),
                             // Static audio icon
-                            Container(width: 140, height: 140, child: Image.asset(ImagePath.audio_recording_png, width: 100, height: 100)),
+                            SizedBox(width: 140, height: 140, child: Image.asset(ImagePath.audio_recording_png, width: 100, height: 100)),
                           ],
                         ),
                       ),
-                      if (controller.globalController.samples.isNotEmpty)
-                        Center(
-                          child: AudioWave(
-                            animation: false,
-                            height: 30,
-                            width: 160,
-                            spacing: 2.5,
-                            animationLoop: 0,
-                            bars: controller.globalController.samples.map((sample) => sample).toList(),
-                          ),
-                        ),
+                      if (controller.globalController.samples.isNotEmpty) Center(child: AudioWave(animation: false, height: 30, width: 160, spacing: 2.5, animationLoop: 0, bars: controller.globalController.samples.map((sample) => sample).toList())),
                       // Mic selection dropdown (shown on all platforms, like iPad view)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -207,27 +197,13 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                                 hintStyle: AppFonts.regular(12, AppColors.backgroundPurple),
                                 suffixIconConstraints: const BoxConstraints.tightFor(width: 35, height: 27),
                                 suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.backgroundPurple, size: 27),
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                  child: SvgPicture.asset(
-                                    ImagePath.micRecording,
-                                  ),
-                                ),
+                                prefixIcon: Padding(padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5), child: SvgPicture.asset(ImagePath.micRecording)),
                                 prefixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 25),
                                 fillColor: AppColors.lightpurpule,
                                 filled: true,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                  borderSide: BorderSide.none,
-                                ),
+                                border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(100)),
+                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100), borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100), borderSide: BorderSide.none),
                               ),
                               controller: TextEditingController(),
                               decoration: BoxDecoration(border: Border.all(color: Colors.red)),

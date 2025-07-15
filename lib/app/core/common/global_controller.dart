@@ -410,9 +410,11 @@ class GlobalController extends GetxController {
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach((element) {
-      totalSize += element.calculateSize ?? 0;
-    });
+    totalSize = list.fold(0, (sum, element) => sum + (element.calculateSize ?? 0));
+
+    // list.value.forEach((element) {
+    //   totalSize += element.calculateSize ?? 0;
+    // });
 
     if (totalSize < 100) {
       return true;
@@ -424,11 +426,13 @@ class GlobalController extends GetxController {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach((element) {
-      if (element.isGraterThan10 ?? false) {
-        isGraterThan10 = true;
-      }
-    });
+    isGraterThan10 = list.any((element) => element.isGraterThan10 == true);
+
+    // list.value.forEach((element) {
+    //   if (element.isGraterThan10 ?? false) {
+    //     isGraterThan10 = true;
+    //   }
+    // });
 
     return isGraterThan10;
   }
@@ -527,7 +531,7 @@ class GlobalController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
       }
     });
     list.refresh();
@@ -567,7 +571,7 @@ class GlobalController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString));
     }
 
     list.refresh();
@@ -609,7 +613,7 @@ class GlobalController extends GetxController {
     }
 
     final doctor = selectedDoctorModel.firstWhereOrNull(
-      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name!.toLowerCase()),
+      (doctor) => doctor.name != null && doctor.name!.toLowerCase().contains(name.toLowerCase()),
       // Return null if no match is found
     );
 
@@ -905,6 +909,7 @@ class GlobalController extends GetxController {
         if (event == 'audioDevicesChanged') {
           await getConnectedInputDevices();
         } else if (event == "bluetoothAudioDevicesChanged") {
+          await getConnectedInputDevices();
           await getActiveMicrophoneName();
         }
       },
@@ -1360,7 +1365,7 @@ class GlobalController extends GetxController {
     try {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: scheduleVisitModel.value?.patientId?.toString() ?? "", param: param, token: loginData.responseData?.token ?? "");
+      dynamic _ = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: scheduleVisitModel.value?.patientId?.toString() ?? "", param: param, token: loginData.responseData?.token ?? "");
 
       isLoading.value = false;
 

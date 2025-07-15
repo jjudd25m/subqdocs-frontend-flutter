@@ -22,6 +22,7 @@ class BaseDropdown2<T> extends StatefulWidget {
   final bool isSearchable;
 
   final String? Function(String?)? checkValidation;
+  final Function(PointerUpEvent)? onTapUpOutside;
 
   final ScrollController? scrollController;
   final FocusNode? focusNode;
@@ -51,6 +52,7 @@ class BaseDropdown2<T> extends StatefulWidget {
     this.focusNode,
     this.direction,
     required this.controller,
+    this.onTapUpOutside,
     this.fillColor = Colors.white,
   });
 
@@ -120,7 +122,11 @@ class _BaseDropdown2State<T> extends State<BaseDropdown2<T>> {
             focusNode: focusNode,
             autofocus: false,
             readOnly: !widget.isSearchable,
-
+            onTapUpOutside: (event) {
+              // widget.onTapUpOutside?.call;
+              // print("inside base dropdown call");
+              widget.onTapUpOutside?.call(event); // Properly invoke the callback
+            },
             validator: widget.checkValidation,
             decoration:
                 widget.inputDecoration ??

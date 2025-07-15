@@ -26,7 +26,7 @@ class EnterMailView extends GetView<ForgotPasswordController> {
         const SizedBox(height: 24),
         Text("Forgot Password", style: AppFonts.medium(18, AppColors.textBlack)),
         const SizedBox(height: 16),
-        Container(width: isSmallScreen ? 350 : 450, child: Text("Please enter your registered email address below, and you will receive an email with a OTP for verification of email.", style: AppFonts.regular(14, AppColors.textDarkGrey), textAlign: TextAlign.center)),
+        SizedBox(width: isSmallScreen ? 350 : 450, child: Text("Please enter your registered email address below, and you will receive an email with a OTP for verification of email.", style: AppFonts.regular(14, AppColors.textDarkGrey), textAlign: TextAlign.center)),
         const SizedBox(height: 24),
         Container(
           color: AppColors.white,
@@ -49,7 +49,7 @@ class EnterMailView extends GetView<ForgotPasswordController> {
         ),
         const SizedBox(height: 30),
         Obx(() {
-          return Container(
+          return SizedBox(
             width: isSmallScreen ? Get.width - 30 : 416,
             child: CustomAnimatedButton(
               onPressed: () {

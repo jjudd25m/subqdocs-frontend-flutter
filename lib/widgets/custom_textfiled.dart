@@ -74,73 +74,71 @@ class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
-              child: Container(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      maxLength: widget.maxLength,
-                      maxLines: widget.maxLines,
-                      readOnly: widget.readOnly,
-                      onChanged: (value) {
-                        if (widget.onChanged != null) {
-                          widget.onChanged!(value);
+              child: Column(
+                children: [
+                  TextFormField(
+                    maxLength: widget.maxLength,
+                    maxLines: widget.maxLines,
+                    readOnly: widget.readOnly,
+                    onChanged: (value) {
+                      if (widget.onChanged != null) {
+                        widget.onChanged!(value);
+                      }
+                      if (widget.isFirst == true) {
+                        value.isEmpty ? widget.isSuffixIconVisible = false : widget.isSuffixIconVisible = true;
+
+                        if (value.isEmpty || value.length == 1) {
+                          setState(() {});
                         }
-                        if (widget.isFirst == true) {
-                          value.isEmpty ? widget.isSuffixIconVisible = false : widget.isSuffixIconVisible = true;
+                      }
+                    },
+                    inputFormatters: widget.format,
+                    keyboardType: widget.type,
+                    cursorColor: AppColors.backgroundPurple,
+                    controller: widget.controller,
+                    textAlign: TextAlign.start,
+                    obscureText: widget.visibility,
+                    autovalidateMode: widget.autovalidateMode,
+                    decoration: InputDecoration(
+                      suffixIcon:
+                          widget.isSuffixIconVisible
+                              ? InkWell(
+                                splashColor: Colors.transparent,
+                                onTap: () {
+                                  widget.onTap?.call();
 
-                          if (value.isEmpty || value.length == 1) {
-                            setState(() {});
-                          }
-                        }
-                      },
-                      inputFormatters: widget.format,
-                      keyboardType: widget.type,
-                      cursorColor: AppColors.backgroundPurple,
-                      controller: widget.controller,
-                      textAlign: TextAlign.start,
-                      obscureText: widget.visibility,
-                      autovalidateMode: widget.autovalidateMode,
-                      decoration: InputDecoration(
-                        suffixIcon:
-                            widget.isSuffixIconVisible
-                                ? InkWell(
-                                  splashColor: Colors.transparent,
-                                  onTap: () {
-                                    widget.onTap?.call();
+                                  if (widget.isFirst == true) {
+                                    widget.isSuffixIconVisible = false;
+                                  }
+                                  setState(() {});
+                                },
+                                child: Padding(padding: const EdgeInsets.all(10), child: widget.suffixIcon),
+                              )
+                              : null,
+                      prefixIcon: widget.prefixIcon != null ? InkWell(splashColor: Colors.transparent, onTap: widget.onTap, child: Padding(padding: const EdgeInsets.only(top: 10, left: 10, right: 0, bottom: 10), child: widget.prefixIcon)) : null,
+                      fillColor: widget.fillColor,
+                      filled: true,
+                      hintText: "${widget.hint}",
 
-                                    if (widget.isFirst == true) {
-                                      widget.isSuffixIconVisible = false;
-                                    }
-                                    setState(() {});
-                                  },
-                                  child: Padding(padding: const EdgeInsets.all(10), child: widget.suffixIcon),
-                                )
-                                : null,
-                        prefixIcon: widget.prefixIcon != null ? InkWell(splashColor: Colors.transparent, onTap: widget.onTap, child: Padding(padding: const EdgeInsets.only(top: 10, left: 10, right: 0, bottom: 10), child: widget.prefixIcon)) : null,
-                        fillColor: widget.fillColor,
-                        filled: true,
-                        hintText: "${widget.hint}",
+                      errorStyle: AppFonts.regular(14, AppColors.redText),
+                      // Controls the height of the error text
+                      errorMaxLines: 1,
 
-                        errorStyle: AppFonts.regular(14, AppColors.redText),
-                        // Controls the height of the error text
-                        errorMaxLines: 1,
+                      // To reserve error space when no error,
+                      // you can add a transparent helperText of the same height:
+                      helperText: widget.helperText,
+                      helperStyle: AppFonts.regular(14, AppColors.redText),
+                      helperMaxLines: 2,
 
-                        // To reserve error space when no error,
-                        // you can add a transparent helperText of the same height:
-                        helperText: widget.helperText,
-                        helperStyle: AppFonts.regular(14, AppColors.redText),
-                        helperMaxLines: 2,
-
-                        hintStyle: AppFonts.regular(14, AppColors.textDarkGrey),
-                        contentPadding: const EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: const BorderSide(width: 0, color: Colors.red)),
-                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
-                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 1, color: AppColors.textDarkGrey)),
-                      ),
-                      validator: widget.checkValidation,
+                      hintStyle: AppFonts.regular(14, AppColors.textDarkGrey),
+                      contentPadding: const EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: const BorderSide(width: 0, color: Colors.red)),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 1, color: AppColors.textDarkGrey)),
                     ),
-                  ],
-                ),
+                    validator: widget.checkValidation,
+                  ),
+                ],
               ),
             ),
           ],

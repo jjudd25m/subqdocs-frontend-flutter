@@ -216,7 +216,7 @@ class PersonalSettingController extends GetxController {
 
       socketService.socket.on("force_sync_completed", (data) {
         var res = data as Map<String, dynamic>;
-        String message = res["message"];
+        // String message = res["message"];
         _fetchSyncLog();
         // CustomToastification().showToast(message, type: ToastificationType.success);
         customPrint("---------------------------------------------");
@@ -226,7 +226,7 @@ class PersonalSettingController extends GetxController {
 
       socketService.socket.on("force_sync_started", (data) {
         var res = data as Map<String, dynamic>;
-        String message = res["message"];
+        // String message = res["message"];
         customPrint("---------------------------------------------");
         customPrint("force_sync_started status is :- $res");
         _fetchSyncLog();
@@ -276,13 +276,12 @@ class PersonalSettingController extends GetxController {
   Future<void> getAvailablePatientVisitTypes() async {
     getAvailableVisitTypes.value = await _personalSettingRepository.getAvailableVisitTypes();
 
-    print("getAvailablePatientVisitTypes :- ${getAvailableVisitTypes.value}");
     // selectedAppointmentTypeValue.value = getAvailableVisitTypes.value?.responseData?.first.display;
   }
 
   Future<void> forceSyncUpdate() async {
     Loader().showLoadingDialogForSimpleLoader();
-    Map<String, dynamic> response = await _personalSettingRepository.forceSyncUpdate();
+    Map<String, dynamic> _ = await _personalSettingRepository.forceSyncUpdate();
     Loader().stopLoader();
     _fetchSyncLog();
     // CustomToastification().showToast(response['message'], type: ToastificationType.success);
@@ -312,8 +311,6 @@ class PersonalSettingController extends GetxController {
 
   Future<void> getEmaConfig() async {
     GetEmaConfigModel response = await _personalSettingRepository.getEmaConfig();
-
-    print("response is :- ${response.toJson()}");
 
     if (response.responseType?.toLowerCase() != "failure") {
       for (GetEmaConfigResponseData data in response.responseData ?? []) {
@@ -436,7 +433,7 @@ class PersonalSettingController extends GetxController {
 
   Future<void> userInvite(Map<String, dynamic> param) async {
     try {
-      InvitedUserResponseModel response = await _personalSettingRepository.userInvite(param: param);
+      InvitedUserResponseModel _ = await _personalSettingRepository.userInvite(param: param);
 
       emailAddressController.text = "";
       firstNameController.text = "";

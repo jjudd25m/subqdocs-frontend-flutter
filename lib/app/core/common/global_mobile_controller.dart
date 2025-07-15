@@ -49,12 +49,9 @@ class GlobalMobileController extends GetxController {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
       getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
-    } catch (e) {}
-  }
-
-  @override
-  void onInit() async {
-    super.onInit();
+    } catch (e) {
+      customPrint(e);
+    }
   }
 
   Future<void> getActiveMicrophoneName() async {
@@ -70,6 +67,7 @@ class GlobalMobileController extends GetxController {
         if (event == 'audioDevicesChanged') {
           await getConnectedInputDevices();
         } else if (event == "bluetoothAudioDevicesChanged") {
+          await getConnectedInputDevices();
           await getActiveMicrophoneName();
         }
       },

@@ -13,6 +13,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/app_update_dialog.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../../widgets/device_info_model.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../modules/add_patient/repository/add_patient_repository.dart';
@@ -74,6 +75,9 @@ class HomeViewMobileController extends GetxController {
     super.onInit();
 
     Get.put(GlobalMobileController());
+
+    Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
+    print("device info is:- $deviceInfo");
     globalController.getUserDetail();
     handelInternetConnection();
 
@@ -238,7 +242,7 @@ class HomeViewMobileController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           getPastVisitList();

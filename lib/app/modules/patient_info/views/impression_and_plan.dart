@@ -176,85 +176,83 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                   contentWidth: 350,
                                   action: Padding(
                                     padding: const EdgeInsets.only(left: 20, right: 0),
-                                    child: Container(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          controller.resetImpressionAndPlanList();
-                                          // model.popoverController.toggle();
-                                          // model.slidableController?.openStartActionPane();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            const SizedBox(width: 5),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        controller.resetImpressionAndPlanList();
+                                        // model.popoverController.toggle();
+                                        // model.slidableController?.openStartActionPane();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 5),
 
-                                            // SvgPicture.asset(ImagePath.dragAndDrop),
-                                            // const SizedBox(width: 10),
-                                            Expanded(
-                                              child: IntrinsicWidth(
-                                                key: model.diagnosisContainerKey,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    model.slidableController?.openStartActionPane();
-                                                    // Slidable.of(context)?.openStartActionPane();
-                                                  },
-                                                  child: Align(
-                                                    alignment: Alignment.topLeft,
-                                                    child: InlineEditingDropdown(
-                                                      focusNode: model.focusNode,
-                                                      key: ValueKey(model.popoverController),
+                                          // SvgPicture.asset(ImagePath.dragAndDrop),
+                                          // const SizedBox(width: 10),
+                                          Expanded(
+                                            child: IntrinsicWidth(
+                                              key: model.diagnosisContainerKey,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  model.slidableController?.openStartActionPane();
+                                                  // Slidable.of(context)?.openStartActionPane();
+                                                },
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: InlineEditingDropdown(
+                                                    focusNode: model.focusNode,
+                                                    key: ValueKey(model.popoverController),
 
-                                                      textStyle: AppFonts.medium(16, AppColors.textPurple),
-                                                      initialText: "${index + 1} ${model.title ?? "Select Icd10 Code"}",
-                                                      toggle: () {
-                                                        // controller
-                                                        //     .closeAllProcedureDiagnosisPopover();
-                                                        //
-                                                        // // controller.impressionAndPlanListFullNote.forEach((element) {
-                                                        // //   element.popoverController.close();
-                                                        // // });
-                                                        //
-                                                        // // model.popoverController.open();
-                                                        // controller.resetImpressionAndPlanList();
-                                                        // model.popoverController.toggle();
-                                                      },
-                                                      onTap: () {
-                                                        model.slidableController?.openStartActionPane();
-                                                      },
-                                                      onSubmitted: (_) {},
-                                                      onChanged: (title, isApiCall) {
-                                                        model.title = title;
+                                                    textStyle: AppFonts.medium(16, AppColors.textPurple),
+                                                    initialText: "${index + 1} ${model.title ?? "Select Icd10 Code"}",
+                                                    toggle: () {
+                                                      // controller
+                                                      //     .closeAllProcedureDiagnosisPopover();
+                                                      //
+                                                      // // controller.impressionAndPlanListFullNote.forEach((element) {
+                                                      // //   element.popoverController.close();
+                                                      // // });
+                                                      //
+                                                      // // model.popoverController.open();
+                                                      // controller.resetImpressionAndPlanList();
+                                                      // model.popoverController.toggle();
+                                                    },
+                                                    onTap: () {
+                                                      model.slidableController?.openStartActionPane();
+                                                    },
+                                                    onSubmitted: (_) {},
+                                                    onChanged: (title, isApiCall) {
+                                                      model.title = title;
 
-                                                        if (isApiCall) {
-                                                          controller.updateImpressionAndPlanFullNote();
-                                                        }
-                                                        // popoverController.open();
-                                                      },
-                                                    ),
+                                                      if (isApiCall) {
+                                                        controller.updateImpressionAndPlanFullNote();
+                                                      }
+                                                      // popoverController.open();
+                                                    },
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            InkResponse(
-                                              radius: 20, // Large touch radius
-                                              onTap: () {
-                                                controller.resetImpressionAndPlanList();
-                                                model.popoverController.toggle();
-                                                model.slidableController?.openStartActionPane();
-                                              },
-                                              child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40)),
-                                            ),
-                                            //
-                                            // GestureDetector(
-                                            //   onTap: () {
-                                            //     // controller.impressionAndPlanListFullNote.removeAt(index);
-                                            //     // controller.impressionAndPlanListFullNote.refresh();
-                                            //     // controller.updateImpressionAndPlanFullNote();
-                                            //   },
-                                            //   child: Container(child: Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: SvgPicture.asset(ImagePath.delete_black))),
-                                            // ),
-                                            // Drag icon
-                                          ],
-                                        ),
+                                          ),
+                                          InkResponse(
+                                            radius: 20, // Large touch radius
+                                            onTap: () {
+                                              controller.resetImpressionAndPlanList();
+                                              model.popoverController.toggle();
+                                              model.slidableController?.openStartActionPane();
+                                            },
+                                            child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: const Icon(Icons.arrow_drop_down_sharp, size: 40)),
+                                          ),
+                                          //
+                                          // GestureDetector(
+                                          //   onTap: () {
+                                          //     // controller.impressionAndPlanListFullNote.removeAt(index);
+                                          //     // controller.impressionAndPlanListFullNote.refresh();
+                                          //     // controller.updateImpressionAndPlanFullNote();
+                                          //   },
+                                          //   child: Container(child: Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: SvgPicture.asset(ImagePath.delete_black))),
+                                          // ),
+                                          // Drag icon
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -373,7 +371,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                                                       hitTestBehavior: HitTestBehavior.translucent,
                                                       // Add this
                                                       onDraggableCanceled: (velocity, offset) {
-                                                        print("LongPressDraggable onDraggableCanceled");
                                                         controller.impressionAndPlanListFullNote.refresh();
                                                         controller.generalAttachments?.refresh();
                                                         controller.updateImpressionAndPlanFullNote();
@@ -519,7 +516,6 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
 
                                                         final dropIndex = _getDropIndex(context, details.offset, controller.generalAttachments ?? []);
                                                         int insertIndex = imageIndex;
-                                                        print("List.generate is from isGeneral");
                                                         if (isGeneral) {
                                                           // Reordering within general images
                                                           if (fromImageIndex < imageIndex) {

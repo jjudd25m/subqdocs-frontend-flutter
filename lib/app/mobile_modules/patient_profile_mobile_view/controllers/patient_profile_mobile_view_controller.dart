@@ -30,11 +30,6 @@ class PatientProfileMobileViewController extends GetxController {
   String patientId = "";
 
   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
   void onReady() {
     // TODO: implement onReady
     super.onReady();
@@ -53,7 +48,6 @@ class PatientProfileMobileViewController extends GetxController {
       patientDetailModel.value = localPatientDetailModel;
     } catch (e) {
       Loader().stopLoader();
-      print(e);
       CustomToastification().showToast(e.toString(), type: ToastificationType.error);
     }
   }

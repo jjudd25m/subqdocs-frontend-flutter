@@ -66,7 +66,7 @@ class GetModifierCodeResponseDataData {
   String? description;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   GetModifierCodeResponseDataData({this.id, this.modifier, this.description, this.createdAt, this.updatedAt, this.deletedAt});
 

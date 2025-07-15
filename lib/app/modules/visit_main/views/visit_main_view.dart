@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_side_sheet/Enums/sheet_position.dart';
 import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -57,11 +59,10 @@ class _VisitMainViewState extends State<VisitMainView> {
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return BaseScreen(
       onItemSelected: (index) async {
         if (index == 0) {
-          final result = await Get.toNamed(Routes.ADD_PATIENT);
+          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
           _key.currentState!.closeDrawer();
         } else if (index == 1) {
@@ -76,7 +77,7 @@ class _VisitMainViewState extends State<VisitMainView> {
           _key.currentState!.closeDrawer();
         } else if (index == 4) {
           _key.currentState!.closeDrawer();
-          final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          final _ = await Get.toNamed(Routes.PERSONAL_SETTING);
         }
       },
       isVisibleModel: true,
@@ -154,7 +155,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     const Spacer(),
                                     GestureDetector(
                                       onTap: () async {
-                                        final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientId.value, "visitId": controller.visitId.value, "fromSchedule": true});
+                                        final _ = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientId.value, "visitId": controller.visitId.value, "fromSchedule": true});
                                         controller.globalController.addRoute(Routes.EDIT_PATENT_DETAILS);
                                         controller.getPatientDetails();
                                       },
@@ -256,6 +257,16 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                   return BaseDropdown2<SelectedDoctorModel>(
                                                     isRequired: true,
                                                     width: 170,
+                                                    onTapUpOutside: (p0) {
+                                                      if (controller.selectedDoctorValueModel.value != null) {
+                                                        controller.doctorController.clear();
+                                                        controller.doctorValue.refresh();
+                                                      } else {
+                                                        controller.doctorValue.value = "N/A";
+                                                        controller.doctorController.clear();
+                                                        controller.doctorValue.refresh();
+                                                      }
+                                                    },
                                                     focusNode: controller.doctorFocusNode,
                                                     controller: controller.doctorController,
                                                     scrollController: scrollController,
@@ -440,7 +451,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             if (controller.globalController.visitId.isNotEmpty) {
                                                               CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                                             } else {
-                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
+                                                              final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
                                                                 controller.globalController.isStartTranscript.value = true;
                                                                 controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
                                                                 controller.globalController.attachmentId.value = controller.patientId.value;
@@ -465,8 +477,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 );
 
                                                                 await controller.globalController.recorderService.startRecording(context);
-                                                              } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
-                                                                showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
+                                                              } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
+                                                                showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
                                                               }
                                                             }
                                                           }
@@ -692,7 +704,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     scrollDirection: Axis.horizontal,
                                                     padding: const EdgeInsets.only(top: 20),
                                                     itemBuilder: (context, index) {
-                                                      return Container(
+                                                      return SizedBox(
                                                         height: 200,
                                                         width: 140,
                                                         child: Column(
@@ -794,7 +806,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 }),
                                               ),
                                             )
-                                            : Container(width: double.infinity, height: 200, child: const Center(child: Text("Attachments Not available"))),
+                                            : const SizedBox(width: double.infinity, height: 200, child: Center(child: Text("Attachments Not available"))),
                                   );
                                 }),
                               ],
@@ -912,7 +924,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     if (controller.globalController.visitId.isNotEmpty) {
                                       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                     } else {
-                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
+                                      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
                                         controller.globalController.isStartTranscript.value = true;
 
                                         // controller.globalController.patientId.value = controller.patientId.value;
@@ -950,10 +963,10 @@ class _VisitMainViewState extends State<VisitMainView> {
 
                                         await controller.globalController.recorderService.startRecording(context);
                                         controller.updateData();
-                                      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+                                      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
                                         // Handle permission denial here
 
-                                        showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
+                                        showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
                                       }
                                     }
                                   },

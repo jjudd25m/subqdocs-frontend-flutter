@@ -24,7 +24,6 @@ import '../../../models/ChangeModel.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../model/check_doctor_pin_expired_model.dart';
 import '../model/get_CPT_code_model.dart';
-import '../model/get_doctor_list_by_role_model.dart';
 import '../model/get_modifier_code_model.dart';
 import '../model/icd10_code_list_model.dart';
 import '../model/patient_doctor_visit_data_model.dart';
@@ -134,7 +133,6 @@ class PatientInfoRepository {
 
   Future<dynamic> hasEncounter({required String id}) async {
     var response = await ApiProvider.instance.callGet("patient-visit/hasEncounter/$id", queryParameters: {});
-    print("hasEncounter repo response ${response}");
     return response;
   }
 

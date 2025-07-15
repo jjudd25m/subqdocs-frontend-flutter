@@ -4,7 +4,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_webapi/places.dart';
-// import 'package:map_location_picker/map_location_picker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
@@ -200,25 +199,6 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                         controller.organizationCityController.text = city;
                                         controller.organizationStateController.text = state;
                                         controller.organizationStreetNameController.text = route;
-
-                                        // for (AddressComponent adr in result.result.addressComponents.toList()) {
-                                        //   print(" sort :- ${adr.shortName}");
-                                        //   print(" long :- ${adr.longName}");
-                                        //   print("Types:- ${adr.types}");
-                                        //
-                                        //   if (adr.types.first == "administrative_area_level_1") {
-                                        //     controller.organizationStateController.text = adr.longName;
-                                        //   }
-                                        //
-                                        //   if (adr.types.first == "locality") {
-                                        //     controller.organizationCityController.text = adr.longName;
-                                        //   }
-                                        //
-                                        //   if (adr.types.first == "postal_code") {
-                                        //     controller.organizationPostalCodeController.text = adr.longName;
-                                        //   }
-                                        // }
-
                                         controller.organizationAddress1Controller.text = result.result.formattedAddress ?? "";
                                       }
                                     },
@@ -233,7 +213,6 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                     child: TextFormFiledWidget(
                                       maxLines: 3,
                                       label: "Address",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.organizationAddress1Controller,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -254,7 +233,6 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                     child: TextFormFiledWidget(
                                       maxLines: 3,
                                       label: "Street Name",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.organizationStreetNameController,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -268,16 +246,12 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                 ),
                               ],
                             ),
-
                             Row(
                               spacing: 15,
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                    // format: [PostalCodeFormatter()],
                                     label: "City",
-                                    // isValid: controller.isValid.value,
-                                    // isImportant: true,
                                     controller: controller.organizationCityController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
@@ -286,17 +260,11 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                       controller.organizationCityController.clear();
                                     },
                                     suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                    // checkValidation: (value) {
-                                    //   return Validation.requiredFiled(value);
-                                    // },
                                   ),
                                 ),
                                 Expanded(
                                   child: TextFormFiledWidget(
-                                    // format: [PostalCodeFormatter()],
                                     label: "State",
-                                    // isValid: controller.isValid.value,
-                                    // isImportant: true,
                                     controller: controller.organizationStateController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
@@ -311,13 +279,12 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                             ),
                             Row(
                               spacing: 15,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: TextFormFiledWidget(
                                     format: [PostalCodeFormatter()],
                                     label: "Postal code",
-                                    // isValid: controller.isValid.value,
-                                    // isImportant: true,
                                     controller: controller.organizationPostalCodeController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
@@ -326,9 +293,6 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                                       controller.organizationPostalCodeController.clear();
                                     },
                                     suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
-                                    // checkValidation: (value) {
-                                    //   return Validation.requiredFiled(value);
-                                    // },
                                   ),
                                 ),
                                 Expanded(
@@ -384,7 +348,6 @@ class OrganizationEditDialog extends GetView<PersonalSettingController> {
                       child: CustomButton(
                         navigate: () {
                           if (controller.formKey.currentState!.validate()) {
-                            // if (controller.organizationSelectedCityValue.value?.isNotEmpty ?? true) {
                             Map<String, dynamic> param = <String, dynamic>{};
 
                             param["name"] = controller.organizationNameController.text;

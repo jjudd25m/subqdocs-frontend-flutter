@@ -128,8 +128,10 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
     WidgetsBinding.instance.addObserver(this); // Add observer for metrics changes
     /// 0. Initialize the component location, boundaries, and status.
     _initBorderSize();
+
     /// 1. Add event subscription.
     _initEventSubscription();
+
     /// 2. Initialize animation.
     _initAnimation();
     super.initState();
@@ -138,7 +140,7 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
   /// Initialize data related to component locations.
   _initBorderSize() {
     // 1. Relevant data of the screen.
-    var _mediaQueryData = MediaQueryData.fromWindow(window);
+    var _mediaQueryData = MediaQueryData.fromView(window);
     _screenWidth = _mediaQueryData.size.width;
     _screenHeight = _mediaQueryData.size.height;
     _halfScreenW = _screenWidth / 2;
@@ -294,7 +296,7 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
 
     // 2. Use AnimatedPositioned for smooth transitions
     return AnimatedPositioned(
-      duration: _isDragging ? Duration(milliseconds: 0) : widget.config.animDuration,
+      duration: _isDragging ? const Duration(milliseconds: 0) : widget.config.animDuration,
       curve: Curves.easeOutCubic,
       left: positionX,
       top: positionY,

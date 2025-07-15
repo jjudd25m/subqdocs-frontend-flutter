@@ -7,12 +7,12 @@ class MediaListingModel {
   Image? previewImage;
   String? fileName;
   String? date;
-  String? Size;
+  String? size;
   String? time;
   double? calculateSize;
   bool? isGraterThan10;
 
-  MediaListingModel({this.file, this.previewImage, this.isGraterThan10, this.calculateSize, this.fileName, this.date, this.Size, this.time});
+  MediaListingModel({this.file, this.previewImage, this.isGraterThan10, this.calculateSize, this.fileName, this.date, this.size, this.time});
 }
 
 // class MediaListingModel {

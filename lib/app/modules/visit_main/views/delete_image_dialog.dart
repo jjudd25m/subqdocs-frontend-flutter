@@ -47,42 +47,40 @@ class DeleteImageDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
-                  const SizedBox(height: 20),
-                  SizedBox(width: 280, child: Text(textAlign: TextAlign.center, "Are you sure you want to Delete this $extension?", style: AppFonts.medium(17, AppColors.textBlack))),
-                  const SizedBox(height: 20),
-                  Text("", style: AppFonts.medium(15, AppColors.textGrey)),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 90,
-                          height: 40,
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              navigator?.pop();
-                            },
-                            text: "Cancel",
-                            isOutline: true,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          ),
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
+                const SizedBox(height: 20),
+                SizedBox(width: 280, child: Text(textAlign: TextAlign.center, "Are you sure you want to Delete this $extension?", style: AppFonts.medium(17, AppColors.textBlack))),
+                const SizedBox(height: 20),
+                Text("", style: AppFonts.medium(15, AppColors.textGrey)),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 90,
+                        height: 40,
+                        child: CustomAnimatedButton(
+                          onPressed: () {
+                            navigator?.pop();
+                          },
+                          text: "Cancel",
+                          isOutline: true,
+                          enabledTextColor: AppColors.backgroundPurple,
+                          enabledColor: AppColors.white,
+                          outLineEnabledColor: AppColors.textGrey,
+                          outlineColor: AppColors.backgroundPurple,
                         ),
-                        const Spacer(),
-                        SizedBox(width: 90, height: 40, child: CustomAnimatedButton(onPressed: onDelete, text: " Delete ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      SizedBox(width: 90, height: 40, child: CustomAnimatedButton(onPressed: onDelete, text: " Delete ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],
@@ -133,42 +131,40 @@ class LogoutDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
-                  const SizedBox(height: 20),
-                  SizedBox(width: 280, child: Text(textAlign: TextAlign.center, title ?? "", style: AppFonts.medium(17, AppColors.textBlack))),
-                  const SizedBox(height: 20),
-                  Text("", style: AppFonts.medium(15, AppColors.textGrey)),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 90,
-                          height: 40,
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              navigator?.pop();
-                            },
-                            text: "Cancel",
-                            isOutline: true,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          ),
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
+                const SizedBox(height: 20),
+                SizedBox(width: 280, child: Text(textAlign: TextAlign.center, title ?? "", style: AppFonts.medium(17, AppColors.textBlack))),
+                const SizedBox(height: 20),
+                Text("", style: AppFonts.medium(15, AppColors.textGrey)),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 90,
+                        height: 40,
+                        child: CustomAnimatedButton(
+                          onPressed: () {
+                            navigator?.pop();
+                          },
+                          text: "Cancel",
+                          isOutline: true,
+                          enabledTextColor: AppColors.backgroundPurple,
+                          enabledColor: AppColors.white,
+                          outLineEnabledColor: AppColors.textGrey,
+                          outlineColor: AppColors.backgroundPurple,
                         ),
-                        const Spacer(),
-                        SizedBox(width: 90, height: 40, child: CustomAnimatedButton(onPressed: onDelete, text: " Logout ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      SizedBox(width: 90, height: 40, child: CustomAnimatedButton(onPressed: onDelete, text: " Logout ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],
@@ -220,42 +216,40 @@ class DeletePatientDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
-                  const SizedBox(height: 20),
-                  SizedBox(width: 280, child: Text(textAlign: TextAlign.center, title ?? "", style: AppFonts.medium(17, AppColors.textBlack))),
-                  const SizedBox(height: 20),
-                  Text("", style: AppFonts.medium(15, AppColors.textGrey)),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 90,
-                          height: 40,
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              navigator?.pop();
-                            },
-                            text: "Cancel",
-                            isOutline: true,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          ),
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
+                const SizedBox(height: 20),
+                SizedBox(width: 280, child: Text(textAlign: TextAlign.center, title ?? "", style: AppFonts.medium(17, AppColors.textBlack))),
+                const SizedBox(height: 20),
+                Text("", style: AppFonts.medium(15, AppColors.textGrey)),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 90,
+                        height: 40,
+                        child: CustomAnimatedButton(
+                          onPressed: () {
+                            navigator?.pop();
+                          },
+                          text: "Cancel",
+                          isOutline: true,
+                          enabledTextColor: AppColors.backgroundPurple,
+                          enabledColor: AppColors.white,
+                          outLineEnabledColor: AppColors.textGrey,
+                          outlineColor: AppColors.backgroundPurple,
                         ),
-                        const Spacer(),
-                        SizedBox(width: 90, height: 40, child: CustomAnimatedButton(isLoading: isLoading, onPressed: onDelete, text: " Delete ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      SizedBox(width: 90, height: 40, child: CustomAnimatedButton(isLoading: isLoading, onPressed: onDelete, text: " Delete ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],
@@ -306,42 +300,40 @@ class ConfirmModel extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
-                  const SizedBox(height: 20),
-                  SizedBox(width: 280, child: Text(textAlign: TextAlign.center, title ?? "", style: AppFonts.medium(17, AppColors.textBlack))),
-                  const SizedBox(height: 20),
-                  Text("", style: AppFonts.medium(15, AppColors.textGrey)),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 90,
-                          height: 40,
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              navigator?.pop();
-                            },
-                            text: "Cancel",
-                            isOutline: true,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          ),
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                SvgPicture.asset(ImagePath.delete_popup, width: 70, height: 70),
+                const SizedBox(height: 20),
+                SizedBox(width: 280, child: Text(textAlign: TextAlign.center, title ?? "", style: AppFonts.medium(17, AppColors.textBlack))),
+                const SizedBox(height: 20),
+                Text("", style: AppFonts.medium(15, AppColors.textGrey)),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 90,
+                        height: 40,
+                        child: CustomAnimatedButton(
+                          onPressed: () {
+                            navigator?.pop();
+                          },
+                          text: "Cancel",
+                          isOutline: true,
+                          enabledTextColor: AppColors.backgroundPurple,
+                          enabledColor: AppColors.white,
+                          outLineEnabledColor: AppColors.textGrey,
+                          outlineColor: AppColors.backgroundPurple,
                         ),
-                        const Spacer(),
-                        SizedBox(width: 90, height: 40, child: CustomAnimatedButton(onPressed: onOk, text: "Ok", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      SizedBox(width: 90, height: 40, child: CustomAnimatedButton(onPressed: onOk, text: "Ok", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.buttonBackgroundred, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.buttonBackgroundred)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],

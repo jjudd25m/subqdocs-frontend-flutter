@@ -51,7 +51,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                       child: EmptyPatientScreen(
                         onBtnPress: () async {
                           controller.globalController.addRoute(Routes.ADD_PATIENT);
-                          final result = await Get.toNamed(Routes.ADD_PATIENT);
+                          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
                           controller.getPastVisitList();
                           controller.getScheduleVisitList();
@@ -202,7 +202,7 @@ class HomeScheduleListView extends GetView<HomeController> {
                     onRowSelected: (rowIndex, rowData) async {
                       customPrint("row index is :- $rowIndex");
                       controller.globalController.addRoute(Routes.VISIT_MAIN);
-                      dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.scheduleVisitList[rowIndex].visitId.toString(), "patientId": controller.scheduleVisitList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
+                      dynamic _ = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.scheduleVisitList[rowIndex].visitId.toString(), "patientId": controller.scheduleVisitList[rowIndex].id.toString(), "unique_tag": DateTime.now().toString()});
                       controller.globalController.valueOfx.refresh();
 
                       controller.globalController.isStartTranscript.refresh();

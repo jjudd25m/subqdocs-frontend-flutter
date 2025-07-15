@@ -228,7 +228,7 @@ class EditPatentDetailsController extends GetxController {
         return CupertinoActionSheet(
           title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
           actions: <Widget>[
-            Container(
+            SizedBox(
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
@@ -276,7 +276,7 @@ class EditPatentDetailsController extends GetxController {
         return CupertinoActionSheet(
           title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
           actions: <Widget>[
-            Container(
+            SizedBox(
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
@@ -358,8 +358,6 @@ class EditPatentDetailsController extends GetxController {
     if (emailAddressController.text != "") {
       param['email'] = emailAddressController.text;
     }
-
-    print("contact_no is :- ${contactNumberController.text}");
 
     if (contactNumberController.text.trim() != "+1") {
       param['contact_no'] = extractDigits(contactNumberController.text.trim());

@@ -184,7 +184,6 @@ class SignFinalizeAuthenticateViewView extends GetView<SignFinalizeAuthenticateV
                   onPressed: () async {
                     // Get.back();
 
-                    print(controller.selectedDoctorValue.value);
                     if (controller.selectedDoctorValue.value == null) {
                       CustomToastification().showToast("Please select Doctor", type: ToastificationType.error);
                     } else {

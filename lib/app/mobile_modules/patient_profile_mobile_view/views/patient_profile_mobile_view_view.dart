@@ -242,27 +242,25 @@ class _PatientProfileMobileViewViewState extends State<PatientProfileMobileViewV
                     delegate: SliverChildBuilderDelegate((context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 50),
-                                    SvgPicture.asset(ImagePath.no_data_power_view, width: MediaQuery.of(context).size.width * 0.5),
-                                    const SizedBox(height: 10),
-                                    SvgPicture.asset(ImagePath.divider_medical_note, width: MediaQuery.of(context).size.width * 0.6),
-                                    const SizedBox(height: 10),
-                                    Center(child: Text("Want to review this note on your computer?", textAlign: TextAlign.center, style: AppFonts.regular(16.0, AppColors.black))),
-                                    const SizedBox(height: 10),
-                                    const Center(child: SizedBox(width: 150, child: CustomTabButton(text: "Email links", height: 45, isOutline: true, outlineColor: AppColors.backgroundPurple, enabledColor: AppColors.clear, enabledTextColor: AppColors.backgroundPurple, outlineWidth: 1))),
-                                  ],
-                                  // ... your existing column children
-                                ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 50),
+                                  SvgPicture.asset(ImagePath.no_data_power_view, width: MediaQuery.of(context).size.width * 0.5),
+                                  const SizedBox(height: 10),
+                                  SvgPicture.asset(ImagePath.divider_medical_note, width: MediaQuery.of(context).size.width * 0.6),
+                                  const SizedBox(height: 10),
+                                  Center(child: Text("Want to review this note on your computer?", textAlign: TextAlign.center, style: AppFonts.regular(16.0, AppColors.black))),
+                                  const SizedBox(height: 10),
+                                  const Center(child: SizedBox(width: 150, child: CustomTabButton(text: "Email links", height: 45, isOutline: true, outlineColor: AppColors.backgroundPurple, enabledColor: AppColors.clear, enabledTextColor: AppColors.backgroundPurple, outlineWidth: 1))),
+                                ],
+                                // ... your existing column children
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     }, childCount: 1),

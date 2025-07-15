@@ -20,6 +20,7 @@ import 'package:toastification/toastification.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/app_update_dialog.dart';
 import '../../../../widgets/customPermission.dart';
+import '../../../../widgets/device_info_model.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
@@ -112,7 +113,6 @@ class HomeController extends GetxController {
   final Set<int> scheduleTriggeredIndexes = <int>{};
   var pageSchedule = 1;
   var pagePast = 1;
-  Set<int> _loadedThresholds = Set<int>();
   RxBool isLoading = RxBool(false);
   RxBool noMoreDataPatientList = RxBool(false);
   RxBool noMoreDataPastPatientList = RxBool(false);
@@ -210,6 +210,10 @@ class HomeController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     Get.put(GlobalController());
+
+    Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
+    print("device info is:- $deviceInfo");
+
     await getLatestBuild();
     customPrint("home controller called");
 
@@ -1009,7 +1013,7 @@ class HomeController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           getPastVisitList();

@@ -17,27 +17,15 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 16,
       child: Container(
-        constraints: BoxConstraints(
-          maxHeight: Get.height * .80,
-          maxWidth: Get.width * .50,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+        constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .50),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: ListView(
           physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
           children: [
             Container(
               width: 360,
-              decoration: const BoxDecoration(
-                color: AppColors.backgroundPurple,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-              ),
+              decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
               // color: AppColors.backgroundPurple,
               child: Padding(
                 padding: const EdgeInsets.all(0),
@@ -45,30 +33,14 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        "Add Attachments",
-                        style: AppFonts.medium(14, Colors.white),
-                      ),
-                    ),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Add Attachments", style: AppFonts.medium(14, Colors.white))),
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                         // controller.list.clear();
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(15),
-                        color: AppColors.clear,
-                        child: SvgPicture.asset(
-                          "assets/images/cross_white.svg",
-                          width: 15,
-                        ),
-                      ),
+                      child: Container(padding: const EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
                     ),
                   ],
                 ),
@@ -89,21 +61,9 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                           children: [
                             const SizedBox(height: 20),
                             SvgPicture.asset("assets/images/upload_image.svg"),
+                            Padding(padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10), child: Text("Upload and manage Photos", style: AppFonts.medium(14, AppColors.black))),
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 40,
-                                vertical: 10,
-                              ),
-                              child: Text(
-                                "Upload and manage Photos",
-                                style: AppFonts.medium(14, AppColors.black),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 80,
-                                right: 80,
-                              ),
+                              padding: const EdgeInsets.only(left: 80, right: 80),
                               child: CustomButton(
                                 navigate: () async {
                                   await controller.pickFiles();
@@ -117,11 +77,7 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                      "Supported Formats: JPG, PNG, WEBP, MP3, WAV,MP4, DOC, PDF",
-                      textAlign: TextAlign.start,
-                      style: AppFonts.medium(10, AppColors.textDarkGrey),
-                    ),
+                    Text("Supported Formats: JPG, PNG, WEBP, MP3, WAV,MP4, DOC, PDF", textAlign: TextAlign.start, style: AppFonts.medium(10, AppColors.textDarkGrey)),
                     const SizedBox(height: 12),
                     CustomButton(
                       navigate: () async {
@@ -149,50 +105,21 @@ class CustomDialogAttachment extends GetView<AddPatientController> {
                                   // Border width
                                 ),
 
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ), // Optional: to make the corners rounded
+                                borderRadius: BorderRadius.circular(10), // Optional: to make the corners rounded
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(
-                                      "assets/images/placeholde_image.svg",
-                                    ),
+                                    SvgPicture.asset("assets/images/placeholde_image.svg"),
                                     const SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          controller.list[index].fileName ?? "",
-                                        ),
-                                        Text(
-                                          "${controller.list[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}",
-                                        ),
-                                        if (controller
-                                                .list[index]
-                                                .isGraterThan10 ??
-                                            false)
-                                          Text(
-                                            "File Size must not exceed 10 MB",
-                                            style: AppFonts.medium(
-                                              15,
-                                              Colors.red,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
+                                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(controller.list[index].fileName ?? ""), Text("${controller.list[index].date ?? " "} |  ${controller.list.value[index].size ?? ""}"), if (controller.list[index].isGraterThan10 ?? false) Text("File Size must not exceed 10 MB", style: AppFonts.medium(15, Colors.red))]),
                                     const Spacer(),
                                     GestureDetector(
                                       onTap: () {
                                         controller.removeItem(index);
                                       },
-                                      child: SvgPicture.asset(
-                                        "assets/images/logo_cross.svg",
-                                        width: 18,
-                                      ),
+                                      child: SvgPicture.asset("assets/images/logo_cross.svg", width: 18),
                                     ),
                                   ],
                                 ),

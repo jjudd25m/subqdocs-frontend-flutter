@@ -11,7 +11,6 @@ import '../../../../core/common/global_controller.dart';
 import '../../../../core/common/logger.dart';
 import '../../../visit_main/model/doctor_view_model.dart';
 import '../../controllers/patient_info_controller.dart';
-import '../../model/get_CPT_code_model.dart';
 import '../../model/get_modifier_code_model.dart';
 
 class ModifierDropDrownSearchTable extends StatefulWidget {

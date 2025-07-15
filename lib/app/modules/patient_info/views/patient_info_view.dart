@@ -144,6 +144,16 @@ class _PatientInfoViewState extends State<PatientInfoView> {
               return BaseDropdown2<SelectedDoctorModel>(
                 isRequired: true,
                 width: 170,
+                onTapUpOutside: (p0) {
+                  if (controller.selectedDoctorValueModel.value != null) {
+                    controller.doctorController.clear();
+                    controller.doctorValue.refresh();
+                  } else {
+                    controller.doctorValue.value = "N/A";
+                    controller.doctorController.clear();
+                    controller.doctorValue.refresh();
+                  }
+                },
                 focusNode: controller.doctorFocusNode,
                 controller: controller.doctorController,
                 scrollController: scrollController,
@@ -176,8 +186,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                   );
                 },
                 onChanged: (SelectedDoctorModel? model) {
+                  print("selectedDoctorValueModel name:- ${controller.selectedDoctorValueModel.value?.name}");
+
                   controller.doctorValue.value = model?.name ?? "";
                   controller.doctorValue.refresh();
+                  if (model != null) {
+                    controller.updateDoctorView(model.id ?? -1);
+                  }
                 },
                 selectText: controller.doctorValue.value,
                 isSearchable: true,
@@ -325,7 +340,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   Widget _buildSignAndFinalizeButton() {
     return GestureDetector(
       onTap: () async {
-        print(controller.loginData.value?.responseData?.user?.role?.toLowerCase());
         controller.closeDoctorPopOverController();
 
         if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false) {
@@ -451,7 +465,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             controller.doctorFocusNode.unfocus();
             controller.closeAllProcedureDiagnosisPopover();
             controller.resetImpressionAndPlanList();
-            controller.selectedDoctorValueModel.value?.name = controller.doctorValue.value;
+
+            print("doctor name:- ${controller.doctorValue.value}");
+            print("gesture selectedDoctorValueModel name:- ${controller.selectedDoctorValueModel.value?.name}");
+
+            // controller.selectedDoctorValueModel.value?.name = controller.doctorValue.value;
+            // controller.selectedDoctorValueModel.refresh();
+            // controller.doctorValue.refresh();
           },
           child: Obx(() {
             return Column(
@@ -512,7 +532,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   Future<void> _handleDrawerItemSelection(int index) async {
     switch (index) {
       case 0:
-        final result = await Get.toNamed(Routes.ADD_PATIENT);
+        final _ = await Get.toNamed(Routes.ADD_PATIENT);
         _scaffoldKey.currentState!.closeDrawer();
         break;
       case 1:
@@ -529,7 +549,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
         break;
       case 4:
         _scaffoldKey.currentState!.closeDrawer();
-        final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+        final _ = await Get.toNamed(Routes.PERSONAL_SETTING);
         break;
     }
   }
@@ -538,15 +558,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
     SignFinalizeAuthenticateViewController con = Get.put(SignFinalizeAuthenticateViewController());
     con.visitId = controller.visitId;
 
-    print("doctor name:- ${controller.patientData.value?.responseData?.doctorName}");
-    print("doctorId:- ${controller.patientData.value?.responseData?.doctorId}");
     con.selectedDoctorValueModel = Rxn(SelectedDoctorModel(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
     con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
-
-    print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
-
-    print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
-
     con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
 
     con.setDoctor(Rxn(SelectedDoctorModel(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null)));
@@ -594,10 +607,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
 
     con.selectedDoctorValueModel = Rxn(SelectedDoctorModel(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
     con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
-
-    print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
-
-    print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
 
     con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
 

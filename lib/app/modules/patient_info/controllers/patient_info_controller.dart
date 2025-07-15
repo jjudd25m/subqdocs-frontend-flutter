@@ -27,6 +27,7 @@ import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../home/repository/home_repository.dart';
 import '../../login/model/login_model.dart';
+
 // import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -145,6 +146,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
       if (patientData.value?.responseData?.doctorId != null) {
         doctorValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.doctorId ?? -1) ?? "";
+
+        selectedDoctorValueModel.value = SelectedDoctorModel(id: patientData.value?.responseData?.doctorId, name: doctorValue.value);
       }
 
       if (patientData.value?.responseData?.medicalAssistantId != null) {
@@ -314,8 +317,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           // int visit_id = res["visit_id"];
           // int transcription_id = res["transcription_id"];
-          String status = res["status"];
-          String message = res["message"];
+          // String status = res["status"];
+          // String message = res["message"];
           customPrint("DoctorsViewStatus status is :- $res");
           // if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
           //   customPrint("DoctorsViewStatus inside condition");
@@ -345,12 +348,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("FullNoteStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int _visitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -378,12 +381,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("visit data status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -411,14 +414,14 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("PatientViewStatus data:- $res");
 
-          int visit_id = res["visit_id"];
-          int transcription_id = res["transcription_id"];
+          int localVisitId = res["visit_id"];
+          // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+          // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -446,15 +449,15 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           var res = data as Map<String, dynamic>;
           customPrint("transcriptStatus data:- $res");
 
-          int visit_id = res["visit_id"];
-          int transcription_id = res["transcription_id"];
+          int localVisitId = res["visit_id"];
+          // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+          // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
           getPatientDetails();
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -521,8 +524,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           // int visit_id = res["visit_id"];
           // int transcription_id = res["transcription_id"];
-          String status = res["status"];
-          String message = res["message"];
+          // String status = res["status"];
+          // String message = res["message"];
           customPrint("DoctorsViewStatus status is :- $res");
           // if (visit_id == int.parse(visitId)) {
           //   customPrint("DoctorsViewStatus inside condition");
@@ -552,12 +555,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("FullNoteStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -585,12 +588,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("visit data status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -618,12 +621,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("PatientViewStatus data:- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -651,12 +654,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           var res = data as Map<String, dynamic>;
           customPrint("transcriptStatus data:- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -698,7 +701,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // int visit_id = res["visit_id"];
       // int transcription_id = res["transcription_id"];
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
       customPrint("DoctorsViewStatus status is :- $res");
 
       if (status.toLowerCase() == "success") {
@@ -717,7 +720,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "failure") {
         getAllPatientInfo();
@@ -728,7 +731,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -749,7 +752,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -765,7 +768,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -781,7 +784,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -798,7 +801,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -815,7 +818,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -832,7 +835,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -848,7 +851,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -866,7 +869,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -878,7 +881,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           socketService.socket.on("PhotoMetaDataStatus", (data) {
             var res = data as Map<String, dynamic>;
             String status = res["status"];
-            String message = res["message"];
+            // String message = res["message"];
 
             if (status.toLowerCase() == "success") {
               Map<String, dynamic> responseData = res["responseData"];
@@ -998,8 +1001,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           // int visit_id = res["visit_id"];
           // int transcription_id = res["transcription_id"];
-          String status = res["status"];
-          String message = res["message"];
+          // String status = res["status"];
+          // String message = res["message"];
 
           customPrint("DoctorsViewStatus status is :- $res");
 
@@ -1031,12 +1034,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("FullNoteStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -1064,12 +1067,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("visit data status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -1097,14 +1100,14 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("PatientViewStatus data:- $res");
 
-          int visit_id = res["visit_id"];
-          int transcription_id = res["transcription_id"];
+          int localVisitId = res["visit_id"];
+          // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+          // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -1132,14 +1135,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           var res = data as Map<String, dynamic>;
           customPrint("transcriptStatus data:- $res");
 
-          int visit_id = res["visit_id"];
-          int transcription_id = res["transcription_id"];
+          int localVisitId = res["visit_id"];
+          // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
-
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -1203,8 +1204,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           // int visit_id = res["visit_id"];
           // int transcription_id = res["transcription_id"];
-          String status = res["status"];
-          String message = res["message"];
+          // String status = res["status"];
+          // String message = res["message"];
           customPrint("DoctorsViewStatus status is :- $res");
           // if (visit_id == int.parse(visitId)) {
           //   customPrint("DoctorsViewStatus inside condition");
@@ -1234,12 +1235,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("FullNoteStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -1267,12 +1268,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("visit data status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -1300,12 +1301,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           customPrint("---------------------------------------------");
           customPrint("PatientViewStatus data:- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -1333,12 +1334,12 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           var res = data as Map<String, dynamic>;
           customPrint("transcriptStatus data:- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -1376,7 +1377,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     }
 
     try {
-      dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+      dynamic _ = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
       getPatientDetails();
 
       CustomToastification().showToast("Update Doctor Successfully", type: ToastificationType.success);
@@ -1392,10 +1393,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       param['medical_assistant_id'] = id;
     }
 
-    dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+    dynamic _ = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
 
     try {
-      dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
+      dynamic _ = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId);
 
       CustomToastification().showToast("Update Medical Assistant Successfully", type: ToastificationType.success);
     } catch (e) {
@@ -1505,7 +1506,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     params["impressions_and_plan"] = impressionAndPlanListFullNote.map((item) => item.toJsonFullNote()).where((map) => map.isNotEmpty).toList();
     customPrint(params);
     try {
-      var response = await _patientInfoRepository.updateImpressionAndPlan(id: doctorViewList.value?.responseData?.id ?? 0, params: params);
+      var _ = await _patientInfoRepository.updateImpressionAndPlan(id: doctorViewList.value?.responseData?.id ?? 0, params: params);
     } catch (e) {
       customPrint(e);
     }
@@ -1530,22 +1531,22 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     customPrint("params: $params");
 
     try {
-      var response = await _patientInfoRepository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
+      var _ = await _patientInfoRepository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
     } catch (e) {
       customPrint(e);
     }
   }
 
   Future<void> updateFullNote(String keyName, List<ImpresionAndPlanViewModel> list) async {
-    var response = await _patientInfoRepository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+    var _ = await _patientInfoRepository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
   }
 
   Future<void> updatePatientView(String keyName, List<ImpresionAndPlanViewModel> list) async {
-    var response = await _patientInfoRepository.updatePatientView(id: patientViewListModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+    var _ = await _patientInfoRepository.updatePatientView(id: patientViewListModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
   }
 
   Future<void> getDoctorNote() async {
-    final startTime = DateTime.now();
+    // final startTime = DateTime.now();
     doctorViewList.value = await _patientInfoRepository.getDoctorNote(id: visitId);
 
     setImpressionAndPlanList();
@@ -1683,7 +1684,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           getAllPatientInfo();
@@ -1961,7 +1962,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'li', 'main', 'nav',
       'noscript', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul', 'video',
       'br', 'tr', 'td', 'th', 'thead', 'tbody', 'caption', 'colgroup', 'col',
-      'article', 'aside', 'details', 'dialog', 'summary', 'menu', 'menuitem',
+      'details', 'dialog', 'summary', 'menu', 'menuitem',
       'output', 'progress', 'meter', 'legend', 'map', 'object', 'iframe',
       // Deprecated but still seen in legacy HTML
       'center', 'dir', 'isindex', 'listing', 'plaintext', 'xmp',
@@ -2041,11 +2042,11 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   }
 
   void loadDoctorviewPDF(String visitID) async {
-    var response = await _patientInfoRepository.loadDoctorviewPDF(visitId, "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_doctorview_${patientData.value?.responseData?.visitTime}");
+    var _ = await _patientInfoRepository.loadDoctorviewPDF(visitId, "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_doctorview_${patientData.value?.responseData?.visitTime}");
   }
 
   void loadFullNotePDF(String visitID) async {
-    var response = await _patientInfoRepository.loadFullNotePDF(visitId, "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_full_note_${patientData.value?.responseData?.visitTime}");
+    var _ = await _patientInfoRepository.loadFullNotePDF(visitId, "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_full_note_${patientData.value?.responseData?.visitTime}");
   }
 
   Future<void> copyMedicalRecordToClipboard(List<CopyModel> copyModels) async {
@@ -2155,7 +2156,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'li', 'main', 'nav',
       'noscript', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul', 'video',
       'br', 'tr', 'td', 'th', 'thead', 'tbody', 'caption', 'colgroup', 'col',
-      'article', 'aside', 'details', 'dialog', 'summary', 'menu', 'menuitem',
+      'details', 'dialog', 'summary', 'menu', 'menuitem',
       'output', 'progress', 'meter', 'legend', 'map', 'object', 'iframe',
       // Deprecated but still seen in legacy HTML
       'center', 'dir', 'isindex', 'listing', 'plaintext', 'xmp',
@@ -2233,7 +2234,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   }
 
   void loadPatientNotePDF(String visitID) async {
-    var response = await _patientInfoRepository.loadPatientNotePDF(visitId, "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_patient_note_${patientData.value?.responseData?.visitTime}");
+    var _ = await _patientInfoRepository.loadPatientNotePDF(visitId, "${patientData.value?.responseData?.patientFirstName}_${patientData.value?.responseData?.patientLastName}_patient_note_${patientData.value?.responseData?.visitTime}");
   }
 
   Future<void> closeDoctorPopOverController() async {
@@ -2268,27 +2269,47 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       }
     }
 
-    impressionAndPlanListFullNote.forEach((element) {
+    // Close popovers
+    for (final element in impressionAndPlanListFullNote) {
       element.popoverController.close();
-    });
-
-    impressionAndPlanList.forEach((element) {
+    }
+    for (final element in impressionAndPlanList) {
       element.popoverController.close();
-    });
+    }
 
-    impressionAndPlanList.forEach((element) {
+    // Unfocus nodes
+    for (final element in impressionAndPlanList) {
       if (element.focusNode.hasFocus) {
-        customPrint("unit found");
         element.focusNode.unfocus();
       }
-    });
-
-    impressionAndPlanListFullNote.forEach((element) {
+    }
+    for (final element in impressionAndPlanListFullNote) {
       if (element.focusNode.hasFocus) {
-        customPrint("unit found");
         element.focusNode.unfocus();
       }
-    });
+    }
+
+    // impressionAndPlanListFullNote.forEach((element) {
+    //   element.popoverController.close();
+    // });
+    //
+    // impressionAndPlanList.forEach((element) {
+    //   element.popoverController.close();
+    // });
+    //
+    // impressionAndPlanList.forEach((element) {
+    //   if (element.focusNode.hasFocus) {
+    //     customPrint("unit found");
+    //     element.focusNode.unfocus();
+    //   }
+    // });
+    //
+    // impressionAndPlanListFullNote.forEach((element) {
+    //   if (element.focusNode.hasFocus) {
+    //     customPrint("unit found");
+    //     element.focusNode.unfocus();
+    //   }
+    // });
 
     for (int rows = 0; rows < (tableModel.value?.rows.length ?? 0); rows++) {
       for (int cols = 0; cols < (tableModel.value?.rows[rows].cells.length ?? 0); cols++) {

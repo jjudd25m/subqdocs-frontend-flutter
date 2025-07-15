@@ -59,7 +59,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
       globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, context);
       globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, context);
     });
-    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
@@ -81,7 +81,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
 
             if (Get.currentRoute == Routes.HOME) {
               if (index == 0) {
-                final result = await Get.toNamed(Routes.ADD_PATIENT);
+                final _ = await Get.toNamed(Routes.ADD_PATIENT);
                 globalController.breadcrumbHistory.clear();
                 globalController.addRoute(Routes.HOME);
                 globalController.addRoute(Routes.ADD_PATIENT);
@@ -130,7 +130,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                   globalController.breadcrumbHistory.clear();
                   globalController.addRoute(Routes.HOME);
                   globalController.addRoute(Routes.ADD_PATIENT);
-                  final result = await Get.toNamed(Routes.ADD_PATIENT);
+                  final _ = await Get.toNamed(Routes.ADD_PATIENT);
                 }
                 widget.globalKey.currentState!.closeDrawer();
               } else if (index == 1) {
@@ -406,14 +406,12 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               hintStyle: AppFonts.regular(12, AppColors.backgroundPurple),
                                               suffixIconConstraints: const BoxConstraints.tightFor(width: 35, height: 27),
                                               suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.backgroundPurple, size: 27),
-                                              prefixIcon: Container(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                                  child: SvgPicture.asset(
-                                                    ImagePath.micRecording,
-                                                    // width: 25, // Explicit size
-                                                    // height: 25,
-                                                  ),
+                                              prefixIcon: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                                                child: SvgPicture.asset(
+                                                  ImagePath.micRecording,
+                                                  // width: 25, // Explicit size
+                                                  // height: 25,
                                                 ),
                                               ),
                                               prefixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 25),
@@ -469,7 +467,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                                 if (globalController.isProd) {
                                                   if (Get.currentRoute != Routes.VISIT_MAIN) {
                                                     Loader().showLoadingDialogForSimpleLoader();
-                                                    dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": globalController.visitId.value, "patientId": globalController.patientId.value, "unique_tag": DateTime.now().toString()});
+                                                    dynamic _ = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": globalController.visitId.value, "patientId": globalController.patientId.value, "unique_tag": DateTime.now().toString()});
                                                     Loader().stopLoader();
                                                   } else {
                                                     Loader().showLoadingDialogForSimpleLoader();
@@ -610,17 +608,15 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         SvgPicture.asset(ImagePath.recording, height: 44, width: 44),
                                         const SizedBox(width: 10),
                                         Expanded(
-                                          child: Container(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(maxLines: 1, textAlign: TextAlign.left, "${globalController.patientFirstName} ${globalController.patientLsatName}", style: AppFonts.regular(14, AppColors.textWhite), overflow: TextOverflow.ellipsis),
-                                                const SizedBox(height: 0),
-                                                Obx(() {
-                                                  return Text(textAlign: TextAlign.left, maxLines: 3, globalController.recorderService.formattedRecordingTime, style: AppFonts.regular(14, AppColors.textGrey));
-                                                }),
-                                              ],
-                                            ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(maxLines: 1, textAlign: TextAlign.left, "${globalController.patientFirstName} ${globalController.patientLsatName}", style: AppFonts.regular(14, AppColors.textWhite), overflow: TextOverflow.ellipsis),
+                                              const SizedBox(height: 0),
+                                              Obx(() {
+                                                return Text(textAlign: TextAlign.left, maxLines: 3, globalController.recorderService.formattedRecordingTime, style: AppFonts.regular(14, AppColors.textGrey));
+                                              }),
+                                            ],
                                           ),
                                         ),
                                         const SizedBox(width: 2),

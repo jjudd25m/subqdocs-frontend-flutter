@@ -94,7 +94,7 @@ class AddPatientAttachment extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: 360,
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -133,7 +133,7 @@ class AddPatientAttachment extends StatelessWidget {
                                         Text(controller.listOldPatient.value[index].fileName ?? ""),
 
                                         //
-                                        Text("${controller.listOldPatient.value[index].date ?? " "} |  ${controller.listOldPatient.value[index].Size ?? ""}"),
+                                        Text("${controller.listOldPatient.value[index].date ?? " "} |  ${controller.listOldPatient.value[index].size ?? ""}"),
 
                                         if (controller.listOldPatient.value[index].isGraterThan10 ?? false) Text("File Size must not exceed 10 MB", style: AppFonts.medium(15, Colors.red)),
                                       ],

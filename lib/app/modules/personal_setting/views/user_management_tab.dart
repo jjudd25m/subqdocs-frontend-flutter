@@ -28,7 +28,7 @@ class UserManagementTab extends StatelessWidget {
   }
 
   Widget _buildInviteUserButton() {
-    return Container(width: 140, child: CustomButton(hight: 40, navigate: _showInviteUserDialog, label: "Invite User"));
+    return SizedBox(width: 140, child: CustomButton(hight: 40, navigate: _showInviteUserDialog, label: "Invite User"));
   }
 
   void _showInviteUserDialog() {

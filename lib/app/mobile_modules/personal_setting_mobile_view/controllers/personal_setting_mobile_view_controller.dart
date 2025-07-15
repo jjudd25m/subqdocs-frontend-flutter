@@ -94,8 +94,6 @@ class PersonalSettingMobileViewController extends GetxController {
   }
 
   Future<void> setUserDetail() async {
-    print("user data:- ${getUserDetailModel.value?.responseData?.toJson()}");
-
     userRole.value = getUserDetailModel.value?.responseData?.role;
     userRole.refresh();
     userOrganizationNameNameController.text = getUserDetailModel.value?.responseData?.organizationName ?? "";

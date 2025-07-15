@@ -9,11 +9,11 @@ import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
+import '../../../core/common/logger.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../login/model/login_model.dart';
 import '../../patient_info/model/check_doctor_pin_expired_model.dart';
-import '../../patient_info/model/get_doctor_list_by_role_model.dart';
 import '../../patient_info/repository/patient_info_repository.dart';
 
 class SignFinalizeAuthenticateViewController extends GetxController {
@@ -70,7 +70,9 @@ class SignFinalizeAuthenticateViewController extends GetxController {
   Future<void> checkDoctorPIN(String doctorId) async {
     try {
       checkPinResponse.value = await _patientInfoRepository.checkDoctorPIN(doctorId);
-    } catch (e) {}
+    } catch (e) {
+      customPrint(e);
+    }
   }
 
   Future<void> changeStatus() async {

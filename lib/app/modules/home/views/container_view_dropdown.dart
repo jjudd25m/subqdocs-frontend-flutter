@@ -20,7 +20,7 @@ class _ContainerDropdownViewState extends State<ContainerDropdownViewPopUp> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
+      child: SizedBox(
         height: 20,
         // decoration: BoxDecoration(color: AppColors.white, border: Border.all(width: 1, color: AppColors.textfieldBorder), borderRadius: BorderRadius.circular(6)),
         child: Row(

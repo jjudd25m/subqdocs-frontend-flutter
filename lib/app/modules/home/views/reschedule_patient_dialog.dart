@@ -86,7 +86,7 @@ class _ReschedulePatientDialogState extends State<ReschedulePatientDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
+              SizedBox(
                 width: 360,
                 child: Padding(
                   padding: const EdgeInsets.all(16),

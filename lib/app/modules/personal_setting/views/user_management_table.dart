@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:subqdocs/app/modules/personal_setting/views/personal_setting_view.dart';
 
 import '../../../../utils/app_colors.dart';

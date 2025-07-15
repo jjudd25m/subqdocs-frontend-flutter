@@ -48,12 +48,9 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
       }
     });
     return BaseScreen(
-      // onPopCallBack: () {
-      //   controller.forceSyncTimer?.cancel();
-      // },
       onItemSelected: (index) async {
         if (index == 0) {
-          final result = await Get.toNamed(Routes.ADD_PATIENT);
+          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
           _key.currentState!.closeDrawer();
         } else if (index == 1) {
@@ -73,7 +70,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
       body: PopScope(
         canPop: true, // Set to false if you want to prevent the swipe
         onPopInvokedWithResult: (didPop, result) {
-          print("onPopInvokedWithResult"); // Explicitly nullify
           if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PERSONAL_SETTING) {
             controller.globalController.popRoute();
           }
@@ -213,7 +209,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                           const SizedBox(height: 20),
                                                           Padding(
                                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                            child: Container(
+                                                            child: SizedBox(
                                                               width: double.infinity,
                                                               // Takes all available width
                                                               child: Row(
@@ -525,8 +521,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                               children: [
                                                                 Expanded(child: CommonPatientData(label: "Street Name", data: controller.getOrganizationDetailModel.value?.responseData?.streetName ?? "-")),
-                                                                // Expanded(child: CommonPatientData(label: "Address 1", data: controller.getOrganizationDetailModel.value?.responseData?.address1 ?? "-")),
-                                                                // Expanded(child: CommonPatientData(label: "Address 2", data: controller.getOrganizationDetailModel.value?.responseData?.address2 ?? "-")),
                                                                 Expanded(child: CommonPatientData(label: "City", data: controller.getOrganizationDetailModel.value?.responseData?.city ?? "-")),
                                                                 const Expanded(child: SizedBox()),
                                                                 const Expanded(child: SizedBox()),
@@ -548,7 +542,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                             ),
                                                           ),
                                                           const SizedBox(height: 20),
-                                                          // if (controller.getOrganizationDetailModel.value?.responseData?.has_ema_configs ?? false) ...[
                                                           Padding(
                                                             padding: const EdgeInsets.symmetric(horizontal: 20),
                                                             child: Row(
@@ -584,24 +577,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                         context: context,
                                                                         barrierDismissible: true, // Allows dismissing the dialog by tapping outside
                                                                         builder: (BuildContext context) {
-                                                                          return IntegrateEmaDialog(
-                                                                            receiveParam: (param) async {
-                                                                              // controller.saveEmaConfig(param);
-
-                                                                              // WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                              //   Navigator.of(context).pop();
-                                                                              // });
-                                                                              //
-                                                                              // // Navigator.of(context).pop(); // Close the dialog
-                                                                              //
-                                                                              // if (response) {
-                                                                              //   final model = controller.globalController.getEMAOrganizationDetailModel.value?.responseData;
-                                                                              //   if (model?.has_ema_configs == true && model?.appointmentType == null) {
-                                                                              //     showAppointmentTypeDialog(context);
-                                                                              //   }
-                                                                              // }
-                                                                            },
-                                                                          );
+                                                                          return IntegrateEmaDialog(receiveParam: (param) async {});
                                                                         },
                                                                       );
                                                                     },
@@ -630,19 +606,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                 if (param) {
                                                                                   showAppointmentTypeDialog(ctx);
                                                                                 }
-
-                                                                                // bool response = await controller.saveEmaConfig(param);
-
-                                                                                // Navigator.of(context).pop();
-
-                                                                                // Navigator.of(context).pop(); // Close the dialog
-
-                                                                                // if (response) {
-                                                                                //   final model = controller.globalController.getEMAOrganizationDetailModel.value?.responseData;
-                                                                                //   if (model?.has_ema_configs == true && model?.appointmentType == null) {
-                                                                                //     showAppointmentTypeDialog(context);
-                                                                                //   }
-                                                                                // }
                                                                               },
                                                                             );
                                                                           },
@@ -682,7 +645,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             // controller.selectedAppointmentTypeValue.value,
 
                                                                             if (controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label != null) {
-                                                                              print("-------fbdesfjudgsf");
                                                                               controller.updateOrganization({
                                                                                 "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
                                                                                 "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
@@ -772,7 +734,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                   ),
                                                                 ),
                                                                 const SizedBox(width: 10),
-                                                                Container(
+                                                                SizedBox(
                                                                   width: 140,
                                                                   child: CustomButton(
                                                                     hight: 40,
@@ -963,7 +925,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
               },
             );
           },
-          child: SvgPicture.asset(ImagePath.user_trash, height: 25, width: 25),
+          child: controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id != controller.loginData.value?.responseData?.user?.id ? SvgPicture.asset(ImagePath.user_trash, height: 25, width: 25) : const SizedBox.shrink(),
         )
         : colIndex == 3
         ? IgnorePointer(
@@ -1187,143 +1149,6 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
     );
   }
 }
-// class PersonalSettingView extends GetView<PersonalSettingController> {
-//   final GlobalKey<ScaffoldState> _key = GlobalKey();
-//
-//   PersonalSettingView({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     _handleRouteInit();
-//
-//     return BaseScreen(onItemSelected: _handleDrawerItemSelected, body: _buildMainContent(), globalKey: _key);
-//   }
-//
-//   void _handleRouteInit() {
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       if (controller.globalController.breadcrumbHistory.last != controller.globalController.breadcrumbs[Routes.PERSONAL_SETTING]) {
-//         controller.globalController.addRouteInit(Routes.PERSONAL_SETTING);
-//       }
-//     });
-//   }
-//
-//   Future<void> _handleDrawerItemSelected(int index) async {
-//     _key.currentState?.closeDrawer();
-//     switch (index) {
-//       case 0:
-//         await Get.toNamed(Routes.ADD_PATIENT);
-//         break;
-//       case 1:
-//         Get.offAllNamed(Routes.HOME, arguments: {"tabIndex": 1});
-//         break;
-//       case 2:
-//         Get.toNamed(Routes.HOME, arguments: {"tabIndex": 2});
-//         break;
-//       case 3:
-//         Get.toNamed(Routes.HOME, arguments: {"tabIndex": 0});
-//         break;
-//     }
-//   }
-//
-//   Widget _buildMainContent() {
-//     return PopScope(
-//       canPop: true,
-//       onPopInvokedWithResult: (didPop, result) {
-//         if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PERSONAL_SETTING) {
-//           controller.globalController.popRoute();
-//         }
-//       },
-//       child: GestureDetector(
-//         onTap: removeFocus,
-//         child: SafeArea(
-//           child: Container(
-//             color: AppColors.ScreenBackGround,
-//             child: Obx(() {
-//               return Column(children: [CustomAppBar(drawerkey: _key), Expanded(child: _buildContentBody())]);
-//             }),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildContentBody() {
-//     return Container(
-//       width: double.infinity,
-//       color: AppColors.ScreenBackGround,
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Expanded(child: Padding(padding: const EdgeInsets.all(15), child: Container(width: double.infinity, decoration: const BoxDecoration(color: Colors.transparent), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const SizedBox(height: 10), _buildTabSelector(), const SizedBox(height: 20), Expanded(child: _buildSelectedTabContent())])))),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildTabSelector() {
-//     return Container(
-//       width: double.infinity,
-//       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.backgroundWhite),
-//       child: Obx(() {
-//         return Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-//           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
-//           height: 70,
-//           child: SingleChildScrollView(
-//             physics: const BouncingScrollPhysics(),
-//             scrollDirection: Axis.horizontal,
-//             child: Row(
-//               children: [
-//                 _buildTabButton(text: "Personal Settings", index: 0),
-//                 if (controller.getUserDetailModel.value?.responseData?.isAdmin ?? false) _buildTabButton(text: "Organization Management", index: 1),
-//                 if (controller.getUserDetailModel.value?.responseData?.isAdmin ?? false)
-//                   _buildTabButton(
-//                     text: "User Management",
-//                     index: 2,
-//                     onPressed: () {
-//                       controller.resetUserManagementFilters();
-//                     },
-//                   ),
-//               ],
-//             ),
-//           ),
-//         );
-//       }),
-//     );
-//   }
-//
-//   Widget _buildTabButton({required String text, required int index, VoidCallback? onPressed}) {
-//     final isSelected = controller.tabIndex.value == index;
-//     return IntrinsicWidth(
-//       child: CustomAnimatedButton(
-//         onPressed: onPressed ?? () => controller.tabIndex.value = index,
-//         text: text,
-//         isOutline: true,
-//         paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-//         fontSize: 14,
-//         enabledTextColor: isSelected ? AppColors.backgroundPurple : AppColors.textGrey,
-//         enabledColor: isSelected ? AppColors.buttonPurpleLight : AppColors.clear,
-//         outLineEnabledColor: AppColors.textGrey,
-//         outlineColor: isSelected ? AppColors.backgroundPurple : AppColors.clear,
-//       ),
-//     );
-//   }
-//
-//   Widget _buildSelectedTabContent() {
-//     return Obx(() {
-//       switch (controller.tabIndex.value) {
-//         case 0:
-//           return PersonalInfoTab(controller: controller);
-//         case 1:
-//           return OrganizationManagementTab(controller: controller);
-//         case 2:
-//           return UserManagementTab(controller: controller);
-//         default:
-//           return const SizedBox();
-//       }
-//     });
-//   }
-// }
 
 void showEmailDialog(int userId, BuildContext context, PersonalSettingController controller) {
   final emailController = TextEditingController();

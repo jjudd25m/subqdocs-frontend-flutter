@@ -34,9 +34,12 @@ class CustomDrawerMobileController extends GetxController {
   void increment() => count.value++;
 
   void setSelectedIndexByTheScreen() {
-    drawerItemModelList.forEach((element) {
+    for (final element in drawerItemModelList) {
       element.isSelected = false;
-    });
+    }
+    // drawerItemModelList.forEach((element) {
+    //   element.isSelected = false;
+    // });
 
     if (Get.currentRoute == Routes.HOME_VIEW_MOBILE) {
       drawerItemModelList[globalController.tabIndex.value].isSelected = true;
@@ -52,9 +55,13 @@ class CustomDrawerMobileController extends GetxController {
   void changeSelected(int index) {
     customPrint(" selected index is the  $index");
 
-    drawerItemModelList.forEach((element) {
+    for (final element in drawerItemModelList) {
       element.isSelected = false;
-    });
+    }
+
+    // drawerItemModelList.forEach((element) {
+    //   element.isSelected = false;
+    // });
 
     drawerItemModelList[index].isSelected = true;
     drawerItemModelList.refresh();
