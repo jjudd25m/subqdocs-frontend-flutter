@@ -27,7 +27,6 @@ import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/repository/edit_patient_details_repository.dart';
 import '../../home/repository/home_repository.dart';
 import '../../login/model/login_model.dart';
-
 // import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
@@ -145,13 +144,14 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       customPrint("patient data is :- ${patientData.toJson()}");
 
       if (patientData.value?.responseData?.doctorId != null) {
-        doctorValue.value = globalController.getDoctorNameById(patientData.value?.responseData?.doctorId ?? -1) ?? "";
-
+        doctorValue.value = patientData.value?.responseData?.doctorName ?? "";
+        print("doctor val- ${doctorValue.value}");
         selectedDoctorValueModel.value = SelectedDoctorModel(id: patientData.value?.responseData?.doctorId, name: doctorValue.value);
       }
 
       if (patientData.value?.responseData?.medicalAssistantId != null) {
         medicationValue.value = globalController.getMedicalNameById(patientData.value?.responseData?.medicalAssistantId ?? -1) ?? "N/A";
+        medicationValue.value = patientData.value?.responseData?.medicalAssistantName ?? "";
       }
 
       if (patientData.value?.responseData?.visitStatus == "Finalized") {

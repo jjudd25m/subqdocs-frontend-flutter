@@ -570,22 +570,22 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                                           ],
                                                         ),
                                                       ),
-                                                      PopupMenuItem(
-                                                        // value: "",
-                                                        padding: EdgeInsets.zero,
-                                                        onTap: () async {
-                                                          // controller.captureProfileImage();
-
-                                                          globalController.pickFiles(context);
-                                                        },
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
-                                                            Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), const SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))])),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                      // PopupMenuItem(
+                                                      //   // value: "",
+                                                      //   padding: EdgeInsets.zero,
+                                                      //   onTap: () async {
+                                                      //     // controller.captureProfileImage();
+                                                      //
+                                                      //     globalController.pickFiles(context);
+                                                      //   },
+                                                      //   child: Column(
+                                                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                                                      //     children: [
+                                                      //       Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                      //       Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), const SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))])),
+                                                      //     ],
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                 child: Container(
                                                   height: 40,

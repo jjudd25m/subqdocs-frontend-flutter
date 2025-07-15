@@ -214,7 +214,7 @@ class HomeController extends GetxController {
     Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
     print("device info is:- $deviceInfo");
 
-    await getLatestBuild();
+    // await getLatestBuild();
     customPrint("home controller called");
 
     globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');

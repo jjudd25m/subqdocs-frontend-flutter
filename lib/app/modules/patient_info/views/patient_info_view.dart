@@ -411,7 +411,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
               }
             } else {
               if (controller.patientData.value?.responseData?.thirdPartyId != null) {
-                CustomToastification().showToast("You don't have permission to finalize this visit!", type: ToastificationType.error);
+                showDoctorToDoctorSignFinalizeAutheticateViewDialog();
+                // CustomToastification().showToast("You don't have permission to finalize this visit!", type: ToastificationType.error);
               } else {
                 showDoctorToDoctorSignFinalizeAutheticateViewDialog();
               }
@@ -443,69 +444,74 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   // MARK: - Main Build Method
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      onPopCallBack: () {
-        controller.closeDoctorPopOverController();
-        if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
-          controller.globalController.popRoute();
-        }
-      },
-      onDrawerChanged: (status) {
-        if (status) {
-          controller.closeAllProcedureDiagnosisPopover();
-        }
-      },
-      resizeToAvoidBottomInset: true,
-      onItemSelected: (index) async {
-        await _handleDrawerItemSelection(index);
-      },
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            controller.doctorFocusNode.unfocus();
-            controller.closeAllProcedureDiagnosisPopover();
-            controller.resetImpressionAndPlanList();
-
-            print("doctor name:- ${controller.doctorValue.value}");
-            print("gesture selectedDoctorValueModel name:- ${controller.selectedDoctorValueModel.value?.name}");
-
-            // controller.selectedDoctorValueModel.value?.name = controller.doctorValue.value;
-            // controller.selectedDoctorValueModel.refresh();
-            // controller.doctorValue.refresh();
+    return Stack(
+      children: [
+        BaseScreen(
+          onPopCallBack: () {
+            controller.closeDoctorPopOverController();
+            if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
+              controller.globalController.popRoute();
+            }
           },
-          child: Obx(() {
-            return Column(
-              children: [
-                if (!controller.isKeyboardVisible.value) CustomAppBar(drawerkey: _scaffoldKey),
-                Expanded(
-                  child: Container(
-                    color: AppColors.ScreenBackGround1,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: RefreshIndicator(
-                      onRefresh: controller.onRefresh,
-                      child: SingleChildScrollView(
-                        controller: controller.scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10),
-                            _buildBreadcrumb(),
-                            const SizedBox(height: 10),
-                            Column(children: [_buildHeaderTitle(), const SizedBox(height: 15.0), _buildPatientHeader(), const SizedBox(height: 10), _buildTabNavigation(), const SizedBox(height: 10), _buildContentContainer(), const SizedBox(height: 20)]),
-                          ],
+          onDrawerChanged: (status) {
+            if (status) {
+              controller.closeAllProcedureDiagnosisPopover();
+            }
+          },
+          resizeToAvoidBottomInset: true,
+          onItemSelected: (index) async {
+            await _handleDrawerItemSelection(index);
+          },
+          body: SafeArea(
+            child: GestureDetector(
+              onTap: () {
+                controller.doctorFocusNode.unfocus();
+                controller.closeAllProcedureDiagnosisPopover();
+                controller.resetImpressionAndPlanList();
+
+                print("doctor name:- ${controller.doctorValue.value}");
+                print("gesture selectedDoctorValueModel name:- ${controller.selectedDoctorValueModel.value?.name}");
+
+                // controller.selectedDoctorValueModel.value?.name = controller.doctorValue.value;
+                // controller.selectedDoctorValueModel.refresh();
+                // controller.doctorValue.refresh();
+              },
+              child: Obx(() {
+                return Column(
+                  children: [
+                    if (!controller.isKeyboardVisible.value) CustomAppBar(drawerkey: _scaffoldKey),
+                    Expanded(
+                      child: Container(
+                        color: AppColors.ScreenBackGround1,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: RefreshIndicator(
+                          onRefresh: controller.onRefresh,
+                          child: SingleChildScrollView(
+                            controller: controller.scrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                _buildBreadcrumb(),
+                                const SizedBox(height: 10),
+                                Column(children: [_buildHeaderTitle(), const SizedBox(height: 15.0), _buildPatientHeader(), const SizedBox(height: 10), _buildTabNavigation(), const SizedBox(height: 10), _buildContentContainer(), const SizedBox(height: 20)]),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                _buildFooter(),
-              ],
-            );
-          }),
+                    _buildFooter(),
+                  ],
+                );
+              }),
+            ),
+          ),
+          globalKey: _scaffoldKey,
         ),
-      ),
-      globalKey: _scaffoldKey,
+        // const ChatBotWidget(),
+      ],
     );
   }
 

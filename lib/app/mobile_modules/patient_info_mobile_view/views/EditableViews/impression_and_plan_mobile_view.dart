@@ -87,7 +87,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.impressionAndPlanListFullNote.insert(index + 1, ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null));
+                                    controller.impressionAndPlanListFullNote.insert(index + 1, ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null, attachments: []));
                                     controller.impressionAndPlanListFullNote.refresh();
                                     // controller.addImpressionPlanItems(index);
                                   },
@@ -96,9 +96,26 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.impressionAndPlanListFullNote.removeAt(index);
-                                    controller.impressionAndPlanListFullNote.refresh();
-                                    controller.updateImpressionAndPlanFullNote();
+                                    showDialog(
+                                      context: Get.context!,
+                                      builder:
+                                          (context) => AlertDialog(
+                                            title: const Text("Alert"),
+                                            content: const Text("Are you sure you want to delete this Impression and Plan?"),
+                                            actions: [
+                                              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
+                                              TextButton(
+                                                onPressed: () {
+                                                  controller.impressionAndPlanListFullNote.removeAt(index);
+                                                  controller.impressionAndPlanListFullNote.refresh();
+                                                  controller.updateImpressionAndPlanFullNote();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Delete", style: TextStyle(color: Colors.red)),
+                                              ),
+                                            ],
+                                          ),
+                                    );
                                   },
                                   child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
                                 ),
@@ -343,6 +360,16 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                   runSpacing: 8,
                                                   children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
                                                     return LongPressDraggable<Map<String, dynamic>>(
+                                                      hitTestBehavior: HitTestBehavior.translucent,
+                                                      onDraggableCanceled: (velocity, offset) {
+                                                        controller.impressionAndPlanListFullNote.refresh();
+                                                        controller.generalAttachments.refresh();
+                                                        controller.updateImpressionAndPlanFullNote();
+                                                      },
+                                                      onDragEnd: (details) {
+                                                        controller.impressionAndPlanListFullNote.refresh();
+                                                        controller.generalAttachments.refresh();
+                                                      },
                                                       data: {'attachment': model.attachments?[imageIndex], 'fromListIndex': index, 'fromImageIndex': imageIndex, 'isGeneral': false},
                                                       feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false, dragging: true)),
                                                       childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false)),
@@ -442,6 +469,16 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                 runSpacing: 8,
                                                 children: List.generate(controller.generalAttachments.length, (imageIndex) {
                                                   return LongPressDraggable<Map<String, dynamic>>(
+                                                    hitTestBehavior: HitTestBehavior.translucent,
+                                                    onDraggableCanceled: (velocity, offset) {
+                                                      controller.impressionAndPlanListFullNote.refresh();
+                                                      controller.generalAttachments.refresh();
+                                                      controller.updateImpressionAndPlanFullNote();
+                                                    },
+                                                    onDragEnd: (details) {
+                                                      controller.impressionAndPlanListFullNote.refresh();
+                                                      controller.generalAttachments.refresh();
+                                                    },
                                                     data: {
                                                       'attachment': controller.generalAttachments[imageIndex],
                                                       'fromListIndex': index,
@@ -522,82 +559,71 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
   }
 
   Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, bool isGeneral, {bool dragging = false}) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Container(
-        // key: ValueKey(attachment.id),
-        width: double.infinity,
-        height: 200,
-        decoration: BoxDecoration(color: dragging ? AppColors.tableItem : Colors.grey[300], borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top row with filename and delete button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InlineEditingDropdown(
-                      focusNode: attachment.focusNode,
-                      textStyle: AppFonts.medium(16, AppColors.textPurple),
-                      initialText: "${attachment.fileName?.split(".").first}",
-                      toggle: () {},
-                      onSubmitted: (_) {},
-                      onChanged: (title, isApiCall) {
-                        attachment.fileName = title;
-                        if (isApiCall) {
-                          controller.updateImpressionAndPlanFullNoteAttachmentName(title, attachment.id);
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      if (isGeneral) {
-                        controller.generalAttachments.removeAt(imageIndex);
-                      } else {
-                        controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+    const double cardSize = 160.0; // Fixed card and image size as in impression_and_plan.dart
+    return Container(
+      width: (context.width / 2) - 50,
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.10), blurRadius: 16, offset: const Offset(0, 6))], border: Border.all(color: Colors.grey.shade200, width: 1)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, top: 3.0, bottom: 3.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InlineEditingDropdown(
+                    focusNode: attachment.focusNode,
+                    textStyle: AppFonts.medium(16, AppColors.textPurple),
+                    initialText: "${attachment.fileName?.split(".").first}",
+                    toggle: () {},
+                    maxLines: 1,
+                    onSubmitted: (_) {},
+                    onChanged: (title, isApiCall) {
+                      attachment.fileName = title;
+                      if (isApiCall) {
+                        controller.updateImpressionAndPlanFullNoteAttachmentName(title, attachment.id);
                       }
-
-                      controller.impressionAndPlanListFullNote.refresh();
-                      controller.generalAttachments.refresh();
-
-                      controller.impressionAndPlanListFullNote.refresh();
-                      controller.isFullNoteAttachment.value = false;
-                      controller.updateImpressionAndPlanFullNote();
                     },
-                    child: SvgPicture.asset(ImagePath.delete_black),
-                  ),
-                ],
-              ),
-            ),
-
-            // Image section with proper constraints
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: CachedNetworkImage(
-                      width: double.infinity,
-                      // Take all available width
-                      height: double.infinity,
-                      // Take all available height
-                      imageUrl: attachment.filePath ?? "",
-                      errorWidget: (context, url, error) {
-                        return Image.asset(ImagePath.file_placeHolder, width: double.infinity, height: double.infinity, fit: BoxFit.cover);
-                      },
-                      fit: BoxFit.cover,
-                    ),
                   ),
                 ),
+                const SizedBox(width: 5),
+                GestureDetector(
+                  onTap: () {
+                    if (isGeneral) {
+                      controller.generalAttachments.removeAt(imageIndex);
+                    } else {
+                      controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                    }
+                    controller.impressionAndPlanListFullNote.refresh();
+                    controller.generalAttachments.refresh();
+                    controller.isFullNoteAttachment.value = false;
+                    controller.updateImpressionAndPlanFullNote();
+                  },
+                  child: Container(decoration: BoxDecoration(color: AppColors.white.withValues(alpha: 0.0)), child: SvgPicture.asset(ImagePath.delete_black, height: 40, width: 50)),
+                ),
+              ],
+            ),
+          ),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+            child: Container(
+              width: (context.width / 2) - 50,
+              height: cardSize - 20,
+              color: Colors.grey[100],
+              child: CachedNetworkImage(
+                width: cardSize,
+                height: cardSize - 20,
+                imageUrl: attachment.filePath ?? "",
+                errorWidget: (context, url, error) {
+                  return Image.asset(ImagePath.file_placeHolder, width: cardSize, height: cardSize, fit: BoxFit.cover);
+                },
+                fit: BoxFit.cover,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
