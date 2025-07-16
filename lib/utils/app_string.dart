@@ -41,4 +41,7 @@ class AppString {
   static const String scheduleVisitsList = "scheduleVisitsList";
   static const String pastPatientVisitsList = "pastPatientVisitsList";
   static const String confimPassword = "Confirm Password";
+
+  static const String warning = "Warning: ";
+  static const String warningMsg = "OpenAI is currently degraded, note generation may be affected.";
 }

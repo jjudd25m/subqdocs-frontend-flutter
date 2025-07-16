@@ -131,6 +131,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                               if (!found) {
                                 // Pass correct arguments for HOME and VISIT_MAIN
                                 if (targetRoute == Routes.HOME) {
+                                  controller.globalController.breadcrumbHistory.clear();
                                   Get.offAllNamed(Routes.HOME);
                                   Get.find<HomeController>();
                                 }

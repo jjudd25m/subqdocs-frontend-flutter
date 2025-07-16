@@ -15,6 +15,7 @@ import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:path/path.dart' as p;
 import 'package:siri_wave/siri_wave.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:toastification/toastification.dart';
@@ -99,6 +100,8 @@ class GlobalController extends GetxController {
   RxBool isStartRecording = false.obs;
   RxBool isExpandRecording = true.obs;
   RecorderService recorderService = RecorderService();
+
+  OpenAiStatus openAiStatus = OpenAiStatus();
 
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   final HomeRepository _homeRepository = HomeRepository();
@@ -248,6 +251,15 @@ class GlobalController extends GetxController {
       }
     } catch (e) {
       customPrint("$e");
+    }
+  }
+
+  Future<OpenAiStatus> getOpenAiStatus() async{
+    try{
+      return await _homeRepository.getOpenAiStatus();
+    }catch(e){
+      customPrint("error message: $e");
+      return OpenAiStatus();
     }
   }
 
@@ -704,8 +716,11 @@ class GlobalController extends GetxController {
 
   void addRouteInit(String route) {
     closeFormState = 1;
+    final breadCrumb = breadcrumbs[route] ?? route;
+    if(!breadcrumbHistory.contains(breadCrumb)){
+      breadcrumbHistory.add(breadcrumbs[route] ?? route);
+    }
 
-    breadcrumbHistory.add(breadcrumbs[route] ?? route);
   }
 
   String getKeyByValue(String value) {

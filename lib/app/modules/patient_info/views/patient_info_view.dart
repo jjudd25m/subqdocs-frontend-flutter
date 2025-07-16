@@ -8,6 +8,7 @@ import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/app/modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
+import 'package:subqdocs/utils/app_string.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
@@ -26,6 +27,7 @@ import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/controllers/doctor_to_doctor_sign_finalize_authenticate_view_controller.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/views/doctor_to_doctor_sign_finalize_authenticate_view_view.dart';
+import '../../home/controllers/home_controller.dart';
 import '../../sign_finalize_authenticate_view/views/sign_finalize_authenticate_view_view.dart';
 import '../controllers/patient_info_controller.dart';
 import 'confirm_finalize_dialog.dart';
@@ -103,17 +105,16 @@ class _PatientInfoViewState extends State<PatientInfoView> {
         //   Get.offAllNamed(targetRoute ?? Routes.HOME);
         // }
         customPrint("message:PatientView");
-        Get.until((route) => Get.currentRoute == Routes.VISIT_MAIN);
-        controller.globalController.popRoute();
-        // controller.globalController.breadcrumbHistory.clear();
-        Get.offAllNamed(
-          Routes.VISIT_MAIN,
-          arguments: {
-            "visitId": controller.visitId,
-            "patientId": controller.patientId,
-            "unique_tag": DateTime.now().toString(),
-          },
-        );
+        controller.isNavigatingFromBreadcrumb.value = true;
+        final globalController = controller.globalController;
+        final breadcrumbs = globalController.breadcrumbHistory;
+        if (breadcrumbs.isNotEmpty) {
+          globalController.popRoute();
+        }
+        if (breadcrumbs.isNotEmpty) {
+          final targetBreadcrumb = breadcrumbs.last;
+          controller.breadCrumbNavigation(targetBreadcrumb);
+        }
       },
       child: Container(color: AppColors.white, padding: const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
     );
@@ -456,32 +457,19 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   Widget build(BuildContext context) {
     return BaseScreen(
       onPopCallBack: () {
+        if (controller.isNavigatingFromBreadcrumb.value) {
+          controller.isNavigatingFromBreadcrumb.value = false;
+          return;
+        }
         controller.closeDoctorPopOverController();
-        // final globalController = controller.globalController;
-        // final breadcrumbs = globalController.breadcrumbHistory;
-        // final lastBreadcrumb = breadcrumbs.isNotEmpty ? breadcrumbs.last : null;
-        // final targetRoute = lastBreadcrumb != null ? globalController.getKeyByValue(lastBreadcrumb) : null;
-        //
-        // // If going to HOME, trigger refresh
-        // if (targetRoute == Routes.VISIT_MAIN) {
-        //   // Optionally, handle VISIT_MAIN navigation/refresh here
-        //   if (Get.currentRoute != Routes.VISIT_MAIN) {
-        //     Get.offAllNamed(
-        //       Routes.VISIT_MAIN,
-        //       arguments: {
-        //         "visitId": controller.visitId,
-        //         "patientId": controller.patientId,
-        //         "unique_tag": DateTime.now().toString(),
-        //       },
-        //     );
-        //     controller.globalController.popRoute();
-        //   }
-        // }
-        // else{
-        //   Get.offAllNamed(targetRoute ?? Routes.HOME);
-        // }
-        if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
-          controller.globalController.popRoute();
+        final globalController = controller.globalController;
+        final breadcrumbs = globalController.breadcrumbHistory;
+        if (breadcrumbs.isNotEmpty) {
+          globalController.popRoute();
+        }
+        if (breadcrumbs.isNotEmpty) {
+          final targetBreadcrumb = breadcrumbs.last;
+          controller.breadCrumbNavigation(targetBreadcrumb);
         }
       },
       onDrawerChanged: (status) {
@@ -520,7 +508,28 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                             const SizedBox(height: 10),
                             _buildBreadcrumb(),
                             const SizedBox(height: 10),
-                            Column(children: [_buildHeaderTitle(), const SizedBox(height: 15.0), _buildPatientHeader(), const SizedBox(height: 10), _buildTabNavigation(), const SizedBox(height: 10), _buildContentContainer(), const SizedBox(height: 20)]),
+                            Column(
+                                children: [
+                                  _buildHeaderTitle(),
+                                  const SizedBox(height: 15.0),
+                                  _buildPatientHeader(),
+                                  const SizedBox(height: 10),
+                                  _buildTabNavigation(),
+                                  const SizedBox(height: 10),
+                                  if(controller.patientData.value?.responseData?.visitStatus == null)...[
+                                    const SizedBox(),
+                                  ]else ...[
+                                    if ((controller.openAiStatus.value.responseData?.status?.indicator != "none") && (controller.patientData.value?.responseData?.visitStatus != "Pending" &&
+                                        controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "finalized" ||
+                                        controller.patientData.value?.responseData?.visitStatus != "Cancelled"))...[
+                                      RichText(text: TextSpan(text: AppString.warning, style: AppFonts.semiBold(16, AppColors.warnTextMsg), children: [
+                                        TextSpan(text: AppString.warningMsg, style: AppFonts.medium(16, AppColors.warnTextMsg))
+                                      ])),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ],
+                                  _buildContentContainer(),
+                                  const SizedBox(height: 20)]),
                           ],
                         ),
                       ),
@@ -541,36 +550,9 @@ class _PatientInfoViewState extends State<PatientInfoView> {
     return BreadcrumbWidget(
       breadcrumbHistory: controller.globalController.breadcrumbHistory.toList(),
       onBack: (breadcrumb) {
+        controller.isNavigatingFromBreadcrumb.value = true;
         controller.globalController.popUntilRoute(breadcrumb);
-        final targetRoute = controller.globalController.getKeyByValue(breadcrumb);
-
-        if (Get.currentRoute == targetRoute) return;
-
-        bool found = false;
-        Get.until((route) {
-          if (route.settings.name == targetRoute) {
-            found = true;
-          }
-          return found;
-        });
-
-        if (!found) {
-          // Pass correct arguments for VISIT_MAIN and PATIENT_INFO
-          if (targetRoute == Routes.VISIT_MAIN) {
-            Get.offAllNamed(
-              Routes.VISIT_MAIN,
-              arguments: {
-                "visitId": controller.visitId,
-                "patientId": controller.patientId,
-                "unique_tag": DateTime.now().toString(),
-              },
-            );
-
-            controller.globalController.popRoute();
-          } else {
-            Get.offAllNamed(targetRoute);
-          }
-        }
+        controller.breadCrumbNavigation(breadcrumb);
       },
     );
   }
