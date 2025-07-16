@@ -680,6 +680,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       }
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      globalController.addRouteInit(Routes.VISIT_MAIN);
       globalController.addRouteInit(Routes.PATIENT_INFO);
     });
   }

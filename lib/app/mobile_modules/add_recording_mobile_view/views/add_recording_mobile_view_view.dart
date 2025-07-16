@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -287,7 +288,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           controller.captureImage(context);
                         },
                         child: Center(

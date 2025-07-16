@@ -32,6 +32,7 @@ import '../../models/ChangeModel.dart';
 import '../../models/MedicalDoctorModel.dart';
 import '../../models/ScheduleModel.dart';
 import '../../models/SelectedDoctorMedicationModel.dart';
+import '../../models/audio_file.dart';
 import '../../models/audio_wave.dart';
 import '../../models/media_listing_model.dart';
 import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
@@ -72,7 +73,7 @@ class GlobalController extends GetxController {
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = false;
+  bool isProd = true;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 
@@ -82,7 +83,7 @@ class GlobalController extends GetxController {
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
   RxInt tabIndex = RxInt(1);
-  Map<String, String> breadcrumbs = {Routes.HOME: 'Patients & Visits', Routes.ADD_PATIENT: 'Add New', Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information', Routes.VISIT_MAIN: 'Medical Record', Routes.PATIENT_INFO: 'Visit Documents', Routes.PATIENT_PROFILE: 'Patient Profile', Routes.ALL_ATTACHMENT: 'Attachments', Routes.SCHEDULE_PATIENT: 'Schedule Visit', Routes.PERSONAL_SETTING: 'Settings'};
+  Map<String, String> breadcrumbs = {Routes.HOME: 'Patients & Visits', Routes.ADD_PATIENT: 'Add New', Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information', Routes.VISIT_MAIN: 'Medical Record', Routes.PATIENT_INFO: 'Visit Documents', Routes.PATIENT_PROFILE: 'Patient Profile', Routes.ALL_ATTACHMENT: 'Attachments', Routes.SCHEDULE_PATIENT: 'Schedule Visit', Routes.PERSONAL_SETTING: 'Personal Settings'};
 
   int closeFormState = 0;
 
@@ -348,23 +349,13 @@ class GlobalController extends GetxController {
 
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      // AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId.value,audioData: audioBytes);
 
+      // await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-
-      // Show a message or update UI
-      // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
-      // isLoading.value = false;
-
-      Get.back();
-
       CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
-
-      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
-
-      for (var file in audio) {
-        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
-      }
+      Get.back();
     } else {
       customPrint("internet available");
       // isLoading.value = true;

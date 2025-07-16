@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
+import 'package:subqdocs/app/core/common/global_controller.dart';
+import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -111,11 +113,41 @@ class _VisitMainViewState extends State<VisitMainView> {
                           BreadcrumbWidget(
                             breadcrumbHistory: controller.globalController.breadcrumbHistory,
                             onBack: (breadcrumb) {
+                              // Remove all breadcrumbs after the selected one
                               controller.globalController.popUntilRoute(breadcrumb);
-                              // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                              while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                Get.back(); // Pop the current screen
+                              final targetRoute = controller.globalController.getKeyByValue(breadcrumb);
+
+                              if (Get.currentRoute == targetRoute) return;
+
+                              bool found = false;
+                              Get.until((route) {
+                                if (route.settings.name == targetRoute) {
+                                  found = true;
+                                }
+                                return found;
+                              });
+
+                              if (!found) {
+                                // Pass correct arguments for HOME and VISIT_MAIN
+                                if (targetRoute == Routes.HOME) {
+                                  Get.offAllNamed(Routes.HOME);
+                                  Get.find<HomeController>();
+                                }
+                                else if (targetRoute == Routes.VISIT_MAIN) {
+                                  Get.offAllNamed(
+                                    Routes.VISIT_MAIN,
+                                    arguments: {
+                                      "visitId": controller.visitId.value,
+                                      "patientId": controller.patientId.value,
+                                      "unique_tag": DateTime.now().toString(),
+                                    },
+                                  );
+                                }
+                                else {
+                                  Get.offAllNamed(targetRoute);
+                                }
+                                controller.globalController.popRoute();
                               }
                             },
                           ),
@@ -139,7 +171,10 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        Get.back();
+                                        Get.until((route) => Get.currentRoute == Routes.HOME);
+                                        controller.globalController.breadcrumbHistory.clear();
+                                        Get.offAllNamed(Routes.HOME);
+                                        Get.find<HomeController>();
                                       },
                                       child: Container(color: AppColors.white, padding: const EdgeInsets.only(right: 11), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
                                     ),

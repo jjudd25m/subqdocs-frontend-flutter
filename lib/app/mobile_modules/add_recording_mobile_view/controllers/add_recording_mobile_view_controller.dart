@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,12 +25,15 @@ import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
+import '../../../data/service/database_helper.dart';
 import '../../../data/service/mobile_recorder_service.dart';
+import '../../../models/audio_file.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../modules/login/model/login_model.dart';
 import '../../../modules/visit_main/model/patient_transcript_upload_model.dart';
 import '../../../modules/visit_main/repository/visit_main_repository.dart';
 import '../../../routes/app_pages.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AddRecordingMobileViewController extends GetxController {
   //TODO: Implement AddRecordingMobileViewController
@@ -68,15 +72,23 @@ class AddRecordingMobileViewController extends GetxController {
 
     Loader().showLoadingDialogForSimpleLoader();
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
     try {
-      PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId);
-      Loader().stopLoader();
-      customPrint("audio upload response is :- ${patientTranscriptUploadModel.toJson()}");
+      if(connectivityResult.contains(ConnectivityResult.none)){
+        Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
+        AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId,audioData: audioBytes);
+        await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
 
-      Get.toNamed(Routes.PATIENT_INFO_MOBILE_VIEW, arguments: {"patientId": patientId, "visitId": visitId, "fromRecording": "1"});
+        CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+        Loader().stopLoader();
+        Get.back();
+      }else{
+        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId);
+        Loader().stopLoader();
+        customPrint("audio upload response is :-  {patientTranscriptUploadModel.toJson()}");
 
-      // Get.toNamed(Routes.GENERATE_NOTE_MOBILE_VIEW, arguments: {"patientId": patientId, "visitId": visitId});
+        Get.toNamed(Routes.PATIENT_INFO_MOBILE_VIEW, arguments: {"patientId": patientId, "visitId": visitId, "fromRecording": "1"});
+      }
     } catch (e) {
       customPrint("Audio failed error is :- $e");
       Loader().stopLoader();
@@ -86,7 +98,7 @@ class AddRecordingMobileViewController extends GetxController {
   Future<void> checkAudioRecordPermission() async {
     final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
     if (await recorderService.audioRecorder.hasPermission() && btGranted) {
-      recorderService.startRecording(Get.context!);
+      // recorderService.startRecording(Get.context!);
     } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
