@@ -360,6 +360,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                   runSpacing: 8,
                                                   children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
                                                     return LongPressDraggable<Map<String, dynamic>>(
+                                                      maxSimultaneousDrags: 1,
                                                       hitTestBehavior: HitTestBehavior.translucent,
                                                       onDraggableCanceled: (velocity, offset) {
                                                         controller.impressionAndPlanListFullNote.refresh();
@@ -390,13 +391,17 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                             model.attachments!.insert(insertIndex, draggedImage);
                                                             controller.generalAttachments.removeAt(fromImageIndex);
                                                           } else if (fromListIndex == index) {
-                                                            if (fromImageIndex < imageIndex) {
-                                                              insertIndex -= 1;
-                                                            }
-                                                            final attachments = List<Attachments?>.from(model.attachments ?? []);
-                                                            attachments.removeAt(fromImageIndex);
-                                                            attachments.insert(insertIndex, draggedImage);
-                                                            model.attachments = attachments.cast<Attachments>();
+                                                            final temp = model.attachments![imageIndex];
+                                                            model.attachments![imageIndex] = model.attachments![fromImageIndex];
+                                                            model.attachments![fromImageIndex] = temp;
+
+                                                            // if (fromImageIndex < imageIndex) {
+                                                            //   insertIndex -= 1;
+                                                            // }
+                                                            // final attachments = List<Attachments?>.from(model.attachments ?? []);
+                                                            // attachments.removeAt(fromImageIndex);
+                                                            // attachments.insert(insertIndex, draggedImage);
+                                                            // model.attachments = attachments.cast<Attachments>();
                                                           } else {
                                                             controller.impressionAndPlanListFullNote[index].attachments?.insert(insertIndex, draggedImage);
                                                             controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
@@ -469,6 +474,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                 runSpacing: 8,
                                                 children: List.generate(controller.generalAttachments.length, (imageIndex) {
                                                   return LongPressDraggable<Map<String, dynamic>>(
+                                                    maxSimultaneousDrags: 1,
                                                     hitTestBehavior: HitTestBehavior.translucent,
                                                     onDraggableCanceled: (velocity, offset) {
                                                       controller.impressionAndPlanListFullNote.refresh();

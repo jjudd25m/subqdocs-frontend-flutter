@@ -638,26 +638,36 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                       children: [
                                                                         Text("EMA Integration", style: AppFonts.regular(12, AppColors.textBlack)),
                                                                         const SizedBox(height: 6),
-                                                                        CupertinoSwitch(
-                                                                          value: controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false,
-                                                                          onChanged: (bool value) {
-                                                                            controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration = !(controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false);
-                                                                            // controller.selectedAppointmentTypeValue.value,
+                                                                        if (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false) ...[
+                                                                          Padding(
+                                                                            padding: const EdgeInsets.only(left: 5),
+                                                                            child: Container(
+                                                                              decoration: BoxDecoration(color: AppColors.greenPastVisit.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                                                                              child: Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6), child: Text("Active", maxLines: 2, overflow: TextOverflow.visible, textAlign: TextAlign.center, style: AppFonts.medium(13, AppColors.greenPastVisit))),
+                                                                            ),
+                                                                          ),
+                                                                        ] else ...[
+                                                                          CupertinoSwitch(
+                                                                            value: controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false,
+                                                                            onChanged: (bool value) {
+                                                                              controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration = !(controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false);
+                                                                              // controller.selectedAppointmentTypeValue.value,
 
-                                                                            if (controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label != null) {
-                                                                              controller.updateOrganization({
-                                                                                "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
-                                                                                "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
-                                                                              });
-                                                                            } else {
-                                                                              controller.updateOrganization({
-                                                                                "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
-                                                                                // "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
-                                                                              });
-                                                                            }
-                                                                          },
-                                                                          activeTrackColor: AppColors.textPurple,
-                                                                        ),
+                                                                              if (controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label != null) {
+                                                                                controller.updateOrganization({
+                                                                                  "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
+                                                                                  "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
+                                                                                });
+                                                                              } else {
+                                                                                controller.updateOrganization({
+                                                                                  "is_ema_integration": controller.getOrganizationDetailModel.value?.responseData?.isEmaIntegration,
+                                                                                  // "appointment_type": {"label": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.label ?? "", "value": controller.getOrganizationDetailModel.value?.responseData?.appointmentType?.value ?? ""},
+                                                                                });
+                                                                              }
+                                                                            },
+                                                                            activeTrackColor: AppColors.textPurple,
+                                                                          ),
+                                                                        ],
                                                                       ],
                                                                     ),
                                                                   ),
@@ -782,14 +792,14 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                             physics: const NeverScrollableScrollPhysics(),
                                                                             onRefresh: () async {},
                                                                             rows: _getTableRows(controller.filterGetUserOrganizationListModel.value?.responseData ?? []),
-                                                                            columnCount: 7,
+                                                                            columnCount: (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration != true) ? 7 : 6,
                                                                             cellBuilder: _buildTableCell,
                                                                             context: context,
                                                                             onRowSelected: (rowIndex, rowData) {},
                                                                             onLoadMore: () async {},
-                                                                            columnWidths: const [0.16, 0.21, 0.20, 0.12, 0.12, 0.12, 0.08],
+                                                                            columnWidths: (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration != true) ? const [0.16, 0.21, 0.20, 0.12, 0.12, 0.12, 0.08] : const [0.16, 0.21, 0.24, 0.13, 0.13, 0.14],
                                                                             headerBuilder: (context, colIndex) {
-                                                                              List<String> headers = ['First Name', 'Email Address', 'Role', 'Admin', 'Status', 'Last Login Date', 'Action'];
+                                                                              List<String> headers = (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration != true) ? ['First Name', 'Email Address', 'Role', 'Admin', 'Status', 'Last Login Date', 'Action'] : ['First Name', 'Email Address', 'Role', 'Admin', 'Status', 'Last Login Date'];
                                                                               return GestureDetector(
                                                                                 onTap: () {
                                                                                   if (colIndex != 5) {
@@ -799,21 +809,30 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                                                                 },
                                                                                 child: Container(
                                                                                   color: AppColors.backgroundWhite,
-                                                                                  height: 40,
+                                                                                  height: 50, // or more, to allow for 2 lines
                                                                                   child: Row(
                                                                                     mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        headers[colIndex],
-                                                                                        textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
-                                                                                        style: AppFonts.medium(12, AppColors.black),
-                                                                                        softWrap: true,
-                                                                                        // Allows text to wrap
-                                                                                        overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                                                                                      ),
-                                                                                    ],
+                                                                                    children: [Expanded(child: Text(headers[colIndex], maxLines: 2, textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center, style: AppFonts.medium(12, AppColors.black), softWrap: true, overflow: TextOverflow.ellipsis))],
                                                                                   ),
                                                                                 ),
+
+                                                                                // Container(
+                                                                                //   color: AppColors.backgroundWhite,
+                                                                                //   height: 40,
+                                                                                //   child: Row(
+                                                                                //     mainAxisAlignment: colIndex == 0 ? MainAxisAlignment.start : MainAxisAlignment.center,
+                                                                                //     children: [
+                                                                                //       Text(
+                                                                                //         headers[colIndex],
+                                                                                //         textAlign: colIndex == 0 ? TextAlign.start : TextAlign.center,
+                                                                                //         style: AppFonts.medium(12, AppColors.black),
+                                                                                //         softWrap: true,
+                                                                                //         // Allows text to wrap
+                                                                                //         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                                                                                //       ),
+                                                                                //     ],
+                                                                                //   ),
+                                                                                // ),
                                                                               );
                                                                             },
                                                                             isLoading: false,
@@ -918,18 +937,18 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                   title: "Are you sure want to delete user?",
                   onDelete: () {
                     Get.back();
-                    controller.deleteUserManagementMember(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].inviteId.toString() ?? "");
+                    controller.deleteUserManagementMember(controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].inviteId.toString() ?? "");
                   },
                   header: "Delete user",
                 ); // Our custom dialog
               },
             );
           },
-          child: controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id != controller.loginData.value?.responseData?.user?.id ? SvgPicture.asset(ImagePath.user_trash, height: 25, width: 25) : const SizedBox.shrink(),
+          child: (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration != true) ? SvgPicture.asset(ImagePath.user_trash, height: 25, width: 25) : const Text("-"),
         )
         : colIndex == 3
         ? IgnorePointer(
-          ignoring: (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended ?? false),
+          ignoring: (controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].suspended ?? false),
           child: SizedBox(
             height: 30,
             child: Transform.scale(
@@ -942,7 +961,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                 value: cellData == "Yes" ? true : false,
                 activeColor: AppColors.backgroundPurple,
                 onChanged: (bool value) {
-                  controller.updateRoleAndAdminControll(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "", controller.getUserOrganizationListModel.value?.responseData?[rowIndex].role ?? "", value, rowIndex);
+                  controller.updateRoleAndAdminControll(controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "", controller.getUserOrganizationListModel.value?.responseData?[rowIndex].role ?? "", value, rowIndex);
                 },
               ),
             ),
@@ -950,7 +969,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
         )
         : colIndex == 2
         ? IgnorePointer(
-          ignoring: (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended ?? false),
+          ignoring: (controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].suspended ?? false),
           child: PopupMenuButton<String>(
             offset: const Offset(0, 8),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -966,48 +985,55 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                     PopupMenuItem(
                       padding: EdgeInsets.zero,
                       onTap: () async {
-                        controller.updateRoleAndAdminControll(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "", item, controller.getUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin ?? false, rowIndex);
+                        controller.updateRoleAndAdminControll(controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].id.toString() ?? "", item, controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].isAdmin ?? false, rowIndex);
                       },
                       // value: "",
                       child: Padding(padding: const EdgeInsets.all(8.0), child: Text(item, style: AppFonts.regular(14, AppColors.textBlack))),
                     ),
                 ],
             child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.dropdownBackgroundColor,
-                border: Border.all(color: AppColors.dropdownBorderColor, width: 2),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(23.0), //                 <--- border radius here
-                ),
-              ),
+              decoration: BoxDecoration(color: AppColors.dropdownBackgroundColor, border: Border.all(color: AppColors.dropdownBorderColor, width: 2), borderRadius: const BorderRadius.all(Radius.circular(23.0))),
               width: 100,
               height: 38,
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Text(
-                    cellData,
-                    textAlign: TextAlign.start,
-                    style: AppFonts.regular(14, AppColors.textDarkGrey),
-                    softWrap: true, // Allows text to wrap
-                    overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
-                  ),
-                  const Spacer(),
-                  SvgPicture.asset(ImagePath.down_arrow, width: 20, height: 20),
-                  const SizedBox(width: 10),
-                ],
-              ),
+              child: Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: Row(children: [Expanded(child: Text(cellData, style: AppFonts.regular(14, AppColors.textDarkGrey), overflow: TextOverflow.ellipsis, maxLines: 1)), SvgPicture.asset(ImagePath.down_arrow, width: 20, height: 20)])),
             ),
+
+            // Container(
+            //   decoration: BoxDecoration(
+            //     color: AppColors.dropdownBackgroundColor,
+            //     border: Border.all(color: AppColors.dropdownBorderColor, width: 2),
+            //     borderRadius: const BorderRadius.all(
+            //       Radius.circular(23.0), //                 <--- border radius here
+            //     ),
+            //   ),
+            //   width: 100,
+            //   height: 38,
+            //   child: Row(
+            //     children: [
+            //       const SizedBox(width: 10),
+            //       Text(
+            //         cellData,
+            //         textAlign: TextAlign.start,
+            //         style: AppFonts.regular(14, AppColors.textDarkGrey),
+            //         softWrap: true, // Allows text to wrap
+            //         overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+            //       ),
+            //       const Spacer(),
+            //       SvgPicture.asset(ImagePath.down_arrow, width: 20, height: 20),
+            //       const SizedBox(width: 10),
+            //     ],
+            //   ),
+            // ),
           ),
         )
         : colIndex == 4
         ? Padding(
           padding: const EdgeInsets.only(left: 5),
           child: Container(
-            decoration: BoxDecoration(color: (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText.withValues(alpha: 0.2) : AppColors.textPurple.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
+            decoration: BoxDecoration(color: (controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText.withValues(alpha: 0.2) : AppColors.textPurple.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              child: Text((controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? "Suspended" : "Active", maxLines: 2, overflow: TextOverflow.visible, textAlign: TextAlign.center, style: AppFonts.medium(13, (controller.getUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText : AppColors.textPurple)),
+              child: Text((controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? "Email needed" : "Active", maxLines: 2, overflow: TextOverflow.visible, textAlign: TextAlign.center, style: AppFonts.medium(13, (controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].suspended == true) ? AppColors.redText : AppColors.textPurple)),
             ),
           ),
         )
@@ -1015,7 +1041,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
         ? cellData == "N/A"
             ? GestureDetector(
               onTap: () {
-                showEmailDialog(controller.getUserOrganizationListModel.value?.responseData?[rowIndex].id ?? 0, context, controller);
+                showEmailDialog(controller.filterGetUserOrganizationListModel.value?.responseData?[rowIndex].id ?? 0, context, controller);
               },
               child: Text(
                 "+ Provide Email",

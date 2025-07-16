@@ -557,7 +557,7 @@ class PersonalSettingController extends GetxController {
     try {
       getUserOrganizationListModel.value = await _personalSettingRepository.getUserByOrganization();
       filterGetUserOrganizationListModel.value = GetUserOrganizationListModel.fromJson(getUserOrganizationListModel.toJson());
-
+      // customPrint("getUserOrganizationListModel is ${getUserOrganizationListModel.value?.responseData?.first.toJson()}");
       Loader().stopLoader();
     } catch (error) {
       Loader().stopLoader();

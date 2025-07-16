@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,6 +80,11 @@ class HomeViewMobileController extends GetxController {
     Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
     print("device info is:- $deviceInfo");
     globalController.getUserDetail();
+
+    if (Platform.isIOS || Platform.isMacOS) {
+      await getLatestBuild();
+    }
+
     handelInternetConnection();
 
     scrollControllerPatientList.addListener(_onScrollPatientList);
@@ -88,7 +94,6 @@ class HomeViewMobileController extends GetxController {
     showClearButton.value = false;
 
     getOrganizationDetail();
-    // getLatestBuild();
   }
 
   @override
@@ -108,7 +113,7 @@ class HomeViewMobileController extends GetxController {
     customPrint("Latest build :- $latestBuild");
     String currentBuild = info.version;
     customPrint("Current build:- $currentBuild");
-    customPrint(isVersionGreater(latestBuild, currentBuild));
+    // customPrint(isVersionGreater(latestBuild, currentBuild));
     if (isVersionGreater(latestBuild, currentBuild)) {
       customPrint("inside update");
       showIOSForceUpdateDialog(Get.context!, latestBuildModel.responseData?.dataValues?.versionSummary ?? "");
