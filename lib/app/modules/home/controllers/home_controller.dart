@@ -20,7 +20,6 @@ import 'package:toastification/toastification.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/app_update_dialog.dart';
 import '../../../../widgets/customPermission.dart';
-import '../../../../widgets/device_info_model.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
 import '../../../core/common/logger.dart';
@@ -29,6 +28,7 @@ import '../../../data/service/database_helper.dart';
 import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalDoctorModel.dart';
+import '../../../models/audio_file.dart';
 import '../../login/model/login_model.dart';
 import '../../personal_setting/model/filter_past_visit_status.dart';
 import '../../personal_setting/repository/personal_setting_repository.dart';
@@ -211,11 +211,11 @@ class HomeController extends GetxController {
     super.onInit();
     Get.put(GlobalController());
 
-    Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
-    print("device info is:- $deviceInfo");
-
-    // await getLatestBuild();
     customPrint("home controller called");
+
+    if (Platform.isIOS || Platform.isMacOS) {
+      await getLatestBuild();
+    }
 
     globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
 
@@ -270,6 +270,15 @@ class HomeController extends GetxController {
 
     getOrganizationDetail();
     getUserDetail();
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    getScheduleVisitList();
+    getPastVisitList();
+    getPatientList();
   }
 
   @override
@@ -1281,7 +1290,8 @@ class HomeController extends GetxController {
     customPrint("Latest build :- $latestBuild");
     String currentBuild = info.version;
     customPrint("Current build:- $currentBuild");
-    customPrint(isVersionGreater(latestBuild, currentBuild));
+    // customPrint(isVersionGreater(latestBuild, currentBuild));
+
     if (isVersionGreater(latestBuild, currentBuild)) {
       customPrint("inside update");
       showIOSForceUpdateDialog(Get.context!, latestBuildModel.responseData?.dataValues?.versionSummary ?? "");

@@ -15,6 +15,7 @@ import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:path/path.dart' as p;
 import 'package:siri_wave/siri_wave.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:toastification/toastification.dart';
@@ -32,6 +33,7 @@ import '../../models/ChangeModel.dart';
 import '../../models/MedicalDoctorModel.dart';
 import '../../models/ScheduleModel.dart';
 import '../../models/SelectedDoctorMedicationModel.dart';
+import '../../models/audio_file.dart';
 import '../../models/audio_wave.dart';
 import '../../models/media_listing_model.dart';
 import '../../modules/edit_patient_details/repository/edit_patient_details_repository.dart';
@@ -82,7 +84,7 @@ class GlobalController extends GetxController {
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
   RxInt tabIndex = RxInt(1);
-  Map<String, String> breadcrumbs = {Routes.HOME: 'Patients & Visits', Routes.ADD_PATIENT: 'Add New', Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information', Routes.VISIT_MAIN: 'Medical Record', Routes.PATIENT_INFO: 'Visit Documents', Routes.PATIENT_PROFILE: 'Patient Profile', Routes.ALL_ATTACHMENT: 'Attachments', Routes.SCHEDULE_PATIENT: 'Schedule Visit', Routes.PERSONAL_SETTING: 'Settings'};
+  Map<String, String> breadcrumbs = {Routes.HOME: 'Patients & Visits', Routes.ADD_PATIENT: 'Add New', Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information', Routes.VISIT_MAIN: 'Medical Record', Routes.PATIENT_INFO: 'Visit Documents', Routes.PATIENT_PROFILE: 'Patient Profile', Routes.ALL_ATTACHMENT: 'Attachments', Routes.SCHEDULE_PATIENT: 'Schedule Visit', Routes.PERSONAL_SETTING: 'Personal Settings'};
 
   int closeFormState = 0;
 
@@ -98,6 +100,8 @@ class GlobalController extends GetxController {
   RxBool isStartRecording = false.obs;
   RxBool isExpandRecording = true.obs;
   RecorderService recorderService = RecorderService();
+
+  OpenAiStatus openAiStatus = OpenAiStatus();
 
   final VisitMainRepository visitMainRepository = VisitMainRepository();
   final HomeRepository _homeRepository = HomeRepository();
@@ -158,6 +162,8 @@ class GlobalController extends GetxController {
     // Snap directly to left edge if closer or right edge otherwise
     return (xPosition < screenWidth / 2) ? 0 : screenWidth;
   }
+
+
 
   void reinitController() {
     waveController = IOS7SiriWaveformController(amplitude: 0, color: AppColors.backgroundPurple, frequency: 3, speed: 0.9);
@@ -230,6 +236,8 @@ class GlobalController extends GetxController {
       param['role'] = ROLE_DOCTOR;
       doctorListModel.value = await _homeRepository.getDoctorsAndMedicalAssistant(param: param);
 
+      print("doctor list is:- ${doctorListModel.value?.toJson()}");
+
       if (doctorListModel.value?.responseType == "success") {
         selectedDoctorModel.clear();
         selectedDoctorModelSchedule.clear();
@@ -246,6 +254,15 @@ class GlobalController extends GetxController {
     }
   }
 
+  Future<OpenAiStatus> getOpenAiStatus() async{
+    try{
+      return await _homeRepository.getOpenAiStatus();
+    }catch(e){
+      customPrint("error message: $e");
+      return OpenAiStatus();
+    }
+  }
+
   Future<void> changeStatus(String status) async {
     try {
       Loader().showLoadingDialogForSimpleLoader();
@@ -253,6 +270,9 @@ class GlobalController extends GetxController {
       Map<String, dynamic> param = {};
 
       param['status'] = status;
+
+      print("pram is:- $param");
+      print("visit id for quick is ${visitId.value} ");
 
       ChangeStatusModel changeStatusModel = await visitMainRepository.changeStatus(id: visitId.value, params: param);
 
@@ -341,23 +361,13 @@ class GlobalController extends GetxController {
 
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
-      AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      // AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
+      AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId.value,audioData: audioBytes);
 
+      // await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-
-      // Show a message or update UI
-      // loadingMessage.value = "Audio saved locally. Will upload when internet is available.";
-      // isLoading.value = false;
-
-      Get.back();
-
       CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
-
-      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
-
-      for (var file in audio) {
-        customPrint("audio data is:-  ${file.visitId} ${file.fileName} ${file.id}");
-      }
+      Get.back();
     } else {
       customPrint("internet available");
       // isLoading.value = true;
@@ -710,8 +720,11 @@ class GlobalController extends GetxController {
 
   void addRouteInit(String route) {
     closeFormState = 1;
+    final breadCrumb = breadcrumbs[route] ?? route;
+    if(!breadcrumbHistory.contains(breadCrumb)){
+      breadcrumbHistory.add(breadcrumbs[route] ?? route);
+    }
 
-    breadcrumbHistory.add(breadcrumbs[route] ?? route);
   }
 
   String getKeyByValue(String value) {
@@ -860,7 +873,9 @@ class GlobalController extends GetxController {
       customPrint('global openAISocket socket connected');
     });
 
-    socketService.openAISocket.onConnectError((data) {});
+    socketService.openAISocket.onConnectError((data) {
+      print("connection openAISocket error :- ${data}");
+    });
 
     socketService.openAISocket.on('disconnect', (_) {
       customPrint('global openAISocket Socket disconnected');
@@ -888,12 +903,14 @@ class GlobalController extends GetxController {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    print("global controller disponse");
   }
 
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+    print("global controller close");
   }
 
   Future<void> startMicListening() async {

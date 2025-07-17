@@ -60,6 +60,7 @@ class AppColors {
   static const Color orange = Color(0xFFFFE6CC);
   static const Color orangeText = Color(0xFFFF8000);
   static const Color redText = Color(0xFFEB4335);
+  static const Color warnTextMsg = Color(0xFFFFB300);
 
   static const Color lightpurpule = Color(0xFFE9E9FB);
   static const Color lightpurpuleButton = Color(0xFF5B5BE1);

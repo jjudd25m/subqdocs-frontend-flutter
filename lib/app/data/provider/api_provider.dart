@@ -46,6 +46,8 @@ class ApiProvider {
 
   static ApiProvider get instance => _apiProvider;
 
+  late final Map<String, String> cachedDeviceInfo;
+
   final Dio dio = Dio();
 
   Future<bool> callStringPost(String url, {Map<String, dynamic>? params}) async {
@@ -468,7 +470,7 @@ class ApiProvider {
     return response;
   }
 
-  Map<String, String>? getApiHeader() {
+  Map<String, dynamic>? getApiHeader() {
     customPrint("getApiHeader");
     String token = "";
     String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
@@ -478,25 +480,28 @@ class ApiProvider {
     } else {}
 
     // Initialize the headers map
-    Map<String, String> headers = {"accept": "*/*", "Content-Type": "application/json"};
+    Map<String, dynamic> headers = {"accept": "*/*", "Content-Type": "application/json"};
 
     // Add x-session header if token exists
     if (token.isNotEmpty) {
       headers["Authorization"] = "Bearer $token";
     }
 
+    headers["x-device-info"] = cachedDeviceInfo;
+
     customPrint("header is $headers");
     return headers.isEmpty ? null : headers;
   }
 
-  Map<String, String>? getApiHeaderWithoutToken() {
+  Map<String, dynamic>? getApiHeaderWithoutToken() {
     customPrint("getApiHeader");
 
     // Initialize the headers map
 
     // Map<String, String> headers = {"accept": "application/json"};
-    Map<String, String> headers = {"accept": "*/*", "Content-Type": "application/json"};
+    Map<String, dynamic> headers = {"accept": "*/*", "Content-Type": "application/json"};
 
+    headers["x-device-info"] = cachedDeviceInfo;
     customPrint("header is $headers");
     return headers.isEmpty ? null : headers;
   }

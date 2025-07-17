@@ -334,7 +334,7 @@ class GetUserOrganizationListResponseData {
   int? id;
   int? inviteId;
 
-  GetUserOrganizationListResponseData({this.organizationId, this.role, this.suspended, this.email, this.isAdmin, this.lastLoginDate, this.name, this.status, this.id, this.inviteId});
+  GetUserOrganizationListResponseData({this.organizationId, this.role, this.suspended = false, this.email, this.isAdmin, this.lastLoginDate, this.name, this.status, this.id, this.inviteId});
 
   GetUserOrganizationListResponseData.fromJson(Map<String, dynamic> json) {
     organizationId = json['organization_id'];

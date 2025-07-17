@@ -44,7 +44,6 @@ class RecorderService {
     globalController.samples.clear();
     log("log: start recording");
     final btMic = await audioRecorder.hasPermission();
-
     final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
     if (btMic && btGranted) {
       Directory dir = await getApplicationCacheDirectory();

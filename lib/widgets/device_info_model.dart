@@ -102,10 +102,10 @@ class DeviceInfoService {
       'iPad11,3': 'iPad Air (3rd generation)',
       'iPad13,1': 'iPad Air (4th generation)',
       'iPad13,16': 'iPad Air (5th generation)',
-      'iPad14,8': 'iPad Air (11‑inch) (M2)',
-      'iPad14,10': 'iPad Air (13‑inch) (M2)',
-      'iPad15,3': 'iPad Air (11‑inch) (M3)',
-      'iPad15,5': 'iPad Air (13‑inch) (M3)',
+      'iPad14,8': 'iPad Air (11 inch) (M2)',
+      'iPad14,10': 'iPad Air (13 inch) (M2)',
+      'iPad15,3': 'iPad Air (11 inch) (M3)',
+      'iPad15,5': 'iPad Air (13 inch) (M3)',
 
       // iPad mini
       'iPad2,5': 'iPad mini',
@@ -117,20 +117,20 @@ class DeviceInfoService {
       'iPad16,1': 'iPad mini (A17 Pro)',
 
       // iPad Pro (11-inch)
-      'iPad8,1': 'iPad Pro (11‑inch) (1st generation)',
-      'iPad8,9': 'iPad Pro (11‑inch) (2nd generation)',
-      'iPad13,4': 'iPad Pro (11‑inch) (3rd generation)',
-      'iPad14,3': 'iPad Pro (11‑inch) (4th generation)',
-      'iPad16,3': 'iPad Pro (11‑inch) (M4)',
+      'iPad8,1': 'iPad Pro (11 inch) (1st generation)',
+      'iPad8,9': 'iPad Pro (11 inch) (2nd generation)',
+      'iPad13,4': 'iPad Pro (11 inch) (3rd generation)',
+      'iPad14,3': 'iPad Pro (11 inch) (4th generation)',
+      'iPad16,3': 'iPad Pro (11 inch) (M4)',
 
       // iPad Pro (12.9-inch)
-      'iPad6,7': 'iPad Pro (12.9‑inch) (1st generation)',
-      'iPad7,1': 'iPad Pro (12.9‑inch) (2nd generation)',
-      'iPad8,5': 'iPad Pro (12.9‑inch) (3rd generation)',
-      'iPad8,11': 'iPad Pro (12.9‑inch) (4th generation)',
-      'iPad13,8': 'iPad Pro (12.9‑inch) (5th generation)',
-      'iPad14,5': 'iPad Pro (12.9‑inch) (6th generation)',
-      'iPad16,5': 'iPad Pro (13‑inch) (M4)',
+      'iPad6,7': 'iPad Pro (12.9 inch) (1st generation)',
+      'iPad7,1': 'iPad Pro (12.9 inch) (2nd generation)',
+      'iPad8,5': 'iPad Pro (12.9 inch) (3rd generation)',
+      'iPad8,11': 'iPad Pro (12.9 inch) (4th generation)',
+      'iPad13,8': 'iPad Pro (12.9 inch) (5th generation)',
+      'iPad14,5': 'iPad Pro (12.9 inch) (6th generation)',
+      'iPad16,5': 'iPad Pro (13 inch) (M4)',
 
       // Simulator fallback
       'i386': 'iOS Simulator',
@@ -138,32 +138,6 @@ class DeviceInfoService {
       'arm64': 'iOS Simulator',
     };
 
-    return modelMap[identifier] ?? identifier;
+    return modelMap[identifier]?.replaceAll('‑', ' ') ?? identifier;
   }
-
-// static String getiOSModelName(String identifier) {
-//   const modelMap = {
-//     // iPads
-//     'iPad13,16': 'iPad Air (5th generation)',
-//     'iPad13,1': 'iPad Air (4th generation)',
-//     'iPad14,1': 'iPad mini (6th generation)',
-//     'iPad11,6': 'iPad (8th generation)',
-//     'iPad13,4': 'iPad Pro 11-inch (3rd generation)',
-//     'iPad13,8': 'iPad Pro 12.9-inch (5th generation)',
-//     'iPad14,3': 'iPad Pro 11-inch (4th generation)',
-//     'iPad14,5': 'iPad Pro 12.9-inch (6th generation)',
-//     // iPhones
-//     'iPhone15,2': 'iPhone 14 Pro',
-//     'iPhone15,3': 'iPhone 14 Pro Max',
-//     'iPhone14,7': 'iPhone 14',
-//     'iPhone14,8': 'iPhone 14 Plus',
-//     'iPhone13,2': 'iPhone 12',
-//     'iPhone13,3': 'iPhone 12 Pro',
-//     'iPhone13,4': 'iPhone 12 Pro Max',
-//     'iPhone14,2': 'iPhone 13 Pro',
-//     'iPhone14,3': 'iPhone 13 Pro Max',
-//   };
-//
-//   return modelMap[identifier] ?? identifier;
-// }
 }

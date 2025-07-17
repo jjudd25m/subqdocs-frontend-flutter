@@ -198,7 +198,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                     widget.body,
                     if (globalController.visitId.value.isNotEmpty || (globalController.isStartTranscript.value && widget.isVisibleModel)) ...[
                       DraggableFloatWidget(
-                        // key: UniqueKey(),
+                        key: UniqueKey(),
                         receiveParam: (x, y) {
                           globalController.valueOfx.value = x;
                           globalController.valueOfy.value = y;
@@ -231,9 +231,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                           GestureDetector(
                                             onTap: () {
                                               globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
-                                              final buildContext = widget.globalKey.currentContext ?? context;
-                                              globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, buildContext);
-                                              globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, buildContext);
+
+                                              print(" when the view is expanded  value of the y ${globalController.valueOfy}");
+                                              print(" when the view is expanded  value of the x ${globalController.valueOfx}");
                                             },
                                             child: SvgPicture.asset(globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording, height: 30, width: 30),
                                           ),
@@ -268,13 +268,13 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                             padding: EdgeInsets.zero,
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
-                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: const TextStyle(fontSize: 16)), const SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
                                             ),
                                           ),
 
                                       // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: 20),
 
                                     // Obx(() {
                                     //   return BaseDropdown2<String>(
@@ -303,7 +303,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                     //   ),
                                     // ),
                                     // const SizedBox(height: 16),
-                                    globalController.samples.isNotEmpty ? const AudioWave(animation: false, key: ValueKey("wave"), height: 30, width: 110, spacing: 2.5, animationLoop: 0) : const SizedBox(height: 30),
+                                    globalController.samples.isNotEmpty ? const AudioWave(animation: true, key: ValueKey("wave"), height: 30, width: 110, spacing: 2.5, animationLoop: 0) : const SizedBox(height: 30),
                                     const SizedBox(height: 17),
                                     if (globalController.recorderService.recordingStatus.value == 1) ...[
                                       Text(textAlign: TextAlign.center, "Transcription in progress", style: AppFonts.regular(17, AppColors.textBlack)),
@@ -760,9 +760,11 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         GestureDetector(
                                           onTap: () {
                                             globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
-                                            final buildContext = widget.globalKey.currentContext ?? context;
-                                            globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, buildContext);
-                                            globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, buildContext);
+
+                                            print(" when the view is non expanded  value of the y ${globalController.valueOfy}");
+                                            print(" when the view is non  expanded  value of the x ${globalController.valueOfx}");
+
+                                            globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, context);
                                           },
                                           child: SvgPicture.asset(ImagePath.expand_recording, height: 30, width: 30),
                                         ),
@@ -791,7 +793,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
   Widget _buildDropdownOption(String language) {
     return GestureDetector(
       onTap: () => selectLanguage(language),
-      child: Obx(() => Container(width: 200, padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
+      child: Obx(() => Container(width: 200, padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
     );
   }
 

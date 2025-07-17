@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:subqdocs/app/core/common/logger.dart';
 import 'package:subqdocs/app/modules/patient_info/views/doctor_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/app/modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
-import 'package:subqdocs/widgets/custom_toastification.dart';
-import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/app_colors.dart';
@@ -20,12 +19,14 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/base_dropdown2.dart';
+import '../../../core/common/logger.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/controllers/doctor_to_doctor_sign_finalize_authenticate_view_controller.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/views/doctor_to_doctor_sign_finalize_authenticate_view_view.dart';
 import '../../sign_finalize_authenticate_view/views/sign_finalize_authenticate_view_view.dart';
 import '../controllers/patient_info_controller.dart';
+import 'chatbot_widget.dart';
 import 'confirm_finalize_dialog.dart';
 import 'full_transcript_view.dart';
 
@@ -86,9 +87,31 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   Widget _buildBackButton() {
     return InkWell(
       onTap: () {
-        Get.until((route) => Get.currentRoute == Routes.HOME);
-        controller.globalController.breadcrumbHistory.clear();
-        controller.globalController.addRoute(Routes.HOME);
+        // final globalController = controller.globalController;
+        // final breadcrumbs = globalController.breadcrumbHistory;
+        // final lastBreadcrumb = breadcrumbs.isNotEmpty ? breadcrumbs.last : null;
+        // final targetRoute = lastBreadcrumb != null ? globalController.getKeyByValue(lastBreadcrumb) : null;
+        //
+        // // If going to HOME, trigger refresh
+        // if (targetRoute == Routes.VISIT_MAIN) {
+        //   // Optionally, handle VISIT_MAIN navigation/refresh here
+        //   if (Get.currentRoute != Routes.VISIT_MAIN) {
+
+        // }
+        // else{
+        //   Get.offAllNamed(targetRoute ?? Routes.HOME);
+        // }
+        customPrint("message:PatientView");
+        controller.isNavigatingFromBreadcrumb.value = true;
+        final globalController = controller.globalController;
+        final breadcrumbs = globalController.breadcrumbHistory;
+        if (breadcrumbs.isNotEmpty) {
+          globalController.popRoute();
+        }
+        if (breadcrumbs.isNotEmpty) {
+          final targetBreadcrumb = breadcrumbs.last;
+          controller.breadCrumbNavigation(targetBreadcrumb);
+        }
       },
       child: Container(color: AppColors.white, padding: const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
     );
@@ -448,9 +471,19 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       children: [
         BaseScreen(
           onPopCallBack: () {
+            if (controller.isNavigatingFromBreadcrumb.value) {
+              controller.isNavigatingFromBreadcrumb.value = false;
+              return;
+            }
             controller.closeDoctorPopOverController();
-            if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
-              controller.globalController.popRoute();
+            final globalController = controller.globalController;
+            final breadcrumbs = globalController.breadcrumbHistory;
+            if (breadcrumbs.isNotEmpty) {
+              globalController.popRoute();
+            }
+            if (breadcrumbs.isNotEmpty) {
+              final targetBreadcrumb = breadcrumbs.last;
+              controller.breadCrumbNavigation(targetBreadcrumb);
             }
           },
           onDrawerChanged: (status) {
@@ -510,19 +543,18 @@ class _PatientInfoViewState extends State<PatientInfoView> {
           ),
           globalKey: _scaffoldKey,
         ),
-        // const ChatBotWidget(),
+        const ChatBotWidget(),
       ],
     );
   }
 
   Widget _buildBreadcrumb() {
     return BreadcrumbWidget(
-      breadcrumbHistory: controller.globalController.breadcrumbHistory,
+      breadcrumbHistory: controller.globalController.breadcrumbHistory.toList(),
       onBack: (breadcrumb) {
+        controller.isNavigatingFromBreadcrumb.value = true;
         controller.globalController.popUntilRoute(breadcrumb);
-        while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-          Get.back();
-        }
+        controller.breadCrumbNavigation(breadcrumb);
       },
     );
   }

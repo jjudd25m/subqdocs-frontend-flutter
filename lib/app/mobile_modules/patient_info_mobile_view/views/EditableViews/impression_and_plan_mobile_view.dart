@@ -98,23 +98,22 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                       context: Get.context!,
-                                      builder:
-                                          (context) => AlertDialog(
-                                            title: const Text("Alert"),
-                                            content: const Text("Are you sure you want to delete this Impression and Plan?"),
-                                            actions: [
-                                              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
-                                              TextButton(
-                                                onPressed: () {
-                                                  controller.impressionAndPlanListFullNote.removeAt(index);
-                                                  controller.impressionAndPlanListFullNote.refresh();
-                                                  controller.updateImpressionAndPlanFullNote();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text("Delete", style: TextStyle(color: Colors.red)),
-                                              ),
-                                            ],
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Alert"),
+                                        content: const Text("Are you sure you want to delete this Impression and Plan?"),
+                                        actions: [
+                                          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
+                                          TextButton(
+                                            onPressed: () {
+                                              controller.impressionAndPlanListFullNote.removeAt(index);
+                                              controller.impressionAndPlanListFullNote.refresh();
+                                              controller.updateImpressionAndPlanFullNote();
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("Delete", style: TextStyle(color: Colors.red)),
                                           ),
+                                        ],
+                                      ),
                                     );
                                   },
                                   child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
@@ -239,11 +238,9 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   ),
                                   content: DiagnosisDropdrownSearchTableMobileView(
                                     diagnosisContainerKey: model.diagnosisContainerKey,
-                                    items:
-                                        (model.siblingIcd10FullNote ?? []).map((e) {
-                                          return ProcedurePossibleAlternatives(code: e.code, description: e.name, isPin: true);
-                                        }).toList(),
-
+                                    items: (model.siblingIcd10FullNote ?? []).map((e) {
+                                      return ProcedurePossibleAlternatives(code: e.code, description: e.name, isPin: true);
+                                    }).toList(),
                                     onItemSelected: (value, _) {
                                       customPrint("called ");
                                       model.popoverController.close();
@@ -271,7 +268,6 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                         GestureDetector(
                                           onTap: () {
                                             model.slidableController?.openStartActionPane();
-                                            // Slidable.of(context)?.openStartActionPane();
                                           },
                                           child: HtmlEditorViewWidget(
                                             heightOfTheEditableView: 500,
@@ -360,6 +356,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                   runSpacing: 8,
                                                   children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
                                                     return LongPressDraggable<Map<String, dynamic>>(
+                                                      maxSimultaneousDrags: 1,
                                                       hitTestBehavior: HitTestBehavior.translucent,
                                                       onDraggableCanceled: (velocity, offset) {
                                                         controller.impressionAndPlanListFullNote.refresh();
@@ -390,13 +387,17 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                             model.attachments!.insert(insertIndex, draggedImage);
                                                             controller.generalAttachments.removeAt(fromImageIndex);
                                                           } else if (fromListIndex == index) {
-                                                            if (fromImageIndex < imageIndex) {
-                                                              insertIndex -= 1;
-                                                            }
-                                                            final attachments = List<Attachments?>.from(model.attachments ?? []);
-                                                            attachments.removeAt(fromImageIndex);
-                                                            attachments.insert(insertIndex, draggedImage);
-                                                            model.attachments = attachments.cast<Attachments>();
+                                                            final temp = model.attachments![imageIndex];
+                                                            model.attachments![imageIndex] = model.attachments![fromImageIndex];
+                                                            model.attachments![fromImageIndex] = temp;
+
+                                                            // if (fromImageIndex < imageIndex) {
+                                                            //   insertIndex -= 1;
+                                                            // }
+                                                            // final attachments = List<Attachments?>.from(model.attachments ?? []);
+                                                            // attachments.removeAt(fromImageIndex);
+                                                            // attachments.insert(insertIndex, draggedImage);
+                                                            // model.attachments = attachments.cast<Attachments>();
                                                           } else {
                                                             controller.impressionAndPlanListFullNote[index].attachments?.insert(insertIndex, draggedImage);
                                                             controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
@@ -469,6 +470,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                 runSpacing: 8,
                                                 children: List.generate(controller.generalAttachments.length, (imageIndex) {
                                                   return LongPressDraggable<Map<String, dynamic>>(
+                                                    maxSimultaneousDrags: 1,
                                                     hitTestBehavior: HitTestBehavior.translucent,
                                                     onDraggableCanceled: (velocity, offset) {
                                                       controller.impressionAndPlanListFullNote.refresh();

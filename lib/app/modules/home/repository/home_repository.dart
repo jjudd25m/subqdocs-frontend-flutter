@@ -1,3 +1,4 @@
+import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 
 import '../../../core/common/logger.dart';
@@ -30,6 +31,11 @@ class HomeRepository {
     var response = await ApiProvider.instance.callGet("getUsersByRole", queryParameters: param);
     customPrint("getDoctorsAndMedicalAssistant API  internal response $response");
     return MedicalDoctorModel.fromJson(response);
+  }
+  Future<OpenAiStatus> getOpenAiStatus() async {
+    var response = await ApiProvider.instance.callGet("openAiStatus");
+    customPrint("getDoctorsAndMedicalAssistant API  internal response $response");
+    return OpenAiStatus.fromJson(response);
   }
 
   Future<ScheduleVisitListModel> getPastVisit({required Map<String, dynamic> param}) async {
