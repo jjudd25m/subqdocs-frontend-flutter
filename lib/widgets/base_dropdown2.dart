@@ -22,6 +22,7 @@ class BaseDropdown2<T> extends StatefulWidget {
   final bool isSearchable;
 
   final String? Function(String?)? checkValidation;
+  final Function(PointerUpEvent)? onTapUpOutside;
 
   final ScrollController? scrollController;
   final FocusNode? focusNode;
@@ -51,6 +52,7 @@ class BaseDropdown2<T> extends StatefulWidget {
     this.focusNode,
     this.direction,
     required this.controller,
+    this.onTapUpOutside,
     this.fillColor = Colors.white,
   });
 
@@ -88,6 +90,7 @@ class _BaseDropdown2State<T> extends State<BaseDropdown2<T>> {
       focusNode: widget.focusNode,
       controller: widget.controller,
       direction: widget.direction,
+      autoFlipDirection: false,
       // focusNode: _focusNode,
       itemBuilder: (context, value) {
         if (widget.itemBuilder != null) {
@@ -119,29 +122,32 @@ class _BaseDropdown2State<T> extends State<BaseDropdown2<T>> {
             focusNode: focusNode,
             autofocus: false,
             readOnly: !widget.isSearchable,
-
+            onTapUpOutside: (event) {
+              // widget.onTapUpOutside?.call;
+              // print("inside base dropdown call");
+              widget.onTapUpOutside?.call(event); // Properly invoke the callback
+            },
             validator: widget.checkValidation,
             decoration:
-                widget.inputDecoration == null
-                    ? InputDecoration(
-                      suffixIcon: const Padding(padding: EdgeInsets.all(10), child: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textDarkGrey)),
-                      fillColor: widget.fillColor,
-                      filled: true,
-                      errorStyle: TextStyle(height: 1),
-                      // Controls the height of the error text
-                      errorMaxLines: 1,
+                widget.inputDecoration ??
+                InputDecoration(
+                  suffixIcon: const Padding(padding: EdgeInsets.all(10), child: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textDarkGrey)),
+                  fillColor: widget.fillColor,
+                  filled: true,
+                  errorStyle: const TextStyle(height: 1),
+                  // Controls the height of the error text
+                  errorMaxLines: 1,
 
-                      // To reserve error space when no error,
-                      // you can add a transparent helperText of the same height:
-                      helperText: ' ',
-                      hintText: widget.valueAsString(widget.selectedValue).isEmpty ? "Select" : widget.valueAsString(widget.selectedValue),
-                      hintStyle: widget.valueAsString(widget.selectedValue).isEmpty ? AppFonts.regular(14, AppColors.textDarkGrey) : AppFonts.regular(14, AppColors.textBlack),
-                      contentPadding: const EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
-                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
-                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
-                    )
-                    : widget.inputDecoration,
+                  // To reserve error space when no error,
+                  // you can add a transparent helperText of the same height:
+                  helperText: ' ',
+                  hintText: widget.valueAsString(widget.selectedValue).isEmpty ? "Select" : widget.valueAsString(widget.selectedValue),
+                  hintStyle: widget.valueAsString(widget.selectedValue).isEmpty ? AppFonts.regular(14, AppColors.textDarkGrey) : AppFonts.regular(14, AppColors.textBlack),
+                  contentPadding: const EdgeInsets.only(left: 10, top: 4, bottom: 4, right: 10),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
+                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
+                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.textDarkGrey)),
+                ),
           ),
         );
       },

@@ -55,7 +55,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
     return BaseScreen(
       onItemSelected: (index) async {
         if (index == 0) {
-          final result = await Get.toNamed(Routes.ADD_PATIENT);
+          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
           _key.currentState!.closeDrawer();
         } else if (index == 1) {
@@ -70,7 +70,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
           _key.currentState!.closeDrawer();
         } else if (index == 4) {
           _key.currentState!.closeDrawer();
-          final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          final _ = await Get.toNamed(Routes.PERSONAL_SETTING);
         }
       },
       body: GestureDetector(
@@ -147,7 +147,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                   onTap: () {},
                                                   padding: EdgeInsets.zero,
                                                   value: "1",
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: 300,
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +181,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                   onTap: () {},
                                                   padding: EdgeInsets.zero,
                                                   value: "",
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: 500,
                                                     child: Padding(
                                                       padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 10),
@@ -335,7 +335,7 @@ class AllAttachmentView extends GetView<AllAttachmentController> {
                                                       ),
                                                       padding: const EdgeInsets.only(top: 20),
                                                       itemBuilder: (context, subindex) {
-                                                        return Container(
+                                                        return SizedBox(
                                                           height: 200,
                                                           width: 140,
                                                           child: Column(

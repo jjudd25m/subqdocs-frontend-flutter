@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -65,7 +64,7 @@ class _ViewAttachmentImageState extends State<ViewAttachmentImage> {
                 ),
               ),
             ),
-            Container(width: double.infinity, height: MediaQuery.of(context).size.height * 0.7, child: widget.imageUrl.isNotEmpty ? ClipRect(child: PhotoView(gaplessPlayback: true, imageProvider: NetworkImage(widget.imageUrl))) : const SizedBox(width: 10)),
+            SizedBox(width: double.infinity, height: MediaQuery.of(context).size.height * 0.7, child: widget.imageUrl.isNotEmpty ? ClipRect(child: PhotoView(gaplessPlayback: true, imageProvider: NetworkImage(widget.imageUrl))) : const SizedBox(width: 10)),
             // WebViewWidget(controller: widget.controller))
             Container(
               width: double.infinity,

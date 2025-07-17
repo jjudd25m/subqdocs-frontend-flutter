@@ -30,12 +30,7 @@ class BaseImageView extends StatelessWidget {
   }
 
   Widget _buildInitialsWidget() {
-    return Container(
-      width: width ?? 80,
-      height: height ?? 80,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: circleColor ?? _getPersistentColor(nameLetters ?? imageUrl)),
-      child: Center(child: Text(nameLetters?.getFirstTwoWordInitials() ?? "", style: AppFonts.medium((height ?? 80) * 0.4, AppColors.textWhite))),
-    );
+    return Container(width: width ?? 80, height: height ?? 80, decoration: BoxDecoration(shape: BoxShape.circle, color: circleColor ?? _getPersistentColor(nameLetters ?? imageUrl)), child: Center(child: Text(nameLetters?.getFirstTwoWordInitials() ?? "", style: AppFonts.medium((height ?? 80) * 0.4, AppColors.textWhite))));
   }
 
   @override
@@ -58,70 +53,6 @@ class BaseImageView extends StatelessWidget {
     );
   }
 }
-
-// class BaseImageView extends StatelessWidget {
-//   const BaseImageView({super.key, required this.imageUrl, this.width, this.height, this.errorWidget, this.nameLetters, this.circleColor, this.fontSize = 24.0});
-//
-//   final String imageUrl;
-//   final double? width;
-//   final double? height;
-//   final Widget? errorWidget;
-//   final String? nameLetters;
-//   final Color? circleColor;
-//   final double? fontSize;
-//
-//   Color _getPersistentColor(String key) {
-//     // Check if the color is already cached
-//     if (_colorCache.containsKey(key)) {
-//       return _colorCache[key]!;
-//     } else {
-//       // Generate a new color and cache it
-//       final newColor = generateDarkRandomColor();
-//       _colorCache[key] = newColor;
-//       return newColor;
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // Use nameLetters as the unique identifier to generate the same color each time
-//     final uniqueKey = nameLetters ?? imageUrl;
-//
-//     // Use cached color for the given key (name or imageUrl)
-//     final persistentColor = _getPersistentColor(uniqueKey);
-//
-//     return imageUrl.isNotEmpty
-//         ? CachedNetworkImage(
-//           imageUrl: imageUrl,
-//           width: width ?? 80,
-//           height: height ?? 80,
-//           errorWidget: (context, url, error) {
-//             if (errorWidget == null) {
-//               return (nameLetters?.isNotEmpty ?? false)
-//                   ? Container(
-//                     width: width ?? 80,
-//                     height: height ?? 80,
-//                     decoration: BoxDecoration(shape: BoxShape.circle, color: circleColor ?? persistentColor),
-//                     child: Center(child: Text(nameLetters?.getFirstTwoWordInitials() ?? "", style: AppFonts.medium((height ?? 80) * 0.4, AppColors.textWhite))),
-//                   )
-//                   : SvgPicture.asset(ImagePath.avatar, width: width ?? 80, height: height ?? 80, fit: BoxFit.fitWidth);
-//             } else {
-//               return errorWidget!;
-//             }
-//           },
-//           placeholder: (context, url) => SvgPicture.asset(ImagePath.avatar, width: width ?? 80, height: height ?? 80, fit: BoxFit.fitWidth),
-//           fit: BoxFit.cover,
-//         )
-//         : (nameLetters?.isNotEmpty ?? false)
-//         ? Container(
-//           width: width ?? 80,
-//           height: height ?? 80,
-//           decoration: BoxDecoration(shape: BoxShape.circle, color: circleColor ?? persistentColor),
-//           child: Center(child: Text(nameLetters?.getFirstTwoWordInitials() ?? "", style: AppFonts.medium((height ?? 80) * 0.4, AppColors.textWhite))),
-//         )
-//         : SvgPicture.asset(ImagePath.avatar, width: width ?? 80, height: height ?? 80, fit: BoxFit.fitWidth);
-//   }
-// }
 
 Color generateDarkRandomColor() {
   final random = Random();

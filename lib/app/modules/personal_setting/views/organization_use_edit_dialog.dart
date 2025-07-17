@@ -38,10 +38,8 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                 Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
-                  // color: AppColors.backgroundPurple,
                   child: Padding(
                     padding: const EdgeInsets.all(0),
-                    // padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -77,8 +75,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                   child: TextFormFiledWidget(
                                     format: [CustomTextInputFormatter()],
                                     label: "First Name",
-                                    // isValid: controller.isValid.value,
-                                    // isImportant: true,
                                     controller: controller.userFirstNameController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
@@ -96,8 +92,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                   child: TextFormFiledWidget(
                                     format: [CustomTextInputFormatter()],
                                     label: "Last Name",
-                                    // isValid: controller.isValid.value,
-                                    // isImportant: true,
                                     controller: controller.userLastNameController,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
@@ -113,38 +107,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 ),
                               ],
                             ),
-                            // Row(
-                            //   spacing: 15,
-                            //   children: [
-                            //     Expanded(
-                            //       child: TextFormFiledWidget(
-
-                            //         format: [CustomTextInputFormatter()],
-                            //         label: "Organization",
-                            //         // isValid: controller.isValid.value,
-                            //         // isImportant: true,
-                            //         controller:
-                            //         controller
-                            //             .userOrganizationNameNameController,
-                            //         isSuffixIconVisible: false,
-                            //         isFirst: true,
-                            //         readOnly: true,
-                            //         hint: "",
-                            //         onTap: () {
-                            //           controller
-                            //               .userOrganizationNameNameController
-                            //               .clear();
-                            //         },
-                            //         suffixIcon: Icon(
-                            //           Icons.highlight_remove,
-                            //           color: AppColors.textDarkGrey,
-                            //           size: 25,
-                            //         ),
-
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                             const SizedBox(height: 5),
                             Row(children: [Text(textAlign: TextAlign.center, "Contact", style: AppFonts.medium(16, AppColors.backgroundPurple)), const Spacer()]),
                             const SizedBox(height: 5),
@@ -155,7 +117,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     format: [NoSpaceLowercaseTextFormatter()],
                                     label: "Email Address",
                                     controller: controller.userEmailController,
-                                    // isValid: controller.isValid.value,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     hint: "",
@@ -178,7 +139,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     format: [MaskTextInputFormatter(mask: "+1 (###) ###-####")],
                                     label: "Phone Number",
                                     controller: controller.userPhoneNumberController,
-                                    // isValid: true,
                                     isSuffixIconVisible: false,
                                     isFirst: true,
                                     type: TextInputType.number,
@@ -204,7 +164,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     child: TextFormFiledWidget(
                                       format: [CustomTextInputFormatter()],
                                       label: "Title",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.userPractitionerController,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -218,7 +177,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                       label: "Degree",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.organizationDegreeController,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -238,7 +196,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     child: TextFormFiledWidget(
                                       format: [MedicalLicenseNumberFormatter()],
                                       label: "Medical License Number",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.userMedicalLicenseNumberController,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -251,12 +208,9 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                   ),
                                   Expanded(
                                     child: TextFormFiledWidget(
-                                      //format: [NoSpaceTextFormatter()],
                                       suffixIcon: const Icon(Icons.calendar_month),
                                       format: [DateInputFormatter()],
                                       label: "License Expiry Date",
-
-                                      // isImportant: true,
                                       controller: controller.userLicenseExpiryDateController,
                                       onTap: () async {
                                         final picked = await showDatePicker(
@@ -287,8 +241,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     child: TextFormFiledWidget(
                                       format: [NpiFormatter()],
                                       label: "National Provider Identifier",
-                                      // maxLength: 5,
-                                      // isValid: controller.isValid.value,
                                       controller: controller.userNationalProviderIdentifierController,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -303,7 +255,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                     child: TextFormFiledWidget(
                                       format: [TaxonomyCodeFormatter()],
                                       label: "Taxonomy Code",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.userTaxonomyCodeController,
 
                                       isSuffixIconVisible: false,
@@ -326,7 +277,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                   Expanded(
                                     child: TextFormFiledWidget(
                                       label: "Specialization",
-                                      // isValid: controller.isValid.value,
                                       controller: controller.userSpecializationController,
                                       isSuffixIconVisible: false,
                                       isFirst: true,
@@ -359,9 +309,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                                   },
                                                   child: const Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                                 ),
-                                        // checkValidation: (value) {
-                                        //   return Validation.passwordValidate(value);
-                                        // },
                                       );
                                     }),
                                   ),
@@ -401,13 +348,7 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                               Map<String, dynamic> param = {};
 
                               param['first_name'] = controller.userFirstNameController.text;
-
                               param['last_name'] = controller.userLastNameController.text;
-
-                              // param['organization_name'] =
-                              //     controller
-                              //         .userOrganizationNameNameController
-                              //         .text;
                               param['email'] = controller.userEmailController.text;
 
                               if (controller.extractDigits(controller.userPhoneNumberController.text).isNotEmpty) {
@@ -448,7 +389,6 @@ class OrganizationUseEditDialog extends GetView<PersonalSettingController> {
                                 }
                               }
 
-                              // Loader().showLoadingDialogForSimpleLoader();
                               customPrint("user edit param is :- $param");
                               receiveParam(param);
                               Navigator.pop(context);

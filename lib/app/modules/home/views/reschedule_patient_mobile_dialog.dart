@@ -69,8 +69,6 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
   void initState() {
     // TODO: implement initState
 
-    print("reload init state");
-
     super.initState();
 
     visitDateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
@@ -78,8 +76,6 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
     generatedTime.value = generateTimeIntervals(DateTime.now());
     selectedVisitTimeValue.value = generatedTime[0];
     visitTimeController.text = selectedVisitTimeValue.value ?? "";
-
-    print("reload init state");
   }
 
   @override
@@ -95,7 +91,7 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   width: 360,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -117,7 +113,6 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
                             lastDate: DateTime.now().add(const Duration(days: 365)),
                             onComplete: (date) {
                               if (date != null) {
-                                print("completed data is $date");
                                 visitDate = date;
                                 _singleDatePickerValueWithDefaultValue.value = [date];
 
@@ -181,7 +176,6 @@ class _ReschedulePatientMobileDialogState extends State<ReschedulePatientMobileD
                                   } else {
                                     try {
                                       String? time = visitTimeController.text;
-                                      print("time is :- ${time}");
 
                                       if (time != null) {
                                         DateTime selectedTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime

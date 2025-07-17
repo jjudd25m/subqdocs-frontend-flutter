@@ -48,7 +48,7 @@ class SplashController extends GetxController {
 
   // Check if user has existing login data
   Future<bool> _checkLoginStatus() async {
-    final loginData = await AppPreference.instance.getString(AppString.prefKeyUserLoginData);
+    final loginData = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
     customPrint("Login data exists: ${loginData.isNotEmpty}");
     return loginData.isNotEmpty;
   }

@@ -380,101 +380,77 @@ class _PlacesAutocompleteState extends State<PlacesAutocomplete> {
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 0.5, color: AppColors.textDarkGrey), color: AppColors.white),
-        child: Container(
-          child: ListTile(
-            minVerticalPadding: 0,
-            tileColor: AppColors.white,
-            contentPadding: EdgeInsets.zero,
-            leading: widget.hideBackButton ? null : widget.backButton ?? const BackButton(),
-            title: ClipRRect(
-              borderRadius: widget.borderRadius,
-              child: FormBuilderTypeAhead<Prediction>(
-                decoration:
-                    widget.decoration ??
-                    InputDecoration(
-                      hintText: widget.searchHintText,
-                      hintStyle: AppFonts.regular(14, AppColors.textDarkGrey),
-                      border: InputBorder.none,
-                      fillColor: AppColors.white,
-                      filled: true,
-                      suffixIcon: (widget.showClearButton && widget.initialValue == null) ? IconButton(icon: const Icon(Icons.close), onPressed: () => _controller.clear()) : widget.suffixIcon,
-                    ),
-                name: 'Search',
-                controller: widget.initialValue == null ? _controller : null,
-                selectionToTextTransformer: (result) {
-                  return result.description ?? "";
-                },
-                itemBuilder:
-                    widget.itemBuilder ??
-                    (context, content) {
-                      return ListTile(tileColor: AppColors.white, title: Text(content.description ?? ""));
-                    },
-                suggestionsCallback: (query) async {
-                  if (query.length < widget.minCharsForSuggestions) {
-                    return [];
-                  }
-                  final completer = Completer<List<Prediction>>();
-                  _debounce.run(() async {
-                    List<Prediction> predictions = await autoCompleteState().search(
-                      query,
-                      widget.apiKey,
-                      language: widget.language,
-                      sessionToken: widget.sessionToken,
-                      region: widget.region,
-                      components: widget.components,
-                      location: widget.location,
-                      offset: widget.offsetParameter,
-                      origin: widget.origin,
-                      radius: widget.radius,
-                      strictbounds: widget.strictbounds,
-                      types: widget.types,
-                    );
-                    completer.complete(predictions);
-                  });
-                  return completer.future;
-                },
-                onSelected: (value) async {
-                  _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
-                  _getDetailsByPlaceId(value.placeId ?? "", context);
-                  widget.onSelected?.call(value);
-                },
-                initialValue: widget.initialValue,
-                validator: widget.validator,
-                scrollController: widget.scrollController,
-                animationDuration: widget.animationDuration,
-                autoFlipDirection: widget.autoFlipDirection,
-                debounceDuration: widget.debounceDuration,
-                direction: widget.direction,
-                suggestionErrorBuilder: widget.suggestionErrorBuilder,
-                focusNode: widget.focusNode,
-                hideOnEmpty: widget.hideOnEmpty,
-                hideOnError: widget.hideOnError,
-                hideOnLoading: widget.hideOnLoading,
-                loadingBuilder: widget.loadingBuilder,
-                transitionBuilder: widget.transitionBuilder,
-                valueTransformer: widget.valueTransformer,
-                enabled: widget.enabled,
-                autovalidateMode: widget.autovalidateMode,
-                onChanged: widget.onChanged,
-                onReset: widget.onReset,
-                onSaved: widget.onSaved,
-                autoFlipListDirection: widget.autoFlipListDirection,
-                autoFlipMinHeight: widget.autoFlipMinHeight,
-                constraints: widget.constraints,
-                customTextField: widget.customTextField,
-                decorationBuilder: widget.decorationBuilder,
-                emptyBuilder: widget.emptyBuilder,
-                hideKeyboardOnDrag: widget.hideKeyboardOnDrag,
-                hideOnSelect: widget.hideOnSelect,
-                hideOnUnfocus: widget.hideOnUnfocus,
-                hideWithKeyboard: widget.hideWithKeyboard,
-                itemSeparatorBuilder: widget.itemSeparatorBuilder,
-                listBuilder: widget.listBuilder,
-                offset: widget.offset,
-                retainOnLoading: widget.retainOnLoading,
-                showOnFocus: widget.showOnFocus,
-                suggestionsController: widget.suggestionsController,
-              ),
+        child: ListTile(
+          minVerticalPadding: 0,
+          tileColor: AppColors.white,
+          contentPadding: EdgeInsets.zero,
+          leading: widget.hideBackButton ? null : widget.backButton ?? const BackButton(),
+          title: ClipRRect(
+            borderRadius: widget.borderRadius,
+            child: FormBuilderTypeAhead<Prediction>(
+              decoration: widget.decoration ?? InputDecoration(hintText: widget.searchHintText, hintStyle: AppFonts.regular(14, AppColors.textDarkGrey), border: InputBorder.none, fillColor: AppColors.white, filled: true, suffixIcon: (widget.showClearButton && widget.initialValue == null) ? IconButton(icon: const Icon(Icons.close), onPressed: () => _controller.clear()) : widget.suffixIcon),
+              name: 'Search',
+              controller: widget.initialValue == null ? _controller : null,
+              selectionToTextTransformer: (result) {
+                return result.description ?? "";
+              },
+              itemBuilder:
+                  widget.itemBuilder ??
+                  (context, content) {
+                    return ListTile(tileColor: AppColors.white, title: Text(content.description ?? ""));
+                  },
+              suggestionsCallback: (query) async {
+                if (query.length < widget.minCharsForSuggestions) {
+                  return [];
+                }
+                final completer = Completer<List<Prediction>>();
+                _debounce.run(() async {
+                  List<Prediction> predictions = await autoCompleteState().search(query, widget.apiKey, language: widget.language, sessionToken: widget.sessionToken, region: widget.region, components: widget.components, location: widget.location, offset: widget.offsetParameter, origin: widget.origin, radius: widget.radius, strictbounds: widget.strictbounds, types: widget.types);
+                  completer.complete(predictions);
+                });
+                return completer.future;
+              },
+              onSelected: (value) async {
+                _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
+                _getDetailsByPlaceId(value.placeId ?? "", context);
+                widget.onSelected?.call(value);
+              },
+              initialValue: widget.initialValue,
+              validator: widget.validator,
+              scrollController: widget.scrollController,
+              animationDuration: widget.animationDuration,
+              autoFlipDirection: widget.autoFlipDirection,
+              debounceDuration: widget.debounceDuration,
+              direction: widget.direction,
+              suggestionErrorBuilder: widget.suggestionErrorBuilder,
+              focusNode: widget.focusNode,
+              hideOnEmpty: widget.hideOnEmpty,
+              hideOnError: widget.hideOnError,
+              hideOnLoading: widget.hideOnLoading,
+              loadingBuilder: widget.loadingBuilder,
+              transitionBuilder: widget.transitionBuilder,
+              valueTransformer: widget.valueTransformer,
+              enabled: widget.enabled,
+              autovalidateMode: widget.autovalidateMode,
+              onChanged: widget.onChanged,
+              onReset: widget.onReset,
+              onSaved: widget.onSaved,
+              autoFlipListDirection: widget.autoFlipListDirection,
+              autoFlipMinHeight: widget.autoFlipMinHeight,
+              constraints: widget.constraints,
+              customTextField: widget.customTextField,
+              decorationBuilder: widget.decorationBuilder,
+              emptyBuilder: widget.emptyBuilder,
+              hideKeyboardOnDrag: widget.hideKeyboardOnDrag,
+              hideOnSelect: widget.hideOnSelect,
+              hideOnUnfocus: widget.hideOnUnfocus,
+              hideWithKeyboard: widget.hideWithKeyboard,
+              itemSeparatorBuilder: widget.itemSeparatorBuilder,
+              listBuilder: widget.listBuilder,
+              offset: widget.offset,
+              retainOnLoading: widget.retainOnLoading,
+              showOnFocus: widget.showOnFocus,
+              suggestionsController: widget.suggestionsController,
             ),
           ),
         ),

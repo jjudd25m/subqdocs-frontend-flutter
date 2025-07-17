@@ -256,7 +256,7 @@ class AddPatientController extends GetxController {
     final DateTime pickDate = DateTime.now();
     final int fileSize = file.lengthSync();
 
-    return MediaListingModel(file: file, previewImage: null, fileName: _getShortFileName(fileName), date: _formatDate(pickDate), Size: _formatFileSize(fileSize), calculateSize: _formatFileSizeDouble(fileSize), isGraterThan10: _formatFileSizeDouble(fileSize) >= 10.00);
+    return MediaListingModel(file: file, previewImage: null, fileName: _getShortFileName(fileName), date: _formatDate(pickDate), size: _formatFileSize(fileSize), calculateSize: _formatFileSizeDouble(fileSize), isGraterThan10: _formatFileSizeDouble(fileSize) >= 10.00);
   }
 
   String _getShortFileName(String fileName) {
@@ -296,7 +296,7 @@ class AddPatientController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        listOldPatient.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        listOldPatient.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
       }
     });
     listOldPatient.refresh();
@@ -423,9 +423,11 @@ class AddPatientController extends GetxController {
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach((element) {
-      totalSize += element.calculateSize ?? 0;
-    });
+    totalSize += list.fold(0, (sum, element) => sum + (element.calculateSize ?? 0));
+
+    // list.value.forEach((element) {
+    //   totalSize += element.calculateSize ?? 0;
+    // });
 
     if (totalSize < 100) {
       return true;
@@ -437,11 +439,13 @@ class AddPatientController extends GetxController {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach((element) {
-      if (element.isGraterThan10 ?? false) {
-        isGraterThan10 = true;
-      }
-    });
+    isGraterThan10 = list.any((element) => element.isGraterThan10 ?? false);
+
+    // list.value.forEach((element) {
+    //   if (element.isGraterThan10 ?? false) {
+    //     isGraterThan10 = true;
+    //   }
+    // });
 
     return isGraterThan10;
   }
@@ -514,7 +518,7 @@ class AddPatientController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
       }
 
       list.refresh();
@@ -566,7 +570,7 @@ class AddPatientController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
     }
 
     list.refresh();
@@ -769,7 +773,7 @@ class AddPatientController extends GetxController {
     try {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      dynamic response = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: editId.value, param: param, token: loginData.responseData?.token ?? "");
+      dynamic _ = await _editPatientDetailsRepository.updatePatient(files: profileParams, id: editId.value, param: param, token: loginData.responseData?.token ?? "");
 
       isLoading.value = false;
       await uploadAttachments(patientId.text);
@@ -871,7 +875,7 @@ class AddPatientController extends GetxController {
         return CupertinoActionSheet(
           title: Text("Pick a Date", style: AppFonts.medium(16, AppColors.black)),
           actions: <Widget>[
-            Container(
+            SizedBox(
               height: 400,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,

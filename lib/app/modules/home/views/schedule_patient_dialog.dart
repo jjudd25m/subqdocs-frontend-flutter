@@ -92,7 +92,7 @@ class _SchedulePatientDialogState extends State<SchedulePatientDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   width: 360,
                   child: Padding(
                     padding: const EdgeInsets.all(16),

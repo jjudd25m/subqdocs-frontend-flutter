@@ -16,7 +16,7 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/base_screen_mobile.dart';
-import '../../../modules/patient_info/model/get_doctor_list_by_role_model.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../modules/patient_info/views/full_note_view.dart';
 import '../../../modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
 import '../../../modules/sign_finalize_authenticate_view/views/sign_finalize_authenticate_view_view.dart';
@@ -192,7 +192,7 @@ class _PatientInfoMobileViewState extends State<PatientInfoMobileView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: SingleChildScrollView(
                             controller: controller.scrollController,
@@ -487,7 +487,6 @@ class _PatientInfoMobileViewState extends State<PatientInfoMobileView> {
 
   void _handleMedicalRecordAction() {
     // Implement your medical record functionality here
-    print('Medical Record option selected');
     // You might navigate to a medical record screen or show a dialog
   }
 
@@ -506,12 +505,8 @@ class _PatientInfoMobileViewState extends State<PatientInfoMobileView> {
       pageBuilder: (context, animation1, animation2) {
         SignFinalizeAuthenticateViewController con = Get.put(SignFinalizeAuthenticateViewController());
         con.visitId = controller.visitId;
-        con.selectedDoctorValueModel = Rxn(GetDoctorListByRoleResponseData(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
+        con.selectedDoctorValueModel = Rxn(SelectedDoctorModel(name: controller.patientData.value?.responseData?.doctorName, id: controller.patientData.value?.responseData?.doctorId, profileImage: null));
         con.selectedDoctorValue.value = controller.patientData.value?.responseData?.doctorName ?? "";
-
-        print("dialog response data:- ${controller.patientData.value?.responseData?.toJson()}");
-
-        print("third:- ${controller.patientData.value?.responseData?.thirdPartyId}");
 
         con.isThirdParty = controller.patientData.value?.responseData?.thirdPartyId ?? "";
 

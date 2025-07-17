@@ -36,13 +36,6 @@ class LoginViewMobileController extends GetxController {
     _loadRememberedCredentials();
   }
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
-
   /// Loads saved credentials if "Remember Me" was enabled
   void _loadRememberedCredentials() {
     final isRemember = _preference.getBool(AppString.prefKeyRememberMe);

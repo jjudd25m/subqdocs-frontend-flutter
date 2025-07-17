@@ -10,7 +10,7 @@ class GetAvailableVisitTypes {
     if (json['responseData'] != null) {
       responseData = <GetAvailableVisitTypesResponseData>[];
       json['responseData'].forEach((v) {
-        responseData!.add(new GetAvailableVisitTypesResponseData.fromJson(v));
+        responseData!.add(GetAvailableVisitTypesResponseData.fromJson(v));
       });
     }
     message = json['message'];
@@ -19,13 +19,13 @@ class GetAvailableVisitTypes {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.responseData != null) {
-      data['responseData'] = this.responseData!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (responseData != null) {
+      data['responseData'] = responseData!.map((v) => v.toJson()).toList();
     }
-    data['message'] = this.message;
-    data['toast'] = this.toast;
-    data['response_type'] = this.responseType;
+    data['message'] = message;
+    data['toast'] = toast;
+    data['response_type'] = responseType;
     return data;
   }
 }
@@ -42,9 +42,9 @@ class GetAvailableVisitTypesResponseData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['display'] = this.display;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['code'] = code;
+    data['display'] = display;
     return data;
   }
 }

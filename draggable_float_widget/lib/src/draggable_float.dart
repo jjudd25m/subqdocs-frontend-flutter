@@ -99,7 +99,7 @@ class DraggableFloatWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _CustomDraggableFloatState();
 }
 
-class _CustomDraggableFloatState extends State<DraggableFloatWidget> with TickerProviderStateMixin<DraggableFloatWidget> {
+class _CustomDraggableFloatState extends State<DraggableFloatWidget> with TickerProviderStateMixin<DraggableFloatWidget>, WidgetsBindingObserver {
   /// Parameters related to the component boundary.
   late double _screenWidth, _screenHeight, _halfScreenW, _statusBarHeight, _bottomBarHeight; // screen size
   late double _variableTop, _top, _bottom, _left, _right; // widget boundary
@@ -119,8 +119,13 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
   late double animEndPx, animEndPy; // animation end location
   Timer? delayShowTimer; // delayed display of Timer
 
+  bool _isDragging = false;
+  Offset? _dragStartOffset;
+  Offset? _dragStartWidgetPosition;
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this); // Add observer for metrics changes
     /// 0. Initialize the component location, boundaries, and status.
     _initBorderSize();
 
@@ -135,7 +140,7 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
   /// Initialize data related to component locations.
   _initBorderSize() {
     // 1. Relevant data of the screen.
-    var _mediaQueryData = MediaQueryData.fromWindow(window);
+    var _mediaQueryData = MediaQueryData.fromView(window);
     _screenWidth = _mediaQueryData.size.width;
     _screenHeight = _mediaQueryData.size.height;
     _halfScreenW = _screenWidth / 2;
@@ -257,6 +262,7 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // Remove observer
     eventSubscription?.cancel();
     animationController.dispose();
     _cancelDelayShowTimer();
@@ -264,33 +270,69 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
   }
 
   @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    // Recalculate screen size and boundaries
+    _initBorderSize();
+    // Clamp positionX and positionY to keep widget inside new screen bounds
+    double newX = positionX;
+    double newY = positionY;
+    if (newX < _left) newX = _left;
+    if (newX > _right) newX = _right;
+    if (newY < _top) newY = _top;
+    if (newY > _bottom) newY = _bottom;
+    if (newX != positionX || newY != positionY) {
+      setState(() {
+        positionX = newX;
+        positionY = newY;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    /// 1. Build a dragged component.
+    // 1. Build the drag widget
     var _dragWidget = _buildDragWidget();
 
-    /// 2. Build a draggable float component.
-    return Positioned(
+    // 2. Use AnimatedPositioned for smooth transitions
+    return AnimatedPositioned(
+      duration: _isDragging ? const Duration(milliseconds: 0) : widget.config.animDuration,
+      curve: Curves.easeOutCubic,
       left: positionX,
       top: positionY,
-      child: currentState != DraggableFloatWidgetState.SHOW && currentState != DraggableFloatWidgetState.DRAG_IN_PROGRESS
-          ? _dragWidget
-          : Draggable(
-              child: _dragWidget,
-              childWhenDragging: Container(),
-              feedback: _dragWidget,
-              onDragStarted: () {
-                _print("drag Start!");
-                _refreshDragState(DraggableFloatWidgetState.DRAG_IN_PROGRESS);
-              },
-              onDragEnd: (details) {
-                print("drag End! DraggableDetails(wasAccepted: ${details.wasAccepted}, velocity: ${details.velocity.toString()}, offset: ${details.offset.toString()})");
-                _print("drag End! DraggableDetails(wasAccepted: ${details.wasAccepted}, velocity: ${details.velocity.toString()}, offset: ${details.offset.toString()})");
-
-                _handleDragEnd(details.offset);
-              },
-              onDragCompleted: () => _print("drag Completed!"),
-              onDraggableCanceled: (velocity, offset) => _print("drag Canceled! {velocity: ${velocity.toString()}, offset: ${offset.toString()}}"),
-            ),
+      child: GestureDetector(
+        onPanStart: (details) {
+          _isDragging = true;
+          _dragStartOffset = details.globalPosition;
+          _dragStartWidgetPosition = Offset(positionX, positionY);
+          _refreshDragState(DraggableFloatWidgetState.DRAG_IN_PROGRESS);
+        },
+        onPanUpdate: (details) {
+          if (_dragStartOffset != null && _dragStartWidgetPosition != null) {
+            final delta = details.globalPosition - _dragStartOffset!;
+            double newX = (_dragStartWidgetPosition!.dx + delta.dx).clamp(_left, _right);
+            double newY = (_dragStartWidgetPosition!.dy + delta.dy).clamp(_top, _bottom);
+            setState(() {
+              positionX = newX;
+              positionY = newY;
+            });
+          }
+        },
+        onPanEnd: (details) {
+          _isDragging = false;
+          // Snap to nearest edge
+          double centerX = positionX + widget.width / 2;
+          double snapX = (centerX < _screenWidth / 2) ? _left : _right;
+          double snapY = positionY.clamp(_top, _bottom);
+          setState(() {
+            positionX = snapX;
+            positionY = snapY;
+          });
+          widget.receiveParam(snapX, snapY);
+          _refreshDragState(DraggableFloatWidgetState.SHOW);
+        },
+        child: _dragWidget,
+      ),
     );
   }
 
@@ -303,12 +345,21 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
         ),
       );
 
-  _handleDragEnd(Offset _offset) {
+  _handleDragEnd(Offset globalOffset) {
+    // Convert global offset to local offset relative to the widget's parent
+    final RenderBox? stackBox = context.findRenderObject() as RenderBox?;
+    Offset localOffset = globalOffset;
+    if (stackBox != null && stackBox.hasSize) {
+      localOffset = stackBox.globalToLocal(globalOffset);
+    }
     // 0. Assign the position at which the animation begins.
-    animStartPx = _offset.dx;
-    animStartPy = _offset.dy - (widget.config.isFullScreen ? 0 : _variableTop);
+    animStartPx = localOffset.dx;
+    animStartPy = localOffset.dy - (widget.config.isFullScreen ? 0 : _variableTop);
     // 1. Calculate the position at the end of the animation.
-    animEndPx = _offset.dx + widget.width / 2 <= _halfScreenW ? _left : _right;
+    // Snap to the nearest edge (left or right), ensuring fully visible
+    double centerX = localOffset.dx + widget.width / 2;
+    animEndPx = (centerX < _screenWidth / 2) ? _left : _right;
+    // Clamp Y to stay within bounds
     if (animStartPy <= _top) {
       animEndPy = _top;
     } else if (animStartPy > _top && animStartPy <= _bottom) {
@@ -316,6 +367,9 @@ class _CustomDraggableFloatState extends State<DraggableFloatWidget> with Ticker
     } else {
       animEndPy = _bottom;
     }
+    // Ensure animEndPy is within bounds
+    animEndPy = animEndPy.clamp(_top, _bottom);
+    // Call receiveParam with the snapped position
     widget.receiveParam(animEndPx, animEndPy);
     // 2. Start animation.
     _startAnimation(DraggableFloatWidgetState.AUTO_ATTACH_IN_PROGRESS);

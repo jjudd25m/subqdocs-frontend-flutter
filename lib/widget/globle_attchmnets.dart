@@ -94,7 +94,7 @@ class GlobleAttchmnets extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: 360,
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -133,7 +133,7 @@ class GlobleAttchmnets extends StatelessWidget {
                                         Text(controller.list.value[index].fileName ?? ""),
                                         //
                                         Text(controller.visitId.value),
-                                        Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                        Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].size ?? ""}"),
                                         if (controller.list.value[index].isGraterThan10 ?? false) Text("File Size must not exceed 10 MB", style: AppFonts.medium(15, Colors.red)),
                                       ],
                                     ),

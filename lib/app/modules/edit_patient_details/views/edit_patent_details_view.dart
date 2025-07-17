@@ -35,7 +35,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
     return BaseScreen(
       onItemSelected: (index) async {
         if (index == 0) {
-          final result = await Get.toNamed(Routes.ADD_PATIENT);
+          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
           _key.currentState!.closeDrawer();
         } else if (index == 1) {
@@ -50,7 +50,7 @@ class EditPatentDetailsView extends GetView<EditPatentDetailsController> {
           _key.currentState!.closeDrawer();
         } else if (index == 4) {
           _key.currentState!.closeDrawer();
-          final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          final _ = await Get.toNamed(Routes.PERSONAL_SETTING);
         }
       },
       body: GestureDetector(

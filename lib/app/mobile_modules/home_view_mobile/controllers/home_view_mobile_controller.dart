@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../widgets/app_update_dialog.dart';
 import '../../../../widgets/custom_toastification.dart';
+import '../../../../widgets/device_info_model.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/logger.dart';
 import '../../../modules/add_patient/repository/add_patient_repository.dart';
@@ -74,7 +76,15 @@ class HomeViewMobileController extends GetxController {
     super.onInit();
 
     Get.put(GlobalMobileController());
+
+    Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
+    print("device info is:- $deviceInfo");
     globalController.getUserDetail();
+
+    if (Platform.isIOS || Platform.isMacOS) {
+      await getLatestBuild();
+    }
+
     handelInternetConnection();
 
     scrollControllerPatientList.addListener(_onScrollPatientList);
@@ -84,7 +94,6 @@ class HomeViewMobileController extends GetxController {
     showClearButton.value = false;
 
     getOrganizationDetail();
-    getLatestBuild();
   }
 
   @override
@@ -104,7 +113,7 @@ class HomeViewMobileController extends GetxController {
     customPrint("Latest build :- $latestBuild");
     String currentBuild = info.version;
     customPrint("Current build:- $currentBuild");
-    customPrint(isVersionGreater(latestBuild, currentBuild));
+    // customPrint(isVersionGreater(latestBuild, currentBuild));
     if (isVersionGreater(latestBuild, currentBuild)) {
       customPrint("inside update");
       showIOSForceUpdateDialog(Get.context!, latestBuildModel.responseData?.dataValues?.versionSummary ?? "");
@@ -140,8 +149,8 @@ class HomeViewMobileController extends GetxController {
       globalController.getEMAOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
 
       // patientSyncSocketSetup();
-      print("isEmaIntegration is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration}");
-      print("has_ema_configs is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs}");
+      customPrint("isEmaIntegration is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration}");
+      customPrint("has_ema_configs is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs}");
     } catch (e) {
       customPrint("error on get OrganizationDetail :- $e");
     }
@@ -238,7 +247,7 @@ class HomeViewMobileController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           getPastVisitList();
@@ -275,9 +284,9 @@ class HomeViewMobileController extends GetxController {
     if (currentIndex != 0 && (currentIndex - 50) % 100 == 0 && !triggeredIndexes.contains(currentIndex)) {
       triggeredIndexes.add(currentIndex); // Mark as triggered
       patientLoadMore();
-      // print("scroll is needed ${currentIndex}");
+      // customPrint("scroll is needed ${currentIndex}");
     } else {
-      // print("scroll is  not needed.  ${currentIndex}");
+      // customPrint("scroll is  not needed.  ${currentIndex}");
     }
   }
 
@@ -291,9 +300,9 @@ class HomeViewMobileController extends GetxController {
       pastTriggeredIndexes.add(currentIndex); // Mark as triggered
       getPastVisitListFetchMore();
 
-      // print("scroll is needed $currentIndex");
+      // customPrint("scroll is needed $currentIndex");
     } else {
-      // print("scroll is  not needed.  $currentIndex");
+      // customPrint("scroll is  not needed.  $currentIndex");
     }
   }
 
@@ -307,9 +316,9 @@ class HomeViewMobileController extends GetxController {
       scheduleTriggeredIndexes.add(currentIndex); // Mark as triggered
       getScheduleVisitListFetchMore();
 
-      // print("scroll is needed $currentIndex");
+      // customPrint("scroll is needed $currentIndex");
     } else {
-      // print("scroll is  not needed.  $currentIndex");
+      // customPrint("scroll is  not needed.  $currentIndex");
     }
   }
 
@@ -333,7 +342,7 @@ class HomeViewMobileController extends GetxController {
   Future<void> getScheduleVisitListFetchMore() async {
     int? totalCount = scheduleVisitListModel.value?.responseData?.totalCount ?? 0;
     if (scheduleVisitList.length < totalCount) {
-      print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
+      customPrint("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
       noMoreDataSchedulePatientList.value = false;
       Map<String, dynamic> param = {};
@@ -420,7 +429,7 @@ class HomeViewMobileController extends GetxController {
     int? totalCount = pastVisitListModel.value?.responseData?.totalCount ?? 0;
 
     if (pastVisitList.length < totalCount) {
-      print("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
+      customPrint("no pagination is not needed  beacuse ${pastVisitList.length}  is this and $totalCount");
       isLoading.value = true;
       noMoreDataPastPatientList.value = false;
 

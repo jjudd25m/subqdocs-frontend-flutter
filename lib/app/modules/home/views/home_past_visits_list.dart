@@ -53,7 +53,7 @@ class HomePastVisitsList extends GetView<HomeController> {
                       child: EmptyPatientScreen(
                         onBtnPress: () async {
                           controller.globalController.addRoute(Routes.ADD_PATIENT);
-                          final result = await Get.toNamed(Routes.ADD_PATIENT);
+                          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
                           controller.getPastVisitList();
                           controller.getScheduleVisitList();
@@ -70,7 +70,6 @@ class HomePastVisitsList extends GetView<HomeController> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     onRefresh: () async {
                       controller.getPastVisitList(isFist: true);
-                      print("refresh past list view");
                       controller.pagePast = 1;
                     },
                     onLoadMore: () => controller.getPastVisitListFetchMore(),

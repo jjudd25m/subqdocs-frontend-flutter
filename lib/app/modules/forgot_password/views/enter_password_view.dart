@@ -26,19 +26,9 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
     return Column(
       children: [
         const SizedBox(height: 24),
-        Text(
-          "Forgot Password",
-          style: AppFonts.medium(18, AppColors.textBlack),
-        ),
+        Text("Forgot Password", style: AppFonts.medium(18, AppColors.textBlack)),
         const SizedBox(height: 16),
-        Container(
-          width: isSmallScreen ? 300 : 400,
-          child: Text(
-            "Enter a new password below to reset your account. Your password must be 8-20 characters with at least 1 number, 1 letter and 1 special symbol.",
-            style: AppFonts.regular(14, AppColors.textDarkGrey),
-            textAlign: TextAlign.center,
-          ),
-        ),
+        SizedBox(width: isSmallScreen ? 300 : 400, child: Text("Enter a new password below to reset your account. Your password must be 8-20 characters with at least 1 number, 1 letter and 1 special symbol.", style: AppFonts.regular(14, AppColors.textDarkGrey), textAlign: TextAlign.center)),
         const SizedBox(height: 24),
         Obx(() {
           return SizedBox(
@@ -55,14 +45,7 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
                         onTap: () {
                           controller.changePasswordVisible();
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: SvgPicture.asset(
-                            ImagePath.eyeLogoOpen,
-                            height: 7,
-                            width: 7,
-                          ),
-                        ),
+                        child: Padding(padding: const EdgeInsets.all(4), child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 7, width: 7)),
                       )
                       : GestureDetector(
                         onTap: () {
@@ -71,10 +54,7 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
                         child: const Icon(CupertinoIcons.eye_slash_fill),
                       ),
               checkValidation: (value) {
-                return Validation.conforimpasswordValidate(
-                  value,
-                  controller.confirmPasswordController.text,
-                );
+                return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
               },
             ),
           );
@@ -95,29 +75,16 @@ class EnterPasswordView extends GetView<ForgotPasswordController> {
                         onTap: () {
                           controller.changeConfirmPasswordVisible();
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: SvgPicture.asset(
-                            ImagePath.eyeLogoOpen,
-                            height: 7,
-                            width: 7,
-                          ),
-                        ),
+                        child: Padding(padding: const EdgeInsets.all(4), child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 7, width: 7)),
                       )
                       : GestureDetector(
                         onTap: () {
                           controller.changeConfirmPasswordVisible();
                         },
-                        child: const Icon(
-                          CupertinoIcons.eye_slash_fill,
-                          color: AppColors.textDarkGrey,
-                        ),
+                        child: const Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                       ),
               checkValidation: (value) {
-                return Validation.conforimpasswordValidate(
-                  value,
-                  controller.passwordController.text,
-                );
+                return Validation.conforimpasswordValidate(value, controller.passwordController.text);
               },
             ),
           );

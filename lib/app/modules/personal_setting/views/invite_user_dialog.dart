@@ -25,56 +25,28 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
       child: Form(
         key: controller.formKey,
         child: Container(
-          constraints: BoxConstraints(
-            maxHeight: Get.height * .80,
-            maxWidth: Get.width * .80,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
+          constraints: BoxConstraints(maxHeight: Get.height * .80, maxWidth: Get.width * .80),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: ListView(
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
               Container(
                 width: 360,
-                decoration: const BoxDecoration(
-                  color: AppColors.backgroundPurple,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                ),
+                decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 10,
-                        ),
-                        child: Text(
-                          "Invite",
-                          style: AppFonts.medium(14, Colors.white),
-                        ),
-                      ),
+                      Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text("Invite", style: AppFonts.medium(14, Colors.white))),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
                           // controller.list.clear();
                         },
-                        child: Container(
-                          padding: const EdgeInsets.all(15),
-                          color: AppColors.clear,
-                          child: SvgPicture.asset(
-                            "assets/images/cross_white.svg",
-                            width: 15,
-                          ),
-                        ),
+                        child: Container(padding: const EdgeInsets.all(15), color: AppColors.clear, child: SvgPicture.asset("assets/images/cross_white.svg", width: 15)),
                       ),
                     ],
                   ),
@@ -101,11 +73,7 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                               onTap: () {
                                 controller.emailAddressController.clear();
                               },
-                              suffixIcon: const Icon(
-                                Icons.highlight_remove,
-                                color: AppColors.textDarkGrey,
-                                size: 25,
-                              ),
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                               checkValidation: (value) {
                                 return Validation.emailValidateRequired(value);
                               },
@@ -129,11 +97,7 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                               onTap: () {
                                 controller.firstNameController.clear();
                               },
-                              suffixIcon: const Icon(
-                                Icons.highlight_remove,
-                                color: AppColors.textDarkGrey,
-                                size: 25,
-                              ),
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                               checkValidation: (value) {
                                 return Validation.requiredFiled(value);
                               },
@@ -151,11 +115,7 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                               onTap: () {
                                 controller.lastNameController.clear();
                               },
-                              suffixIcon: const Icon(
-                                Icons.highlight_remove,
-                                color: AppColors.textDarkGrey,
-                                size: 25,
-                              ),
+                              suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                               checkValidation: (value) {
                                 return Validation.requiredFiled(value);
                               },
@@ -171,42 +131,17 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Role",
-                                      style: AppFonts.regular(
-                                        14,
-                                        AppColors.textBlack,
-                                      ),
-                                    ),
-                                    Text(
-                                      "*",
-                                      style: AppFonts.regular(
-                                        14,
-                                        AppColors.redText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                Row(children: [Text("Role", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
                                 const SizedBox(height: 8),
                                 Obx(() {
                                   return BaseDropdown<String>(
                                     valueAsString: (value) => value ?? "",
-                                    items:
-                                        controller
-                                            .userRolesModel
-                                            .value
-                                            ?.responseData ??
-                                        [],
-                                    selectedValue:
-                                        controller.selectedRoleValue.value,
+                                    items: controller.userRolesModel.value?.responseData ?? [],
+                                    selectedValue: controller.selectedRoleValue.value,
                                     onChanged: (value) {
-                                      controller.selectedRoleValue.value =
-                                          value;
+                                      controller.selectedRoleValue.value = value;
                                     },
-                                    selectText:
-                                        controller.selectedRoleValue.value,
+                                    selectText: controller.selectedRoleValue.value,
                                   );
                                 }),
                               ],
@@ -216,37 +151,17 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Admin",
-                                      style: AppFonts.regular(
-                                        14,
-                                        AppColors.textBlack,
-                                      ),
-                                    ),
-                                    Text(
-                                      "*",
-                                      style: AppFonts.regular(
-                                        14,
-                                        AppColors.redText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                Row(children: [Text("Admin", style: AppFonts.regular(14, AppColors.textBlack)), Text("*", style: AppFonts.regular(14, AppColors.redText))]),
                                 const SizedBox(height: 8),
                                 Obx(() {
                                   return BaseDropdown<String>(
                                     valueAsString: (value) => value ?? "",
                                     items: controller.adminStatus,
-                                    selectedValue:
-                                        controller.selectedAdminValue.value,
+                                    selectedValue: controller.selectedAdminValue.value,
                                     onChanged: (value) {
-                                      controller.selectedAdminValue.value =
-                                          value;
+                                      controller.selectedAdminValue.value = value;
                                     },
-                                    selectText:
-                                        controller.selectedAdminValue.value,
+                                    selectText: controller.selectedAdminValue.value,
                                   );
                                 }),
                               ],
@@ -276,23 +191,13 @@ class InviteUserDialog extends GetView<PersonalSettingController> {
                             width: 100,
                             child: CustomButton(
                               navigate: () {
-                                if (controller.formKey.currentState!
-                                    .validate()) {
-                                  Map<String, dynamic> param =
-                                      Map<String, dynamic>();
-                                  param["email"] =
-                                      controller.emailAddressController.text;
-                                  param["is_admin"] =
-                                      controller.selectedAdminValue.value ==
-                                              "Yes"
-                                          ? true
-                                          : false;
-                                  param["first_name"] =
-                                      controller.firstNameController.text;
-                                  param["last_name"] =
-                                      controller.lastNameController.text;
-                                  param["role"] =
-                                      controller.selectedRoleValue.value;
+                                if (controller.formKey.currentState!.validate()) {
+                                  Map<String, dynamic> param = <String, dynamic>{};
+                                  param["email"] = controller.emailAddressController.text;
+                                  param["is_admin"] = controller.selectedAdminValue.value == "Yes" ? true : false;
+                                  param["first_name"] = controller.firstNameController.text;
+                                  param["last_name"] = controller.lastNameController.text;
+                                  param["role"] = controller.selectedRoleValue.value;
 
                                   receiveParam(param);
                                   Navigator.pop(context);

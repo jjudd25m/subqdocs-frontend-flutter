@@ -46,6 +46,8 @@ class ApiProvider {
 
   static ApiProvider get instance => _apiProvider;
 
+  late final Map<String, String> cachedDeviceInfo;
+
   final Dio dio = Dio();
 
   Future<bool> callStringPost(String url, {Map<String, dynamic>? params}) async {
@@ -62,7 +64,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callStringPost throw $e");
+      customPrint("callStringPost throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -85,7 +87,7 @@ class ApiProvider {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
       customPrint("API response is $e");
-      print("callPost throw $e");
+      customPrint("callPost throw $e");
       throw handleDioException(e);
     } catch (e) {
       customPrint("API response is $e");
@@ -109,7 +111,7 @@ class ApiProvider {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
       customPrint("API response is $e");
-      print("callPostWithoutHeader throw $e");
+      customPrint("callPostWithoutHeader throw $e");
       throw handleDioException(e);
     } catch (e) {
       customPrint("API response is $e");
@@ -120,7 +122,7 @@ class ApiProvider {
   Future<Map<String, dynamic>> callPut(String url, Map<String, dynamic> params) async {
     if (kDebugMode) {
       customPrint(UrlProvider.baseUrl + url);
-      print("param:- ${params}");
+      customPrint("param:- $params");
     }
     try {
       var response = await dio.put(UrlProvider.baseUrl + url, data: params, options: Options(headers: getApiHeader())).timeout(const Duration(seconds: 3000));
@@ -131,7 +133,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callPut throw $e");
+      customPrint("callPut throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -151,7 +153,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callPutWithoutError throw $e");
+      customPrint("callPutWithoutError throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -186,7 +188,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callPostMultipartDio throw $e");
+      customPrint("callPostMultipartDio throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -230,7 +232,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callPostMultiPartDioListOfFiles throw $e");
+      customPrint("callPostMultiPartDioListOfFiles throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -274,7 +276,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callPutMultiPartDioListOfFiles throw $e");
+      customPrint("callPutMultiPartDioListOfFiles throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -306,7 +308,7 @@ class ApiProvider {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
       customPrint("DioException $e");
-      print("callGet throw $e");
+      customPrint("callGet throw $e");
       throw handleDioException(e);
     } catch (e) {
       customPrint("use is not authorised ");
@@ -427,7 +429,7 @@ class ApiProvider {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
       customPrint("DioException $e");
-      print("callGetDownloadPDF throw $e");
+      customPrint("callGetDownloadPDF throw $e");
       throw handleDioException(e);
     } catch (e) {
       customPrint("catch $e");
@@ -453,7 +455,7 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      print("callDelete throw $e");
+      customPrint("callDelete throw $e");
       throw handleDioException(e);
     } catch (e) {
       rethrow;
@@ -468,7 +470,7 @@ class ApiProvider {
     return response;
   }
 
-  Map<String, String>? getApiHeader() {
+  Map<String, dynamic>? getApiHeader() {
     customPrint("getApiHeader");
     String token = "";
     String loginKey = AppPreference.instance.getString(AppString.prefKeyUserLoginData);
@@ -478,25 +480,28 @@ class ApiProvider {
     } else {}
 
     // Initialize the headers map
-    Map<String, String> headers = {"accept": "*/*", "Content-Type": "application/json"};
+    Map<String, dynamic> headers = {"accept": "*/*", "Content-Type": "application/json"};
 
     // Add x-session header if token exists
     if (token.isNotEmpty) {
       headers["Authorization"] = "Bearer $token";
     }
 
+    headers["x-device-info"] = cachedDeviceInfo;
+
     customPrint("header is $headers");
     return headers.isEmpty ? null : headers;
   }
 
-  Map<String, String>? getApiHeaderWithoutToken() {
+  Map<String, dynamic>? getApiHeaderWithoutToken() {
     customPrint("getApiHeader");
 
     // Initialize the headers map
 
     // Map<String, String> headers = {"accept": "application/json"};
-    Map<String, String> headers = {"accept": "*/*", "Content-Type": "application/json"};
+    Map<String, dynamic> headers = {"accept": "*/*", "Content-Type": "application/json"};
 
+    headers["x-device-info"] = cachedDeviceInfo;
     customPrint("header is $headers");
     return headers.isEmpty ? null : headers;
   }

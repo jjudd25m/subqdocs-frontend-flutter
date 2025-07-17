@@ -76,9 +76,14 @@ class PersonalSettingRepository {
   }
 
   Future<DeleteUserModel> deleteUserManagementMember({required String userId}) async {
-    var response = await ApiProvider.instance.callDelete(url: 'user/invite/$userId', data: {});
-    customPrint("deleteUserManagementMember API  internal response $response");
-    return DeleteUserModel.fromJson(response);
+    try {
+      var response = await ApiProvider.instance.callDelete(url: 'user/invite/$userId', data: {});
+      customPrint("deleteUserManagementMember API  internal response $response");
+      return DeleteUserModel.fromJson(response);
+    } catch (e) {
+      customPrint("deleteUserManagementMember API  internal response $e");
+      rethrow;
+    }
   }
 
   Future<GetAvailableVisitTypes> getAvailableVisitTypes() async {

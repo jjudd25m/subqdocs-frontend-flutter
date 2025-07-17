@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:mime/mime.dart';
 
 import '../../../../widget/device_detection.dart';
@@ -30,19 +29,19 @@ class VisitMainRepository {
     final GlobalMobileController globalMobileController = Get.find();
 
     String deviceType = await getDeviceType(Get.context!);
-    bool is_multi_language_preference = false;
+    bool isMultiLanguagePreference = false;
 
     if (deviceType == 'iPad') {
-      is_multi_language_preference = globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+      isMultiLanguagePreference = globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
     } else {
-      is_multi_language_preference = globalMobileController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
+      isMultiLanguagePreference = globalMobileController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false;
     }
 
     String? mimeType = lookupMimeType(audioFile.path);
 
     customPrint("uploadAudio :- $patientVisitId");
 
-    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {"isMulti": is_multi_language_preference}, {"audio": audioFile}, mimeType ?? "", token);
+    var response = await ApiProvider.instance.callPostMultiPartDio("patient/transcript/upload/$patientVisitId", {"isMulti": isMultiLanguagePreference}, {"audio": audioFile}, mimeType ?? "", token);
     return PatientTranscriptUploadModel.fromJson(response);
   }
 
@@ -80,18 +79,15 @@ class VisitMainRepository {
   }
 
   Future<PatientAttachmentListModel> getPatientAttachment({required String id, required Map<String, dynamic> param}) async {
-    print("inside getPatientAttachment");
     try {
       var response = await ApiProvider.instance.callGet("patient/attachments/$id", queryParameters: param);
       customPrint("getPatientAttachment API internal response $response");
 
       PatientAttachmentListModel testing = PatientAttachmentListModel.fromJson(response);
-      print("testing :- ${testing.toJson()}");
 
       return testing;
       // return PatientAttachmentListModel.fromJson(response);
     } catch (e) {
-      print("getPatientAttachment catch ${e.toString()}");
       return PatientAttachmentListModel.fromJson({});
     }
   }
@@ -102,7 +98,6 @@ class VisitMainRepository {
       customPrint("getAllPatientAttachment API internal response $response");
       return AllAttachmentListModel.fromJson(response);
     } catch (e) {
-      print("---getAllPatientAttachment:- ${e}");
       return AllAttachmentListModel.fromJson({});
     }
   }
@@ -114,7 +109,6 @@ class VisitMainRepository {
   }
 
   Future<ChangeStatusModel> changeStatus({required String id, required Map<String, dynamic> params}) async {
-    print("changeStatus param:- $params and id:- $id");
     var response = await ApiProvider.instance.callPut("patient/updateVisitStatus/$id", params);
     customPrint("changeStatus API  internal response $response");
     return ChangeStatusModel.fromJson(response);

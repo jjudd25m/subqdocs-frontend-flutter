@@ -41,8 +41,12 @@ class RecorderService {
   Future<bool> startRecording(BuildContext context) async {
     WakelockPlus.enable();
     final GlobalController globalController = Get.find();
+    globalController.samples.clear();
     log("log: start recording");
-    if (await audioRecorder.hasPermission()) {
+    final btMic = await audioRecorder.hasPermission();
+
+    final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+    if (btMic && btGranted) {
       Directory dir = await getApplicationCacheDirectory();
       String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
 
@@ -68,7 +72,7 @@ class RecorderService {
       _startTimer();
 
       return true;
-    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
       showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));

@@ -65,7 +65,9 @@ class AddPatientMobileViewController extends GetxController {
       if (latestPatientIdModel.responseType == "success") {
         patientId.text = latestPatientIdModel.responseData?.patientId ?? "";
       }
-    } catch (e) {}
+    } catch (e) {
+      customPrint(e);
+    }
   }
 
   Future<void> addPatient() async {

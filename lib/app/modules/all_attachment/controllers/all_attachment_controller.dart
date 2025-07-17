@@ -69,7 +69,6 @@ class AllAttachmentController extends GetxController {
         param['dateRange'] = '{"startDate":"$formattedStartDate", "endDate":"$formattedEndDate"}';
       }
       allAttachmentList.value = await _visitMainRepository.getAllPatientAttachment(id: visitId.value, param: param);
-      print("allAttachmentList count:- ${allAttachmentList.value?.responseData.data.length}");
       Loader().stopLoader();
     } catch (error) {
       Loader().stopLoader();

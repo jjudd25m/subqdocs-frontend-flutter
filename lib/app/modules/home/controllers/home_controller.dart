@@ -102,18 +102,7 @@ class HomeController extends GetxController {
   RxString startDate = RxString("MM/DD/YYYY");
   RxString endDate = RxString("");
   List<DateTime> selectedValue = [];
-  Map<String, String> nameToIdMap = {
-    "Patient Name": "first_name",
-    "Visit Date": "appointmentTime",
-    "Visit Date & Time": "appointmentTime",
-    "Last Visit Date": "lastVisitDate",
-    "Age": "age",
-    "Gender": "gender",
-    "Previous": "previousVisitCount",
-    "Previous Visits": "previousVisitCount",
-    "Status": "status",
-    "Provider": 'doctorName',
-  };
+  Map<String, String> nameToIdMap = {"Patient Name": "first_name", "Visit Date": "appointmentTime", "Visit Date & Time": "appointmentTime", "Last Visit Date": "lastVisitDate", "Age": "age", "Gender": "gender", "Previous": "previousVisitCount", "Previous Visits": "previousVisitCount", "Status": "status", "Provider": 'doctorName'};
   RxBool isInternetConnected = RxBool(true);
 
   var pagePatient = 1;
@@ -123,7 +112,6 @@ class HomeController extends GetxController {
   final Set<int> scheduleTriggeredIndexes = <int>{};
   var pageSchedule = 1;
   var pagePast = 1;
-  Set<int> _loadedThresholds = Set<int>();
   RxBool isLoading = RxBool(false);
   RxBool noMoreDataPatientList = RxBool(false);
   RxBool noMoreDataPastPatientList = RxBool(false);
@@ -221,10 +209,12 @@ class HomeController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     Get.put(GlobalController());
-    await getLatestBuild();
+
     customPrint("home controller called");
 
-    ;
+    if (Platform.isIOS || Platform.isMacOS) {
+      await getLatestBuild();
+    }
 
     globalController.liveActivitiesPlugin.init(appGroupId: 'group.subqdocs.liveactivities', urlScheme: 'la');
 
@@ -299,7 +289,6 @@ class HomeController extends GetxController {
     if (globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration ?? false) {
       var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-      print("inside patientSyncSocketSetup");
       socketService.socket.emit("EMA_user_joined", [loginData.responseData?.user?.id]);
 
       socketService.socket.on("patient_sync_started", (data) {
@@ -336,8 +325,6 @@ class HomeController extends GetxController {
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     globalController.getUserDetailModel.value = await _personalSettingRepository.getUserDetail(userId: loginData.responseData?.user?.id.toString() ?? "");
-
-    print("lanavuge :- ${globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false}");
   }
 
   Future<void> getOrganizationDetail() async {
@@ -345,8 +332,6 @@ class HomeController extends GetxController {
       globalController.getEMAOrganizationDetailModel.value = await _personalSettingRepository.getOrganizationDetail();
 
       patientSyncSocketSetup();
-      print("isEmaIntegration is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration}");
-      print("has_ema_configs is :- ${globalController.getEMAOrganizationDetailModel.value?.responseData?.has_ema_configs}");
     } catch (e) {
       customPrint("error on get OrganizationDetail :- $e");
     }
@@ -498,8 +483,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> getScheduleVisitList({String? sortingName = "", bool isFist = false}) async {
-    print("getScheduleVisitList called");
-
     scheduleVisitList.clear();
 
     pageSchedule = 1;
@@ -1029,7 +1012,7 @@ class HomeController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           getPastVisitList();
@@ -1297,7 +1280,8 @@ class HomeController extends GetxController {
     customPrint("Latest build :- $latestBuild");
     String currentBuild = info.version;
     customPrint("Current build:- $currentBuild");
-    customPrint(isVersionGreater(latestBuild, currentBuild));
+    // customPrint(isVersionGreater(latestBuild, currentBuild));
+
     if (isVersionGreater(latestBuild, currentBuild)) {
       customPrint("inside update");
       showIOSForceUpdateDialog(Get.context!, latestBuildModel.responseData?.dataValues?.versionSummary ?? "");
@@ -1337,11 +1321,7 @@ class HomeController extends GetxController {
       } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
         // Handle permission denial here
 
-        showDialog(
-          barrierDismissible: false,
-          context: Get.context!,
-          builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true),
-        );
+        showDialog(barrierDismissible: false, context: Get.context!, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
       }
     }
   }

@@ -94,8 +94,6 @@ class PersonalSettingMobileViewController extends GetxController {
   }
 
   Future<void> setUserDetail() async {
-    print("user data:- ${getUserDetailModel.value?.responseData?.toJson()}");
-
     userRole.value = getUserDetailModel.value?.responseData?.role;
     userRole.refresh();
     userOrganizationNameNameController.text = getUserDetailModel.value?.responseData?.organizationName ?? "";
@@ -268,13 +266,11 @@ class PersonalSettingMobileViewController extends GetxController {
         param['isDeleteProfileImage'] = true;
       }
     }
-    print("user loader start");
     Loader().showLoadingDialogForSimpleLoader();
     try {
       dynamic response = await _personalSettingRepository.updateUserDetail(param: param, files: profileParams, token: loginData.responseData?.token ?? "");
 
       Loader().stopLoader();
-      print("updateUserDetail is $response");
       UpdateUserResponseModel updateUserResponseModel = UpdateUserResponseModel.fromJson(response);
 
       CustomToastification().showToast(updateUserResponseModel.message ?? "", type: ToastificationType.success);

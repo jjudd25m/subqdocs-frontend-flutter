@@ -59,7 +59,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
       globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, context);
       globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, context);
     });
-    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
@@ -81,7 +81,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
 
             if (Get.currentRoute == Routes.HOME) {
               if (index == 0) {
-                final result = await Get.toNamed(Routes.ADD_PATIENT);
+                final _ = await Get.toNamed(Routes.ADD_PATIENT);
                 globalController.breadcrumbHistory.clear();
                 globalController.addRoute(Routes.HOME);
                 globalController.addRoute(Routes.ADD_PATIENT);
@@ -130,7 +130,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                   globalController.breadcrumbHistory.clear();
                   globalController.addRoute(Routes.HOME);
                   globalController.addRoute(Routes.ADD_PATIENT);
-                  final result = await Get.toNamed(Routes.ADD_PATIENT);
+                  final _ = await Get.toNamed(Routes.ADD_PATIENT);
                 }
                 widget.globalKey.currentState!.closeDrawer();
               } else if (index == 1) {
@@ -231,9 +231,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                           GestureDetector(
                                             onTap: () {
                                               globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
-
-                                              print(" when the view is expanded  value of the y ${globalController.valueOfy}");
-                                              print(" when the view is expanded  value of the x ${globalController.valueOfx}");
+                                              final buildContext = widget.globalKey.currentContext ?? context;
+                                              globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, buildContext);
+                                              globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, buildContext);
                                             },
                                             child: SvgPicture.asset(globalController.isExpandRecording.value ? ImagePath.collpase : ImagePath.expand_recording, height: 30, width: 30),
                                           ),
@@ -268,13 +268,13 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                             padding: EdgeInsets.zero,
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
-                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                                              children: [Text('Transcription in ${(globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: const TextStyle(fontSize: 16)), const SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
                                             ),
                                           ),
 
                                       // buttonBuilder: (context, showMenu) => Row(mainAxisSize: MainAxisSize.min, children: [Text('Transcription in ${globalController.selectedLanguageValue.value}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)]),
                                     ),
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
 
                                     // Obx(() {
                                     //   return BaseDropdown2<String>(
@@ -310,7 +310,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                     ] else if (globalController.recorderService.recordingStatus.value == 2) ...[
                                       Text(textAlign: TextAlign.center, "Transcription is paused", style: AppFonts.regular(17, AppColors.textBlack)),
                                     ] else ...[
-                                      const Text(" "),
+                                      Text(textAlign: TextAlign.center, "Transcription not started", style: AppFonts.regular(17, AppColors.textBlack)),
                                     ],
                                     const SizedBox(height: 16),
                                     Row(
@@ -406,14 +406,12 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               hintStyle: AppFonts.regular(12, AppColors.backgroundPurple),
                                               suffixIconConstraints: const BoxConstraints.tightFor(width: 35, height: 27),
                                               suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.backgroundPurple, size: 27),
-                                              prefixIcon: Container(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                                                  child: SvgPicture.asset(
-                                                    ImagePath.micRecording,
-                                                    // width: 25, // Explicit size
-                                                    // height: 25,
-                                                  ),
+                                              prefixIcon: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                                                child: SvgPicture.asset(
+                                                  ImagePath.micRecording,
+                                                  // width: 25, // Explicit size
+                                                  // height: 25,
                                                 ),
                                               ),
                                               prefixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 25),
@@ -469,7 +467,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                                 if (globalController.isProd) {
                                                   if (Get.currentRoute != Routes.VISIT_MAIN) {
                                                     Loader().showLoadingDialogForSimpleLoader();
-                                                    dynamic response = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": globalController.visitId.value, "patientId": globalController.patientId.value, "unique_tag": DateTime.now().toString()});
+                                                    dynamic _ = await Get.toNamed(Routes.VISIT_MAIN, arguments: {"visitId": globalController.visitId.value, "patientId": globalController.patientId.value, "unique_tag": DateTime.now().toString()});
                                                     Loader().stopLoader();
                                                   } else {
                                                     Loader().showLoadingDialogForSimpleLoader();
@@ -572,22 +570,22 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                                           ],
                                                         ),
                                                       ),
-                                                      PopupMenuItem(
-                                                        // value: "",
-                                                        padding: EdgeInsets.zero,
-                                                        onTap: () async {
-                                                          // controller.captureProfileImage();
-
-                                                          globalController.pickFiles(context);
-                                                        },
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
-                                                            Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), const SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))])),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                      // PopupMenuItem(
+                                                      //   // value: "",
+                                                      //   padding: EdgeInsets.zero,
+                                                      //   onTap: () async {
+                                                      //     // controller.captureProfileImage();
+                                                      //
+                                                      //     globalController.pickFiles(context);
+                                                      //   },
+                                                      //   child: Column(
+                                                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                                                      //     children: [
+                                                      //       Container(width: double.infinity, height: 1, color: AppColors.appbarBorder),
+                                                      //       Padding(padding: const EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10), child: Row(children: [const Icon(Icons.file_copy_rounded, color: AppColors.textDarkGrey), const SizedBox(width: 10), Text("Attach File", style: AppFonts.regular(16, AppColors.textBlack))])),
+                                                      //     ],
+                                                      //   ),
+                                                      // ),
                                                     ],
                                                 child: Container(
                                                   height: 40,
@@ -610,17 +608,15 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         SvgPicture.asset(ImagePath.recording, height: 44, width: 44),
                                         const SizedBox(width: 10),
                                         Expanded(
-                                          child: Container(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(maxLines: 1, textAlign: TextAlign.left, "${globalController.patientFirstName} ${globalController.patientLsatName}", style: AppFonts.regular(14, AppColors.textWhite), overflow: TextOverflow.ellipsis),
-                                                const SizedBox(height: 0),
-                                                Obx(() {
-                                                  return Text(textAlign: TextAlign.left, maxLines: 3, globalController.recorderService.formattedRecordingTime, style: AppFonts.regular(14, AppColors.textGrey));
-                                                }),
-                                              ],
-                                            ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(maxLines: 1, textAlign: TextAlign.left, "${globalController.patientFirstName} ${globalController.patientLsatName}", style: AppFonts.regular(14, AppColors.textWhite), overflow: TextOverflow.ellipsis),
+                                              const SizedBox(height: 0),
+                                              Obx(() {
+                                                return Text(textAlign: TextAlign.left, maxLines: 3, globalController.recorderService.formattedRecordingTime, style: AppFonts.regular(14, AppColors.textGrey));
+                                              }),
+                                            ],
                                           ),
                                         ),
                                         const SizedBox(width: 2),
@@ -764,11 +760,9 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         GestureDetector(
                                           onTap: () {
                                             globalController.isExpandRecording.value = !globalController.isExpandRecording.value;
-
-                                            print(" when the view is non expanded  value of the y ${globalController.valueOfy}");
-                                            print(" when the view is non  expanded  value of the x ${globalController.valueOfx}");
-
-                                            globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, context);
+                                            final buildContext = widget.globalKey.currentContext ?? context;
+                                            globalController.valueOfx.value = globalController.snapXToEdge(globalController.valueOfx.value, buildContext);
+                                            globalController.valueOfy.value = globalController.adjustYPosition(globalController.valueOfy.value, buildContext);
                                           },
                                           child: SvgPicture.asset(ImagePath.expand_recording, height: 30, width: 30),
                                         ),
@@ -797,7 +791,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
   Widget _buildDropdownOption(String language) {
     return GestureDetector(
       onTap: () => selectLanguage(language),
-      child: Obx(() => Container(width: 200, padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
+      child: Obx(() => Container(width: 200, padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(4)), child: Text(language, style: TextStyle(fontSize: 16, color: globalController.selectedLanguageValue.value == language ? Colors.blue : Colors.black)))),
     );
   }
 

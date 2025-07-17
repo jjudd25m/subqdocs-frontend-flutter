@@ -9,6 +9,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/widgets/base_screen_mobile.dart';
 import 'package:subqdocs/widgets/custom_tab_button.dart';
+import 'package:subqdocs/widgets/base_dropdown2.dart';
 
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/imagepath.dart';
@@ -129,7 +130,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                               padding: EdgeInsets.zero,
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                children: [Text('Transcription in ${(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: TextStyle(fontSize: 16)), SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
+                                children: [Text('Transcription in ${(controller.globalController.getUserDetailModel.value?.responseData?.is_multi_language_preference ?? false) ? "Multi language" : "English"}', style: const TextStyle(fontSize: 16)), const SizedBox(width: 8), Icon(controller.globalController.isDropdownOpen.value ? Icons.arrow_drop_up : Icons.arrow_drop_down, size: 24)],
                               ),
                             ),
                       ),
@@ -177,80 +178,47 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                               },
                             ),
                             // Static audio icon
-                            Container(width: 140, height: 140, child: Image.asset(ImagePath.audio_recording_png, width: 100, height: 100)),
+                            SizedBox(width: 140, height: 140, child: Image.asset(ImagePath.audio_recording_png, width: 100, height: 100)),
                           ],
                         ),
                       ),
-                      if (controller.globalController.samples.isNotEmpty)
-                        // Text(globalController.samples.first.heightFactor.toString()),
-                        Center(
-                          child: AudioWave(
-                            animation: false,
-                            height: 30,
-                            width: 160,
-                            spacing: 2.5,
-                            animationLoop: 0,
-                            // beatRate: Duration(milliseconds: 500),
-                            bars: controller.globalController.samples.map((sample) => sample).toList(),
-                          ),
-                        ),
-                      // if (Platform.isIOS) ...[
-                      //   Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Obx(() {
-                      //         return BaseDropdown2(
-                      //           height: 35,
-                      //           width: 175,
-                      //           fontSize: 12,
-                      //           inputDecoration: InputDecoration(
-                      //             hintText: controller.globalController.selectedMic.value.isEmpty ? "Select..." : controller.globalController.selectedMic.value,
-                      //             hintStyle: AppFonts.regular(12, AppColors.backgroundPurple),
-                      //             suffixIconConstraints: const BoxConstraints.tightFor(width: 35, height: 27),
-                      //             suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.backgroundPurple, size: 27),
-                      //             prefixIcon: Container(
-                      //               child: Padding(
-                      //                 padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                      //                 child: SvgPicture.asset(
-                      //                   ImagePath.micRecording,
-                      //                   // width: 25, // Explicit size
-                      //                   // height: 25,
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //             prefixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 25),
-                      //             fillColor: AppColors.lightpurpule,
-                      //             filled: true,
-                      //             border: OutlineInputBorder(
-                      //               borderSide: BorderSide.none,
-                      //               borderRadius: BorderRadius.circular(100), // main border radius
-                      //             ),
-                      //             enabledBorder: OutlineInputBorder(
-                      //               borderRadius: BorderRadius.circular(100),
-                      //               // increased from 5 to 100 for roundness
-                      //               borderSide: BorderSide.none,
-                      //             ),
-                      //             focusedBorder: OutlineInputBorder(
-                      //               borderRadius: BorderRadius.circular(100),
-                      //               // increased from 5 to 100 for roundness
-                      //               borderSide: BorderSide.none,
-                      //             ),
-                      //           ),
-                      //           controller: TextEditingController(),
-                      //           decoration: BoxDecoration(border: Border.all(color: Colors.red)),
-                      //           valueAsString: (value) => value ?? "aa",
-                      //           items: controller.globalController.connectedMic,
-                      //           selectedValue: controller.globalController.selectedMic.value,
-                      //           onChanged: (value) {
-                      //             controller.globalController.selectedMic.value = value ?? "";
-                      //             controller.globalController.setPreferredAudioInput(value ?? "");
-                      //           },
-                      //           selectText: "Select Mic",
-                      //         );
-                      //       }),
-                      //     ],
-                      //   ),
-                      // ],
+                      if (controller.globalController.samples.isNotEmpty) Center(child: AudioWave(animation: false, height: 30, width: 160, spacing: 2.5, animationLoop: 0, bars: controller.globalController.samples.map((sample) => sample).toList())),
+                      // Mic selection dropdown (shown on all platforms, like iPad view)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Obx(() {
+                            return BaseDropdown2<String>(
+                              height: 35,
+                              width: 175,
+                              fontSize: 12,
+                              inputDecoration: InputDecoration(
+                                hintText: controller.globalController.selectedMic.value.isEmpty ? "Select..." : controller.globalController.selectedMic.value,
+                                hintStyle: AppFonts.regular(12, AppColors.backgroundPurple),
+                                suffixIconConstraints: const BoxConstraints.tightFor(width: 35, height: 27),
+                                suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.backgroundPurple, size: 27),
+                                prefixIcon: Padding(padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5), child: SvgPicture.asset(ImagePath.micRecording)),
+                                prefixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 25),
+                                fillColor: AppColors.lightpurpule,
+                                filled: true,
+                                border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(100)),
+                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100), borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100), borderSide: BorderSide.none),
+                              ),
+                              controller: TextEditingController(),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+                              valueAsString: (value) => value ?? "",
+                              items: controller.globalController.connectedMic,
+                              selectedValue: controller.globalController.selectedMic.value,
+                              onChanged: (value) {
+                                controller.globalController.selectedMic.value = value ?? "";
+                                controller.globalController.setPreferredAudioInput(value ?? "");
+                              },
+                              selectText: "Select Mic",
+                            );
+                          }),
+                        ],
+                      ),
                       Obx(() {
                         return Center(child: Text(textAlign: TextAlign.center, "(${controller.recorderService.formattedRecordingTime})", style: AppFonts.regular(14, AppColors.textBlack)));
                       }),

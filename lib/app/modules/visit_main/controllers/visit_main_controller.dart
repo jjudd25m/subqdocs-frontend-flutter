@@ -23,6 +23,7 @@ import '../../../data/provider/api_provider.dart';
 import '../../../data/service/database_helper.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalRecords.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/media_listing_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../edit_patient_details/model/patient_detail_model.dart';
@@ -40,6 +41,10 @@ import '../views/attachmentDailog.dart';
 
 class VisitMainController extends GetxController with WidgetsBindingObserver {
   //TODO: Implement VisitMainController
+
+  Rxn<SelectedDoctorModel> selectedDoctorValueModel = Rxn();
+  TextEditingController doctorController = TextEditingController();
+  FocusNode doctorFocusNode = FocusNode();
 
   RxBool isKeyboardVisible = RxBool(false);
   PageController pageController = PageController();
@@ -176,7 +181,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> updateFullNote(String keyName, List<ImpresionAndPlanViewModel> list) async {
-    var response = await visitMainRepository.updateFullNote(id: medicalRecords.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+    var _ = await visitMainRepository.updateFullNote(id: medicalRecords.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
   }
 
   String _formatDate(DateTime date) {
@@ -221,7 +226,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
     }
 
     list.refresh();
@@ -332,7 +337,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
       }
 
       list.refresh();
@@ -379,7 +384,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true));
       }
     });
     list.refresh();
@@ -521,7 +526,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   }
 
   void handelInternetConnection() {
-    final listener = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           onLine();
@@ -540,9 +545,11 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach((element) {
-      totalSize += element.calculateSize ?? 0;
-    });
+    totalSize = list.fold(0, (sum, element) => sum + (element.calculateSize ?? 0));
+
+    // list.value.forEach((element) {
+    //   totalSize += element.calculateSize ?? 0;
+    // });
 
     if (totalSize < 100) {
       return true;
@@ -554,11 +561,13 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach((element) {
-      if (element.isGraterThan10 ?? false) {
-        isGraterThan10 = true;
-      }
-    });
+    isGraterThan10 = list.any((element) => element.isGraterThan10 == true);
+
+    // list.value.forEach((element) {
+    //   if (element.isGraterThan10 ?? false) {
+    //     isGraterThan10 = true;
+    //   }
+    // });
 
     return isGraterThan10;
   }
@@ -642,7 +651,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
     // }
     // var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
     try {
-      dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId.value);
+      dynamic _ = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId.value);
 
       CustomToastification().showToast("Update Doctor Successfully", type: ToastificationType.success);
     } catch (e) {
@@ -658,7 +667,7 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
     }
 
     try {
-      dynamic response = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId.value);
+      dynamic _ = await _homeRepository.patientReScheduleVisit(param: param, visitId: visitId.value);
 
       CustomToastification().showToast("Update Medical Assistant Successfully", type: ToastificationType.success);
     } catch (e) {
@@ -788,7 +797,9 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
     if (patientId.value.isNotEmpty && visitId.value != "null") {
       try {
         patientDetailModel.value = await _editPatientDetailsRepository.getPatientDetails(id: patientId.value);
-      } catch (e) {}
+      } catch (e) {
+        customPrint(e);
+      }
 
       getVisitRecap();
       getPatientAttachment();

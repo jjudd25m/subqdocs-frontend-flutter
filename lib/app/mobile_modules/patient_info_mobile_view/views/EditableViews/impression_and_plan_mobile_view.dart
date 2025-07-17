@@ -43,6 +43,11 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               onReorder: (oldIndex, newIndex) {
+                for (var item in controller.impressionAndPlanListFullNote) {
+                  item.slidableController?.close();
+                  item.isOpened?.value = false;
+                }
+
                 controller.resetImpressionAndPlanList();
                 if (newIndex > oldIndex) newIndex -= 1;
                 final item = controller.impressionAndPlanListFullNote.removeAt(oldIndex);
@@ -62,16 +67,16 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                       key: ValueKey(model),
                       controller: model.slidableController,
                       startActionPane: ActionPane(
-                        motion: ScrollMotion(),
+                        motion: const ScrollMotion(),
                         extentRatio: 0.11,
                         children: [
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.2)), color: AppColors.backgroundPurple.withValues(alpha: 0.1)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   // onTap: () {
                                   //   controller.resetImpressionAndPlanList();
@@ -79,23 +84,40 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   // },
                                   child: SvgPicture.asset(ImagePath.dragAndDrop),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.impressionAndPlanListFullNote.insert(index + 1, ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null));
+                                    controller.impressionAndPlanListFullNote.insert(index + 1, ImpresionAndPlanViewModel(htmlEditorController: HtmlEditorController(), siblingIcd10: [], htmlContent: null, isEditing: false, siblingIcd10FullNote: [], title: null, attachments: []));
                                     controller.impressionAndPlanListFullNote.refresh();
                                     // controller.addImpressionPlanItems(index);
                                   },
                                   child: SvgPicture.asset(ImagePath.plus),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    controller.impressionAndPlanListFullNote.removeAt(index);
-                                    controller.impressionAndPlanListFullNote.refresh();
-                                    controller.updateImpressionAndPlanFullNote();
+                                    showDialog(
+                                      context: Get.context!,
+                                      builder:
+                                          (context) => AlertDialog(
+                                            title: const Text("Alert"),
+                                            content: const Text("Are you sure you want to delete this Impression and Plan?"),
+                                            actions: [
+                                              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
+                                              TextButton(
+                                                onPressed: () {
+                                                  controller.impressionAndPlanListFullNote.removeAt(index);
+                                                  controller.impressionAndPlanListFullNote.refresh();
+                                                  controller.updateImpressionAndPlanFullNote();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Delete", style: TextStyle(color: Colors.red)),
+                                              ),
+                                            ],
+                                          ),
+                                    );
                                   },
-                                  child: SvgPicture.asset(ImagePath.trash, colorFilter: ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
+                                  child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
                                 ),
                               ],
                             ),
@@ -106,6 +128,11 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                         builder: (context) {
                           const _openThreshold = 0.03;
                           model.slidableController?.animation.addListener(() {
+                            if (model.slidableController?.animation.status == AnimationStatus.dismissed) {
+                              model.isOpened?.value = false;
+                              return;
+                            }
+
                             final rawValue = model.slidableController?.animation.value ?? 0;
                             final isOpen = rawValue > _openThreshold; // Explicit boolean conversion
                             customPrint("message:SlidableState raw $rawValue: isOpen $isOpen");
@@ -194,7 +221,7 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                               model.popoverController.toggle();
                                               model.slidableController?.openStartActionPane();
                                             },
-                                            child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: Icon(Icons.arrow_drop_down_sharp, size: 40)),
+                                            child: Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 0), child: const Icon(Icons.arrow_drop_down_sharp, size: 40)),
                                           ),
                                           //
                                           // GestureDetector(
@@ -268,9 +295,9 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                             },
                                           ),
                                         ),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Padding(padding: const EdgeInsets.only(left: 15, right: 10), child: Text("Add Attachments", style: AppFonts.medium(14, Colors.black))),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Padding(
                                           padding: const EdgeInsets.only(left: 15, right: 10),
                                           child: DragTarget<Map<String, dynamic>>(
@@ -322,17 +349,28 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                             },
                                             builder: (context, candidateData, rejectedData) {
                                               if (model.attachments == null || model.attachments!.isEmpty) {
-                                                return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("No Attachments")));
+                                                return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("No Attachments")));
                                               }
                                               return Container(
                                                 width: double.infinity,
-                                                margin: EdgeInsets.only(top: 10),
+                                                margin: const EdgeInsets.only(top: 10),
                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
                                                 child: Wrap(
                                                   spacing: 8,
                                                   runSpacing: 8,
                                                   children: List.generate(model.attachments?.length ?? 0, (imageIndex) {
                                                     return LongPressDraggable<Map<String, dynamic>>(
+                                                      maxSimultaneousDrags: 1,
+                                                      hitTestBehavior: HitTestBehavior.translucent,
+                                                      onDraggableCanceled: (velocity, offset) {
+                                                        controller.impressionAndPlanListFullNote.refresh();
+                                                        controller.generalAttachments.refresh();
+                                                        controller.updateImpressionAndPlanFullNote();
+                                                      },
+                                                      onDragEnd: (details) {
+                                                        controller.impressionAndPlanListFullNote.refresh();
+                                                        controller.generalAttachments.refresh();
+                                                      },
                                                       data: {'attachment': model.attachments?[imageIndex], 'fromListIndex': index, 'fromImageIndex': imageIndex, 'isGeneral': false},
                                                       feedback: Material(elevation: 4.0, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false, dragging: true)),
                                                       childWhenDragging: Opacity(opacity: 0.3, child: _imageContainer(model.attachments?[imageIndex] ?? Attachments(), context, imageIndex, index, false)),
@@ -353,13 +391,17 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                             model.attachments!.insert(insertIndex, draggedImage);
                                                             controller.generalAttachments.removeAt(fromImageIndex);
                                                           } else if (fromListIndex == index) {
-                                                            if (fromImageIndex < imageIndex) {
-                                                              insertIndex -= 1;
-                                                            }
-                                                            final attachments = List<Attachments?>.from(model.attachments ?? []);
-                                                            attachments.removeAt(fromImageIndex);
-                                                            attachments.insert(insertIndex, draggedImage);
-                                                            model.attachments = attachments.cast<Attachments>();
+                                                            final temp = model.attachments![imageIndex];
+                                                            model.attachments![imageIndex] = model.attachments![fromImageIndex];
+                                                            model.attachments![fromImageIndex] = temp;
+
+                                                            // if (fromImageIndex < imageIndex) {
+                                                            //   insertIndex -= 1;
+                                                            // }
+                                                            // final attachments = List<Attachments?>.from(model.attachments ?? []);
+                                                            // attachments.removeAt(fromImageIndex);
+                                                            // attachments.insert(insertIndex, draggedImage);
+                                                            // model.attachments = attachments.cast<Attachments>();
                                                           } else {
                                                             controller.impressionAndPlanListFullNote[index].attachments?.insert(insertIndex, draggedImage);
                                                             controller.impressionAndPlanListFullNote[fromListIndex].attachments?.removeAt(fromImageIndex);
@@ -384,11 +426,11 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                     ),
                                   ),
                                   if (controller.impressionAndPlanListFullNote.length - 1 == index) ...[
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Divider(height: 1, color: AppColors.textGrey.withValues(alpha: 0.2)),
                                     const SizedBox(height: 16),
                                     Padding(padding: const EdgeInsets.only(left: 15, right: 10), child: Align(alignment: Alignment.topLeft, child: Text("General Images", style: AppFonts.medium(14, AppColors.black)))),
-                                    SizedBox(height: 8),
+                                    const SizedBox(height: 8),
                                     DragTarget<Map<String, dynamic>>(
                                       onWillAcceptWithDetails: (data) => true,
                                       onAcceptWithDetails: (details) {
@@ -417,13 +459,13 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                       },
                                       builder: (context, candidateData, rejectedData) {
                                         if (controller.generalAttachments.isEmpty) {
-                                          return SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
+                                          return const SizedBox(width: double.infinity, height: 100, child: Center(child: Text("Drag attachments here")));
                                         }
                                         return Container(
                                           width: double.infinity,
-                                          margin: EdgeInsets.only(top: 10),
+                                          margin: const EdgeInsets.only(top: 10),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                                          padding: EdgeInsets.only(left: 15, right: 10),
+                                          padding: const EdgeInsets.only(left: 15, right: 10),
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
@@ -432,6 +474,17 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                                 runSpacing: 8,
                                                 children: List.generate(controller.generalAttachments.length, (imageIndex) {
                                                   return LongPressDraggable<Map<String, dynamic>>(
+                                                    maxSimultaneousDrags: 1,
+                                                    hitTestBehavior: HitTestBehavior.translucent,
+                                                    onDraggableCanceled: (velocity, offset) {
+                                                      controller.impressionAndPlanListFullNote.refresh();
+                                                      controller.generalAttachments.refresh();
+                                                      controller.updateImpressionAndPlanFullNote();
+                                                    },
+                                                    onDragEnd: (details) {
+                                                      controller.impressionAndPlanListFullNote.refresh();
+                                                      controller.generalAttachments.refresh();
+                                                    },
                                                     data: {
                                                       'attachment': controller.generalAttachments[imageIndex],
                                                       'fromListIndex': index,
@@ -512,82 +565,71 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
   }
 
   Widget _imageContainer(Attachments attachment, BuildContext context, int imageIndex, int listIndex, bool isGeneral, {bool dragging = false}) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Container(
-        // key: ValueKey(attachment.id),
-        width: double.infinity,
-        height: 200,
-        decoration: BoxDecoration(color: dragging ? AppColors.tableItem : Colors.grey[300], borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top row with filename and delete button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InlineEditingDropdown(
-                      focusNode: attachment.focusNode,
-                      textStyle: AppFonts.medium(16, AppColors.textPurple),
-                      initialText: "${attachment.fileName?.split(".").first}",
-                      toggle: () {},
-                      onSubmitted: (_) {},
-                      onChanged: (title, isApiCall) {
-                        attachment.fileName = title;
-                        if (isApiCall) {
-                          controller.updateImpressionAndPlanFullNoteAttachmentName(title, attachment.id);
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      if (isGeneral) {
-                        controller.generalAttachments.removeAt(imageIndex);
-                      } else {
-                        controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+    const double cardSize = 160.0; // Fixed card and image size as in impression_and_plan.dart
+    return Container(
+      width: (context.width / 2) - 50,
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.10), blurRadius: 16, offset: const Offset(0, 6))], border: Border.all(color: Colors.grey.shade200, width: 1)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, top: 3.0, bottom: 3.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InlineEditingDropdown(
+                    focusNode: attachment.focusNode,
+                    textStyle: AppFonts.medium(16, AppColors.textPurple),
+                    initialText: "${attachment.fileName?.split(".").first}",
+                    toggle: () {},
+                    maxLines: 1,
+                    onSubmitted: (_) {},
+                    onChanged: (title, isApiCall) {
+                      attachment.fileName = title;
+                      if (isApiCall) {
+                        controller.updateImpressionAndPlanFullNoteAttachmentName(title, attachment.id);
                       }
-
-                      controller.impressionAndPlanListFullNote.refresh();
-                      controller.generalAttachments.refresh();
-
-                      controller.impressionAndPlanListFullNote.refresh();
-                      controller.isFullNoteAttachment.value = false;
-                      controller.updateImpressionAndPlanFullNote();
                     },
-                    child: SvgPicture.asset(ImagePath.delete_black),
-                  ),
-                ],
-              ),
-            ),
-
-            // Image section with proper constraints
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: CachedNetworkImage(
-                      width: double.infinity,
-                      // Take all available width
-                      height: double.infinity,
-                      // Take all available height
-                      imageUrl: attachment.filePath ?? "",
-                      errorWidget: (context, url, error) {
-                        return Image.asset(ImagePath.file_placeHolder, width: double.infinity, height: double.infinity, fit: BoxFit.cover);
-                      },
-                      fit: BoxFit.cover,
-                    ),
                   ),
                 ),
+                const SizedBox(width: 5),
+                GestureDetector(
+                  onTap: () {
+                    if (isGeneral) {
+                      controller.generalAttachments.removeAt(imageIndex);
+                    } else {
+                      controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                    }
+                    controller.impressionAndPlanListFullNote.refresh();
+                    controller.generalAttachments.refresh();
+                    controller.isFullNoteAttachment.value = false;
+                    controller.updateImpressionAndPlanFullNote();
+                  },
+                  child: Container(decoration: BoxDecoration(color: AppColors.white.withValues(alpha: 0.0)), child: SvgPicture.asset(ImagePath.delete_black, height: 40, width: 50)),
+                ),
+              ],
+            ),
+          ),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+            child: Container(
+              width: (context.width / 2) - 50,
+              height: cardSize - 20,
+              color: Colors.grey[100],
+              child: CachedNetworkImage(
+                width: cardSize,
+                height: cardSize - 20,
+                imageUrl: attachment.filePath ?? "",
+                errorWidget: (context, url, error) {
+                  return Image.asset(ImagePath.file_placeHolder, width: cardSize, height: cardSize, fit: BoxFit.cover);
+                },
+                fit: BoxFit.cover,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

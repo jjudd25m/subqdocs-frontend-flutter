@@ -68,9 +68,7 @@ class _CustomMobileSearchBarState extends State<CustomMobileSearchBar> {
   }
 
   void _onTextChanged() {
-    print("_onTextChanged called");
-
-    widget.showClearButton = _controller.text.isNotEmpty;
+    _controller.text.isNotEmpty;
 
     _showClearButton.value = _controller.text.isNotEmpty;
     timer?.cancel();

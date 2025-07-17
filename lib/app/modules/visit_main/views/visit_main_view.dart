@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_side_sheet/Enums/sheet_position.dart';
 import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,9 +23,12 @@ import '../../../../utils/app_fonts.dart';
 import '../../../../utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
+import '../../../../widgets/base_dropdown2.dart';
 import '../../../../widgets/customPermission.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
+import '../../../models/audio_wave.dart';
 import '../../../routes/app_pages.dart';
 import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
@@ -49,16 +54,15 @@ class VisitMainView extends StatefulWidget {
 
 class _VisitMainViewState extends State<VisitMainView> {
   VisitMainController controller = Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]);
-
+  final ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
     return BaseScreen(
       onItemSelected: (index) async {
         if (index == 0) {
-          final result = await Get.toNamed(Routes.ADD_PATIENT);
+          final _ = await Get.toNamed(Routes.ADD_PATIENT);
 
           _key.currentState!.closeDrawer();
         } else if (index == 1) {
@@ -73,7 +77,7 @@ class _VisitMainViewState extends State<VisitMainView> {
           _key.currentState!.closeDrawer();
         } else if (index == 4) {
           _key.currentState!.closeDrawer();
-          final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          final _ = await Get.toNamed(Routes.PERSONAL_SETTING);
         }
       },
       isVisibleModel: true,
@@ -151,7 +155,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     const Spacer(),
                                     GestureDetector(
                                       onTap: () async {
-                                        final result = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientId.value, "visitId": controller.visitId.value, "fromSchedule": true});
+                                        final _ = await Get.toNamed(Routes.EDIT_PATENT_DETAILS, arguments: {"patientData": controller.patientId.value, "visitId": controller.visitId.value, "fromSchedule": true});
                                         controller.globalController.addRoute(Routes.EDIT_PATENT_DETAILS);
                                         controller.getPatientDetails();
                                       },
@@ -243,47 +247,66 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Text(textAlign: TextAlign.center, "Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
+                                            Text("Doctor", style: AppFonts.regular(12, AppColors.textBlack)),
                                             const SizedBox(height: 6),
                                             if (controller.visitId.value == "null") const Text(textAlign: TextAlign.center, "-"),
                                             if (controller.visitId.value != "null")
-                                              PopupMenuButton<String>(
-                                                offset: const Offset(0, 8),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                                color: AppColors.white,
-                                                position: PopupMenuPosition.under,
-                                                padding: EdgeInsetsDirectional.zero,
-                                                menuPadding: EdgeInsetsDirectional.zero,
-                                                onSelected: (value) {},
-                                                style: const ButtonStyle(padding: WidgetStatePropertyAll(EdgeInsetsDirectional.zero), tapTargetSize: MaterialTapTargetSize.shrinkWrap, maximumSize: WidgetStatePropertyAll(Size.zero), visualDensity: VisualDensity(horizontal: 0, vertical: 0)),
-                                                itemBuilder:
-                                                    (context) => [
-                                                      PopupMenuItem(
-                                                        padding: EdgeInsets.zero,
-                                                        onTap: () async {},
-                                                        value: "",
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(0),
-                                                          child: SizedBox(
-                                                            width: 165,
-                                                            child: DropDownWithSearchPopup(
-                                                              key: UniqueKey(),
-                                                              onChanged: (value, index, selectedId, name) {
-                                                                customPrint("print the doctor view ");
-
-                                                                controller.doctorValue.value = name;
-                                                                Get.back();
-                                                                controller.updateDoctorView(selectedId);
-                                                              },
-                                                              list: controller.globalController.selectedDoctorModel.toList(),
-                                                              receiveParam: (String value) {},
-                                                              selectedId: 1,
-                                                            ),
-                                                          ),
+                                              SizedBox(
+                                                height: 25,
+                                                child: Obx(() {
+                                                  return BaseDropdown2<SelectedDoctorModel>(
+                                                    isRequired: true,
+                                                    width: 170,
+                                                    onTapUpOutside: (p0) {
+                                                      if (controller.selectedDoctorValueModel.value != null) {
+                                                        controller.doctorController.clear();
+                                                        controller.doctorValue.refresh();
+                                                      } else {
+                                                        controller.doctorValue.value = "N/A";
+                                                        controller.doctorController.clear();
+                                                        controller.doctorValue.refresh();
+                                                      }
+                                                    },
+                                                    focusNode: controller.doctorFocusNode,
+                                                    controller: controller.doctorController,
+                                                    scrollController: scrollController,
+                                                    direction: VerticalDirection.down,
+                                                    inputDecoration: InputDecoration(
+                                                      suffixIcon: const Padding(padding: EdgeInsets.all(0), child: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textDarkGrey)),
+                                                      fillColor: AppColors.white,
+                                                      filled: true,
+                                                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                                      hintText: controller.doctorValue.value.isEmpty ? "Select" : controller.doctorValue.value,
+                                                      hintStyle: controller.doctorValue.value.isEmpty ? AppFonts.regular(14, AppColors.textDarkGrey) : AppFonts.regular(14, AppColors.textBlack),
+                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 0, color: AppColors.white)),
+                                                    ),
+                                                    valueAsString: (SelectedDoctorModel? model) => model?.name ?? "",
+                                                    items: controller.globalController.selectedDoctorModel.toList(),
+                                                    selectedValue: controller.selectedDoctorValueModel.value,
+                                                    itemBuilder: (p0) {
+                                                      return Container(
+                                                        color: Colors.white,
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Padding(padding: const EdgeInsets.only(left: 10), child: ClipRRect(borderRadius: BorderRadius.circular(16), child: BaseImageView(height: 32, width: 32, nameLetters: p0.name ?? "", fontSize: 12, imageUrl: p0.profileImage ?? ""))),
+                                                            const SizedBox(width: 10),
+                                                            Expanded(child: Container(color: AppColors.white, child: Text(p0.name ?? "", style: AppFonts.medium(14, AppColors.black)))),
+                                                          ],
                                                         ),
-                                                      ),
-                                                    ],
-                                                child: IntrinsicWidth(child: ContainerDropdownViewPopUp(receiveParam: (isExpand) {}, name: controller.doctorValue.value)),
+                                                      );
+                                                    },
+                                                    onChanged: (SelectedDoctorModel? model) {
+                                                      controller.doctorValue.value = model?.name ?? "";
+                                                      controller.doctorValue.refresh();
+                                                      controller.updateDoctorView(model?.id ?? -1);
+                                                    },
+                                                    selectText: controller.doctorValue.value,
+                                                    isSearchable: true,
+                                                  );
+                                                }),
                                               ),
                                           ],
                                         ),
@@ -428,7 +451,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             if (controller.globalController.visitId.isNotEmpty) {
                                                               CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                                             } else {
-                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
+                                                              final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
                                                                 controller.globalController.isStartTranscript.value = true;
                                                                 controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
                                                                 controller.globalController.attachmentId.value = controller.patientId.value;
@@ -441,9 +465,20 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 controller.globalController.startAudioWidget();
                                                                 controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                                                 controller.globalController.getConnectedInputDevices();
+
+                                                                controller.globalController.samples.assignAll(
+                                                                  List.generate(
+                                                                    30,
+                                                                    (index) => AudioWaveBar(
+                                                                      heightFactor: 0.4, // Creates a repeating pattern
+                                                                      color: AppColors.backgroundPurple,
+                                                                    ),
+                                                                  ),
+                                                                );
+
                                                                 await controller.globalController.recorderService.startRecording(context);
-                                                              } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
-                                                                showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
+                                                              } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
+                                                                showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
                                                               }
                                                             }
                                                           }
@@ -513,138 +548,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                   ),
                                                 ],
                                               ),
-                                              // Row(
-                                              //   children: [
-                                              //     Expanded(child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, controller.visitDate(controller.patientDetailModel.value?.responseData!.scheduledVisits?[index].visitDate), style: AppFonts.regular(14, AppColors.textGrey))),
-                                              //     const SizedBox(width: 15),
-                                              //     Expanded(child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, controller.visitTime(controller.patientDetailModel.value?.responseData!.scheduledVisits?[index].visitTime), style: AppFonts.regular(14, AppColors.textGrey))),
-                                              //     // Spacer(),
-                                              //     const SizedBox(width: 5),
-                                              //     const Spacer(),
-                                              //
-                                              //     Row(
-                                              //       children: [
-                                              //         GestureDetector(
-                                              //           onTap: () async {
-                                              //             if (controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() != controller.visitId.value) {
-                                              //               customPrint("print");
-                                              //               // Get.back();
-                                              //               controller.globalController.breadcrumbHistory.removeLast();
-                                              //
-                                              //               controller.globalController.addRoute(Routes.VISIT_MAIN);
-                                              //               Get.toNamed(Routes.VISIT_MAIN, preventDuplicates: false, arguments: {"visitId": controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString(), "patientId": controller.patientId.value, "unique_tag": DateTime.now().toString()})?.then((value) => Get.back());
-                                              //             } else {
-                                              //               if (controller.globalController.visitId.isNotEmpty) {
-                                              //                 CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
-                                              //               } else {
-                                              //                 if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
-                                              //                   controller.globalController.isStartTranscript.value = true;
-                                              //                   controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
-                                              //                   controller.globalController.attachmentId.value = controller.patientId.value;
-                                              //                   controller.globalController.patientLsatName.value = controller.patientData.value.responseData?.patientLastName ?? "";
-                                              //                   controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
-                                              //                   controller.globalController.patientLsatName.value = controller.patientData.value.responseData?.patientLastName ?? "";
-                                              //
-                                              //                   controller.globalController.valueOfx.value = 0;
-                                              //                   controller.globalController.valueOfy.value = 0;
-                                              //
-                                              //                   controller.globalController.visitId = controller.visitId;
-                                              //                   controller.globalController.patientId = controller.patientId;
-                                              //
-                                              //                   controller.globalController.changeStatus("In-Room");
-                                              //                   // If not recording, start the recording
-                                              //                   controller.globalController.startAudioWidget();
-                                              //                   controller.globalController.recorderService.audioRecorder = AudioRecorder();
-                                              //                   controller.globalController.getConnectedInputDevices();
-                                              //                   await controller.globalController.recorderService.startRecording(context);
-                                              //                 } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
-                                              //                   // Handle permission denial here
-                                              //
-                                              //                   showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
-                                              //                 }
-                                              //               }
-                                              //               // CustomToastification().showToast("Visit Already Opened", type: ToastificationType.info);
-                                              //             }
-                                              //           },
-                                              //           child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, (controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() != controller.visitId.value) ? "Start visit now" : "Start Transcribing", style: AppFonts.regular(14, AppColors.backgroundPurple)),
-                                              //         ),
-                                              //
-                                              //         const SizedBox(width: 30),
-                                              //         GestureDetector(
-                                              //           onTap: () {
-                                              //             DateTime visitdate = DateTime.parse(controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].visitTime ?? "");
-                                              //             DateTime visitTimeS = DateTime.parse(controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].visitTime ?? ""); // Parsing the string to DateTime
-                                              //             // Formatting to "hh:mm a" format
-                                              //             String formattedTime = DateFormat('hh:mm a').format(visitTimeS.toLocal());
-                                              //
-                                              //             controller.isConnected.value
-                                              //                 ? showDialog(
-                                              //                   context: context,
-                                              //                   barrierDismissible: true,
-                                              //                   // Allows dismissing the dialog by tapping outside
-                                              //                   builder: (BuildContext context) {
-                                              //                     return HomeReschedulePatientDialog(
-                                              //                       receiveParam: (p0, p1, doctorId, medicalId) {
-                                              //                         customPrint("p0 is $p0 p1 is $p1");
-                                              //
-                                              //                         Map<String, dynamic> param = {};
-                                              //
-                                              //                         param['visit_date'] = p1;
-                                              //                         param['visit_time'] = p0;
-                                              //
-                                              //                         if (doctorId != -1) {
-                                              //                           param['doctor_id'] = doctorId;
-                                              //                         }
-                                              //
-                                              //                         if (medicalId != -1) {
-                                              //                           param['medical_assistant_id'] = medicalId;
-                                              //                         }
-                                              //
-                                              //                         controller.patientReScheduleCreate(param: param, visitId: controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "-1");
-                                              //                       },
-                                              //                       visitDate: Rxn(visitdate),
-                                              //                       selectedDoctorValueSchedule: null,
-                                              //
-                                              //                       selectedMedicalValueSchedule: null,
-                                              //
-                                              //                       selectedVisitTimeValue: RxnString(formattedTime),
-                                              //                     ); // Our custom dialog
-                                              //                   },
-                                              //                 )
-                                              //                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
-                                              //           },
-                                              //           child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Reschedule", style: AppFonts.regular(14, AppColors.backgroundPurple)),
-                                              //         ),
-                                              //         const SizedBox(width: 30),
-                                              //         GestureDetector(
-                                              //           onTap: () {
-                                              //             controller.isConnected.value
-                                              //                 ? showDialog(
-                                              //                   context: context,
-                                              //                   barrierDismissible: true,
-                                              //                   builder: (BuildContext context) {
-                                              //                     // return SizedBox();
-                                              //                     return DeleteScheduleVisit(
-                                              //                       onDelete: () {
-                                              //                         controller.changeStatus("Cancelled", controller.patientDetailModel.value?.responseData?.scheduledVisits![index].id.toString() ?? "");
-                                              //
-                                              //                         // controller.globalController.changeStatus("Cancelled");
-                                              //
-                                              //                         // controller.deletePatientVisit(
-                                              //                         //     id: controller.patientDetailModel.value?.responseData?.scheduledVisits?[index].id.toString() ?? "");
-                                              //                       },
-                                              //                     );
-                                              //                   },
-                                              //                 )
-                                              //                 : CustomToastification().showToast("Internet is require for this feature", type: ToastificationType.info);
-                                              //           },
-                                              //           child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, "Cancel visit", style: AppFonts.regular(14, AppColors.backgroundPurple)),
-                                              //         ),
-                                              //         const SizedBox(width: 60),
-                                              //       ],
-                                              //     ),
-                                              //   ],
-                                              // ),
                                               const SizedBox(height: 10),
                                               if (index != 7) ...[const Divider(height: 1, color: AppColors.appbarBorder)],
                                             ],
@@ -673,37 +576,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                               shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                               backgroundColor: AppColors.backgroundWhite,
                               collapsedBackgroundColor: AppColors.backgroundWhite,
-                              title: Row(
-                                children: [
-                                  Text(textAlign: TextAlign.start, "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)", style: AppFonts.regular(16, AppColors.textBlack)),
-                                  const Spacer(),
-                                  // Container(
-                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                  //   decoration: BoxDecoration(
-                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                  //     // color: AppColors.backgroundWhite,
-                                  //     borderRadius: BorderRadius.circular(8),
-                                  //   ),
-                                  //   child: Row(
-                                  //     children: [
-                                  //       SvgPicture.asset(ImagePath.search, height: 14, width: 14),
-                                  //       SizedBox(width: 10),
-                                  //       SizedBox(
-                                  //         width: 194,
-                                  //         height: 25,
-                                  //         child: TextField(
-                                  //           maxLines: 1,
-                                  //           textAlignVertical: TextAlignVertical.center, // Centers the text vertically
-                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // SizedBox(width: 10),
-                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
-                                ],
-                              ),
+                              title: Row(children: [Text(textAlign: TextAlign.start, "Visit Recaps ( ${controller.visitRecapList.value?.responseData?.length ?? 0} Visits)", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -812,33 +685,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     },
                                   ),
                                   const SizedBox(width: 10),
-                                  // Container(
-                                  //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                                  //   decoration: BoxDecoration(
-                                  //     border: Border.all(color: AppColors.textGrey.withValues(alpha: 0.5)),
-                                  //     // color: AppColors.backgroundWhite,
-                                  //     borderRadius: BorderRadius.circular(8),
-                                  //   ),
-                                  //   child: Row(
-                                  //     children: [
-                                  //       SvgPicture.asset(ImagePath.search, height: 25, width: 25),
-                                  //       SizedBox(width: 10),
-                                  //       SizedBox(
-                                  //         width: 120,
-                                  //         child: TextField(
-                                  //           controller: controller.searchController,
-                                  //           onChanged: (value) {
-                                  //             controller.getPatientAttachment();
-                                  //           },
-                                  //           maxLines: 1, //or null
-                                  //           decoration: InputDecoration.collapsed(hintText: "Search", hintStyle: AppFonts.regular(14, AppColors.textGrey)),
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // SizedBox(width: 10),
-                                  // SvgPicture.asset(ImagePath.edit_outline, height: 40, width: 40),
                                 ],
                               ),
                               children: <Widget>[
@@ -858,7 +704,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                     scrollDirection: Axis.horizontal,
                                                     padding: const EdgeInsets.only(top: 20),
                                                     itemBuilder: (context, index) {
-                                                      return Container(
+                                                      return SizedBox(
                                                         height: 200,
                                                         width: 140,
                                                         child: Column(
@@ -960,7 +806,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 }),
                                               ),
                                             )
-                                            : Container(width: double.infinity, height: 200, child: const Center(child: Text("Attachments Not available"))),
+                                            : const SizedBox(width: double.infinity, height: 200, child: Center(child: Text("Attachments Not available"))),
                                   );
                                 }),
                               ],
@@ -1078,7 +924,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     if (controller.globalController.visitId.isNotEmpty) {
                                       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                     } else {
-                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission()) {
+                                      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
                                         controller.globalController.isStartTranscript.value = true;
 
                                         // controller.globalController.patientId.value = controller.patientId.value;
@@ -1103,12 +950,23 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         controller.globalController.startAudioWidget();
                                         controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                         controller.globalController.getConnectedInputDevices();
+
+                                        controller.globalController.samples.assignAll(
+                                          List.generate(
+                                            30,
+                                            (index) => AudioWaveBar(
+                                              heightFactor: 0.4, // Creates a repeating pattern
+                                              color: AppColors.backgroundPurple,
+                                            ),
+                                          ),
+                                        );
+
                                         await controller.globalController.recorderService.startRecording(context);
                                         controller.updateData();
-                                      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+                                      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
                                         // Handle permission denial here
 
-                                        showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
+                                        showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
                                       }
                                     }
                                   },
@@ -1135,9 +993,6 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                 style: AppFonts.medium(16, AppColors.textWhite),
                                               );
                                             }),
-                                            // SvgPicture.asset(ImagePath.ai_white, height: 30, width: 30),
-                                            // SizedBox(height: 10),
-                                            // Text(textAlign: TextAlign.center, "Start Transcribing", style: AppFonts.medium(16, AppColors.textWhite)),
                                           ],
                                         ),
                                       ],

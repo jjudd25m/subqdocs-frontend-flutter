@@ -75,7 +75,9 @@ class QuickStartViewController extends GetxController {
       if (latestPatientIdModel.responseType == "success") {
         patientId.text = latestPatientIdModel.responseData?.patientId ?? "";
       }
-    } catch (e) {}
+    } catch (e) {
+      customPrint(e);
+    }
   }
 
   Future<void> addPatient() async {
@@ -223,7 +225,6 @@ class QuickStartViewController extends GetxController {
   }
 
   void setUi(PatientListData? value) {
-    print("PatientListData :- ${value?.toJson()}");
     if (value?.patientId != null) {
       patientId.text = value?.patientId.toString() ?? "";
     }

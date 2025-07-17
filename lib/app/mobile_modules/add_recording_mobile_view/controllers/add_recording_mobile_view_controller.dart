@@ -84,9 +84,10 @@ class AddRecordingMobileViewController extends GetxController {
   }
 
   Future<void> checkAudioRecordPermission() async {
-    if (await recorderService.audioRecorder.hasPermission()) {
+    final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+    if (await recorderService.audioRecorder.hasPermission() && btGranted) {
       recorderService.startRecording(Get.context!);
-    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
       showDialog(
@@ -139,7 +140,7 @@ class AddRecordingMobileViewController extends GetxController {
       } else {
         _shortFileName = p.basename(_fileName); // Use the full name if it's already short
       }
-      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
+      list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
     }
 
     list.refresh();
@@ -205,7 +206,7 @@ class AddRecordingMobileViewController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
       }
 
       list.refresh();
@@ -252,7 +253,7 @@ class AddRecordingMobileViewController extends GetxController {
         } else {
           _shortFileName = p.basename(_fileName); // Use the full name if it's already short
         }
-        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), Size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
+        list.value.add(MediaListingModel(file: file, previewImage: null, fileName: _shortFileName, date: _formatDate(_pickDate), size: _filesizeString, calculateSize: _filesizeStringDouble, isGraterThan10: _filesizeStringDouble < 10.00 ? false : true, time: globalController.formatTimeToHHMMSS(recorderService.formattedRecordingTime)));
       }
     });
     list.refresh();
@@ -277,9 +278,11 @@ class AddRecordingMobileViewController extends GetxController {
   bool checkTotalSize() {
     double totalSize = 0.0;
 
-    list.value.forEach((element) {
-      totalSize += element.calculateSize ?? 0;
-    });
+    totalSize += list.fold(0, (sum, element) => sum + (element.calculateSize ?? 0));
+
+    // list.value.forEach((element) {
+    //   totalSize += element.calculateSize ?? 0;
+    // });
 
     if (totalSize < 100) {
       return true;
@@ -291,11 +294,13 @@ class AddRecordingMobileViewController extends GetxController {
   bool checkSingleSize() {
     bool isGraterThan10 = false;
 
-    list.value.forEach((element) {
-      if (element.isGraterThan10 ?? false) {
-        isGraterThan10 = true;
-      }
-    });
+    isGraterThan10 = list.fold(false, (result, element) => result || (element.isGraterThan10 ?? false));
+
+    // list.value.forEach((element) {
+    //   if (element.isGraterThan10 ?? false) {
+    //     isGraterThan10 = true;
+    //   }
+    // });
 
     return isGraterThan10;
   }
@@ -424,7 +429,7 @@ class audioAttachmentMobileDailog extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: 360,
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -463,7 +468,7 @@ class audioAttachmentMobileDailog extends StatelessWidget {
                                         Text(controller.list.value[index].fileName ?? ""),
                                         //
                                         Text(controller.visitId),
-                                        Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].Size ?? ""}"),
+                                        Text("${controller.list.value[index].date ?? " "} |  ${controller.list.value[index].size ?? ""}"),
 
                                         if (controller.list.value[index].isGraterThan10 ?? false) Text("File Size must not exceed 10 MB", style: AppFonts.medium(15, Colors.red)),
                                       ],

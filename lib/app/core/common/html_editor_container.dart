@@ -68,7 +68,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
 
       // If there's no actual content, insert the default
       if (contentWithoutTags.isEmpty) {
-        final newContent = "<div>Type here</div>";
+        const newContent = "<div>Type here</div>";
         return fullSection.replaceFirst(innerContent, newContent);
       }
 
@@ -81,14 +81,14 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
       context: context,
       builder: (context) {
         // For URL input inside the same dialog
-        final urlController = TextEditingController();
+        // final urlController = TextEditingController();
 
         return Dialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: StatefulBuilder(
             builder: (context, setState) {
-              bool showUrlInput = false;
+              // bool showUrlInput = false;
               return Container(
                 padding: const EdgeInsets.all(16),
                 constraints: const BoxConstraints(maxWidth: 200),
@@ -176,9 +176,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
                   onChangeContent: (content) {
                     onChangeContent(content);
                   },
-                  onScroll: () {
-                    print("demo  is the called ");
-                  },
+                  onScroll: () {},
                   onInit: () {
                     widget.impresionAndPlanViewModel.htmlEditorController.setFullScreen();
                   },
@@ -247,7 +245,7 @@ class _HtmlEditorViewWidgetState extends State<HtmlEditorViewWidget> {
       'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'li', 'main', 'nav',
       'noscript', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul', 'video',
       'br', 'tr', 'td', 'th', 'thead', 'tbody', 'caption', 'colgroup', 'col',
-      'article', 'aside', 'details', 'dialog', 'summary', 'menu', 'menuitem',
+      'details', 'dialog', 'summary', 'menu', 'menuitem',
       'output', 'progress', 'meter', 'legend', 'map', 'object', 'iframe',
       // Deprecated but still seen in legacy HTML
       'center', 'dir', 'isindex', 'listing', 'plaintext', 'xmp',

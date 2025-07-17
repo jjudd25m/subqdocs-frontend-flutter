@@ -116,8 +116,6 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       }
     }
 
-    print("visit status ${patientData.value?.responseData?.visitStatus}");
-
     super.onInit();
   }
 
@@ -172,11 +170,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("DoctorsViewStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int _visitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("DoctorsViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("DoctorsViewStatus pending");
@@ -204,11 +202,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("FullNoteStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -236,11 +234,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("visit data status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -268,14 +266,14 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("PatientViewStatus data:- $res");
 
-          int visit_id = res["visit_id"];
-          int transcription_id = res["transcription_id"];
+          int localVisitId = res["visit_id"];
+          // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+          // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -303,15 +301,15 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           var res = data as Map<String, dynamic>;
           customPrint("transcriptStatus data:- $res");
 
-          int visit_id = res["visit_id"];
-          int transcription_id = res["transcription_id"];
+          int localVisitId = res["visit_id"];
+          // int transcription_id = res["transcription_id"];
           String status = res["status"];
           String message = res["message"];
 
-          customPrint("$visit_id == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+          // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
           getPatientDetails();
-          if (visit_id == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -369,11 +367,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("DoctorsViewStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("DoctorsViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("DoctorsViewStatus pending");
@@ -401,11 +399,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("FullNoteStatus status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -433,11 +431,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("visit data status is :- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -465,11 +463,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           customPrint("---------------------------------------------");
           customPrint("PatientViewStatus data:- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -497,11 +495,11 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           var res = data as Map<String, dynamic>;
           customPrint("transcriptStatus data:- $res");
 
-          int visit_id = res["visit_id"];
+          int localVisitId = res["visit_id"];
           String status = res["status"];
           String message = res["message"];
 
-          if (visit_id == int.parse(visitId)) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -547,43 +545,41 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
                   decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
                   child: Padding(padding: const EdgeInsets.all(10), child: Row(mainAxisSize: MainAxisSize.min, children: [Text("", style: AppFonts.medium(15, Colors.white)), const Spacer(), const SizedBox(width: 10)])),
                 ),
-                Container(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 40),
-                      const Icon(Icons.info_outline, color: AppColors.redText, size: 100),
-                      const SizedBox(height: 20),
-                      Text(message, style: AppFonts.medium(17, AppColors.textBlack)),
-                      const SizedBox(height: 40),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          spacing: 20,
-                          children: [
-                            Expanded(
-                              child: CustomAnimatedButton(
-                                onPressed: () {
-                                  // Get.put(GlobalController());
-                                  // Get.until(Routes.HOME);
+                Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    const Icon(Icons.info_outline, color: AppColors.redText, size: 100),
+                    const SizedBox(height: 20),
+                    Text(message, style: AppFonts.medium(17, AppColors.textBlack)),
+                    const SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        spacing: 20,
+                        children: [
+                          Expanded(
+                            child: CustomAnimatedButton(
+                              onPressed: () {
+                                // Get.put(GlobalController());
+                                // Get.until(Routes.HOME);
 
-                                  Get.until((route) => Get.currentRoute == Routes.HOME_VIEW_MOBILE);
-                                  // final GlobalController globalController = Get.find();
-                                  // globalController.breadcrumbHistory.clear();
-                                  // globalController.addRoute(Routes.HOME);
-                                },
-                                text: " Okay ",
-                                isOutline: true,
-                                enabledTextColor: AppColors.textWhite,
-                                enabledColor: AppColors.backgroundPurple,
-                                outLineEnabledColor: AppColors.textGrey,
-                                outlineColor: AppColors.backgroundPurple,
-                              ),
+                                Get.until((route) => Get.currentRoute == Routes.HOME_VIEW_MOBILE);
+                                // final GlobalController globalController = Get.find();
+                                // globalController.breadcrumbHistory.clear();
+                                // globalController.addRoute(Routes.HOME);
+                              },
+                              text: " Okay ",
+                              isOutline: true,
+                              enabledTextColor: AppColors.textWhite,
+                              enabledColor: AppColors.backgroundPurple,
+                              outLineEnabledColor: AppColors.textGrey,
+                              outlineColor: AppColors.backgroundPurple,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
               ],
@@ -1022,7 +1018,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'li', 'main', 'nav',
       'noscript', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul', 'video',
       'br', 'tr', 'td', 'th', 'thead', 'tbody', 'caption', 'colgroup', 'col',
-      'article', 'aside', 'details', 'dialog', 'summary', 'menu', 'menuitem',
+      'details', 'dialog', 'summary', 'menu', 'menuitem',
       'output', 'progress', 'meter', 'legend', 'map', 'object', 'iframe',
       // Deprecated but still seen in legacy HTML
       'center', 'dir', 'isindex', 'listing', 'plaintext', 'xmp',
@@ -1142,7 +1138,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'li', 'main', 'nav',
       'noscript', 'ol', 'p', 'pre', 'section', 'table', 'tfoot', 'ul', 'video',
       'br', 'tr', 'td', 'th', 'thead', 'tbody', 'caption', 'colgroup', 'col',
-      'article', 'aside', 'details', 'dialog', 'summary', 'menu', 'menuitem',
+      'details', 'dialog', 'summary', 'menu', 'menuitem',
       'output', 'progress', 'meter', 'legend', 'map', 'object', 'iframe',
       // Deprecated but still seen in legacy HTML
       'center', 'dir', 'isindex', 'listing', 'plaintext', 'xmp',
@@ -1178,17 +1174,16 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
     if (isFullNoteAttachment.value) {
       params["impressions_and_plan_attachments"] = generalAttachments.value.map((attachment) => attachment.toJson()).toList();
     }
-    print(params);
 
     try {
-      var response = await repository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
+      var _ = await repository.updateImpressionAndPlanFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: params);
     } catch (e) {
-      print(e);
+      customPrint(e);
     }
   }
 
   Future<void> updateFullNote(String keyName, List<ImpresionAndPlanViewModel> list) async {
-    var response = await repository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
+    var _ = await repository.updateFullNote(id: patientFullNoteModel.value?.responseData?.id ?? 0, params: buildParams(keyName, list));
   }
 
   Future<void> updatePatientView(String keyName, List<ImpresionAndPlanViewModel> list) async {
@@ -1244,7 +1239,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "failure") {
         getInitData();
@@ -1255,7 +1250,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -1276,7 +1271,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -1291,13 +1286,13 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
     socketService.socket.on("SocialHistoryStatus", (data) {
       var res = data as Map<String, dynamic>;
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
         Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
         patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        print("patientFullNoteModel:- ${patientFullNoteModel.toJson()}");
+
         HtmlEditorController htmlEditorController = HtmlEditorController();
         editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
         editableDataForSocialHistory.refresh();
@@ -1308,13 +1303,13 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
         Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
         patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        print("patientFullNoteModel:- ${patientFullNoteModel.toJson()}");
+
         HtmlEditorController htmlEditorController = HtmlEditorController();
         editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
         editableDataForCancerHistory.refresh();
@@ -1326,7 +1321,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -1343,7 +1338,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -1360,7 +1355,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -1376,7 +1371,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         getPatientDetails();
@@ -1387,7 +1382,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       var res = data as Map<String, dynamic>;
 
       String status = res["status"];
-      String message = res["message"];
+      // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -1400,7 +1395,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           socketService.socket.on("PhotoMetaDataStatus", (data) {
             var res = data as Map<String, dynamic>;
             String status = res["status"];
-            String message = res["message"];
+            // String message = res["message"];
 
             if (status.toLowerCase() == "success") {
               Map<String, dynamic> responseData = res["responseData"];

@@ -9,10 +9,11 @@ import '../../../../utils/app_string.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
+import '../../../core/common/logger.dart';
 import '../../../models/ChangeModel.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../login/model/login_model.dart';
 import '../../patient_info/model/check_doctor_pin_expired_model.dart';
-import '../../patient_info/model/get_doctor_list_by_role_model.dart';
 import '../../patient_info/repository/patient_info_repository.dart';
 
 class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxController {
@@ -24,10 +25,10 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
   RxBool userPinVisibility = RxBool(true);
   final ScrollController scrollController = ScrollController();
   RxnString selectedDoctorValue = RxnString();
-  Rxn<GetDoctorListByRoleResponseData> selectedDoctorValueModel = Rxn();
+  Rxn<SelectedDoctorModel> selectedDoctorValueModel = Rxn();
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();
   Rxn<LoginModel> loginData = Rxn();
-  RxList<GetDoctorListByRoleResponseData> doctorList = RxList();
+  RxList<SelectedDoctorModel> doctorList = RxList();
   Rxn<CheckDoctorPinExpiredModel> checkPinResponse = Rxn();
   final GlobalController globalController = Get.find();
 
@@ -40,85 +41,40 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
   void onInit() {
     super.onInit();
 
-    print("inside third:- $isThirdParty");
-
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-
-    // print("isThirdParty :- $isThirdParty");
-
     isDisableView = !(isThirdParty.isNotEmpty);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   getDoctorList();
-    // });
-
-    // print("isAccessible :- $isDisableView");
   }
 
   @override
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Loader().showLoadingDialogForSimpleLoader();
-
-      try {
-        GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-        doctorList.value = doctorListByRole.responseData ?? [];
-        doctorList.refresh();
-        // Loader().stopLoader();
-      } catch (e) {
-        // Loader().stopLoader();
-        CustomToastification().showToast(e.toString(), type: ToastificationType.error);
-      }
-    });
-
-    print("visit id:- $visitId");
   }
 
-  void changeUserPinVisiblity() {
+  void changeUserPinVisibility() {
     userPinVisibility.value = userPinVisibility == true ? false : true;
     userPinVisibility.refresh();
   }
 
-  Future<void> setDoctor(Rxn<GetDoctorListByRoleResponseData> doctorData) async {
+  Future<void> setDoctor(Rxn<SelectedDoctorModel> doctorData) async {
     selectedDoctorValueModel = doctorData;
 
     selectedDoctorValue.value = selectedDoctorValueModel.value?.name;
 
-    print("doctor name:- ${selectedDoctorValue.value}");
+    doctorList = globalController.selectedDoctorModel;
   }
 
   Future<void> setThirdParty(String thirdParty) async {
     loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     isDisableView = (thirdParty.isNotEmpty);
-
-    print("setThirdParty :- $isDisableView");
-
-    // GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-    // doctorList.value = doctorListByRole.responseData ?? [];
-    // doctorList.refresh();
-
-    // print("login id:- ${loginData.value?.responseData?.user?.id}");
-    // print("doctor id:- ${selectedDoctorValueModel.value?.id}");
-
-    print("login id same as doctor :- ${selectedDoctorValueModel.value?.id == loginData.value?.responseData?.user?.id}");
-  }
-
-  void getDoctorList() async {
-    GetDoctorListByRoleModel doctorListByRole = await _patientInfoRepository.getDoctorByRole();
-    doctorList.value = doctorListByRole.responseData ?? [];
-    doctorList.refresh();
   }
 
   Future<void> checkDoctorPIN(String doctorId) async {
     try {
       checkPinResponse.value = await _patientInfoRepository.checkDoctorPIN(doctorId);
-      print("response of checkPinResponse :- ${checkPinResponse.toJson()}");
     } catch (e) {
-      print(e);
+      customPrint(e);
     }
   }
 
@@ -130,8 +86,6 @@ class DoctorToDoctorSignFinalizeAuthenticateViewController extends GetxControlle
     } else {
       param['status'] = "Finalized";
     }
-
-    print("param :- $param");
 
     Loader().showLoadingDialogForSimpleLoader();
 

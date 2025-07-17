@@ -14,7 +14,7 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widgets/base_dropdown2.dart';
 import '../../../../widgets/custom_tab_button.dart';
 import '../../../../widgets/custom_textfiled.dart';
-import '../../patient_info/model/get_doctor_list_by_role_model.dart';
+import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../controllers/sign_finalize_authenticate_view_controller.dart';
 
 class SignFinalizeAuthenticateViewView extends GetView<SignFinalizeAuthenticateViewController> {
@@ -73,7 +73,7 @@ class SignFinalizeAuthenticateViewView extends GetView<SignFinalizeAuthenticateV
                                     const SizedBox(height: 8),
                                   ],
                                   Obx(() {
-                                    return BaseDropdown2<GetDoctorListByRoleResponseData>(
+                                    return BaseDropdown2<SelectedDoctorModel>(
                                       isRequired: true,
                                       fillColor: AppColors.clear,
                                       direction: VerticalDirection.up,
@@ -184,7 +184,6 @@ class SignFinalizeAuthenticateViewView extends GetView<SignFinalizeAuthenticateV
                   onPressed: () async {
                     // Get.back();
 
-                    print(controller.selectedDoctorValue.value);
                     if (controller.selectedDoctorValue.value == null) {
                       CustomToastification().showToast("Please select Doctor", type: ToastificationType.error);
                     } else {

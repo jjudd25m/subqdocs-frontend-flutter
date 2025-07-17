@@ -131,7 +131,7 @@ class _HomeReschedulePatientDialogState extends State<HomeReschedulePatientDialo
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 360,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -333,7 +333,7 @@ class _HomeReschedulePatientDialogState extends State<HomeReschedulePatientDialo
                                     } else {
                                       try {
                                         String? time = visitTimeController.text;
-                                        print("time is :- ${time}");
+
                                         if (time != null) {
                                           customPrint("before time");
                                           DateTime firstTime = DateFormat('hh:mm a').parse(time).toUtc(); // 10:30 AM to DateTime

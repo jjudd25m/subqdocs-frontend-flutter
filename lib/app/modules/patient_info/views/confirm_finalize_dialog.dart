@@ -48,38 +48,36 @@ class ConfirmFinalizeDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  SvgPicture.asset(ImagePath.confirm_check, width: 100, height: 100),
-                  const SizedBox(height: 20),
-                  Row(children: [Expanded(child: Text("Are you sure you want to finalize?", textAlign: TextAlign.center, style: AppFonts.medium(17, AppColors.textBlack)))]),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      spacing: 20,
-                      children: [
-                        Expanded(
-                          child: CustomAnimatedButton(
-                            text: " Cancel ",
-                            onPressed: () {
-                              Get.back();
-                            },
-                            isOutline: true,
-                            enabledTextColor: AppColors.backgroundPurple,
-                            enabledColor: AppColors.white,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          ),
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                SvgPicture.asset(ImagePath.confirm_check, width: 100, height: 100),
+                const SizedBox(height: 20),
+                Row(children: [Expanded(child: Text("Are you sure you want to finalize?", textAlign: TextAlign.center, style: AppFonts.medium(17, AppColors.textBlack)))]),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    spacing: 20,
+                    children: [
+                      Expanded(
+                        child: CustomAnimatedButton(
+                          text: " Cancel ",
+                          onPressed: () {
+                            Get.back();
+                          },
+                          isOutline: true,
+                          enabledTextColor: AppColors.backgroundPurple,
+                          enabledColor: AppColors.white,
+                          outLineEnabledColor: AppColors.textGrey,
+                          outlineColor: AppColors.backgroundPurple,
                         ),
-                        Expanded(child: CustomAnimatedButton(onPressed: onDelete, text: " Finalize ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.backgroundPurple, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.backgroundPurple)),
-                      ],
-                    ),
+                      ),
+                      Expanded(child: CustomAnimatedButton(onPressed: onDelete, text: " Finalize ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.backgroundPurple, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.backgroundPurple)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],
@@ -112,43 +110,41 @@ class PrompErrorDialog extends StatelessWidget {
               decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
               child: Padding(padding: const EdgeInsets.all(10), child: Row(mainAxisSize: MainAxisSize.min, children: [Text("", style: AppFonts.medium(15, Colors.white)), const Spacer(), const SizedBox(width: 10)])),
             ),
-            Container(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  const Icon(Icons.info_outline, color: AppColors.redText, size: 100),
-                  const SizedBox(height: 20),
-                  Text(errorMessage, style: AppFonts.medium(17, AppColors.textBlack)),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      spacing: 20,
-                      children: [
-                        Expanded(
-                          child: CustomAnimatedButton(
-                            onPressed: () {
-                              // Get.put(GlobalController());
-                              // Get.until(Routes.HOME);
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                const Icon(Icons.info_outline, color: AppColors.redText, size: 100),
+                const SizedBox(height: 20),
+                Text(errorMessage, style: AppFonts.medium(17, AppColors.textBlack)),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    spacing: 20,
+                    children: [
+                      Expanded(
+                        child: CustomAnimatedButton(
+                          onPressed: () {
+                            // Get.put(GlobalController());
+                            // Get.until(Routes.HOME);
 
-                              Get.until((route) => Get.currentRoute == Routes.HOME);
-                              final GlobalController globalController = Get.find();
-                              globalController.breadcrumbHistory.clear();
-                              globalController.addRoute(Routes.HOME);
-                            },
-                            text: " Okay ",
-                            isOutline: true,
-                            enabledTextColor: AppColors.textWhite,
-                            enabledColor: AppColors.backgroundPurple,
-                            outLineEnabledColor: AppColors.textGrey,
-                            outlineColor: AppColors.backgroundPurple,
-                          ),
+                            Get.until((route) => Get.currentRoute == Routes.HOME);
+                            final GlobalController globalController = Get.find();
+                            globalController.breadcrumbHistory.clear();
+                            globalController.addRoute(Routes.HOME);
+                          },
+                          text: " Okay ",
+                          isOutline: true,
+                          enabledTextColor: AppColors.textWhite,
+                          enabledColor: AppColors.backgroundPurple,
+                          outLineEnabledColor: AppColors.textGrey,
+                          outlineColor: AppColors.backgroundPurple,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],
@@ -178,22 +174,20 @@ class HasEncounterDialog extends StatelessWidget {
             Container(
               height: 50,
               width: double.infinity,
-              decoration: BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
-              child: Padding(padding: const EdgeInsets.all(10), child: Row(mainAxisSize: MainAxisSize.min, children: [Text("Cannot Proceed with Sign and Finalize", style: AppFonts.medium(15, Colors.white)), Spacer(), SizedBox(width: 10)])),
+              decoration: const BoxDecoration(color: AppColors.backgroundPurple, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+              child: Padding(padding: const EdgeInsets.all(10), child: Row(mainAxisSize: MainAxisSize.min, children: [Text("Cannot Proceed with Sign and Finalize", style: AppFonts.medium(15, Colors.white)), const Spacer(), const SizedBox(width: 10)])),
             ),
-            Container(
-              child: Column(
-                children: [
-                  SizedBox(height: 40),
-                  Icon(Icons.info_outline, color: AppColors.redText, size: 100),
-                  SizedBox(height: 20),
-                  Text("This action requires an encounter to be created in EMA.", textAlign: TextAlign.center, style: AppFonts.medium(17, AppColors.textBlack)),
-                  SizedBox(height: 40),
-                  Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: Row(spacing: 20, children: [Expanded(child: CustomAnimatedButton(onPressed: onCounter, text: " Create Encounter ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.backgroundPurple, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.backgroundPurple))])),
-                ],
-              ),
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                const Icon(Icons.info_outline, color: AppColors.redText, size: 100),
+                const SizedBox(height: 20),
+                Text("This action requires an encounter to be created in EMA.", textAlign: TextAlign.center, style: AppFonts.medium(17, AppColors.textBlack)),
+                const SizedBox(height: 40),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: Row(spacing: 20, children: [Expanded(child: CustomAnimatedButton(onPressed: onCounter, text: " Create Encounter ", isOutline: true, enabledTextColor: AppColors.textWhite, enabledColor: AppColors.backgroundPurple, outLineEnabledColor: AppColors.textGrey, outlineColor: AppColors.backgroundPurple))])),
+              ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       ),

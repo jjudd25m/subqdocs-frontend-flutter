@@ -69,7 +69,7 @@ class HomeView extends GetView<HomeController> {
           _key.currentState!.closeDrawer();
         } else if (index == 4) {
           _key.currentState!.closeDrawer();
-          final result = await Get.toNamed(Routes.PERSONAL_SETTING);
+          final _ = await Get.toNamed(Routes.PERSONAL_SETTING);
         }
       },
       body: Obx(() {
@@ -421,7 +421,7 @@ class HomeView extends GetView<HomeController> {
                                                       ignoring: (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration == true) && (controller.globalController.tabIndex.value != 0),
                                                       child: Opacity(
                                                         opacity: (controller.globalController.getEMAOrganizationDetailModel.value?.responseData?.isEmaIntegration == true) && (controller.globalController.tabIndex.value != 0) ? 0.5 : 1,
-                                                        child: Container(
+                                                        child: SizedBox(
                                                           width: 140,
                                                           child: CustomButton(
                                                             hight: 40,
@@ -743,7 +743,6 @@ class HomeView extends GetView<HomeController> {
       controller.globalController.visitId.refresh();
 
       // controller.update();
-      print("popup closed");
     });
   }
 
