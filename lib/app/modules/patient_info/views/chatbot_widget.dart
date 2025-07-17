@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:subqdocs/app/models/audio_wave.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
-import 'package:get/get.dart';
-import 'package:subqdocs/app/core/common/global_controller.dart';
 
 import '../../../../widget/base_image_view.dart';
 
@@ -175,8 +172,8 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         constraints: const BoxConstraints(maxWidth: 220),
-        decoration: BoxDecoration(color: isUser ? const Color(0xFF7C3AED) : Colors.grey[100], borderRadius: BorderRadius.circular(16), boxShadow: [if (!isUser) const BoxShadow(color: Colors.black12, blurRadius: 2)]),
-        child: Text(msg['text'] ?? '', style: TextStyle(color: isUser ? Colors.white : const Color(0xFF7C3AED), fontSize: 15)),
+        decoration: BoxDecoration(color: isUser ? AppColors.backgroundPurple : AppColors.chatBackgroundGrey, borderRadius: BorderRadius.circular(16), boxShadow: [if (!isUser) const BoxShadow(color: Colors.black12, blurRadius: 2)]),
+        child: Text(msg['text'] ?? '', style: TextStyle(color: isUser ? Colors.white : AppColors.black, fontSize: 15)),
       ),
     );
   }
@@ -202,14 +199,14 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   width: 340,
-                  height: 480,
+                  height: 500,
                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black26.withOpacity(0.08), blurRadius: 16, offset: const Offset(0, 8))]),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // HEADER SECTION
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
                         child: Row(
                           children: [
@@ -218,9 +215,34 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                             const SizedBox(width: 10),
                             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Chatbot', style: AppFonts.medium(17, AppColors.black))]),
                             const Spacer(),
+
                             // Minimize and close buttons
-                            IconButton(padding: EdgeInsets.zero, icon: Icon(Icons.remove, color: AppColors.black.withValues(alpha: 0.5)), onPressed: _minimizeChat, tooltip: 'Minimize'),
-                            IconButton(padding: EdgeInsets.zero, icon: Icon(Icons.close, color: AppColors.black.withValues(alpha: 0.5)), onPressed: _closeChat, tooltip: 'Close'),
+                            GestureDetector(
+                              onTap: _minimizeChat,
+                              child: SvgPicture.asset(
+                                ImagePath.minus,
+                                colorFilter: ColorFilter.mode(
+                                  AppColors.black.withValues(alpha: 0.5), // your desired color
+                                  BlendMode.srcIn, // ensures the color replaces the SVG content
+                                ),
+                                height: 22,
+                                width: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            GestureDetector(
+                              onTap: _closeChat,
+                              child: SvgPicture.asset(
+                                ImagePath.cross_white,
+                                colorFilter: ColorFilter.mode(
+                                  AppColors.black.withValues(alpha: 0.5), // your desired color
+                                  BlendMode.srcIn, // ensures the color replaces the SVG content
+                                ),
+                                height: 15,
+                                width: 15,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
                           ],
                         ),
                       ),
@@ -266,23 +288,11 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   // Delete
-                                  IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red, size: 28),
-                                    onPressed: _deleteRecording,
-                                    tooltip: 'Delete',
-                                  ),
+                                  IconButton(icon: const Icon(Icons.delete, color: Colors.red, size: 28), onPressed: _deleteRecording, tooltip: 'Delete'),
                                   // Pause/Resume
-                                  IconButton(
-                                    icon: Icon(_isPaused ? Icons.play_arrow : Icons.pause, color: const Color(0xFF7C3AED), size: 32),
-                                    onPressed: _pauseResumeRecording,
-                                    tooltip: _isPaused ? 'Resume' : 'Pause',
-                                  ),
+                                  IconButton(icon: Icon(_isPaused ? Icons.play_arrow : Icons.pause, color: const Color(0xFF7C3AED), size: 32), onPressed: _pauseResumeRecording, tooltip: _isPaused ? 'Resume' : 'Pause'),
                                   // Send
-                                  IconButton(
-                                    icon: const Icon(Icons.send, color: Color(0xFF7C3AED), size: 28),
-                                    onPressed: _sendRecording,
-                                    tooltip: 'Send',
-                                  ),
+                                  IconButton(icon: const Icon(Icons.send, color: Color(0xFF7C3AED), size: 28), onPressed: _sendRecording, tooltip: 'Send'),
                                 ],
                               ),
                             ],
@@ -301,7 +311,11 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                                   padding: const EdgeInsets.symmetric(horizontal: 8),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: [Expanded(child: TextField(controller: _controller, focusNode: _focusNode, decoration: const InputDecoration(hintText: 'Type Something...', border: InputBorder.none), onSubmitted: (_) => _sendMessage())), GestureDetector(onTap: _startRecording, child: SvgPicture.asset(ImagePath.micRecordingModel, height: 27, width: 27)), const SizedBox(width: 5)],
+                                    children: [
+                                      Expanded(child: TextField(controller: _controller, focusNode: _focusNode, decoration: InputDecoration(hintText: 'Type Something...', hintStyle: AppFonts.regular(14, AppColors.textDarkGrey), border: InputBorder.none), onSubmitted: (_) => _sendMessage())),
+                                      GestureDetector(onTap: _startRecording, child: SvgPicture.asset(ImagePath.micRecordingModel, height: 22, width: 22)),
+                                      const SizedBox(width: 5),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -311,6 +325,8 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                             ],
                           ),
                         ),
+                      Center(child: Text.rich(TextSpan(children: [TextSpan(text: 'Powered by ', style: AppFonts.regular(14, AppColors.textDarkGrey)), TextSpan(text: 'chatbot.ai', style: AppFonts.semiBold(14, AppColors.black))]))),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
