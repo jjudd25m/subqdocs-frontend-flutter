@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:subqdocs/app/mobile_modules/add_recording_mobile_view/views/audio_wave.dart';
+import 'package:subqdocs/app/models/audio_wave.dart';
 import 'package:subqdocs/utils/app_colors.dart';
 import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
+import 'package:get/get.dart';
+import 'package:subqdocs/app/core/common/global_controller.dart';
 
 import '../../../../widget/base_image_view.dart';
 
@@ -20,6 +22,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
   bool _isOpen = false;
   bool _isMinimized = false;
   bool _isRecording = false;
+  bool _isPaused = false;
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
@@ -38,6 +41,8 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
     {'sender': 'bot', 'text': 'How does GPT use AI?'},
     {'sender': 'user', 'text': 'Tell me more!'},
   ];
+
+  Timer? _waveSimTimer;
 
   @override
   void initState() {
@@ -70,30 +75,82 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
       _recordSeconds = 0;
       _voiceToTextResult = '';
     });
+    // Simulate amplitude data for demo/testing
+    _waveSimTimer?.cancel();
+    _waveSimTimer = Timer.periodic(const Duration(milliseconds: 80), (timer) {
+      print('WaveSimTimer tick:  [32m${timer.tick} [0m'); // DEBUG
+      bool isSpeaking = true; // Set to false to simulate silence
+      if (isSpeaking) {
+        setState(() {
+          // _localWaveBars = List.generate(30, (i) => AudioWaveBar(heightFactor: 0.2 + 0.7 * (i % 2 == 0 ? (0.5 + 0.5 * (timer.tick % 3)) : (0.2 + 0.2 * (timer.tick % 5))), color: const Color(0xFF7C3AED)));
+        });
+      } else {
+        setState(() {
+          // _localWaveBars = List.generate(30, (i) => AudioWaveBar(heightFactor: 0.08, color: const Color(0xFF7C3AED)));
+        });
+      }
+    });
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() => _recordSeconds++);
+      if (!_isPaused) {
+        setState(() {
+          _recordSeconds++;
+        });
+      }
     });
   }
 
   void _cancelRecording() {
     _timer?.cancel();
+    _waveSimTimer?.cancel();
     setState(() {
       _isRecording = false;
       _recordSeconds = 0;
       _voiceToTextResult = '';
+      // _localWaveBars.clear();
     });
   }
 
   void _stopRecording() {
     _timer?.cancel();
-    // Simulate voice-to-text result
+    _waveSimTimer?.cancel();
     setState(() {
       _isRecording = false;
       _voiceToTextResult = 'This is a sample voice to text message.';
       _controller.text = _voiceToTextResult;
       _recordSeconds = 0;
+      // _localWaveBars.clear();
     });
     _focusNode.requestFocus();
+  }
+
+  void _pauseResumeRecording() {
+    setState(() {
+      _isPaused = !_isPaused;
+    });
+  }
+
+  void _sendRecording() {
+    _timer?.cancel();
+    _waveSimTimer?.cancel();
+    setState(() {
+      _isRecording = false;
+      _recordSeconds = 0;
+      _voiceToTextResult = '';
+      _isPaused = false;
+      // _localWaveBars.clear();
+    });
+  }
+
+  void _deleteRecording() {
+    _timer?.cancel();
+    _waveSimTimer?.cancel();
+    setState(() {
+      _isRecording = false;
+      _recordSeconds = 0;
+      _voiceToTextResult = '';
+      _isPaused = false;
+      // _localWaveBars.clear();
+    });
   }
 
   void _sendMessage() {
@@ -188,24 +245,46 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(color: Colors.grey[100], borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20))),
-                          child: Row(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              // Glowing mic
-                              AnimatedBuilder(
-                                animation: _glowController,
-                                builder: (context, child) {
-                                  return Container(decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.purpleAccent.withOpacity(0.5 + 0.3 * _glowController.value), blurRadius: 16 + 8 * _glowController.value, spreadRadius: 2)]), child: const Icon(Icons.mic, color: Color(0xFF7C3AED), size: 32));
-                                },
+                              // Top row: Timer and AudioWave
+                              Row(
+                                children: [
+                                  // Timer
+                                  Text(_formatDuration(_recordSeconds), style: const TextStyle(fontSize: 16, color: Color(0xFF7C3AED), fontWeight: FontWeight.bold)),
+                                  const SizedBox(width: 12),
+                                  // AudioWave visualization
+                                  // Expanded(
+                                  //   child: AudioWave(bars: _localWaveBars),
+                                  // ),
+                                ],
                               ),
-                              const SizedBox(width: 10),
-                              // Animated AudioWave
-                              AudioWave(height: 30, width: 80, spacing: 2, animation: true, bars: List.generate(16, (i) => AudioWaveBar(heightFactor: i.isEven ? 0.3 : 0.8, color: const Color(0xFF7C3AED)))),
-                              const SizedBox(width: 10),
-                              // Timer
-                              Text(_formatDuration(_recordSeconds), style: const TextStyle(fontSize: 16, color: Color(0xFF7C3AED), fontWeight: FontWeight.bold)),
-                              const Spacer(),
-                              IconButton(icon: const Icon(Icons.stop_circle, color: Colors.red, size: 32), onPressed: _stopRecording, tooltip: 'Stop'),
-                              IconButton(icon: const Icon(Icons.cancel, color: Colors.black38, size: 28), onPressed: _cancelRecording, tooltip: 'Cancel'),
+                              const SizedBox(height: 10),
+                              // Bottom row: Delete, Pause/Resume, Send
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Delete
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red, size: 28),
+                                    onPressed: _deleteRecording,
+                                    tooltip: 'Delete',
+                                  ),
+                                  // Pause/Resume
+                                  IconButton(
+                                    icon: Icon(_isPaused ? Icons.play_arrow : Icons.pause, color: const Color(0xFF7C3AED), size: 32),
+                                    onPressed: _pauseResumeRecording,
+                                    tooltip: _isPaused ? 'Resume' : 'Pause',
+                                  ),
+                                  // Send
+                                  IconButton(
+                                    icon: const Icon(Icons.send, color: Color(0xFF7C3AED), size: 28),
+                                    onPressed: _sendRecording,
+                                    tooltip: 'Send',
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -216,7 +295,17 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                           decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
                           child: Row(
                             children: [
-                              Container(child: Row(children: [Expanded(child: TextField(controller: _controller, focusNode: _focusNode, decoration: const InputDecoration(hintText: 'Type Something...', border: InputBorder.none), onSubmitted: (_) => _sendMessage())), IconButton(icon: const Icon(Icons.mic, color: Color(0xFF7C3AED)), onPressed: _startRecording, tooltip: 'Voice to Text')])),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all(color: Color(0xFFD8DCE4), width: 1.5), borderRadius: BorderRadius.circular(15), color: Colors.white),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [Expanded(child: TextField(controller: _controller, focusNode: _focusNode, decoration: const InputDecoration(hintText: 'Type Something...', border: InputBorder.none), onSubmitted: (_) => _sendMessage())), GestureDetector(onTap: _startRecording, child: SvgPicture.asset(ImagePath.micRecordingModel, height: 27, width: 27)), const SizedBox(width: 5)],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
                               // sendMessage
                               GestureDetector(child: SvgPicture.asset(ImagePath.sendMessage, height: 45, width: 45)),
                             ],
@@ -241,7 +330,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(32), boxShadow: [BoxShadow(color: Colors.black26.withOpacity(0.08), blurRadius: 8)]),
-                  child: Row(mainAxisSize: MainAxisSize.min, children: const [Icon(Icons.chat_bubble_outline, color: Color(0xFF7C3AED)), SizedBox(width: 10), Text('Chat', style: TextStyle(color: Color(0xFF7C3AED), fontWeight: FontWeight.bold))]),
+                  child: const Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.chat_bubble_outline, color: Color(0xFF7C3AED)), SizedBox(width: 10), Text('Chat', style: TextStyle(color: Color(0xFF7C3AED), fontWeight: FontWeight.bold))]),
                 ),
               ),
             ),

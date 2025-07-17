@@ -303,7 +303,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                     //   ),
                                     // ),
                                     // const SizedBox(height: 16),
-                                    globalController.samples.isNotEmpty ? const AudioWave(animation: false, key: ValueKey("wave"), height: 30, width: 110, spacing: 2.5, animationLoop: 0) : const SizedBox(height: 30),
+                                    globalController.samples.isNotEmpty ? const AudioWave(animation: true, key: ValueKey("wave"), height: 30, width: 110, spacing: 2.5, animationLoop: 0) : const SizedBox(height: 30),
                                     const SizedBox(height: 17),
                                     if (globalController.recorderService.recordingStatus.value == 1) ...[
                                       Text(textAlign: TextAlign.center, "Transcription in progress", style: AppFonts.regular(17, AppColors.textBlack)),

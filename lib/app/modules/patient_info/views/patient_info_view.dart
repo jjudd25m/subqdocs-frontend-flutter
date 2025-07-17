@@ -8,8 +8,6 @@ import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/app/modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
-import 'package:subqdocs/widgets/custom_toastification.dart';
-import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/app_colors.dart';
@@ -26,6 +24,7 @@ import '../../doctor_to_doctor_sign_finalize_authenticate_view/controllers/docto
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/views/doctor_to_doctor_sign_finalize_authenticate_view_view.dart';
 import '../../sign_finalize_authenticate_view/views/sign_finalize_authenticate_view_view.dart';
 import '../controllers/patient_info_controller.dart';
+import 'chatbot_widget.dart';
 import 'confirm_finalize_dialog.dart';
 import 'full_transcript_view.dart';
 
@@ -510,7 +509,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
           ),
           globalKey: _scaffoldKey,
         ),
-        // const ChatBotWidget(),
+        const ChatBotWidget(),
       ],
     );
   }
