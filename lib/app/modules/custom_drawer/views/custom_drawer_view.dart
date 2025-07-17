@@ -46,14 +46,14 @@ class CustomDrawerView extends GetView<CustomDrawerController> {
                           Get.back();
                           Get.until((route) => Get.currentRoute == Routes.HOME);
 
-                          controller.globalController.breadcrumbHistory.clear();
+
 
                           await Future.delayed(const Duration(milliseconds: 100));
 
                           PersonalSettingController personalSettingController = Get.put(PersonalSettingController());
                           personalSettingController.onInit();
-
-                          controller.globalController.addRoute(Routes.HOME);
+                          controller.globalController.breadcrumbHistory.clear();
+                          // controller.globalController.addRoute(Routes.HOME);
                           controller.globalController.addRoute(Routes.PERSONAL_SETTING);
                           Get.toNamed(Routes.PERSONAL_SETTING);
                         }

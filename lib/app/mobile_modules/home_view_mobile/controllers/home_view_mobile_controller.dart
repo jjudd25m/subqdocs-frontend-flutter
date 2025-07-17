@@ -247,23 +247,14 @@ class HomeViewMobileController extends GetxController {
   }
 
   void handelInternetConnection() {
-    final _ = InternetConnection().onStatusChange.listen((InternetStatus status) async {
+    InternetConnection().onStatusChange.listen((InternetStatus status) async {
       switch (status) {
         case InternetStatus.connected:
           getPastVisitList();
           getScheduleVisitList();
           getPatientList();
 
-          // List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
-          //
-          // if (audio.isNotEmpty) {
-          //   CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
-          //
-          //   // uploadAllAudioFiles(() {
-          //   //   CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
-          //   //   // customPrint('All audio files have been uploaded!');
-          //   // });
-          // }
+          await globalController.handleAudioOnlineData();
 
           break;
         case InternetStatus.disconnected:

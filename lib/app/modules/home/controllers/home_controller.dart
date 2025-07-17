@@ -28,6 +28,7 @@ import '../../../data/service/database_helper.dart';
 import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalDoctorModel.dart';
+import '../../../models/audio_file.dart';
 import '../../login/model/login_model.dart';
 import '../../personal_setting/model/filter_past_visit_status.dart';
 import '../../personal_setting/repository/personal_setting_repository.dart';
@@ -269,6 +270,15 @@ class HomeController extends GetxController {
 
     getOrganizationDetail();
     getUserDetail();
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    getScheduleVisitList();
+    getPastVisitList();
+    getPatientList();
   }
 
   @override

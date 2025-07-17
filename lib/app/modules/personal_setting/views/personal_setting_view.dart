@@ -15,6 +15,7 @@ import '../../../../utils/no_space_lowercase.dart';
 import '../../../../utils/validation_service.dart';
 import '../../../../widget/appbar.dart';
 import '../../../../widget/base_image_view.dart';
+import '../../../../widget/bredcums.dart';
 import '../../../../widget/fileImage.dart';
 import '../../../../widgets/base_dropdown.dart';
 import '../../../../widgets/custom_button.dart';
@@ -44,6 +45,7 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.globalController.breadcrumbHistory.last != controller.globalController.breadcrumbs[Routes.PERSONAL_SETTING]) {
+        controller.globalController.breadcrumbHistory.clear();
         controller.globalController.addRouteInit(Routes.PERSONAL_SETTING);
       }
     });
@@ -99,16 +101,16 @@ class PersonalSettingView extends GetView<PersonalSettingController> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      // BreadcrumbWidget(
-                                      //   breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
-                                      //   onBack: (breadcrumb) {
-                                      //     controller.globalController.popUntilRoute(breadcrumb);
+                                      BreadcrumbWidget(
+                                        breadcrumbHistory: controller.globalController.breadcrumbHistory.value,
+                                        onBack: (breadcrumb) {
+                                          controller.globalController.popUntilRoute(breadcrumb);
 
-                                      //     while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-                                      //       Get.back(); // Pop the current screen
-                                      //     }
-                                      //   },
-                                      // ),
+                                          while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                            Get.back(); // Pop the current screen
+                                          }
+                                        },
+                                      ),
                                       const SizedBox(height: 10),
                                       Container(
                                         width: double.infinity,
