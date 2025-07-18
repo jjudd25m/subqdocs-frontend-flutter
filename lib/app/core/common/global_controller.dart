@@ -84,7 +84,17 @@ class GlobalController extends GetxController {
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
   RxInt tabIndex = RxInt(1);
-  Map<String, String> breadcrumbs = {Routes.HOME: 'Patients & Visits', Routes.ADD_PATIENT: 'Add New', Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information', Routes.VISIT_MAIN: 'Medical Record', Routes.PATIENT_INFO: 'Visit Documents', Routes.PATIENT_PROFILE: 'Patient Profile', Routes.ALL_ATTACHMENT: 'Attachments', Routes.SCHEDULE_PATIENT: 'Schedule Visit', Routes.PERSONAL_SETTING: 'Personal Settings'};
+  Map<String, String> breadcrumbs = {
+    Routes.HOME: 'Patients & Visits',
+    Routes.ADD_PATIENT: 'Add New',
+    Routes.EDIT_PATENT_DETAILS: 'Edit Patient Information',
+    Routes.VISIT_MAIN: 'Medical Record',
+    Routes.PATIENT_INFO: 'Visit Documents',
+    Routes.PATIENT_PROFILE: 'Patient Profile',
+    Routes.ALL_ATTACHMENT: 'Attachments',
+    Routes.SCHEDULE_PATIENT: 'Schedule Visit',
+    Routes.PERSONAL_SETTING: 'Personal Settings',
+  };
 
   int closeFormState = 0;
 
@@ -162,8 +172,6 @@ class GlobalController extends GetxController {
     // Snap directly to left edge if closer or right edge otherwise
     return (xPosition < screenWidth / 2) ? 0 : screenWidth;
   }
-
-
 
   void reinitController() {
     waveController = IOS7SiriWaveformController(amplitude: 0, color: AppColors.backgroundPurple, frequency: 3, speed: 0.9);
@@ -254,10 +262,10 @@ class GlobalController extends GetxController {
     }
   }
 
-  Future<OpenAiStatus> getOpenAiStatus() async{
-    try{
+  Future<OpenAiStatus> getOpenAiStatus() async {
+    try {
       return await _homeRepository.getOpenAiStatus();
-    }catch(e){
+    } catch (e) {
       customPrint("error message: $e");
       return OpenAiStatus();
     }
@@ -362,7 +370,7 @@ class GlobalController extends GetxController {
       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
 
       // AudioFile audioFileToSave = AudioFile(audioData: audioBytes, fileName: audioFile.path, status: 'pending', visitId: visitId.value);
-      AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId.value,audioData: audioBytes);
+      AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId.value, audioData: audioBytes);
 
       // await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
@@ -721,10 +729,9 @@ class GlobalController extends GetxController {
   void addRouteInit(String route) {
     closeFormState = 1;
     final breadCrumb = breadcrumbs[route] ?? route;
-    if(!breadcrumbHistory.contains(breadCrumb)){
+    if (!breadcrumbHistory.contains(breadCrumb)) {
       breadcrumbHistory.add(breadcrumbs[route] ?? route);
     }
-
   }
 
   String getKeyByValue(String value) {
@@ -1277,11 +1284,6 @@ class GlobalController extends GetxController {
       return;
     }
 
-    // if (scheduleVisitModel.value?.selectedDoctorValueSchedule == null) {
-    //   CustomToastification().showToast("Please Select Doctor", type: ToastificationType.error);
-    //   return;
-    // }
-
     if (scheduleVisitModel.value?.visitDateController.text == "") {
       CustomToastification().showToast("Please Select Date ", type: ToastificationType.error);
       return;
@@ -1289,59 +1291,6 @@ class GlobalController extends GetxController {
 
     editPatient();
   }
-
-  // bool validateVisitTime(String? visitTimeInput, DateTime? selectedDate) {
-  //   if (visitTimeInput == null || visitTimeInput.trim().isEmpty) {
-  //     CustomToastification().showToast("Please Select Visit Time", type: ToastificationType.error);
-  //     return false;
-  //   }
-  //
-  //   DateTime selectedTime;
-  //   try {
-  //     selectedTime = DateFormat('HH:mm').parseStrict(visitTimeInput.trim());
-  //   } catch (e) {
-  //     CustomToastification().showToast("Please enter a valid time.", type: ToastificationType.error);
-  //     return false;
-  //   }
-  //
-  //   final DateTime openingTime = DateFormat('HH:mm').parse("07:00");
-  //   final DateTime closingTime = DateFormat('HH:mm').parse("23:59");
-  //
-  //   if (selectedTime.isBefore(openingTime) || selectedTime.isAfter(closingTime)) {
-  //     CustomToastification().showToast("This visit is outside normal operating hours", type: ToastificationType.error);
-  //     return false;
-  //   }
-  //
-  //   if (selectedDate == null) {
-  //     CustomToastification().showToast("Please Select Date", type: ToastificationType.error);
-  //     return false;
-  //   }
-  //
-  //   DateTime now = DateTime.now();
-  //
-  //   // Check if selectedDate is today (year, month, day match)
-  //   bool isToday = (selectedDate.year == now.year &&
-  //       selectedDate.month == now.month &&
-  //       selectedDate.day == now.day);
-  //
-  //   if (isToday) {
-  //     // Combine selected date with selectedTime to get full DateTime
-  //     DateTime combinedSelectedDateTime = DateTime(
-  //       selectedDate.year,
-  //       selectedDate.month,
-  //       selectedDate.day,
-  //       selectedTime.hour,
-  //       selectedTime.minute,
-  //     );
-  //
-  //     if (combinedSelectedDateTime.isBefore(now)) {
-  //       CustomToastification().showToast("Visit time must be in the future", type: ToastificationType.error);
-  //       return false;
-  //     }
-  //   }
-  //
-  //   return true; // all validations passed
-  // }
 
   Future<void> editPatient() async {
     Loader().showLoadingDialogForSimpleLoader();

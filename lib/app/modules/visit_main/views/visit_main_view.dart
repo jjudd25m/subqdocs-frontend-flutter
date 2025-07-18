@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
-import 'package:subqdocs/app/core/common/global_controller.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
@@ -32,6 +31,7 @@ import '../../../core/common/logger.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/audio_wave.dart';
 import '../../../routes/app_pages.dart';
+import '../../custom_drawer/controllers/custom_drawer_controller.dart';
 import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../../home/views/home_reschedule_patient_dialog.dart';
@@ -87,6 +87,14 @@ class _VisitMainViewState extends State<VisitMainView> {
         if (controller.globalController.visitId.isEmpty && controller.globalController.patientId.isEmpty) {
           controller.globalController.visitId = controller.visitId;
           controller.globalController.patientId = controller.patientId;
+        }
+      },
+      onPopCallBack: () {
+        customPrint("message ${controller.globalController.breadcrumbHistory.last}");
+        if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.VISIT_MAIN) {
+          controller.globalController.breadcrumbHistory.clear();
+          Get.offAllNamed(Routes.HOME);
+          Get.find<HomeController>();
         }
       },
       globalKey: _key,
@@ -164,8 +172,15 @@ class _VisitMainViewState extends State<VisitMainView> {
                                       onTap: () {
                                         Get.until((route) => Get.currentRoute == Routes.HOME);
                                         controller.globalController.breadcrumbHistory.clear();
+
+                                        Get.put(HomeController());
+                                        Get.put(CustomDrawerController());
+                                        // Get.find<CustomDrawerController>();
+
+                                        // Get.find<HomeController>();
+                                        // Get.find<CustomDrawerController>();
                                         Get.offAllNamed(Routes.HOME);
-                                        Get.find<HomeController>();
+                                        // Get.find<HomeController>();
                                       },
                                       child: Container(color: AppColors.white, padding: const EdgeInsets.only(right: 11), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
                                     ),

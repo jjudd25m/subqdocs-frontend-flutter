@@ -19,7 +19,6 @@ import '../../../../widget/base_image_view.dart';
 import '../../../../widget/bredcums.dart';
 import '../../../../widget/custom_animated_button.dart';
 import '../../../../widgets/base_dropdown2.dart';
-import '../../../core/common/logger.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/controllers/doctor_to_doctor_sign_finalize_authenticate_view_controller.dart';
@@ -479,11 +478,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             final globalController = controller.globalController;
             final breadcrumbs = globalController.breadcrumbHistory;
             if (breadcrumbs.isNotEmpty) {
-              globalController.popRoute();
-            }
-            if (breadcrumbs.isNotEmpty) {
-              final targetBreadcrumb = breadcrumbs.last;
-              controller.breadCrumbNavigation(targetBreadcrumb);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                globalController.popRoute();
+                if (breadcrumbs.isNotEmpty) {
+                  final targetBreadcrumb = breadcrumbs.last;
+                  controller.breadCrumbNavigation(targetBreadcrumb);
+                }
+              });
             }
           },
           onDrawerChanged: (status) {
