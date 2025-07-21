@@ -117,7 +117,8 @@ dependencies:
   #  map_location_picker:
   html_editor_enhanced:
     path: html_editor_enhanced-2.5.0
-
+  flutter_sound: ^9.28.0
+  flutter_audio_toolkit: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

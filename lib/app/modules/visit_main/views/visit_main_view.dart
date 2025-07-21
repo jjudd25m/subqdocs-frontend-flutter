@@ -454,8 +454,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             if (controller.globalController.visitId.isNotEmpty) {
                                                               CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                                             } else {
+                                                              final btMic = await Permission.microphone.request().isGranted;
                                                               final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
-                                                              if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
+                                                              if (btMic && btGranted) {
                                                                 controller.globalController.isStartTranscript.value = true;
                                                                 controller.globalController.patientFirstName.value = controller.patientData.value.responseData?.patientFirstName ?? "";
                                                                 controller.globalController.attachmentId.value = controller.patientId.value;
@@ -466,7 +467,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                                 controller.globalController.patientId = controller.patientId;
                                                                 controller.globalController.changeStatus("In-Room");
                                                                 controller.globalController.startAudioWidget();
-                                                                controller.globalController.recorderService.audioRecorder = AudioRecorder();
+                                                                // controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                                                 controller.globalController.getConnectedInputDevices();
 
                                                                 controller.globalController.samples.assignAll(
@@ -927,8 +928,9 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     if (controller.globalController.visitId.isNotEmpty) {
                                       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                     } else {
+                                      final btMic = await Permission.microphone.request().isGranted;
                                       final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
-                                      if (await controller.globalController.recorderService.audioRecorder.hasPermission() && btGranted) {
+                                      if (btMic && btGranted) {
                                         controller.globalController.isStartTranscript.value = true;
 
                                         // controller.globalController.patientId.value = controller.patientId.value;
@@ -951,7 +953,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                         controller.globalController.changeStatus("In-Room");
                                         // If not recording, start the recording
                                         controller.globalController.startAudioWidget();
-                                        controller.globalController.recorderService.audioRecorder = AudioRecorder();
+                                        // controller.globalController.recorderService.audioRecorder = AudioRecorder();
                                         controller.globalController.getConnectedInputDevices();
 
                                         controller.globalController.samples.assignAll(

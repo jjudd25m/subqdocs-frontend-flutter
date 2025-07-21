@@ -227,12 +227,13 @@ class HomeController extends GetxController {
 
     globalController.urlSchemeSubscription = globalController.liveActivitiesPlugin.urlSchemeStream().listen((schemeData) async {
       if (schemeData.path == '/stop') {
-        File? audioFile = await globalController.recorderService.stopRecording();
-        customPrint("audio file url is :- ${audioFile?.absolute}");
-        if (audioFile != null) {
-          globalController.stopLiveActivityAudio();
-          globalController.submitAudio(audioFile);
-        }
+        await globalController.recorderService.stopRecording();
+        // File? audioFile = await globalController.recorderService.stopRecording();
+        // customPrint("audio file url is :- ${audioFile?.absolute}");
+        // if (audioFile != null) {
+        //   globalController.stopLiveActivityAudio();
+        //   globalController.submitAudio(audioFile);
+        // }
       } else if (schemeData.path == '/pause') {
         globalController.updatePauseResumeAudioWidget();
         await globalController.recorderService.pauseRecording();
@@ -1304,7 +1305,7 @@ class HomeController extends GetxController {
     if (globalController.visitId.isNotEmpty) {
       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
     } else {
-      if (await globalController.recorderService.audioRecorder.hasPermission()) {
+      if (await Permission.microphone.request().isGranted) {
         globalController.isStartTranscript.value = true;
 
         // controller.globalController.patientId.value = controller.patientId.value;
@@ -1324,7 +1325,7 @@ class HomeController extends GetxController {
         globalController.changeStatus("In-Room");
         // If not recording, start the recording
         globalController.startAudioWidget();
-        globalController.recorderService.audioRecorder = AudioRecorder();
+        // globalController.recorderService.audioRecorder = AudioRecorder();
         globalController.getConnectedInputDevices();
         await globalController.recorderService.startRecording(Get.context!);
         // controller.updateData();

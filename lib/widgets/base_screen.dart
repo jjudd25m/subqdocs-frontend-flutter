@@ -326,7 +326,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               globalController.changeStatus("In-Room");
                                               // If not recording, start the recording
                                               globalController.startAudioWidget();
-                                              globalController.recorderService.audioRecorder = AudioRecorder();
+                                              // globalController.recorderService.audioRecorder = AudioRecorder();
                                               globalController.getConnectedInputDevices();
                                               await globalController.recorderService.startRecording(context);
                                             } else if (globalController.recorderService.recordingStatus.value == 1) {
@@ -381,12 +381,13 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         // SizedBox(width: 20),
                                         GestureDetector(
                                           onTap: () async {
-                                            File? audioFile = await globalController.recorderService.stopRecording();
-                                            globalController.stopLiveActivityAudio();
-                                            customPrint("audio file url is :- ${audioFile?.absolute}");
-                                            if (audioFile != null) {
-                                              globalController.submitAudio(audioFile);
-                                            }
+                                            await globalController.recorderService.stopRecording();
+                                            // File? audioFile = await globalController.recorderService.stopRecording();
+                                            // globalController.stopLiveActivityAudio();
+                                            // customPrint("audio file url is :- ${audioFile?.absolute}");
+                                            // if (audioFile != null) {
+                                            //   globalController.submitAudio(audioFile);
+                                            // }
                                           },
                                           child: Column(children: [SvgPicture.asset(ImagePath.stop_recording, height: 58, width: 58), const SizedBox(height: 10), Text(textAlign: TextAlign.center, "Stop", style: AppFonts.regular(12, AppColors.textGrey))]),
                                         ),
@@ -702,7 +703,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               }
                                               globalController.changeStatus("In-Room");
                                               globalController.startAudioWidget();
-                                              globalController.recorderService.audioRecorder = AudioRecorder();
+                                              // globalController.recorderService.audioRecorder = AudioRecorder();
                                               globalController.getConnectedInputDevices();
 
                                               await globalController.recorderService.startRecording(context);
@@ -748,12 +749,13 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         const SizedBox(width: 10),
                                         GestureDetector(
                                           onTap: () async {
-                                            File? audioFile = await globalController.recorderService.stopRecording();
-                                            customPrint("audio file url is :- ${audioFile?.absolute}");
-                                            globalController.stopLiveActivityAudio();
-                                            if (audioFile != null) {
-                                              globalController.submitAudio(audioFile!);
-                                            }
+                                            await globalController.recorderService.stopRecording();
+                                            // File? audioFile = await globalController.recorderService.stopRecording();
+                                            // customPrint("audio file url is :- ${audioFile?.absolute}");
+                                            // globalController.stopLiveActivityAudio();
+                                            // if (audioFile != null) {
+                                            //   globalController.submitAudio(audioFile!);
+                                            // }
                                           },
                                           child: SvgPicture.asset(ImagePath.stop_recording, height: 44, width: 44),
                                         ),

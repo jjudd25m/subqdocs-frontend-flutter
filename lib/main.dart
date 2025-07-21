@@ -23,9 +23,9 @@ void main() {
       WidgetsFlutterBinding.ensureInitialized();
       await dotenv.load(fileName: ".env");
 
-      await SentryFlutter.init((options) {
-        options.dsn = WebUri(dotenv.get("SENTRY_URL", fallback: "")).toString();
-      });
+      // await SentryFlutter.init((options) {
+      //   options.dsn = WebUri(dotenv.get("SENTRY_URL", fallback: "")).toString();
+      // });
 
       await AppPreference.instance.init();
 

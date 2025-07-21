@@ -7,6 +7,7 @@ import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/app/modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
+import 'package:subqdocs/utils/app_string.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -519,7 +520,21 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                 const SizedBox(height: 10),
                                 _buildBreadcrumb(),
                                 const SizedBox(height: 10),
-                                Column(children: [_buildHeaderTitle(), const SizedBox(height: 15.0), _buildPatientHeader(), const SizedBox(height: 10), _buildTabNavigation(), const SizedBox(height: 10), _buildContentContainer(), const SizedBox(height: 20)]),
+                                Column(children: [
+                                  _buildHeaderTitle(),
+                                  const SizedBox(height: 15.0),
+                                  _buildPatientHeader(),
+                                  const SizedBox(height: 10),
+                                  _buildTabNavigation(),
+                                  const SizedBox(height: 10),
+                                  if((controller.openAiStatus.value.responseData?.status?.indicator != "none") && (controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "finalized" && controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "pending" && controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "cancelled"))...[
+                                    RichText(text: TextSpan(text: AppString.warning,style: AppFonts.bold(16, AppColors.warnTextMsg),children: [
+                                      TextSpan(text: AppString.warningMsg,style: AppFonts.medium(16, AppColors.warnTextMsg))
+                                    ])),
+                                    const SizedBox(height: 10),
+                                  ],
+                                  _buildContentContainer(),
+                                  const SizedBox(height: 20)]),
                               ],
                             ),
                           ),
