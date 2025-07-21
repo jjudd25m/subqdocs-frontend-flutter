@@ -704,6 +704,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               globalController.startAudioWidget();
                                               globalController.recorderService.audioRecorder = AudioRecorder();
                                               globalController.getConnectedInputDevices();
+
                                               await globalController.recorderService.startRecording(context);
                                             } else if (globalController.recorderService.recordingStatus.value == 1) {
                                               // If recording, pause it

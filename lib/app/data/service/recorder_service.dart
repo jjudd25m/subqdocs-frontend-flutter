@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
@@ -28,14 +29,10 @@ class RecorderService {
   // Track recording time in seconds (using GetX Rx for reactivity)
   Rx<int> recordingTime = 0.obs;
   Rx<int> recordingStatus = 0.obs; // 0: Stopped, 1: Recording, 2: Paused
-  // final waveController = IOS7SiriWaveformController(
-  //   amplitude: 1,
-  //   color: AppColors.backgroundPurple,
-  //   frequency: 0,
-  //   speed: 0.50,
-  // );
 
   Timer? _timer;
+  Timer? _chunkTimer;
+  String chunkFilePath = "";
 
   /// Start Recording
   Future<bool> startRecording(BuildContext context) async {
@@ -50,6 +47,8 @@ class RecorderService {
       String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
 
       await audioRecorder.start(const RecordConfig(), path: "${dir.path}/$filename");
+
+      chunkFilePath = "${dir.path}/$filename";
       globalController.startMicListening();
       // globalController.setupEventListener();
       waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
@@ -69,6 +68,7 @@ class RecorderService {
       recordingStatus.value = 1;
       // Start the timer to update recording time
       _startTimer();
+      startChunkTimer();
 
       return true;
     } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
@@ -157,6 +157,27 @@ class RecorderService {
       recordingTime.value++;
       updatedRecordingTime.value = formattedRecordingTime;
     });
+  }
+
+  void startChunkTimer() {
+    _chunkTimer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
+      print("path is :- $chunkFilePath");
+      Duration? duration = await getAudioDuration(chunkFilePath);
+      print("Audio Duration: ${duration?.inSeconds} seconds");
+    });
+  }
+
+  Future<Duration?> getAudioDuration(String filePath) async {
+    final player = AudioPlayer();
+    try {
+      await player.setFilePath(filePath);
+      return player.duration;
+    } catch (e) {
+      print("Error loading audio: $e");
+      return null;
+    } finally {
+      await player.dispose();
+    }
   }
 
   /// Private method to stop the timer when recording is paused or stopped

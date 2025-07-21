@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
-import 'package:subqdocs/app/core/common/global_controller.dart';
 import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
@@ -32,6 +31,7 @@ import '../../../core/common/logger.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/audio_wave.dart';
 import '../../../routes/app_pages.dart';
+import '../../custom_drawer/controllers/custom_drawer_controller.dart';
 import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../../home/views/home_reschedule_patient_dialog.dart';
@@ -89,6 +89,7 @@ class _VisitMainViewState extends State<VisitMainView> {
           controller.globalController.patientId = controller.patientId;
         }
       },
+      onPopCallBack: () {},
       globalKey: _key,
       body: Obx(() {
         return GestureDetector(
@@ -112,33 +113,11 @@ class _VisitMainViewState extends State<VisitMainView> {
                           BreadcrumbWidget(
                             breadcrumbHistory: controller.globalController.breadcrumbHistory,
                             onBack: (breadcrumb) {
-                              // Remove all breadcrumbs after the selected one
                               controller.globalController.popUntilRoute(breadcrumb);
+                              // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
 
-                              final targetRoute = controller.globalController.getKeyByValue(breadcrumb);
-
-                              if (Get.currentRoute == targetRoute) return;
-
-                              bool found = false;
-                              Get.until((route) {
-                                if (route.settings.name == targetRoute) {
-                                  found = true;
-                                }
-                                return found;
-                              });
-
-                              if (!found) {
-                                // Pass correct arguments for HOME and VISIT_MAIN
-                                if (targetRoute == Routes.HOME) {
-                                  controller.globalController.breadcrumbHistory.clear();
-                                  Get.offAllNamed(Routes.HOME);
-                                  Get.find<HomeController>();
-                                } else if (targetRoute == Routes.VISIT_MAIN) {
-                                  Get.offAllNamed(Routes.VISIT_MAIN, arguments: {"visitId": controller.visitId.value, "patientId": controller.patientId.value, "unique_tag": DateTime.now().toString()});
-                                } else {
-                                  Get.offAllNamed(targetRoute);
-                                }
-                                controller.globalController.popRoute();
+                              while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
+                                Get.back(); // Pop the current screen
                               }
                             },
                           ),
@@ -162,10 +141,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        Get.until((route) => Get.currentRoute == Routes.HOME);
-                                        controller.globalController.breadcrumbHistory.clear();
-                                        Get.offAllNamed(Routes.HOME);
-                                        Get.find<HomeController>();
+                                        Get.back();
                                       },
                                       child: Container(color: AppColors.white, padding: const EdgeInsets.only(right: 11), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
                                     ),

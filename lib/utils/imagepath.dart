@@ -161,4 +161,7 @@ class ImagePath {
   static const String no_data_power_view = 'assets/images/no_data_power_view.svg';
   static const String robot = 'assets/images/robot.svg';
   static const String sendMessage = 'assets/images/send_message.svg';
+  static const String cross_white = 'assets/images/cross_white.svg';
+
+  static const String audio_delete = 'assets/images/audio_delete.svg';
 }
