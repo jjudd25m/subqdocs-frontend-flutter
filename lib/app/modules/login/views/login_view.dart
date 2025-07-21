@@ -134,6 +134,18 @@ class LoginView extends GetView<LoginController> {
                     );
                   }),
                   const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Don't have an account yet? ", style: AppFonts.medium(14, AppColors.textDarkGrey)),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.SIGN_UP);
+                        },
+                        child: Text("Sign up now", style: AppFonts.medium(14, AppColors.backgroundPurple)),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 20),
                 ],
               ),

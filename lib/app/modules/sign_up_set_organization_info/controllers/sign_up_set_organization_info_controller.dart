@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:subqdocs/utils/Loader.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../widgets/custom_toastification.dart';
@@ -17,6 +18,9 @@ class SignUpSetOrganizationInfoController extends GetxController {
 
   TextEditingController organizationNameController = TextEditingController();
   TextEditingController noOfProviderController = TextEditingController();
+
+  TextEditingController userPINController = TextEditingController();
+  RxBool userPinVisibility = RxBool(true);
 
   Rxn<GetUserRolesModel> userRolesModel = Rxn<GetUserRolesModel>();
   RxnString selectedRoleValue = RxnString("");
@@ -55,8 +59,18 @@ class SignUpSetOrganizationInfoController extends GetxController {
     param['providers_count'] = noOfProviderController.text.trim();
     param['role'] = selectedRoleValue.value;
     param['userId'] = signupdata.responseData?.id.toString().trim();
+
+    if (selectedRoleValue.value?.toLowerCase() == "doctor") {
+      param['pin'] = userPINController.text.trim();
+    }
+
+    Loader().showLoadingDialogForSimpleLoader();
+
     try {
       SignUpOrganizationModel signUpOrganizationModel = await _personalSettingRepository.organizationUpdate(param: param, organizationId: signupdata.responseData!.organizationId.toString());
+
+      Loader().stopLoader();
+
       if (signUpOrganizationModel.responseType == "success") {
         CustomToastification().showToast(signUpOrganizationModel.message ?? "", type: ToastificationType.success);
       } else {
@@ -66,8 +80,14 @@ class SignUpSetOrganizationInfoController extends GetxController {
       Get.toNamed(Routes.SIGN_UP_PROFILE_COMPLETE);
     } catch (error) {
       // Get.back();
+      Loader().stopLoader();
       CustomToastification().showToast("$error", type: ToastificationType.error);
       customPrint("organizationUpdate catch error is $error");
     }
+  }
+
+  void changeUserPinVisibility() {
+    userPinVisibility.value = userPinVisibility == true ? false : true;
+    userPinVisibility.refresh();
   }
 }

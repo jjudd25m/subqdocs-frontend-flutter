@@ -164,4 +164,5 @@ class ImagePath {
   static const String cross_white = 'assets/images/cross_white.svg';
 
   static const String audio_delete = 'assets/images/audio_delete.svg';
+  static const String template = 'assets/images/template.svg';
 }
