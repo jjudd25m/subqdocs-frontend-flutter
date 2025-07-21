@@ -199,14 +199,13 @@ import '../../core/common/global_controller.dart';
 //   }
 // }
 
-
 class RecorderService {
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   final FlutterAudioToolkit _audioToolkit = FlutterAudioToolkit();
   final int _sampleRate = 16000;
   final int _numChannels = 1;
   final List<int> _pcmBuffer = [];
-  Timer? _chunkTimer,_timer;
+  Timer? _chunkTimer, _timer;
   RxList<AudioWaveBar> samples = <AudioWaveBar>[].obs;
   late StreamController<Uint8List> _pcmStreamController;
   StreamSubscription<Uint8List>? _pcmSubscription;
@@ -219,39 +218,30 @@ class RecorderService {
     WakelockPlus.enable();
     final GlobalController globalController = Get.find();
     globalController.samples.clear();
-    final btMic = await Permission.microphone.request().isGranted;
+    final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
     final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
     if (btMic && btGranted) {
       _pcmStreamController = StreamController<Uint8List>();
       await _recorder.openRecorder();
-      await _recorder.startRecorder(
-        codec: Codec.pcm16,
-        sampleRate: _sampleRate,
-        numChannels: _numChannels,
-        toStream: _pcmStreamController.sink,
-      );
+      await _recorder.startRecorder(codec: Codec.pcm16, sampleRate: _sampleRate, numChannels: _numChannels, toStream: _pcmStreamController.sink);
       globalController.startMicListening();
       _pcmSubscription = _pcmStreamController.stream.listen((buffer) {
         _pcmBuffer.addAll(buffer);
         double amplitude = _calculateAmplitude(buffer);
         if (globalController.samples.length >= 30) globalController.samples.removeAt(0);
-        globalController.samples.add(AudioWaveBar(
-          heightFactor: amplitude,
-          color: Colors.purple,
-        ));
+        globalController.samples.add(AudioWaveBar(heightFactor: amplitude, color: Colors.purple));
         globalController.waveController.amplitude = amplitude;
       });
       recordingStatus.value = 1;
       _startTimer();
       _chunkTimer = Timer.periodic(const Duration(seconds: 15), (_) => _setChunk(globalController.visitId.value));
       return true;
-    }  else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
+    } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
       showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
     }
     return false;
-
   }
 
   /// Stop recording and upload any remaining chunk
@@ -299,21 +289,7 @@ class RecorderService {
     int blockAlign = numChannels * 2;
     int dataLength = pcmData.length;
     int fileLength = 36 + dataLength;
-    var header = <int>[
-      ...'RIFF'.codeUnits,
-      ..._intToBytes(fileLength, 4),
-      ...'WAVE'.codeUnits,
-      ...'fmt '.codeUnits,
-      ..._intToBytes(16, 4),
-      ..._intToBytes(1, 2),
-      ..._intToBytes(numChannels, 2),
-      ..._intToBytes(sampleRate, 4),
-      ..._intToBytes(byteRate, 4),
-      ..._intToBytes(blockAlign, 2),
-      ..._intToBytes(16, 2),
-      ...'data'.codeUnits,
-      ..._intToBytes(dataLength, 4),
-    ];
+    var header = <int>[...'RIFF'.codeUnits, ..._intToBytes(fileLength, 4), ...'WAVE'.codeUnits, ...'fmt '.codeUnits, ..._intToBytes(16, 4), ..._intToBytes(1, 2), ..._intToBytes(numChannels, 2), ..._intToBytes(sampleRate, 4), ..._intToBytes(byteRate, 4), ..._intToBytes(blockAlign, 2), ..._intToBytes(16, 2), ...'data'.codeUnits, ..._intToBytes(dataLength, 4)];
     return header + pcmData;
   }
 
@@ -328,11 +304,7 @@ class RecorderService {
   /// Convert WAV to M4A
   Future<bool> convertWavToM4A(String wavFile, String m4aFile) async {
     try {
-      await _audioToolkit.convertAudio(
-        inputPath: wavFile,
-        outputPath: m4aFile,
-        format: AudioFormat.m4a,
-      );
+      await _audioToolkit.convertAudio(inputPath: wavFile, outputPath: m4aFile, format: AudioFormat.m4a);
       return true;
     } catch (e) {
       log("error message: $e");
@@ -377,6 +349,7 @@ class RecorderService {
       updatedRecordingTime.value = formattedRecordingTime;
     });
   }
+
   void _stopTimer() {
     if (_timer != null) {
       _timer?.cancel();

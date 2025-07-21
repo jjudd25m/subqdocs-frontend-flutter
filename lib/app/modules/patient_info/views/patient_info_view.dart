@@ -502,6 +502,9 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                 // controller.doctorValue.refresh();
               },
               child: Obx(() {
+                final visitStatus = controller.patientData.value?.responseData?.visitStatus;
+                final statusIndicator = controller.openAiStatus.value.responseData?.status?.indicator;
+
                 return Column(
                   children: [
                     if (!controller.isKeyboardVisible.value) CustomAppBar(drawerkey: _scaffoldKey),
@@ -520,21 +523,23 @@ class _PatientInfoViewState extends State<PatientInfoView> {
                                 const SizedBox(height: 10),
                                 _buildBreadcrumb(),
                                 const SizedBox(height: 10),
-                                Column(children: [
-                                  _buildHeaderTitle(),
-                                  const SizedBox(height: 15.0),
-                                  _buildPatientHeader(),
-                                  const SizedBox(height: 10),
-                                  _buildTabNavigation(),
-                                  const SizedBox(height: 10),
-                                  if((controller.openAiStatus.value.responseData?.status?.indicator != "none") && (controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "finalized" && controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "pending" && controller.patientData.value?.responseData?.visitStatus?.toLowerCase() != "cancelled"))...[
-                                    RichText(text: TextSpan(text: AppString.warning,style: AppFonts.bold(16, AppColors.warnTextMsg),children: [
-                                      TextSpan(text: AppString.warningMsg,style: AppFonts.medium(16, AppColors.warnTextMsg))
-                                    ])),
+                                Column(
+                                  children: [
+                                    _buildHeaderTitle(),
+                                    const SizedBox(height: 15.0),
+                                    _buildPatientHeader(),
                                     const SizedBox(height: 10),
+                                    _buildTabNavigation(),
+                                    const SizedBox(height: 10),
+
+                                    if (statusIndicator != "none" && visitStatus != null && !["finalized", "pending", "cancelled"].contains(visitStatus.toLowerCase())) ...[
+                                      RichText(text: TextSpan(text: AppString.warning, style: AppFonts.bold(16, AppColors.warnTextMsg), children: [TextSpan(text: AppString.warningMsg, style: AppFonts.medium(16, AppColors.warnTextMsg))])),
+                                      const SizedBox(height: 10),
+                                    ],
+                                    _buildContentContainer(),
+                                    const SizedBox(height: 20),
                                   ],
-                                  _buildContentContainer(),
-                                  const SizedBox(height: 20)]),
+                                ),
                               ],
                             ),
                           ),

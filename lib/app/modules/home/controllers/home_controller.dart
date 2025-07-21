@@ -9,7 +9,6 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
 import 'package:subqdocs/app/modules/home/model/latest_build_model.dart';
 import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 import 'package:subqdocs/utils/Loader.dart';
@@ -1305,7 +1304,9 @@ class HomeController extends GetxController {
     if (globalController.visitId.isNotEmpty) {
       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
     } else {
-      if (await Permission.microphone.request().isGranted) {
+      final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
+      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+      if (btMic && btGranted) {
         globalController.isStartTranscript.value = true;
 
         // controller.globalController.patientId.value = controller.patientId.value;

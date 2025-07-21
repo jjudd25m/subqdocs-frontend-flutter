@@ -10,8 +10,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
-import 'package:subqdocs/app/modules/home/controllers/home_controller.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -31,7 +29,6 @@ import '../../../core/common/logger.dart';
 import '../../../models/SelectedDoctorMedicationModel.dart';
 import '../../../models/audio_wave.dart';
 import '../../../routes/app_pages.dart';
-import '../../custom_drawer/controllers/custom_drawer_controller.dart';
 import '../../home/views/container_view_dropdown.dart';
 import '../../home/views/drop_down_with_search_popup.dart';
 import '../../home/views/home_reschedule_patient_dialog.dart';
@@ -454,7 +451,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                                             if (controller.globalController.visitId.isNotEmpty) {
                                                               CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                                             } else {
-                                                              final btMic = await Permission.microphone.request().isGranted;
+                                                              final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
                                                               final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
                                                               if (btMic && btGranted) {
                                                                 controller.globalController.isStartTranscript.value = true;
@@ -928,7 +925,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                     if (controller.globalController.visitId.isNotEmpty) {
                                       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
                                     } else {
-                                      final btMic = await Permission.microphone.request().isGranted;
+                                      final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
                                       final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
                                       if (btMic && btGranted) {
                                         controller.globalController.isStartTranscript.value = true;

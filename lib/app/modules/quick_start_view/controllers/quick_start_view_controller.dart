@@ -291,7 +291,9 @@ class QuickStartViewController extends GetxController {
     if (globalController.visitId.isNotEmpty) {
       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
     } else {
-      if (await Permission.microphone.request().isGranted) {
+      final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
+      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+      if (btMic && btGranted) {
         globalController.isStartTranscript.value = true;
 
         // controller.globalController.patientId.value = controller.patientId.value;
