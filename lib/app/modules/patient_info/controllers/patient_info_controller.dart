@@ -687,7 +687,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       }
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      globalController.addRouteInit(Routes.VISIT_MAIN);
       globalController.addRouteInit(Routes.PATIENT_INFO);
     });
   }
@@ -2195,7 +2194,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     copyMedicalRecordToClipboard(copyModel);
   }
 
-  void breadCrumbNavigation(String breadCrumb){
+  void breadCrumbNavigation(String breadCrumb) {
     final targetRoute = globalController.getKeyByValue(breadCrumb);
     if (Get.currentRoute == targetRoute) return;
     bool found = false;
@@ -2207,14 +2206,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     });
     if (!found) {
       if (targetRoute == Routes.VISIT_MAIN) {
-        Get.offAllNamed(
-          Routes.VISIT_MAIN,
-          arguments: {
-            "visitId": visitId,
-            "patientId": patientId,
-            "unique_tag": DateTime.now().toString(),
-          },
-        );
+        Get.offAllNamed(Routes.VISIT_MAIN, arguments: {"visitId": visitId, "patientId": patientId, "unique_tag": DateTime.now().toString()});
       } else if (targetRoute == Routes.HOME) {
         globalController.breadcrumbHistory.clear();
         Get.offAllNamed(Routes.HOME);
@@ -2429,8 +2421,6 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   }
 }
 
-
-
 class KeyboardController extends GetxController {
   static KeyboardController get to => Get.find();
 
@@ -2465,6 +2455,4 @@ class KeyboardController extends GetxController {
   void closeKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
   }
-
-
 }
