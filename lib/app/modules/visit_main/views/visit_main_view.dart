@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 import 'package:subqdocs/app/modules/visit_main/views/view_attchment_image.dart';
 import 'package:subqdocs/app/modules/visit_main/views/visit_main_attachment_filter.dart';
 import 'package:subqdocs/utils/app_colors.dart';
@@ -334,8 +335,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
-                                title: Row(children: [Text(textAlign: TextAlign.center, "Patient Summery", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
-                                children: <Widget>[controller.editableVisitSnapShot.isEmpty ? patientMedicalHistoryEmptyWidget("Patient summery found") : VisitSnapShotEditbale(controller: controller), const SizedBox(height: 10)],
+                                title: Row(children: [Text(textAlign: TextAlign.center, "Patient Summary", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
+                                children: <Widget>[controller.editableVisitSnapShot.isEmpty ? patientMedicalHistoryEmptyWidget("Patient Summary found") : VisitSnapShotEditbale(controller: controller), const SizedBox(height: 10)],
                               ),
                             ),
                           if (controller.visitId.value != "null") const SizedBox(height: 10.0),

@@ -1,3 +1,5 @@
+import 'package:awesome_side_sheet/Enums/sheet_position.dart';
+import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/patient_info/views/doctor_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
+import 'package:subqdocs/app/modules/patient_info/views/template_bottomsheet.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/app/modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
 import 'package:subqdocs/utils/app_string.dart';
@@ -238,7 +241,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
         height: 45,
-        child: SingleChildScrollView(physics: const BouncingScrollPhysics(), scrollDirection: Axis.horizontal, child: Row(children: [_buildTabButton("Power View", 0), _buildTabButton("Full Note", 3), _buildTabButton("Patient Note", 2), _buildTabButton("Full Transcript", 1)])),
+        child: SingleChildScrollView(physics: const BouncingScrollPhysics(), scrollDirection: Axis.horizontal, child: Row(children: [_buildTabButton("Power View", 0), _buildTabButton("Full Note", 3), _buildTabButton("Patient Note", 2), _buildTabButton("Full Transcript", 1), _buildTabButton("Template", 4)])),
       );
     });
   }
@@ -246,7 +249,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   Widget _buildTabButton(String text, int tabIndex) {
     return IntrinsicWidth(
       child: CustomAnimatedButton(
-        onPressed: () => _handleTabChange(tabIndex),
+        onPressed: () {
+          if (tabIndex == 4) {
+            aweSideSheet(sheetWidth: Get.width * 0.85, header: const SizedBox(), footer: const SizedBox(), showActions: false, backgroundColor: AppColors.white, barrierDismissible: true, showCloseButton: false, showBackButton: true, context: context, body: TemplateBottomsheet(onTap: () {}, controller: controller), sheetPosition: SheetPosition.right).then((value) {});
+          } else {
+            _handleTabChange(tabIndex);
+          }
+        },
         text: text,
         isOutline: true,
         paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -278,11 +287,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       return Column(
         children: [
           const SizedBox(height: 20),
-          if (controller.tabIndex.value == 0) ...[DoctorView(controller: controller)],
-          if (controller.tabIndex.value == 1) ...[FullTranscriptView(controller: controller)],
-          if (controller.tabIndex.value == 2) ...[PatientView(controller: controller)],
-          if (controller.tabIndex.value == 3) ...[FullNoteView(controller: controller)],
-          if (controller.tabIndex.value == 6) ...[VisitDataView(controller: controller)],
+          if (controller.tabIndex.value == 0) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: DoctorView(controller: controller))],
+          if (controller.tabIndex.value == 1) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: FullTranscriptView(controller: controller))],
+          if (controller.tabIndex.value == 2) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: PatientView(controller: controller))],
+          if (controller.tabIndex.value == 3) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: FullNoteView(controller: controller))],
+          if (controller.tabIndex.value == 6) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: VisitDataView(controller: controller))],
           const SizedBox(height: 20),
         ],
       );
@@ -330,7 +339,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             ),
           ),
           const SizedBox(height: 10),
-          Text("Amend Note", style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline)),
         ],
       ),
     );

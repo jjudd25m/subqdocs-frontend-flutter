@@ -13,7 +13,7 @@ import 'package:subqdocs/utils/imagepath.dart';
 import '../../../../widget/base_image_view.dart';
 
 class ChatBotWidget extends StatefulWidget {
-  const ChatBotWidget({Key? key}) : super(key: key);
+  const ChatBotWidget({super.key});
 
   @override
   State<ChatBotWidget> createState() => _ChatBotWidgetState();
@@ -154,7 +154,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
       return Stack(
         children: [
           // Floating button
-          if (!isOpen.value) Positioned(bottom: 24, right: 24, child: FloatingActionButton(backgroundColor: const Color(0xFF7C3AED), onPressed: _toggleChat, child: const Icon(Icons.chat_bubble_outline, color: Colors.white))),
+          if (!isOpen.value) Positioned(bottom: 24, right: 24, child: FloatingActionButton(backgroundColor: AppColors.backgroundPurple, onPressed: _toggleChat, child: const Icon(Icons.chat_bubble_outline, color: Colors.white))),
           // Chat window
           if (isOpen.value && !isMinimized.value)
             AnimatedPadding(

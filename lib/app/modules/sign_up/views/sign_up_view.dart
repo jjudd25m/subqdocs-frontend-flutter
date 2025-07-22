@@ -40,32 +40,14 @@ class SignUpView extends GetView<SignUpController> {
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(
-                height: isSmallScreen ? 130 : 300,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: isPortrait ? 0 : -80,
-                      child: Image.asset(ImagePath.loginHeader),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: isSmallScreen ? 130 : 300, child: Stack(children: [Positioned(left: 0, right: 0, top: isPortrait ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: isPortrait ? null : 30),
-                  Text(
-                    "Lets Get Started",
-                    style: AppFonts.medium(24, AppColors.backgroundPurple),
-                  ),
+                  Text("Lets Get Started", style: AppFonts.medium(24, AppColors.backgroundPurple)),
                   const SizedBox(height: 24),
-                  Text(
-                    "Sign Up",
-                    style: AppFonts.medium(20, AppColors.textBlack),
-                  ),
+                  Text("Sign Up", style: AppFonts.medium(20, AppColors.textBlack)),
                   const SizedBox(height: 24),
 
                   SizedBox(
@@ -84,11 +66,7 @@ class SignUpView extends GetView<SignUpController> {
                             onTap: () {
                               controller.firstNameController.clear();
                             },
-                            suffixIcon: const Icon(
-                              Icons.highlight_remove,
-                              color: AppColors.textDarkGrey,
-                              size: 25,
-                            ),
+                            suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                             checkValidation: (value) {
                               return Validation.requiredFiled(value);
                             },
@@ -105,11 +83,7 @@ class SignUpView extends GetView<SignUpController> {
                             onTap: () {
                               controller.lastNameController.clear();
                             },
-                            suffixIcon: const Icon(
-                              Icons.highlight_remove,
-                              color: AppColors.textDarkGrey,
-                              size: 25,
-                            ),
+                            suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                             checkValidation: (value) {
                               return Validation.requiredFiled(value);
                             },
@@ -131,11 +105,7 @@ class SignUpView extends GetView<SignUpController> {
                       onTap: () {
                         controller.emailController.clear();
                       },
-                      suffixIcon: const Icon(
-                        Icons.highlight_remove,
-                        color: AppColors.textDarkGrey,
-                        size: 25,
-                      ),
+                      suffixIcon: const Icon(Icons.highlight_remove, color: AppColors.textDarkGrey, size: 25),
                       checkValidation: (value) {
                         return Validation.emailValidateRequired(value);
                       },
@@ -148,62 +118,25 @@ class SignUpView extends GetView<SignUpController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Obx(() {
-                          return Checkbox(
-                            visualDensity: VisualDensity.compact,
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            activeColor: AppColors.backgroundPurple,
-                            value: controller.isTermsCondition.value,
-                            onChanged:
-                                (value) => {
-                                  controller.isTermsCondition.value = value!,
-                                },
-                          );
+                          return Checkbox(visualDensity: VisualDensity.compact, materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, activeColor: AppColors.backgroundPurple, value: controller.isTermsCondition.value, onChanged: (value) => {controller.isTermsCondition.value = value!});
                         }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "I agree to the ",
-                              style: AppFonts.medium(
-                                14,
-                                AppColors.textDarkGrey,
-                              ),
-                            ),
+                            Text("I agree to the ", style: AppFonts.medium(14, AppColors.textDarkGrey)),
                             GestureDetector(
                               onTap: () {
-                                Get.toNamed(Routes.SIGN_UP);
+                                controller.openTermsConditionPrivacyPolicy(Uri.parse("https://subqdocs.ai/user-agreement/"));
                               },
-                              child: Text(
-                                "Terms & Conditions",
-                                style: AppFonts.medium(
-                                  14,
-                                  AppColors.backgroundPurple,
-                                ).copyWith(
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
+                              child: Text("Terms & Conditions", style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline)),
                             ),
-                            Text(
-                              " and ",
-                              style: AppFonts.medium(
-                                14,
-                                AppColors.textDarkGrey,
-                              ),
-                            ),
+                            Text(" and ", style: AppFonts.medium(14, AppColors.textDarkGrey)),
                             GestureDetector(
                               onTap: () {
+                                controller.openTermsConditionPrivacyPolicy(Uri.parse("https://subqdocs.ai/privacy-policy/"));
                                 Get.toNamed(Routes.SIGN_UP);
                               },
-                              child: Text(
-                                "Privacy Policy",
-                                style: AppFonts.medium(
-                                  14,
-                                  AppColors.backgroundPurple,
-                                ).copyWith(
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
+                              child: Text("Privacy Policy", style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline)),
                             ),
                           ],
                         ),
@@ -220,35 +153,16 @@ class SignUpView extends GetView<SignUpController> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             if (!controller.isTermsCondition.value) {
-                              CustomToastification().showToast(
-                                "Please accept terms and conditions",
-                                type: ToastificationType.error,
-                              );
+                              CustomToastification().showToast("Please accept terms and conditions", type: ToastificationType.error);
                             } else {
-                              CheckNewUserModel checkNewUserModel =
-                                  await controller.checkIsNewUser(
-                                    email: controller.emailController.text,
-                                  );
+                              CheckNewUserModel checkNewUserModel = await controller.checkIsNewUser(email: controller.emailController.text);
 
                               if (checkNewUserModel.responseData ?? false) {
-                                await controller.joinWishlist();
+                                // await controller.joinWishlist();
 
-                                Get.toNamed(
-                                  Routes.SIGN_UP_SET_PASSWORD,
-                                  arguments: {
-                                    'first_name':
-                                        controller.firstNameController.text,
-                                    'last_name':
-                                        controller.lastNameController.text,
-                                    'email': controller.emailController.text,
-                                    'beta_code': controller.beta_code,
-                                  },
-                                );
+                                Get.toNamed(Routes.SIGN_UP_SET_PASSWORD, arguments: {'first_name': controller.firstNameController.text, 'last_name': controller.lastNameController.text, 'email': controller.emailController.text, 'beta_code': controller.beta_code});
                               } else {
-                                CustomToastification().showToast(
-                                  checkNewUserModel.message ?? "",
-                                  type: ToastificationType.error,
-                                );
+                                CustomToastification().showToast(checkNewUserModel.message ?? "", type: ToastificationType.error);
                               }
                             }
                           }
@@ -265,21 +179,12 @@ class SignUpView extends GetView<SignUpController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Already have an account? ",
-                        style: AppFonts.medium(14, AppColors.textDarkGrey),
-                      ),
+                      Text("Already have an account? ", style: AppFonts.medium(14, AppColors.textDarkGrey)),
                       GestureDetector(
                         onTap: () {
                           Get.back();
                         },
-                        child: Text(
-                          "Sign in",
-                          style: AppFonts.medium(
-                            14,
-                            AppColors.backgroundPurple,
-                          ).copyWith(decoration: TextDecoration.underline),
-                        ),
+                        child: Text("Sign in", style: AppFonts.medium(14, AppColors.backgroundPurple).copyWith(decoration: TextDecoration.underline)),
                       ),
                     ],
                   ),

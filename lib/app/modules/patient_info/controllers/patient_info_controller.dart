@@ -47,6 +47,10 @@ import '../views/confirm_finalize_dialog.dart';
 class PatientInfoController extends GetxController with WidgetsBindingObserver, GetTickerProviderStateMixin {
   //TODO: Implement PatientInfoController
 
+  // Template screen
+  RxBool showTemplateSearchClearButton = RxBool(false);
+  TextEditingController templateSearchController = TextEditingController();
+
   final isDragging = false.obs;
 
   // final KeyboardController keyboardController = Get.put(KeyboardController());

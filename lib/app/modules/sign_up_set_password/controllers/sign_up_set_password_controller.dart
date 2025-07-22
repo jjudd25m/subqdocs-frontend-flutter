@@ -18,12 +18,11 @@ class SignUpSetPasswordController extends GetxController {
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController betaCodeController = TextEditingController();
+  // TextEditingController betaCodeController = TextEditingController();
 
   final SignupRepository _signupRepository = SignupRepository();
 
-  var passwordValidation =
-      {'length': false, 'number': false, 'letter': false, 'special': false}.obs;
+  var passwordValidation = {'length': false, 'number': false, 'letter': false, 'special': false}.obs;
 
   String firstName = '';
   String lastName = '';
@@ -48,8 +47,7 @@ class SignUpSetPasswordController extends GetxController {
   }
 
   void changeConfirmPasswordVisible() {
-    confirmPasswordVisible.value =
-        confirmPasswordVisible.value == true ? false : true;
+    confirmPasswordVisible.value = confirmPasswordVisible.value == true ? false : true;
     confirmPasswordVisible.refresh();
   }
 
@@ -87,39 +85,28 @@ class SignUpSetPasswordController extends GetxController {
     param["last_name"] = lastName.trim();
     param["email"] = email.trim();
     param["password"] = confirmPasswordController.text.trim();
-    param["betaTesterCode"] = betaCodeController.text.trim();
+    // param["betaTesterCode"] = betaCodeController.text.trim();
 
     try {
-      SignUpModel signUpModel = await _signupRepository.registerUser(
-        param: param,
-      );
+      SignUpModel signUpModel = await _signupRepository.registerUser(param: param);
 
       customPrint("response is :- ${signUpModel.toJson()}");
       isLoading.value = false;
       if (signUpModel.responseType == "success") {
         customPrint("signUpModel is  :- ${signUpModel.toJson()}");
 
-        Get.toNamed(
-          Routes.SIGN_UP_SET_ORGANIZATION_INFO,
-          arguments: {'signupdata': signUpModel},
-        );
+        Get.toNamed(Routes.SIGN_UP_SET_ORGANIZATION_INFO, arguments: {'signupdata': signUpModel});
       } else {
         isLoading.value = false;
         Get.back();
 
-        CustomToastification().showToast(
-          signUpModel.message ?? "",
-          type: ToastificationType.error,
-        );
+        CustomToastification().showToast(signUpModel.message ?? "", type: ToastificationType.error);
       }
     } catch (error) {
       // Get.back();
       isLoading.value = false;
       customPrint("login catch error is $error");
-      CustomToastification().showToast(
-        "$error",
-        type: ToastificationType.error,
-      );
+      CustomToastification().showToast("$error", type: ToastificationType.error);
     }
   }
 }
