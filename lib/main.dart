@@ -36,7 +36,6 @@ Future<void> main() async {
   Get.put(GlobalController());
   Get.put(GlobalMobileController());
 
-  //
   Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
   print("device info is:- $deviceInfo");
   ApiProvider.instance.cachedDeviceInfo = deviceInfo;
