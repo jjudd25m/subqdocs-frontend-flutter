@@ -17,36 +17,29 @@ import 'app/core/common/global_controller.dart';
 import 'app/core/common/global_mobile_controller.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
-  runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load(fileName: ".env");
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
-      await SentryFlutter.init((options) {
-        options.dsn = WebUri(dotenv.get("SENTRY_URL", fallback: "")).toString();
-      });
+  await SentryFlutter.init((options) {
+    options.dsn = WebUri(dotenv.get("SENTRY_URL", fallback: "")).toString();
+  });
 
-      await AppPreference.instance.init();
+  await AppPreference.instance.init();
 
-      SocketService socketService = SocketService();
+  SocketService socketService = SocketService();
 
-      socketService.socket.onConnect((_) {
-        socketService.openAISocket.connect();
-      });
+  socketService.socket.onConnect((_) {
+    socketService.openAISocket.connect();
+  });
 
-      Get.put(GlobalController());
-      Get.put(GlobalMobileController());
+  Get.put(GlobalController());
+  Get.put(GlobalMobileController());
 
-      //
-      Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
-      print("device info is:- $deviceInfo");
-      ApiProvider.instance.cachedDeviceInfo = deviceInfo;
+  //
+  Map<String, String> deviceInfo = await DeviceInfoService.getDeviceInfoAsJson();
+  print("device info is:- $deviceInfo");
+  ApiProvider.instance.cachedDeviceInfo = deviceInfo;
 
-      runApp(ToastificationWrapper(child: GetMaterialApp(navigatorKey: AppConstants().navigatorKey, title: "Application", debugShowCheckedModeBanner: false, defaultTransition: Transition.noTransition, initialRoute: AppPages.INITIAL, getPages: AppPages.routes)));
-    },
-    (exception, stackTrace) async {
-      await Sentry.captureException(exception, stackTrace: stackTrace);
-    },
-  );
+  runApp(ToastificationWrapper(child: GetMaterialApp(navigatorKey: AppConstants().navigatorKey, title: "Application", debugShowCheckedModeBanner: false, defaultTransition: Transition.noTransition, initialRoute: AppPages.INITIAL, getPages: AppPages.routes)));
 }

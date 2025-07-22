@@ -11,6 +11,7 @@ class AppColors {
   // Text color
   static const Color textWhite = Color(0xFFFFFFFF);
   static const Color tableItem = Color(0xFFF3F3F3);
+  static const Color chatBackgroundGrey = Color(0xFFF8F8F8);
 
   static const Color textBlack = Color(0xFF000000);
   static const Color textBlackDark = Color(0xFF1E212A);
@@ -60,6 +61,7 @@ class AppColors {
   static const Color orange = Color(0xFFFFE6CC);
   static const Color orangeText = Color(0xFFFF8000);
   static const Color redText = Color(0xFFEB4335);
+  static const Color warnTextMsg = Color(0xFFFFB300);
 
   static const Color lightpurpule = Color(0xFFE9E9FB);
   static const Color lightpurpuleButton = Color(0xFF5B5BE1);

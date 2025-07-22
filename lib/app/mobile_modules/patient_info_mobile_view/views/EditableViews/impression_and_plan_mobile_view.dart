@@ -98,23 +98,22 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                       context: Get.context!,
-                                      builder:
-                                          (context) => AlertDialog(
-                                            title: const Text("Alert"),
-                                            content: const Text("Are you sure you want to delete this Impression and Plan?"),
-                                            actions: [
-                                              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
-                                              TextButton(
-                                                onPressed: () {
-                                                  controller.impressionAndPlanListFullNote.removeAt(index);
-                                                  controller.impressionAndPlanListFullNote.refresh();
-                                                  controller.updateImpressionAndPlanFullNote();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text("Delete", style: TextStyle(color: Colors.red)),
-                                              ),
-                                            ],
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Alert"),
+                                        content: const Text("Are you sure you want to delete this Impression and Plan?"),
+                                        actions: [
+                                          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
+                                          TextButton(
+                                            onPressed: () {
+                                              controller.impressionAndPlanListFullNote.removeAt(index);
+                                              controller.impressionAndPlanListFullNote.refresh();
+                                              controller.updateImpressionAndPlanFullNote();
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("Delete", style: TextStyle(color: Colors.red)),
                                           ),
+                                        ],
+                                      ),
                                     );
                                   },
                                   child: SvgPicture.asset(ImagePath.trash, colorFilter: const ColorFilter.mode(AppColors.textPurple, BlendMode.srcIn), fit: BoxFit.cover),
@@ -239,11 +238,9 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                   ),
                                   content: DiagnosisDropdrownSearchTableMobileView(
                                     diagnosisContainerKey: model.diagnosisContainerKey,
-                                    items:
-                                        (model.siblingIcd10FullNote ?? []).map((e) {
-                                          return ProcedurePossibleAlternatives(code: e.code, description: e.name, isPin: true);
-                                        }).toList(),
-
+                                    items: (model.siblingIcd10FullNote ?? []).map((e) {
+                                      return ProcedurePossibleAlternatives(code: e.code, description: e.name, isPin: true);
+                                    }).toList(),
                                     onItemSelected: (value, _) {
                                       customPrint("called ");
                                       model.popoverController.close();
@@ -271,7 +268,6 @@ class ImpressionAndPlanMobileView extends StatelessWidget {
                                         GestureDetector(
                                           onTap: () {
                                             model.slidableController?.openStartActionPane();
-                                            // Slidable.of(context)?.openStartActionPane();
                                           },
                                           child: HtmlEditorViewWidget(
                                             heightOfTheEditableView: 500,

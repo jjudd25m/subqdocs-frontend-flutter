@@ -35,17 +35,14 @@ class MainActivity : FlutterActivity() {
                         val name = call.arguments as? String
                         result.success(name?.let { setPreferredAudioInput(it) } ?: false)
                     }
-
                     "startAudioRouteListening" -> {
                         startAudioRouteListening()
                         result.success(null)
                     }
-
                     "stopAudioRouteListening" -> {
                         stopAudioRouteListening()
                         result.success(null)
                     }
-
                     else -> result.notImplemented()
                 }
             }

@@ -10,6 +10,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/patient_info/model/icd10_code_list_model.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:toastification/toastification.dart';
@@ -45,6 +46,10 @@ import '../views/confirm_finalize_dialog.dart';
 
 class PatientInfoController extends GetxController with WidgetsBindingObserver, GetTickerProviderStateMixin {
   //TODO: Implement PatientInfoController
+
+  // Template screen
+  RxBool showTemplateSearchClearButton = RxBool(false);
+  TextEditingController templateSearchController = TextEditingController();
 
   final isDragging = false.obs;
 
@@ -112,6 +117,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   Rxn<PatientFullNoteResponseData> patientFullNoteResponseData = Rxn();
 
   RxBool isFullNoteAttachment = RxBool(false);
+  RxBool isNavigatingFromBreadcrumb = RxBool(false);
   RxList<ImpresionAndPlanViewModel> impressionAndPlanList = RxList();
   RxList<ImpresionAndPlanViewModel> impressionAndPlanListFullNote = RxList();
 
@@ -130,6 +136,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   final VisitMainRepository _visitMainRepository = VisitMainRepository();
 
   Rxn<LoginModel> loginData = Rxn();
+  Rx<OpenAiStatus> openAiStatus = OpenAiStatus().obs;
 
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
 
@@ -189,6 +196,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     globalController.getDoctorsFilter();
     globalController.getMedicalAssistance();
+    openAiStatus.value = await globalController.getOpenAiStatus();
 
     customPrint("argument is :- ${Get.arguments}");
 
@@ -2188,6 +2196,28 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   void copyAllSection() async {
     List<CopyModel> copyModel = initCopyModel();
     copyMedicalRecordToClipboard(copyModel);
+  }
+
+  void breadCrumbNavigation(String breadCrumb) {
+    final targetRoute = globalController.getKeyByValue(breadCrumb);
+    if (Get.currentRoute == targetRoute) return;
+    bool found = false;
+    Get.until((route) {
+      if (route.settings.name == targetRoute) {
+        found = true;
+      }
+      return found;
+    });
+    if (!found) {
+      if (targetRoute == Routes.VISIT_MAIN) {
+        Get.offAllNamed(Routes.VISIT_MAIN, arguments: {"visitId": visitId, "patientId": patientId, "unique_tag": DateTime.now().toString()});
+      } else if (targetRoute == Routes.HOME) {
+        globalController.breadcrumbHistory.clear();
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        Get.offAllNamed(targetRoute);
+      }
+    }
   }
 
   // List<CopyModel> initCopyModel() {

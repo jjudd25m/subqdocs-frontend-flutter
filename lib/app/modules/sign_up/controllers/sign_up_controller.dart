@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:subqdocs/app/modules/sign_up/models/sign_up_models.dart';
 import 'package:subqdocs/app/modules/sign_up/repository/signup_repository.dart';
 import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/logger.dart';
@@ -11,8 +12,7 @@ import '../../beta_tester_code/repository/beta_tester_code_repository.dart';
 class SignUpController extends GetxController {
   //TODO: Implement SignUpController
 
-  final BetaTesterCodeRepository betaTesterCodeRepository =
-      BetaTesterCodeRepository();
+  final BetaTesterCodeRepository betaTesterCodeRepository = BetaTesterCodeRepository();
 
   RxBool isTermsCondition = RxBool(true);
   RxBool passwordVisible = RxBool(true);
@@ -45,8 +45,7 @@ class SignUpController extends GetxController {
   }
 
   void changeConfirmPasswordVisible() {
-    confirmPasswordVisible.value =
-        confirmPasswordVisible.value == true ? false : true;
+    confirmPasswordVisible.value = confirmPasswordVisible.value == true ? false : true;
     confirmPasswordVisible.refresh();
   }
 
@@ -60,9 +59,7 @@ class SignUpController extends GetxController {
     param["password"] = confirmPasswordController.text.trim();
 
     try {
-      SignUpModel signUpModel = await _signupRepository.registerUser(
-        param: param,
-      );
+      SignUpModel signUpModel = await _signupRepository.registerUser(param: param);
 
       customPrint("respionse is :- ${signUpModel.toJson()}");
 
@@ -70,42 +67,33 @@ class SignUpController extends GetxController {
 
       if (signUpModel.responseType == "success") {
         Get.back();
-        CustomToastification().showToast(
-          signUpModel.message ?? "",
-          type: ToastificationType.success,
-        );
+        CustomToastification().showToast(signUpModel.message ?? "", type: ToastificationType.success);
       } else {
-        CustomToastification().showToast(
-          signUpModel.message ?? "",
-          type: ToastificationType.error,
-        );
+        CustomToastification().showToast(signUpModel.message ?? "", type: ToastificationType.error);
       }
     } catch (error) {
       isLoading.value = false;
       customPrint("login catch error is $error");
-      CustomToastification().showToast(
-        "$error",
-        type: ToastificationType.error,
-      );
+      CustomToastification().showToast("$error", type: ToastificationType.error);
     }
   }
 
   Future<CheckNewUserModel> checkIsNewUser({required String email}) async {
-    CheckNewUserModel checkNewUserModel = await _signupRepository
-        .checkIsNewUser(email: email);
+    CheckNewUserModel checkNewUserModel = await _signupRepository.checkIsNewUser(email: email);
     return checkNewUserModel;
   }
 
   Future<bool> joinWishlist() async {
-    dynamic res = await betaTesterCodeRepository.joinWishlist(
-      email: emailController.text,
-    );
-    CustomToastification().showToast(
-      "Verification send to email address.",
-      type: ToastificationType.success,
-    );
+    dynamic res = await betaTesterCodeRepository.joinWishlist(email: emailController.text);
+    CustomToastification().showToast("Verification send to email address.", type: ToastificationType.success);
     // CustomToastification().showToast(res['message'] ?? "", type: ToastificationType.success);
     return true;
     // Get.back();
+  }
+
+  Future<void> openTermsConditionPrivacyPolicy(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.platformDefault, browserConfiguration: const BrowserConfiguration(showTitle: true))) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

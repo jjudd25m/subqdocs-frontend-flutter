@@ -1,3 +1,5 @@
+import 'package:awesome_side_sheet/Enums/sheet_position.dart';
+import 'package:awesome_side_sheet/side_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -5,11 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:subqdocs/app/modules/patient_info/views/doctor_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/full_note_view.dart';
 import 'package:subqdocs/app/modules/patient_info/views/patient_view.dart';
+import 'package:subqdocs/app/modules/patient_info/views/template_bottomsheet.dart';
 import 'package:subqdocs/app/modules/patient_info/views/visit_data_view.dart';
 import 'package:subqdocs/app/modules/sign_finalize_authenticate_view/controllers/sign_finalize_authenticate_view_controller.dart';
 import 'package:subqdocs/widgets/base_screen.dart';
-import 'package:subqdocs/widgets/custom_toastification.dart';
-import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/app_colors.dart';
@@ -26,6 +27,7 @@ import '../../doctor_to_doctor_sign_finalize_authenticate_view/controllers/docto
 import '../../doctor_to_doctor_sign_finalize_authenticate_view/views/doctor_to_doctor_sign_finalize_authenticate_view_view.dart';
 import '../../sign_finalize_authenticate_view/views/sign_finalize_authenticate_view_view.dart';
 import '../controllers/patient_info_controller.dart';
+import 'chatbot_widget.dart';
 import 'confirm_finalize_dialog.dart';
 import 'full_transcript_view.dart';
 
@@ -89,6 +91,32 @@ class _PatientInfoViewState extends State<PatientInfoView> {
         Get.until((route) => Get.currentRoute == Routes.HOME);
         controller.globalController.breadcrumbHistory.clear();
         controller.globalController.addRoute(Routes.HOME);
+
+        // final globalController = controller.globalController;
+        // final breadcrumbs = globalController.breadcrumbHistory;
+        // final lastBreadcrumb = breadcrumbs.isNotEmpty ? breadcrumbs.last : null;
+        // final targetRoute = lastBreadcrumb != null ? globalController.getKeyByValue(lastBreadcrumb) : null;
+        //
+        // // If going to HOME, trigger refresh
+        // if (targetRoute == Routes.VISIT_MAIN) {
+        //   // Optionally, handle VISIT_MAIN navigation/refresh here
+        //   if (Get.currentRoute != Routes.VISIT_MAIN) {
+
+        // }
+        // else{
+        //   Get.offAllNamed(targetRoute ?? Routes.HOME);
+        // }
+        // customPrint("message:PatientView");
+        // controller.isNavigatingFromBreadcrumb.value = true;
+        // final globalController = controller.globalController;
+        // final breadcrumbs = globalController.breadcrumbHistory;
+        // if (breadcrumbs.isNotEmpty) {
+        //   globalController.popRoute();
+        // }
+        // if (breadcrumbs.isNotEmpty) {
+        //   final targetBreadcrumb = breadcrumbs.last;
+        //   controller.breadCrumbNavigation(targetBreadcrumb);
+        // }
       },
       child: Container(color: AppColors.white, padding: const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 20.0), child: SvgPicture.asset(ImagePath.logo_back, height: 20, width: 20)),
     );
@@ -212,7 +240,7 @@ class _PatientInfoViewState extends State<PatientInfoView> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColors.white),
         height: 45,
-        child: SingleChildScrollView(physics: const BouncingScrollPhysics(), scrollDirection: Axis.horizontal, child: Row(children: [_buildTabButton("Power View", 0), _buildTabButton("Full Note", 3), _buildTabButton("Patient Note", 2), _buildTabButton("Full Transcript", 1)])),
+        child: SingleChildScrollView(physics: const BouncingScrollPhysics(), scrollDirection: Axis.horizontal, child: Row(children: [_buildTabButton("Power View", 0), _buildTabButton("Full Note", 3), _buildTabButton("Patient Note", 2), _buildTabButton("Full Transcript", 1), _buildTabButton("Template", 4)])),
       );
     });
   }
@@ -220,7 +248,13 @@ class _PatientInfoViewState extends State<PatientInfoView> {
   Widget _buildTabButton(String text, int tabIndex) {
     return IntrinsicWidth(
       child: CustomAnimatedButton(
-        onPressed: () => _handleTabChange(tabIndex),
+        onPressed: () {
+          if (tabIndex == 4) {
+            aweSideSheet(sheetWidth: Get.width * 0.85, header: const SizedBox(), footer: const SizedBox(), showActions: false, backgroundColor: AppColors.white, barrierDismissible: true, showCloseButton: false, showBackButton: true, context: context, body: TemplateBottomsheet(onTap: () {}, controller: controller), sheetPosition: SheetPosition.right).then((value) {});
+          } else {
+            _handleTabChange(tabIndex);
+          }
+        },
         text: text,
         isOutline: true,
         paddingText: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -252,11 +286,11 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       return Column(
         children: [
           const SizedBox(height: 20),
-          if (controller.tabIndex.value == 0) ...[DoctorView(controller: controller)],
-          if (controller.tabIndex.value == 1) ...[FullTranscriptView(controller: controller)],
-          if (controller.tabIndex.value == 2) ...[PatientView(controller: controller)],
-          if (controller.tabIndex.value == 3) ...[FullNoteView(controller: controller)],
-          if (controller.tabIndex.value == 6) ...[VisitDataView(controller: controller)],
+          if (controller.tabIndex.value == 0) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: DoctorView(controller: controller))],
+          if (controller.tabIndex.value == 1) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: FullTranscriptView(controller: controller))],
+          if (controller.tabIndex.value == 2) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: PatientView(controller: controller))],
+          if (controller.tabIndex.value == 3) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: FullNoteView(controller: controller))],
+          if (controller.tabIndex.value == 6) ...[IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: VisitDataView(controller: controller))],
           const SizedBox(height: 20),
         ],
       );
@@ -304,7 +338,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
             ),
           ),
           const SizedBox(height: 10),
-          Text("Amend Note", style: AppFonts.medium(15, AppColors.textGrey).copyWith(decoration: TextDecoration.underline)),
         ],
       ),
     );
@@ -448,7 +481,6 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       children: [
         BaseScreen(
           onPopCallBack: () {
-            controller.closeDoctorPopOverController();
             if (controller.globalController.getKeyByValue(controller.globalController.breadcrumbHistory.last) == Routes.PATIENT_INFO) {
               controller.globalController.popRoute();
             }
@@ -510,18 +542,20 @@ class _PatientInfoViewState extends State<PatientInfoView> {
           ),
           globalKey: _scaffoldKey,
         ),
-        // const ChatBotWidget(),
+        const ChatBotWidget(),
       ],
     );
   }
 
   Widget _buildBreadcrumb() {
     return BreadcrumbWidget(
-      breadcrumbHistory: controller.globalController.breadcrumbHistory,
+      breadcrumbHistory: controller.globalController.breadcrumbHistory.toList(),
       onBack: (breadcrumb) {
         controller.globalController.popUntilRoute(breadcrumb);
+        // Get.offAllNamed(globalController.getKeyByValue(breadcrumb));
+
         while (Get.currentRoute != controller.globalController.getKeyByValue(breadcrumb)) {
-          Get.back();
+          Get.back(); // Pop the current screen
         }
       },
     );

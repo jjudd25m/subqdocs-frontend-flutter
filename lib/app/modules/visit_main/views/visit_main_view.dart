@@ -87,6 +87,7 @@ class _VisitMainViewState extends State<VisitMainView> {
           controller.globalController.patientId = controller.patientId;
         }
       },
+      onPopCallBack: () {},
       globalKey: _key,
       body: Obx(() {
         return GestureDetector(
@@ -334,8 +335,8 @@ class _VisitMainViewState extends State<VisitMainView> {
                                 shape: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
                                 backgroundColor: AppColors.backgroundWhite,
                                 collapsedBackgroundColor: AppColors.backgroundWhite,
-                                title: Row(children: [Text(textAlign: TextAlign.center, "Patient Summery", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
-                                children: <Widget>[controller.editableVisitSnapShot.isEmpty ? patientMedicalHistoryEmptyWidget("Patient summery found") : VisitSnapShotEditbale(controller: controller), const SizedBox(height: 10)],
+                                title: Row(children: [Text(textAlign: TextAlign.center, "Patient Summary", style: AppFonts.regular(16, AppColors.textBlack)), const Spacer()]),
+                                children: <Widget>[controller.editableVisitSnapShot.isEmpty ? patientMedicalHistoryEmptyWidget("Patient Summary found") : VisitSnapShotEditbale(controller: controller), const SizedBox(height: 10)],
                               ),
                             ),
                           if (controller.visitId.value != "null") const SizedBox(height: 10.0),
@@ -478,7 +479,7 @@ class _VisitMainViewState extends State<VisitMainView> {
 
                                                                 await controller.globalController.recorderService.startRecording(context);
                                                               } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
-                                                                showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
+                                                                showDialog(barrierDismissible: false, context: context, builder: (context) => PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: "Microphone permission request", isMicPermission: true));
                                                               }
                                                             }
                                                           }

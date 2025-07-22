@@ -32,13 +32,10 @@ class FullNoteCommonContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      // padding: const EdgeInsets.symmetric(horizontal: 0),
-      // decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)), color: AppColors.white, border: Border.all(color: AppColors.backgroundPurple.withAlpha(50), width: 1)),
       child: Column(
         children: [
           Container(
             height: 35,
-            // decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)), color: AppColors.backgroundPurple.withAlpha(50), border: Border.all(color: AppColors.backgroundPurple.withAlpha(50), width: 0.01)),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [

@@ -571,15 +571,26 @@ class ImpressionAndPlanPatientView extends StatelessWidget {
                 const SizedBox(width: 5),
                 GestureDetector(
                   onTap: () {
-                    if (isGeneral) {
-                      controller.generalAttachments?.removeAt(imageIndex);
-                    } else {
-                      controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
-                    }
-                    controller.impressionAndPlanListFullNote.refresh();
-                    controller.generalAttachments?.refresh();
-                    controller.isFullNoteAttachment.value = false;
-                    controller.updateImpressionAndPlanFullNote();
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => DeleteConfirmationDialog(
+                            title: "Alert!",
+                            description: "Are you sure you want to delete this image?",
+                            onDeletePressed: () {
+                              // Your delete logic here
+                              if (isGeneral) {
+                                controller.generalAttachments?.removeAt(imageIndex);
+                              } else {
+                                controller.impressionAndPlanListFullNote[listIndex].attachments?.removeAt(imageIndex);
+                              }
+                              controller.impressionAndPlanListFullNote.refresh();
+                              controller.generalAttachments?.refresh();
+                              controller.isFullNoteAttachment.value = false;
+                              controller.updateImpressionAndPlanFullNote();
+                            },
+                          ),
+                    );
                   },
                   child: Container(decoration: BoxDecoration(color: AppColors.white.withValues(alpha: 0.0)), child: SvgPicture.asset(ImagePath.delete_black, height: 40, width: 50)),
                 ),

@@ -38,32 +38,14 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(
-                height: isSmallScreen ? 130 : 300,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: isPortrait ? 0 : -80,
-                      child: Image.asset(ImagePath.loginHeader),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: isSmallScreen ? 130 : 300, child: Stack(children: [Positioned(left: 0, right: 0, top: isPortrait ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: isPortrait ? null : 30),
-                  Text(
-                    "Lets Get Started",
-                    style: AppFonts.medium(24, AppColors.backgroundPurple),
-                  ),
+                  Text("Lets Get Started", style: AppFonts.medium(24, AppColors.backgroundPurple)),
                   const SizedBox(height: 24),
-                  Text(
-                    "Sign Up",
-                    style: AppFonts.medium(20, AppColors.textBlack),
-                  ),
+                  Text("Sign Up", style: AppFonts.medium(20, AppColors.textBlack)),
                   const SizedBox(height: 24),
                   const SizedBox(height: 20),
                   const SizedBox(height: 0),
@@ -83,29 +65,19 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                                   onTap: () {
                                     controller.changePasswordVisible();
                                   },
-                                  child: SvgPicture.asset(
-                                    ImagePath.eyeLogoOpen,
-                                    height: 5,
-                                    width: 5,
-                                  ),
+                                  child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 5, width: 5),
                                 )
                                 : GestureDetector(
                                   onTap: () {
                                     controller.changePasswordVisible();
                                   },
-                                  child: const Icon(
-                                    CupertinoIcons.eye_slash_fill,
-                                    color: AppColors.textDarkGrey,
-                                  ),
+                                  child: const Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                 ),
                         onChanged: (p0) {
                           controller.validatePassword(p0 ?? "");
                         },
                         checkValidation: (value) {
-                          return Validation.conforimpasswordValidate(
-                            value,
-                            controller.confirmPasswordController.text,
-                          );
+                          return Validation.conforimpasswordValidate(value, controller.confirmPasswordController.text);
                         },
                       ),
                     );
@@ -131,15 +103,7 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                                       width: 20,
                                     ),
                                     const SizedBox(width: 5),
-                                    Text(
-                                      "8-20 Characters",
-                                      style: AppFonts.regular(
-                                        14,
-                                        controller.passwordValidation['length']!
-                                            ? AppColors.backgroundPurple
-                                            : AppColors.textDarkGrey,
-                                      ),
-                                    ),
+                                    Text("8-20 Characters", style: AppFonts.regular(14, controller.passwordValidation['length']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
                                   ],
                                 ),
                               ),
@@ -155,15 +119,7 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                                       width: 20,
                                     ),
                                     const SizedBox(width: 5),
-                                    Text(
-                                      "1 Number",
-                                      style: AppFonts.regular(
-                                        14,
-                                        controller.passwordValidation['number']!
-                                            ? AppColors.backgroundPurple
-                                            : AppColors.textDarkGrey,
-                                      ),
-                                    ),
+                                    Text("1 Number", style: AppFonts.regular(14, controller.passwordValidation['number']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
                                   ],
                                 ),
                               ),
@@ -194,15 +150,7 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                                       width: 20,
                                     ),
                                     const SizedBox(width: 5),
-                                    Text(
-                                      "1 Letter",
-                                      style: AppFonts.regular(
-                                        14,
-                                        controller.passwordValidation['letter']!
-                                            ? AppColors.backgroundPurple
-                                            : AppColors.textDarkGrey,
-                                      ),
-                                    ),
+                                    Text("1 Letter", style: AppFonts.regular(14, controller.passwordValidation['letter']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
                                   ],
                                 ),
                               ),
@@ -221,16 +169,7 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                                       width: 20,
                                     ),
                                     const SizedBox(width: 5),
-                                    Text(
-                                      "1 Special Character",
-                                      style: AppFonts.regular(
-                                        14,
-                                        controller
-                                                .passwordValidation['special']!
-                                            ? AppColors.backgroundPurple
-                                            : AppColors.textDarkGrey,
-                                      ),
-                                    ),
+                                    Text("1 Special Character", style: AppFonts.regular(14, controller.passwordValidation['special']! ? AppColors.backgroundPurple : AppColors.textDarkGrey)),
                                   ],
                                 ),
                               ),
@@ -257,54 +196,44 @@ class SignUpSetPasswordView extends GetView<SignUpSetPasswordController> {
                                   onTap: () {
                                     controller.changeConfirmPasswordVisible();
                                   },
-                                  child: SvgPicture.asset(
-                                    ImagePath.eyeLogoOpen,
-                                    height: 5,
-                                    width: 5,
-                                  ),
+                                  child: SvgPicture.asset(ImagePath.eyeLogoOpen, height: 5, width: 5),
                                 )
                                 : GestureDetector(
                                   onTap: () {
                                     controller.changeConfirmPasswordVisible();
                                   },
-                                  child: const Icon(
-                                    CupertinoIcons.eye_slash_fill,
-                                    color: AppColors.textDarkGrey,
-                                  ),
+                                  child: const Icon(CupertinoIcons.eye_slash_fill, color: AppColors.textDarkGrey),
                                 ),
                         checkValidation: (value) {
-                          return Validation.conforimpasswordValidate(
-                            value,
-                            controller.passwordController.text,
-                          );
+                          return Validation.conforimpasswordValidate(value, controller.passwordController.text);
                         },
                       ),
                     );
                   }),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
-                    child: TextFormFiledWidget(
-                      isSuffixIconVisible: false,
-                      isFirst: true,
-                      label: "Enter the code",
-                      controller: controller.betaCodeController,
-                      // format: [NoSpaceLowercaseTextFormatter()],
-                      hint: "123456",
-                      onTap: () {
-                        // controller.emailController.clear();
-                      },
-                      suffixIcon: const Icon(
-                        Icons.highlight_remove,
-                        color: AppColors.textDarkGrey,
-                        size: 25,
-                      ),
-                      // checkValidation: (value) {
-                      //   return Validation.emailValidateRequired(value);
-                      // },
-                    ),
-                  ),
-                  const SizedBox(height: 42),
+                  // SizedBox(
+                  //   width: isSmallScreen ? Get.width - 30 : 416,
+                  //   child: TextFormFiledWidget(
+                  //     isSuffixIconVisible: false,
+                  //     isFirst: true,
+                  //     label: "Enter the code",
+                  //     controller: controller.betaCodeController,
+                  //     // format: [NoSpaceLowercaseTextFormatter()],
+                  //     hint: "123456",
+                  //     onTap: () {
+                  //       // controller.emailController.clear();
+                  //     },
+                  //     suffixIcon: const Icon(
+                  //       Icons.highlight_remove,
+                  //       color: AppColors.textDarkGrey,
+                  //       size: 25,
+                  //     ),
+                  //     // checkValidation: (value) {
+                  //     //   return Validation.emailValidateRequired(value);
+                  //     // },
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 42),
                   Obx(() {
                     return SizedBox(
                       width: isSmallScreen ? Get.width - 30 : 416,

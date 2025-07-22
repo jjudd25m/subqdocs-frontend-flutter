@@ -1,16 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:siri_wave/siri_wave.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../utils/app_string.dart';
+import '../../../widgets/custom_toastification.dart';
+import '../../data/service/database_helper.dart';
 import '../../mobile_modules/add_recording_mobile_view/views/audio_wave.dart';
+import '../../models/audio_file.dart';
 import '../../modules/login/model/login_model.dart';
 import '../../modules/personal_setting/model/get_user_detail_model.dart';
 import '../../modules/personal_setting/repository/personal_setting_repository.dart';
+import '../../modules/visit_main/model/patient_transcript_upload_model.dart';
+import '../../modules/visit_main/repository/visit_main_repository.dart';
 import 'app_preferences.dart';
 import 'logger.dart';
 
@@ -18,7 +26,7 @@ class GlobalMobileController extends GetxController {
   RxnString selectedLanguageValue = RxnString("English");
   List<String> languageList = ["English", "Muti Language"];
   RxBool isDropdownOpen = RxBool(false);
-
+  final VisitMainRepository visitMainRepository = VisitMainRepository();
   Rxn<GetOrganizationDetailModel> getEMAOrganizationDetailModel = Rxn<GetOrganizationDetailModel>();
 
   static const platform = MethodChannel('com.subqdocs/shared');
@@ -118,6 +126,54 @@ class GlobalMobileController extends GetxController {
       return '$hh:$mm:$ss';
     } else {
       return "";
+    }
+  }
+
+  Future<void> handleAudioOnlineData() async{
+    try{
+      List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+
+      if (audio.isNotEmpty) {
+        CustomToastification().showToast("Audio uploading start!", type: ToastificationType.info, toastDuration: 6);
+
+        uploadAllAudioFiles(() {
+          CustomToastification().showToast("All audio files have been uploaded!", type: ToastificationType.success, toastDuration: 6);
+        });
+      }
+    }catch(e){
+      customPrint("error message: $e");
+    }
+  }
+
+  Future<void> uploadAllAudioFiles(Function onAllUploaded) async {
+    List<AudioFile> audio = await DatabaseHelper.instance.getPendingAudioFiles();
+
+    List<Future<bool>> uploadFutures = [];
+
+    for (var file in audio) {
+      uploadFutures.add(
+        uploadLocalAudio(file).then((success) {
+          if (success) {
+            DatabaseHelper.instance.deleteAudioFile(file.id ?? 0);
+          }
+          return success;
+        }),
+      );
+    }
+
+    await Future.wait(uploadFutures);
+
+    onAllUploaded(); // This will trigger the callback function
+  }
+
+  Future<bool> uploadLocalAudio(AudioFile file) async {
+    try {
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+
+      PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: File.fromUri(Uri.file(file.fileName ?? "")), token: loginData.responseData?.token ?? "", patientVisitId: file.visitId ?? "");
+      return true; // You might want to change this logic to match your actual upload process
+    } catch (error) {
+      return false;
     }
   }
 }
