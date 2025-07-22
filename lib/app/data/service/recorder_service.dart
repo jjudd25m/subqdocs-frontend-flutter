@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -8,16 +9,29 @@ import 'package:flutter_audio_toolkit/flutter_audio_toolkit.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:subqdocs/app/models/audio_wave.dart';
+import 'package:toastification/toastification.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../../utils/Loader.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_string.dart';
 import '../../../widgets/customPermission.dart';
+import '../../../widgets/custom_toastification.dart';
+import '../../core/common/app_preferences.dart';
 import '../../core/common/global_controller.dart';
+import '../../core/common/logger.dart';
+import '../../models/Records.dart';
+import '../../models/audio_file.dart';
+import '../../modules/login/model/login_model.dart';
+import '../../modules/visit_main/repository/visit_main_repository.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
+import 'database_helper.dart';
 // class RecorderService {
 //   AudioRecorder audioRecorder = AudioRecorder();
 //
@@ -204,7 +218,9 @@ class RecorderService {
   final FlutterAudioToolkit _audioToolkit = FlutterAudioToolkit();
   final int _sampleRate = 16000;
   final int _numChannels = 1;
+  int chunkIndex = 0;
   final List<int> _pcmBuffer = [];
+  final List<File> chunkFiles = [];
   Timer? _chunkTimer, _timer;
   RxList<AudioWaveBar> samples = <AudioWaveBar>[].obs;
   late StreamController<Uint8List> _pcmStreamController;
@@ -212,7 +228,10 @@ class RecorderService {
   RxString updatedRecordingTime = RxString("00:00");
   Rx<int> recordingTime = 0.obs;
   Rx<int> recordingStatus = 0.obs;
-
+  final VisitMainRepository visitMainRepository = VisitMainRepository();
+  String sessionId = "";
+  bool isLastChunk = false;
+  int audioId = 0;
   /// Start recording with real-time chunking and waveform
   Future<bool> startRecording(BuildContext context) async {
     WakelockPlus.enable();
@@ -249,6 +268,7 @@ class RecorderService {
     final GlobalController globalController = Get.find();
     WakelockPlus.disable();
     globalController.waveController.amplitude = 0;
+    isLastChunk = true;
     await _recorder.stopRecorder();
     await _recorder.closeRecorder();
     _chunkTimer?.cancel();
@@ -256,19 +276,23 @@ class RecorderService {
     await _pcmStreamController.close();
     if (_pcmBuffer.isNotEmpty) {
       String filePath = await _savePcmAsWavAndConvertToM4a(_pcmBuffer, globalController.visitId.value);
-      await uploadChunk(File(filePath));
+      chunkFiles.add(File(filePath));
       _pcmBuffer.clear();
+      await uploading(globalController.visitId.value);
     }
   }
 
   /// Upload a chunk every 15 seconds, regardless of buffer size
-  void _setChunk(String? visitId) async {
+  void _setChunk(String visitId) async {
+    log("_setChunk called, buffer length: ${_pcmBuffer.length}");
     if (_pcmBuffer.isNotEmpty) {
       List<int> chunk = List.from(_pcmBuffer);
       String filePath = await _savePcmAsWavAndConvertToM4a(chunk, visitId);
+      log("message:File $filePath");
       File chunkFile = File(filePath);
-      await uploadChunk(chunkFile);
+      chunkFiles.add(chunkFile);
       _pcmBuffer.clear();
+      await uploading(visitId);
     }
   }
 
@@ -278,9 +302,28 @@ class RecorderService {
     final wavData = _pcmToWav(Uint8List.fromList(pcmData), _sampleRate, _numChannels);
     final wavFile = File('${dir.path}/chunk_${visitId}_${DateTime.now().millisecondsSinceEpoch}.wav');
     await wavFile.writeAsBytes(wavData, flush: true);
-    final m4aFile = File('${dir.path}/${visitId}_${DateTime.now().millisecondsSinceEpoch}.m4a');
+    final m4aFile = File('${dir.path}/${visitId}_${chunkIndex++}_${DateTime.now().millisecondsSinceEpoch}.m4a');
     await convertWavToM4A(wavFile.path, m4aFile.path);
     return m4aFile.path;
+    // int maxRetries = 3;
+    // int attempt = 0;
+    // bool success = false;
+    // while (attempt < maxRetries && !success) {
+    //   success =
+    //   log("messageSuccess: $success");
+    //   if (success) {
+    //     log('Conversion failed, retrying... (attempt  [31m${attempt + 1} [0m)');
+    //     await Future.delayed(const Duration(seconds: 1));
+    //   }
+    //   attempt++;
+    // }
+    // if (success) {
+
+    // } else {
+    //   log('Conversion failed after $maxRetries attempts.');
+    //   throw Exception('WAV to M4A conversion failed after $maxRetries attempts.');
+    //   // return "";
+    // }
   }
 
   /// Convert PCM to WAV (add header)
@@ -360,9 +403,71 @@ class RecorderService {
   }
 
   /// Stub for uploading a chunk to your API
-  Future<void> uploadChunk(File chunkFile) async {
-    // TODO: Implement your API upload logic here
-    log('Uploading chunk: ${chunkFile.path}');
+  Future<bool> uploadChunk(File chunkFile,String visitId) async {
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+    try {
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
+        AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+        audioId = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+        await DatabaseHelper.instance.insertAudioChunkFile(audioId, chunkIndex, audioFileToSave);
+
+        CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      } else {
+        Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
+        AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+        audioId = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+        await DatabaseHelper.instance.insertAudioChunkFile(audioId, chunkIndex, audioFileToSave);
+        String? mimeType = lookupMimeType(chunkFile.path);
+        if(sessionId == "" && sessionId.isEmpty) {
+          Records records = await visitMainRepository.uploadRecordInitialized(visitId: visitId, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          sessionId = records.responseData?.sessionId ?? "";
+        }else if(isLastChunk == false){
+          Map<String,dynamic> params = {};
+          params["chunkIndex"] = chunkIndex;
+          params["isLastChunk"] = isLastChunk;
+          var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+        }else if(isLastChunk){
+          Map<String,dynamic> params = {};
+          params["session_id"] = sessionId;
+          var response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+        }
+        return true;
+      }
+    }
+    catch (e) {
+      customPrint("Audio failed error is :- $e");
+      Loader().stopLoader();
+    }
+    return false;
+  }
+
+  Future<void> uploading(String visitId) async{
+    log("messageChunkFiles: ${chunkFiles.length}");
+
+    if(chunkFiles.isEmpty) return;
+    // final stopwatch = Stopwatch() ..start();
+    try{
+
+      while(chunkFiles.isNotEmpty){
+        String fileName = chunkFiles.first.toString().split('/').last;
+        List<String> parts = fileName.split('_');
+        int cIndex = int.parse(parts[1]);
+        final success = await uploadChunk(chunkFiles.first,visitId);
+
+        if(success){
+          chunkFiles.removeAt(0);
+          await DatabaseHelper.instance.deleteAudioFile(audioId);
+        }else{
+          await Future.delayed(Duration(minutes: 10));
+          break;
+        }
+      }
+    }catch(e){
+      log("error message: $e");
+    }
+
   }
 
   String get formattedRecordingTime {

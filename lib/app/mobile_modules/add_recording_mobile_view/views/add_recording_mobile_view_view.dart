@@ -297,6 +297,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
               onPressed: () async {
                 // File? audioFile = await controller.recorderService.stopRecording();
                 await controller.recorderService.stopRecording(controller.visitId);
+                Get.back();
                 // globalController.stopLiveActivityAudio();
                 // customPrint("audio file url is :- ${audioFile?.absolute}");
 

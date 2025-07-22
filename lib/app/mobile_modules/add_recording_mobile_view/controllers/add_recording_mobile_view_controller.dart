@@ -65,35 +65,35 @@ class AddRecordingMobileViewController extends GetxController {
     // WakelockPlus.disable();
   }
 
-  Future<void> submitAudio(File audioFile) async {
-    if (audioFile.path.isEmpty) {
-      return;
-    }
-
-    Loader().showLoadingDialogForSimpleLoader();
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
-    try {
-      if (connectivityResult.contains(ConnectivityResult.none)) {
-        Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
-        AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
-        await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-
-        CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
-        Loader().stopLoader();
-        Get.back();
-      } else {
-        PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId);
-        Loader().stopLoader();
-        customPrint("audio upload response is :-  {patientTranscriptUploadModel.toJson()}");
-
-        Get.toNamed(Routes.PATIENT_INFO_MOBILE_VIEW, arguments: {"patientId": patientId, "visitId": visitId, "fromRecording": "1"});
-      }
-    } catch (e) {
-      customPrint("Audio failed error is :- $e");
-      Loader().stopLoader();
-    }
-  }
+  // Future<void> submitAudio(File audioFile) async {
+  //   if (audioFile.path.isEmpty) {
+  //     return;
+  //   }
+  //
+  //   Loader().showLoadingDialogForSimpleLoader();
+  //   var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+  //   final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+  //   try {
+  //     if (connectivityResult.contains(ConnectivityResult.none)) {
+  //       Uint8List audioBytes = await audioFile.readAsBytes(); // Read audio file as bytes
+  //       AudioFile audioFileToSave = AudioFile(fileName: audioFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+  //       await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+  //
+  //       CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+  //       Loader().stopLoader();
+  //       Get.back();
+  //     } else {
+  //       PatientTranscriptUploadModel patientTranscriptUploadModel = await visitMainRepository.uploadAudio(audioFile: audioFile, token: loginData.responseData?.token ?? "", patientVisitId: visitId);
+  //       Loader().stopLoader();
+  //       customPrint("audio upload response is :-  {patientTranscriptUploadModel.toJson()}");
+  //
+  //       Get.toNamed(Routes.PATIENT_INFO_MOBILE_VIEW, arguments: {"patientId": patientId, "visitId": visitId, "fromRecording": "1"});
+  //     }
+  //   } catch (e) {
+  //     customPrint("Audio failed error is :- $e");
+  //     Loader().stopLoader();
+  //   }
+  // }
 
   Future<void> checkAudioRecordPermission() async {
     final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
