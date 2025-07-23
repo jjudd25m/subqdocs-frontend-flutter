@@ -291,7 +291,7 @@ class ApiProvider {
     customPrint("token is :- $token");
 
     if (kDebugMode) {
-      customPrint(UrlProvider.baseUrl + url);
+      log(UrlProvider.baseUrl + url);
     }
     try {
       FormData formData = FormData.fromMap(params);
@@ -311,16 +311,17 @@ class ApiProvider {
       customPrint("header is ${dio.options.headers}");
 
       var response = await dio.post(UrlProvider.baseUrl + url, data: formData);
-      customPrint("resposns: $response");
+      log("resposns: $response");
       return getResponse(response.data);
     } on TimeoutException {
       throw ValidationString.validationRequestTimeout;
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      customPrint("callPutMultiPartDioListOfFiles throw $e");
+      log("callPutMultiPartDioListOfFiles throw $e");
       throw handleDioException(e);
     } catch (e) {
+      log("callPutMultiPartDioListOfFiles throw $e");
       rethrow;
     }
   }

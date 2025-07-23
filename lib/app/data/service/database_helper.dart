@@ -53,7 +53,6 @@ class DatabaseHelper {
   Future<int> insertAudioFile(AudioFile file, {int chunkSize = 1024 * 1024}) async {
     try {
       final db = await instance.database;
-      log("message:Database");
       final result = await db.query('audioFiles',where: 'visit_id = ?',whereArgs: [file.visitId]);
       if(result.isNotEmpty){
         return result.first['id'] as int;
@@ -69,7 +68,6 @@ class DatabaseHelper {
 
   Future<void> insertAudioChunkFile(int audioId,int chunkIndex,AudioFile file, {int chunkSize = 1024 * 1024}) async{
     final db = await instance.database;
-    log("message:Database");
     await db.insert('audioChunks', {'audioId': audioId, 'chunkIndex': chunkIndex, 'chunkData': file.audioData,'is_uploaded' : 0});
     // int totalChunks = (file.audioData?.length ?? 0 / chunkSize).ceil();
     // for (int i = 0; i < totalChunks; i++) {

@@ -115,8 +115,8 @@ class VisitMainRepository {
     return ChangeStatusModel.fromJson(response);
   }
 
-  Future<Records> uploadRecordInitialized({required String visitId, required File chunkFile, required String mimeType,required String token}) async {
-    var response = await ApiProvider.instance.callPostMultiPart(url: "initialize-chunked-upload/$visitId", params: {},files: {"audio": chunkFile},mimeTye: mimeType ?? "",token: token ?? "");
+  Future<Records> uploadRecordInitialized({required String visitId,required Map<String,dynamic> params, required File chunkFile, required String mimeType,required String token}) async {
+    var response = await ApiProvider.instance.callPostMultiPart(url: "initialize-chunked-upload/$visitId", params: params,files: {"audio": chunkFile},mimeTye: mimeType ?? "",token: token ?? "");
     customPrint("Records API  internal response $response");
     return Records.fromJson(response);
   }

@@ -280,6 +280,7 @@ class RecorderService {
       _pcmBuffer.clear();
       await uploading(globalController.visitId.value);
     }
+
   }
 
   /// Upload a chunk every 15 seconds, regardless of buffer size
@@ -404,6 +405,11 @@ class RecorderService {
 
   /// Stub for uploading a chunk to your API
   Future<bool> uploadChunk(File chunkFile,String visitId) async {
+    String fileName = chunkFile.toString().split('/').last;
+    List<String> parts = fileName.split('_');
+    int cIndex = int.parse(parts[1]);
+    log("message:File $chunkFile");
+    log("message:File $cIndex");
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
     final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
     try {
@@ -421,19 +427,28 @@ class RecorderService {
         await DatabaseHelper.instance.insertAudioChunkFile(audioId, chunkIndex, audioFileToSave);
         String? mimeType = lookupMimeType(chunkFile.path);
         if(sessionId == "" && sessionId.isEmpty) {
-          Records records = await visitMainRepository.uploadRecordInitialized(visitId: visitId, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
-          sessionId = records.responseData?.sessionId ?? "";
+          Map<String,dynamic> params = {};
+          params["filename"] = parts[2];
+          params["mimetype"] = mimeType;
+          Records records = await visitMainRepository.uploadRecordInitialized(visitId: visitId, params: params,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          if(records != null) {
+            sessionId = records.responseData?.sessionId ?? "";
+            return true;
+          }
         }else if(isLastChunk == false){
           Map<String,dynamic> params = {};
-          params["chunkIndex"] = chunkIndex;
+          params["chunkIndex"] = cIndex;
           params["isLastChunk"] = isLastChunk;
           var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          if(response.isNotEmpty) return true;
         }else if(isLastChunk){
           Map<String,dynamic> params = {};
           params["session_id"] = sessionId;
           var response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          if(response.isNotEmpty) return true;
         }
-        return true;
+        await Future.delayed(const Duration(minutes: 5));
+        return false;
       }
     }
     catch (e) {
