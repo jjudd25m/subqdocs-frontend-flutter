@@ -48,6 +48,7 @@ class ResponseData {
   PersonalNote? personalNote;
   VisitSnapshot? visitSnapshot;
   String? finalize_date_time;
+  PatientSummary? patientSummary;
 
   ResponseData({
     this.visitId,
@@ -72,6 +73,7 @@ class ResponseData {
     this.personalNote,
     this.visitSnapshot,
     this.thirdPartyId,
+    this.patientSummary,
   });
 
   ResponseData.fromJson(Map<String, dynamic> json) {
@@ -101,6 +103,8 @@ class ResponseData {
         pastVisitsList!.add(PastVisit.fromJson(v));
       });
     }
+
+    patientSummary = json['patient_summary'] != null ? new PatientSummary.fromJson(json['patient_summary']) : null;
 
     personalNote = json['personal_note'] != null ? PersonalNote.fromJson(json['personal_note']) : null;
 
@@ -136,6 +140,9 @@ class ResponseData {
     }
     if (visitSnapshot != null) {
       data['visit_snapshot'] = visitSnapshot!.toJson();
+    }
+    if (this.patientSummary != null) {
+      data['patient_summary'] = this.patientSummary!.toJson();
     }
     return data;
   }
@@ -208,6 +215,28 @@ class VisitSnapshot {
     data['id'] = id;
     data['visit_date'] = visitDate;
     data['visit_snapshot'] = visitSnapshot;
+    return data;
+  }
+}
+
+class PatientSummary {
+  int? id;
+  String? visitDate;
+  String? patientSummary;
+
+  PatientSummary({this.id, this.visitDate, this.patientSummary});
+
+  PatientSummary.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    visitDate = json['visit_date'];
+    patientSummary = json['patient_summary'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['visit_date'] = this.visitDate;
+    data['patient_summary'] = this.patientSummary;
     return data;
   }
 }

@@ -896,12 +896,12 @@ class VisitMainController extends GetxController with WidgetsBindingObserver {
   }
 
   void setPatientEditableData() {
-    if (patientData.value.responseData?.visitSnapshot?.visitSnapshot != null) {
+    if (patientData.value.responseData?.patientSummary?.patientSummary != null) {
       editableVisitSnapShot.clear();
 
       HtmlEditorController htmlEditorController = HtmlEditorController();
-      htmlEditorController.setText(patientData.value.responseData?.visitSnapshot?.visitSnapshot ?? "");
-      editableVisitSnapShot.add(ImpresionAndPlanViewModel(htmlContent: patientData.value.responseData?.visitSnapshot?.visitSnapshot ?? "", htmlEditorController: htmlEditorController, title: ""));
+      htmlEditorController.setText(patientData.value.responseData?.patientSummary?.patientSummary ?? "");
+      editableVisitSnapShot.add(ImpresionAndPlanViewModel(htmlContent: patientData.value.responseData?.patientSummary?.patientSummary ?? "", htmlEditorController: htmlEditorController, title: ""));
       editableVisitSnapShot.refresh();
     }
 

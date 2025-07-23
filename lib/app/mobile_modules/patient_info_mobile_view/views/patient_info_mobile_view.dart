@@ -227,40 +227,43 @@ class _PatientInfoMobileViewState extends State<PatientInfoMobileView> {
                             if (controller.patientFullNoteModel.value?.responseData?.status == "Failure") {
                               return Padding(padding: const EdgeInsets.symmetric(vertical: 100), child: Text(controller.patientFullNoteModel.value?.responseData?.message ?? "No data found", textAlign: TextAlign.center));
                             }
-                            return Column(
-                              spacing: 16,
-                              children: [
-                                Container(
-                                  // decoration: BoxDecoration(border: Border.all(width: 1, color: AppColors.black.withAlpha(25)), borderRadius: BorderRadius.circular(6)),
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    spacing: 16,
-                                    children: [
-                                      FullNoteCommonContainer(title: "Chief Complaint", child: controller.editableChiefView.isEmpty ? const FullNoteSectionSkeleton() : ChiefComplaintMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "HPI", child: controller.editableDataHpiView.isEmpty ? const FullNoteSectionSkeleton() : HpiEditableMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "Review of Systems", child: controller.editableDataForReviewOfSystems.isEmpty ? const FullNoteSectionSkeleton() : ReviewOfSystemsMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "Exam", child: controller.editableDataForExam.isEmpty ? const FullNoteSectionSkeleton() : ExamEditableMobileView(controller: controller)),
-                                      ImpressionAndPlanMobileView(controller: controller),
-                                    ],
+                            return IgnorePointer(
+                              ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized",
+                              child: Column(
+                                spacing: 16,
+                                children: [
+                                  Container(
+                                    // decoration: BoxDecoration(border: Border.all(width: 1, color: AppColors.black.withAlpha(25)), borderRadius: BorderRadius.circular(6)),
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      spacing: 16,
+                                      children: [
+                                        FullNoteCommonContainer(title: "Chief Complaint", child: controller.editableChiefView.isEmpty ? const FullNoteSectionSkeleton() : ChiefComplaintMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "HPI", child: controller.editableDataHpiView.isEmpty ? const FullNoteSectionSkeleton() : HpiEditableMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "Review of Systems", child: controller.editableDataForReviewOfSystems.isEmpty ? const FullNoteSectionSkeleton() : ReviewOfSystemsMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "Exam", child: controller.editableDataForExam.isEmpty ? const FullNoteSectionSkeleton() : ExamEditableMobileView(controller: controller)),
+                                        ImpressionAndPlanMobileView(controller: controller),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  // decoration: BoxDecoration(border: Border.all(width: 1, color: AppColors.black.withAlpha(25)), borderRadius: BorderRadius.circular(6)),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    spacing: 16,
-                                    children: [
-                                      FullNoteCommonContainer(title: "Cancer History", child: controller.editableDataForCancerHistory.isEmpty ? const FullNoteSectionSkeleton() : CancerHistoryEditableMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "Skin History", child: controller.editableDataForSkinHistory.isEmpty ? const FullNoteSectionSkeleton() : SkinHistoryEditableMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "Social History", child: controller.editableDataForSocialHistory.isEmpty ? const FullNoteSectionSkeleton() : SocialHistoryEditableMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "Medications", child: controller.editableDataForMedication.isEmpty ? const FullNoteSectionSkeleton() : MedicationEditableMobileView(controller: controller)),
-                                      FullNoteCommonContainer(title: "Allergies", child: controller.editableDataForAllergies.isEmpty ? const FullNoteSectionSkeleton() : AlergiesEditableMobileView(controller: controller)),
-                                    ],
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    // decoration: BoxDecoration(border: Border.all(width: 1, color: AppColors.black.withAlpha(25)), borderRadius: BorderRadius.circular(6)),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      spacing: 16,
+                                      children: [
+                                        FullNoteCommonContainer(title: "Cancer History", child: controller.editableDataForCancerHistory.isEmpty ? const FullNoteSectionSkeleton() : CancerHistoryEditableMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "Skin History", child: controller.editableDataForSkinHistory.isEmpty ? const FullNoteSectionSkeleton() : SkinHistoryEditableMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "Social History", child: controller.editableDataForSocialHistory.isEmpty ? const FullNoteSectionSkeleton() : SocialHistoryEditableMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "Medications", child: controller.editableDataForMedication.isEmpty ? const FullNoteSectionSkeleton() : MedicationEditableMobileView(controller: controller)),
+                                        FullNoteCommonContainer(title: "Allergies", child: controller.editableDataForAllergies.isEmpty ? const FullNoteSectionSkeleton() : AlergiesEditableMobileView(controller: controller)),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           }),
                         ] else if (_selectedIndex == 1) ...[
@@ -285,7 +288,7 @@ class _PatientInfoMobileViewState extends State<PatientInfoMobileView> {
                                       ),
                                     ),
                                   )
-                                  : PatientViewEditableMobileView(controller: controller);
+                                  : IgnorePointer(ignoring: controller.patientData.value?.responseData?.visitStatus?.toLowerCase() == "finalized", child: PatientViewEditableMobileView(controller: controller));
                             }
                             // }
                           }),
