@@ -264,23 +264,27 @@ class RecorderService {
   }
 
   /// Stop recording and upload any remaining chunk
-  Future<void> stopRecording() async {
+  Future<bool> stopRecording(String visitId) async {
+    _chunkTimer?.cancel();
     final GlobalController globalController = Get.find();
     WakelockPlus.disable();
     globalController.waveController.amplitude = 0;
     isLastChunk = true;
-    await _recorder.stopRecorder();
-    await _recorder.closeRecorder();
-    _chunkTimer?.cancel();
-    await _pcmSubscription?.cancel();
-    await _pcmStreamController.close();
     if (_pcmBuffer.isNotEmpty) {
-      String filePath = await _savePcmAsWavAndConvertToM4a(_pcmBuffer, globalController.visitId.value);
+      log("message${_pcmBuffer}");
+      List<int> chunk = List.from(_pcmBuffer);
+      String filePath = await _savePcmAsWavAndConvertToM4a(chunk, visitId);
       chunkFiles.add(File(filePath));
       _pcmBuffer.clear();
-      await uploading(globalController.visitId.value);
+      // uploadLastChunk(File(filePath),visitId);
+      await uploading(visitId,true);
     }
+    await _recorder.stopRecorder();
+    await _recorder.closeRecorder();
 
+    await _pcmSubscription?.cancel();
+    await _pcmStreamController.close();
+    return true;
   }
 
   /// Upload a chunk every 15 seconds, regardless of buffer size
@@ -293,7 +297,7 @@ class RecorderService {
       File chunkFile = File(filePath);
       chunkFiles.add(chunkFile);
       _pcmBuffer.clear();
-      await uploading(visitId);
+      await uploading(visitId,false);
     }
   }
 
@@ -431,23 +435,30 @@ class RecorderService {
           params["filename"] = parts[2];
           params["mimetype"] = mimeType;
           Records records = await visitMainRepository.uploadRecordInitialized(visitId: visitId, params: params,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
-          if(records != null) {
+          if (records.responseData != null) {
+            log("message1");
             sessionId = records.responseData?.sessionId ?? "";
-            return true;
+            return false;
+            // Map<String,dynamic> params = {};
+            // params["chunkIndex"] = cIndex;
+            // params["isLastChunk"] = isLastChunk;
+            // var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+            // if (response.isNotEmpty) return true;
           }
-        }else if(isLastChunk == false){
+        }
+        else if(isLastChunk == false && (sessionId.isNotEmpty && sessionId != "")){
           Map<String,dynamic> params = {};
           params["chunkIndex"] = cIndex;
           params["isLastChunk"] = isLastChunk;
-          var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
-          if(response.isNotEmpty) return true;
-        }else if(isLastChunk){
-          Map<String,dynamic> params = {};
-          params["session_id"] = sessionId;
-          var response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          Map<String, dynamic> response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
           if(response.isNotEmpty) return true;
         }
-        await Future.delayed(const Duration(minutes: 5));
+        // else if(isLastChunk){
+        //   Map<String,dynamic> params = {};
+        //   params["session_id"] = sessionId;
+        //   Map<String, dynamic> response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+        //   if(response.isNotEmpty) return true;
+        // }
         return false;
       }
     }
@@ -458,26 +469,39 @@ class RecorderService {
     return false;
   }
 
-  Future<void> uploading(String visitId) async{
-    log("messageChunkFiles: ${chunkFiles.length}");
+  Future<void> uploadLastChunk(File chunkFile,String visitId) async{
+    try{
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+      String? mimeType = lookupMimeType(chunkFile.path);
+      Map<String,dynamic> params = {};
+      params["session_id"] = sessionId;
+      Map<String, dynamic> response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+      log("message response: $response");
+    }catch(e){
+      log("error message: $e");
+    }
+  }
 
+  Future<void> uploading(String visitId,bool isLastChunk) async{
     if(chunkFiles.isEmpty) return;
     // final stopwatch = Stopwatch() ..start();
     try{
-
-      while(chunkFiles.isNotEmpty){
-        String fileName = chunkFiles.first.toString().split('/').last;
-        List<String> parts = fileName.split('_');
-        int cIndex = int.parse(parts[1]);
-        final success = await uploadChunk(chunkFiles.first,visitId);
-
-        if(success){
-          chunkFiles.removeAt(0);
-          await DatabaseHelper.instance.deleteAudioFile(audioId);
-        }else{
-          await Future.delayed(Duration(minutes: 10));
-          break;
+      if(!isLastChunk) {
+        while (chunkFiles.isNotEmpty) {
+          log("message$chunkIndex");
+          final success = await uploadChunk(chunkFiles.first, visitId);
+          if (success) {
+            chunkFiles.removeAt(0);
+            await DatabaseHelper.instance.deleteAudioFile(audioId);
+          } else {
+            await Future.delayed(Duration(milliseconds: 200));
+            break;
+          }
         }
+      }
+      else{
+        log("message:${chunkFiles.length}");
+        await uploadLastChunk(chunkFiles.first, visitId);
       }
     }catch(e){
       log("error message: $e");
