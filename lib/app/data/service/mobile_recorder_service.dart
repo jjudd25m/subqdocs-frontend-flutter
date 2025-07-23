@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -38,7 +39,7 @@ class MobileRecorderService {
   final int _numChannels = 1;
   int chunkIndex = 0;
   final List<int> _pcmBuffer = [];
-  final List<File> chunkFiles = [];
+  final List<File> chunkFiles =[];
   Timer? _chunkTimer, _timer;
   RxList<AudioWaveBar> samples = <AudioWaveBar>[].obs;
   late StreamController<Uint8List> _pcmStreamController;
@@ -84,21 +85,25 @@ class MobileRecorderService {
 
   /// Stop recording and upload any remaining chunk
   Future<bool> stopRecording(String visitId) async {
+    _chunkTimer?.cancel();
     final GlobalMobileController globalController = Get.find();
     WakelockPlus.disable();
     globalController.waveController.amplitude = 0;
     isLastChunk = true;
-    await _recorder.stopRecorder();
-    await _recorder.closeRecorder();
-    _chunkTimer?.cancel();
-    await _pcmSubscription?.cancel();
-    await _pcmStreamController.close();
     if (_pcmBuffer.isNotEmpty) {
-      String filePath = await _savePcmAsWavAndConvertToM4a(_pcmBuffer, visitId);
+      log("message${_pcmBuffer}");
+      List<int> chunk = List.from(_pcmBuffer);
+      String filePath = await _savePcmAsWavAndConvertToM4a(chunk, visitId);
       chunkFiles.add(File(filePath));
       _pcmBuffer.clear();
-      await uploading(visitId);
+      // uploadLastChunk(File(filePath),visitId);
+      await uploading(visitId,true);
     }
+    await _recorder.stopRecorder();
+    await _recorder.closeRecorder();
+
+    await _pcmSubscription?.cancel();
+    await _pcmStreamController.close();
    return true;
   }
 
@@ -111,7 +116,8 @@ class MobileRecorderService {
       File chunkFile = File(filePath);
       chunkFiles.add(chunkFile);
       _pcmBuffer.clear();
-      await uploading(visitId);
+      log("message$chunkIndex");
+      await uploading(visitId,false);
     }
   }
 
@@ -121,9 +127,8 @@ class MobileRecorderService {
     final wavData = _pcmToWav(Uint8List.fromList(pcmData), _sampleRate, _numChannels);
     final wavFile = File("${dir.path}/chunk_${visitId}_${DateTime.now().millisecondsSinceEpoch}.wav");
     await wavFile.writeAsBytes(wavData, flush: true);
-    final m4aFile = File("${dir.path}/${visitId}_${chunkIndex++}_${DateTime.now().millisecondsSinceEpoch}.m4a");
+    final m4aFile = File("${dir.path}/${visitId}_${++chunkIndex}_${DateTime.now().millisecondsSinceEpoch}.m4a");
     await convertWavToM4A(wavFile.path, m4aFile.path);
-    log("message ${m4aFile.path}");
     return m4aFile.path;
     // int maxRetries = 3;
     // int attempt = 0;
@@ -249,7 +254,8 @@ class MobileRecorderService {
           params["filename"] = parts[2];
           params["mimetype"] = mimeType;
           Records records = await visitMainRepository.uploadRecordInitialized(visitId: visitId, params: params,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
-          if (records != null) {
+          if (records.responseData != null) {
+            log("message1");
             sessionId = records.responseData?.sessionId ?? "";
             return false;
             // Map<String,dynamic> params = {};
@@ -258,19 +264,20 @@ class MobileRecorderService {
             // var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
             // if (response.isNotEmpty) return true;
           }
-        }else if(isLastChunk == false && (sessionId.isNotEmpty && sessionId != "")){
+        }
+        else if(isLastChunk == false && (sessionId.isNotEmpty && sessionId != "")){
           Map<String,dynamic> params = {};
           params["chunkIndex"] = cIndex;
           params["isLastChunk"] = isLastChunk;
-          var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
-          if(response.isNotEmpty) return true;
-        }else if(isLastChunk){
-          Map<String,dynamic> params = {};
-          params["session_id"] = sessionId;
-          var response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          Map<String, dynamic> response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
           if(response.isNotEmpty) return true;
         }
-        await Future.delayed(const Duration(minutes: 5));
+        // else if(isLastChunk){
+        //   Map<String,dynamic> params = {};
+        //   params["session_id"] = sessionId;
+        //   Map<String, dynamic> response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+        //   if(response.isNotEmpty) return true;
+        // }
         return false;
       }
     }
@@ -281,30 +288,72 @@ class MobileRecorderService {
     return false;
   }
 
-  Future<void> uploading(String visitId) async{
+  Future<void> uploadLastChunk(File chunkFile,String visitId) async{
+    try{
+      var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+      String? mimeType = lookupMimeType(chunkFile.path);
+      Map<String,dynamic> params = {};
+      params["session_id"] = sessionId;
+      Map<String, dynamic> response = await visitMainRepository.uploadLastRecord(visitId: visitId, params: params ,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+      log("message response: $response");
+    }catch(e){
+      log("error message: $e");
+    }
+  }
 
-
+  Future<void> uploading(String visitId,bool isLastChunk) async{
     if(chunkFiles.isEmpty) return;
     // final stopwatch = Stopwatch() ..start();
     try{
-
-      while(chunkFiles.isNotEmpty){
-
-        final success = await uploadChunk(chunkFiles.first,visitId);
-
-        if(success){
-          chunkFiles.removeAt(0);
-          await DatabaseHelper.instance.deleteAudioFile(audioId);
-        }else{
-          await Future.delayed(Duration(minutes: 5));
-          break;
+      if(!isLastChunk) {
+        while (chunkFiles.isNotEmpty) {
+          log("message$chunkIndex");
+          final success = await uploadChunk(chunkFiles.first, visitId);
+          if (success) {
+            chunkFiles.removeAt(0);
+            await DatabaseHelper.instance.deleteAudioFile(audioId);
+          } else {
+            await Future.delayed(Duration(milliseconds: 200));
+            break;
+          }
         }
+      }
+      else{
+        log("message:${chunkFiles.length}");
+        await uploadLastChunk(chunkFiles.first, visitId);
       }
     }catch(e){
       log("error message: $e");
     }
 
   }
+
+  bool _isUploading = false;
+
+  // Future<void> uploading(String visitId) async {
+  //   log("uploading called, _isUploading = $_isUploading, chunkFiles.length = ${chunkFiles.length}");
+  //   if (_isUploading) return; // Prevent overlapping uploads
+  //   _isUploading = true;
+  //   try {
+  //     while(chunkFiles.isNotEmpty){
+  //       log("message ${chunkFiles.length}");
+  //       final success = await uploadChunk(chunkFiles.first,visitId);
+  //       log("message2");
+  //       if(success){
+  //         log("message4");
+  //         chunkFiles.removeAt(0);
+  //         await DatabaseHelper.instance.deleteAudioFile(audioId);
+  //       }else{
+  //         log("message3");
+  //         await Future.delayed(Duration(minutes: 1));
+  //         // break;
+  //       }
+  //     }
+  //   } finally {
+  //     log("message5");
+  //     _isUploading = false;
+  //   }
+  // }
 
   String get formattedRecordingTime {
     int minutes = (recordingTime.value / 60).floor();
