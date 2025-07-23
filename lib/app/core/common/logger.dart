@@ -9,6 +9,12 @@ import 'global_controller.dart';
 
 void customPrint(dynamic message) {
   // if (false) {
+  // print(message);
+  // }
+}
+
+void socketCustomPrint(dynamic message) {
+  // if (false) {
   print(message);
   // }
 }

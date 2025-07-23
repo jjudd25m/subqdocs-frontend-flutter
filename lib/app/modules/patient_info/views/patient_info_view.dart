@@ -348,6 +348,8 @@ class _PatientInfoViewState extends State<PatientInfoView> {
       spacing: 15,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        if (controller.patientData.value?.responseData?.visitStatus == "Pending" || controller.patientData.value?.responseData?.visitStatus == "Insufficient Information") ...[Expanded(child: _buildContinueRecordingButton())],
+
         Expanded(child: _buildAddPhotoButton()),
         if (controller.patientData.value?.responseData?.visitStatus == "Pending") ...[Expanded(child: _buildSignAndFinalizeButton())],
       ],
@@ -364,6 +366,24 @@ class _PatientInfoViewState extends State<PatientInfoView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [SvgPicture.asset(ImagePath.add_photo, height: 30, width: 30), const SizedBox(height: 10), Text("Add Photo or Document", style: AppFonts.medium(16, AppColors.textBlack))]),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContinueRecordingButton() {
+    return GestureDetector(
+      onTap: () async {
+        controller.reGenerateAudio(controller.patientId, controller.visitId, controller.patientData.value?.responseData?.patientFirstName ?? "", controller.patientData.value?.responseData?.patientLastName ?? "");
+      },
+      child: Container(
+        height: 81,
+        decoration: BoxDecoration(border: Border.all(color: AppColors.backgroundPurple), color: AppColors.backgroundPurple, borderRadius: BorderRadius.circular(8)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [SvgPicture.asset(ImagePath.signature, height: 30, width: 30), const SizedBox(height: 10), Text("Continue Recording", style: AppFonts.medium(16, AppColors.textWhite))]),
           ],
         ),
       ),

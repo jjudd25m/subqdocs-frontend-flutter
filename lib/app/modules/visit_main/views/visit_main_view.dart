@@ -962,7 +962,7 @@ class _VisitMainViewState extends State<VisitMainView> {
                                           ),
                                         );
 
-                                        // await controller.globalController.recorderService.startRecording(context);
+                                        await controller.globalController.recorderService.startRecording(context);
                                         controller.updateData();
                                       } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
                                         // Handle permission denial here

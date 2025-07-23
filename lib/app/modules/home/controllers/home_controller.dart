@@ -304,6 +304,8 @@ class HomeController extends GetxController {
       socketService.socket.on("patient_sync_started", (data) {
         var res = data as Map<String, dynamic>;
 
+        print("meta data :- ${res}");
+
         String status = res["status"];
 
         switch (status) {

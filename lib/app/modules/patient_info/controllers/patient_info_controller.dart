@@ -10,12 +10,16 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/patient_info/model/icd10_code_list_model.dart';
 import 'package:subqdocs/utils/Loader.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../utils/app_string.dart';
+import '../../../../widgets/customPermission.dart';
 import '../../../../widgets/custom_toastification.dart';
 import '../../../core/common/app_preferences.dart';
 import '../../../core/common/global_controller.dart';
@@ -69,6 +73,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   final PatientInfoRepository _patientInfoRepository = PatientInfoRepository();
   final HomeRepository _homeRepository = HomeRepository();
   SocketService socketService = SocketService();
+
+  SocketService reRunSocketService = SocketService();
 
   RxDouble totalUnitCost = RxDouble(0.0);
 
@@ -149,6 +155,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       patientData.value = await _visitMainRepository.getPatientDetails(param: param);
 
       customPrint("patient data is :- ${patientData.toJson()}");
+
+      print("stattus type is:- ${patientData.value?.responseData?.visitStatus}");
 
       if (patientData.value?.responseData?.doctorId != null) {
         doctorValue.value = patientData.value?.responseData?.doctorName ?? "";
@@ -314,13 +322,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   Future<void> setUpFullNoteSocket() async {
     socketService.socket.on("DoctorsViewStatus", (data) {
       var res = data as Map<String, dynamic>;
-      customPrint("---------------------------------------------");
+      socketCustomPrint("---------------------------------------------");
 
       // int visit_id = res["visit_id"];
       // int transcription_id = res["transcription_id"];
       String status = res["status"];
       // String message = res["message"];
-      customPrint("DoctorsViewStatus status is :- $res");
+      socketCustomPrint("DoctorsViewStatus status is :- $res");
 
       if (status.toLowerCase() == "success") {
         Map<String, dynamic> responseData = res["responseData"];
@@ -511,9 +519,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
             }
             for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
               HtmlEditorController htmlEditorController = HtmlEditorController();
-              customPrint("message:attach ${impressionsAndPlan.attachments}");
-              customPrint("message:attach ${impressionsAndPlan.title}");
-              customPrint("message:attach ${impressionsAndPlan.content}");
+
               impressionAndPlanListFullNote.add(
                 ImpresionAndPlanViewModel(
                   htmlContent: impressionsAndPlan.content ?? "",
@@ -541,30 +547,14 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         impressionAndPlanListFullNote.refresh();
         generalAttachments?.refresh();
       }
-
-      // if (status.toLowerCase() == "success") {
-      //   Map<String, dynamic> responseData = res["responseData"];
-      //   Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-      //   patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-      //
-      //   impressionAndPlanListFullNote.clear();
-      //
-      //   for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
-      //     HtmlEditorController htmlEditorController = HtmlEditorController();
-      //
-      //     impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10));
-      //   }
-      //
-      //   impressionAndPlanListFullNote.refresh();
-      // }
     });
 
     // remaning socket event
 
     socketService.socket.on("AllTabStatus", (data) {
       var res = data as Map<String, dynamic>;
-      customPrint("---------------------------------------------");
-      customPrint("AllTabStatus status is :- $res");
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("AllTabStatus status is :- $res");
 
       // int visit_id = res["visit_id"];
       // int transcription_id = res["transcription_id"];
@@ -572,7 +562,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       String message = res["message"];
 
       if (status.toLowerCase() == "failure") {
-        customPrint("PatientViewStatus failure");
+        socketCustomPrint("PatientViewStatus failure");
 
         showPrompError(Get.context!, message);
       }
@@ -580,8 +570,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     socketService.socket.on("FullNoteStatus", (data) {
       var res = data as Map<String, dynamic>;
-      customPrint("---------------------------------------------");
-      customPrint("FullNoteStatus status is :- $res");
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("FullNoteStatus status is :- $res");
 
       int localVisitId = res["visit_id"];
       // int transcription_id = res["transcription_id"];
@@ -589,17 +579,17 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       String message = res["message"];
 
       if (localVisitId == int.parse(visitId)) {
-        customPrint("FullNoteStatus inside condition");
+        socketCustomPrint("FullNoteStatus inside condition");
         if (status.toLowerCase() == "pending") {
-          customPrint("FullNoteStatus pending");
+          socketCustomPrint("FullNoteStatus pending");
           isFullNoteLoading.value = true;
           isFullNoteLoadText.value = message;
         } else if (status.toLowerCase() == "inprogress") {
-          customPrint("FullNoteStatus inprogress");
+          socketCustomPrint("FullNoteStatus inprogress");
           isFullNoteLoading.value = true;
           isFullNoteLoadText.value = message;
         } else if (status.toLowerCase() == "success") {
-          customPrint("FullNoteStatus success");
+          socketCustomPrint("FullNoteStatus success");
           isFullNoteLoading.value = false;
           isFullNoteLoadText.value = message;
 
@@ -613,8 +603,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     socketService.socket.on("VisitDataStatus", (data) {
       var res = data as Map<String, dynamic>;
-      customPrint("---------------------------------------------");
-      customPrint("visit data status is :- $res");
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("visit data status is :- $res");
 
       int localVisitId = res["visit_id"];
       // int transcription_id = res["transcription_id"];
@@ -622,17 +612,17 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       String message = res["message"];
 
       if (localVisitId == int.parse(visitId)) {
-        customPrint("VisitDataStatus inside condition");
+        socketCustomPrint("VisitDataStatus inside condition");
         if (status.toLowerCase() == "pending") {
-          customPrint("VisitDataStatus pending");
+          socketCustomPrint("VisitDataStatus pending");
           isVisitDataLoading.value = true;
           isVisitDataLoadText.value = message;
         } else if (status.toLowerCase() == "inprogress") {
-          customPrint("VisitDataStatus inprogress");
+          socketCustomPrint("VisitDataStatus inprogress");
           isVisitDataLoading.value = true;
           isVisitDataLoadText.value = message;
         } else if (status.toLowerCase() == "success") {
-          customPrint("VisitDataStatus success");
+          socketCustomPrint("VisitDataStatus success");
           isVisitDataLoading.value = false;
           isVisitDataLoadText.value = message;
 
@@ -646,8 +636,8 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     socketService.socket.on("PatientViewStatus", (data) {
       var res = data as Map<String, dynamic>;
-      customPrint("---------------------------------------------");
-      customPrint("PatientViewStatus data:- $res");
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("PatientViewStatus data:- $res");
 
       int localVisitId = res["visit_id"];
       // int transcription_id = res["transcription_id"];
@@ -657,22 +647,22 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
       if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
-        customPrint("PatientViewStatus inside condition");
+        socketCustomPrint("PatientViewStatus inside condition");
         if (status.toLowerCase() == "pending") {
           isPatientViewLoading.value = true;
           isPatientViewLoadText.value = message;
-          customPrint("PatientViewStatus pending");
+          socketCustomPrint("PatientViewStatus pending");
         } else if (status.toLowerCase() == "inprogress") {
-          customPrint("PatientViewStatus inprogress");
+          socketCustomPrint("PatientViewStatus inprogress");
           isPatientViewLoading.value = true;
           isPatientViewLoadText.value = message;
         } else if (status.toLowerCase() == "success") {
-          customPrint("PatientViewStatus success");
+          socketCustomPrint("PatientViewStatus success");
           isPatientViewLoading.value = false;
           isPatientViewLoadText.value = message;
           getPatientView();
         } else if (status.toLowerCase() == "failure") {
-          customPrint("PatientViewStatus failure");
+          socketCustomPrint("PatientViewStatus failure");
           isPatientViewLoading.value = true;
           isPatientViewLoadText.value = "failure";
         }
@@ -680,9 +670,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     });
 
     socketService.socket.on("transcriptStatus", (data) {
-      customPrint("---------------------------------------------");
+      socketCustomPrint("---------------------------------------------");
       var res = data as Map<String, dynamic>;
-      customPrint("transcriptStatus data:- $res");
+      socketCustomPrint("transcriptStatus data:- $res");
 
       int localVisitId = res["visit_id"];
       // int transcription_id = res["transcription_id"];
@@ -693,20 +683,406 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
       getPatientDetails();
       if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
-        customPrint("transcriptStatus inside condition");
+        socketCustomPrint("transcriptStatus inside condition");
         if (status.toLowerCase() == "pending") {
-          customPrint("transcriptStatus pending");
+          socketCustomPrint("transcriptStatus pending");
           isFullTranscriptLoading.value = true;
           isFullTranscriptLoadText.value = message;
 
           isPatientViewLoading.value = true;
           isPatientViewLoadText.value = "Patient View under process ";
         } else if (status.toLowerCase() == "inprogress") {
-          customPrint("transcriptStatus inprogress");
+          socketCustomPrint("transcriptStatus inprogress");
           isFullTranscriptLoading.value = true;
           isFullTranscriptLoadText.value = message;
         } else if (status.toLowerCase() == "success") {
-          customPrint("transcriptStatus success");
+          socketCustomPrint("transcriptStatus success");
+          isFullTranscriptLoading.value = false;
+          isFullTranscriptLoadText.value = message;
+          getTranscript();
+        }
+      }
+    });
+  }
+
+  Future<void> reRunSetUpFullNoteSocket() async {
+    reRunSocketService.socket.on("DoctorsViewStatus", (data) {
+      var res = data as Map<String, dynamic>;
+      socketCustomPrint("---------------------------------------------");
+
+      // int visit_id = res["visit_id"];
+      // int transcription_id = res["transcription_id"];
+      String status = res["status"];
+      // String message = res["message"];
+      socketCustomPrint("DoctorsViewStatus status is :- $res");
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> doctorDiagnosisiResponseData = responseData["diagnosis_codes_procedures"];
+
+        doctorViewList.value = DoctorViewModel(toast: true, message: "", responseType: "Success", responseData: DoctorViewResponseData.fromJson(responseData));
+        setDoctorModel();
+        // setImpressionAndPlanList();
+        // getPatientDetails();
+        update();
+      }
+    });
+
+    reRunSocketService.socket.on("isMedicalTranscriptStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "failure") {
+        getAllPatientInfo();
+      }
+    });
+
+    reRunSocketService.socket.on("HpiCheifAllergiesStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataHpiView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "", htmlEditorController: htmlEditorController, title: ""));
+
+        editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+
+        editableDataHpiView.refresh();
+      }
+    });
+
+    reRunSocketService.socket.on("SkinHistoryStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForSkinHistory.refresh();
+      }
+    });
+
+    reRunSocketService.socket.on("SocialHistoryStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForSocialHistory.refresh();
+      }
+    });
+
+    reRunSocketService.socket.on("CancerHistoryStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForCancerHistory.refresh();
+        update();
+      }
+    });
+
+    reRunSocketService.socket.on("MedicationHistoryStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForMedication.refresh();
+        update();
+      }
+    });
+
+    reRunSocketService.socket.on("ExamStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForExam.refresh();
+        update();
+      }
+    });
+
+    reRunSocketService.socket.on("ReviewOfSystemStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        HtmlEditorController htmlEditorController = HtmlEditorController();
+        editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
+        editableDataForReviewOfSystems.refresh();
+      }
+    });
+
+    reRunSocketService.socket.on("DoctorsViewImpressionAndPlanStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> doctorDiagnosisiResponseData = responseData["diagnosis_codes_procedures"];
+
+        doctorViewList.value = DoctorViewModel(toast: true, message: "", responseType: "Success", responseData: DoctorViewResponseData.fromJson(responseData));
+        setDoctorModel();
+        setImpressionAndPlanList();
+        getPatientDetails();
+        update();
+      }
+    });
+
+    reRunSocketService.socket.on("ImpressionAndPlanStatus", (data) {
+      var res = data as Map<String, dynamic>;
+
+      String status = res["status"];
+      // String message = res["message"];
+
+      if (status.toLowerCase() == "success") {
+        Map<String, dynamic> responseData = res["responseData"];
+        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+
+        impressionAndPlanListFullNote.clear();
+        if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.isImageGenerated ?? false) {
+          socketService.socket.on("PhotoMetaDataStatus", (data) {
+            var res = data as Map<String, dynamic>;
+            String status = res["status"];
+            // String message = res["message"];
+
+            if (status.toLowerCase() == "success") {
+              Map<String, dynamic> responseData = res["responseData"];
+              patientFullNoteResponseData.value = PatientFullNoteResponseData.fromJson(responseData);
+              Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+              // log("messages: ${patientFullNoteResponseData.value?.toJson()}");
+
+              patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+            }
+            for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+              HtmlEditorController htmlEditorController = HtmlEditorController();
+
+              impressionAndPlanListFullNote.add(
+                ImpresionAndPlanViewModel(
+                  htmlContent: impressionsAndPlan.content ?? "",
+                  htmlEditorController: htmlEditorController,
+                  title: impressionsAndPlan.title,
+                  siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
+                  slidableController: SlidableController(this),
+                  attachments: impressionsAndPlan.attachments ?? [],
+                  // generalAttachments: patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? []
+                ),
+              );
+            }
+            generalAttachments?.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
+          });
+        } else {
+          for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+            HtmlEditorController htmlEditorController = HtmlEditorController();
+
+            impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
+          }
+
+          generalAttachments?.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
+        }
+
+        impressionAndPlanListFullNote.refresh();
+        generalAttachments?.refresh();
+      }
+    });
+
+    // remaning socket event
+
+    reRunSocketService.socket.on("AllTabStatus", (data) {
+      var res = data as Map<String, dynamic>;
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("AllTabStatus status is :- $res");
+
+      // int visit_id = res["visit_id"];
+      // int transcription_id = res["transcription_id"];
+      String status = res["status"];
+      String message = res["message"];
+
+      if (status.toLowerCase() == "failure") {
+        socketCustomPrint("PatientViewStatus failure");
+
+        showPrompError(Get.context!, message);
+      }
+    });
+
+    reRunSocketService.socket.on("FullNoteStatus", (data) {
+      var res = data as Map<String, dynamic>;
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("FullNoteStatus status is :- $res");
+
+      int localVisitId = res["visit_id"];
+      // int transcription_id = res["transcription_id"];
+      String status = res["status"];
+      String message = res["message"];
+
+      if (localVisitId == int.parse(visitId)) {
+        socketCustomPrint("FullNoteStatus inside condition");
+        if (status.toLowerCase() == "pending") {
+          socketCustomPrint("FullNoteStatus pending");
+          isFullNoteLoading.value = true;
+          isFullNoteLoadText.value = message;
+        } else if (status.toLowerCase() == "inprogress") {
+          socketCustomPrint("FullNoteStatus inprogress");
+          isFullNoteLoading.value = true;
+          isFullNoteLoadText.value = message;
+        } else if (status.toLowerCase() == "success") {
+          socketCustomPrint("FullNoteStatus success");
+          isFullNoteLoading.value = false;
+          isFullNoteLoadText.value = message;
+
+          getFullNote();
+        } else if (status.toLowerCase() == "failure") {
+          isFullNoteLoading.value = false;
+          isFullNoteLoadText.value = "failure";
+        }
+      }
+    });
+
+    reRunSocketService.socket.on("VisitDataStatus", (data) {
+      var res = data as Map<String, dynamic>;
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("visit data status is :- $res");
+
+      int localVisitId = res["visit_id"];
+      // int transcription_id = res["transcription_id"];
+      String status = res["status"];
+      String message = res["message"];
+
+      if (localVisitId == int.parse(visitId)) {
+        socketCustomPrint("VisitDataStatus inside condition");
+        if (status.toLowerCase() == "pending") {
+          socketCustomPrint("VisitDataStatus pending");
+          isVisitDataLoading.value = true;
+          isVisitDataLoadText.value = message;
+        } else if (status.toLowerCase() == "inprogress") {
+          socketCustomPrint("VisitDataStatus inprogress");
+          isVisitDataLoading.value = true;
+          isVisitDataLoadText.value = message;
+        } else if (status.toLowerCase() == "success") {
+          socketCustomPrint("VisitDataStatus success");
+          isVisitDataLoading.value = false;
+          isVisitDataLoadText.value = message;
+
+          getPatientDoctorVisitData();
+        } else if (status.toLowerCase() == "failure") {
+          isVisitDataLoading.value = false;
+          isVisitDataLoadText.value = "failure";
+        }
+      }
+    });
+
+    reRunSocketService.socket.on("PatientViewStatus", (data) {
+      var res = data as Map<String, dynamic>;
+      socketCustomPrint("---------------------------------------------");
+      socketCustomPrint("PatientViewStatus data:- $res");
+
+      int localVisitId = res["visit_id"];
+      // int transcription_id = res["transcription_id"];
+      String status = res["status"];
+      String message = res["message"];
+
+      // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+
+      if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+        socketCustomPrint("PatientViewStatus inside condition");
+        if (status.toLowerCase() == "pending") {
+          isPatientViewLoading.value = true;
+          isPatientViewLoadText.value = message;
+          socketCustomPrint("PatientViewStatus pending");
+        } else if (status.toLowerCase() == "inprogress") {
+          socketCustomPrint("PatientViewStatus inprogress");
+          isPatientViewLoading.value = true;
+          isPatientViewLoadText.value = message;
+        } else if (status.toLowerCase() == "success") {
+          socketCustomPrint("PatientViewStatus success");
+          isPatientViewLoading.value = false;
+          isPatientViewLoadText.value = message;
+          getPatientView();
+        } else if (status.toLowerCase() == "failure") {
+          socketCustomPrint("PatientViewStatus failure");
+          isPatientViewLoading.value = true;
+          isPatientViewLoadText.value = "failure";
+        }
+      }
+    });
+
+    reRunSocketService.socket.on("transcriptStatus", (data) {
+      socketCustomPrint("---------------------------------------------");
+      var res = data as Map<String, dynamic>;
+      socketCustomPrint("transcriptStatus data:- $res");
+
+      int localVisitId = res["visit_id"];
+      // int transcription_id = res["transcription_id"];
+      String status = res["status"];
+      String message = res["message"];
+
+      // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
+
+      getPatientDetails();
+      if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+        socketCustomPrint("transcriptStatus inside condition");
+        if (status.toLowerCase() == "pending") {
+          socketCustomPrint("transcriptStatus pending");
+          isFullTranscriptLoading.value = true;
+          isFullTranscriptLoadText.value = message;
+
+          isPatientViewLoading.value = true;
+          isPatientViewLoadText.value = "Patient View under process ";
+        } else if (status.toLowerCase() == "inprogress") {
+          socketCustomPrint("transcriptStatus inprogress");
+          isFullTranscriptLoading.value = true;
+          isFullTranscriptLoadText.value = message;
+        } else if (status.toLowerCase() == "success") {
+          socketCustomPrint("transcriptStatus success");
           isFullTranscriptLoading.value = false;
           isFullTranscriptLoadText.value = message;
           getTranscript();
@@ -1808,6 +2184,59 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   void safeRemoveAt(List list, int index) {
     if (isValidIndex(index, list)) {
       list.removeAt(index);
+    }
+  }
+
+  Future<void> reGenerateAudio(String patientId, String visitId, String firstName, String lastName) async {
+    if (globalController.visitId.isNotEmpty) {
+      CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
+    } else {
+      if (await globalController.recorderService.audioRecorder.hasPermission()) {
+        globalController.isStartTranscript.value = true;
+
+        // controller.globalController.patientId.value = controller.patientId.value;
+        // controller.globalController.visitId.value = controller.visitId.value;
+
+        globalController.patientFirstName.value = firstName;
+        globalController.attachmentId.value = patientId;
+        globalController.patientLsatName.value = lastName;
+        globalController.patientFirstName.value = firstName;
+        globalController.patientLsatName.value = lastName;
+
+        globalController.valueOfx.value = 0;
+        globalController.valueOfy.value = 0;
+
+        globalController.isRegenerateRecording.value = true;
+
+        globalController.visitId = RxString(visitId);
+        globalController.patientId = RxString(patientId);
+
+        // globalController.changeStatus("In-Room");
+        // If not recording, start the recording
+        globalController.startAudioWidget();
+        globalController.recorderService.audioRecorder = AudioRecorder();
+        globalController.getConnectedInputDevices();
+
+        globalController.regenerateRecordingCallBack = () {
+          reRunSocketService.socket.onConnect((_) {
+            reRunSocketService.socket.emit("joinRoom", [loginData.value?.responseData?.user?.id, int.parse(visitId)]);
+
+            print("re run socket calleds");
+            reRunSetUpFullNoteSocket();
+          });
+
+          print("get after rerecording");
+        };
+
+        await globalController.recorderService.startRecording(Get.context!);
+
+        update();
+        // updateData();
+      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+        // Handle permission denial here
+
+        showDialog(barrierDismissible: false, context: Get.context!, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
+      }
     }
   }
 }

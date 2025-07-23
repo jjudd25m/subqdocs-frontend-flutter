@@ -74,7 +74,7 @@ class GlobalController extends GetxController {
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = false;
+  bool isProd = true;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 
@@ -128,6 +128,9 @@ class GlobalController extends GetxController {
   RxString attachmentId = RxString("");
   RxString patientFirstName = RxString("");
   RxString patientLsatName = RxString("");
+
+  void Function()? regenerateRecordingCallBack;
+  RxBool isRegenerateRecording = RxBool(false);
 
   RxList<MediaListingModel> list = RxList();
 
@@ -401,22 +404,27 @@ class GlobalController extends GetxController {
         isStartTranscript.value = false;
         wipeData();
 
-        if (Get.currentRoute == Routes.PATIENT_INFO) {
-          Get.until((route) => Get.currentRoute == Routes.HOME);
-
-          // Get.until(Routes.HOME, (route) => false);
-          breadcrumbHistory.clear();
-          addRoute(Routes.HOME);
-          // addRoute(Routes.PATIENT_INFO);
-
-          await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
+        if (isRegenerateRecording.value) {
+          regenerateRecordingCallBack!();
+          isRegenerateRecording.value = false;
         } else {
-          await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
-        }
+          if (Get.currentRoute == Routes.PATIENT_INFO) {
+            Get.until((route) => Get.currentRoute == Routes.HOME);
 
-        if (Get.currentRoute == Routes.VISIT_MAIN) {
-          // Get.find<VisitMainController>().getPatientDetails();
-          Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+            // Get.until(Routes.HOME, (route) => false);
+            breadcrumbHistory.clear();
+            addRoute(Routes.HOME);
+            // addRoute(Routes.PATIENT_INFO);
+
+            await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
+          } else {
+            await Get.toNamed(Routes.PATIENT_INFO, arguments: {"trascriptUploadData": patientTranscriptUploadModel, "unique_tag": DateTime.now().toString()});
+          }
+
+          if (Get.currentRoute == Routes.VISIT_MAIN) {
+            // Get.find<VisitMainController>().getPatientDetails();
+            Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+          }
         }
       } catch (e) {
         customPrint("Audio failed error is :- $e");
