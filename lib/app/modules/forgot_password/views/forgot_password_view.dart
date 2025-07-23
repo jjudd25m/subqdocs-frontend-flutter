@@ -11,15 +11,15 @@ import '../controllers/forgot_password_controller.dart';
 class ForgotPasswordView extends GetView<ForgotPasswordController> {
   const ForgotPasswordView({super.key});
 
-  bool isWidthLessThan428(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return width < 428;
-  }
+  // bool isWidthLessThan428(BuildContext context) {
+  //   double width = MediaQuery.of(context).size.width;
+  //   return width < 428;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
-    bool isSmallScreen = isWidthLessThan428(context);
+    // bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+    // bool isSmallScreen = isWidthLessThan428(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: GestureDetector(
@@ -30,31 +30,9 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(
-                height: isSmallScreen ? 130 : 300,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: isPortrait ? 0 : -80,
-                      child: Image.asset(ImagePath.loginHeader),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: controller.isSmallScreen.value ? 130 : 300, child: Stack(children: [Positioned(left: 0, right: 0, top: controller.isPortrait.value ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
               Obx(() {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: isPortrait ? null : 30),
-                    Text(
-                      AppString.login,
-                      style: AppFonts.medium(24, AppColors.backgroundPurple),
-                    ),
-                    controller.getCurrentScreen(),
-                  ],
-                );
+                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [SizedBox(height: controller.isPortrait.value ? null : 30), Text(AppString.login, style: AppFonts.medium(24, AppColors.backgroundPurple)), controller.getCurrentScreen()]);
               }),
             ],
           ),

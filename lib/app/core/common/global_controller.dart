@@ -74,7 +74,7 @@ class GlobalController extends GetxController {
 
   RxnInt selectedRowIndex = RxnInt();
 
-  bool isProd = true;
+  bool isProd = false;
 
   SuggestionsController<PatientListData> suggestionsController = SuggestionsController();
 

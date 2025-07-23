@@ -27,11 +27,17 @@ class LoginController extends GetxController {
 
   final count = 0.obs;
 
+  RxBool isPortrait = RxBool(false);
+  RxBool isSmallScreen = RxBool(false);
+
   @override
   void onInit() {
     super.onInit();
 
     bool isRemember = AppPreference.instance.getBool(AppString.prefKeyRememberMe);
+
+    isPortrait.value = MediaQuery.orientationOf(Get.context!) == Orientation.portrait;
+    isSmallScreen.value = isWidthLessThan428(Get.context!);
 
     if (isRemember) {
       String preferenceEmail = AppPreference.instance.getString(AppString.prefKeyRememberEmail);
@@ -73,7 +79,6 @@ class LoginController extends GetxController {
         await AppPreference.instance.removeKey(AppString.pastPatientList);
         await AppPreference.instance.removeKey(AppString.schedulePatientList);
         AppPreference.instance.setString(loginModel.responseData?.token ?? "", AppString.prefKeyToken);
-        CustomToastification().showToast("User logged in successfully", type: ToastificationType.success);
         // Get.replace(Routes.HOME);
         Get.offNamed(Routes.HOME);
         Get.put(GlobalController());
@@ -83,5 +88,10 @@ class LoginController extends GetxController {
       customPrint("login catch error is $error");
       CustomToastification().showToast(error.toString(), type: ToastificationType.error);
     }
+  }
+
+  bool isWidthLessThan428(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return width < 428;
   }
 }

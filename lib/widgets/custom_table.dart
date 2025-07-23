@@ -38,6 +38,8 @@ class CustomTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("CustomTable called ");
+
     double screenWidth = MediaQuery.of(context).size.width - 100;
 
     return Container(

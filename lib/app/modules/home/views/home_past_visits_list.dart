@@ -23,6 +23,8 @@ class HomePastVisitsList extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    print("HomePastVisitsList called ");
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Obx(() {

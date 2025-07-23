@@ -20,15 +20,10 @@ class LoginView extends GetView<LoginController> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool isWidthLessThan428(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return width < 428;
-  }
-
   @override
   Widget build(BuildContext context) {
-    bool isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
-    bool isSmallScreen = isWidthLessThan428(context);
+    print("Loginview called");
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: GestureDetector(
@@ -39,17 +34,17 @@ class LoginView extends GetView<LoginController> {
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
-              SizedBox(height: isSmallScreen ? 130 : 330, child: Stack(children: [Positioned(left: 0, right: 0, top: isPortrait ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
+              SizedBox(height: controller.isSmallScreen.value ? 130 : 330, child: Stack(children: [Positioned(left: 0, right: 0, top: controller.isPortrait.value ? 0 : -80, child: Image.asset(ImagePath.loginHeader))])),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: isPortrait ? null : 30),
+                  SizedBox(height: controller.isPortrait.value ? null : 30),
                   Text(AppString.login, style: AppFonts.medium(24, AppColors.backgroundPurple)),
                   const SizedBox(height: 24),
                   Text(AppString.welcomeBack, style: AppFonts.medium(20, AppColors.textBlack)),
                   const SizedBox(height: 24),
                   SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
+                    width: controller.isSmallScreen.value ? Get.width - 30 : 416,
                     child: TextFormFiledWidget(
                       isSuffixIconVisible: false,
                       isFirst: true,
@@ -67,10 +62,11 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Obx(() {
-                    return SizedBox(
-                      width: isSmallScreen ? Get.width - 30 : 416,
-                      child: TextFormFiledWidget(
+
+                  SizedBox(
+                    width: controller.isSmallScreen.value ? Get.width - 30 : 416,
+                    child: Obx(() {
+                      return TextFormFiledWidget(
                         label: AppString.password,
                         hint: AppString.passwordHint,
                         visibility: controller.visibility.value,
@@ -92,12 +88,12 @@ class LoginView extends GetView<LoginController> {
                         checkValidation: (value) {
                           return Validation.passwordValidate(value);
                         },
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                   const SizedBox(height: 12),
                   SizedBox(
-                    width: isSmallScreen ? Get.width - 30 : 416,
+                    width: controller.isSmallScreen.value ? Get.width - 30 : 416,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -118,7 +114,7 @@ class LoginView extends GetView<LoginController> {
                   const SizedBox(height: 30),
                   Obx(() {
                     return SizedBox(
-                      width: isSmallScreen ? Get.width - 30 : 416,
+                      width: controller.isSmallScreen.value ? Get.width - 30 : 416,
                       child: CustomAnimatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {

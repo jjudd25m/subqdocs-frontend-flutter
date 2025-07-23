@@ -93,6 +93,8 @@ class _HomeCustomSearchBarState extends State<HomeCustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    print("HomeCustomSearchBar build called ");
+
     final theme = Theme.of(context);
     final defaultBorderRadius = widget.borderRadius ?? BorderRadius.circular(8.0);
     final defaultBorder = widget.border ?? Border.all(color: AppColors.textGrey.withValues(alpha: 0.5), width: 1.0);

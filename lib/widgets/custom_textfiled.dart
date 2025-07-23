@@ -65,6 +65,8 @@ class TextFormFiledWidget extends StatefulWidget {
 class _TextFormFiledWidgetState extends State<TextFormFiledWidget> {
   @override
   Widget build(BuildContext context) {
+    print("TextFormFiledWidget called");
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

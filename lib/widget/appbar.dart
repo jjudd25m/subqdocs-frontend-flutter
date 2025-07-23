@@ -33,6 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("CustomAppBar called ");
     return Container(
       height: 64,
       decoration: const BoxDecoration(color: AppColors.backgroundWhite),

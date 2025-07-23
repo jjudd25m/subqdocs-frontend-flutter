@@ -15,6 +15,9 @@ import '../views/enter_password_view.dart';
 import '../views/password_changed_screen.dart';
 
 class ForgotPasswordController extends GetxController {
+  RxBool isPortrait = RxBool(false);
+  RxBool isSmallScreen = RxBool(false);
+
   RxBool isTimerActive = false.obs;
   RxInt timeRemaining = 900.obs; // Time in seconds (15 minutes)
   Timer? timer;
@@ -49,6 +52,9 @@ class ForgotPasswordController extends GetxController {
       String email = Get.arguments["email"] ?? "";
       emailController.text = email;
     }
+
+    isPortrait.value = MediaQuery.orientationOf(Get.context!) == Orientation.portrait;
+    isSmallScreen.value = isWidthLessThan428(Get.context!);
 
     startTimer();
   }
@@ -183,5 +189,10 @@ class ForgotPasswordController extends GetxController {
       CustomToastification().showToast("$error", type: ToastificationType.error);
       isLoading.value = false;
     }
+  }
+
+  bool isWidthLessThan428(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return width < 428;
   }
 }
