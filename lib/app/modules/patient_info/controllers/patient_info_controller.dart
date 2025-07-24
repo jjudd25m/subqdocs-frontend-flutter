@@ -361,7 +361,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           String status = res["status"];
           String message = res["message"];
 
-          if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (_visitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -394,7 +394,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -429,7 +429,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -465,7 +465,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
           getPatientDetails();
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -1047,7 +1047,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -1080,7 +1080,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -1115,7 +1115,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -1148,7 +1148,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");

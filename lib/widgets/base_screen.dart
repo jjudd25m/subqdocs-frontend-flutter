@@ -18,6 +18,7 @@ import '../app/core/common/logger.dart';
 import '../app/models/audio_wave.dart';
 import '../app/modules/custom_drawer/views/custom_drawer_view.dart';
 import '../app/modules/personal_setting/controllers/personal_setting_controller.dart';
+import '../app/modules/visit_main/controllers/visit_main_controller.dart';
 import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -381,7 +382,28 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         // SizedBox(width: 20),
                                         GestureDetector(
                                           onTap: () async {
-                                            await globalController.recorderService.stopRecording();
+                                            final success = await globalController.recorderService.stopRecording();
+                                            if(success) {
+                                              if (Get.currentRoute == Routes.PATIENT_INFO) {
+                                                Get.until((route) => Get.currentRoute == Routes.HOME);
+
+                                                // Get.until(Routes.HOME, (route) => false);
+                                                globalController.breadcrumbHistory.clear();
+                                                globalController.addRoute(Routes.HOME);
+                                                // addRoute(Routes.PATIENT_INFO);
+
+                                                await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+                                              } else {
+                                                await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+                                              }
+
+                                              if (Get.currentRoute == Routes.VISIT_MAIN) {
+                                                // Get.find<VisitMainController>().getPatientDetails();
+                                                Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+                                              }
+                                            }else{
+                                              Get.back();
+                                            }
                                             // File? audioFile = await globalController.recorderService.stopRecording();
                                             // globalController.stopLiveActivityAudio();
                                             // customPrint("audio file url is :- ${audioFile?.absolute}");
@@ -749,7 +771,28 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         const SizedBox(width: 10),
                                         GestureDetector(
                                           onTap: () async {
-                                            await globalController.recorderService.stopRecording();
+                                            final success = await globalController.recorderService.stopRecording();
+                                            if(success) {
+                                              if (Get.currentRoute == Routes.PATIENT_INFO) {
+                                                Get.until((route) => Get.currentRoute == Routes.HOME);
+
+                                                // Get.until(Routes.HOME, (route) => false);
+                                                globalController.breadcrumbHistory.clear();
+                                                globalController.addRoute(Routes.HOME);
+                                                // addRoute(Routes.PATIENT_INFO);
+
+                                                await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+                                              } else {
+                                                await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+                                              }
+
+                                              if (Get.currentRoute == Routes.VISIT_MAIN) {
+                                                // Get.find<VisitMainController>().getPatientDetails();
+                                                Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+                                              }
+                                            }else{
+                                              Get.back();
+                                            }
                                             // File? audioFile = await globalController.recorderService.stopRecording();
                                             // customPrint("audio file url is :- ${audioFile?.absolute}");
                                             // globalController.stopLiveActivityAudio();

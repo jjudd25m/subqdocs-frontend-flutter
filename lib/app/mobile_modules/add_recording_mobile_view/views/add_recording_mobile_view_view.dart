@@ -297,8 +297,11 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
               onPressed: () async {
                 // File? audioFile = await controller.recorderService.stopRecording();
                 final success = await controller.recorderService.stopRecording(controller.visitId);
-                if(success) Get.back();
-                //
+                if(success) {
+                  Get.toNamed(Routes.PATIENT_INFO_MOBILE_VIEW, arguments: {"patientId": controller.patientId, "visitId": controller.visitId, "fromRecording": "1"});
+                }else{
+                  Get.back();
+                }
                 // globalController.stopLiveActivityAudio();
                 // customPrint("audio file url is :- ${audioFile?.absolute}");
 

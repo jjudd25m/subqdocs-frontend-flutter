@@ -174,7 +174,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           String status = res["status"];
           String message = res["message"];
 
-          if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (_visitId == int.parse(visitId)) {
             customPrint("DoctorsViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("DoctorsViewStatus pending");
@@ -206,7 +207,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -238,7 +240,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -273,7 +276,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
 
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -309,7 +313,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
           getPatientDetails();
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -335,6 +340,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       }
     } else {
       if (visitId.isNotEmpty) {
+        customPrint("socket status:- ${socketService.socket.connected}");
         socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, int.parse(visitId)]);
 
         setUpFullNoteSocket();
