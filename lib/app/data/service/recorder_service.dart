@@ -275,7 +275,8 @@ class RecorderService {
     isLastChunk = true;
     _stopTimer();
     recordingStatus.value = 2;
-
+    await _pcmSubscription?.cancel();
+    await _pcmStreamController.close();
     if (_pcmBuffer.isNotEmpty) {
       List<int> chunk = List.from(_pcmBuffer);
       String filePath = await _savePcmAsWavAndConvertToM4a(chunk, globalController.visitId.value);
@@ -286,9 +287,23 @@ class RecorderService {
     }
     await _recorder.stopRecorder();
     await _recorder.closeRecorder();
+    if (Get.currentRoute == Routes.PATIENT_INFO) {
+      Get.until((route) => Get.currentRoute == Routes.HOME);
 
-    await _pcmSubscription?.cancel();
-    await _pcmStreamController.close();
+      // Get.until(Routes.HOME, (route) => false);
+      globalController.breadcrumbHistory.clear();
+      globalController.addRoute(Routes.HOME);
+      // addRoute(Routes.PATIENT_INFO);
+
+      await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+    } else {
+      await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+    }
+
+    if (Get.currentRoute == Routes.VISIT_MAIN) {
+      // Get.find<VisitMainController>().getPatientDetails();
+      Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+    }
     return success;
   }
 
@@ -480,7 +495,6 @@ class RecorderService {
         await DatabaseHelper.instance.insertAudioChunkFile(audioIds, chunkIndex, audioFileToSave);
         if (connectivityResult.contains(ConnectivityResult.none)) {
           CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
-          return true;
         }
         else {
           var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
