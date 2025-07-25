@@ -10,6 +10,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/patient_info/model/icd10_code_list_model.dart';
 import 'package:subqdocs/utils/Loader.dart';
@@ -275,6 +276,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     // getAllPatientInfo();
     customPrint("its on claaed");
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    customPrint("message ${socketService.socket.onConnectError((data) => data.toString())}");
 
     // if (socketService.socket.connected) {
     //   socketService.socket.on("openaiStatusUpdate", (data) {

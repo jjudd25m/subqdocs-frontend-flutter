@@ -33,7 +33,8 @@ class DatabaseHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       fileName TEXT,
       status TEXT,
-      visit_id TEXT
+      visit_id TEXT,
+      session_id TEXT
     )
     ''');
     await db.execute('''
@@ -116,7 +117,16 @@ class DatabaseHelper {
   // Update status to 'uploaded' after successful upload, considering visit_id (String)
   Future<int> updateAudioFileStatus(int audioId,int chunkIndex) async {
     final db = await instance.database;
-    // final whereArgs = visitId != null ?  : [chunkIndex];
     return await db.update('audioChunks', {'is_uploaded': 1}, where: 'chunkIndex = ? AND audioId = ?', whereArgs: [chunkIndex, audioId]);
+  }
+
+  Future<int> updateSessionId(int audioId,String sessionId) async {
+    final db = await instance.database;
+    return await db.update('audioFiles', {'session_id': sessionId}, where: 'id = ?', whereArgs: [audioId]);
+  }
+
+  Future<int> deleteAudioChunkFile(int id) async {
+    final db = await instance.database;
+    return await db.delete('audioChunks', where: 'audioId = ?', whereArgs: [id]);
   }
 }

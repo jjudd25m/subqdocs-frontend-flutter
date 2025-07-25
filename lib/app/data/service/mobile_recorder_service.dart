@@ -258,6 +258,7 @@ class MobileRecorderService {
           if (records.responseData != null) {
             log("message1");
             sessionId = records.responseData?.sessionId ?? "";
+            await DatabaseHelper.instance.updateSessionId(audioId, sessionId);
             return false;
             // Map<String,dynamic> params = {};
             // params["chunkIndex"] = cIndex;
@@ -339,7 +340,7 @@ class MobileRecorderService {
           final success = await uploadChunk(chunkFiles.first, visitId);
           if (success) {
             chunkFiles.removeAt(0);
-            await DatabaseHelper.instance.deleteAudioFile(audioId);
+            await DatabaseHelper.instance.deleteAudioChunkFile(audioId);
           } else {
             await Future.delayed(Duration(milliseconds: 200));
             break;

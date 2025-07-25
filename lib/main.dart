@@ -35,6 +35,7 @@ void main() {
         socketService.openAISocket.connect();
       });
 
+
       Get.put(GlobalController());
       Get.put(GlobalMobileController());
 
