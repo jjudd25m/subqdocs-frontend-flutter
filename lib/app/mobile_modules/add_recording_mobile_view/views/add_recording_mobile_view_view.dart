@@ -71,7 +71,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
     return BaseScreenMobile(
       onPopCallBack: () {
         if (controller.recorderService.recordingStatus.value == 1) {
-          controller.recorderService.stopRecording();
+          controller.recorderService.stopRecording(controller.visitId);
         }
       },
       onItemSelected: (index) async {},
@@ -183,7 +183,14 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                           ],
                         ),
                       ),
-                      if (controller.globalController.samples.isNotEmpty) Center(child: AudioWave(animation: false, height: 30, width: 160, spacing: 2.5, animationLoop: 0, bars: controller.globalController.samples.map((sample) => sample).toList())),
+                      if (controller.globalController.samples.isNotEmpty)
+                        Center(child: AudioWave(
+                            animation: false,
+                            height: 30,
+                            width: 160,
+                            spacing: 2.5,
+                            animationLoop: 0,
+                            bars: controller.globalController.samples.map((sample) => sample).toList())),
                       // Mic selection dropdown (shown on all platforms, like iPad view)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -233,7 +240,7 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
                             } else if (controller.recorderService.recordingStatus.value == 2) {
                               // If paused, resume the recording
                               //  controller.updatePauseResumeAudioWidget();
-                              await controller.recorderService.resumeRecording();
+                              await controller.recorderService.resumeRecording(controller.visitId);
                             }
                           },
                           child: Column(
@@ -288,11 +295,17 @@ class _AddRecordingMobileViewViewState extends State<AddRecordingMobileViewView>
             padding: EdgeInsets.only(right: 20, left: 20, top: 0, bottom: MediaQuery.of(context).padding.bottom),
             child: CustomTabButton(
               onPressed: () async {
-                File? audioFile = await controller.recorderService.stopRecording();
+                // File? audioFile = await controller.recorderService.stopRecording();
+                final success = await controller.recorderService.stopRecording(controller.visitId);
+                if(success) {
+                  Get.toNamed(Routes.PATIENT_INFO_MOBILE_VIEW, arguments: {"patientId": controller.patientId, "visitId": controller.visitId, "fromRecording": "1"});
+                }else{
+                  Get.back();
+                }
                 // globalController.stopLiveActivityAudio();
-                customPrint("audio file url is :- ${audioFile?.absolute}");
+                // customPrint("audio file url is :- ${audioFile?.absolute}");
 
-                controller.submitAudio(audioFile!);
+                // controller.submitAudio(audioFile!);
                 // _toggleRecording();
               },
               text: "Stop Recording",

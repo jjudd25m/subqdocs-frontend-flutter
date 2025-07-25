@@ -3,20 +3,17 @@ import 'package:subqdocs/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../utils/app_string.dart';
+import '../../modules/login/controllers/login_controller.dart';
 import '../../routes/app_pages.dart';
 import 'app_preferences.dart';
 import 'global_controller.dart';
 
 void customPrint(dynamic message) {
-  // if (false) {
-  // print(message);
-  // }
+  print(message);
 }
 
 void socketCustomPrint(dynamic message) {
-  // if (false) {
-  // print(message);
-  // }
+  print(message);
 }
 
 void unAuthorisedLogOut() async {
@@ -27,5 +24,6 @@ void unAuthorisedLogOut() async {
   await AppPreference.instance.removeKey("homeScheduleListSortingModel");
   Get.delete<GlobalController>();
   Get.offAllNamed(Routes.LOGIN);
+  Get.put(LoginController());
   CustomToastification().showToast("Unauthorized User", type: ToastificationType.error);
 }

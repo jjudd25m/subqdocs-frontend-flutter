@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
@@ -23,7 +24,7 @@ class DatabaseHelper {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 3, onCreate: _createDB);
+    return await openDatabase(path, version: 5, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -32,7 +33,8 @@ class DatabaseHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       fileName TEXT,
       status TEXT,
-      visit_id TEXT
+      visit_id TEXT,
+      session_id TEXT
     )
     ''');
     await db.execute('''
@@ -41,6 +43,7 @@ class DatabaseHelper {
       audioId INTEGER,
       chunkIndex INTEGER,
       chunkData BLOB,
+      is_uploaded INTEGER DEFAULT 0,
       FOREIGN KEY(audioId) REFERENCES audioFiles(id)
     )
     ''');
@@ -51,22 +54,31 @@ class DatabaseHelper {
   Future<int> insertAudioFile(AudioFile file, {int chunkSize = 1024 * 1024}) async {
     try {
       final db = await instance.database;
-      int audioId = await db.insert('audioFiles', {'fileName': file.fileName, 'status': file.status, 'visit_id': file.visitId});
-      int totalChunks = (file.audioData?.length ?? 0 / chunkSize).ceil();
-      for (int i = 0; i < totalChunks; i++) {
-        int start = i * chunkSize;
-        int end = start + chunkSize;
-        if (end > (file.audioData?.length ?? 0)) end = file.audioData?.length ?? 0;
-        List<int> chunk = file.audioData?.sublist(start, end) ?? [];
-        await db.insert('audioChunks', {'audioId': audioId, 'chunkIndex': i, 'chunkData': chunk});
+      final result = await db.query('audioFiles',where: 'visit_id = ?',whereArgs: [file.visitId]);
+      if(result.isNotEmpty){
+        return result.first['id'] as int;
+      }else{
+        return await db.insert('audioFiles', {'fileName': file.fileName, 'status': file.status, 'visit_id': file.visitId});
       }
-      return audioId;
+
     } catch (e) {
       customPrint("error message: $e");
       return -1;
     }
   }
 
+  Future<void> insertAudioChunkFile(int audioId,int chunkIndex,AudioFile file, {int chunkSize = 1024 * 1024}) async{
+    final db = await instance.database;
+    await db.insert('audioChunks', {'audioId': audioId, 'chunkIndex': chunkIndex, 'chunkData': file.audioData,'is_uploaded' : 0});
+    // int totalChunks = (file.audioData?.length ?? 0 / chunkSize).ceil();
+    // for (int i = 0; i < totalChunks; i++) {
+    //   int start = i * chunkSize;
+    //   int end = start + chunkSize;
+    //   if (end > (file.audioData?.length ?? 0)) end = file.audioData?.length ?? 0;
+    //   List<int> chunk = file.audioData?.sublist(start, end) ?? [];
+    //
+    // }
+  }
   // Retrieve audio data for a file
   Future<Uint8List> getAudioFileData(int audioId) async {
     final db = await instance.database;
@@ -103,9 +115,18 @@ class DatabaseHelper {
   }
 
   // Update status to 'uploaded' after successful upload, considering visit_id (String)
-  Future<int> updateAudioFileStatus(int id, {String? visitId}) async {
+  Future<int> updateAudioFileStatus(int audioId,int chunkIndex) async {
     final db = await instance.database;
-    final whereArgs = visitId != null ? [id, visitId] : [id];
-    return await db.update('audioFiles', {'status': 'uploaded'}, where: 'id = ? AND visit_id = ?', whereArgs: whereArgs);
+    return await db.update('audioChunks', {'is_uploaded': 1}, where: 'chunkIndex = ? AND audioId = ?', whereArgs: [chunkIndex, audioId]);
+  }
+
+  Future<int> updateSessionId(int audioId,String sessionId) async {
+    final db = await instance.database;
+    return await db.update('audioFiles', {'session_id': sessionId}, where: 'id = ?', whereArgs: [audioId]);
+  }
+
+  Future<int> deleteAudioChunkFile(int id) async {
+    final db = await instance.database;
+    return await db.delete('audioChunks', where: 'audioId = ?', whereArgs: [id]);
   }
 }

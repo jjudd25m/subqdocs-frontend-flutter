@@ -11,9 +11,13 @@ import 'package:subqdocs/utils/app_fonts.dart';
 import 'package:subqdocs/utils/imagepath.dart';
 
 import '../../../../widget/base_image_view.dart';
+import '../controllers/patient_info_controller.dart';
+import '../model/chatbot_history_model.dart';
 
 class ChatBotWidget extends StatefulWidget {
-  const ChatBotWidget({super.key});
+  PatientInfoController controller;
+
+  ChatBotWidget({super.key, required this.controller});
 
   @override
   State<ChatBotWidget> createState() => _ChatBotWidgetState();
@@ -23,6 +27,8 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
   RxBool isOpen = RxBool(false);
   RxBool isMinimized = RxBool(false);
   RxBool isRecording = RxBool(false);
+
+  // chatbotHistoryModel
 
   String? path;
   String? musicFile;
@@ -35,7 +41,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
   String? recordedFilePath;
   final RecorderController recorderController = RecorderController();
 
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController textEditcontroller = TextEditingController();
   final FocusNode focusNode = FocusNode();
   final ScrollController scrollController = ScrollController();
   Timer? timer;
@@ -49,12 +55,12 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
   RxBool showSettings = RxBool(false);
   RxString preferredTalkback = RxString('voice_to_voice');
 
-  // Demo static messages
-  RxList<Map<String, dynamic>> messages = RxList([
-    {'sender': 'bot', 'text': 'Good Morning 👋'},
-    {'sender': 'bot', 'text': 'How does GPT use AI?'},
-    {'sender': 'user', 'text': 'Tell me more!'},
-  ]);
+  // // Demo static messages
+  // RxList<Map<String, dynamic>> messages = RxList([
+  //   {'sender': 'bot', 'text': 'Good Morning 👋'},
+  //   {'sender': 'bot', 'text': 'How does GPT use AI?'},
+  //   {'sender': 'user', 'text': 'Tell me more!'},
+  // ]);
 
   @override
   void initState() {
@@ -73,7 +79,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
   void dispose() {
     recorderController.dispose();
     timer?.cancel();
-    controller.dispose();
+    textEditcontroller.dispose();
     focusNode.dispose();
     scrollController.dispose();
     glowController.dispose();
@@ -119,10 +125,10 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
   }
 
   void _sendMessage() {
-    if (controller.text.trim().isEmpty) return;
+    if (textEditcontroller.text.trim().isEmpty) return;
 
-    messages.add({'sender': 'user', 'text': controller.text.trim()});
-    controller.clear();
+    // messages.add({'sender': 'user', 'text': controller.text.trim()});
+    textEditcontroller.clear();
     voiceToTextResult.value = '';
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -132,8 +138,8 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
     });
   }
 
-  Widget _buildMessage(Map<String, dynamic> msg) {
-    final isUser = msg['sender'] == 'user';
+  Widget _buildMessage(ChatHistory msg) {
+    final isUser = msg.sender == 'user';
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -141,7 +147,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         constraints: const BoxConstraints(maxWidth: 220),
         decoration: BoxDecoration(color: isUser ? AppColors.backgroundPurple : AppColors.chatBackgroundGrey, borderRadius: BorderRadius.circular(16), boxShadow: [if (!isUser) const BoxShadow(color: Colors.black12, blurRadius: 2)]),
-        child: Text(msg['text'] ?? '', style: TextStyle(color: isUser ? Colors.white : AppColors.black, fontSize: 15)),
+        child: Text(msg.content ?? '', style: TextStyle(color: isUser ? Colors.white : AppColors.black, fontSize: 15)),
       ),
     );
   }
@@ -167,8 +173,8 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                   elevation: 12,
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    width: 340,
-                    height: 500,
+                    width: 360,
+                    height: 550,
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black26.withValues(alpha: 0.08), blurRadius: 16, offset: const Offset(0, 8))]),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -247,7 +253,11 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                                           ],
                                         ),
                                       ),
-                                      Expanded(child: ListView.builder(controller: scrollController, reverse: true, padding: const EdgeInsets.only(top: 8, bottom: 8), itemCount: messages.length, itemBuilder: (context, i) => _buildMessage(messages[messages.length - 1 - i]))),
+                                      Expanded(
+                                        child: Obx(() {
+                                          return ListView.builder(controller: scrollController, reverse: true, padding: const EdgeInsets.only(top: 8, bottom: 8), itemCount: widget.controller.chatbotHistoryModel.value?.responseData?.chatHistory?.length ?? 0, itemBuilder: (context, i) => _buildMessage(widget.controller.chatbotHistoryModel.value?.responseData!.chatHistory![i] ?? ChatHistory()));
+                                        }),
+                                      ),
                                       // AUDIO RECORDING BAR
                                       if (_isRecording.value)
                                         Container(
@@ -334,7 +344,7 @@ class _ChatBotWidgetState extends State<ChatBotWidget> with SingleTickerProvider
                                                   child: Row(
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
-                                                      Expanded(child: TextField(controller: controller, focusNode: focusNode, decoration: InputDecoration(hintText: 'Type Something...', hintStyle: AppFonts.regular(14, AppColors.textDarkGrey), border: InputBorder.none), onSubmitted: (_) => _sendMessage())),
+                                                      Expanded(child: TextField(controller: textEditcontroller, focusNode: focusNode, decoration: InputDecoration(hintText: 'Type Something...', hintStyle: AppFonts.regular(14, AppColors.textDarkGrey), border: InputBorder.none), onSubmitted: (_) => _sendMessage())),
                                                       GestureDetector(
                                                         onTap: () {
                                                           recorderController.record(); // By default saves file with datetime as name.

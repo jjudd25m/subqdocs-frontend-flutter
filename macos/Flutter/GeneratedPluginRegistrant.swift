@@ -11,6 +11,7 @@ import device_info_plus
 import file_picker
 import file_selector_macos
 import flutter_app_group_directory
+import flutter_audio_toolkit
 import flutter_inappwebview_macos
 import flutter_timezone
 import geolocator_apple
@@ -33,6 +34,7 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FilePickerPlugin.register(with: registry.registrar(forPlugin: "FilePickerPlugin"))
   FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
   FlutterAppGroupDirectoryPlugin.register(with: registry.registrar(forPlugin: "FlutterAppGroupDirectoryPlugin"))
+  FlutterAudioToolkitPlugin.register(with: registry.registrar(forPlugin: "FlutterAudioToolkitPlugin"))
   InAppWebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "InAppWebViewFlutterPlugin"))
   FlutterTimezonePlugin.register(with: registry.registrar(forPlugin: "FlutterTimezonePlugin"))
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))

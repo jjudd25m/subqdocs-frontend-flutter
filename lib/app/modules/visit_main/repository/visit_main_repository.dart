@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:mime/mime.dart';
+import 'package:subqdocs/app/models/Records.dart';
 
 import '../../../../widget/device_detection.dart';
 import '../../../core/common/global_controller.dart';
@@ -112,5 +113,23 @@ class VisitMainRepository {
     var response = await ApiProvider.instance.callPut("patient/updateVisitStatus/$id", params);
     customPrint("changeStatus API  internal response $response");
     return ChangeStatusModel.fromJson(response);
+  }
+
+  Future<Records> uploadRecordInitialized({required String visitId,required Map<String,dynamic> params, required File chunkFile, required String mimeType,required String token}) async {
+    var response = await ApiProvider.instance.callPostMultiPart(url: "initialize-chunked-upload/$visitId", params: params,files: {"audio": chunkFile},mimeTye: mimeType ?? "",token: token ?? "");
+    customPrint("Records API  internal response $response");
+    return Records.fromJson(response);
+  }
+
+  Future<Map<String,dynamic>> uploadRecordings({required String sessionId,required Map<String,dynamic> params, required File chunkFile, required String mimeType,required String token}) async {
+    var response = await ApiProvider.instance.callPostMultiPart(url: "upload-chunk/$sessionId", params: params,files: {"audio": chunkFile},mimeTye: mimeType ?? "",token: token ?? "");
+    customPrint("Records API  internal response $response");
+    return response;
+  }
+
+  Future<Map<String,dynamic>> uploadLastRecord({required String visitId,required Map<String,dynamic> params, required File chunkFile, required String mimeType,required String token}) async {
+    var response = await ApiProvider.instance.callPostMultiPart(url: "upload-transcript-file-v2/$visitId", params: params,files: {"audio": chunkFile},mimeTye: mimeType ?? "",token: token ?? "");
+    customPrint("Records API  internal response $response");
+    return response;
   }
 }

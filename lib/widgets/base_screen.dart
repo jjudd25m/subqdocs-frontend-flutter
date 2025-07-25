@@ -18,6 +18,8 @@ import '../app/core/common/logger.dart';
 import '../app/models/audio_wave.dart';
 import '../app/modules/custom_drawer/views/custom_drawer_view.dart';
 import '../app/modules/personal_setting/controllers/personal_setting_controller.dart';
+import '../app/modules/visit_main/controllers/visit_main_controller.dart';
+import '../app/modules/visit_main/model/patient_transcript_upload_model.dart';
 import '../app/routes/app_pages.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -1112,7 +1114,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               globalController.changeStatus("In-Room");
                                               // If not recording, start the recording
                                               globalController.startAudioWidget();
-                                              globalController.recorderService.audioRecorder = AudioRecorder();
+                                              // globalController.recorderService.audioRecorder = AudioRecorder();
                                               globalController.getConnectedInputDevices();
                                               await globalController.recorderService.startRecording(context);
                                             } else if (globalController.recorderService.recordingStatus.value == 1) {
@@ -1167,11 +1169,25 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         // SizedBox(width: 20),
                                         GestureDetector(
                                           onTap: () async {
-                                            File? audioFile = await globalController.recorderService.stopRecording();
+                                            final visitId = await globalController.recorderService.stopRecording();
                                             globalController.stopLiveActivityAudio();
-                                            customPrint("audio file url is :- ${audioFile?.absolute}");
-                                            if (audioFile != null) {
-                                              globalController.submitAudio(audioFile);
+                                            if (Get.currentRoute == Routes.PATIENT_INFO) {
+                                              Get.until((route) => Get.currentRoute == Routes.HOME);
+
+                                              // Get.until(Routes.HOME, (route) => false);
+                                              globalController.breadcrumbHistory.clear();
+                                              globalController.addRoute(Routes.HOME);
+                                              // addRoute(Routes.PATIENT_INFO);
+                                              globalController.wipeData();
+                                              await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": visitId, "trascriptUploadData": PatientTranscriptUploadModel(), "unique_tag": DateTime.now().toString()});
+                                            } else {
+                                              globalController.wipeData();
+                                              await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": visitId, "trascriptUploadData": PatientTranscriptUploadModel(), "unique_tag": DateTime.now().toString()});
+                                            }
+                                            //
+                                            if (Get.currentRoute == Routes.VISIT_MAIN) {
+                                              // Get.find<VisitMainController>().getPatientDetails();
+                                              Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
                                             }
                                           },
                                           child: Column(children: [SvgPicture.asset(ImagePath.stop_recording, height: 58, width: 58), const SizedBox(height: 10), Text(textAlign: TextAlign.center, "Stop", style: AppFonts.regular(12, AppColors.textGrey))]),
@@ -1488,7 +1504,7 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                               }
                                               globalController.changeStatus("In-Room");
                                               globalController.startAudioWidget();
-                                              globalController.recorderService.audioRecorder = AudioRecorder();
+                                              // globalController.recorderService.audioRecorder = AudioRecorder();
                                               globalController.getConnectedInputDevices();
                                               await globalController.recorderService.startRecording(context);
                                             } else if (globalController.recorderService.recordingStatus.value == 1) {
@@ -1533,11 +1549,25 @@ class _BaseScreenState extends State<BaseScreen> with WidgetsBindingObserver {
                                         const SizedBox(width: 10),
                                         GestureDetector(
                                           onTap: () async {
-                                            File? audioFile = await globalController.recorderService.stopRecording();
-                                            customPrint("audio file url is :- ${audioFile?.absolute}");
+                                            final visitId = await globalController.recorderService.stopRecording();
                                             globalController.stopLiveActivityAudio();
-                                            if (audioFile != null) {
-                                              globalController.submitAudio(audioFile!);
+                                            if (Get.currentRoute == Routes.PATIENT_INFO) {
+                                              Get.until((route) => Get.currentRoute == Routes.HOME);
+
+                                              // Get.until(Routes.HOME, (route) => false);
+                                              globalController.breadcrumbHistory.clear();
+                                              globalController.addRoute(Routes.HOME);
+                                              // addRoute(Routes.PATIENT_INFO);
+                                              globalController.wipeData();
+                                              await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": visitId, "trascriptUploadData": PatientTranscriptUploadModel(), "unique_tag": DateTime.now().toString()});
+                                            } else {
+                                              globalController.wipeData();
+                                              await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": visitId, "trascriptUploadData": PatientTranscriptUploadModel(), "unique_tag": DateTime.now().toString()});
+                                            }
+                                            //
+                                            if (Get.currentRoute == Routes.VISIT_MAIN) {
+                                              // Get.find<VisitMainController>().getPatientDetails();
+                                              Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
                                             }
                                           },
                                           child: SvgPicture.asset(ImagePath.stop_recording, height: 44, width: 44),

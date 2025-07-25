@@ -8,8 +8,6 @@ import 'dart:io';
 // import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,6 +20,7 @@ import '../../../core/common/logger.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../models/ChangeModel.dart';
 import '../../visit_main/model/doctor_view_model.dart';
+import '../model/chatbot_history_model.dart';
 import '../model/check_doctor_pin_expired_model.dart';
 import '../model/get_CPT_code_model.dart';
 import '../model/get_modifier_code_model.dart';
@@ -321,6 +320,17 @@ class PatientInfoRepository {
     }
   }
 
+  Future<ChatbotHistoryModel> getChatbotHistory(String visitId) async {
+    try {
+      var response = await ApiProvider.instance.callGet("chat-bot/$visitId", queryParameters: {});
+      customPrint("try getChatbotHistory API  internal response $response");
+      return ChatbotHistoryModel.fromJson(response);
+    } catch (e) {
+      customPrint("catch getChatbotHistory API  internal response $e");
+      return ChatbotHistoryModel(message: "$e", responseType: "error", responseData: null);
+    }
+  }
+
   // Helper function to save PDF to app folder
   Future<String> savePdfToAppFolder(Uint8List pdfBytes, String fileName) async {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -348,93 +358,93 @@ class PatientInfoRepository {
   }
 }
 
-class PDFScreen extends StatefulWidget {
-  final String? path;
-
-  const PDFScreen({super.key, this.path});
-
-  _PDFScreenState createState() => _PDFScreenState();
-}
-
-class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
-  final Completer<PDFViewController> _controller = Completer<PDFViewController>();
-  int? pages = 0;
-  int? currentPage = 0;
-  bool isReady = false;
-  String errorMessage = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text("")),
-      body: Stack(
-        children: <Widget>[
-          PDFView(
-            filePath: widget.path,
-            enableSwipe: true,
-            swipeHorizontal: true,
-            autoSpacing: false,
-            pageFling: true,
-            pageSnap: true,
-            defaultPage: currentPage!,
-            fitPolicy: FitPolicy.BOTH,
-            preventLinkNavigation: false,
-            // if set to true the link is handled in flutter
-            backgroundColor: const Color(0xFFFEF7FF),
-            onRender: (_pages) {
-              setState(() {
-                pages = _pages;
-                isReady = true;
-              });
-            },
-            onError: (error) {
-              setState(() {
-                errorMessage = error.toString();
-              });
-              customPrint(error.toString());
-            },
-            onPageError: (page, error) {
-              setState(() {
-                errorMessage = '$page: ${error.toString()}';
-              });
-              customPrint('$page: ${error.toString()}');
-            },
-            onViewCreated: (PDFViewController pdfViewController) {
-              _controller.complete(pdfViewController);
-            },
-            onLinkHandler: (String? uri) {
-              customPrint('goto uri: $uri');
-            },
-            onPageChanged: (int? page, int? total) {
-              customPrint('page change: ${page ?? 0 + 1}/$total');
-              setState(() {
-                currentPage = page;
-              });
-            },
-          ),
-          errorMessage.isEmpty
-              ? !isReady
-                  ? const Center(child: CircularProgressIndicator())
-                  : Container()
-              : Center(child: Text(errorMessage)),
-        ],
-      ),
-      // floatingActionButton: FutureBuilder<PDFViewController>(
-      //   future: _controller.future,
-      //   builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-      //     if (snapshot.hasData) {
-      //       return FloatingActionButton.extended(
-      //         label: Text("Go to ${pages! ~/ 2}"),
-      //         onPressed: () async {
-      //           await snapshot.data!.setPage(pages! ~/ 2);
-      //         },
-      //       );
-      //     }
-      //
-      //     return Container();
-      //   },
-      // ),
-    );
-  }
-}
+// class PDFScreen extends StatefulWidget {
+//   final String? path;
+//
+//   const PDFScreen({super.key, this.path});
+//
+//   _PDFScreenState createState() => _PDFScreenState();
+// }
+//
+// class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
+//   final Completer<PDFViewController> _controller = Completer<PDFViewController>();
+//   int? pages = 0;
+//   int? currentPage = 0;
+//   bool isReady = false;
+//   String errorMessage = '';
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       appBar: AppBar(title: const Text("")),
+//       body: Stack(
+//         children: <Widget>[
+//           PDFView(
+//             filePath: widget.path,
+//             enableSwipe: true,
+//             swipeHorizontal: true,
+//             autoSpacing: false,
+//             pageFling: true,
+//             pageSnap: true,
+//             defaultPage: currentPage!,
+//             fitPolicy: FitPolicy.BOTH,
+//             preventLinkNavigation: false,
+//             // if set to true the link is handled in flutter
+//             backgroundColor: const Color(0xFFFEF7FF),
+//             onRender: (_pages) {
+//               setState(() {
+//                 pages = _pages;
+//                 isReady = true;
+//               });
+//             },
+//             onError: (error) {
+//               setState(() {
+//                 errorMessage = error.toString();
+//               });
+//               customPrint(error.toString());
+//             },
+//             onPageError: (page, error) {
+//               setState(() {
+//                 errorMessage = '$page: ${error.toString()}';
+//               });
+//               customPrint('$page: ${error.toString()}');
+//             },
+//             onViewCreated: (PDFViewController pdfViewController) {
+//               _controller.complete(pdfViewController);
+//             },
+//             onLinkHandler: (String? uri) {
+//               customPrint('goto uri: $uri');
+//             },
+//             onPageChanged: (int? page, int? total) {
+//               customPrint('page change: ${page ?? 0 + 1}/$total');
+//               setState(() {
+//                 currentPage = page;
+//               });
+//             },
+//           ),
+//           errorMessage.isEmpty
+//               ? !isReady
+//                   ? const Center(child: CircularProgressIndicator())
+//                   : Container()
+//               : Center(child: Text(errorMessage)),
+//         ],
+//       ),
+//       // floatingActionButton: FutureBuilder<PDFViewController>(
+//       //   future: _controller.future,
+//       //   builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
+//       //     if (snapshot.hasData) {
+//       //       return FloatingActionButton.extended(
+//       //         label: Text("Go to ${pages! ~/ 2}"),
+//       //         onPressed: () async {
+//       //           await snapshot.data!.setPage(pages! ~/ 2);
+//       //         },
+//       //       );
+//       //     }
+//       //
+//       //     return Container();
+//       //   },
+//       // ),
+//     );
+//   }
+// }

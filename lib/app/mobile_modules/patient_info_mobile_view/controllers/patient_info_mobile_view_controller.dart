@@ -130,7 +130,7 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
     customPrint("its on claaed");
     var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
-    if (patientTranscriptUploadModel.responseData != null) {
+    // if (patientTranscriptUploadModel.responseData != null) {
       customPrint("socket status:- ${socketService.socket.connected}");
       if (socketService.socket.connected) {
         customPrint("socket is connected");
@@ -174,7 +174,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           String status = res["status"];
           String message = res["message"];
 
-          if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (_visitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (_visitId == int.parse(visitId)) {
             customPrint("DoctorsViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("DoctorsViewStatus pending");
@@ -206,7 +207,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("FullNoteStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("FullNoteStatus pending");
@@ -238,7 +240,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           String status = res["status"];
           String message = res["message"];
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("VisitDataStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("VisitDataStatus pending");
@@ -273,7 +276,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
 
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("PatientViewStatus inside condition");
             if (status.toLowerCase() == "pending") {
               isPatientViewLoading.value = true;
@@ -309,7 +313,8 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
           // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
           getPatientDetails();
-          if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          // if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+          if (localVisitId == int.parse(visitId)) {
             customPrint("transcriptStatus inside condition");
             if (status.toLowerCase() == "pending") {
               customPrint("transcriptStatus pending");
@@ -333,195 +338,197 @@ class PatientInfoMobileViewController extends GetxController with GetTickerProvi
       } else {
         customPrint("socket is not connected");
       }
-    } else {
-      if (visitId.isNotEmpty) {
-        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, int.parse(visitId)]);
-
-        setUpFullNoteSocket();
-
-        socketService.socket.on("openaiStatusUpdate", (data) {
-          var res = data as Map<String, dynamic>;
-          customPrint('Open Ai server status $res');
-
-          CustomToastification().showChatGPTDownBanner();
-        });
-
-        socketService.socket.on("AllTabStatus", (data) {
-          var res = data as Map<String, dynamic>;
-          customPrint("---------------------------------------------");
-          customPrint("AllTabStatus status is :- $res");
-
-          String status = res["status"];
-          String message = res["message"];
-
-          if (status.toLowerCase() == "failure") {
-            customPrint("PatientViewStatus failure");
-
-            showPromptDialog(message);
-            // showPrompError(Get.context!, message);
-          }
-        });
-
-        socketService.socket.on("DoctorsViewStatus", (data) {
-          var res = data as Map<String, dynamic>;
-          customPrint("---------------------------------------------");
-          customPrint("DoctorsViewStatus status is :- $res");
-
-          int localVisitId = res["visit_id"];
-          String status = res["status"];
-          String message = res["message"];
-
-          if (localVisitId == int.parse(visitId)) {
-            customPrint("DoctorsViewStatus inside condition");
-            if (status.toLowerCase() == "pending") {
-              customPrint("DoctorsViewStatus pending");
-              isDoctorViewLoading.value = true;
-              isDoctorViewLoadText.value = message;
-            } else if (status.toLowerCase() == "inprogress") {
-              customPrint("DoctorsViewStatus inprogress");
-              isDoctorViewLoading.value = true;
-              isDoctorViewLoadText.value = message;
-            } else if (status.toLowerCase() == "success") {
-              customPrint("DoctorsViewStatus success");
-              isDoctorViewLoading.value = false;
-              isDoctorViewLoadText.value = message;
-
-              // getDoctorNote();
-            } else if (status.toLowerCase() == "failure") {
-              isDoctorViewLoading.value = false;
-              isDoctorViewLoadText.value = "failure";
-            }
-          }
-        });
-
-        socketService.socket.on("FullNoteStatus", (data) {
-          var res = data as Map<String, dynamic>;
-          customPrint("---------------------------------------------");
-          customPrint("FullNoteStatus status is :- $res");
-
-          int localVisitId = res["visit_id"];
-          String status = res["status"];
-          String message = res["message"];
-
-          if (localVisitId == int.parse(visitId)) {
-            customPrint("FullNoteStatus inside condition");
-            if (status.toLowerCase() == "pending") {
-              customPrint("FullNoteStatus pending");
-              isFullNoteLoading.value = true;
-              isFullNoteLoadText.value = message;
-            } else if (status.toLowerCase() == "inprogress") {
-              customPrint("FullNoteStatus inprogress");
-              isFullNoteLoading.value = true;
-              isFullNoteLoadText.value = message;
-            } else if (status.toLowerCase() == "success") {
-              customPrint("FullNoteStatus success");
-              isFullNoteLoading.value = false;
-              isFullNoteLoadText.value = message;
-
-              getPatientFullNoteData();
-            } else if (status.toLowerCase() == "failure") {
-              isFullNoteLoading.value = false;
-              isFullNoteLoadText.value = "failure";
-            }
-          }
-        });
-
-        socketService.socket.on("VisitDataStatus", (data) {
-          var res = data as Map<String, dynamic>;
-          customPrint("---------------------------------------------");
-          customPrint("visit data status is :- $res");
-
-          int localVisitId = res["visit_id"];
-          String status = res["status"];
-          String message = res["message"];
-
-          if (localVisitId == int.parse(visitId)) {
-            customPrint("VisitDataStatus inside condition");
-            if (status.toLowerCase() == "pending") {
-              customPrint("VisitDataStatus pending");
-              isVisitDataLoading.value = true;
-              isVisitDataLoadText.value = message;
-            } else if (status.toLowerCase() == "inprogress") {
-              customPrint("VisitDataStatus inprogress");
-              isVisitDataLoading.value = true;
-              isVisitDataLoadText.value = message;
-            } else if (status.toLowerCase() == "success") {
-              customPrint("VisitDataStatus success");
-              isVisitDataLoading.value = false;
-              isVisitDataLoadText.value = message;
-
-              getPatientDoctorVisitData();
-            } else if (status.toLowerCase() == "failure") {
-              isVisitDataLoading.value = false;
-              isVisitDataLoadText.value = "failure";
-            }
-          }
-        });
-
-        socketService.socket.on("PatientViewStatus", (data) {
-          var res = data as Map<String, dynamic>;
-          customPrint("---------------------------------------------");
-          customPrint("PatientViewStatus data:- $res");
-
-          int localVisitId = res["visit_id"];
-          String status = res["status"];
-          String message = res["message"];
-
-          if (localVisitId == int.parse(visitId)) {
-            customPrint("PatientViewStatus inside condition");
-            if (status.toLowerCase() == "pending") {
-              isPatientViewLoading.value = true;
-              isPatientViewLoadText.value = message;
-              customPrint("PatientViewStatus pending");
-            } else if (status.toLowerCase() == "inprogress") {
-              customPrint("PatientViewStatus inprogress");
-              isPatientViewLoading.value = true;
-              isPatientViewLoadText.value = message;
-            } else if (status.toLowerCase() == "success") {
-              customPrint("PatientViewStatus success");
-              isPatientViewLoading.value = false;
-              isPatientViewLoadText.value = message;
-              getPatientView();
-            } else if (status.toLowerCase() == "failure") {
-              customPrint("PatientViewStatus failure");
-              isPatientViewLoading.value = true;
-              isPatientViewLoadText.value = "failure";
-            }
-          }
-        });
-
-        socketService.socket.on("transcriptStatus", (data) {
-          customPrint("---------------------------------------------");
-          var res = data as Map<String, dynamic>;
-          customPrint("transcriptStatus data:- $res");
-
-          int localVisitId = res["visit_id"];
-          String status = res["status"];
-          String message = res["message"];
-
-          if (localVisitId == int.parse(visitId)) {
-            customPrint("transcriptStatus inside condition");
-            if (status.toLowerCase() == "pending") {
-              customPrint("transcriptStatus pending");
-              isFullTranscriptLoading.value = true;
-              isFullTranscriptLoadText.value = message;
-
-              isPatientViewLoading.value = true;
-              isPatientViewLoadText.value = "Patient View under process ";
-            } else if (status.toLowerCase() == "inprogress") {
-              customPrint("transcriptStatus inprogress");
-              isFullTranscriptLoading.value = true;
-              isFullTranscriptLoadText.value = message;
-            } else if (status.toLowerCase() == "success") {
-              customPrint("transcriptStatus success");
-              isFullTranscriptLoading.value = false;
-              isFullTranscriptLoadText.value = message;
-              // getTranscript();
-            }
-          }
-        });
-      }
-    }
+    // }
+    // else {
+    //   if (visitId.isNotEmpty) {
+    //     customPrint("socket status:- ${socketService.socket.connected}");
+    //     socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, int.parse(visitId)]);
+    //
+    //     setUpFullNoteSocket();
+    //
+    //     socketService.socket.on("openaiStatusUpdate", (data) {
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint('Open Ai server status $res');
+    //
+    //       CustomToastification().showChatGPTDownBanner();
+    //     });
+    //
+    //     socketService.socket.on("AllTabStatus", (data) {
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint("---------------------------------------------");
+    //       customPrint("AllTabStatus status is :- $res");
+    //
+    //       String status = res["status"];
+    //       String message = res["message"];
+    //
+    //       if (status.toLowerCase() == "failure") {
+    //         customPrint("PatientViewStatus failure");
+    //
+    //         showPromptDialog(message);
+    //         // showPrompError(Get.context!, message);
+    //       }
+    //     });
+    //
+    //     socketService.socket.on("DoctorsViewStatus", (data) {
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint("---------------------------------------------");
+    //       customPrint("DoctorsViewStatus status is :- $res");
+    //
+    //       int localVisitId = res["visit_id"];
+    //       String status = res["status"];
+    //       String message = res["message"];
+    //
+    //       if (localVisitId == int.parse(visitId)) {
+    //         customPrint("DoctorsViewStatus inside condition");
+    //         if (status.toLowerCase() == "pending") {
+    //           customPrint("DoctorsViewStatus pending");
+    //           isDoctorViewLoading.value = true;
+    //           isDoctorViewLoadText.value = message;
+    //         } else if (status.toLowerCase() == "inprogress") {
+    //           customPrint("DoctorsViewStatus inprogress");
+    //           isDoctorViewLoading.value = true;
+    //           isDoctorViewLoadText.value = message;
+    //         } else if (status.toLowerCase() == "success") {
+    //           customPrint("DoctorsViewStatus success");
+    //           isDoctorViewLoading.value = false;
+    //           isDoctorViewLoadText.value = message;
+    //
+    //           // getDoctorNote();
+    //         } else if (status.toLowerCase() == "failure") {
+    //           isDoctorViewLoading.value = false;
+    //           isDoctorViewLoadText.value = "failure";
+    //         }
+    //       }
+    //     });
+    //
+    //     socketService.socket.on("FullNoteStatus", (data) {
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint("---------------------------------------------");
+    //       customPrint("FullNoteStatus status is :- $res");
+    //
+    //       int localVisitId = res["visit_id"];
+    //       String status = res["status"];
+    //       String message = res["message"];
+    //
+    //       if (localVisitId == int.parse(visitId)) {
+    //         customPrint("FullNoteStatus inside condition");
+    //         if (status.toLowerCase() == "pending") {
+    //           customPrint("FullNoteStatus pending");
+    //           isFullNoteLoading.value = true;
+    //           isFullNoteLoadText.value = message;
+    //         } else if (status.toLowerCase() == "inprogress") {
+    //           customPrint("FullNoteStatus inprogress");
+    //           isFullNoteLoading.value = true;
+    //           isFullNoteLoadText.value = message;
+    //         } else if (status.toLowerCase() == "success") {
+    //           customPrint("FullNoteStatus success");
+    //           isFullNoteLoading.value = false;
+    //           isFullNoteLoadText.value = message;
+    //
+    //           getPatientFullNoteData();
+    //         } else if (status.toLowerCase() == "failure") {
+    //           isFullNoteLoading.value = false;
+    //           isFullNoteLoadText.value = "failure";
+    //         }
+    //       }
+    //     });
+    //
+    //     socketService.socket.on("VisitDataStatus", (data) {
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint("---------------------------------------------");
+    //       customPrint("visit data status is :- $res");
+    //
+    //       int localVisitId = res["visit_id"];
+    //       String status = res["status"];
+    //       String message = res["message"];
+    //
+    //       if (localVisitId == int.parse(visitId)) {
+    //         customPrint("VisitDataStatus inside condition");
+    //         if (status.toLowerCase() == "pending") {
+    //           customPrint("VisitDataStatus pending");
+    //           isVisitDataLoading.value = true;
+    //           isVisitDataLoadText.value = message;
+    //         } else if (status.toLowerCase() == "inprogress") {
+    //           customPrint("VisitDataStatus inprogress");
+    //           isVisitDataLoading.value = true;
+    //           isVisitDataLoadText.value = message;
+    //         } else if (status.toLowerCase() == "success") {
+    //           customPrint("VisitDataStatus success");
+    //           isVisitDataLoading.value = false;
+    //           isVisitDataLoadText.value = message;
+    //
+    //           getPatientDoctorVisitData();
+    //         } else if (status.toLowerCase() == "failure") {
+    //           isVisitDataLoading.value = false;
+    //           isVisitDataLoadText.value = "failure";
+    //         }
+    //       }
+    //     });
+    //
+    //     socketService.socket.on("PatientViewStatus", (data) {
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint("---------------------------------------------");
+    //       customPrint("PatientViewStatus data:- $res");
+    //
+    //       int localVisitId = res["visit_id"];
+    //       String status = res["status"];
+    //       String message = res["message"];
+    //
+    //       if (localVisitId == int.parse(visitId)) {
+    //         customPrint("PatientViewStatus inside condition");
+    //         if (status.toLowerCase() == "pending") {
+    //           isPatientViewLoading.value = true;
+    //           isPatientViewLoadText.value = message;
+    //           customPrint("PatientViewStatus pending");
+    //         } else if (status.toLowerCase() == "inprogress") {
+    //           customPrint("PatientViewStatus inprogress");
+    //           isPatientViewLoading.value = true;
+    //           isPatientViewLoadText.value = message;
+    //         } else if (status.toLowerCase() == "success") {
+    //           customPrint("PatientViewStatus success");
+    //           isPatientViewLoading.value = false;
+    //           isPatientViewLoadText.value = message;
+    //           getPatientView();
+    //         } else if (status.toLowerCase() == "failure") {
+    //           customPrint("PatientViewStatus failure");
+    //           isPatientViewLoading.value = true;
+    //           isPatientViewLoadText.value = "failure";
+    //         }
+    //       }
+    //     });
+    //
+    //     socketService.socket.on("transcriptStatus", (data) {
+    //       customPrint("---------------------------------------------");
+    //       var res = data as Map<String, dynamic>;
+    //       customPrint("transcriptStatus data:- $res");
+    //
+    //       int localVisitId = res["visit_id"];
+    //       String status = res["status"];
+    //       String message = res["message"];
+    //
+    //       if (localVisitId == int.parse(visitId)) {
+    //         customPrint("transcriptStatus inside condition");
+    //         if (status.toLowerCase() == "pending") {
+    //           customPrint("transcriptStatus pending");
+    //           isFullTranscriptLoading.value = true;
+    //           isFullTranscriptLoadText.value = message;
+    //
+    //           isPatientViewLoading.value = true;
+    //           isPatientViewLoadText.value = "Patient View under process ";
+    //         } else if (status.toLowerCase() == "inprogress") {
+    //           customPrint("transcriptStatus inprogress");
+    //           isFullTranscriptLoading.value = true;
+    //           isFullTranscriptLoadText.value = message;
+    //         } else if (status.toLowerCase() == "success") {
+    //           customPrint("transcriptStatus success");
+    //           isFullTranscriptLoading.value = false;
+    //           isFullTranscriptLoadText.value = message;
+    //           // getTranscript();
+    //         }
+    //       }
+    //     });
+    //   }
+    // }
   }
 
   Future<void> showPromptDialog(String message) async {

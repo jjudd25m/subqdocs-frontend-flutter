@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_linux
+  flutter_audio_toolkit
   flutter_timezone
   record_linux
   sentry_flutter

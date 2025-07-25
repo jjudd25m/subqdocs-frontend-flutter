@@ -11,7 +11,6 @@ import 'package:html/parser.dart' as html;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:subqdocs/app/models/open_ai_status.dart';
 import 'package:subqdocs/app/modules/patient_info/model/icd10_code_list_model.dart';
@@ -37,6 +36,7 @@ import '../../visit_main/model/doctor_view_model.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/model/visit_main_model.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
+import '../model/chatbot_history_model.dart';
 import '../model/diagnosis_model.dart';
 import '../model/get_CPT_code_model.dart';
 import '../model/get_modifier_code_model.dart';
@@ -75,6 +75,10 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   SocketService socketService = SocketService();
 
   SocketService reRunSocketService = SocketService();
+
+  // SocketService chatbotSocketService = SocketService();
+
+  final newchatsocketService = ChatBotSocketService();
 
   RxDouble totalUnitCost = RxDouble(0.0);
 
@@ -144,7 +148,11 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   Rxn<LoginModel> loginData = Rxn();
   Rx<OpenAiStatus> openAiStatus = OpenAiStatus().obs;
 
+  Rxn<ChatbotHistoryModel> chatbotHistoryModel = Rxn();
+
   final EditPatientDetailsRepository _editPatientDetailsRepository = EditPatientDetailsRepository();
+
+  Rxn<LoginModel> loginModel = Rxn();
 
   Future<void> getPatientDetails() async {
     Map<String, dynamic> param = {};
@@ -204,6 +212,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     globalController.getDoctorsFilter();
     globalController.getMedicalAssistance();
+
     openAiStatus.value = await globalController.getOpenAiStatus();
 
     customPrint("argument is :- ${Get.arguments}");
@@ -224,6 +233,11 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       customPrint("visit id :- $visitId");
       getPatientDetails();
 
+      print("chat bot is :- ${socketService.chatBotSocket.connected}");
+
+      newchatsocketService.initializeSocket();
+
+      getChatbotHistory(visitId);
       var status = await InternetConnection().internetStatus;
 
       getAllPatientInfo();
@@ -279,7 +293,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     super.onReady();
     // getAllPatientInfo();
     customPrint("its on claaed");
-    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    loginData.value = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
 
     if (patientTranscriptUploadModel.responseData != null) {
       customPrint("if condition on onReady");
@@ -290,7 +304,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         isFullTranscriptLoading.value = true;
         isFullTranscriptLoadText.value = "Waiting for response";
 
-        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
+        socketService.socket.emit("joinRoom", [loginData.value?.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
 
         setUpFullNoteSocket();
       } else {
@@ -303,7 +317,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
       if (visitId.isNotEmpty) {
         print("ready else visit id:- $visitId");
-        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, int.parse(visitId)]);
+        socketService.socket.emit("joinRoom", [loginData.value?.responseData?.user?.id, int.parse(visitId)]);
 
         setUpFullNoteSocket();
       }
@@ -706,7 +720,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   }
 
   Future<void> reRunSetUpFullNoteSocket() async {
-    reRunSocketService.noChangeSocket.on("NoChangeSocket", (data) {
+    reRunSocketService.socket.on("NoChangeSocket", (data) {
       print("NoChangeSocket data:- $data");
     });
 
@@ -1165,7 +1179,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       if (socketService.socket.connected) {
         customPrint("socket is connected");
 
-        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, patientTranscriptUploadModel.responseData?.visitId]);
+        socketService.socket.emit("joinRoom", [loginData.responseData?.user?.id, int.parse(visitId)]);
 
         setUpFullNoteSocket();
       } else {
@@ -1459,6 +1473,26 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         possibleDignosisProcedureTableModel.refresh();
       }
     }
+  }
+
+  Future<void> getChatbotHistory(String visitid) async {
+    print("inside getChatbotHistory");
+    print("visit id :- ${visitId}");
+    chatbotHistoryModel.value = await _patientInfoRepository.getChatbotHistory(visitid);
+
+    if (chatbotHistoryModel.value?.responseData != null) {
+      // sort by timestamp in descending order
+      chatbotHistoryModel.value?.responseData?.chatHistory?.sort((a, b) => b.actualTimestamp!.compareTo(a.actualTimestamp!));
+    }
+
+    customPrint("getChatbotHistory is :- ${chatbotHistoryModel.value?.toJson()}");
+
+    print("-------------------------------------------------");
+    for (ChatHistory history in chatbotHistoryModel.value?.responseData?.chatHistory ?? []) {
+      print("string time:- ${history.timestamp}");
+      print("time stamp is:- ${history.actualTimestamp}");
+    }
+    print("-------------------------------------------------");
   }
 
   void offLine() {
@@ -2246,7 +2280,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     if (globalController.visitId.isNotEmpty) {
       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
     } else {
-      if (await globalController.recorderService.audioRecorder.hasPermission()) {
+      final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
+      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+      if (btMic && btGranted) {
         globalController.isStartTranscript.value = true;
 
         // controller.globalController.patientId.value = controller.patientId.value;
@@ -2269,7 +2305,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         // globalController.changeStatus("In-Room");
         // If not recording, start the recording
         globalController.startAudioWidget();
-        globalController.recorderService.audioRecorder = AudioRecorder();
+        // globalController.recorderService.audioRecorder = AudioRecorder();
         globalController.getConnectedInputDevices();
 
         globalController.regenerateRecordingCallBack = () {
@@ -2294,7 +2330,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
         update();
         // updateData();
-      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
+      } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
         // Handle permission denial here
 
         showDialog(barrierDismissible: false, context: Get.context!, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));

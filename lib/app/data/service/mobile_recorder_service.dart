@@ -1,406 +1,218 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_audio_toolkit/flutter_audio_toolkit.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
+import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
+import 'package:subqdocs/app/core/common/global_mobile_controller.dart';
+import 'package:subqdocs/app/models/Records.dart';
+import 'package:toastification/toastification.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+// import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 
-import '../../../utils/app_colors.dart';
+import '../../../utils/Loader.dart';
+import '../../../utils/app_string.dart';
 import '../../../widgets/customPermission.dart';
-import '../../core/common/global_controller.dart';
-import '../../core/common/global_mobile_controller.dart';
+import '../../../widgets/custom_toastification.dart';
+import '../../core/common/app_preferences.dart';
+import '../../core/common/logger.dart';
 import '../../mobile_modules/add_recording_mobile_view/views/audio_wave.dart';
+import '../../models/audio_file.dart';
+import '../../modules/login/model/login_model.dart';
+import '../../modules/visit_main/repository/visit_main_repository.dart';
 import '../../routes/app_pages.dart';
-
-// class MobileRecorderService {
-//   final AudioRecorder audioRecorder = AudioRecorder();
-//   static const MethodChannel _channel = MethodChannel('audio_recorder_channel');
-//
-//   File? recordFile;
-//   RxString updatedRecordingTime = RxString("00:00");
-//   late StreamSubscription<Amplitude> waves;
-//
-//   Rx<int> recordingTime = 0.obs;
-//   Rx<int> recordingStatus = 0.obs;
-//
-//   RxString selectedMicrophone = 'Default'.obs;
-//   RxList<String> availableMicrophones = <String>['Default'].obs;
-//
-//   Timer? _timer;
-//
-//   /// Initialize the recorder service
-//   Future<void> init() async {
-//     await _refreshAvailableMicrophones();
-//   }
-//
-//   /// Refresh list of available microphones
-//   Future<void> _refreshAvailableMicrophones() async {
-//     try {
-//       if (Platform.isAndroid || Platform.isIOS) {
-//         final mics = await _getPlatformMicrophones();
-//         availableMicrophones.value = mics;
-//
-//         if (!availableMicrophones.contains(selectedMicrophone.value)) {
-//           selectedMicrophone.value = availableMicrophones.firstOrNull ?? 'Default';
-//         }
-//       }
-//     } catch (e) {
-//       debugPrint("Error getting microphones: $e");
-//       availableMicrophones.value = ['Default'];
-//       selectedMicrophone.value = 'Default';
-//     }
-//   }
-//
-//   /// Get available microphones using platform channels
-//   Future<List<String>> _getPlatformMicrophones() async {
-//     try {
-//       if (Platform.isAndroid) {
-//         final List<dynamic> mics = await _channel.invokeMethod('getAvailableMicrophones');
-//         return mics.cast<String>();
-//       } else if (Platform.isIOS) {
-//         return ['Default', 'Microphone']; // iOS usually has fewer options
-//       }
-//       return ['Default'];
-//     } catch (e) {
-//       debugPrint("Error getting microphones: $e");
-//       return ['Default'];
-//     }
-//   }
-//
-//   /// Change microphone input
-//   Future<void> changeMicrophone(String microphone) async {
-//     try {
-//       if (recordingStatus.value == 1) {
-//         await pauseRecording();
-//         await _setPlatformMicrophone(microphone);
-//         await resumeRecording();
-//       } else {
-//         await _setPlatformMicrophone(microphone);
-//       }
-//       selectedMicrophone.value = microphone;
-//     } catch (e) {
-//       debugPrint("Error changing microphone: $e");
-//     }
-//   }
-//
-//   /// Set microphone using platform channels
-//   Future<void> _setPlatformMicrophone(String microphone) async {
-//     try {
-//       if (Platform.isAndroid) {
-//         await _channel.invokeMethod('setMicrophone', {'source': microphone});
-//       }
-//       // iOS typically handles this automatically
-//     } catch (e) {
-//       debugPrint("Error setting microphone: $e");
-//     }
-//   }
-//
-//   /// iOS microphone selection
-//   Future<void> _setIOSMicrophone(String microphone) async {
-//     // iOS typically handles this automatically, but we can configure AVAudioSession
-//     // This would require platform channels in a real implementation
-//     debugPrint("iOS microphone selection: $microphone");
-//   }
-//
-//   /// Start Recording
-//   Future<bool> startRecording(BuildContext context) async {
-//     final GlobalMobileController globalController = Get.find();
-//     debugPrint("Starting recording with mic: ${selectedMicrophone.value}");
-//
-//     if (await audioRecorder.hasPermission()) {
-//       // Set the selected microphone before starting
-//       await _setPlatformMicrophone(selectedMicrophone.value);
-//
-//       Directory dir = await getApplicationCacheDirectory();
-//       String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
-//
-//       await audioRecorder.start(const RecordConfig(), path: "${dir.path}/$filename");
-//
-//       // Setup amplitude listener
-//       waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
-//         const minDb = -45.0;
-//         const maxDb = 0.0;
-//
-//         double normalized = ((amp.current - minDb) / (maxDb - minDb)).clamp(0.0, 1.0);
-//
-//         if (globalController.samples.length >= 30) {
-//           globalController.samples.removeAt(0);
-//         }
-//         globalController.samples.add(AudioWaveBar(heightFactor: normalized, color: AppColors.backgroundPurple));
-//         globalController.waveController.amplitude = normalized;
-//       });
-//
-//       recordingStatus.value = 1;
-//       _startTimer();
-//       return true;
-//     } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied)) {
-//       showDialog(
-//         barrierDismissible: false,
-//         context: context,
-//         builder:
-//             (context) => PermissionAlert(
-//               onCancel: () {
-//                 Get.until((route) => Get.currentRoute == Routes.HOME_VIEW_MOBILE);
-//               },
-//               permissionDescription: "To record audio, the app needs access to your microphone.",
-//               permissionTitle: "Microphone permission request",
-//               isMicPermission: true,
-//             ),
-//       );
-//     }
-//     return false;
-//   }
-//
-//   /// Stop Recording
-//   Future<File?> stopRecording() async {
-//     final GlobalMobileController globalController = Get.find();
-//
-//     globalController.waveController.amplitude = 0;
-//     globalController.samples.clear();
-//     String? path = await audioRecorder.stop();
-//
-//     _stopTimer();
-//
-//     if (path != null) {
-//       recordFile = File(path);
-//       debugPrint("Recording saved to: ${recordFile?.path}");
-//     }
-//
-//     recordingTime.value = 0;
-//     recordingStatus.value = 0;
-//
-//     return recordFile;
-//   }
-//
-//   /// Resume Recording
-//   Future<void> resumeRecording() async {
-//     waves.resume();
-//     debugPrint("Resuming recording");
-//     await audioRecorder.resume();
-//     recordingStatus.value = 1;
-//     _startTimer();
-//   }
-//
-//   /// Pause Recording
-//   Future<void> pauseRecording() async {
-//     waves.pause();
-//     debugPrint("Pausing recording");
-//     await audioRecorder.pause();
-//     recordingStatus.value = 2;
-//     _stopTimer();
-//   }
-//
-//   /// Delete Recording
-//   Future<bool> deleteRecording() async {
-//     final GlobalController globalController = Get.find();
-//
-//     globalController.waveController.amplitude = 0;
-//     if (recordFile != null) {
-//       try {
-//         if (recordFile?.existsSync() ?? false) {
-//           recordFile!.deleteSync();
-//         }
-//       } catch (e) {
-//         debugPrint("Error deleting file: ${e.toString()}");
-//       }
-//       recordFile = null;
-//       return true;
-//     }
-//     return false;
-//   }
-//
-//   /// Private method to start the timer
-//   void _startTimer() {
-//     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-//       recordingTime.value++;
-//       updatedRecordingTime.value = formattedRecordingTime;
-//     });
-//   }
-//
-//   /// Private method to stop the timer
-//   void _stopTimer() {
-//     _timer?.cancel();
-//     _timer = null;
-//   }
-//
-//   /// Get formatted time as minutes:seconds
-//   String get formattedRecordingTime {
-//     int minutes = (recordingTime.value / 60).floor();
-//     int seconds = recordingTime.value % 60;
-//     return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-//   }
-//
-//   /// Dispose resources
-//   void dispose() {
-//     waves.cancel();
-//     _stopTimer();
-//     audioRecorder.dispose();
-//   }
-// }
+import '../provider/api_provider.dart';
+import 'database_helper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class MobileRecorderService {
-  AudioRecorder audioRecorder = AudioRecorder();
-
-  // late AudioFileWaveformsC _waveformController;
-
-  File? recordFile;
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  final FlutterAudioToolkit _audioToolkit = FlutterAudioToolkit();
+  final int _sampleRate = 16000;
+  final int _numChannels = 1;
+  int chunkIndex = 0;
+  final List<int> _pcmBuffer = [];
+  final List<File> chunkFiles =[];
+  Timer? _chunkTimer, _timer;
+  RxList<AudioWaveBar> samples = <AudioWaveBar>[].obs;
+  late StreamController<Uint8List> _pcmStreamController;
+  StreamSubscription<Uint8List>? _pcmSubscription;
   RxString updatedRecordingTime = RxString("00:00");
-  late StreamSubscription<Amplitude> waves;
-
-  double normalized = 0.0;
-
-  // Track recording time in seconds (using GetX Rx for reactivity)
   Rx<int> recordingTime = 0.obs;
-  Rx<int> recordingStatus = 0.obs; // 0: Stopped, 1: Recording, 2: Paused
-  // final waveController = IOS7SiriWaveformController(
-  //   amplitude: 1,
-  //   color: AppColors.backgroundPurple,
-  //   frequency: 0,
-  //   speed: 0.50,
-  // );
+  Rx<int> recordingStatus = 0.obs;
+  int audioId = 0;
+  final VisitMainRepository visitMainRepository = VisitMainRepository();
+  String sessionId = "";
+  bool isLastChunk = false;
 
-  Timer? _timer;
-
-  /// Start Recording
-  Future<bool> startRecording(BuildContext context) async {
+  /// Start recording with real-time chunking and waveform
+  Future<bool> startRecording(BuildContext context, String visitId) async {
     WakelockPlus.enable();
-    final btMic = await audioRecorder.hasPermission();
-
     final GlobalMobileController globalController = Get.find();
-    log("log: start recording");
+    globalController.samples.clear();
+    final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
     final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
     if (btMic && btGranted) {
-      Directory dir = await getApplicationCacheDirectory();
-      String filename = "${DateTime.now().millisecondsSinceEpoch.toString()}.m4a";
-
-      await audioRecorder.start(const RecordConfig(), path: "${dir.path}/$filename");
+      _pcmStreamController = StreamController<Uint8List>();
+      await _recorder.openRecorder();
+      await _recorder.startRecorder(codec: Codec.pcm16, sampleRate: _sampleRate, numChannels: _numChannels, toStream: _pcmStreamController.sink);
       globalController.startMicListening();
-      // waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
-      //   // globalController.waveController.amplitude = (amp.current / 100).clamp(0.01, 1.0);
-      //   final db = amp.current ?? -160;
-      //
-      //   // Normalize the decibel to 0.0 - 1.0
-      //   normalized = ((db + 60) / 60).clamp(0.0, 1.0);
-      //
-      //   // Update the waveform
-      //   globalController.waveController.amplitude = normalized;
-      // });
-      waves = audioRecorder.onAmplitudeChanged(const Duration(milliseconds: 50)).listen((amp) {
-        const minDb = -45.0; // silence threshold
-        const maxDb = 0.0; // max (loud)
-
-        double normalized = ((amp.current - minDb) / (maxDb - minDb)).clamp(0.0, 1.0);
-        // final normalized = ((amp.current + 130) / 130).clamp(0.0, 1.0);
-        log(amp.current.toString());
-
-        if (globalController.samples.length >= 30) {
-          globalController.samples.removeAt(0);
-        }
-        globalController.samples.add(AudioWaveBar(heightFactor: normalized, color: AppColors.backgroundPurple));
-        globalController.waveController.amplitude = normalized;
-        // globalController.samples.refresh();
+      _pcmSubscription = _pcmStreamController.stream.listen((buffer) {
+        _pcmBuffer.addAll(buffer);
+        double amplitude = _calculateAmplitude(buffer);
+        if (globalController.samples.length >= 30) globalController.samples.removeAt(0);
+        globalController.samples.add(AudioWaveBar(heightFactor: amplitude, color: Colors.purple));
+        globalController.waveController.amplitude = amplitude;
       });
       recordingStatus.value = 1;
-      // Start the timer to update recording time
       _startTimer();
-
+      _chunkTimer = Timer.periodic(const Duration(seconds: 15), (_) => _setChunk(visitId));
       return true;
     } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
 
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder:
-            (context) => PermissionAlert(
-              onCancel: () {
-                // Get.back();
-                Get.until((route) => Get.currentRoute == Routes.HOME_VIEW_MOBILE);
-              },
-              permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.",
-              permissionTitle: " Microphone  permission request",
-              isMicPermission: true,
-            ),
-      );
+      showDialog(barrierDismissible: false, context: context, builder: (context) => const PermissionAlert(permissionDescription: "To record audio, the app needs access to your microphone. Please enable the microphone permission in your app settings.", permissionTitle: " Microphone  permission request", isMicPermission: true));
     }
     return false;
   }
 
-  /// Stop Recording
-  Future<File?> stopRecording() async {
+  /// Stop recording and upload any remaining chunk
+  Future<bool> stopRecording(String visitId) async {
+    bool success = false;
     final GlobalMobileController globalController = Get.find();
-
-    globalController.waveController.amplitude = 0;
-    globalController.samples.clear();
-    String? s = await audioRecorder.stop();
-
-    // Stop the timer when recording is stopped
-    _stopTimer();
-
-    if (s != null) {
-      recordFile = File(s);
-      log("log: stop recording ${recordFile?.path}");
-    }
-
-    // Reset the time when stopping the recording
-    recordingTime.value = 0;
-    // Update the recording status to "Stopped"
-    recordingStatus.value = 0;
     WakelockPlus.disable();
-    return recordFile;
+    globalController.waveController.amplitude = 0;
+    isLastChunk = true;
+    _stopTimer();
+    recordingStatus.value = 2;
+
+    if (_pcmBuffer.isNotEmpty) {
+      List<int> chunk = List.from(_pcmBuffer);
+      String filePath = await _savePcmAsWavAndConvertToM4a(chunk, visitId);
+      chunkFiles.add(File(filePath));
+      _pcmBuffer.clear();
+      success = await uploadLastChunk(File(filePath),visitId);
+      // await uploading(visitId,true);
+    }
+    await _recorder.stopRecorder();
+    await _recorder.closeRecorder();
+
+    await _pcmSubscription?.cancel();
+    await _pcmStreamController.close();
+   return success;
   }
 
-  /// Resume Recording
-  Future<void> resumeRecording() async {
-    WakelockPlus.enable();
-    waves.resume();
-    log("log: resume recording");
-    await audioRecorder.resume();
+  /// Upload a chunk every 15 seconds, regardless of buffer size
+  void _setChunk(String visitId) async {
+    if(isLastChunk) return;
+    if (_pcmBuffer.isNotEmpty) {
+      List<int> chunk = List.from(_pcmBuffer);
+      String filePath = await _savePcmAsWavAndConvertToM4a(chunk, visitId);
+      File chunkFile = File(filePath);
+      chunkFiles.add(chunkFile);
+      _pcmBuffer.clear();
+      log("message$chunkIndex");
+      await uploading(visitId);
+    }
+  }
 
-    // Update the recording status to "Recording"
+  /// Save PCM data as a WAV file, then convert to m4a, retrying if conversion fails
+  Future<String> _savePcmAsWavAndConvertToM4a(List<int> pcmData, String? visitId) async {
+    final dir = await getTemporaryDirectory();
+    final wavData = _pcmToWav(Uint8List.fromList(pcmData), _sampleRate, _numChannels);
+    final wavFile = File("${dir.path}/chunk_${visitId}_${DateTime.now().millisecondsSinceEpoch}.wav");
+    await wavFile.writeAsBytes(wavData, flush: true);
+    final m4aFile = File("${dir.path}/${visitId}_${++chunkIndex}_${DateTime.now().millisecondsSinceEpoch}.m4a");
+    await convertWavToM4A(wavFile.path, m4aFile.path);
+    return m4aFile.path;
+    // int maxRetries = 3;
+    // int attempt = 0;
+    // bool success = false;
+    // while (attempt < maxRetries && !success) {
+    //   success =
+    //   log("messageSuccess: $success");
+    //   if (success) {
+    //     log('Conversion failed, retrying... (attempt  [31m${attempt + 1} [0m)');
+    //     await Future.delayed(const Duration(seconds: 1));
+    //   }
+    //   attempt++;
+    // }
+    // if (success) {
+
+    // } else {
+    //   log('Conversion failed after $maxRetries attempts.');
+    //   throw Exception('WAV to M4A conversion failed after $maxRetries attempts.');
+    //   // return "";
+    // }
+  }
+
+  /// Convert PCM to WAV (add header)
+  List<int> _pcmToWav(Uint8List pcmData, int sampleRate, int numChannels) {
+    int byteRate = sampleRate * numChannels * 2;
+    int blockAlign = numChannels * 2;
+    int dataLength = pcmData.length;
+    int fileLength = 36 + dataLength;
+    var header = <int>[...'RIFF'.codeUnits, ..._intToBytes(fileLength, 4), ...'WAVE'.codeUnits, ...'fmt '.codeUnits, ..._intToBytes(16, 4), ..._intToBytes(1, 2), ..._intToBytes(numChannels, 2), ..._intToBytes(sampleRate, 4), ..._intToBytes(byteRate, 4), ..._intToBytes(blockAlign, 2), ..._intToBytes(16, 2), ...'data'.codeUnits, ..._intToBytes(dataLength, 4)];
+    return header + pcmData;
+  }
+
+  List<int> _intToBytes(int value, int byteCount) {
+    final result = <int>[];
+    for (int i = 0; i < byteCount; i++) {
+      result.add((value >> (8 * i)) & 0xFF);
+    }
+    return result;
+  }
+
+  /// Convert WAV to M4A
+  Future<bool> convertWavToM4A(String wavFile, String m4aFile) async {
+    try {
+      await _audioToolkit.convertAudio(inputPath: wavFile, outputPath: m4aFile, format: AudioFormat.m4a);
+      return true;
+    } catch (e) {
+      log("error message: $e");
+      return false;
+    }
+  }
+
+  /// Calculate normalized amplitude for waveform
+  double _calculateAmplitude(Uint8List buffer) {
+    int max = 0;
+    for (int i = 0; i < buffer.length; i += 2) {
+      int sample = buffer[i] | (buffer[i + 1] << 8);
+      if (sample & 0x8000 != 0) sample = sample - 0x10000;
+      if (sample < 0) sample = -sample;
+      if (sample > max) max = sample;
+    }
+    return (max / 32768.0).clamp(0.0, 1.0);
+  }
+
+  Future<void> resumeRecording(String visitId) async {
+    WakelockPlus.enable();
+    _pcmSubscription?.resume();
+    await _recorder.resumeRecorder();
     recordingStatus.value = 1;
-    // Start the timer if resumed
     _startTimer();
+    _chunkTimer = Timer.periodic(const Duration(seconds: 15), (_) => _setChunk(visitId));
   }
 
   /// Pause Recording
   Future<void> pauseRecording() async {
     WakelockPlus.disable();
-    waves.pause();
-    log("log: pause recording");
-    await audioRecorder.pause();
-
-    // Update the recording status to "Paused"
+    _pcmSubscription?.pause();
+    await _recorder.pauseRecorder();
     recordingStatus.value = 2;
-    // Stop the timer if paused
     _stopTimer();
   }
 
-  /// Delete Recording
-  Future<bool> deleteRecording() async {
-    final GlobalController globalController = Get.find();
-
-    globalController.waveController.amplitude = 0;
-    log("log: delete recording");
-    if (recordFile != null) {
-      try {
-        if (recordFile?.existsSync() ?? false) {
-          recordFile!.deleteSync();
-        }
-      } catch (e) {
-        log("log: ${e.toString()}");
-      }
-      recordFile = null;
-      return true;
-    }
-    return false;
-  }
-
-  /// Private method to start the timer and update the recording time every second
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       recordingTime.value++;
@@ -408,15 +220,147 @@ class MobileRecorderService {
     });
   }
 
-  /// Private method to stop the timer when recording is paused or stopped
   void _stopTimer() {
     if (_timer != null) {
       _timer?.cancel();
       _timer = null;
+      _chunkTimer?.cancel();
+      _chunkTimer = null;
     }
   }
 
-  /// Method to get formatted time as minutes and seconds
+  /// Stub for uploading a chunk to your API
+  Future<bool> uploadChunk(File chunkFile,String visitId) async {
+    String fileName = chunkFile.toString().split('/').last;
+    List<String> parts = fileName.split('_');
+    int cIndex = int.parse(parts[1]);
+    var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+    try {
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
+        AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+        audioId = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+        await DatabaseHelper.instance.insertAudioChunkFile(audioId, chunkIndex, audioFileToSave);
+
+        CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      } else {
+        Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
+        AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+        audioId = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+        await DatabaseHelper.instance.insertAudioChunkFile(audioId, chunkIndex, audioFileToSave);
+        String? mimeType = lookupMimeType(chunkFile.path);
+        if(sessionId == "" && sessionId.isEmpty) {
+          Map<String,dynamic> params = {};
+          params["filename"] = parts[2];
+          params["mimetype"] = mimeType;
+          Records records = await visitMainRepository.uploadRecordInitialized(visitId: visitId, params: params,chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          if (records.responseData != null) {
+            log("message1");
+            sessionId = records.responseData?.sessionId ?? "";
+            await DatabaseHelper.instance.updateSessionId(audioId, sessionId);
+            return false;
+            // Map<String,dynamic> params = {};
+            // params["chunkIndex"] = cIndex;
+            // params["isLastChunk"] = isLastChunk;
+            // var response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+            // if (response.isNotEmpty) return true;
+          }
+        }
+        else if(isLastChunk == false && (sessionId.isNotEmpty && sessionId != "")){
+          Map<String,dynamic> params = {};
+          params["chunkIndex"] = cIndex;
+          params["isLastChunk"] = isLastChunk;
+          Map<String, dynamic> response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: params, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
+          if(response.isNotEmpty) return true;
+        }
+        return false;
+      }
+    }
+    catch (e) {
+      customPrint("Audio failed error is :- $e");
+      Loader().stopLoader();
+    }
+    return false;
+  }
+
+  Future<bool> uploadLastChunk(File chunkFile,String visitId) async{
+    int audioIds = 0;
+    // while(true) {
+    try {
+      final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+      Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
+      AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+      audioIds = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+      await DatabaseHelper.instance.insertAudioChunkFile(audioIds, chunkIndex, audioFileToSave);
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      }
+      else {
+        var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+        String? mimeType = lookupMimeType(chunkFile.path);
+        String fileName = chunkFile
+            .toString()
+            .split('/')
+            .last;
+        List<String> parts = fileName.split('_');
+        int cIndex = int.parse(parts[1]);
+        Map<String, dynamic> param = {};
+        param["chunkIndex"] = cIndex;
+        param["isLastChunk"] = true;
+        Map<String, dynamic> response = await visitMainRepository.uploadRecordings(sessionId: sessionId,
+            params: param,
+            chunkFile: chunkFile,
+            mimeType: mimeType ?? "",
+            token: loginData.responseData?.token ?? "");
+        if (response.isNotEmpty) {
+          final dir = await getTemporaryDirectory();
+          final dummyFile = File('${dir.path}/${visitId}_${DateTime
+              .now()
+              .millisecondsSinceEpoch}.m4a');
+          await dummyFile.writeAsBytes([]);
+          Map<String, dynamic> params = {};
+          params["session_id"] = sessionId;
+          Map<String, dynamic> responses = await visitMainRepository.uploadLastRecord(visitId: visitId,
+              params: params,
+              chunkFile: chunkFile,
+              mimeType: mimeType ?? "",
+              token: loginData.responseData?.token ?? "");
+          // if(responses.isNotEmpty)
+          chunkFiles.removeAt(0);
+          await DatabaseHelper.instance.deleteAudioFile(audioIds);
+          return true;
+        }
+      }
+    } catch (e) {
+      log("error message: $e");
+    }
+    return false;
+    // await Future.delayed(const Duration(seconds: 10));
+    // }
+  }
+
+  Future<void> uploading(String visitId) async{
+    if(chunkFiles.isEmpty) return;
+    // final stopwatch = Stopwatch() ..start();
+    try{
+        while (chunkFiles.isNotEmpty) {
+          log("message$chunkIndex");
+          final success = await uploadChunk(chunkFiles.first, visitId);
+          if (success) {
+            chunkFiles.removeAt(0);
+            await DatabaseHelper.instance.deleteAudioChunkFile(audioId);
+          } else {
+            await Future.delayed(Duration(milliseconds: 200));
+            break;
+          }
+        }
+
+    }catch(e){
+      log("error message: $e");
+    }
+
+  }
   String get formattedRecordingTime {
     int minutes = (recordingTime.value / 60).floor();
     int seconds = recordingTime.value % 60;

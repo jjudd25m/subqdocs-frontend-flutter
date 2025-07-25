@@ -9,7 +9,6 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
 import 'package:subqdocs/app/modules/home/model/latest_build_model.dart';
 import 'package:subqdocs/app/modules/home/model/statusModel.dart';
 import 'package:subqdocs/utils/Loader.dart';
@@ -29,9 +28,11 @@ import '../../../data/service/socket_service.dart';
 import '../../../models/ChangeModel.dart';
 import '../../../models/MedicalDoctorModel.dart';
 import '../../../models/audio_file.dart';
+import '../../../routes/app_pages.dart';
 import '../../login/model/login_model.dart';
 import '../../personal_setting/model/filter_past_visit_status.dart';
 import '../../personal_setting/repository/personal_setting_repository.dart';
+import '../../visit_main/controllers/visit_main_controller.dart';
 import '../../visit_main/model/patient_transcript_upload_model.dart';
 import '../../visit_main/repository/visit_main_repository.dart';
 import '../model/deletePatientModel.dart';
@@ -227,12 +228,35 @@ class HomeController extends GetxController {
 
     globalController.urlSchemeSubscription = globalController.liveActivitiesPlugin.urlSchemeStream().listen((schemeData) async {
       if (schemeData.path == '/stop') {
-        File? audioFile = await globalController.recorderService.stopRecording();
-        customPrint("audio file url is :- ${audioFile?.absolute}");
-        if (audioFile != null) {
-          globalController.stopLiveActivityAudio();
-          globalController.submitAudio(audioFile);
-        }
+        final success = await globalController.recorderService.stopRecording();
+        // if(success) {
+        globalController.stopLiveActivityAudio();
+          if (Get.currentRoute == Routes.PATIENT_INFO) {
+            Get.until((route) => Get.currentRoute == Routes.HOME);
+
+            // Get.until(Routes.HOME, (route) => false);
+            globalController.breadcrumbHistory.clear();
+            globalController.addRoute(Routes.HOME);
+            // addRoute(Routes.PATIENT_INFO);
+
+            await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+          } else {
+            await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+          }
+
+          if (Get.currentRoute == Routes.VISIT_MAIN) {
+            // Get.find<VisitMainController>().getPatientDetails();
+            Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+          }
+        // }else{
+        //   Get.back();
+        // }
+        // File? audioFile = await globalController.recorderService.stopRecording();
+        // customPrint("audio file url is :- ${audioFile?.absolute}");
+        // if (audioFile != null) {
+        //   globalController.stopLiveActivityAudio();
+        //   globalController.submitAudio(audioFile);
+        // }
       } else if (schemeData.path == '/pause') {
         globalController.updatePauseResumeAudioWidget();
         await globalController.recorderService.pauseRecording();
@@ -1306,7 +1330,9 @@ class HomeController extends GetxController {
     if (globalController.visitId.isNotEmpty) {
       CustomToastification().showToast("Recording is already in progress", type: ToastificationType.info);
     } else {
-      if (await globalController.recorderService.audioRecorder.hasPermission()) {
+      final btMic = Platform.isAndroid ? await Permission.microphone.request().isGranted : true;
+      final btGranted = Platform.isAndroid ? await Permission.bluetoothConnect.request().isGranted : true;
+      if (btMic && btGranted) {
         globalController.isStartTranscript.value = true;
 
         // controller.globalController.patientId.value = controller.patientId.value;
@@ -1326,7 +1352,7 @@ class HomeController extends GetxController {
         globalController.changeStatus("In-Room");
         // If not recording, start the recording
         globalController.startAudioWidget();
-        globalController.recorderService.audioRecorder = AudioRecorder();
+        // globalController.recorderService.audioRecorder = AudioRecorder();
         globalController.getConnectedInputDevices();
         await globalController.recorderService.startRecording(Get.context!);
         // controller.updateData();

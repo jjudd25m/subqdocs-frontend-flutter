@@ -20,6 +20,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -276,9 +277,51 @@ class ApiProvider {
     } on SocketException {
       throw ValidationString.validationNoInternetFound;
     } on DioException catch (e) {
-      customPrint("callPutMultiPartDioListOfFiles throw $e");
+      log("callPutMultiPartDioListOfFiles throw $e");
       throw handleDioException(e);
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> callPostMultiPart({required String url, required Map<String, dynamic> params,required Map<String, File> files, required String token,required String mimeTye}) async {
+    customPrint("URL is :- $url");
+    customPrint("files is :- $files");
+    log("params is :- $params");
+    customPrint("token is :- $token");
+
+    if (kDebugMode) {
+      log(UrlProvider.baseUrl + url);
+    }
+    try {
+      FormData formData = FormData.fromMap(params);
+
+      for (String key in files.keys) {
+        customPrint(files[key]!.path);
+        formData.files.add(MapEntry(key, await MultipartFile.fromFile(files[key]!.path, contentType: DioMediaType.parse(mimeTye))));
+      }
+
+      if (getApiHeader() != null) {
+        dio.options.headers["Content-Type"] = "multipart/form-data";
+        dio.options.headers["Authorization"] = "Bearer $token";
+        log("header is:- ${dio.options.headers}");
+      }
+
+      log("formdata is $formData");
+      customPrint("header is ${dio.options.headers}");
+
+      var response = await dio.post(UrlProvider.baseUrl + url, data: formData);
+      log("resposns: $response");
+      return getResponse(response.data);
+    } on TimeoutException {
+      throw ValidationString.validationRequestTimeout;
+    } on SocketException {
+      throw ValidationString.validationNoInternetFound;
+    } on DioException catch (e) {
+      log("callPutMultiPartDioListOfFiles throw $e");
+      throw handleDioException(e);
+    } catch (e) {
+      log("callPutMultiPartDioListOfFiles throw $e");
       rethrow;
     }
   }
