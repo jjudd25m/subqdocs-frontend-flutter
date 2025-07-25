@@ -257,6 +257,7 @@ class RecorderService {
       recordingStatus.value = 1;
       _startTimer();
       _chunkTimer = Timer.periodic(const Duration(seconds: 15), (_) => _setChunk(globalController.visitId.value));
+      saveRecordingState(isRecording: true,time: recordingTime.value.toString(),sessionId: sessionId,visitId: globalController.visitId.value);
       return true;
     } else if ((await Permission.microphone.isPermanentlyDenied || await Permission.microphone.isDenied) && (await Permission.bluetoothConnect.isPermanentlyDenied || await Permission.bluetoothConnect.isDenied)) {
       // Handle permission denial here
@@ -385,15 +386,18 @@ class RecorderService {
     recordingStatus.value = 1;
     _startTimer();
     _chunkTimer = Timer.periodic(const Duration(seconds: 15), (_) => _setChunk(globalController.visitId.value));
+    saveRecordingState(isRecording: true,time: recordingTime.value.toString(),sessionId: sessionId,visitId: globalController.visitId.value);
   }
 
   /// Pause Recording
   Future<void> pauseRecording() async {
+    final GlobalController globalController = Get.find();
     WakelockPlus.disable();
     _pcmSubscription?.pause();
     await _recorder.pauseRecorder();
     recordingStatus.value = 2;
     _stopTimer();
+    saveRecordingState(isRecording: true,time: recordingTime.value.toString(),sessionId: sessionId,visitId: globalController.visitId.value);
   }
 
   void _startTimer() {
@@ -553,24 +557,45 @@ class RecorderService {
     return "$minutes:${seconds.toString().padLeft(2, '0')}";
   }
 
-  Future<void> saveRecordingState({
-    required bool isRecording,
-    String? visitId,
-    int? chunkIndex,
-  }) async {
+  Future<void> saveRecordingState({required bool isRecording, String? visitId,String? sessionId,String? time}) async {
     await AppPreference.instance.setBool('isRecordingInProgress', isRecording);
     if (visitId != null) {
       await AppPreference.instance.setString('currentVisitId', visitId);
     }
-    if (chunkIndex != null) {
-      await AppPreference.instance.setInt('currentChunkIndex', chunkIndex);
+    if(sessionId != null) {
+      await AppPreference.instance.setString("session_id", sessionId);
+    }
+    if(time != null){
+      await AppPreference.instance.setString("time", time);
     }
   }
 
 // Call this when you stop or finish a recording to clear state
   Future<void> clearRecordingState() async {
-    // await AppPreference.instance.setBool('isRecordingInProgress', false);
-    // await AppPreference.instance.remove('currentVisitId');
-    // await AppPreference.instance.remove('currentChunkIndex');
+    await AppPreference.instance.setBool('isRecordingInProgress', false);
+    await AppPreference.instance.removeKey('currentVisitId');
+    await AppPreference.instance.removeKey('session_id');
+    await AppPreference.instance.removeKey('time');
+  }
+
+  Future<void> resumeFromSavedState() async {
+    final GlobalController globalController = Get.find();
+    bool wasRecording = await AppPreference.instance.getBool('isRecordingInProgress') ?? false;
+    if (!wasRecording) return;
+
+    String? visitId = await AppPreference.instance.getString('currentVisitId');
+    sessionId = await AppPreference.instance.getString('session_id');
+
+
+    int savedTime = await AppPreference.instance.getInt('recordingTime', defaultValue: 0);
+
+    if (visitId != "" && visitId.isNotEmpty) {
+      globalController.visitId.value = visitId;
+      recordingTime.value = savedTime;
+      updatedRecordingTime.value = formattedRecordingTime;
+      // _startTimer();
+      recordingStatus.value = 2;
+      // ...restore other state as needed
+    }
   }
 }

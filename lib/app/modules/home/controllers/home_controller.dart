@@ -230,23 +230,24 @@ class HomeController extends GetxController {
       if (schemeData.path == '/stop') {
         final success = await globalController.recorderService.stopRecording();
         // if(success) {
-        //   if (Get.currentRoute == Routes.PATIENT_INFO) {
-        //     Get.until((route) => Get.currentRoute == Routes.HOME);
-        //
-        //     // Get.until(Routes.HOME, (route) => false);
-        //     globalController.breadcrumbHistory.clear();
-        //     globalController.addRoute(Routes.HOME);
-        //     // addRoute(Routes.PATIENT_INFO);
-        //
-        //     await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
-        //   } else {
-        //     await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
-        //   }
-        //
-        //   if (Get.currentRoute == Routes.VISIT_MAIN) {
-        //     // Get.find<VisitMainController>().getPatientDetails();
-        //     Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
-        //   }
+        globalController.stopLiveActivityAudio();
+          if (Get.currentRoute == Routes.PATIENT_INFO) {
+            Get.until((route) => Get.currentRoute == Routes.HOME);
+
+            // Get.until(Routes.HOME, (route) => false);
+            globalController.breadcrumbHistory.clear();
+            globalController.addRoute(Routes.HOME);
+            // addRoute(Routes.PATIENT_INFO);
+
+            await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+          } else {
+            await Get.toNamed(Routes.PATIENT_INFO, arguments: {"visitId": globalController.visitId.value, "unique_tag": DateTime.now().toString()});
+          }
+
+          if (Get.currentRoute == Routes.VISIT_MAIN) {
+            // Get.find<VisitMainController>().getPatientDetails();
+            Get.find<VisitMainController>(tag: Get.arguments["unique_tag"]).getPatientDetails();
+          }
         // }else{
         //   Get.back();
         // }

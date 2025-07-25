@@ -286,49 +286,58 @@ class MobileRecorderService {
 
   Future<bool> uploadLastChunk(File chunkFile,String visitId) async{
     int audioIds = 0;
-    while (true) {
-      try{
-        final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
-        Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
-        AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
-        audioIds = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
-        await DatabaseHelper.instance.insertAudioChunkFile(audioIds, chunkIndex, audioFileToSave);
-        if(connectivityResult.contains(ConnectivityResult.none)){
-          CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+    // while(true) {
+    try {
+      final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+      Uint8List audioBytes = await chunkFile.readAsBytes(); // Read audio file as bytes
+      AudioFile audioFileToSave = AudioFile(fileName: chunkFile.path, status: 'pending', visitId: visitId, audioData: audioBytes);
+      audioIds = await DatabaseHelper.instance.insertAudioFile(audioFileToSave);
+      await DatabaseHelper.instance.insertAudioChunkFile(audioIds, chunkIndex, audioFileToSave);
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        CustomToastification().showToast("Audio saved locally. Will upload when internet is available.", type: ToastificationType.success);
+      }
+      else {
+        var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
+        String? mimeType = lookupMimeType(chunkFile.path);
+        String fileName = chunkFile
+            .toString()
+            .split('/')
+            .last;
+        List<String> parts = fileName.split('_');
+        int cIndex = int.parse(parts[1]);
+        Map<String, dynamic> param = {};
+        param["chunkIndex"] = cIndex;
+        param["isLastChunk"] = true;
+        Map<String, dynamic> response = await visitMainRepository.uploadRecordings(sessionId: sessionId,
+            params: param,
+            chunkFile: chunkFile,
+            mimeType: mimeType ?? "",
+            token: loginData.responseData?.token ?? "");
+        if (response.isNotEmpty) {
+          final dir = await getTemporaryDirectory();
+          final dummyFile = File('${dir.path}/${visitId}_${DateTime
+              .now()
+              .millisecondsSinceEpoch}.m4a');
+          await dummyFile.writeAsBytes([]);
+          Map<String, dynamic> params = {};
+          params["session_id"] = sessionId;
+          Map<String, dynamic> responses = await visitMainRepository.uploadLastRecord(visitId: visitId,
+              params: params,
+              chunkFile: chunkFile,
+              mimeType: mimeType ?? "",
+              token: loginData.responseData?.token ?? "");
+          // if(responses.isNotEmpty)
+          chunkFiles.removeAt(0);
+          await DatabaseHelper.instance.deleteAudioFile(audioIds);
           return true;
         }
-        else{
-          var loginData = LoginModel.fromJson(jsonDecode(AppPreference.instance.getString(AppString.prefKeyUserLoginData)));
-          String? mimeType = lookupMimeType(chunkFile.path);
-          String fileName = chunkFile.toString().split('/').last;
-          List<String> parts = fileName.split('_');
-          int cIndex = int.parse(parts[1]);
-          Map<String,dynamic> param = {};
-          param["chunkIndex"] = cIndex;
-          param["isLastChunk"] = true;
-          Map<String, dynamic> response  = await visitMainRepository.uploadRecordings(sessionId: sessionId,params: param, chunkFile: chunkFile, mimeType: mimeType ?? "", token: loginData.responseData?.token ?? "");
-          if(response.isNotEmpty) {
-            final dir = await getTemporaryDirectory();
-            final dummyFile = File('${dir.path}/${visitId}_${DateTime.now().millisecondsSinceEpoch}.m4a');
-            await dummyFile.writeAsBytes([]);
-            Map<String, dynamic> params = {};
-            params["session_id"] = sessionId;
-            Map<String, dynamic> responses = await visitMainRepository.uploadLastRecord(visitId: visitId,
-                params: params,
-                chunkFile: chunkFile,
-                mimeType: mimeType ?? "",
-                token: loginData.responseData?.token ?? "");
-            // if(responses.isNotEmpty)
-            chunkFiles.removeAt(0);
-            await DatabaseHelper.instance.deleteAudioFile(audioIds);
-            return true;
-          }
-        }
-      }catch(e){
-        log("error message: $e");
       }
-      await Future.delayed(const Duration(seconds: 10));
+    } catch (e) {
+      log("error message: $e");
     }
+    return false;
+    // await Future.delayed(const Duration(seconds: 10));
+    // }
   }
 
   Future<void> uploading(String visitId) async{
@@ -352,47 +361,9 @@ class MobileRecorderService {
     }
 
   }
-
-
   String get formattedRecordingTime {
     int minutes = (recordingTime.value / 60).floor();
     int seconds = recordingTime.value % 60;
     return "$minutes:${seconds.toString().padLeft(2, '0')}";
   }
-
-  /// Merge a single WAV chunk file into a merged WAV file in the Downloads directory
-  // Future<File> mergeWavChunks(String outputFileName, String chunkFilePath) async {
-  //   // Request storage permission
-  //   if (!await Permission.storage.request().isGranted) {
-  //     throw Exception('Storage permission not granted');
-  //   }
-  //
-  //   final dir = await DownloadsPathProvider.downloadsDirectory;
-  //   if (dir == null) throw Exception('Could not get the downloads directory');
-  //   final outputFile = File('${dir.path}/$outputFileName');
-  //
-  //   final chunkFile = File(chunkFilePath);
-  //   if (!await chunkFile.exists()) throw Exception('Chunk file does not exist');
-  //   Uint8List bytes = await chunkFile.readAsBytes();
-  //   int headerLength = 44; // Standard WAV header size
-  //
-  //   if (!await outputFile.exists()) {
-  //     // First chunk: write header + data
-  //     await outputFile.writeAsBytes(bytes, flush: true);
-  //   } else {
-  //     // Subsequent chunks: append only data (skip header)
-  //     await outputFile.writeAsBytes(bytes.sublist(headerLength), mode: FileMode.append, flush: true);
-  //
-  //     // After appending, update the header for file size and data size
-  //     Uint8List merged = await outputFile.readAsBytes();
-  //     int totalDataLength = merged.length - headerLength;
-  //     ByteData header = merged.buffer.asByteData();
-  //     header.setUint32(4, 36 + totalDataLength, Endian.little);
-  //     header.setUint32(40, totalDataLength, Endian.little);
-  //     await outputFile.writeAsBytes(merged, flush: true);
-  //   }
-  //
-  //   log('Merged WAV updated at: \\${outputFile.path}');
-  //   return outputFile;
-  // }
 }
