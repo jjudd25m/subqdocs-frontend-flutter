@@ -26,7 +26,7 @@ class FullTranscriptView extends StatelessWidget {
               child: Column(
                 children: [
                   if (controller.transcriptListModel.value?.message != "This Visit Was Cancelled") ...[
-                    if ((controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.isNotEmpty ?? false)) ...[
+                    if ((controller.transcriptListModel.value?.responseData?.mergedTranscript?.responseData?.isNotEmpty ?? false)) ...[
                       Container(
                         decoration: BoxDecoration(color: AppColors.white.withValues(alpha: 0.2)),
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -38,8 +38,8 @@ class FullTranscriptView extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 10),
                                 const SizedBox(height: 4),
-                                if (controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.isNotEmpty ?? false) ...[
-                                  Row(children: [Text(textAlign: TextAlign.left, "(Transcription Time-  ${(convertSecondsToMinutes(controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?.last.transcript?.last.end.round() ?? 0))})", style: AppFonts.medium(12, AppColors.textGrey))]),
+                                if (controller.transcriptListModel.value?.responseData?.mergedTranscript?.responseData?.isNotEmpty ?? false) ...[
+                                  Row(children: [Text(textAlign: TextAlign.left, "(Transcription Time-  ${(convertSecondsToMinutes(controller.transcriptListModel.value?.responseData?.mergedTranscript?.responseData?.last.transcript?.last.end.round() ?? 0))})", style: AppFonts.medium(12, AppColors.textGrey))]),
                                 ] else ...[
                                   Row(children: [Text(textAlign: TextAlign.left, "(Transcription Time- 00:00:00)", style: AppFonts.medium(12, AppColors.textGrey))]),
                                 ],
@@ -60,7 +60,7 @@ class FullTranscriptView extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Skeletonizer(
-                            enabled: controller.transcriptListModel.value?.responseData == null || controller.transcriptListModel.value?.responseData?.cleanedTranscript == null,
+                            enabled: controller.transcriptListModel.value?.responseData == null || controller.transcriptListModel.value?.responseData?.mergedTranscript == null,
                             child: ListView.builder(
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
@@ -89,7 +89,7 @@ class FullTranscriptView extends StatelessWidget {
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          Text(textAlign: TextAlign.left, controller.transcriptListModel.value?.responseData?.cleanedTranscript?.responseData?[index].transcript?[subIndex].speaker ?? "", style: AppFonts.regular(14, AppColors.textPurple)),
+                                                          Text(textAlign: TextAlign.left, controller.transcriptListModel.value?.responseData?.mergedTranscript?.responseData?[index].transcript?[subIndex].speaker ?? "", style: AppFonts.regular(14, AppColors.textPurple)),
                                                           const SizedBox(height: 4),
                                                           Text(controller.transcriptList[index].transcript?[subIndex].sentence ?? "", style: AppFonts.regular(12, AppColors.textGrey)),
                                                         ],

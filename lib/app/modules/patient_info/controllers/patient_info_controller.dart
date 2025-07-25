@@ -154,9 +154,9 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     try {
       patientData.value = await _visitMainRepository.getPatientDetails(param: param);
 
-      customPrint("patient data is :- ${patientData.toJson()}");
+      // customPrint("patient data is :- ${patientData.toJson()}");
 
-      print("stattus type is:- ${patientData.value?.responseData?.visitStatus}");
+      // print("stattus type is:- ${patientData.value?.responseData?.visitStatus}");
 
       if (patientData.value?.responseData?.doctorId != null) {
         doctorValue.value = patientData.value?.responseData?.doctorName ?? "";
@@ -672,7 +672,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     socketService.socket.on("transcriptStatus", (data) {
       socketCustomPrint("---------------------------------------------");
       var res = data as Map<String, dynamic>;
-      socketCustomPrint("transcriptStatus data:- $res");
+      socketCustomPrint("socket transcriptStatus data:- $res");
 
       int localVisitId = res["visit_id"];
       // int transcription_id = res["transcription_id"];
@@ -706,8 +706,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   }
 
   Future<void> reRunSetUpFullNoteSocket() async {
+    reRunSocketService.noChangeSocket.on("NoChangeSocket", (data) {
+      print("NoChangeSocket data:- $data");
+    });
+
     reRunSocketService.socket.on("DoctorsViewStatus", (data) {
       var res = data as Map<String, dynamic>;
+
       socketCustomPrint("---------------------------------------------");
 
       // int visit_id = res["visit_id"];
@@ -717,20 +722,24 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       socketCustomPrint("DoctorsViewStatus status is :- $res");
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> doctorDiagnosisiResponseData = responseData["diagnosis_codes_procedures"];
+        if (res["responseData"] != null) {
+          Map<String, dynamic> responseData = res["responseData"];
+          print("DoctorsViewStatus :- $res");
+          Map<String, dynamic> doctorDiagnosisiResponseData = responseData["diagnosis_codes_procedures"];
 
-        doctorViewList.value = DoctorViewModel(toast: true, message: "", responseType: "Success", responseData: DoctorViewResponseData.fromJson(responseData));
-        setDoctorModel();
-        // setImpressionAndPlanList();
-        // getPatientDetails();
-        update();
+          doctorViewList.value = DoctorViewModel(toast: true, message: "", responseType: "Success", responseData: DoctorViewResponseData.fromJson(responseData));
+          setDoctorModel();
+          // setImpressionAndPlanList();
+          // getPatientDetails();
+          update();
+        }
       }
     });
 
     reRunSocketService.socket.on("isMedicalTranscriptStatus", (data) {
       var res = data as Map<String, dynamic>;
 
+      print("isMedicalTranscriptStatus :- $res");
       String status = res["status"];
       // String message = res["message"];
 
@@ -746,17 +755,20 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        if (res["responseData"] != null) {
+          print("HpiCheifAllergiesStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
 
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataHpiView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "", htmlEditorController: htmlEditorController, title: ""));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataHpiView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.hpi ?? "", htmlEditorController: htmlEditorController, title: ""));
 
-        editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableChiefView.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.chiefComplain ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForAllergies.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.allergies ?? "", htmlEditorController: htmlEditorController, title: ""));
 
-        editableDataHpiView.refresh();
+          editableDataHpiView.refresh();
+        }
       }
     });
 
@@ -767,12 +779,15 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForSkinHistory.refresh();
+        if (res["responseData"] != null) {
+          print("SkinHistoryStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataForSkinHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.skinHistoryWithLocation ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForSkinHistory.refresh();
+        }
       }
     });
 
@@ -783,12 +798,15 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForSocialHistory.refresh();
+        if (res["responseData"] != null) {
+          print("SocialHistoryStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataForSocialHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.socialHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForSocialHistory.refresh();
+        }
       }
     });
 
@@ -799,13 +817,16 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForCancerHistory.refresh();
-        update();
+        if (res["responseData"] != null) {
+          print("CancerHistoryStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataForCancerHistory.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.cancerHistoryHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForCancerHistory.refresh();
+          update();
+        }
       }
     });
 
@@ -816,13 +837,16 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForMedication.refresh();
-        update();
+        if (res["responseData"] != null) {
+          print("MedicationHistoryStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataForMedication.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.medicationsHtml ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForMedication.refresh();
+          update();
+        }
       }
     });
 
@@ -833,13 +857,16 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForExam.refresh();
-        update();
+        if (res["responseData"] != null) {
+          print("ExamStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataForExam.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.exam ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForExam.refresh();
+          update();
+        }
       }
     });
 
@@ -850,12 +877,15 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-        HtmlEditorController htmlEditorController = HtmlEditorController();
-        editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
-        editableDataForReviewOfSystems.refresh();
+        if (res["responseData"] != null) {
+          print("ReviewOfSystemStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: 0, message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+          HtmlEditorController htmlEditorController = HtmlEditorController();
+          editableDataForReviewOfSystems.add(ImpresionAndPlanViewModel(htmlContent: patientFullNoteModel.value?.responseData?.fullNoteDetails?.reviewOfSystem ?? "", htmlEditorController: htmlEditorController, title: ""));
+          editableDataForReviewOfSystems.refresh();
+        }
       }
     });
 
@@ -866,14 +896,17 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> doctorDiagnosisiResponseData = responseData["diagnosis_codes_procedures"];
+        if (res["responseData"] != null) {
+          print("DoctorsViewImpressionAndPlanStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> doctorDiagnosisiResponseData = responseData["diagnosis_codes_procedures"];
 
-        doctorViewList.value = DoctorViewModel(toast: true, message: "", responseType: "Success", responseData: DoctorViewResponseData.fromJson(responseData));
-        setDoctorModel();
-        setImpressionAndPlanList();
-        getPatientDetails();
-        update();
+          doctorViewList.value = DoctorViewModel(toast: true, message: "", responseType: "Success", responseData: DoctorViewResponseData.fromJson(responseData));
+          setDoctorModel();
+          setImpressionAndPlanList();
+          getPatientDetails();
+          update();
+        }
       }
     });
 
@@ -884,54 +917,57 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
       // String message = res["message"];
 
       if (status.toLowerCase() == "success") {
-        Map<String, dynamic> responseData = res["responseData"];
-        Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-        patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+        if (res["responseData"] != null) {
+          print("ImpressionAndPlanStatus :- $res");
+          Map<String, dynamic> responseData = res["responseData"];
+          Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+          patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
 
-        impressionAndPlanListFullNote.clear();
-        if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.isImageGenerated ?? false) {
-          socketService.socket.on("PhotoMetaDataStatus", (data) {
-            var res = data as Map<String, dynamic>;
-            String status = res["status"];
-            // String message = res["message"];
+          impressionAndPlanListFullNote.clear();
+          if (patientFullNoteModel.value?.responseData?.fullNoteDetails?.isImageGenerated ?? false) {
+            socketService.socket.on("PhotoMetaDataStatus", (data) {
+              var res = data as Map<String, dynamic>;
+              String status = res["status"];
+              // String message = res["message"];
 
-            if (status.toLowerCase() == "success") {
-              Map<String, dynamic> responseData = res["responseData"];
-              patientFullNoteResponseData.value = PatientFullNoteResponseData.fromJson(responseData);
-              Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
-              // log("messages: ${patientFullNoteResponseData.value?.toJson()}");
+              if (status.toLowerCase() == "success") {
+                Map<String, dynamic> responseData = res["responseData"];
+                patientFullNoteResponseData.value = PatientFullNoteResponseData.fromJson(responseData);
+                Map<String, dynamic> fullNoteResponseData = responseData["full_note_details"];
+                // log("messages: ${patientFullNoteResponseData.value?.toJson()}");
 
-              patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
-            }
+                patientFullNoteModel.value = PatientFullNoteModel(message: "", toast: true, responseType: "success", responseData: PatientFullNoteResponseData(id: responseData["id"], message: "", status: "Success", fullNoteDetails: FullNoteDetails.fromJson(fullNoteResponseData)));
+              }
+              for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
+                HtmlEditorController htmlEditorController = HtmlEditorController();
+
+                impressionAndPlanListFullNote.add(
+                  ImpresionAndPlanViewModel(
+                    htmlContent: impressionsAndPlan.content ?? "",
+                    htmlEditorController: htmlEditorController,
+                    title: impressionsAndPlan.title,
+                    siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
+                    slidableController: SlidableController(this),
+                    attachments: impressionsAndPlan.attachments ?? [],
+                    // generalAttachments: patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? []
+                  ),
+                );
+              }
+              generalAttachments?.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
+            });
+          } else {
             for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
               HtmlEditorController htmlEditorController = HtmlEditorController();
 
-              impressionAndPlanListFullNote.add(
-                ImpresionAndPlanViewModel(
-                  htmlContent: impressionsAndPlan.content ?? "",
-                  htmlEditorController: htmlEditorController,
-                  title: impressionsAndPlan.title,
-                  siblingIcd10FullNote: impressionsAndPlan.siblingIcd10,
-                  slidableController: SlidableController(this),
-                  attachments: impressionsAndPlan.attachments ?? [],
-                  // generalAttachments: patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? []
-                ),
-              );
+              impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
             }
-            generalAttachments?.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
-          });
-        } else {
-          for (var impressionsAndPlan in patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlan ?? []) {
-            HtmlEditorController htmlEditorController = HtmlEditorController();
 
-            impressionAndPlanListFullNote.add(ImpresionAndPlanViewModel(htmlContent: impressionsAndPlan.content ?? "", htmlEditorController: htmlEditorController, title: impressionsAndPlan.title, siblingIcd10FullNote: impressionsAndPlan.siblingIcd10, slidableController: SlidableController(this), attachments: impressionsAndPlan.attachments ?? []));
+            generalAttachments?.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
           }
 
-          generalAttachments?.value = patientFullNoteModel.value?.responseData?.fullNoteDetails?.impressionsAndPlanAttachments ?? [];
+          impressionAndPlanListFullNote.refresh();
+          generalAttachments?.refresh();
         }
-
-        impressionAndPlanListFullNote.refresh();
-        generalAttachments?.refresh();
       }
     });
 
@@ -939,6 +975,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     reRunSocketService.socket.on("AllTabStatus", (data) {
       var res = data as Map<String, dynamic>;
+      print("AllTabStatus :- $res");
       socketCustomPrint("---------------------------------------------");
       socketCustomPrint("AllTabStatus status is :- $res");
 
@@ -956,6 +993,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     reRunSocketService.socket.on("FullNoteStatus", (data) {
       var res = data as Map<String, dynamic>;
+
       socketCustomPrint("---------------------------------------------");
       socketCustomPrint("FullNoteStatus status is :- $res");
 
@@ -978,7 +1016,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           socketCustomPrint("FullNoteStatus success");
           isFullNoteLoading.value = false;
           isFullNoteLoadText.value = message;
-
+          print("FullNoteStatus :- $res");
           getFullNote();
         } else if (status.toLowerCase() == "failure") {
           isFullNoteLoading.value = false;
@@ -989,6 +1027,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     reRunSocketService.socket.on("VisitDataStatus", (data) {
       var res = data as Map<String, dynamic>;
+
       socketCustomPrint("---------------------------------------------");
       socketCustomPrint("visit data status is :- $res");
 
@@ -1011,7 +1050,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           socketCustomPrint("VisitDataStatus success");
           isVisitDataLoading.value = false;
           isVisitDataLoadText.value = message;
-
+          print("VisitDataStatus :- $res");
           getPatientDoctorVisitData();
         } else if (status.toLowerCase() == "failure") {
           isVisitDataLoading.value = false;
@@ -1022,6 +1061,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
     reRunSocketService.socket.on("PatientViewStatus", (data) {
       var res = data as Map<String, dynamic>;
+
       socketCustomPrint("---------------------------------------------");
       socketCustomPrint("PatientViewStatus data:- $res");
 
@@ -1032,7 +1072,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
       // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
-      if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+      if (localVisitId.toString() == visitId) {
         socketCustomPrint("PatientViewStatus inside condition");
         if (status.toLowerCase() == "pending") {
           isPatientViewLoading.value = true;
@@ -1044,6 +1084,7 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
           isPatientViewLoadText.value = message;
         } else if (status.toLowerCase() == "success") {
           socketCustomPrint("PatientViewStatus success");
+          print("PatientViewStatus :- $res");
           isPatientViewLoading.value = false;
           isPatientViewLoadText.value = message;
           getPatientView();
@@ -1058,17 +1099,23 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
     reRunSocketService.socket.on("transcriptStatus", (data) {
       socketCustomPrint("---------------------------------------------");
       var res = data as Map<String, dynamic>;
-      socketCustomPrint("transcriptStatus data:- $res");
+      // print("transcriptStatus :- $res");
+      // socketCustomPrint("resocket transcriptStatus data:- $res");
 
       int localVisitId = res["visit_id"];
       // int transcription_id = res["transcription_id"];
       String status = res["status"];
+
       String message = res["message"];
+
+      print("local visit id:- $localVisitId my visit id:- ${visitId}");
+      print("transcript status:- $status");
+      print("transcript message:- $message");
 
       // customPrint("$localVisitId == ${patientTranscriptUploadModel.responseData?.visitId} && $transcription_id == ${patientTranscriptUploadModel.responseData?.id}");
 
       getPatientDetails();
-      if (localVisitId == patientTranscriptUploadModel.responseData?.visitId) {
+      if (localVisitId.toString() == visitId) {
         socketCustomPrint("transcriptStatus inside condition");
         if (status.toLowerCase() == "pending") {
           socketCustomPrint("transcriptStatus pending");
@@ -1077,11 +1124,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
 
           isPatientViewLoading.value = true;
           isPatientViewLoadText.value = "Patient View under process ";
-        } else if (status.toLowerCase() == "inprogress") {
+        } else if (status.toLowerCase().trim() == "inprogress") {
           socketCustomPrint("transcriptStatus inprogress");
           isFullTranscriptLoading.value = true;
           isFullTranscriptLoadText.value = message;
-        } else if (status.toLowerCase() == "success") {
+        } else if (status.toLowerCase().trim() == "success") {
+          // print("Inside success------------------------------- ");
+          // print("data :- ${res}");
           socketCustomPrint("transcriptStatus success");
           isFullTranscriptLoading.value = false;
           isFullTranscriptLoadText.value = message;
@@ -1229,7 +1278,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
   Future<void> getTranscript() async {
     transcriptListModel.value = await _patientInfoRepository.getTranscript(id: visitId);
     // if (/**/transcriptListModel.value?.responseData != null) {
-    transcriptList.value = transcriptListModel.value?.responseData?.cleanedTranscript?.responseData ?? [];
+
+    if (transcriptListModel.value?.responseData?.mergedTranscript == null) {
+      transcriptListModel.value?.responseData?.mergedTranscript = transcriptListModel.value?.responseData?.cleanedTranscript;
+    }
+
+    transcriptList.value = transcriptListModel.value?.responseData?.mergedTranscript?.responseData ?? [];
+    transcriptList.refresh();
     getPatientDetails();
     // }
 
@@ -2218,6 +2273,13 @@ class PatientInfoController extends GetxController with WidgetsBindingObserver, 
         globalController.getConnectedInputDevices();
 
         globalController.regenerateRecordingCallBack = () {
+          if (reRunSocketService.socket.connected) {
+            reRunSocketService.socket.emit("joinRoom", [loginData.value?.responseData?.user?.id, int.parse(visitId)]);
+
+            print("re run socket calleds");
+            reRunSetUpFullNoteSocket();
+          }
+
           reRunSocketService.socket.onConnect((_) {
             reRunSocketService.socket.emit("joinRoom", [loginData.value?.responseData?.user?.id, int.parse(visitId)]);
 

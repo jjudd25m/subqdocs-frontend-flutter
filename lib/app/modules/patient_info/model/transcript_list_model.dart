@@ -29,6 +29,7 @@ class TranscriptListResponseData {
   int? id;
   String? status;
   CleanedTranscript? cleanedTranscript;
+  CleanedTranscript? mergedTranscript;
   String? message;
 
   TranscriptListResponseData({this.id, this.status, this.cleanedTranscript});
@@ -38,6 +39,7 @@ class TranscriptListResponseData {
     status = json['status'];
     message = json['message'];
     cleanedTranscript = json['cleaned_transcript'] != null ? CleanedTranscript.fromJson(json['cleaned_transcript']) : null;
+    mergedTranscript = json['merged_transcript'] != null ? CleanedTranscript.fromJson(json['merged_transcript']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +49,9 @@ class TranscriptListResponseData {
     data['status'] = status;
     if (cleanedTranscript != null) {
       data['cleaned_transcript'] = cleanedTranscript!.toJson();
+    }
+    if (mergedTranscript != null) {
+      data['merged_transcript'] = mergedTranscript!.toJson();
     }
     return data;
   }

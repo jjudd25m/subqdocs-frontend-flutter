@@ -15,7 +15,7 @@ void customPrint(dynamic message) {
 
 void socketCustomPrint(dynamic message) {
   // if (false) {
-  print(message);
+  // print(message);
   // }
 }
 
